@@ -56,6 +56,7 @@ public class Data {
 		}
 	}
 
+	/*
 	public void thisIsAUselessMethod() { //THIS STAY BROKE FIX UM
 		if (customConfigFile == null) {
 			customConfigFile = new File(plugin.getDataFolder(), "arenas.yml");
@@ -74,6 +75,7 @@ public class Data {
 			arenadat.setDefaults(defConfig);
 		}
 	}
+	*/
 
 	public FileConfiguration getCustomConfig() {
 		if (arenadat == null) {
@@ -105,7 +107,7 @@ public class Data {
 			if (hasData) {
 				for (String s : arenadat.getConfigurationSection("arenas").getKeys(false)) {
 					boolean isReady = true;
-					List<Location> spawns = new ArrayList<Location>();
+					List<Location> spawns = new ArrayList<>();
 					Sign lobbysign = null;
 					int timer = 0;
 					int minplayers = 0;
