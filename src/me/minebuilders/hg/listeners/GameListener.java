@@ -26,6 +26,7 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.block.Action;
 import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.event.block.BlockPlaceEvent;
+import org.bukkit.event.block.LeavesDecayEvent;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.entity.FoodLevelChangeEvent;
 import org.bukkit.event.entity.PlayerDeathEvent;
@@ -328,7 +329,7 @@ public class GameListener implements Listener {
 			if (Config.breakblocks && plugin.players.containsKey(p.getUniqueId())) {
 				Game g = plugin.players.get(p.getUniqueId()).getGame();
 				if (g.getStatus() == Status.RUNNING) {
-					if (!Config.blocks.contains(b.getType().getId())) {
+					if (!Config.blocks.contains(b.getType().toString())) {
 						p.sendMessage(ChatColor.RED + "You cannot edit this block type!");
 						event.setCancelled(true);
 						return;
@@ -348,6 +349,19 @@ public class GameListener implements Listener {
 				return;
 			} else {
 				event.setCancelled(true);
+			}
+		}
+	}
+
+	@EventHandler
+	public void onLeafDecay(LeavesDecayEvent event) {
+		Block b = event.getBlock();
+		if (HG.manager.isInRegion(b.getLocation())) {
+			if (Config.breakblocks) {
+				Game g = HG.manager.getGame(b.getLocation());
+				if (g.getStatus() == Status.RUNNING) {
+					g.recordBlockBreak(b);
+				}
 			}
 		}
 	}
