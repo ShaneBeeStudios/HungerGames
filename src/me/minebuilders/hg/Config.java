@@ -30,7 +30,7 @@ public class Config {
 
 	//Rollback config info
 	public static boolean breakblocks;
-	public static List<Integer> blocks;
+	public static List<String> blocks;
 
 	//Random chest
 	public static boolean randomChest;
@@ -67,7 +67,7 @@ public class Config {
 		giveReward = config.getBoolean("reward.enabled");
 		cash = config.getInt("reward.cash");
 		breakblocks = config.getBoolean("rollback.allow-block-break");
-		blocks = config.getIntegerList("rollback.editable-blocks");
+		blocks = config.getStringList("rollback.editable-blocks");
 		randomChest = config.getBoolean("random-chest.enabled");
 		randomChestInterval = config.getInt("random-chest.interval") * 20;
 		randomChestMaxContent = config.getInt("random-chest.max-chestcontent");
