@@ -15,12 +15,12 @@ public class ListCmd extends BaseCmd {
 
 	@Override
 	public boolean run() {
-		String p = "";
+		StringBuilder p = new StringBuilder();
 		Game g = HG.plugin.players.get(player.getUniqueId()).getGame();
 		for (String s : Util.convertUUIDListToStringList(g.getPlayers())) {
-			p = p + "&6, &c" + s;
+			p.append("&6, &c").append(s);
 		}
-		p = p.substring(3);
+		p = new StringBuilder(p.substring(3));
 		Util.scm(player, "&6Players:" + p);
 		return true;
 	}
