@@ -1,0 +1,8 @@
+<component name="ArtifactManager">
+  <artifact type="jar" name="HungerGames:jar">
+    <output-path>$USER_HOME$/Desktop/Server/1-13-HG-TEST/plugins</output-path>
+    <root id="archive" name="HungerGames.jar">
+      <element id="module-output" name="HungerGames" />
+    </root>
+  </artifact>
+</component>

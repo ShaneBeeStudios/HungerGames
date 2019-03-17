@@ -1,0 +1,83 @@
+settings:
+    spawn-mobs: true
+    spawn-mobs-interval: 35
+    free-roam: 25
+    trackingstick-uses: 8
+    players-for-trackingstick: 5
+    max-chestcontent: 5
+    teleport-at-end: true
+    max-team-size: 3
+reward:
+    enabled: true
+    cash: 500
+random-chest:
+    enabled: false
+    interval: 30
+    max-chestcontent: 9
+rollback:
+    allow-block-break: false
+    editable-blocks:
+        - GRASS
+        - DIRT
+        - COBBLESTONE
+        - OAK_PLANKS
+        - SANDSTONE
+        - WHITE_WOOL
+        - STONE_BRICKS
+        - GLASS_PANE
+kits:
+    bowman:
+        permission: none
+        helmet: LEATHER_HELMET color:red
+        chestplate: LEATHER_CHESTPLATE color:red
+        leggings: LEATHER_LEGGINGS color:red
+        boots: LEATHER_BOOTS color:red
+        items:
+            - BOW name:&2Lucky_Bow
+            - ARROW 64
+            - POTION 2
+        potion-effects:
+    survivor:
+        permission: none
+        helmet: 18
+        chestplate: 299 color:green
+        leggings: 300 color.green
+        boots: 0
+        items:
+            - STONE_SWORD 1
+            - BREAD 4
+            - POTION 2
+        potion-effects:
+    pro:
+        permission: none
+        helmet: 0
+        chestplate: 0
+        leggings: 0
+        boots: 0
+        items:
+            - IRON_SWORD 1
+            - BREAK 4
+            - POTION 2
+        potion-effects:
+    ninja:
+        permission: none
+        helmet: 0
+        chestplate: LEATHER_CHESTPLATE color:black name:&7Ninja-ChestPlate lore:&6Ninja-Stealth-Suit:&4------------- enchant:PROTECTION_FIRE
+        leggings: LEATHER_LEGGINGS color:black
+        boots: LEATHER_BOOTS color:black enchant:PROTECTION_FALL
+        items:
+            - POTION 2 name:&bSuper-healing
+        potion-effects:
+            - SPEED.1.forever
+    stupidclass:
+        permission: hg.vip
+        helmet: 0
+        chestplate: 0
+        leggings: 0
+        boots: 0
+        items:
+            - IRON_SWORD 1 enchant:SHARPNESS:2 enchant:DAMAGE_UNDEAD:2 name:&6OP_sword?
+            - BREAD 4
+            - POTION     2
+        potion-effects:
+            - FIRE_RESISTANCE.2.forever

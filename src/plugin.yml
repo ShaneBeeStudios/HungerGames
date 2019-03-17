@@ -1,0 +1,10 @@
+name: HungerGames
+author: [bob7l, Spoopy]
+description: A Simple, fun, HungerGames plugin
+version: 3.2
+api-version: 1.13
+main: me.minebuilders.hg.HG
+softdepend: [Multiverse-Core, MultiWorld, Vault, My Worlds]
+commands:
+  hg:
+    description: HungerGames Base command
