@@ -1,7 +1,8 @@
 package me.minebuilders.hg.managers;
 
-import java.util.ArrayList;
-
+import me.minebuilders.hg.HG;
+import me.minebuilders.hg.Util;
+import me.minebuilders.hg.data.KitEntry;
 import org.bukkit.ChatColor;
 import org.bukkit.DyeColor;
 import org.bukkit.Material;
@@ -13,9 +14,8 @@ import org.bukkit.inventory.meta.LeatherArmorMeta;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 
-import me.minebuilders.hg.HG;
-import me.minebuilders.hg.Util;
-import me.minebuilders.hg.data.KitEntry;
+import java.util.ArrayList;
+import java.util.Arrays;
 
 public class ItemStackManager {
 
@@ -30,8 +30,8 @@ public class ItemStackManager {
 		Configuration config = plugin.getConfig();
 		for (String path : config.getConfigurationSection("kits").getKeys(false)) {
 			try {
-				ArrayList<ItemStack> stack = new ArrayList<ItemStack>();
-				ArrayList<PotionEffect> potions = new ArrayList<PotionEffect>();
+				ArrayList<ItemStack> stack = new ArrayList<>();
+				ArrayList<PotionEffect> potions = new ArrayList<>();
 				String perm = null;
 
 				for(String item : config.getStringList("kits." + path + ".items"))
@@ -43,8 +43,8 @@ public class ItemStackManager {
 					if (poti[2].equalsIgnoreCase("forever")) {
 						potions.add(e.createEffect(2147483647, Integer.parseInt(poti[1])));
 					} else {
-						Integer dur = Integer.valueOf(Integer.parseInt(poti[2]) * 20);
-						potions.add(e.createEffect(dur.intValue(), Integer.parseInt(poti[1])));
+						int dur = Integer.parseInt(poti[2]) * 20;
+						potions.add(e.createEffect(dur, Integer.parseInt(poti[1])));
 					}
 				}
 
@@ -61,11 +61,15 @@ public class ItemStackManager {
 				Util.log("-------------------------------------------");
 				Util.log("WARNING: Unable to load kit " + path + "!");
 				Util.log("-------------------------------------------");
+				Util.warning("Exception: " + e.getMessage());
+
 			}
 		}
 	}
 
+	@SuppressWarnings("deprecation")
 	public ItemStack getItem(String args, boolean isItem) {
+		if (args == null) return null;
 		int amount = 1;
 		if (isItem) {
 			String a = args.split(" ")[1];
@@ -84,14 +88,17 @@ public class ItemStackManager {
 					level = Integer.parseInt(d[1]);
 				}
 				for (Enchantment e : Enchantment.values()) {
-					if (e.getName().equalsIgnoreCase(d[0]))
+					if (e.getName().equalsIgnoreCase(d[0])) {
+						assert item != null;
 						item.addUnsafeEnchantment(e, level);
+					}
 				}
 			} else if (s.startsWith("color:")) {
 				try {
 					s = s.replace("color:", "").toUpperCase();
 					for (DyeColor c : DyeColor.values()) {
 						if (c.name().equalsIgnoreCase(s)) {
+							assert item != null;
 							LeatherArmorMeta lam = (LeatherArmorMeta)item.getItemMeta();
 							lam.setColor(c.getColor());
 							item.setItemMeta(lam);
@@ -101,16 +108,16 @@ public class ItemStackManager {
 			} else if (s.startsWith("name:")) {
 				s = s.replace("name:", "").replace("_", " ");
 				s = ChatColor.translateAlternateColorCodes('&', s);
+				assert item != null;
 				ItemMeta im = item.getItemMeta();
 				im.setDisplayName(s);
 				item.setItemMeta(im);
 			} else if (s.startsWith("lore:")) {
 				s = s.replace("lore:", "").replace("_", " ");
 				s = ChatColor.translateAlternateColorCodes('&', s);
+				assert item != null;
 				ItemMeta meta = item.getItemMeta();
-				ArrayList<String> lore = new ArrayList<String>();
-				for (String w : s.split(":")) 
-					lore.add(w);
+				ArrayList<String> lore = new ArrayList<>(Arrays.asList(s.split(":")));
 				meta.setLore(lore);
 				item.setItemMeta(meta);
 			}
@@ -120,6 +127,9 @@ public class ItemStackManager {
 
 	private ItemStack itemStringToStack(String item, int amount) {
 		String[] itemArr = item.split(":");
-		return new ItemStack(Material.valueOf(itemArr[0].toUpperCase()), amount);
+		if (!itemArr[0].equalsIgnoreCase("null"))
+			return new ItemStack(Material.valueOf(itemArr[0].toUpperCase()), amount);
+		else
+			return null; // TODO this needs to be something
 	}
 }
