@@ -56,7 +56,7 @@ public class HG extends JavaPlugin {
 	public HashMap<Integer, ItemStack> items = new HashMap<>();
 	
 	//Lists
-	public List<Game> games = new ArrayList<Game>();
+	public List<Game> games = new ArrayList<>();
 	
 	//Instances
 	public static HG plugin;
@@ -82,7 +82,7 @@ public class HG extends JavaPlugin {
 		getServer().getPluginManager().registerEvents(new CancelListener(this), this);
 		getServer().getPluginManager().registerEvents(new GameListener(this), this);
 		loadCmds();
-		Util.log("Hugergames has been enabled!");
+		Util.log("HungerGames has been enabled!");
 	}
 	
 	@Override
@@ -95,10 +95,10 @@ public class HG extends JavaPlugin {
 		kit = null;
 		ism = null;
 		ri = null;
-		Util.log("Hugergames has been disabled!");
+		Util.log("HungerGames has been disabled!");
 	}
 
-	public void loadCmds() {
+	private void loadCmds() {
 		cmds.put("team", new TeamCmd());
 		cmds.put("addspawn", new AddSpawnCmd());
 		cmds.put("create", new CreateCmd());
@@ -123,7 +123,7 @@ public class HG extends JavaPlugin {
 	}
 
 	public void stopAll() {
-		ArrayList<UUID> ps = new ArrayList<UUID>();
+		ArrayList<UUID> ps = new ArrayList<>();
 		for (Game g : games) {
 			g.cancelTasks();
 			g.forceRollback();
