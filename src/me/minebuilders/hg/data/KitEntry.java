@@ -11,11 +11,11 @@ import org.bukkit.potion.PotionEffect;
 
 public class KitEntry {
 
-	private ItemStack helm = (ItemStack)null;
+	private ItemStack helm;
 	private String perm;
-	private ItemStack boots = (ItemStack)null;
-	private ItemStack chestplate = (ItemStack)null;
-	private ItemStack pants = (ItemStack)null;
+	private ItemStack boots;
+	private ItemStack chestplate;
+	private ItemStack pants;
 	private ItemStack[] inventoryContents;
 	private ArrayList<PotionEffect> posions;
 
@@ -30,10 +30,7 @@ public class KitEntry {
 	}
 
 	public boolean hasKitPermission(Player p) {
-		if (perm != null && !p.hasPermission(perm)) {
-			return false;
-		}
-		return true;
+		return perm == null || p.hasPermission(perm);
 	}
 
 	public void setInventoryContent(Player p) {
