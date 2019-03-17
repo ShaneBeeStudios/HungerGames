@@ -25,7 +25,7 @@ public class RandomItems {
 		load();
 	}
 
-	public void reloadCustomConfig() {
+	private void reloadCustomConfig() {
 		if (customConfigFile == null) {
 			customConfigFile = new File(plugin.getDataFolder(), "items.yml");
 		}
@@ -44,14 +44,14 @@ public class RandomItems {
 		}
 	}
 
-	public FileConfiguration getCustomConfig() {
+	private FileConfiguration getCustomConfig() {
 		if (item == null) {
 			this.reloadCustomConfig();
 		}
 		return item;
 	}
 
-	public void saveCustomConfig() {
+	private void saveCustomConfig() {
 		if (item == null || customConfigFile == null) {
 			return;
 		}
@@ -87,8 +87,8 @@ public class RandomItems {
 		Util.log(plugin.items.size() + " Random items have been loaded!");
 	}
 
-	public void setDefaultss() {
-		ArrayList <String> s = new ArrayList <String>();
+	private void setDefaultss() {
+		ArrayList <String> s = new ArrayList <>();
 		s.add("STONE_SWORD 1 x:5");
 		s.add("GOLDEN_SWORD 1");
 		s.add("MUSHROOM_STEW 1 x:2");
