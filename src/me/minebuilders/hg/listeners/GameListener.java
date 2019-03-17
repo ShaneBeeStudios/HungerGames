@@ -53,7 +53,7 @@ public class GameListener implements Listener {
 		trackingStick = it;
 	}
 
-	public void dropInv(Player p) {
+	private void dropInv(Player p) {
 		PlayerInventory inv = p.getInventory();
 		Location l = p.getLocation();
 		for (ItemStack i : inv.getContents()) {
@@ -66,7 +66,7 @@ public class GameListener implements Listener {
 		}
 	}
 
-	public void checkStick(Game g) {
+	private void checkStick(Game g) {
 		if (Config.playersfortrackingstick == g.getPlayers().size()) {
 			for (UUID u : g.getPlayers()) {
 				Player p = Bukkit.getPlayer(u);
@@ -107,13 +107,9 @@ public class GameListener implements Listener {
 			dropInv(p);
 			g.exit(p);
 			
-			Bukkit.getScheduler().scheduleSyncDelayedTask(plugin, new Runnable() {
-
-				@Override
-				public void run() {
-					g.leave(p);
-					checkStick(g);
-				}
+			Bukkit.getScheduler().scheduleSyncDelayedTask(plugin, () -> {
+				g.leave(p);
+				checkStick(g);
 			}, 10L);
 		}
 	}
@@ -131,36 +127,32 @@ public class GameListener implements Listener {
 	}
 
 
-	public void useTrackStick(Player p) {
+	private void useTrackStick(Player p) {
 		ItemStack i = p.getInventory().getItemInMainHand();
 		ItemMeta im = i.getItemMeta();
 		if (im.getDisplayName() != null && im.getDisplayName().startsWith(tsn)) {
-			int uses = 0;
-			uses = Integer.parseInt(im.getDisplayName().replace(tsn, ""));
+			int uses = Integer.parseInt(im.getDisplayName().replace(tsn, ""));
 			if (uses == 0) {
 				p.sendMessage(ChatColor.RED + "This trackingstick is out of uses!");
 			} else {
-				boolean foundno = true;
 				for (Entity e : p.getNearbyEntities(120, 50, 120)) {
 					if (e instanceof Player) {
 						im.setDisplayName(tsn + (uses -1));
-						foundno = false;
 						Location l = e.getLocation();
 						int range = (int) p.getLocation().distance(l);
-						Util.msg(p, ("&6" + ((Player)e).getName()) + "&e is " + range + " blocks away from you:&6 " + getDirection(p.getLocation().getBlock(), l.getBlock()));
+						Util.msg(p, ("&6" + e.getName()) + "&e is " + range + " blocks away from you:&6 " + getDirection(p.getLocation().getBlock(), l.getBlock()));
 						i.setItemMeta(im);
 						p.updateInventory();
 						return;
 					} 
 				}
-				if (foundno)
-					Util.msg(p, ChatColor.RED + "Couldn't locate any nearby players!");
+				Util.msg(p, ChatColor.RED + "Couldn't locate any nearby players!");
 
 			}
 		}
 	}
 
-	public String getDirection(Block block, Block block1) {
+	private String getDirection(Block block, Block block1) {
 		Vector bv = block.getLocation().toVector();
 		Vector bv2 = block1.getLocation().toVector();
 		float y = (float) angle(bv.getX(), bv.getZ(), bv2.getX(), bv2.getZ());
@@ -188,16 +180,15 @@ public class GameListener implements Listener {
 	}
 
 
-	public double angle(double d, double e, double f, double g) {
+	private double angle(double d, double e, double f, double g) {
 		//Vector differences
 		int x = (int) (f - d);
 		int z = (int) (g - e);
 
-		double yaw = Math.atan2(x, z);
-		return yaw;
+		return Math.atan2(x, z);
 	}
 
-	@EventHandler(priority=EventPriority.HIGHEST, ignoreCancelled = false)
+	@EventHandler(priority=EventPriority.HIGHEST)
 	public void onAttack(EntityDamageByEntityEvent event) {
 		Entity defender = event.getEntity();
 		Entity damager = event.getDamager();
@@ -215,8 +206,8 @@ public class GameListener implements Listener {
 
 				if (g.getStatus() != Status.RUNNING) {
 					event.setCancelled(true);
-				} else if (pd.isOnTeam(p.getUniqueId()) && damager instanceof Player && pd.getTeam().isOnTeam(((Player)damager).getUniqueId())) {
-					Util.scm(((Player)damager), "&c" + p.getName() + " is on your team!");
+				} else if (pd.isOnTeam(p.getUniqueId()) && damager instanceof Player && pd.getTeam().isOnTeam(damager.getUniqueId())) {
+					Util.scm(damager, "&c" + p.getName() + " is on your team!");
 					event.setCancelled(true);
 				} else if (event.isCancelled()) event.setCancelled(false);
 			}
@@ -268,7 +259,6 @@ public class GameListener implements Listener {
 					Game game = HG.manager.getGame(sign.getLine(1).substring(2));
 					if (game == null) {
 						Util.msg(p, ChatColor.RED + "This arena does not exist!");
-						return;
 					} else {
 						if (p.getInventory().getItemInMainHand().getType() == Material.AIR) {
 							game.join(p);
@@ -285,7 +275,6 @@ public class GameListener implements Listener {
 		}
 	}
 
-	@SuppressWarnings("deprecation")
 	@EventHandler
 	public void blockPlace(BlockPlaceEvent event) {
 		Player p = event.getPlayer();
@@ -298,21 +287,18 @@ public class GameListener implements Listener {
 				Game g = plugin.players.get(p.getUniqueId()).getGame();
 				
 				if (g.getStatus() == Status.RUNNING || g.getStatus() == Status.BEGINNING) {
-					if (!Config.blocks.contains(b.getType().getId())) {
+					if (!Config.blocks.contains(b.getType().toString())) {
 						p.sendMessage(ChatColor.RED + "You cannot edit this block type!");
 						event.setCancelled(true);
-						return;
 					} else {
 						g.recordBlockPlace(event.getBlockReplacedState());
 						if (b.getType() == Material.CHEST) {
 							g.addChest(b.getLocation());
 						}
-						return;
 					}
 				} else {
 					p.sendMessage(ChatColor.RED + "The game is not running!");
 					event.setCancelled(true);
-					return;
 				}
 			} else {
 				event.setCancelled(true);
@@ -320,7 +306,6 @@ public class GameListener implements Listener {
 		}
 	}
 
-	@SuppressWarnings("deprecation")
 	@EventHandler
 	public void blockBreak(BlockBreakEvent event) {
 		Player p = event.getPlayer();
@@ -332,18 +317,15 @@ public class GameListener implements Listener {
 					if (!Config.blocks.contains(b.getType().toString())) {
 						p.sendMessage(ChatColor.RED + "You cannot edit this block type!");
 						event.setCancelled(true);
-						return;
 					} else {
 						g.recordBlockBreak(b);
 						if (b.getType() == Material.CHEST) {
 							g.removeChest(b.getLocation());
 						}
-						return;
 					}
 				} else {
 					p.sendMessage(ChatColor.RED + "The game is not running!");
 					event.setCancelled(true);
-					return;
 				}
 			} else if (p.hasPermission("hg.create") && HG.manager.getGame(b.getLocation()).getStatus() != Status.RUNNING) {
 				return;
