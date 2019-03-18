@@ -1,3 +1,11 @@
+## HungerGames
+# Revamped by: ShaneBee
+
+# Issues: Please report issues on the GitHub issue tracker @ https://github.com/ShaneBeeTK/HungerGames/issues
+# Updates: Can be found on GitHub @ https://github.com/ShaneBeeTK/HungerGames/releases
+
+# More Info: See the wiki for more info on this config @ https://github.com/ShaneBeeTK/HungerGames/wiki/Config.yml
+
 settings:
     spawn-mobs: true
     spawn-mobs-interval: 35
@@ -5,7 +13,7 @@ settings:
     trackingstick-uses: 8
     players-for-trackingstick: 5
     max-chestcontent: 5
-    teleport-at-end: true
+    teleport-at-end: false
     max-team-size: 3
 reward:
     enabled: true
@@ -74,7 +82,7 @@ kits:
             - SPEED:1:forever
     stupidclass:
         permission: hg.vip
-        helmet: GRASS_BLOCK
+        helmet:
         chestplate:
         leggings:
         boots:
