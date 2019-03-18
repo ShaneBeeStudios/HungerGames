@@ -34,6 +34,7 @@ import me.minebuilders.hg.managers.KillManager;
 import me.minebuilders.hg.managers.KitManager;
 import me.minebuilders.hg.managers.Manager;
 
+import me.minebuilders.hg.metrics.Metrics;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
@@ -70,6 +71,7 @@ public class HG extends JavaPlugin {
 	@Override
 	public void onEnable() {
 		new Config(this);
+		Metrics metrics = new Metrics(this);
 		plugin = this;
 		arenaconfig = new Data(this);
 		killmanager = new KillManager();
@@ -83,6 +85,10 @@ public class HG extends JavaPlugin {
 		getServer().getPluginManager().registerEvents(new GameListener(this), this);
 		loadCmds();
 		Util.log("HungerGames has been enabled!");
+		if (this.getDescription().getVersion().contains("Beta")) {
+			Util.log("&eYOU ARE RUNNING A BETA VERSION, please use with caution");
+			Util.log("&eReport any issues to: &bhttps://github.com/ShaneBeeTK/HungerGames/issues");
+		}
 	}
 	
 	@Override
