@@ -1,9 +1,6 @@
 package me.minebuilders.hg;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.UUID;
+import java.util.*;
 
 import me.minebuilders.hg.commands.AddSpawnCmd;
 import me.minebuilders.hg.commands.BaseCmd;
@@ -39,6 +36,7 @@ import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.permissions.Permission;
+import org.bukkit.permissions.PermissionDefault;
 import org.bukkit.plugin.java.JavaPlugin;
 
 public class HG extends JavaPlugin {
@@ -72,6 +70,8 @@ public class HG extends JavaPlugin {
 	public void onEnable() {
 		new Config(this);
 		Metrics metrics = new Metrics(this);
+		if (metrics.isEnabled())
+			Util.log("&7Metrics has been &aenabled");
 		plugin = this;
 		arenaconfig = new Data(this);
 		killmanager = new KillManager();
@@ -123,9 +123,19 @@ public class HG extends JavaPlugin {
 		cmds.put("setexit", new SetExitCmd());
 		cmds.put("delete", new DeleteCmd());
 
+		ArrayList<String> cArray = new ArrayList<>();
+		cArray.add("join");
+		cArray.add("leave");
+		cArray.add("kit");
+		cArray.add("listgames");
+		cArray.add("list");
 
-		for (String bc : cmds.keySet())
+		for (String bc : cmds.keySet()) {
 			getServer().getPluginManager().addPermission(new Permission("hg." + bc));
+			if (cArray.contains(bc))
+				getServer().getPluginManager().getPermission("hg." + bc).setDefault(PermissionDefault.TRUE);
+
+		}
 	}
 
 	public void stopAll() {
