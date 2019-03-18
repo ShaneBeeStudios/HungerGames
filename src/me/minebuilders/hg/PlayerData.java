@@ -1,12 +1,10 @@
 package me.minebuilders.hg;
 
-import me.minebuilders.hg.Util;
-
-import java.util.UUID;
-
 import org.bukkit.GameMode;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
+
+import java.util.UUID;
 
 public class PlayerData {
 
@@ -20,7 +18,7 @@ public class PlayerData {
 	private Team team;
 	private Game game;
 	
-	public PlayerData(Player p, Game game) {
+	PlayerData(Player p, Game game) {
 		this.game = game;
 		inv = p.getInventory().getContents();
 		equip = p.getInventory().getArmorContents();
@@ -29,9 +27,10 @@ public class PlayerData {
 		Util.clearInv(p);
 	}
 
-	public void restore(Player p) {
+	void restore(Player p) {
 		Util.clearInv(p);
 		p.setExp(0);
+		p.setWalkSpeed(0.2f);
 		p.giveExp(exp);
 		p.getInventory().setContents(inv);
 		p.getInventory().setArmorContents(equip);
