@@ -1,7 +1,7 @@
 name: HungerGames
 authors: [bob7l, Spoopy, ShaneBee]
 description: A Simple, fun, HungerGames plugin
-version: 3.2
+version: 4.0.0-Beta1
 api-version: 1.13
 main: me.minebuilders.hg.HG
 softdepend: [Multiverse-Core, MultiWorld, Vault, My_Worlds]
