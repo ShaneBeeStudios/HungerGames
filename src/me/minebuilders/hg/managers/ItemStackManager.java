@@ -11,6 +11,7 @@ import org.bukkit.enchantments.Enchantment;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.inventory.meta.LeatherArmorMeta;
+import org.bukkit.inventory.meta.PotionMeta;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 
@@ -34,7 +35,7 @@ public class ItemStackManager {
 				ArrayList<PotionEffect> potions = new ArrayList<>();
 				String perm = null;
 
-				for(String item : config.getStringList("kits." + path + ".items"))
+				for (String item : config.getStringList("kits." + path + ".items"))
 					stack.add(getItem(item, true));
 
 				for (String pot : plugin.getConfig().getStringList("kits." + path + ".potion-effects")) {
@@ -79,7 +80,7 @@ public class ItemStackManager {
 		}
 		ItemStack item = itemStringToStack(args.split(" ")[0], amount);
 		String[] ags = args.split(" ");
-		for (String s :ags) {
+		for (String s : ags) {
 			if (s.startsWith("enchant:")) {
 				s = s.replace("enchant:", "").toUpperCase();
 				String[] d = s.split(":");
@@ -99,12 +100,13 @@ public class ItemStackManager {
 					for (DyeColor c : DyeColor.values()) {
 						if (c.name().equalsIgnoreCase(s)) {
 							assert item != null;
-							LeatherArmorMeta lam = (LeatherArmorMeta)item.getItemMeta();
+							LeatherArmorMeta lam = (LeatherArmorMeta) item.getItemMeta();
 							lam.setColor(c.getColor());
 							item.setItemMeta(lam);
 						}
 					}
-				} catch (Exception ignore) {}
+				} catch (Exception ignore) {
+				}
 			} else if (s.startsWith("name:")) {
 				s = s.replace("name:", "").replace("_", " ");
 				s = ChatColor.translateAlternateColorCodes('&', s);
@@ -127,9 +129,34 @@ public class ItemStackManager {
 
 	private ItemStack itemStringToStack(String item, int amount) {
 		String[] itemArr = item.split(":");
-		if (!itemArr[0].equalsIgnoreCase("null"))
-			return new ItemStack(Material.valueOf(itemArr[0].toUpperCase()), amount);
-		else
-			return null; // TODO this needs to be something
+		if (itemArr[0].equalsIgnoreCase("potion") || itemArr[0].equalsIgnoreCase("splash_potion")) {
+			Boolean splash = itemArr[0].equalsIgnoreCase("splash_potion");
+			if (PotionEffectType.getByName(itemArr[1].toUpperCase()) == null) {
+				Util.warning("Potion effect type not found: " + ChatColor.RED + itemArr[1].toUpperCase());
+				Util.log("  - Check your configs");
+				Util.log("  - Proper example:");
+				Util.log("      &bPOTION:POTION_TYPE:DURATION_IN_TICKS:LEVEL");
+				Util.log("      &bPOTION:HEAL:200:1");
+				return null;
+			}
+			if (itemArr.length != 4) {
+				Util.warning("Improper setup of potion: &c" + item);
+				Util.log("  - Check your configs for missing arguments");
+				Util.log("  - Proper example:");
+				Util.log("      &bPOTION:POTION_TYPE:DURATION_IN_TICKS:LEVEL");
+				Util.log("      &bPOTION:HEAL:200:1");
+				return null;
+			}
+			PotionEffectType potType = PotionEffectType.getByName(itemArr[1].toUpperCase());
+			int duration = Integer.valueOf(itemArr[2]);
+			int amplifier = Integer.valueOf(itemArr[3]);
+			ItemStack potion = new ItemStack(splash ? Material.SPLASH_POTION : Material.POTION);
+			PotionMeta meta = ((PotionMeta) potion.getItemMeta());
+			meta.addCustomEffect(new PotionEffect(potType, duration, amplifier), true);
+			potion.setItemMeta(meta);
+			return potion;
+		}
+		return new ItemStack(Material.valueOf(itemArr[0].toUpperCase()), amount);
 	}
+
 }
