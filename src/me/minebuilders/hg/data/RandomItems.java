@@ -119,16 +119,10 @@ public class RandomItems {
 		s.add("MELON_SLICE 1 x:4");
 		s.add("COOKED_BEEF 1 x:2");
 		s.add("ENDER_PEARL 1 x:2");
-		/*
-		s.add("373:8194 1 x:2");
-		s.add("373:8197 1 x:2");
-		s.add("373:16420 1");
-		s.add("373:16385 1 x:2");
-		*/
-		s.add("POTION 1 x:2");
-		s.add("POTION 1 x:2");
-		s.add("POTION 1");
-		s.add("POTION 1 x:2");
+		s.add("POTION:SPEED:3600:1 1 x:2");
+		s.add("POTION:HEAL:1:1 1 x:2");
+		s.add("SPLASH_POTION:POISON:320:2 1");
+		s.add("SPLASH_POTION:REGENERATION:660:1 1 x:2");
 		s.add("APPLE 2 x:5");
 		item.set("items", s);
 	}
