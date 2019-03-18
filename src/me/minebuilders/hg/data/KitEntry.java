@@ -35,11 +35,12 @@ public class KitEntry {
 
 	public void setInventoryContent(Player p) {
 		Util.clearInv(p);
+		p.getInventory().setContents(inventoryContents);
 		p.getInventory().setHelmet(helm);
 		p.getInventory().setChestplate(chestplate);
 		p.getInventory().setLeggings(pants);
 		p.getInventory().setBoots(boots);
-		p.getInventory().setContents(inventoryContents);
+
 
 		for (PotionEffect effect : p.getActivePotionEffects()) {
 			p.removePotionEffect(effect.getType());
