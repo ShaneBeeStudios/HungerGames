@@ -1,10 +1,8 @@
 package me.minebuilders.hg;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
+import java.util.*;
 import java.util.Map.Entry;
-import java.util.UUID;
+
 import me.minebuilders.hg.mobhandler.Spawner;
 import me.minebuilders.hg.tasks.ChestDropTask;
 import me.minebuilders.hg.tasks.FreeRoamTask;
@@ -250,15 +248,18 @@ public class Game {
 	}
 
 	public Location pickSpawn() {
-		int spawn = players.size() - 1;
-		if (containsPlayer(spawns.get(spawn))) {
+
+		//int spawn = players.size() - 1;
+		double spawn = getRandomIntegerBetweenRange(0, maxplayers - 1);
+		if (containsPlayer(spawns.get(((int) spawn)))) {
+			Collections.shuffle(spawns);
 			for (Location l : spawns) {
 				if (!containsPlayer(l)) {
 					return l;
 				}
 			}
 		}
-		return spawns.get(spawn);
+		return spawns.get((int)spawn);
 	}
 
 	public boolean containsPlayer(Location l) {
@@ -457,5 +458,10 @@ public class Game {
 			return false;
 		}
 		return false;
+	}
+
+	public static double getRandomIntegerBetweenRange(double min, double max){
+		double x = (int)(Math.random()*((max-min)+1))+min;
+		return x;
 	}
 }
