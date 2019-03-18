@@ -39,7 +39,7 @@ public class ItemStackManager {
 					stack.add(getItem(item, true));
 
 				for (String pot : plugin.getConfig().getStringList("kits." + path + ".potion-effects")) {
-					String[] poti = pot.split("\\.");
+					String[] poti = pot.split(":");
 					PotionEffectType e = PotionEffectType.getByName(poti[0]);
 					if (poti[2].equalsIgnoreCase("forever")) {
 						potions.add(e.createEffect(2147483647, Integer.parseInt(poti[1])));
