@@ -26,10 +26,10 @@ public class Game {
 	private String name;
 	private List<Location> spawns;
 	private Bound b;
-	private List<UUID> players = new ArrayList<UUID>();
-	private List<Location> chests = new ArrayList<Location>();
+	private List<UUID> players = new ArrayList<>();
+	private List<Location> chests = new ArrayList<>();
 
-	private List<BlockState> blocks = new ArrayList<BlockState>();
+	private List<BlockState> blocks = new ArrayList<>();
 	private Location exit;
 	private Status status;
 	private int minplayers;
@@ -72,7 +72,7 @@ public class Game {
 		this.minplayers = minplayers;
 		this.maxplayers = maxplayers;
 		this.roamtime = roam;
-		this.spawns = new ArrayList<Location>();
+		this.spawns = new ArrayList<>();
 		this.b = c;
 		status = Status.NOTREADY;
 		sb = new SBDisplay(this);
@@ -90,29 +90,28 @@ public class Game {
 	}
 
 	public void setStatus(Status st) {
-		this.status = st; 
+		this.status = st;
 		updateLobbyBlock();
 	}
 
-	public void addState(BlockState s) {
+	private void addState(BlockState s) {
 		if (s.getType() != Material.AIR) {
 			blocks.add(s);
 		}
 	}
-	
+
 	public void addChest(Location l) {
 		chests.add(l);
 	}
-	
+
 	public boolean isLoggedChest(Location l) {
-		if (chests.contains(l)) return true;
-		return false;
+		return (chests.contains(l));
 	}
-	
+
 	public void removeChest(Location l) {
 		chests.remove(l);
 	}
-	
+
 	public void recordBlockBreak(Block bl) {
 		Block top = bl.getRelative(BlockFace.UP);
 
@@ -138,23 +137,13 @@ public class Game {
 		return this.status;
 	}
 
-	public List<BlockState> getBlocks() {
+	List<BlockState> getBlocks() {
 		Collections.reverse(blocks);
 		return blocks;
 	}
 
-	public void resetBlocks() {
+	void resetBlocks() {
 		this.blocks.clear();
-	}
-
-	public void msgAllMulti(String[] sta) {
-		for (String s : sta) {
-			for (UUID u : players) {
-				Player p = Bukkit.getPlayer(u);
-				if (p != null)
-					Util.msg(p, s);
-			}
-		}
 	}
 
 	public List<UUID> getPlayers() {
@@ -194,7 +183,7 @@ public class Game {
 			if (players.size() >= minplayers && status.equals(Status.WAITING)) {
 				startPreGame();
 			} else if (status == Status.WAITING) {
-				msgDef("&4(&6"+p.getName() + "&a Has joined the game"+(minplayers-players.size()<= 0?"!":": "+(minplayers-players.size())+" players to start!")+"&4)");
+				msgDef("&4(&6" + p.getName() + "&a Has joined the game" + (minplayers - players.size() <= 0 ? "!" : ": " + (minplayers - players.size()) + " players to start!") + "&4)");
 			}
 			kitHelp(p);
 			if (players.size() == 1)
@@ -205,7 +194,7 @@ public class Game {
 		}
 	}
 
-	public void kitHelp(Player p) {
+	private void kitHelp(Player p) {
 		String kit = HG.plugin.kit.getKitList();
 		Util.scm(p, "&8     ");
 		Util.scm(p, "&4&l>----------[&6&lWelcome to HungerGames&4&l]----------<");
@@ -247,7 +236,7 @@ public class Game {
 		this.spawns.add(l);
 	}
 
-	public Location pickSpawn() {
+	private Location pickSpawn() {
 
 		//int spawn = players.size() - 1;
 		double spawn = getRandomIntegerBetweenRange(0, maxplayers - 1);
@@ -259,10 +248,10 @@ public class Game {
 				}
 			}
 		}
-		return spawns.get((int)spawn);
+		return spawns.get((int) spawn);
 	}
 
-	public boolean containsPlayer(Location l) {
+	private boolean containsPlayer(Location l) {
 		if (l == null) return false;
 
 		for (UUID u : players) {
@@ -289,14 +278,14 @@ public class Game {
 		}
 	}
 
-	public void updateLobbyBlock() {
+	private void updateLobbyBlock() {
 		s1.setLine(1, status.getName());
 		s2.setLine(1, ChatColor.BOLD + "" + players.size() + "/" + maxplayers);
 		s1.update(true);
 		s2.update(true);
 	}
 
-	public void heal(Player p) {
+	private void heal(Player p) {
 		for (PotionEffect ef : p.getActivePotionEffects()) {
 			p.removePotionEffect(ef.getType());
 		}
@@ -338,7 +327,9 @@ public class Game {
 			s.update(true);
 			s1.update(true);
 			s2.update(true);
-		} catch (Exception e) { return false; }
+		} catch (Exception e) {
+			return false;
+		}
 		try {
 			String[] h = HG.plugin.getConfig().getString("settings.globalexit").split(":");
 			this.exit = new Location(Bukkit.getServer().getWorld(h[0]), Integer.parseInt(h[1]) + 0.5, Integer.parseInt(h[2]) + 0.1, Integer.parseInt(h[3]) + 0.5, Float.parseFloat(h[4]), Float.parseFloat(h[5]));
@@ -352,7 +343,7 @@ public class Game {
 		this.exit = l;
 	}
 
-	public void cancelTasks() {
+	void cancelTasks() {
 		if (spawner != null) spawner.stop();
 		if (timer != null) timer.stop();
 		if (starting != null) starting.stop();
@@ -361,7 +352,7 @@ public class Game {
 	}
 
 	public void stop() {
-		List<UUID> win = new ArrayList<UUID>();
+		List<UUID> win = new ArrayList<>();
 		cancelTasks();
 		for (UUID u : players) {
 			Player p = Bukkit.getPlayer(u);
@@ -377,13 +368,13 @@ public class Game {
 		players.clear();
 
 		if (!win.isEmpty() && Config.giveReward) {
-			double db = Config.cash / win.size();
+			double db = (double) Config.cash / win.size();
 
 			for (UUID u : win) {
 				Vault.economy.depositPlayer(Bukkit.getServer().getOfflinePlayer(u), db);
 				Player p = Bukkit.getPlayer(u);
 				if (p != null)
-				Util.msg(p, "&aYou won " + db + " for winning HungerGames!");
+					Util.msg(p, "&aYou won " + db + " for winning HungerGames!");
 			}
 		}
 		chests.clear();
@@ -410,15 +401,15 @@ public class Game {
 				stop();
 			}
 		} else if (status == Status.WAITING) {
-			msgDef("&6&l"+p.getName() + "&l&c Has left the game"+(minplayers-players.size()<= 0?"!":": "+(minplayers-players.size())+" players to start!"));
+			msgDef("&6&l" + p.getName() + "&l&c Has left the game" + (minplayers - players.size() <= 0 ? "!" : ": " + (minplayers - players.size()) + " players to start!"));
 		}
 		updateLobbyBlock();
 		sb.restoreSB(p);
 		sb.setAlive();
 	}
 
-	public boolean isGameOver() {
-		if (players.size() <= 1) return true; 
+	private boolean isGameOver() {
+		if (players.size() <= 1) return true;
 		for (Entry<UUID, PlayerData> f : HG.plugin.players.entrySet()) {
 
 			Team t = f.getValue().getTeam();
@@ -454,14 +445,15 @@ public class Game {
 			if (s instanceof Sign && s1 instanceof Sign && s2 instanceof Sign) {
 				return true;
 			}
-		} catch (Exception e) { 
+		} catch (Exception e) {
 			return false;
 		}
 		return false;
 	}
 
-	public static double getRandomIntegerBetweenRange(double min, double max){
-		double x = (int)(Math.random()*((max-min)+1))+min;
+	private static double getRandomIntegerBetweenRange(double min, double max) {
+		double x = (int) (Math.random() * ((max - min) + 1)) + min;
 		return x;
 	}
+
 }
