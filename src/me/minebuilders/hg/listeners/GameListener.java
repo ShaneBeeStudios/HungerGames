@@ -337,6 +337,7 @@ public class GameListener implements Listener {
 
 	@EventHandler
 	public void onLeafDecay(LeavesDecayEvent event) {
+		if (!Config.fixleaves) return;
 		Block b = event.getBlock();
 		if (HG.manager.isInRegion(b.getLocation())) {
 			if (Config.breakblocks) {
