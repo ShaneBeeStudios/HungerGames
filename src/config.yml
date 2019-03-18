@@ -16,8 +16,11 @@ random-chest:
     max-chestcontent: 9
 rollback:
     allow-block-break: false
+    fix-leaves: true
     editable-blocks:
         - GRASS
+        - TALL_GRASS
+        - GRASS_BLOCK
         - DIRT
         - COBBLESTONE
         - OAK_PLANKS
@@ -34,50 +37,50 @@ kits:
         boots: LEATHER_BOOTS color:red
         items:
             - BOW name:&2Lucky_Bow
-            - ARROW 64
-            - POTION 2
+            - ARROW 64 name:&aLucky_Arrow
+            - POTION:HEAL:60:0 2 name:&bHealing
         potion-effects:
     survivor:
         permission: none
-        helmet: 18
-        chestplate: 299 color:green
-        leggings: 300 color.green
-        boots: 0
+        helmet: LEATHER_HELMET
+        chestplate: LEATHER_CHESTPLATE color:green
+        leggings: LEATHER_LEGGINGS color:green
+        boots: LEATHER_BOOTS
         items:
-            - STONE_SWORD 1
-            - BREAD 4
-            - POTION 2
+            - STONE_SWORD 1 name:&7Survival_Sword
+            - BREAD 4 name:&6Peasant's_Bread
+            - POTION:HEAL:60:0 2 name:&bHealing
         potion-effects:
     pro:
         permission: none
-        helmet: 0
-        chestplate: 0
-        leggings: 0
-        boots: 0
+        helmet: TURTLE_HELMET name:&2Turtle_Shell
+        chestplate:
+        leggings:
+        boots:
         items:
             - IRON_SWORD 1
-            - BREAK 4
-            - POTION 2
+            - BREAD 4 name:&8Pro_Bread
+            - POTION:HEAL:60:1 2 name:&bSuper_Healing
         potion-effects:
     ninja:
         permission: none
-        helmet: 0
-        chestplate: LEATHER_CHESTPLATE color:black name:&7Ninja-ChestPlate lore:&6Ninja-Stealth-Suit:&4------------- enchant:PROTECTION_FIRE
+        helmet: LEATHER_HELMET color:black
+        chestplate: LEATHER_CHESTPLATE color:black name:&7Ninja-Jacket lore:&6Ninja-Stealth-Suit:&4------------- enchant:PROTECTION_FIRE
         leggings: LEATHER_LEGGINGS color:black
         boots: LEATHER_BOOTS color:black enchant:PROTECTION_FALL
         items:
-            - POTION 2 name:&bSuper-healing
+            - POTION:HEAL:60:1 2 name:&bSuper_Healing
         potion-effects:
-            - SPEED.1.forever
+            - SPEED:1:forever
     stupidclass:
         permission: hg.vip
-        helmet: 0
-        chestplate: 0
-        leggings: 0
-        boots: 0
+        helmet: GRASS_BLOCK
+        chestplate:
+        leggings:
+        boots:
         items:
-            - IRON_SWORD 1 enchant:SHARPNESS:2 enchant:DAMAGE_UNDEAD:2 name:&6OP_sword?
+            - IRON_SWORD 1 enchant:DAMAGE_ALL:2 enchant:DAMAGE_UNDEAD:2 name:&bOP_&6Sword?
             - BREAD 4
-            - POTION     2
+            - POTION:HEAL:60:2 2 name:&bSuper_Duper_Healing
         potion-effects:
-            - FIRE_RESISTANCE.2.forever
+            - FIRE_RESISTANCE:2:forever
