@@ -1,25 +1,6 @@
 package me.minebuilders.hg;
 
-import java.util.*;
-
-import me.minebuilders.hg.commands.AddSpawnCmd;
-import me.minebuilders.hg.commands.BaseCmd;
-import me.minebuilders.hg.commands.CreateCmd;
-import me.minebuilders.hg.commands.DebugCmd;
-import me.minebuilders.hg.commands.DeleteCmd;
-import me.minebuilders.hg.commands.JoinCmd;
-import me.minebuilders.hg.commands.KitCmd;
-import me.minebuilders.hg.commands.LeaveCmd;
-import me.minebuilders.hg.commands.ListCmd;
-import me.minebuilders.hg.commands.ListGamesCmd;
-import me.minebuilders.hg.commands.ReloadCmd;
-import me.minebuilders.hg.commands.SetExitCmd;
-import me.minebuilders.hg.commands.SetLobbyWallCmd;
-import me.minebuilders.hg.commands.StartCmd;
-import me.minebuilders.hg.commands.StopCmd;
-import me.minebuilders.hg.commands.TeamCmd;
-import me.minebuilders.hg.commands.ToggleCmd;
-import me.minebuilders.hg.commands.WandCmd;
+import me.minebuilders.hg.commands.*;
 import me.minebuilders.hg.data.Data;
 import me.minebuilders.hg.data.RandomItems;
 import me.minebuilders.hg.listeners.CancelListener;
@@ -30,7 +11,6 @@ import me.minebuilders.hg.managers.ItemStackManager;
 import me.minebuilders.hg.managers.KillManager;
 import me.minebuilders.hg.managers.KitManager;
 import me.minebuilders.hg.managers.Manager;
-
 import me.minebuilders.hg.metrics.Metrics;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
@@ -38,6 +18,11 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.permissions.Permission;
 import org.bukkit.permissions.PermissionDefault;
 import org.bukkit.plugin.java.JavaPlugin;
+
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.UUID;
 
 public class HG extends JavaPlugin {
 
