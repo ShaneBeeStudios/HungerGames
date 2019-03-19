@@ -23,9 +23,9 @@ public class CommandListener implements CommandExecutor, TabCompleter {
 
 	public boolean onCommand(CommandSender s, Command command, String label, String[] args) {
 		if (args.length == 0 || !p.cmds.containsKey(args[0])) {
-			Util.scm(s, "&4*&c&m                           &4*( &6Hungergames &4)*&c&m                           &4*");
+			Util.scm(s, "&4*&c&m                         &7*( &3&lHungergames &7)*&c&m                          &4*");
 			for (BaseCmd cmd : p.cmds.values().toArray(new BaseCmd[0])) {
-				if (s.hasPermission("hg." + cmd.cmdName)) Util.scm(s, "  &4- " + cmd.sendHelpLine());
+				if (s.hasPermission("hg." + cmd.cmdName)) Util.scm(s, "  &7&l- " + cmd.sendHelpLine());
 			}
 			Util.scm(s, "&4*&c&m                                                                             &4*");
 		} else p.cmds.get(args[0]).processCmd(p, s, args);

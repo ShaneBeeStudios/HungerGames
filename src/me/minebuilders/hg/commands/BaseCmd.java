@@ -42,6 +42,6 @@ public abstract class BaseCmd {
 	public abstract boolean run();
 
 	public String sendHelpLine() {
-		return "&c/hg &6" + cmdName + " &c" + usage;
+		return "&3&l/hg &b" + cmdName + " &6" + usage.replaceAll("<", "&7&l<&f").replaceAll(">", "&7&l>");
 	}
 }

@@ -75,12 +75,12 @@ public class Manager {
 			isReady = false;
 		}
 		if (isReady) {
-			Util.scm(sender,"&2&l---= &a&lYour hungergames arena is ready to run! &2&l=---");
-			Util.scm(sender, "&2Spawns:&a " + spawns.size());
-			Util.scm(sender, "&2Lobby:&a z:" + lobbysign.getX() +", y:"+ lobbysign.getY() +", z:"+ lobbysign.getZ());
-			Util.scm(sender, "&2Timer:&a " + timer);
-			Util.scm(sender, "&2MinPlayers:&a " + minplayers);
-			Util.scm(sender, "&2MaxPlayers:&a " + maxplayers);
+			Util.scm(sender,"&7&l---= &3&lYour HungerGames arena is ready to run! &7&l=---");
+			Util.scm(sender, "&7Spawns:&b " + spawns.size());
+			Util.scm(sender, "&7Lobby:&b z:" + lobbysign.getX() +", y:"+ lobbysign.getY() +", z:"+ lobbysign.getZ());
+			Util.scm(sender, "&7Timer:&b " + timer);
+			Util.scm(sender, "&7MinPlayers:&b " + minplayers);
+			Util.scm(sender, "&7MaxPlayers:&b " + maxplayers);
 		}
 	}
 

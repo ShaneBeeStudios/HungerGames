@@ -14,7 +14,7 @@ public class ToggleCmd extends BaseCmd {
 		cmdName = "toggle";
 		forceInGame = false;
 		argLength = 2;
-		usage = "<&cgame&b>";
+		usage = "<game>";
 	}
 
 	@Override

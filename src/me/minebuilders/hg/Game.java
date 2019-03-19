@@ -183,7 +183,7 @@ public class Game {
 			if (players.size() >= minplayers && status.equals(Status.WAITING)) {
 				startPreGame();
 			} else if (status == Status.WAITING) {
-				msgDef("&4(&6" + p.getName() + "&a Has joined the game" + (minplayers - players.size() <= 0 ? "!" : ": " + (minplayers - players.size()) + " players to start!") + "&4)");
+				msgDef("&b&l" + p.getName() + "&7 Has joined the game" + (minplayers - players.size() <= 0 ? "!" : ": &b&l" + (minplayers - players.size()) + " &6players to start!"));
 			}
 			kitHelp(p);
 			if (players.size() == 1)
@@ -195,12 +195,19 @@ public class Game {
 	}
 
 	private void kitHelp(Player p) {
+		// Clear the chat a little bit, making this message easier to see
+		for(int i = 0; i < 20; ++i)
+			Util.scm(p, " ");
 		String kit = HG.plugin.kit.getKitList();
-		Util.scm(p, "&8     ");
-		Util.scm(p, "&4&l>----------[&6&lWelcome to HungerGames&4&l]----------<");
-		Util.scm(p, "&4&l - &6Pick a kit using &c/hg kit <kit-name>");
-		Util.scm(p, "&4&lKits:&c" + kit);
-		Util.scm(p, "&4&l>------------------------------------------<");
+		Util.scm(p, " ");
+		Util.scm(p, "&c&l>&7&l----------[&f&lWelcome to Hunger&f&lGames&7&l]&7&l----------&c&l<");
+		Util.scm(p, " ");
+		Util.scm(p, "&7&l           - &3Pick a kit using &b/hg kit &7<&rkit-name&7>");
+		Util.scm(p, " ");
+		Util.scm(p, "&3&l  Available Kits:&b" + kit);
+		Util.scm(p, " ");
+		Util.scm(p, "&c&l>&7&l------------------------------------------&c&l<");
+		Util.scm(p, " ");
 	}
 
 	public void respawnAll() {
@@ -374,11 +381,11 @@ public class Game {
 				Vault.economy.depositPlayer(Bukkit.getServer().getOfflinePlayer(u), db);
 				Player p = Bukkit.getPlayer(u);
 				if (p != null)
-					Util.msg(p, "&aYou won " + db + " for winning HungerGames!");
+					Util.msg(p, "&7You received &b$" + db + " &7for winning &3&lHunger&b&lGames!");
 			}
 		}
 		chests.clear();
-		Util.broadcast("&l&6" + Util.translateStop(Util.convertUUIDListToStringList(win)) + " &l&aWon HungerGames at arena " + name + "!");
+		Util.broadcast("&b&l" + Util.translateStop(Util.convertUUIDListToStringList(win)) + " &6won HungerGames at arena &b&l" + name + "&7!");
 		if (!blocks.isEmpty()) {
 			new Rollback(this);
 		} else {
@@ -401,7 +408,7 @@ public class Game {
 				stop();
 			}
 		} else if (status == Status.WAITING) {
-			msgDef("&6&l" + p.getName() + "&l&c Has left the game" + (minplayers - players.size() <= 0 ? "!" : ": " + (minplayers - players.size()) + " players to start!"));
+			msgDef("&b&l" + p.getName() + "&c Has left the game" + (minplayers - players.size() <= 0 ? "!" : ": &b&l" + (minplayers - players.size()) + " &7&lplayers to start!"));
 		}
 		updateLobbyBlock();
 		sb.restoreSB(p);
