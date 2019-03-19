@@ -40,12 +40,11 @@ import org.bukkit.permissions.PermissionDefault;
 import org.bukkit.plugin.java.JavaPlugin;
 
 public class HG extends JavaPlugin {
-	
-	/** Things to fix
-	 * 
-	 * Block breaking on selection of left click
-	 * Colors are fucking ugly
-	 * Cant select kits when in game
+
+	/**
+	 * Things to fix
+	 *
+	 * Colors are fucking ugly <-- I agree
 	 */
 
 	//Maps
@@ -53,10 +52,10 @@ public class HG extends JavaPlugin {
 	public HashMap<UUID, PlayerData> players = new HashMap<>();
 	public HashMap<UUID, PlayerSession> playerses = new HashMap<>();
 	public HashMap<Integer, ItemStack> items = new HashMap<>();
-	
+
 	//Lists
 	public List<Game> games = new ArrayList<>();
-	
+
 	//Instances
 	public static HG plugin;
 	public static Manager manager;
@@ -65,13 +64,15 @@ public class HG extends JavaPlugin {
 	public static RandomItems ri;
 	public KitManager kit;
 	public ItemStackManager ism;
-	
+
 	@Override
 	public void onEnable() {
 		new Config(this);
 		Metrics metrics = new Metrics(this);
 		if (metrics.isEnabled())
 			Util.log("&7Metrics has been &aenabled");
+		else
+			Util.log("&7Metrics has been &cdisabled");
 		plugin = this;
 		arenaconfig = new Data(this);
 		killmanager = new KillManager();
@@ -90,7 +91,7 @@ public class HG extends JavaPlugin {
 			Util.log("&eReport any issues to: &bhttps://github.com/ShaneBeeTK/HungerGames/issues");
 		}
 	}
-	
+
 	@Override
 	public void onDisable() {
 		stopAll();
@@ -154,4 +155,5 @@ public class HG extends JavaPlugin {
 		players.clear();
 		games.clear();
 	}
+
 }
