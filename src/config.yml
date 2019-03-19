@@ -25,6 +25,7 @@ random-chest:
 rollback:
     allow-block-break: false
     fix-leaves: true
+    prevent-trampling: true
     editable-blocks:
         - GRASS
         - TALL_GRASS

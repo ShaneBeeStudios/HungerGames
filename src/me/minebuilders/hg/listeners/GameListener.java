@@ -1,15 +1,7 @@
 package me.minebuilders.hg.listeners;
 
-import me.minebuilders.hg.Config;
-import me.minebuilders.hg.Game;
-import me.minebuilders.hg.HG;
-import me.minebuilders.hg.PlayerData;
-import me.minebuilders.hg.Status;
-import me.minebuilders.hg.Util;
+import me.minebuilders.hg.*;
 import me.minebuilders.hg.events.ChestOpenEvent;
-
-import java.util.UUID;
-
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
@@ -37,6 +29,8 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.PlayerInventory;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.util.Vector;
+
+import java.util.UUID;
 
 public class GameListener implements Listener {
 
@@ -344,6 +338,20 @@ public class GameListener implements Listener {
 				Game g = HG.manager.getGame(b.getLocation());
 				if (g.getStatus() == Status.RUNNING) {
 					g.recordBlockBreak(b);
+				}
+			}
+		}
+	}
+
+	@EventHandler
+	public void onTrample(PlayerInteractEvent e) {
+		if (!Config.preventtrample) return;
+		Player p = e.getPlayer();
+		if (HG.manager.isInRegion(p.getLocation())) {
+			if (e.getAction() == Action.PHYSICAL) {
+				Material block = e.getClickedBlock().getType();
+				if (block == Material.FARMLAND) {
+					e.setCancelled(true);
 				}
 			}
 		}
