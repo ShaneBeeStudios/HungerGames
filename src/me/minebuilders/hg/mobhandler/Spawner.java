@@ -56,21 +56,27 @@ public class Spawner implements Runnable{
 
 	private EntityType pickRandomMob(boolean isNight, int x) {
 		if (isNight) {
-			if (x < 5) 
+			if (x < 3)
 				return EntityType.ZOMBIE;
-			if (x < 8) 
+			if (x < 5)
+				return EntityType.DROWNED;
+			if (x < 7)
 				return EntityType.SKELETON;
+			if (x < 8)
+				return EntityType.STRAY;
 
 			return EntityType.CREEPER;
 		} else {
-			if (x < 3)
+			if (x < 2)
 				return EntityType.COW;
-			if (x < 6)
+			if (x < 5)
 				return EntityType.PIG;
-			if (x < 7) 
+			if (x < 6)
 				return EntityType.CHICKEN;
-			if (x < 8)
+			if (x < 7)
 				return EntityType.SHEEP;
+			if (x < 8)
+				return EntityType.PARROT;
 			if (x < 9)
 				return EntityType.SPIDER;
 
