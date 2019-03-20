@@ -10,6 +10,7 @@
 A new fork of ImSpoopy's [**HungerGames**](https://github.com/ImSpoopy/Hungergames)
 
 
-Updating this plugin to work on 1.13.2
+Updating this plugin to work on 1.13.2  
+See [**WIKI**](https://github.com/ShaneBeeTK/HungerGames/wiki) for commands, permissions and setup instructions.
 
 Original plugin can be found on [**SpigotMC**](https://www.spigotmc.org/resources/hungergames.30102/)
