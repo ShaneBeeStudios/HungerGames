@@ -117,8 +117,8 @@ public class Util {
 		Firework fw = l.getWorld().spawn(l, Firework.class);
 		FireworkMeta fm = fw.getFireworkMeta();
 		List<Color> c = new ArrayList<>();
-		c.add(Color.ORANGE);
-		c.add(Color.RED);
+		c.add(Color.GREEN);
+		c.add(Color.BLUE);
 		FireworkEffect e = FireworkEffect.builder().flicker(true).withColor(c).withFade(c).with(Type.BALL_LARGE).trail(true).build();
 		fm.addEffect(e);
 		fm.setPower(2);
