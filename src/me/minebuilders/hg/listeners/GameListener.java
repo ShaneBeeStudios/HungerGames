@@ -2,14 +2,10 @@ package me.minebuilders.hg.listeners;
 
 import me.minebuilders.hg.*;
 import me.minebuilders.hg.events.ChestOpenEvent;
-import org.bukkit.Bukkit;
-import org.bukkit.ChatColor;
-import org.bukkit.Location;
-import org.bukkit.Material;
+import org.bukkit.*;
 import org.bukkit.block.Block;
 import org.bukkit.block.Sign;
 import org.bukkit.entity.Entity;
-import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.entity.Projectile;
 import org.bukkit.event.EventHandler;
@@ -20,6 +16,7 @@ import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.event.block.BlockPlaceEvent;
 import org.bukkit.event.block.LeavesDecayEvent;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
+import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.event.entity.FoodLevelChangeEvent;
 import org.bukkit.event.entity.PlayerDeathEvent;
 import org.bukkit.event.player.PlayerDropItemEvent;
@@ -30,6 +27,7 @@ import org.bukkit.inventory.PlayerInventory;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.util.Vector;
 
+import java.util.HashMap;
 import java.util.UUID;
 
 public class GameListener implements Listener {
@@ -37,6 +35,7 @@ public class GameListener implements Listener {
 	private HG plugin;
 	private String tsn = ChatColor.GOLD + "TrackingStick " + ChatColor.GREEN + "Uses: ";
 	private ItemStack trackingStick;
+	private HashMap<Player, Entity> killerMap = new HashMap<>();
 
 	public GameListener(HG plugin) {
 		this.plugin = plugin;
@@ -74,10 +73,22 @@ public class GameListener implements Listener {
 			}
 		}
 	}
-	
+
+	@EventHandler
+	public void onDamage(EntityDamageByEntityEvent e) {
+		if (e.getEntity() instanceof Player) {
+			Player player = ((Player) e.getEntity());
+			if (plugin.players.get(player.getUniqueId()) != null) {
+				if (!killerMap.containsKey(player))
+					killerMap.put(player, e.getDamager());
+				else
+					killerMap.replace(player, e.getDamager());
+			}
+		}
+	}
 	
 	@EventHandler
-	public void onDIe(PlayerDeathEvent event) {
+	public void onDeath(PlayerDeathEvent event) {
 		final Player p = event.getEntity();
 
 		PlayerData pd = plugin.players.get(p.getUniqueId());
@@ -86,17 +97,22 @@ public class GameListener implements Listener {
 			final Game g = pd.getGame();
 
 			p.setHealth(20);
-
-			LivingEntity killer = p.getKiller();
+			Player killer = p.getKiller();
 
 			if (killer != null) {
-				g.msgDef("&l&d" + HG.killmanager.getKillString(p.getName(), killer));
+				g.msgDef("&7&l[&3&lHungerGames Fallen&7&l] &d" + HG.killmanager.getKillString(p.getName(), killer));
+			} else if (p.getLastDamageCause().getCause() == EntityDamageEvent.DamageCause.ENTITY_ATTACK) {
+				g.msgDef("&7&l[&3&lHungerGames Fallen&7&l] &d" + HG.killmanager.getKillString(p.getName(), killerMap.get(p)));
 			} else {
-				g.msgDef("&d" + HG.killmanager.getDeathString(p.getLastDamageCause().getCause(), p.getName()));
+				g.msgDef("&7&l[&3&lHungerGames Fallen&7&l] &d" + HG.killmanager.getDeathString(p.getLastDamageCause().getCause(), p.getName()));
 			}
 			event.setDeathMessage(null);
-			
 			event.getDrops().clear();
+
+			for (UUID uuid : g.getPlayers()) {
+				Player player = Bukkit.getPlayer(uuid);
+				player.playSound(player.getLocation(), Sound.UI_TOAST_CHALLENGE_COMPLETE, 5, 1);
+			}
 			
 			dropInv(p);
 			g.exit(p);
@@ -260,7 +276,7 @@ public class GameListener implements Listener {
 							Util.msg(p, ChatColor.RED + "Click the sign with your hand!");
 						}
 					}
-				} 
+				}
 			}
 		} else if (event.getAction().equals(Action.LEFT_CLICK_AIR)) {
 			if (p.getInventory().getItemInMainHand().getType().equals(Material.STICK) && plugin.players.containsKey(p.getUniqueId())) {
