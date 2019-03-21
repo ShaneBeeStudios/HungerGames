@@ -11,14 +11,8 @@ import org.bukkit.entity.Projectile;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
-import org.bukkit.event.block.Action;
-import org.bukkit.event.block.BlockBreakEvent;
-import org.bukkit.event.block.BlockPlaceEvent;
-import org.bukkit.event.block.LeavesDecayEvent;
-import org.bukkit.event.entity.EntityDamageByEntityEvent;
-import org.bukkit.event.entity.EntityDamageEvent;
-import org.bukkit.event.entity.FoodLevelChangeEvent;
-import org.bukkit.event.entity.PlayerDeathEvent;
+import org.bukkit.event.block.*;
+import org.bukkit.event.entity.*;
 import org.bukkit.event.player.PlayerDropItemEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
@@ -28,6 +22,7 @@ import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.util.Vector;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.UUID;
 
 public class GameListener implements Listener {
@@ -113,9 +108,9 @@ public class GameListener implements Listener {
 				Player player = Bukkit.getPlayer(uuid);
 				player.playSound(player.getLocation(), Sound.UI_TOAST_CHALLENGE_COMPLETE, 5, 1);
 			}
-			
 			dropInv(p);
 			g.exit(p);
+            p.playSound(p.getLocation(), Sound.UI_TOAST_CHALLENGE_COMPLETE, 5, 1);
 			
 			Bukkit.getScheduler().scheduleSyncDelayedTask(plugin, () -> {
 				g.leave(p);
@@ -344,6 +339,17 @@ public class GameListener implements Listener {
 			}
 		}
 	}
+
+	@EventHandler
+    public void blockExplode(EntityExplodeEvent e) {
+        if (HG.manager.isInRegion(e.getLocation())) {
+            List<Block> blocks = e.blockList();
+            Game g = HG.manager.getGame(e.getLocation());
+            for (Block block : blocks) {
+                g.recordBlockBreak(block);
+            }
+        }
+    }
 
 	@EventHandler
 	public void onLeafDecay(LeavesDecayEvent event) {
