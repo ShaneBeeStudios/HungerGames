@@ -2,10 +2,7 @@ package me.minebuilders.hg;
 
 import java.util.Random;
 
-import org.bukkit.Bukkit;
-import org.bukkit.Chunk;
-import org.bukkit.Location;
-import org.bukkit.Material;
+import org.bukkit.*;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockState;
 import org.bukkit.entity.Entity;
@@ -44,18 +41,18 @@ public class ChestDrop implements Listener {
 			event.setCancelled(true);
 		}
 	}
-	
+
 	@SuppressWarnings("deprecation")
 	public void remove() {
 		if (fb != null && !fb.isDead()) fb.remove();
 		if (beforeBlock != null) {
 			beforeBlock.update(true);
 			Block b = beforeBlock.getBlock();
-			if (b.getType() == Material.PISTON) {
+			if (b.getType() == Material.ENDER_CHEST) {
 				b.setType(Material.AIR);
 			}
 		}
-		
+
 		HandlerList.unregisterAll(this);
 	}
 
@@ -65,7 +62,7 @@ public class ChestDrop implements Listener {
 
 		if (!(en instanceof FallingBlock)) return;
 
-		FallingBlock fb2 = (FallingBlock)en;
+		FallingBlock fb2 = (FallingBlock) en;
 
 		if (fb2.equals(fb)) {
 			beforeBlock = event.getBlock().getState();
@@ -78,8 +75,8 @@ public class ChestDrop implements Listener {
 	@EventHandler
 	public void onClose(InventoryCloseEvent event) {
 		for (HumanEntity p : event.getViewers()) {
-			if (((Player)p).equals(invopener)) {
-				Location l =  beforeBlock.getLocation();
+			if (p.equals(invopener)) {
+				Location l = beforeBlock.getLocation();
 				l.getWorld().createExplosion(l.getBlockX(), l.getBlockY(), l.getBlockZ(), 1, false, false);
 				remove();
 				return;
@@ -89,13 +86,12 @@ public class ChestDrop implements Listener {
 
 	@EventHandler
 	public void onBla(PlayerInteractEvent event) {
-
 		if (event.getAction() == Action.RIGHT_CLICK_BLOCK && beforeBlock != null && event.getClickedBlock().getLocation().equals(beforeBlock.getLocation())) {
 			Player p = event.getPlayer();
 			Random rg = new Random();
 			invopener = p;
-			
-		    Inventory i = Bukkit.getServer().createInventory(p, 54);
+
+			Inventory i = Bukkit.getServer().createInventory(p, 54);
 			i.clear();
 			int c = rg.nextInt(Config.randomChestMaxContent) + 1;
 			while (c != 0) {
@@ -105,7 +101,10 @@ public class ChestDrop implements Listener {
 				}
 				c--;
 			}
+			event.setCancelled(true);
+			p.playSound(p.getLocation(), Sound.BLOCK_ENDER_CHEST_OPEN, 1, 1);
 			p.openInventory(i);
 		}
 	}
+
 }

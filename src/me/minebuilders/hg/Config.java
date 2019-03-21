@@ -85,6 +85,7 @@ public class Config {
 			}
 		}
 		//Firework setup info
+		/*
 		ItemStack i = new ItemStack(Material.FIREWORK_ROCKET, 64);
 		FireworkMeta fm = (FireworkMeta) i.getItemMeta();
 		List<Color> c = new ArrayList<Color>();
@@ -96,5 +97,6 @@ public class Config {
 		i.setItemMeta(fm);
 
 		firework = i;
+		*/
 	}
 }

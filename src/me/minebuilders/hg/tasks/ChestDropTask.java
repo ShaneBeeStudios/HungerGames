@@ -21,7 +21,7 @@ public class ChestDropTask implements Runnable {
 
 	private Game g;
 	private int timerID;
-	private List<ChestDrop> chests = new ArrayList<ChestDrop>();
+	private List<ChestDrop> chests = new ArrayList<>();
 
 	public ChestDropTask(Game g) {
 		this.g = g;
@@ -53,16 +53,16 @@ public class ChestDropTask implements Runnable {
 
 		Location l = new Location(w, x, y, z);
 
-		FallingBlock fb = l.getWorld().spawnFallingBlock(l, Bukkit.getServer().createBlockData(Material.PISTON));
+		FallingBlock fb = l.getWorld().spawnFallingBlock(l, Bukkit.getServer().createBlockData(Material.ENDER_CHEST));
 
 		chests.add(new ChestDrop(fb));
 
 		for (UUID u : g.getPlayers()) {
 			Player p = Bukkit.getPlayer(u);
 			if (p != null) {
-			Util.scm(p, "&6*&b&m                                                                             &6*");
+			Util.scm(p, "&6*&b&m                                                                                   &6*");
 			Util.scm(p, "&b| &3A Care-Package was just dropped near: &f"+x+"&3, &f"+y+"&3, &f"+z);
-			Util.scm(p, "&6*&b&m                                                                             &6*");
+			Util.scm(p, "&6*&b&m                                                                                   &6*");
 			}
 		}
 	}
