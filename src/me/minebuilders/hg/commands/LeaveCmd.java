@@ -1,5 +1,6 @@
 package me.minebuilders.hg.commands;
 
+import me.minebuilders.hg.Game;
 import me.minebuilders.hg.HG;
 import me.minebuilders.hg.Util;
 
@@ -14,8 +15,9 @@ public class LeaveCmd extends BaseCmd {
 
 	@Override
 	public boolean run() {
-		HG.plugin.players.get(player.getUniqueId()).getGame().leave(player);
-		Util.msg(player, "&cYou left Hungergames!");
+		Game g = HG.plugin.players.get(player.getUniqueId()).getGame();
+		g.leave(player);
+		Util.msg(player, "&7&l[&3&lHungerGames&7&l] &cYou left &b&l" + g.getName() + "&c!");
 		return true;
 	}
 }
