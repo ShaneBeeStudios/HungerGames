@@ -59,10 +59,10 @@ public class GameListener implements Listener {
 			for (UUID u : g.getPlayers()) {
 				Player p = Bukkit.getPlayer(u);
 				if (p != null) {
-					Util.scm(p,"&a&l[]------------------------------------------[]");
+					Util.scm(p, "&a&l[]------------------------------------------[]");
 					Util.scm(p, "&a&l |&6&l   You have been given a player-tracking stick! &a&l |");
 					Util.scm(p, "&a&l |&6&l   Swing the stick to track players!                &a&l |");
-					Util.scm(p,"&a&l[]------------------------------------------[]");
+					Util.scm(p, "&a&l[]------------------------------------------[]");
 					p.getInventory().addItem(trackingStick);
 				}
 			}
@@ -81,7 +81,7 @@ public class GameListener implements Listener {
 			}
 		}
 	}
-	
+
 	@EventHandler
 	public void onDeath(PlayerDeathEvent event) {
 		final Player p = event.getEntity();
@@ -110,8 +110,8 @@ public class GameListener implements Listener {
 			}
 			dropInv(p);
 			g.exit(p);
-            p.playSound(p.getLocation(), Sound.UI_TOAST_CHALLENGE_COMPLETE, 5, 1);
-			
+			p.playSound(p.getLocation(), Sound.UI_TOAST_CHALLENGE_COMPLETE, 5, 1);
+
 			Bukkit.getScheduler().scheduleSyncDelayedTask(plugin, () -> {
 				g.leave(p);
 				checkStick(g);
@@ -121,12 +121,12 @@ public class GameListener implements Listener {
 
 	@EventHandler
 	public void onSprint(FoodLevelChangeEvent event) {
-		Player p = (Player)event.getEntity();
+		Player p = (Player) event.getEntity();
 		if (plugin.players.containsKey(p.getUniqueId())) {
 			Status st = plugin.players.get(p.getUniqueId()).getGame().getStatus();
 			if (st == Status.WAITING || st == Status.COUNTDOWN) {
-			event.setFoodLevel(1);
-			event.setCancelled(true);
+				event.setFoodLevel(1);
+				event.setCancelled(true);
 			}
 		}
 	}
@@ -142,14 +142,14 @@ public class GameListener implements Listener {
 			} else {
 				for (Entity e : p.getNearbyEntities(120, 50, 120)) {
 					if (e instanceof Player) {
-						im.setDisplayName(tsn + (uses -1));
+						im.setDisplayName(tsn + (uses - 1));
 						Location l = e.getLocation();
 						int range = (int) p.getLocation().distance(l);
 						Util.msg(p, ("&6" + e.getName()) + "&e is " + range + " blocks away from you:&6 " + getDirection(p.getLocation().getBlock(), l.getBlock()));
 						i.setItemMeta(im);
 						p.updateInventory();
 						return;
-					} 
+					}
 				}
 				Util.msg(p, ChatColor.RED + "Couldn't locate any nearby players!");
 
@@ -163,21 +163,21 @@ public class GameListener implements Listener {
 		float y = (float) angle(bv.getX(), bv.getZ(), bv2.getX(), bv2.getZ());
 		float cal = (y * 10);
 		int c = (int) cal;
-		if (c<=1 && c>=-1) {
+		if (c <= 1 && c >= -1) {
 			return "South";
-		} else if (c>-14 && c<-1) {
+		} else if (c > -14 && c < -1) {
 			return "SouthWest";
-		} else if (c>=-17 && c<=-14) {
+		} else if (c >= -17 && c <= -14) {
 			return "West";
-		} else if (c>-29 && c<-17) {
+		} else if (c > -29 && c < -17) {
 			return "NorthWest";
-		} else if (c>17 && c<29) {
+		} else if (c > 17 && c < 29) {
 			return "NorthEast";
-		} else if (c<=17 && c>=14) {
+		} else if (c <= 17 && c >= 14) {
 			return "East";
-		} else if (c>1 && c<14) {
+		} else if (c > 1 && c < 14) {
 			return "SouthEast";
-		}  else if (c<=29 && c>=-29) {
+		} else if (c <= 29 && c >= -29) {
 			return "North";
 		} else {
 			return "UnKnown";
@@ -193,17 +193,17 @@ public class GameListener implements Listener {
 		return Math.atan2(x, z);
 	}
 
-	@EventHandler(priority=EventPriority.HIGHEST)
+	@EventHandler(priority = EventPriority.HIGHEST)
 	public void onAttack(EntityDamageByEntityEvent event) {
 		Entity defender = event.getEntity();
 		Entity damager = event.getDamager();
-		
+
 		if (damager instanceof Projectile) {
-			damager = (Entity) ((Projectile)damager).getShooter();
+			damager = (Entity) ((Projectile) damager).getShooter();
 		}
-		
+
 		if (defender instanceof Player && damager != null) {
-			Player p = (Player)defender;
+			Player p = (Player) defender;
 			PlayerData pd = plugin.players.get(p.getUniqueId());
 
 			if (pd != null) {
@@ -218,7 +218,7 @@ public class GameListener implements Listener {
 			}
 		}
 	}
-	
+
 	@EventHandler
 	public void onChestOpen(ChestOpenEvent event) {
 		Block b = event.getChest();
@@ -236,11 +236,11 @@ public class GameListener implements Listener {
 			Block b = event.getClickedBlock();
 			if (b.getType() == Material.CHEST) {
 				PlayerData pd = plugin.players.get(p.getUniqueId());
-				Bukkit.getServer().getPluginManager().callEvent(new ChestOpenEvent(pd.getGame(),b));
+				Bukkit.getServer().getPluginManager().callEvent(new ChestOpenEvent(pd.getGame(), b));
 			}
 		}
 	}
-	
+
 	@EventHandler
 	public void onItemUseAttempt(PlayerInteractEvent event) {
 		Player p = event.getPlayer();
@@ -284,13 +284,13 @@ public class GameListener implements Listener {
 	public void blockPlace(BlockPlaceEvent event) {
 		Player p = event.getPlayer();
 		Block b = event.getBlock();
-		
+
 		if (HG.manager.isInRegion(b.getLocation())) {
-			
+
 			if (Config.breakblocks && plugin.players.containsKey(p.getUniqueId())) {
-				
+
 				Game g = plugin.players.get(p.getUniqueId()).getGame();
-				
+
 				if (g.getStatus() == Status.RUNNING || g.getStatus() == Status.BEGINNING) {
 					if (!Config.blocks.contains(b.getType().toString())) {
 						p.sendMessage(ChatColor.RED + "You cannot edit this block type!");
@@ -306,6 +306,8 @@ public class GameListener implements Listener {
 					event.setCancelled(true);
 				}
 			} else {
+				if (p.hasPermission("hg.create") && HG.manager.getGame(b.getLocation()).getStatus() != Status.RUNNING)
+					return;
 				event.setCancelled(true);
 			}
 		}
@@ -332,24 +334,24 @@ public class GameListener implements Listener {
 					p.sendMessage(ChatColor.RED + "The game is not running!");
 					event.setCancelled(true);
 				}
-			} else if (p.hasPermission("hg.create") && HG.manager.getGame(b.getLocation()).getStatus() != Status.RUNNING) {
-				return;
 			} else {
+				if (p.hasPermission("hg.create") && HG.manager.getGame(b.getLocation()).getStatus() != Status.RUNNING)
+					return;
 				event.setCancelled(true);
 			}
 		}
 	}
 
 	@EventHandler
-    public void blockExplode(EntityExplodeEvent e) {
-        if (HG.manager.isInRegion(e.getLocation())) {
-            List<Block> blocks = e.blockList();
-            Game g = HG.manager.getGame(e.getLocation());
-            for (Block block : blocks) {
-                g.recordBlockBreak(block);
-            }
-        }
-    }
+	public void blockExplode(EntityExplodeEvent e) {
+		if (HG.manager.isInRegion(e.getLocation())) {
+			List<Block> blocks = e.blockList();
+			Game g = HG.manager.getGame(e.getLocation());
+			for (Block block : blocks) {
+				g.recordBlockBreak(block);
+			}
+		}
+	}
 
 	@EventHandler
 	public void onLeafDecay(LeavesDecayEvent event) {
@@ -388,10 +390,24 @@ public class GameListener implements Listener {
 	}
 
 	@EventHandler
+	public void onSpawn(EntitySpawnEvent e) {
+		Entity entity = e.getEntity();
+		if (!(entity instanceof Player)) {
+			if (HG.manager.isInRegion(e.getLocation())) {
+				Game g = HG.manager.getGame(e.getLocation());
+				if (g.getStatus() != Status.RUNNING) {
+					e.setCancelled(true);
+				}
+			}
+		}
+	}
+
+	@EventHandler
 	public void onlogout(PlayerQuitEvent event) {
 		Player player = event.getPlayer();
 		if (plugin.players.containsKey(player.getUniqueId())) {
 			plugin.players.get(player.getUniqueId()).getGame().leave(player);
 		}
 	}
+
 }
