@@ -2,6 +2,7 @@ package me.minebuilders.hg;
 
 import me.minebuilders.hg.commands.*;
 import me.minebuilders.hg.data.Data;
+import me.minebuilders.hg.data.Language;
 import me.minebuilders.hg.data.RandomItems;
 import me.minebuilders.hg.listeners.CancelListener;
 import me.minebuilders.hg.listeners.CommandListener;
@@ -47,6 +48,7 @@ public class HG extends JavaPlugin {
 	public static Data arenaconfig;
 	public static KillManager killmanager;
 	public static RandomItems ri;
+	public static Language lang;
 	public KitManager kit;
 	public ItemStackManager ism;
 
@@ -64,6 +66,7 @@ public class HG extends JavaPlugin {
 		kit = new KitManager();
 		ism = new ItemStackManager(this);
 		ri = new RandomItems(this);
+		lang = new Language(this);
 		manager = new Manager(this);
 		getCommand("hg").setExecutor(new CommandListener(this));
 		getServer().getPluginManager().registerEvents(new WandListener(this), this);

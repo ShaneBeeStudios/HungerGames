@@ -1,0 +1,9 @@
+#  This is the language file
+#  Change the messages to your liking
+#  Supports '&' color codes
+
+#  GENERAL PLUGIN MESSAGES
+prefix: '&7&l[&3&lHungerGames&7&l]'
+
+#  GAME MESSAGES
+
