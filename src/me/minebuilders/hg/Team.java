@@ -9,8 +9,8 @@ import org.bukkit.entity.Player;
 public class Team {
 
 	private UUID leader;
-	private List<UUID> players = new ArrayList<UUID>();
-	private List<UUID> pending = new ArrayList<UUID>();
+	private List<UUID> players = new ArrayList<>();
+	private List<UUID> pending = new ArrayList<>();
 	
 	public Team(UUID leader) {
 		this.leader = leader;
@@ -19,17 +19,17 @@ public class Team {
 	
 	
 	public void invite(Player p) {
-		Util.scm(p, "&6*&b&m                                                                             &6*");
-		Util.scm(p, "| &f" + leader + " &3Just invited you to a &fTeam&3!");
-		Util.scm(p, "| &3Type &f/hg team accept &3To join!");
-		Util.scm(p, "&6*&b&m                                                                             &6*");
+		Util.scm(p, HG.lang.team_invite_1);
+		Util.scm(p, HG.lang.team_invite_2.replace("<inviter>", leader.toString()));
+		Util.scm(p, HG.lang.team_invite_3);
+		Util.scm(p, HG.lang.team_invite_4);
 		pending.add(p.getUniqueId());
 	}
 	
 	public void acceptInvite(Player p) {
 		pending.remove(p.getUniqueId());
 		players.add(p.getUniqueId());
-		Util.msg(p, "&3You successfully joined this team!");
+		Util.msg(p, HG.lang.joined_team);
 	}
 	
 	public boolean isOnTeam(UUID p) {

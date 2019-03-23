@@ -27,16 +27,21 @@ public class TimerTask implements Runnable {
 		remainingtime = (remainingtime - 30);
 
 		if (remainingtime == 30 && HG.plugin.getConfig().getBoolean("settings.teleport-at-end")) {
-			game.msgAll("&l&cThe game is almost over, fight to the death!");
+			game.msgAll(HG.lang.game_almost_over);
 			game.respawnAll();
 		} else if (this.remainingtime < 10) {
 			stop();
 			game.stop();
 		} else {
 			int minutes = this.remainingtime / 60;
-			int asd = Integer.valueOf(this.remainingtime % 60);
-			if (minutes != 0) game.msgAll(ChatColor.GREEN+"The game is ending in " + minutes + (asd == 0?" minute(s)!":" minute(s), and " + asd+" seconds!"));
-			else game.msgAll(ChatColor.GREEN+"The game is ending in " + this.remainingtime +" seconds!");
+			int asd = this.remainingtime % 60;
+			if (minutes != 0) {
+				if (asd == 0)
+					game.msgAll(HG.lang.game_ending_minsec.replace("<minutes>", String.valueOf(minutes)).replace("<seconds>", String.valueOf(asd)));
+				else
+					game.msgAll(HG.lang.game_ending_min.replace("<minutes>", String.valueOf(minutes)));
+			}
+			else game.msgAll(HG.lang.game_ending_sec.replace("<seconds>", String.valueOf(this.remainingtime)));
 		}
 	}
 	

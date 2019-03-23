@@ -18,12 +18,10 @@ import java.util.UUID;
 
 public class Util {
 
-	private static String prefix = "&7[&3&lHungerGames&7] ";
-
 	static final BlockFace[] faces = new BlockFace[]{BlockFace.EAST, BlockFace.WEST, BlockFace.NORTH, BlockFace.SOUTH};
 
 	public static void log(String s) {
-		Bukkit.getConsoleSender().sendMessage(ChatColor.translateAlternateColorCodes('&', prefix + s));
+		Bukkit.getConsoleSender().sendMessage(ChatColor.translateAlternateColorCodes('&', "&7[&3&lHungerGames&7] " + s));
 	}
 
 	public static void warning(String s) {
@@ -41,7 +39,7 @@ public class Util {
 	}
 
 	public static void broadcast(String s) {
-		Bukkit.getServer().broadcastMessage(ChatColor.translateAlternateColorCodes('&', prefix + s));
+		Bukkit.getServer().broadcastMessage(ChatColor.translateAlternateColorCodes('&', HG.lang.prefix + s));
 	}
 
 	public static boolean isInt(String str) {

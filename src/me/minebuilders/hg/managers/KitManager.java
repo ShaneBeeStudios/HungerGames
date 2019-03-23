@@ -2,6 +2,7 @@ package me.minebuilders.hg.managers;
 
 import java.util.HashMap;
 
+import me.minebuilders.hg.HG;
 import me.minebuilders.hg.Util;
 import me.minebuilders.hg.data.KitEntry;
 
@@ -14,10 +15,10 @@ public class KitManager {
 	
 	public void setkit(Player p, String path) {
 		if (!kititems.containsKey(path)) {
-			Util.scm(p, ChatColor.RED + path + " Doesn't exist!");
+			Util.scm(p, ChatColor.RED + path + HG.lang.kit_doesnt_exist);
 			Util.scm(p, "&9&lKits:&b" + getKitList());
 		} else if (!kititems.get(path).hasKitPermission(p))
-			Util.msg(p, ChatColor.RED + "You don't have permission to use this kit!");
+			Util.msg(p, HG.lang.kit_no_perm);
 		else {
 			kititems.get(path).setInventoryContent(p);
 		}

@@ -19,8 +19,8 @@ public class FreeRoamTask implements Runnable {
 		for (UUID u : g.getPlayers()) {
 			Player p = Bukkit.getPlayer(u);
 			if (p != null) {
-				Util.scm(p,"&4[]---------[ &6&lThe game has started! &4]---------[]"); 
-				Util.scm(p," &e You have " + g.getRoamTime() + " seconds to roam without taking damage!"); 
+				Util.scm(p,HG.lang.roam_game_started);
+				Util.scm(p,HG.lang.roam_time.replace("<roam>", String.valueOf(g.getRoamTime())));
 				p.setHealth(20);
 				p.setFoodLevel(20);
 				g.unFreeze(p);
@@ -31,7 +31,7 @@ public class FreeRoamTask implements Runnable {
 
 	@Override
 	public void run() {
-		game.msgAll("&c&lFree-Roam is over, PVP is now enabled!");
+		game.msgAll(HG.lang.roam_finished);
 		game.startGame();
 	}
 

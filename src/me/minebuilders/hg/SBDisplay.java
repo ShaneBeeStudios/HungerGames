@@ -19,32 +19,32 @@ public class SBDisplay {
 	private HashMap<String, Scoreboard> score = new HashMap<String, Scoreboard>();
 	private Game g;
 
-	public SBDisplay(Game g) {
+	SBDisplay(Game g) {
 		this.manager = Bukkit.getScoreboardManager();
 		this.board = manager.getNewScoreboard();
-		this.ob = board.registerNewObjective(ChatColor.GREEN + "Players-Alive:", "dummy");
+		this.ob = board.registerNewObjective(ChatColor.translateAlternateColorCodes('&', HG.lang.players_alive), "dummy");
 		this.ob.setDisplaySlot(DisplaySlot.SIDEBAR);
-		this.ob.setDisplayName(ChatColor.GOLD + "" + ChatColor.BOLD + "HungerGames");
+		this.ob.setDisplayName(ChatColor.translateAlternateColorCodes('&', HG.lang.scoreboard_title));
 		this.g = g;
 	}
 
-	public void setAlive() {
-		Score score = ob.getScore(ChatColor.GREEN + "Players-Alive:"); 
+	void setAlive() {
+		Score score = ob.getScore(ChatColor.translateAlternateColorCodes('&', HG.lang.players_alive));
 		
 		score.setScore(g.getPlayers().size());
 	}
 
-	public void resetAlive() {
-		board.resetScores(ChatColor.GREEN + "Players-Alive:");
+	void resetAlive() {
+		board.resetScores(ChatColor.translateAlternateColorCodes('&', HG.lang.players_alive));
 		score.clear();
 	}
 
-	public void setSB(Player p) {
+	void setSB(Player p) {
 		score.put(p.getName(), p.getScoreboard());
 		p.setScoreboard(board);
 	}
 
-	public void restoreSB(Player p) {
+	void restoreSB(Player p) {
 		if (score.get(p.getName()) == null) {
 			p.setScoreboard(manager.getNewScoreboard());
 		} else {

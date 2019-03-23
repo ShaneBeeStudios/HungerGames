@@ -48,6 +48,7 @@ public class Game {
 	private TimerTask timer;
 	private ChestDropTask chestdrop;
 
+
 	public Game(String s, Bound bo, List<Location> spawns, Sign lobbysign, int timer, int minplayers, int maxplayers, int roam, boolean isready) {
 		this.name = s;
 		this.b = bo;
@@ -168,9 +169,10 @@ public class Game {
 
 	public void join(Player p) {
 		if (status != Status.WAITING && status != Status.STOPPED && status != Status.COUNTDOWN) {
-			p.sendMessage(ChatColor.RED + "This arena is not ready! Please wait before joining!");
+			Util.scm(p, HG.lang.arena_not_ready);
 		} else if (maxplayers <= players.size()) {
 			p.sendMessage(ChatColor.RED + name + " is currently full!");
+			Util.scm(p, "&c" + name + " " + HG.lang.game_full);
 		} else {
 			if (p.isInsideVehicle()) {
 				p.leaveVehicle();
@@ -183,7 +185,9 @@ public class Game {
 			if (players.size() >= minplayers && status.equals(Status.WAITING)) {
 				startPreGame();
 			} else if (status == Status.WAITING) {
-				msgDef("&b&l" + p.getName() + "&7 Has joined the game" + (minplayers - players.size() <= 0 ? "!" : ": &b&l" + (minplayers - players.size()) + " &6players to start!"));
+				msgDef(HG.lang.player_joined_game.replace("<player>",
+						p.getName()) + (minplayers - players.size() <= 0 ? "!" : ":" +
+						HG.lang.players_to_start.replace("<amount>", String.valueOf((minplayers - players.size())))));
 			}
 			kitHelp(p);
 			if (players.size() == 1)
@@ -200,13 +204,13 @@ public class Game {
 			Util.scm(p, " ");
 		String kit = HG.plugin.kit.getKitList();
 		Util.scm(p, " ");
-		Util.scm(p, "&c&l>&7&l----------[&f&lWelcome to Hunger&f&lGames&7&l]&7&l----------&c&l<");
+		Util.scm(p, HG.lang.kit_join_header);
 		Util.scm(p, " ");
-		Util.scm(p, "&7&l           - &3Pick a kit using &b/hg kit &7<&rkit-name&7>");
+		Util.scm(p, HG.lang.kit_join_msg);
 		Util.scm(p, " ");
-		Util.scm(p, "&3&l  Available Kits:&b" + kit);
+		Util.scm(p, HG.lang.kit_join_avail + kit);
 		Util.scm(p, " ");
-		Util.scm(p, "&c&l>&7&l------------------------------------------&c&l<");
+		Util.scm(p, HG.lang.kit_join_footer);
 		Util.scm(p, " ");
 	}
 
@@ -339,7 +343,8 @@ public class Game {
 		}
 		try {
 			String[] h = HG.plugin.getConfig().getString("settings.globalexit").split(":");
-			this.exit = new Location(Bukkit.getServer().getWorld(h[0]), Integer.parseInt(h[1]) + 0.5, Integer.parseInt(h[2]) + 0.1, Integer.parseInt(h[3]) + 0.5, Float.parseFloat(h[4]), Float.parseFloat(h[5]));
+			this.exit = new Location(Bukkit.getServer().getWorld(h[0]), Integer.parseInt(h[1]) + 0.5,
+					Integer.parseInt(h[2]) + 0.1, Integer.parseInt(h[3]) + 0.5, Float.parseFloat(h[4]), Float.parseFloat(h[5]));
 		} catch (Exception e) {
 			this.exit = s.getWorld().getSpawnLocation();
 		}
@@ -376,16 +381,17 @@ public class Game {
 
 		if (!win.isEmpty() && Config.giveReward) {
 			double db = (double) Config.cash / win.size();
-
 			for (UUID u : win) {
 				Vault.economy.depositPlayer(Bukkit.getServer().getOfflinePlayer(u), db);
 				Player p = Bukkit.getPlayer(u);
-				if (p != null)
-					Util.msg(p, "&7You received &b$" + db + " &7for winning &3&lHunger&b&lGames!");
+				if (p != null) {
+					Util.msg(p, HG.lang.winning_amount.replace("<amount>", String.valueOf(db)));
+				}
 			}
 		}
 		chests.clear();
-		Util.broadcast("&b&l" + Util.translateStop(Util.convertUUIDListToStringList(win)) + " &6won HungerGames at arena &b&l" + name + "&7!");
+		String winner = Util.translateStop(Util.convertUUIDListToStringList(win));
+		Util.broadcast(HG.lang.player_won.replace("<arena>", name).replace("<winner>", winner));
 		if (!blocks.isEmpty()) {
 			new Rollback(this);
 		} else {
@@ -408,7 +414,9 @@ public class Game {
 				stop();
 			}
 		} else if (status == Status.WAITING) {
-			msgDef("&b&l" + p.getName() + "&c Has left the game" + (minplayers - players.size() <= 0 ? "!" : ": &b&l" + (minplayers - players.size()) + " &7&lplayers to start!"));
+			msgDef(HG.lang.player_left_game.replace("<player>", p.getName()) +
+					(minplayers - players.size() <= 0 ? "!" : ":" + HG.lang.players_to_start
+							.replace("<amount>", String.valueOf((minplayers - players.size())))));
 		}
 		updateLobbyBlock();
 		sb.restoreSB(p);

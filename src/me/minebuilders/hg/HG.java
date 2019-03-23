@@ -27,12 +27,6 @@ import java.util.UUID;
 
 public class HG extends JavaPlugin {
 
-	/**
-	 * Things to fix
-	 *
-	 * Colors are fucking ugly <-- I agree
-	 */
-
 	//Maps
 	public HashMap<String, BaseCmd> cmds = new HashMap<>();
 	public HashMap<UUID, PlayerData> players = new HashMap<>();

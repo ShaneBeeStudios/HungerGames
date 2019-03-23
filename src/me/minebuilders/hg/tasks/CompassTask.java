@@ -33,7 +33,8 @@ public class CompassTask implements Runnable {
 				if (pd != null) {
 
 					String[] st = getNearestPlayer(p, pd);
-					String info = ChatColor.WHITE + "" + ChatColor.BOLD + "Nearest Player: " + ChatColor.RED + st[0] + "    "  + ChatColor.WHITE + "" + ChatColor.BOLD + "Distance: " + ChatColor.RED + st[1]; 
+					String info = ChatColor.translateAlternateColorCodes('&',
+							HG.lang.compass_nearest_player.replace("<player>", st[0]).replace("<distance>", st[1]));
 
 					for (ItemStack it : p.getInventory()) {
 						if (it != null && it.getType() == Material.COMPASS) {

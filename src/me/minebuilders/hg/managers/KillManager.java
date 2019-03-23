@@ -1,5 +1,6 @@
 package me.minebuilders.hg.managers;
 
+import me.minebuilders.hg.HG;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 import org.bukkit.event.entity.EntityDamageEvent.DamageCause;
@@ -10,47 +11,48 @@ public class KillManager {
 		switch (dc) {
 			case ENTITY_EXPLOSION:
 			case BLOCK_EXPLOSION:
-				return (name + " Was blown to bits!");
+				return (HG.lang.death_explosion.replace("<player>", name));
 			case CUSTOM:
-				return (name + " Was killed by an unknown cause!");
+				return (HG.lang.death_custom.replace("<player>", name));
 			case FALL:
-				return (name + " Fell to their death!");
+				return (HG.lang.death_fall.replace("<player>", name));
 			case FALLING_BLOCK:
-				return (name + " Was smashed by a block!");
+				return (HG.lang.death_falling_block.replace("<player>", name));
 			case FIRE:
 			case FIRE_TICK:
-				return (name + " Was Burned alive!");
+				return (HG.lang.death_fire.replace("<player>", name));
 			case PROJECTILE:
-				return (name + " Got hit by a projectile!");
+				return (HG.lang.death_projectile.replace("<player>", name));
 			case LAVA:
-				return (name + " Fell into a pit of lava!");
+				return (HG.lang.death_lava.replace("<player>", name));
 			case MAGIC:
-				return (name + " Was destroyed by magic!");
+				return (HG.lang.death_magic.replace("<player>", name));
 			case SUICIDE:
-				return (name + " Couldn't handle HungerGames!");
+				return (HG.lang.death_suicide.replace("<player>", name));
 			default:
-				return (name + " Was killed by " + dc.toString().toLowerCase());
+				return (HG.lang.death_other_cause.replace("<player>", name).replace("<cause>", dc.toString().toLowerCase()));
 		}
 	}
 
 	public String getKillString(String name, Entity e) {
 		switch (e.getType()) {
 			case PLAYER:
-				return ("&6" + name + " &c&lWas killed by &6" + ((Player) e).getName() + " &cusing a(n) &6" + ((Player) e).getInventory().getItemInMainHand().getType().name().toLowerCase() + "&c!");
+				return (HG.lang.death_player.replace("<player>", name)
+						.replace("<killer>", e.getName())
+						.replace("<weapon>", ((Player) e).getInventory().getItemInMainHand().getType().name().toLowerCase()));
 			case ZOMBIE:
-				return (name + " Was ripped to bits by a Zombie!");
+				return (HG.lang.death_zombie.replace("<player>", name));
 			case SKELETON:
-				return (name + " Was shot in the face by a Skeleton");
 			case ARROW:
-				return (name + " Was shot in the face by a Skeleton");
+				return (HG.lang.death_skeleton.replace("<player>", name));
 			case SPIDER:
-				return (name + " Was eaten alive by a Spider!");
+				return (HG.lang.death_spider.replace("<player>", name));
 			case DROWNED:
-				return (name + " Was ripped apart by a Drowned!");
+				return (HG.lang.death_drowned.replace("<player>", name));
 			case STRAY:
-				return (name + " Was shot in the face by a Stray!");
+				return (HG.lang.death_stray.replace("<player>", name));
 			default:
-				return (name + " Spontaneously died!");
+				return (HG.lang.death_other_entity.replace("<player>", name));
 		}
 	}
 }
