@@ -30,14 +30,14 @@ public class SetLobbyWallCmd extends BaseCmd {
 				Location l = b.getLocation();
 				HG.arenaconfig.getCustomConfig().set(("arenas." + args[1] + "." + "lobbysign"), (l.getWorld().getName() + ":" + l.getBlockX() + ":" + l.getBlockY() + ":" + l.getBlockZ()));
 				HG.arenaconfig.saveCustomConfig();
-				Util.msg(player, "&aThe lobbyWallSign has been set!");
+				Util.msg(player, HG.lang.cmd_lobbywall_set);
 				HG.manager.checkGame(g, player);
 			} else {
-				Util.msg(player, "&cThese signs aren't in correct format!");
-				Util.msg(player, "&cformat: &6[sign] &c[sign] [sign]");
+				Util.msg(player, HG.lang.cmd_lobbywall_notcorrect);
+				Util.msg(player, HG.lang.cmd_lobbywall_format);
 			}
 		} else {
-			player.sendMessage("This arena does not exist!");
+			player.sendMessage(HG.lang.cmd_delete_noexist);
 		}
 		return true;
 	}

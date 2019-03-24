@@ -23,13 +23,13 @@ public class ToggleCmd extends BaseCmd {
 		if (g != null) {
 			if (g.getStatus() == Status.NOTREADY || g.getStatus() == Status.BROKEN) {
 				g.setStatus(Status.WAITING);
-				Util.scm(sender, "&3" + args[1] + "&b is now unlocked!");
+				Util.scm(sender, HG.lang.cmd_toggle_unlocked);
 			} else {
 				g.setStatus(Status.NOTREADY);
-				Util.scm(sender, "&3" + args[1] + "&b is now &4LOCKED&b!");
+				Util.scm(sender, HG.lang.cmd_toggle_locked);
 			}
 		} else {
-			sender.sendMessage(ChatColor.RED + "This game does not exist!");
+			sender.sendMessage(HG.lang.cmd_delete_noexist);
 		}
 		return true;
 	}

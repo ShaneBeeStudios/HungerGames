@@ -24,15 +24,15 @@ public class StopCmd extends BaseCmd {
 					game.stop();
 				}
 			}
-			Util.scm(sender, "&aStopped all games");
+			Util.scm(sender, HG.lang.cmd_stop_all);
 			return true;
 		}
 		Game g = HG.manager.getGame(args[1]);
 		if (g != null) {
 			g.stop();
-			Util.scm(sender, "&6" + args[1] + "&c Has been stopped!");
+			Util.scm(sender, HG.lang.cmd_stop_arena.replace("<arena>", args[1]));
 		} else {
-			Util.scm(sender, "&cThe game &b" + args[1] + "&c does not exist!");
+			Util.scm(sender, HG.lang.cmd_stop_noexist.replace("<arena>", args[1]));
 		}
 		return true;
 	}

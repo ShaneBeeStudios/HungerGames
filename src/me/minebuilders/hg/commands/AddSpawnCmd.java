@@ -28,7 +28,7 @@ public class AddSpawnCmd extends BaseCmd {
 		Location l = player.getLocation();
 		for (Location lb : g.getSpawns()) {
 			if (lb.getBlock().equals(l.getBlock())) {
-				player.sendMessage(ChatColor.RED + "You cannot have two spawns in the same location!");
+				Util.scm(player, HG.lang.cmd_spawn_same);
 				return true;
 			}
 		}
@@ -36,7 +36,7 @@ public class AddSpawnCmd extends BaseCmd {
 		c.set("arenas."+g.getName()+".spawns", d);
 		g.addSpawn(l);
 		HG.arenaconfig.saveCustomConfig();
-		Util.msg(player, "You set HungerGames spawn #" + num + "!");
+		Util.scm(player, HG.lang.cmd_spawn_set.replace("<number>", String.valueOf(num)));
 		
         HG.manager.checkGame(g, player);
 		return true;

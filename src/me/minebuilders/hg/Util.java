@@ -39,7 +39,7 @@ public class Util {
 	}
 
 	public static void broadcast(String s) {
-		Bukkit.getServer().broadcastMessage(ChatColor.translateAlternateColorCodes('&', HG.lang.prefix + s));
+		Bukkit.getServer().broadcastMessage(ChatColor.translateAlternateColorCodes('&', HG.lang.prefix + " " + s));
 	}
 
 	public static boolean isInt(String str) {
@@ -101,14 +101,15 @@ public class Util {
 			else if (count == win.size()) {
 				assert bc != null;
 				bc.append(", and ").append(s);
-			}
-			else {
+			} else {
 				assert bc != null;
 				bc.append(", ").append(s);
 			}
 		}
-		assert bc != null;
-		return bc.toString();
+		if (bc != null)
+			return bc.toString();
+		else
+			return "No one";
 	}
 
 	static void shootFirework(Location l) {

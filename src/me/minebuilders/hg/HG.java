@@ -55,12 +55,12 @@ public class HG extends JavaPlugin {
 		else
 			Util.log("&7Metrics has been &cdisabled");
 		plugin = this;
+		lang = new Language(this);
 		arenaconfig = new Data(this);
 		killmanager = new KillManager();
 		kit = new KitManager();
 		ism = new ItemStackManager(this);
 		ri = new RandomItems(this);
-		lang = new Language(this);
 		manager = new Manager(this);
 		getCommand("hg").setExecutor(new CommandListener(this));
 		getServer().getPluginManager().registerEvents(new WandListener(this), this);

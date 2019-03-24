@@ -25,15 +25,15 @@ public class DeleteCmd extends BaseCmd {
 		Game g = HG.manager.getGame(args[1]);
 		if (g != null) {
 			try {
-				Util.msg(sender, "&aAttempting to delete " + g.getName() + "!");
+				Util.scm(sender, HG.lang.cmd_delete_attempt.replace("<arena>", g.getName()));
 
 				if (g.getStatus() == Status.BEGINNING || g.getStatus() == Status.RUNNING) {
-					Util.msg(sender, "  &7- &cGame running! &aStopping..");
+					Util.scm(sender, "  &7- &cGame running! &aStopping..");
 					g.forceRollback();
 					g.stop();
 				}
 				if (!g.getPlayers().isEmpty()) {
-					Util.msg(sender, "  &7- &c&cPlayers detected! &aKicking..");
+					Util.msg(sender, HG.lang.cmd_delete_kicking);
 					for (UUID u : g.getPlayers()) {
 						Player p = Bukkit.getPlayer(u);
 						if (p != null) {
@@ -43,13 +43,13 @@ public class DeleteCmd extends BaseCmd {
 				}
 				HG.arenaconfig.getCustomConfig().set("arenas." + args[1], null);
 				HG.arenaconfig.saveCustomConfig();
+				Util.scm(sender, HG.lang.cmd_delete_deleted.replace("<arena>", g.getName()));
 				HG.plugin.games.remove(g);
-				Util.msg(sender, "&aSuccessfully deleted Hungergames arena!");
 			} catch (Exception e) {
-				Util.msg(sender, "&cFailed to delete arena!");
+				Util.scm(sender, HG.lang.cmd_delete_failed);
 			}
 		} else {
-			sender.sendMessage("This arena does not exist!");
+			Util.scm(sender, HG.lang.cmd_delete_noexist);
 		}
 		return true;
 	}

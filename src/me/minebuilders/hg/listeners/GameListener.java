@@ -59,10 +59,10 @@ public class GameListener implements Listener {
 			for (UUID u : g.getPlayers()) {
 				Player p = Bukkit.getPlayer(u);
 				if (p != null) {
-					Util.scm(p, "&a&l[]------------------------------------------[]");
-					Util.scm(p, "&a&l |&6&l   You have been given a player-tracking stick! &a&l |");
-					Util.scm(p, "&a&l |&6&l   Swing the stick to track players!                &a&l |");
-					Util.scm(p, "&a&l[]------------------------------------------[]");
+					Util.scm(p, HG.lang.track_bar);
+					Util.scm(p, HG.lang.track_new1);
+					Util.scm(p, HG.lang.track_new2);
+					Util.scm(p, HG.lang.track_bar);
 					p.getInventory().addItem(trackingStick);
 				}
 			}
@@ -95,11 +95,11 @@ public class GameListener implements Listener {
 			Player killer = p.getKiller();
 
 			if (killer != null) {
-				g.msgDef("&7&l[&3&lHungerGames Fallen&7&l] &d" + HG.killmanager.getKillString(p.getName(), killer));
+				g.msgDef(HG.lang.death_fallen + " &d" + HG.killmanager.getKillString(p.getName(), killer));
 			} else if (p.getLastDamageCause().getCause() == EntityDamageEvent.DamageCause.ENTITY_ATTACK) {
-				g.msgDef("&7&l[&3&lHungerGames Fallen&7&l] &d" + HG.killmanager.getKillString(p.getName(), killerMap.get(p)));
+				g.msgDef(HG.lang.death_fallen + " &d" + HG.killmanager.getKillString(p.getName(), killerMap.get(p)));
 			} else {
-				g.msgDef("&7&l[&3&lHungerGames Fallen&7&l] &d" + HG.killmanager.getDeathString(p.getLastDamageCause().getCause(), p.getName()));
+				g.msgDef(HG.lang.death_fallen + " &d" + HG.killmanager.getDeathString(p.getLastDamageCause().getCause(), p.getName()));
 			}
 			event.setDeathMessage(null);
 			event.getDrops().clear();
@@ -138,20 +138,23 @@ public class GameListener implements Listener {
 		if (im.getDisplayName() != null && im.getDisplayName().startsWith(tsn)) {
 			int uses = Integer.parseInt(im.getDisplayName().replace(tsn, ""));
 			if (uses == 0) {
-				p.sendMessage(ChatColor.RED + "This trackingstick is out of uses!");
+				Util.scm(p, HG.lang.track_empty);
 			} else {
 				for (Entity e : p.getNearbyEntities(120, 50, 120)) {
 					if (e instanceof Player) {
 						im.setDisplayName(tsn + (uses - 1));
 						Location l = e.getLocation();
 						int range = (int) p.getLocation().distance(l);
-						Util.msg(p, ("&6" + e.getName()) + "&e is " + range + " blocks away from you:&6 " + getDirection(p.getLocation().getBlock(), l.getBlock()));
+						Util.msg(p, HG.lang.track_nearest
+								.replace("<player>", e.getName())
+								.replace("<blocks>", String.valueOf(range))
+								.replace("<location>", getDirection(p.getLocation().getBlock(), l.getBlock())));
 						i.setItemMeta(im);
 						p.updateInventory();
 						return;
 					}
 				}
-				Util.msg(p, ChatColor.RED + "Couldn't locate any nearby players!");
+				Util.msg(p, HG.lang.track_no_near);
 
 			}
 		}
@@ -248,7 +251,7 @@ public class GameListener implements Listener {
 			Status st = plugin.players.get(p.getUniqueId()).getGame().getStatus();
 			if (st == Status.WAITING || st == Status.COUNTDOWN) {
 				event.setCancelled(true);
-				p.sendMessage(ChatColor.RED + "You cannot interact until the game has started!");
+				Util.scm(p, HG.lang.listener_no_interact);
 			}
 		}
 	}
@@ -263,12 +266,12 @@ public class GameListener implements Listener {
 				if (sign.getLine(0).equals(ChatColor.DARK_BLUE + "" + ChatColor.BOLD + "HungerGames")) {
 					Game game = HG.manager.getGame(sign.getLine(1).substring(2));
 					if (game == null) {
-						Util.msg(p, ChatColor.RED + "This arena does not exist!");
+						Util.msg(p, HG.lang.cmd_delete_noexist);
 					} else {
 						if (p.getInventory().getItemInMainHand().getType() == Material.AIR) {
 							game.join(p);
 						} else {
-							Util.msg(p, ChatColor.RED + "Click the sign with your hand!");
+							Util.msg(p, HG.lang.listener_sign_click_hand);
 						}
 					}
 				}
@@ -293,7 +296,7 @@ public class GameListener implements Listener {
 
 				if (g.getStatus() == Status.RUNNING || g.getStatus() == Status.BEGINNING) {
 					if (!Config.blocks.contains(b.getType().toString())) {
-						p.sendMessage(ChatColor.RED + "You cannot edit this block type!");
+						Util.scm(p, HG.lang.listener_no_edit_block);
 						event.setCancelled(true);
 					} else {
 						g.recordBlockPlace(event.getBlockReplacedState());
@@ -302,7 +305,7 @@ public class GameListener implements Listener {
 						}
 					}
 				} else {
-					p.sendMessage(ChatColor.RED + "The game is not running!");
+					Util.scm(p, HG.lang.listener_not_running);
 					event.setCancelled(true);
 				}
 			} else {
@@ -322,7 +325,7 @@ public class GameListener implements Listener {
 				Game g = plugin.players.get(p.getUniqueId()).getGame();
 				if (g.getStatus() == Status.RUNNING) {
 					if (!Config.blocks.contains(b.getType().toString())) {
-						p.sendMessage(ChatColor.RED + "You cannot edit this block type!");
+						Util.scm(p, HG.lang.listener_no_edit_block);
 						event.setCancelled(true);
 					} else {
 						g.recordBlockBreak(b);
@@ -331,7 +334,7 @@ public class GameListener implements Listener {
 						}
 					}
 				} else {
-					p.sendMessage(ChatColor.RED + "The game is not running!");
+					Util.scm(p, HG.lang.listener_not_running);
 					event.setCancelled(true);
 				}
 			} else {

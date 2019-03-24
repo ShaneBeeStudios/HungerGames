@@ -23,20 +23,20 @@ public class CreateCmd extends BaseCmd {
 	@Override
 	public boolean run() {
 		if (!HG.plugin.playerses.containsKey(player.getUniqueId())) {
-			Util.msg(player, ChatColor.RED + "You need to make a selection before making an arena!");
+			Util.msg(player, HG.lang.cmd_create_need_selection);
 		} else {
 			PlayerSession s = HG.plugin.playerses.get(player.getUniqueId());
 			if (!s.hasValidSelection()) {
-				Util.msg(player, ChatColor.RED + "You need to make a selection before making an arena!");	
+				Util.msg(player, HG.lang.cmd_create_need_selection);
 			} else {
 				if (!Util.isInt(args[2]) || !Util.isInt(args[3]) || !Util.isInt(args[4])) {
-					player.sendMessage(ChatColor.RED + "Wrong usage: " + sendHelpLine());
+					player.sendMessage(HG.lang.cmd_base_wrongusage + " " + sendHelpLine());
 				} else if (Integer.parseInt(args[4]) % 30 != 0) {
-					player.sendMessage(ChatColor.RED + "time-in-seconds must be divisible by 30!");
-					player.sendMessage(ChatColor.RED + "Ex: 90 is divisible by 30");
+					Util.scm(player, HG.lang.cmd_create_divisible_1);
+					Util.scm(player, HG.lang.cmd_create_divisible_2);
 					return true;
 				} else if (Integer.parseInt(args[2]) > Integer.parseInt(args[3])) {
-					player.sendMessage(ChatColor.RED + "min-players cannot be more then max-players!");
+					Util.scm(player, HG.lang.cmd_create_minmax);
 					sendHelpLine();
 				} else {
 					Location l = s.getLoc1();
@@ -58,7 +58,7 @@ public class CreateCmd extends BaseCmd {
 
 					Bound b = new Bound(player.getWorld().getName(), l.getBlockX(), l.getBlockY(), l.getBlockZ(), l2.getBlockX(), l2.getBlockY(), l2.getBlockZ());
 					HG.plugin.games.add(new Game(args[1], b, Integer.parseInt(args[4]), Integer.parseInt(args[2]), Integer.parseInt(args[3]), freeroam));
-					Util.msg(player, ChatColor.GREEN+"You created HungerGames arena " + args[1] + "!");
+					Util.msg(player, HG.lang.cmd_create_created.replace("<arena>", args[1]));
 					return true;
 				}
 			}
