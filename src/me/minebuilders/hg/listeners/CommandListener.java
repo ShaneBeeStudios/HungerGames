@@ -1,6 +1,7 @@
 package me.minebuilders.hg.listeners;
 
 import com.google.common.collect.ImmutableList;
+import me.minebuilders.hg.Game;
 import me.minebuilders.hg.HG;
 import me.minebuilders.hg.Util;
 import me.minebuilders.hg.commands.BaseCmd;
@@ -34,24 +35,68 @@ public class CommandListener implements CommandExecutor, TabCompleter {
 
 	@Override
 	public List<String> onTabComplete(CommandSender sender, Command command, String s, String[] args) {
-		if (args.length >= 2) {
-			return ImmutableList.of();
-		}
-		StringBuilder builder = new StringBuilder();
-		for (String arg : args) {
-			builder.append(arg).append(" ");
-		}
-		String[] list = {"debug", "toggle", "team", "list", "delete", "setlobbywall", "listgames", "reload", "addspawn", "stop",
-				"forcestart", "leave", "wand", "kit", "setexit", "create", "join"};
-		String arg = builder.toString().trim();
-		ArrayList<String> matches = new ArrayList<>();
-		for (String name : list) {
-			if (StringUtil.startsWithIgnoreCase(name, arg)) {
-				if (sender.hasPermission("hg." + name))
-					matches.add(name);
+		if (args.length == 1) {
+			ArrayList<String> matches = new ArrayList<>();
+			for (String name : HG.plugin.cmds.keySet()) {
+				if (StringUtil.startsWithIgnoreCase(name, args[0])) {
+					if (sender.hasPermission("hg." + name))
+						matches.add(name);
+				}
+			}
+			return matches;
+		} else if (args.length >= 2) {
+			if (args[0].equalsIgnoreCase("team")) {
+				if (args.length == 2) {
+					String[] listTeam = {"invite", "accept"};
+					ArrayList<String> matchesTeam = new ArrayList<>();
+					for (String name : listTeam) {
+						if (StringUtil.startsWithIgnoreCase(name, args[1])) {
+							matchesTeam.add(name);
+						}
+					}
+					return matchesTeam;
+				}
+				return null;
+			} else if (args[0].equalsIgnoreCase("delete") ||
+					args[0].equalsIgnoreCase("debug") ||
+					args[0].equalsIgnoreCase("stop") ||
+					(args[0].equalsIgnoreCase("forcestart")) ||
+					(args[0].equalsIgnoreCase("leave")) ||
+					(args[0].equalsIgnoreCase("join")) ||
+					(args[0].equalsIgnoreCase("setlobbywall")) ||
+					(args[0].equalsIgnoreCase("toggle"))) {
+				ArrayList<String> matchesDelete = new ArrayList<>();
+				if (args.length == 2) {
+					for (Game name : HG.plugin.games) {
+						if (StringUtil.startsWithIgnoreCase(name.getName(), args[1])) {
+							matchesDelete.add(name.getName());
+						}
+					}
+					return matchesDelete;
+				}
+			} else if (args[0].equalsIgnoreCase("kit")) {
+				if (args.length == 2) {
+					ArrayList<String> matchesKit = new ArrayList<>();
+					for (String name : HG.plugin.kit.kititems.keySet()) {
+						if (StringUtil.startsWithIgnoreCase(name, args[1])) {
+							matchesKit.add(name);
+						}
+					}
+					return matchesKit;
+				}
+			} else if (args[0].equalsIgnoreCase("create")) {
+				if (args.length == 2) {
+					return ImmutableList.of("<arena-name>");
+				} else if (args.length == 3) {
+					return ImmutableList.of("<min-players>");
+				} else if (args.length == 4) {
+					return ImmutableList.of("<max-players>");
+				} else if (args.length == 5) {
+					return ImmutableList.of("<time-seconds>");
+				}
 			}
 		}
-		return matches;
+		return ImmutableList.of();
 	}
 
 }
