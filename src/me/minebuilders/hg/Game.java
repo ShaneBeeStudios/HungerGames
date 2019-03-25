@@ -58,7 +58,7 @@ public class Game {
 		this.minplayers = minplayers;
 		this.maxplayers = maxplayers;
 		this.roamtime = roam;
-		if (isready) status = Status.STOPPED;
+		if (isready) status = Status.READY;
 		else status = Status.BROKEN;
 
 
@@ -395,7 +395,7 @@ public class Game {
 		if (!blocks.isEmpty()) {
 			new Rollback(this);
 		} else {
-			status = Status.STOPPED;
+			status = Status.READY; // TODO set this from stopped to ready
 			updateLobbyBlock();
 		}
 		b.removeEntities();
