@@ -409,7 +409,7 @@ public class Game {
 		exit(p);
 		HG.plugin.players.get(p.getUniqueId()).restore(p);
 		HG.plugin.players.remove(p.getUniqueId());
-		if (status == Status.RUNNING || status == Status.BEGINNING) {
+		if (status == Status.RUNNING || status == Status.BEGINNING || status == Status.COUNTDOWN) {
 			if (isGameOver()) {
 				stop();
 			}
