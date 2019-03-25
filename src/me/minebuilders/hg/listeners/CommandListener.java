@@ -1,6 +1,5 @@
 package me.minebuilders.hg.listeners;
 
-import com.google.common.collect.ImmutableList;
 import me.minebuilders.hg.Game;
 import me.minebuilders.hg.HG;
 import me.minebuilders.hg.Util;
@@ -12,6 +11,7 @@ import org.bukkit.command.TabCompleter;
 import org.bukkit.util.StringUtil;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 public class CommandListener implements CommandExecutor, TabCompleter {
@@ -24,7 +24,7 @@ public class CommandListener implements CommandExecutor, TabCompleter {
 
 	public boolean onCommand(CommandSender s, Command command, String label, String[] args) {
 		if (args.length == 0 || !p.cmds.containsKey(args[0])) {
-			Util.scm(s, "&4*&c&m                         &7*( &3&lHungergames &7)*&c&m                          &4*");
+			Util.scm(s, "&4*&c&m                         &7*( &3&lHungerGames &7)*&c&m                          &4*");
 			for (BaseCmd cmd : p.cmds.values().toArray(new BaseCmd[0])) {
 				if (s.hasPermission("hg." + cmd.cmdName)) Util.scm(s, "  &7&l- " + cmd.sendHelpLine());
 			}
@@ -85,18 +85,29 @@ public class CommandListener implements CommandExecutor, TabCompleter {
 					return matchesKit;
 				}
 			} else if (args[0].equalsIgnoreCase("create")) {
-				if (args.length == 2) {
-					return ImmutableList.of("<arena-name>");
-				} else if (args.length == 3) {
-					return ImmutableList.of("<min-players>");
-				} else if (args.length == 4) {
-					return ImmutableList.of("<max-players>");
-				} else if (args.length == 5) {
-					return ImmutableList.of("<time-seconds>");
+				ArrayList<String> matchesCreate = new ArrayList<>();
+				switch (args.length) {
+					case 2:
+						if (StringUtil.startsWithIgnoreCase("<arena-name>", args[1]))
+							matchesCreate.add("<arena-name>");
+						break;
+					case 3:
+						if (StringUtil.startsWithIgnoreCase("<min-players>", args[2]))
+							matchesCreate.add("<min-players>");
+						break;
+					case 4:
+						if (StringUtil.startsWithIgnoreCase("<max-players>", args[3]))
+							matchesCreate.add("<max-players>");
+						break;
+					case 5:
+						if (StringUtil.startsWithIgnoreCase("<time-seconds>", args[4]))
+							matchesCreate.add("<time-seconds>");
+						break;
 				}
+				return matchesCreate;
 			}
 		}
-		return ImmutableList.of();
+		return Collections.emptyList();
 	}
 
 }
