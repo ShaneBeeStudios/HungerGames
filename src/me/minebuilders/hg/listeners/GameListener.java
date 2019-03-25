@@ -147,7 +147,7 @@ public class GameListener implements Listener {
 						int range = (int) p.getLocation().distance(l);
 						Util.msg(p, HG.lang.track_nearest
 								.replace("<player>", e.getName())
-								.replace("<blocks>", String.valueOf(range))
+								.replace("<range>", String.valueOf(range))
 								.replace("<location>", getDirection(p.getLocation().getBlock(), l.getBlock())));
 						i.setItemMeta(im);
 						p.updateInventory();
