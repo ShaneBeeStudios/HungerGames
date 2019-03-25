@@ -18,6 +18,11 @@ settings:
 reward:
     enabled: true
     cash: 500
+    #Example:     <player> will be replaced by winner
+    #commands:
+    #  - 'say Hi <player>'
+    #  - 'crates key give <player> 1'
+    commands:
 random-chest:
     enabled: false
     interval: 30

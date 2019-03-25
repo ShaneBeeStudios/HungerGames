@@ -168,7 +168,7 @@ public class Game {
 	}
 
 	public void join(Player p) {
-		if (status != Status.WAITING && status != Status.STOPPED && status != Status.COUNTDOWN) {
+		if (status != Status.WAITING && status != Status.STOPPED && status != Status.COUNTDOWN && status != Status.READY) {
 			Util.scm(p, HG.lang.arena_not_ready);
 		} else if (maxplayers <= players.size()) {
 			p.sendMessage(ChatColor.RED + name + " is currently full!");
@@ -177,12 +177,15 @@ public class Game {
 			if (p.isInsideVehicle()) {
 				p.leaveVehicle();
 			}
-			players.add(p.getUniqueId());
-			HG.plugin.players.put(p.getUniqueId(), new PlayerData(p, this));
+
+			Bukkit.getScheduler().scheduleSyncDelayedTask(HG.plugin, () -> {
+                players.add(p.getUniqueId());
+                HG.plugin.players.put(p.getUniqueId(), new PlayerData(p, this));
+
 			p.teleport(pickSpawn());
 			heal(p);
 			freeze(p);
-			if (players.size() >= minplayers && status.equals(Status.WAITING)) {
+			if (players.size() >= minplayers && (status == Status.WAITING || status == Status.READY)) {
 				startPreGame();
 			} else if (status == Status.WAITING) {
 				msgDef(HG.lang.player_joined_game.replace("<player>",
@@ -195,6 +198,7 @@ public class Game {
 			updateLobbyBlock();
 			sb.setSB(p);
 			sb.setAlive();
+            }, 5);
 		}
 	}
 
@@ -384,6 +388,11 @@ public class Game {
 			for (UUID u : win) {
 				Vault.economy.depositPlayer(Bukkit.getServer().getOfflinePlayer(u), db);
 				Player p = Bukkit.getPlayer(u);
+				if (!Config.commands.isEmpty()) {
+				    for (String cmd : Config.commands) {
+				        Bukkit.dispatchCommand(Bukkit.getConsoleSender(), cmd.replace("<player>", p.getName()));
+                    }
+                }
 				if (p != null) {
 					Util.msg(p, HG.lang.winning_amount.replace("<amount>", String.valueOf(db)));
 				}
