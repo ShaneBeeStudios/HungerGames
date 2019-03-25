@@ -386,16 +386,25 @@ public class Game {
 		if (!win.isEmpty() && Config.giveReward) {
 			double db = (double) Config.cash / win.size();
 			for (UUID u : win) {
-				Vault.economy.depositPlayer(Bukkit.getServer().getOfflinePlayer(u), db);
 				Player p = Bukkit.getPlayer(u);
-				if (!Config.commands.isEmpty()) {
-				    for (String cmd : Config.commands) {
-				        Bukkit.dispatchCommand(Bukkit.getConsoleSender(), cmd.replace("<player>", p.getName()));
+				if (!Config.rewardCommands.isEmpty()) {
+				    for (String cmd : Config.rewardCommands) {
+				        if (!cmd.equalsIgnoreCase("none"))
+				            Bukkit.dispatchCommand(Bukkit.getConsoleSender(), cmd.replace("<player>", p.getName()));
                     }
                 }
-				if (p != null) {
-					Util.msg(p, HG.lang.winning_amount.replace("<amount>", String.valueOf(db)));
-				}
+				if (!Config.rewardMessages.isEmpty()) {
+				    for (String msg : Config.rewardMessages) {
+				        if (!msg.equalsIgnoreCase("none"))
+				            Util.scm(p, msg.replace("<player>", p.getName()));
+                    }
+                }
+				if (Config.cash != 0) {
+                    Vault.economy.depositPlayer(Bukkit.getServer().getOfflinePlayer(u), db);
+                    if (p != null) {
+                        Util.msg(p, HG.lang.winning_amount.replace("<amount>", String.valueOf(db)));
+                    }
+                }
 			}
 		}
 		chests.clear();

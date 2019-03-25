@@ -27,7 +27,8 @@ public class Config {
 	//Reward info
 	public static boolean giveReward;
 	public static int cash;
-	public static List<String> commands;
+	public static List<String> rewardCommands;
+	public static List<String> rewardMessages;
 
 	//Rollback config info
 	public static boolean breakblocks;
@@ -66,7 +67,8 @@ public class Config {
 		maxTeam = config.getInt("settings.max-team-size");
 		giveReward = config.getBoolean("reward.enabled");
 		cash = config.getInt("reward.cash");
-		commands = config.getStringList("reward.commands");
+		rewardCommands = config.getStringList("reward.commands");
+		rewardMessages = config.getStringList("reward.messages");
 		maxTeam = config.getInt("settings.max-team-size");
 		giveReward = config.getBoolean("reward.enabled");
 		cash = config.getInt("reward.cash");
