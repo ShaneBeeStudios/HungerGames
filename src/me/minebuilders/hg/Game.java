@@ -8,11 +8,7 @@ import me.minebuilders.hg.tasks.ChestDropTask;
 import me.minebuilders.hg.tasks.FreeRoamTask;
 import me.minebuilders.hg.tasks.StartingTask;
 import me.minebuilders.hg.tasks.TimerTask;
-import org.bukkit.Bukkit;
-import org.bukkit.ChatColor;
-import org.bukkit.GameMode;
-import org.bukkit.Location;
-import org.bukkit.Material;
+import org.bukkit.*;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
 import org.bukkit.block.BlockState;
@@ -182,7 +178,9 @@ public class Game {
                 players.add(p.getUniqueId());
                 HG.plugin.players.put(p.getUniqueId(), new PlayerData(p, this));
 
-			p.teleport(pickSpawn());
+			Location loc = pickSpawn();
+			loc.setY(Bukkit.getWorld(loc.getWorld().getName()).getHighestBlockAt(loc).getY());
+			p.teleport(loc);
 			heal(p);
 			freeze(p);
 			if (players.size() >= minplayers && (status == Status.WAITING || status == Status.READY)) {
