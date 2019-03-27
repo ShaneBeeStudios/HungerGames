@@ -183,6 +183,9 @@ public class Game {
 			p.teleport(loc);
 			heal(p);
 			freeze(p);
+
+            if (players.size() == 1)
+                status = Status.WAITING;
 			if (players.size() >= minplayers && (status == Status.WAITING || status == Status.READY)) {
 				startPreGame();
 			} else if (status == Status.WAITING) {
@@ -191,8 +194,7 @@ public class Game {
 						HG.lang.players_to_start.replace("<amount>", String.valueOf((minplayers - players.size())))));
 			}
 			kitHelp(p);
-			if (players.size() == 1)
-				status = Status.WAITING;
+
 			updateLobbyBlock();
 			sb.setSB(p);
 			sb.setAlive();
@@ -225,7 +227,8 @@ public class Game {
 	}
 
 	public void startPreGame() {
-		setStatus(Status.COUNTDOWN);
+		//setStatus(Status.COUNTDOWN);
+        status = Status.COUNTDOWN;
 		starting = new StartingTask(this);
 		updateLobbyBlock();
 	}
