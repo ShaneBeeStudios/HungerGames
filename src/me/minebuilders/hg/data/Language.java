@@ -63,6 +63,7 @@ public class Language {
     public String death_skeleton;
     public String death_spider;
     public String death_drowned;
+    public String death_trident;
     public String death_stray;
     public String death_other_entity;
     public String cmd_spawn_same;
@@ -205,6 +206,7 @@ public class Language {
         death_spider = lang.getString("death-spider");
         death_stray = lang.getString("death-stray");
         death_drowned = lang.getString("death-drowned");
+        death_trident = lang.getString("death-trident");
         death_other_entity = lang.getString("death-other-entity");
 
         cmd_spawn_same = lang.getString("cmd-spawn-same");

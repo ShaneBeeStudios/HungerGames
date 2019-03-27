@@ -7,6 +7,7 @@ import org.bukkit.attribute.Attribute;
 import org.bukkit.block.Block;
 import org.bukkit.block.Sign;
 import org.bukkit.entity.Entity;
+import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
 import org.bukkit.entity.Projectile;
 import org.bukkit.event.EventHandler;
@@ -102,7 +103,10 @@ public class GameListener implements Listener {
 			if (killer != null) {
 				g.msgDef(HG.lang.death_fallen + " &d" + HG.killmanager.getKillString(p.getName(), killer));
 			} else if (p.getLastDamageCause().getCause() == EntityDamageEvent.DamageCause.ENTITY_ATTACK) {
-				g.msgDef(HG.lang.death_fallen + " &d" + HG.killmanager.getKillString(p.getName(), killerMap.get(p)));
+                g.msgDef(HG.lang.death_fallen + " &d" + HG.killmanager.getKillString(p.getName(), killerMap.get(p)));
+            } else if (p.getLastDamageCause().getCause() == EntityDamageEvent.DamageCause.PROJECTILE &&
+                    (killerMap.get(p).getType() == EntityType.TRIDENT || killerMap.get(p).getType() == EntityType.ARROW)) {
+			    g.msgDef(HG.lang.death_fallen + " &d" + HG.killmanager.getKillString(p.getName(), killerMap.get(p)));
 			} else {
 				g.msgDef(HG.lang.death_fallen + " &d" + HG.killmanager.getDeathString(p.getLastDamageCause().getCause(), p.getName()));
 			}

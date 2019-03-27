@@ -3,6 +3,7 @@ package me.minebuilders.hg.managers;
 import me.minebuilders.hg.HG;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
+import org.bukkit.entity.Trident;
 import org.bukkit.event.entity.EntityDamageEvent.DamageCause;
 
 public class KillManager {
@@ -49,6 +50,8 @@ public class KillManager {
 				return (HG.lang.death_spider.replace("<player>", name));
 			case DROWNED:
 				return (HG.lang.death_drowned.replace("<player>", name));
+			case TRIDENT:
+				return (HG.lang.death_trident.replace("<player>", name));
 			case STRAY:
 				return (HG.lang.death_stray.replace("<player>", name));
 			default:

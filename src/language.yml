@@ -82,6 +82,7 @@ death-zombie: '<player> Was ripped to bits by a Zombie!'
 death-skeleton: '<player> Was shot in the face by a Skeleton'
 death-spider: '<player> Was eaten alive by a Spider!'
 death-drowned: '<player> Was ripped apart by a Drowned!'
+death-trident: '<player> Was impaled by a Trident!'
 death-stray: '<player> Was shot in the face by a Stray!'
 death-other-entity: '<player> Spontaneously died!'
 
