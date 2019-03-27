@@ -3,6 +3,7 @@ package me.minebuilders.hg.listeners;
 import me.minebuilders.hg.*;
 import me.minebuilders.hg.events.ChestOpenEvent;
 import org.bukkit.*;
+import org.bukkit.attribute.Attribute;
 import org.bukkit.block.Block;
 import org.bukkit.block.Sign;
 import org.bukkit.entity.Entity;
@@ -11,7 +12,10 @@ import org.bukkit.entity.Projectile;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
-import org.bukkit.event.block.*;
+import org.bukkit.event.block.Action;
+import org.bukkit.event.block.BlockBreakEvent;
+import org.bukkit.event.block.BlockPlaceEvent;
+import org.bukkit.event.block.LeavesDecayEvent;
 import org.bukkit.event.entity.*;
 import org.bukkit.event.player.PlayerDropItemEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
@@ -91,7 +95,8 @@ public class GameListener implements Listener {
 		if (pd != null) {
 			final Game g = pd.getGame();
 
-			p.setHealth(20);
+			p.setHealth((p.getAttribute(Attribute.GENERIC_MAX_HEALTH).getValue()));
+			p.spigot().respawn();
 			Player killer = p.getKiller();
 
 			if (killer != null) {
