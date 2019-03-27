@@ -358,6 +358,7 @@ public class GameListener implements Listener {
 			for (Block block : blocks) {
 				g.recordBlockBreak(block);
 			}
+			e.setYield(0);
 		}
 	}
 
