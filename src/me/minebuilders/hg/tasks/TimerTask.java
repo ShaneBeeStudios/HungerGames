@@ -31,7 +31,7 @@ public class TimerTask implements Runnable {
 			game.respawnAll();
 		} else if (this.remainingtime < 10) {
 			stop();
-			game.stop();
+			game.stop(false);
 		} else {
 			int minutes = this.remainingtime / 60;
 			int asd = this.remainingtime % 60;

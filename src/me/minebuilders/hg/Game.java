@@ -9,11 +9,10 @@ import me.minebuilders.hg.tasks.FreeRoamTask;
 import me.minebuilders.hg.tasks.StartingTask;
 import me.minebuilders.hg.tasks.TimerTask;
 import org.bukkit.*;
-import org.bukkit.block.Block;
-import org.bukkit.block.BlockFace;
-import org.bukkit.block.BlockState;
-import org.bukkit.block.Sign;
+import org.bukkit.block.*;
+import org.bukkit.craftbukkit.v1_13_R2.block.CraftBlock;
 import org.bukkit.entity.Player;
+import org.bukkit.inventory.Inventory;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 
@@ -368,7 +367,7 @@ public class Game {
 		if (chestdrop != null) chestdrop.shutdown();
 	}
 
-	public void stop() {
+	public void stop(Boolean death) {
 		List<UUID> win = new ArrayList<>();
 		cancelTasks();
 		for (UUID u : players) {
@@ -384,7 +383,7 @@ public class Game {
 		}
 		players.clear();
 
-		if (!win.isEmpty() && Config.giveReward) {
+		if (!win.isEmpty() && Config.giveReward && death) {
 			double db = (double) Config.cash / win.size();
 			for (UUID u : win) {
 				Player p = Bukkit.getPlayer(u);
@@ -408,20 +407,24 @@ public class Game {
                 }
 			}
 		}
+
+
 		chests.clear();
 		String winner = Util.translateStop(Util.convertUUIDListToStringList(win));
-		Util.broadcast(HG.lang.player_won.replace("<arena>", name).replace("<winner>", winner));
+		// prevent not death winners from gaining a prize
+		if (death)
+			Util.broadcast(HG.lang.player_won.replace("<arena>", name).replace("<winner>", winner));
 		if (!blocks.isEmpty()) {
 			new Rollback(this);
 		} else {
-			status = Status.READY; // TODO set this from stopped to ready
+			status = Status.READY;
 			updateLobbyBlock();
 		}
 		b.removeEntities();
 		sb.resetAlive();
 	}
 
-	public void leave(Player p) {
+	public void leave(Player p, Boolean death) {
 		players.remove(p.getUniqueId());
 		unFreeze(p);
 		heal(p);
@@ -430,7 +433,7 @@ public class Game {
 		HG.plugin.players.remove(p.getUniqueId());
 		if (status == Status.RUNNING || status == Status.BEGINNING || status == Status.COUNTDOWN) {
 			if (isGameOver()) {
-				stop();
+				stop(death);
 			}
 		} else if (status == Status.WAITING) {
 			msgDef(HG.lang.player_left_game.replace("<player>", p.getName()) +

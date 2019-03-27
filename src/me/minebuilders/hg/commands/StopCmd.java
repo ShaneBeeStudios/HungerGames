@@ -21,7 +21,7 @@ public class StopCmd extends BaseCmd {
 			for (Game game : HG.plugin.games) {
 				if (game.getStatus() == Status.RUNNING || game.getStatus() == Status.WAITING ||
 						game.getStatus() == Status.BEGINNING || game.getStatus() == Status.COUNTDOWN) {
-					game.stop();
+					game.stop(false);
 				}
 			}
 			Util.scm(sender, HG.lang.cmd_stop_all);
@@ -29,7 +29,7 @@ public class StopCmd extends BaseCmd {
 		}
 		Game g = HG.manager.getGame(args[1]);
 		if (g != null) {
-			g.stop();
+			g.stop(false);
 			Util.scm(sender, HG.lang.cmd_stop_arena.replace("<arena>", args[1]));
 		} else {
 			Util.scm(sender, HG.lang.cmd_stop_noexist.replace("<arena>", args[1]));

@@ -122,7 +122,7 @@ public class GameListener implements Listener {
 			p.playSound(p.getLocation(), Sound.UI_TOAST_CHALLENGE_COMPLETE, 5, 1);
 
 			Bukkit.getScheduler().scheduleSyncDelayedTask(plugin, () -> {
-				g.leave(p);
+				g.leave(p, true);
 				checkStick(g);
 			}, 10L);
 		}
@@ -419,7 +419,7 @@ public class GameListener implements Listener {
 	public void onlogout(PlayerQuitEvent event) {
 		Player player = event.getPlayer();
 		if (plugin.players.containsKey(player.getUniqueId())) {
-			plugin.players.get(player.getUniqueId()).getGame().leave(player);
+			plugin.players.get(player.getUniqueId()).getGame().leave(player, false);
 		}
 	}
 

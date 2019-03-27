@@ -30,14 +30,14 @@ public class DeleteCmd extends BaseCmd {
 				if (g.getStatus() == Status.BEGINNING || g.getStatus() == Status.RUNNING) {
 					Util.scm(sender, "  &7- &cGame running! &aStopping..");
 					g.forceRollback();
-					g.stop();
+					g.stop(false);
 				}
 				if (!g.getPlayers().isEmpty()) {
 					Util.msg(sender, HG.lang.cmd_delete_kicking);
 					for (UUID u : g.getPlayers()) {
 						Player p = Bukkit.getPlayer(u);
 						if (p != null) {
-							g.leave(p);
+							g.leave(p, false);
 						}
 					}
 				}
