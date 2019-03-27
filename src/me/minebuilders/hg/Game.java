@@ -408,7 +408,10 @@ public class Game {
 			}
 		}
 
-
+		for (Location loc : chests) {
+			((Chest) loc.getBlock().getState()).getInventory().clear();
+			loc.getBlock().getState().update();
+		}
 		chests.clear();
 		String winner = Util.translateStop(Util.convertUUIDListToStringList(win));
 		// prevent not death winners from gaining a prize
