@@ -11,18 +11,18 @@ import org.bukkit.scoreboard.Score;
 import org.bukkit.scoreboard.Scoreboard;
 import org.bukkit.scoreboard.ScoreboardManager;
 
-public class SBDisplay {
+class SBDisplay {
 
 	private ScoreboardManager manager;
 	private Scoreboard board;
 	private Objective ob;
-	private HashMap<String, Scoreboard> score = new HashMap<String, Scoreboard>();
+	private HashMap<String, Scoreboard> score = new HashMap<>();
 	private Game g;
 
 	SBDisplay(Game g) {
 		this.manager = Bukkit.getScoreboardManager();
 		this.board = manager.getNewScoreboard();
-		this.ob = board.registerNewObjective(ChatColor.translateAlternateColorCodes('&', HG.lang.players_alive), "dummy");
+		this.ob = board.registerNewObjective(ChatColor.translateAlternateColorCodes('&', HG.lang.players_alive), "dummy", "arena" + g.getName());
 		this.ob.setDisplaySlot(DisplaySlot.SIDEBAR);
 		this.ob.setDisplayName(ChatColor.translateAlternateColorCodes('&', HG.lang.scoreboard_title));
 		this.g = g;

@@ -432,6 +432,7 @@ public class Game {
 		unFreeze(p);
 		heal(p);
 		exit(p);
+		sb.restoreSB(p);
 		HG.plugin.players.get(p.getUniqueId()).restore(p);
 		HG.plugin.players.remove(p.getUniqueId());
 		if (status == Status.RUNNING || status == Status.BEGINNING || status == Status.COUNTDOWN) {
@@ -444,7 +445,6 @@ public class Game {
 							.replace("<amount>", String.valueOf((minplayers - players.size())))));
 		}
 		updateLobbyBlock();
-		sb.restoreSB(p);
 		sb.setAlive();
 	}
 
