@@ -61,7 +61,6 @@ public class CommandListener implements CommandExecutor, TabCompleter {
 					args[0].equalsIgnoreCase("debug") ||
 					args[0].equalsIgnoreCase("stop") ||
 					(args[0].equalsIgnoreCase("forcestart")) ||
-					(args[0].equalsIgnoreCase("leave")) ||
 					(args[0].equalsIgnoreCase("join")) ||
 					(args[0].equalsIgnoreCase("setlobbywall")) ||
 					(args[0].equalsIgnoreCase("toggle"))) {
