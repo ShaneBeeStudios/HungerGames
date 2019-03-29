@@ -10,9 +10,7 @@ import me.minebuilders.hg.tasks.StartingTask;
 import me.minebuilders.hg.tasks.TimerTask;
 import org.bukkit.*;
 import org.bukkit.block.*;
-import org.bukkit.craftbukkit.v1_13_R2.block.CraftBlock;
 import org.bukkit.entity.Player;
-import org.bukkit.inventory.Inventory;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 
@@ -253,8 +251,7 @@ public class Game {
 
 	private Location pickSpawn() {
 
-		//int spawn = players.size() - 1;
-		double spawn = getRandomIntegerBetweenRange(0, maxplayers - 1);
+		double spawn = getRandomIntegerBetweenRange(maxplayers - 1);
 		if (containsPlayer(spawns.get(((int) spawn)))) {
 			Collections.shuffle(spawns);
 			for (Location l : spawns) {
@@ -482,7 +479,7 @@ public class Game {
 
 	public boolean isLobbyValid() {
 		try {
-			if (s instanceof Sign && s1 instanceof Sign && s2 instanceof Sign) {
+			if (s != null && s1 != null && s2 != null) {
 				return true;
 			}
 		} catch (Exception e) {
@@ -491,9 +488,8 @@ public class Game {
 		return false;
 	}
 
-	private static double getRandomIntegerBetweenRange(double min, double max) {
-		double x = (int) (Math.random() * ((max - min) + 1)) + min;
-		return x;
+	private static double getRandomIntegerBetweenRange(double max) {
+		return (int) (Math.random() * ((max - (double) 0) + 1)) + (double) 0;
 	}
 
 }
