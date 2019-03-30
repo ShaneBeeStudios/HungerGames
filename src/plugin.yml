@@ -1,7 +1,7 @@
 name: HungerGames
 authors: [bob7l, Spoopy, ShaneBee]
 description: A Simple, fun, HungerGames plugin
-version: 4.0.0
+version: 4.0.1
 website: https://github.com/ShaneBeeTK/HungerGames
 api-version: 1.13
 main: me.minebuilders.hg.HG
