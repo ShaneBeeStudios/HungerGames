@@ -179,7 +179,9 @@ public class Game {
                 HG.plugin.players.put(p.getUniqueId(), new PlayerData(p, this));
 
 			Location loc = pickSpawn();
-			loc.setY(Bukkit.getWorld(loc.getWorld().getName()).getHighestBlockAt(loc).getY());
+			if (loc.getBlock().getRelative(BlockFace.DOWN).getType() == Material.AIR) {
+				loc.setY(Bukkit.getWorld(loc.getWorld().getName()).getHighestBlockAt(loc).getY());
+			}
 			p.teleport(loc);
 			heal(p);
 			freeze(p);
