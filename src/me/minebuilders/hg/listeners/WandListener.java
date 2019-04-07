@@ -1,5 +1,6 @@
 package me.minebuilders.hg.listeners;
 
+import me.minebuilders.hg.Game;
 import me.minebuilders.hg.HG;
 import me.minebuilders.hg.PlayerSession;
 import me.minebuilders.hg.Util;
@@ -28,24 +29,36 @@ public class WandListener implements Listener {
 			if (!player.getInventory().getItemInMainHand().getType().equals(Material.BLAZE_ROD)) return;
 			if (!plugin.playerses.containsKey(player.getUniqueId())) return;
 			Location l = event.getClickedBlock().getLocation();
+			event.setCancelled(true);
+			for (Game game : HG.plugin.games) {
+				if (game.getRegion().isInRegion(l)) {
+					Util.scm(player, "&cThis location is already within an arena");
+					return;
+				}
+			}
 			PlayerSession ses = plugin.playerses.get(player.getUniqueId());
 			ses.setLoc2(l);
 			Util.msg(player, "Pos2: "+l.getX()+", "+l.getY()+", "+l.getZ());
 			if (!ses.hasValidSelection()) {
 				Util.msg(player, "Now you need to set position 1!");
 			}
-			event.setCancelled(true);
 		} else if (action.equals(Action.LEFT_CLICK_BLOCK)) {
 			if (!player.getInventory().getItemInMainHand().getType().equals(Material.BLAZE_ROD)) return;
 			if (!plugin.playerses.containsKey(player.getUniqueId())) return;
 			Location l = event.getClickedBlock().getLocation();
+			event.setCancelled(true);
+			for (Game game : HG.plugin.games) {
+				if (game.getRegion().isInRegion(l)) {
+					Util.scm(player, "&cThis location is already within an arena");
+					return;
+				}
+			}
 			PlayerSession ses = plugin.playerses.get(player.getUniqueId());
 			ses.setLoc1(l);
 			Util.msg(player, "Pos1: "+l.getX()+", "+l.getY()+", "+l.getZ());
 			if (!ses.hasValidSelection()) {
 				Util.msg(player, "Now you need to set position 2!");
 			}
-			event.setCancelled(true);
 		}
 	}
 }
