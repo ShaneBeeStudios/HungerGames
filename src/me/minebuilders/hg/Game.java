@@ -1,8 +1,5 @@
 package me.minebuilders.hg;
 
-import java.util.*;
-import java.util.Map.Entry;
-
 import me.minebuilders.hg.mobhandler.Spawner;
 import me.minebuilders.hg.tasks.ChestDropTask;
 import me.minebuilders.hg.tasks.FreeRoamTask;
@@ -13,6 +10,12 @@ import org.bukkit.block.*;
 import org.bukkit.entity.Player;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
+
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+import java.util.Map.Entry;
+import java.util.UUID;
 
 public class Game {
 
@@ -37,7 +40,7 @@ public class Game {
 	// Task ID's here!
 	private Spawner spawner;
 	private FreeRoamTask freeroam;
-	private StartingTask starting;
+	public StartingTask starting;
 	private TimerTask timer;
 	private ChestDropTask chestdrop;
 
