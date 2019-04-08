@@ -3,13 +3,10 @@ package me.minebuilders.hg.listeners;
 import me.minebuilders.hg.*;
 import me.minebuilders.hg.events.ChestOpenEvent;
 import org.bukkit.*;
-import org.bukkit.attribute.Attribute;
 import org.bukkit.block.Block;
 import org.bukkit.block.Sign;
 import org.bukkit.entity.Entity;
-import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
-import org.bukkit.entity.Projectile;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
@@ -74,20 +71,9 @@ public class GameListener implements Listener {
 		}
 	}
 
-	@EventHandler
-	public void onDamage(EntityDamageByEntityEvent e) {
-		if (e.getEntity() instanceof Player) {
-			Player player = ((Player) e.getEntity());
-			if (plugin.players.get(player.getUniqueId()) != null) {
-				if (!killerMap.containsKey(player))
-					killerMap.put(player, e.getDamager());
-				else
-					killerMap.replace(player, e.getDamager());
-			}
-		}
-	}
 
-	@EventHandler
+
+	@EventHandler(priority = EventPriority.HIGHEST)
 	public void onDeath(PlayerDeathEvent event) {
 		final Player p = event.getEntity();
 
@@ -95,18 +81,21 @@ public class GameListener implements Listener {
 
 		if (pd != null) {
 			final Game g = pd.getGame();
+			dropInv(p);
 
-			p.setHealth((p.getAttribute(Attribute.GENERIC_MAX_HEALTH).getValue()));
-			p.spigot().respawn();
+			// TODO Leaving this out for now and replacing with setCancelled to see if this performs any better
+			//p.setHealth((p.getAttribute(Attribute.GENERIC_MAX_HEALTH).getValue()));
+			//p.spigot().respawn();
+			event.setCancelled(true);
+
 			Player killer = p.getKiller();
 
 			if (killer != null) {
 				g.msgDef(HG.lang.death_fallen + " &d" + HG.killmanager.getKillString(p.getName(), killer));
 			} else if (p.getLastDamageCause().getCause() == EntityDamageEvent.DamageCause.ENTITY_ATTACK) {
-                g.msgDef(HG.lang.death_fallen + " &d" + HG.killmanager.getKillString(p.getName(), killerMap.get(p)));
-            } else if (p.getLastDamageCause().getCause() == EntityDamageEvent.DamageCause.PROJECTILE &&
-                    (killerMap.get(p).getType() == EntityType.TRIDENT || killerMap.get(p).getType() == EntityType.ARROW)) {
-			    g.msgDef(HG.lang.death_fallen + " &d" + HG.killmanager.getKillString(p.getName(), killerMap.get(p)));
+				g.msgDef(HG.lang.death_fallen + " &d" + HG.killmanager.getKillString(p.getName(), killerMap.get(p)));
+			} else if (p.getLastDamageCause().getCause() == EntityDamageEvent.DamageCause.PROJECTILE) {
+				g.msgDef(HG.lang.death_fallen + " &d" + HG.killmanager.getKillString(p.getName(), killerMap.get(p)));
 			} else {
 				g.msgDef(HG.lang.death_fallen + " &d" + HG.killmanager.getDeathString(p.getLastDamageCause().getCause(), p.getName()));
 			}
@@ -117,14 +106,14 @@ public class GameListener implements Listener {
 				Player player = Bukkit.getPlayer(uuid);
 				player.playSound(player.getLocation(), Sound.UI_TOAST_CHALLENGE_COMPLETE, 5, 1);
 			}
-			dropInv(p);
-			g.exit(p);
-			p.playSound(p.getLocation(), Sound.UI_TOAST_CHALLENGE_COMPLETE, 5, 1);
 
 			Bukkit.getScheduler().scheduleSyncDelayedTask(plugin, () -> {
+				g.exit(p);
 				g.leave(p, true);
-				checkStick(g);
-			}, 10L);
+				p.playSound(p.getLocation(), Sound.UI_TOAST_CHALLENGE_COMPLETE, 5, 1);
+			}, 1);
+
+			Bukkit.getScheduler().scheduleSyncDelayedTask(plugin, () -> checkStick(g), 10L);
 		}
 	}
 
@@ -210,8 +199,13 @@ public class GameListener implements Listener {
 		Entity defender = event.getEntity();
 		Entity damager = event.getDamager();
 
-		if (damager instanceof Projectile) {
-			damager = (Entity) ((Projectile) damager).getShooter();
+		if (defender instanceof Player) {
+			if (plugin.players.get(defender.getUniqueId()) != null) {
+				if (!killerMap.containsKey(defender))
+					killerMap.put(((Player) defender), damager);
+				else
+					killerMap.replace(((Player) defender), damager);
+			}
 		}
 
 		if (defender instanceof Player && damager != null) {
