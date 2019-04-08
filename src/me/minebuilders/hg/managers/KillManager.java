@@ -1,9 +1,8 @@
 package me.minebuilders.hg.managers;
 
 import me.minebuilders.hg.HG;
-import org.bukkit.entity.Entity;
-import org.bukkit.entity.Player;
-import org.bukkit.entity.Trident;
+import org.bukkit.Material;
+import org.bukkit.entity.*;
 import org.bukkit.event.entity.EntityDamageEvent.DamageCause;
 
 public class KillManager {
@@ -38,9 +37,14 @@ public class KillManager {
 	public String getKillString(String name, Entity e) {
 		switch (e.getType()) {
 			case PLAYER:
+				String weapon;
+				if (((Player) e).getInventory().getItemInMainHand().getType() == Material.AIR)
+					weapon = "fist";
+				else
+					weapon = ((Player) e).getInventory().getItemInMainHand().getType().name().toLowerCase();
 				return (HG.lang.death_player.replace("<player>", name)
 						.replace("<killer>", e.getName())
-						.replace("<weapon>", ((Player) e).getInventory().getItemInMainHand().getType().name().toLowerCase()));
+						.replace("<weapon>", weapon));
 			case ZOMBIE:
 				return (HG.lang.death_zombie.replace("<player>", name));
 			case SKELETON:
