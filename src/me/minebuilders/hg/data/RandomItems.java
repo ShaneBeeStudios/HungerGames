@@ -88,42 +88,42 @@ public class RandomItems {
 	}
 
 	private void setDefaultss() {
-		ArrayList <String> s = new ArrayList <>();
-		s.add("STONE_SWORD 1 x:5");
-		s.add("GOLDEN_SWORD 1");
-		s.add("MUSHROOM_STEW 1 x:2");
-		s.add("STONE_HOE 1");
-		s.add("LEATHER_HELMET 1 x:2");
-		s.add("LEATHER_CHESTPLATE 1 x:2");
-		s.add("LEATHER_LEGGINGS 1 x:2");
-		s.add("IRON_HELMET 1 x:2");
-		s.add("IRON_CHESTPLATE 1 x:2");
-		s.add("IRON_LEGGINGS 1 x:2");
-		s.add("IRON_BOOTS 1 x:2");//280
-		s.add("BOW 1 x:3");
-		s.add("ARROW 20 x:2");
-		s.add("MILK_BUCKET 1 x:2");
-		s.add("FISHING_ROD 1");
-		s.add("COMPASS 1");
-		s.add("STICK 1 name:&6TrackingStick_&aUses:_5");
-		s.add("GOLDEN_HELMET 1");
-		s.add("GOLDEN_CHESTPLATE 1");
-		s.add("BONE 1 x:2");
-		s.add("GOLDEN_LEGGINGS 1");
-		s.add("GOLDEN_BOOTS 1");
-		s.add("DIAMOND_SWORD 1 name:&6Death_Dealer");
-		s.add("GOLDEN_APPLE 1");
-		s.add("CHAINMAIL_CHESTPLATE 1 x:1");
-		s.add("CHAINMAIL_LEGGINGS 1 x:1");
-		s.add("COOKIE 2 x:3");
-		s.add("MELON_SLICE 1 x:4");
-		s.add("COOKED_BEEF 1 x:2");
-		s.add("ENDER_PEARL 1 x:2");
-		s.add("POTION:SPEED:3600:1 1 x:2");
-		s.add("POTION:HEAL:1:1 1 x:2");
-		s.add("SPLASH_POTION:POISON:320:2 1");
-		s.add("SPLASH_POTION:REGENERATION:660:1 1 x:2");
-		s.add("APPLE 2 x:5");
-		item.set("items", s);
+		ArrayList <String> items = new ArrayList <>();
+		items.add("STONE_SWORD 1 x:5");
+		items.add("GOLDEN_SWORD 1");
+		items.add("MUSHROOM_STEW 1 x:2");
+		items.add("STONE_HOE 1");
+		items.add("LEATHER_HELMET 1 x:2");
+		items.add("LEATHER_CHESTPLATE 1 x:2");
+		items.add("LEATHER_LEGGINGS 1 x:2");
+		items.add("IRON_HELMET 1 x:2");
+		items.add("IRON_CHESTPLATE 1 x:2");
+		items.add("IRON_LEGGINGS 1 x:2");
+		items.add("IRON_BOOTS 1 x:2");//280
+		items.add("BOW 1 x:3");
+		items.add("ARROW 20 x:2");
+		items.add("MILK_BUCKET 1 x:2");
+		items.add("FISHING_ROD 1");
+		items.add("COMPASS 1");
+		items.add("STICK 1 name:&6TrackingStick_&aUses:_5 lore:&Left_click_in_the_air:&7To_find_nearby_players");
+		items.add("GOLDEN_HELMET 1");
+		items.add("GOLDEN_CHESTPLATE 1");
+		items.add("BONE 1 x:2");
+		items.add("GOLDEN_LEGGINGS 1");
+		items.add("GOLDEN_BOOTS 1");
+		items.add("DIAMOND_SWORD 1 name:&6Death_Dealer");
+		items.add("GOLDEN_APPLE 1");
+		items.add("CHAINMAIL_CHESTPLATE 1 x:1");
+		items.add("CHAINMAIL_LEGGINGS 1 x:1");
+		items.add("COOKIE 2 x:3");
+		items.add("MELON_SLICE 1 x:4");
+		items.add("COOKED_BEEF 1 x:2");
+		items.add("ENDER_PEARL 1 x:2");
+		items.add("POTION:SPEED:3600:1 1 x:2");
+		items.add("POTION:HEAL:1:1 1 x:2");
+		items.add("SPLASH_POTION:POISON:320:2 1");
+		items.add("SPLASH_POTION:REGENERATION:660:1 1 x:2");
+		items.add("APPLE 2 x:5");
+		item.set("items", items);
 	}
 }
