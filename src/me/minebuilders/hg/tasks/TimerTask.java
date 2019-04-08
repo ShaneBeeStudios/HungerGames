@@ -37,9 +37,10 @@ public class TimerTask implements Runnable {
 			int asd = this.remainingtime % 60;
 			if (minutes != 0) {
 				if (asd == 0)
-					game.msgAll(HG.lang.game_ending_minsec.replace("<minutes>", String.valueOf(minutes)).replace("<seconds>", String.valueOf(asd)));
-				else
 					game.msgAll(HG.lang.game_ending_min.replace("<minutes>", String.valueOf(minutes)));
+				else
+
+				game.msgAll(HG.lang.game_ending_minsec.replace("<minutes>", String.valueOf(minutes)).replace("<seconds>", String.valueOf(asd)));
 			}
 			else game.msgAll(HG.lang.game_ending_sec.replace("<seconds>", String.valueOf(this.remainingtime)));
 		}
