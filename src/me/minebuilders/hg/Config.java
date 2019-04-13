@@ -39,6 +39,7 @@ public class Config {
 		}
 
 		Configuration config = plugin.getConfig().getRoot();
+		assert config != null;
 		config.options().copyDefaults(true);
 		plugin.reloadConfig();
 		config = plugin.getConfig();
@@ -67,8 +68,15 @@ public class Config {
 		if (giveReward) {
 			try {
 				Vault.setupEconomy();
+				if (Vault.economy == null) {
+					Util.log("&cUnable to setup vault!");
+					Util.log(" - &cEconomy provider is missing.");
+					Util.log(" - Cash rewards will not be given out..");
+					giveReward = false;
+				}
 			} catch (NoClassDefFoundError e) {
-				Util.log("Unable to setup vault! Rewards will not be given out..");
+				Util.log("&cUnable to setup vault!");
+				Util.log("  - Cash rewards will not be given out..");
 				giveReward = false;
 			}
 		}
