@@ -25,6 +25,7 @@ import org.bukkit.util.Vector;
 
 import java.util.HashMap;
 import java.util.List;
+import java.util.Objects;
 import java.util.UUID;
 
 public class GameListener implements Listener {
@@ -85,14 +86,15 @@ public class GameListener implements Listener {
 
 			// TODO Leaving this out for now and replacing with setCancelled to see if this performs any better
 			//p.setHealth((p.getAttribute(Attribute.GENERIC_MAX_HEALTH).getValue()));
-			//p.spigot().respawn();
-			event.setCancelled(true);
+			//p.setHealth(20);
+			p.setHealth(20);
+			p.spigot().respawn();
 
 			Player killer = p.getKiller();
 
 			if (killer != null) {
 				g.msgDef(HG.lang.death_fallen + " &d" + HG.killmanager.getKillString(p.getName(), killer));
-			} else if (p.getLastDamageCause().getCause() == EntityDamageEvent.DamageCause.ENTITY_ATTACK) {
+			} else if (Objects.requireNonNull(p.getLastDamageCause()).getCause() == EntityDamageEvent.DamageCause.ENTITY_ATTACK) {
 				g.msgDef(HG.lang.death_fallen + " &d" + HG.killmanager.getKillString(p.getName(), killerMap.get(p)));
 			} else if (p.getLastDamageCause().getCause() == EntityDamageEvent.DamageCause.PROJECTILE) {
 				g.msgDef(HG.lang.death_fallen + " &d" + HG.killmanager.getKillString(p.getName(), killerMap.get(p)));
@@ -104,6 +106,7 @@ public class GameListener implements Listener {
 
 			for (UUID uuid : g.getPlayers()) {
 				Player player = Bukkit.getPlayer(uuid);
+				assert player != null;
 				player.playSound(player.getLocation(), Sound.UI_TOAST_CHALLENGE_COMPLETE, 5, 1);
 			}
 
@@ -111,7 +114,7 @@ public class GameListener implements Listener {
 				g.exit(p);
 				g.leave(p, true);
 				p.playSound(p.getLocation(), Sound.UI_TOAST_CHALLENGE_COMPLETE, 5, 1);
-			}, 1);
+			}, 5);
 
 			Bukkit.getScheduler().scheduleSyncDelayedTask(plugin, () -> checkStick(g), 10L);
 		}
