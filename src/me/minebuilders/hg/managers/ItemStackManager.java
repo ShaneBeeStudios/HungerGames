@@ -3,6 +3,7 @@ package me.minebuilders.hg.managers;
 import me.minebuilders.hg.HG;
 import me.minebuilders.hg.Util;
 import me.minebuilders.hg.data.KitEntry;
+import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.DyeColor;
 import org.bukkit.Material;
@@ -12,6 +13,7 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.inventory.meta.LeatherArmorMeta;
 import org.bukkit.inventory.meta.PotionMeta;
+import org.bukkit.inventory.meta.SkullMeta;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 
@@ -112,6 +114,7 @@ public class ItemStackManager {
 				s = ChatColor.translateAlternateColorCodes('&', s);
 				assert item != null;
 				ItemMeta im = item.getItemMeta();
+				assert im != null;
 				im.setDisplayName(s);
 				item.setItemMeta(im);
 			} else if (s.startsWith("lore:")) {
@@ -120,8 +123,18 @@ public class ItemStackManager {
 				assert item != null;
 				ItemMeta meta = item.getItemMeta();
 				ArrayList<String> lore = new ArrayList<>(Arrays.asList(s.split(":")));
+				assert meta != null;
 				meta.setLore(lore);
 				item.setItemMeta(meta);
+			} else if (s.startsWith("ownerName:")) {
+				s = s.replace("ownerName:", "");
+				assert item != null;
+				if (item.getType().equals(Material.PLAYER_HEAD)) {
+					ItemMeta meta = item.getItemMeta();
+					assert meta != null;
+					((SkullMeta) meta).setOwningPlayer(Bukkit.getOfflinePlayer(s));
+					item.setItemMeta(meta);
+				}
 			}
 		}
 		return item;
