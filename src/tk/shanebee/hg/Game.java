@@ -313,7 +313,8 @@ public class Game {
 		}
 		p.setHealth(20);
 		p.setFoodLevel(20);
-		p.setFireTicks(0);
+		Bukkit.getScheduler().scheduleSyncDelayedTask(HG.plugin, () -> p.setFireTicks(0), 1);
+
 	}
 
 	public void freeze(Player p) {
@@ -435,8 +436,9 @@ public class Game {
 	public void leave(Player p, Boolean death) {
 		players.remove(p.getUniqueId());
 		unFreeze(p);
-		heal(p);
 		exit(p);
+		heal(p);
+		if (death) p.spigot().respawn();
 		sb.restoreSB(p);
 		HG.plugin.players.get(p.getUniqueId()).restore(p);
 		HG.plugin.players.remove(p.getUniqueId());
