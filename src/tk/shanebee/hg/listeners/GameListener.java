@@ -93,7 +93,6 @@ public class GameListener implements Listener {
 			//p.setHealth((p.getAttribute(Attribute.GENERIC_MAX_HEALTH).getValue()));
 			//p.setHealth(20);
 			p.setHealth(20);
-			p.spigot().respawn();
 
 			Player killer = p.getKiller();
 
@@ -116,10 +115,9 @@ public class GameListener implements Listener {
 			}
 
 			Bukkit.getScheduler().scheduleSyncDelayedTask(plugin, () -> {
-				g.exit(p);
 				g.leave(p, true);
 				p.playSound(p.getLocation(), Sound.UI_TOAST_CHALLENGE_COMPLETE, 5, 1);
-			}, 5);
+			}, 1);
 
 			Bukkit.getScheduler().scheduleSyncDelayedTask(plugin, () -> checkStick(g), 10L);
 		}
@@ -148,8 +146,11 @@ public class GameListener implements Listener {
 			if (uses == 0) {
 				Util.scm(p, HG.lang.track_empty);
 			} else {
+				PlayerData pd = plugin.players.get(p.getUniqueId());
+				final Game g = pd.getGame();
 				for (Entity e : p.getNearbyEntities(120, 50, 120)) {
 					if (e instanceof Player) {
+						if (!g.getPlayers().contains(e.getUniqueId())) continue;
 						im.setDisplayName(tsn + (uses - 1));
 						Location l = e.getLocation();
 						int range = (int) p.getLocation().distance(l);
@@ -163,7 +164,6 @@ public class GameListener implements Listener {
 					}
 				}
 				Util.msg(p, HG.lang.track_no_near);
-
 			}
 		}
 	}
