@@ -38,11 +38,11 @@ public class ChestDrop implements Listener {
 	@EventHandler
 	public void onUnload(ChunkUnloadEvent event) {
 		if (event.getChunk().equals(c)) {
-			event.setCancelled(true);
+			//event.setCancelled(true); I guess this was removed?!?
+			event.getChunk().setForceLoaded(true); // Let's give this a try
 		}
 	}
 
-	@SuppressWarnings("deprecation")
 	public void remove() {
 		if (fb != null && !fb.isDead()) fb.remove();
 		if (beforeBlock != null) {
