@@ -63,6 +63,7 @@ public class RandomItems {
 	}
 
 	public void load() {
+		reloadCustomConfig();
 		size = 0;
 		if (item.getStringList("items").isEmpty()) {
 			setDefaultss();
@@ -72,16 +73,20 @@ public class RandomItems {
 		}
 		for (String s : item.getStringList("items")) {
 			String[] amount = s.split(" ");
-			for (String p : amount)
-				if (p.startsWith("x:")) {
-					int c = Integer.parseInt(p.replace("x:", ""));
-					while(c != 0) {
-						c--;
-						plugin.items.put(plugin.items.size() + 1, plugin.ism.getItem(s.replace("x:", ""), true));
-						size++;
+			if (s.contains("x:")) {
+				for (String p : amount) {
+					if (p.startsWith("x:")) {
+						int c = Integer.parseInt(p.replace("x:", ""));
+						while (c != 0) {
+							c--;
+							plugin.items.put(plugin.items.size() + 1, plugin.ism.getItem(s.replace("x:", ""), true));
+							size++;
+						}
 					}
-				} else
-					plugin.items.put(plugin.items.size() + 1, plugin.ism.getItem(s, true));
+				}
+			} else {
+				plugin.items.put(plugin.items.size() + 1, plugin.ism.getItem(s, true));
+			}
 			size++;
 		}
 		Util.log(plugin.items.size() + " Random items have been loaded!");
