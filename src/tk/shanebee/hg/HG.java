@@ -50,9 +50,9 @@ public class HG extends JavaPlugin {
 		new Config(this);
 		Metrics metrics = new Metrics(this);
 		if (metrics.isEnabled())
-			Util.log("&7Metrics has been &aenabled");
+			Util.log("&7Metrics have been &aenabled");
 		else
-			Util.log("&7Metrics has been &cdisabled");
+			Util.log("&7Metrics have been &cdisabled");
 		plugin = this;
 		lang = new Language(this);
 		arenaconfig = new Data(this);
@@ -64,7 +64,9 @@ public class HG extends JavaPlugin {
 		leaderboard = new Leaderboard(this);
 		if (Bukkit.getPluginManager().getPlugin("PlaceholderAPI") != null) {
 			new Placeholders(this).register();
-			Util.scm(Bukkit.getConsoleSender(), "Placeholders enabled");
+			Util.log("&7PAPI found, Placeholders have been &aenabled");
+		} else {
+			Util.log("&7PAPI not found, Placeholders have been &cdisabled");
 		}
 		getCommand("hg").setExecutor(new CommandListener(this));
 		getServer().getPluginManager().registerEvents(new WandListener(this), this);
