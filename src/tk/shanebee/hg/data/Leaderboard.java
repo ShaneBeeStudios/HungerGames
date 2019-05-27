@@ -24,12 +24,11 @@ public class Leaderboard {
         loadLeaderboard();
     }
 
-    public void addWin(Player player) {
-        String uuid = player.getUniqueId().toString();
-        if (wins.containsKey(uuid)) {
-            wins.replace(uuid, wins.get(uuid) + 1);
+    public void addWin(UUID uuid) {
+        if (wins.containsKey(uuid.toString())) {
+            wins.replace(uuid.toString(), wins.get(uuid.toString()) + 1);
         } else {
-            wins.put(uuid, 1);
+            wins.put(uuid.toString(), 1);
         }
         saveLeaderboard();
     }
@@ -54,6 +53,10 @@ public class Leaderboard {
             plugin.saveResource("leaderboard.yml", true);
         }
         leaderboardConfig = YamlConfiguration.loadConfiguration(config_file);
+        if (leaderboardConfig.getConfigurationSection("Total-Wins") == null) return;
+        for (String key : leaderboardConfig.getConfigurationSection("Total-Wins").getKeys(false)) {
+            wins.put(key, leaderboardConfig.getInt("Total-Wins." + key));
+        }
     }
 
     public List<String> getTop(String entry) {

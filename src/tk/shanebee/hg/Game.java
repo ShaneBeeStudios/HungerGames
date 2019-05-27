@@ -1,5 +1,6 @@
 package tk.shanebee.hg;
 
+import org.bukkit.plugin.IllegalPluginAccessException;
 import tk.shanebee.hg.mobhandler.Spawner;
 import tk.shanebee.hg.tasks.ChestDropTask;
 import tk.shanebee.hg.tasks.FreeRoamTask;
@@ -313,7 +314,9 @@ public class Game {
 		}
 		p.setHealth(20);
 		p.setFoodLevel(20);
-		Bukkit.getScheduler().scheduleSyncDelayedTask(HG.plugin, () -> p.setFireTicks(0), 1);
+		try {
+			Bukkit.getScheduler().scheduleSyncDelayedTask(HG.plugin, () -> p.setFireTicks(0), 1);
+		} catch (IllegalPluginAccessException ignore) {}
 
 	}
 
@@ -396,21 +399,22 @@ public class Game {
 				Player p = Bukkit.getPlayer(u);
 				assert p != null;
 				if (!Config.rewardCommands.isEmpty()) {
-				    for (String cmd : Config.rewardCommands) {
+					for (String cmd : Config.rewardCommands) {
 						if (!cmd.equalsIgnoreCase("none"))
 							Bukkit.dispatchCommand(Bukkit.getConsoleSender(), cmd.replace("<player>", p.getName()));
 					}
-                }
+				}
 				if (!Config.rewardMessages.isEmpty()) {
-				    for (String msg : Config.rewardMessages) {
-				        if (!msg.equalsIgnoreCase("none"))
-				            Util.scm(p, msg.replace("<player>", p.getName()));
-                    }
-                }
+					for (String msg : Config.rewardMessages) {
+						if (!msg.equalsIgnoreCase("none"))
+							Util.scm(p, msg.replace("<player>", p.getName()));
+					}
+				}
 				if (Config.cash != 0) {
-                    Vault.economy.depositPlayer(Bukkit.getServer().getOfflinePlayer(u), db);
+					Vault.economy.depositPlayer(Bukkit.getServer().getOfflinePlayer(u), db);
 					Util.msg(p, HG.lang.winning_amount.replace("<amount>", String.valueOf(db)));
 				}
+				HG.plugin.leaderboard.addWin(u);
 			}
 		}
 
@@ -474,7 +478,7 @@ public class Game {
 		return false;
 	}
 
-	public void exit(Player p) {
+	private void exit(Player p) {
 		Util.clearInv(p);
 		if (this.exit == null) {
 			p.teleport(s.getWorld().getSpawnLocation());

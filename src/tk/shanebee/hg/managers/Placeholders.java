@@ -3,7 +3,9 @@ package tk.shanebee.hg.managers;
 import me.clip.placeholderapi.expansion.PlaceholderExpansion;
 import org.bukkit.entity.Player;
 import tk.shanebee.hg.HG;
+import tk.shanebee.hg.Util;
 
+import java.util.List;
 import java.util.Map;
 
 public class Placeholders extends PlaceholderExpansion {
@@ -43,13 +45,22 @@ public class Placeholders extends PlaceholderExpansion {
 
     @Override
     public String onPlaceholderRequest(Player player, String identifier) {
-        if (identifier.contains("leaderboard_player")) {
-            int leader = Integer.valueOf(identifier.replace("leaderboard_player_", ""));
-            return plugin.leaderboard.getTop("player").get(leader);
+        if (identifier.startsWith("lb_player")) {
+            int leader = Integer.valueOf(identifier.replace("lb_player_", ""));
+            List<String> list =  plugin.leaderboard.getTop("player");
+            if (list.size() >= leader)
+                return list.get(leader - 1);
+            else
+                return "";
         }
-        if (identifier.contains("leaderboard_score")) {
-            int leader = Integer.valueOf(identifier.replace("leaderboard_score_", ""));
-            return plugin.leaderboard.getTop("score").get(leader);
+        if (identifier.startsWith("lb_score")) {
+            int leader = (Integer.valueOf(identifier.replace("lb_score_", "")));
+            List<String> list = plugin.leaderboard.getTop("score");
+            if (list.size() >= leader)
+                return list.get(leader - 1);
+            else
+                return "";
+
         }
         return null;
     }

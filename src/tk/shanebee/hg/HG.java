@@ -15,10 +15,7 @@ import tk.shanebee.hg.listeners.CancelListener;
 import tk.shanebee.hg.listeners.CommandListener;
 import tk.shanebee.hg.listeners.GameListener;
 import tk.shanebee.hg.listeners.WandListener;
-import tk.shanebee.hg.managers.ItemStackManager;
-import tk.shanebee.hg.managers.KillManager;
-import tk.shanebee.hg.managers.KitManager;
-import tk.shanebee.hg.managers.Manager;
+import tk.shanebee.hg.managers.*;
 import tk.shanebee.hg.metrics.Metrics;
 
 import java.util.ArrayList;
@@ -65,7 +62,10 @@ public class HG extends JavaPlugin {
 		ri = new RandomItems(this);
 		manager = new Manager(this);
 		leaderboard = new Leaderboard(this);
-
+		if (Bukkit.getPluginManager().getPlugin("PlaceholderAPI") != null) {
+			new Placeholders(this).register();
+			Util.scm(Bukkit.getConsoleSender(), "Placeholders enabled");
+		}
 		getCommand("hg").setExecutor(new CommandListener(this));
 		getServer().getPluginManager().registerEvents(new WandListener(this), this);
 		getServer().getPluginManager().registerEvents(new CancelListener(this), this);
