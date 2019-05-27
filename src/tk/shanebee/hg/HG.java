@@ -9,6 +9,7 @@ import org.bukkit.plugin.java.JavaPlugin;
 import tk.shanebee.hg.commands.*;
 import tk.shanebee.hg.data.Data;
 import tk.shanebee.hg.data.Language;
+import tk.shanebee.hg.data.Leaderboard;
 import tk.shanebee.hg.data.RandomItems;
 import tk.shanebee.hg.listeners.CancelListener;
 import tk.shanebee.hg.listeners.CommandListener;
@@ -45,6 +46,7 @@ public class HG extends JavaPlugin {
 	public static Language lang;
 	public KitManager kit;
 	public ItemStackManager ism;
+	public Leaderboard leaderboard;
 
 	@Override
 	public void onEnable() {
@@ -62,6 +64,8 @@ public class HG extends JavaPlugin {
 		ism = new ItemStackManager(this);
 		ri = new RandomItems(this);
 		manager = new Manager(this);
+		leaderboard = new Leaderboard(this);
+
 		getCommand("hg").setExecutor(new CommandListener(this));
 		getServer().getPluginManager().registerEvents(new WandListener(this), this);
 		getServer().getPluginManager().registerEvents(new CancelListener(this), this);
