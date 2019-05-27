@@ -3,24 +3,26 @@ package tk.shanebee.hg.data;
 import org.bukkit.Bukkit;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
-import org.bukkit.entity.Player;
 import tk.shanebee.hg.HG;
 
 import java.io.File;
 import java.io.IOException;
 import java.util.*;
 
-@SuppressWarnings("unused")
 public class Leaderboard {
 
     private HG plugin;
-    public Map<String, Integer> wins;
     private FileConfiguration leaderboardConfig;
     private File config_file;
+    private Map<String, Integer> wins;
+    public List<String> sorted_players;
+    public List<String> sorted_scores;
 
     public Leaderboard(HG pluging) {
         this.plugin = pluging;
         wins = new TreeMap<>();
+        sorted_players = new ArrayList<>();
+        sorted_scores = new ArrayList<>();
         loadLeaderboard();
     }
 
@@ -33,11 +35,6 @@ public class Leaderboard {
         saveLeaderboard();
     }
 
-    public int getWins(Player player) {
-        String uuid = player.getUniqueId().toString();
-        return wins.getOrDefault(uuid, 0);
-    }
-
     private void saveLeaderboard() {
         leaderboardConfig.set("Total-Wins", wins);
         try {
@@ -45,6 +42,7 @@ public class Leaderboard {
         } catch (IOException e) {
             e.printStackTrace();
         }
+        sortScores();
     }
 
     private void loadLeaderboard() {
@@ -57,20 +55,23 @@ public class Leaderboard {
         for (String key : leaderboardConfig.getConfigurationSection("Total-Wins").getKeys(false)) {
             wins.put(key, leaderboardConfig.getInt("Total-Wins." + key));
         }
+        sortScores();
     }
 
-    public List<String> getTop(String entry) {
-        List<String> top = new ArrayList<>();
+    private void sortScores() {
+        sorted_scores.clear();
+        sorted_players.clear();
         for (Map.Entry<String, Integer> map : entriesSortedByValues(wins)) {
             String player = Bukkit.getOfflinePlayer(UUID.fromString(map.getKey())).getName();
             int score = map.getValue();
-            top.add(entry.equalsIgnoreCase("player") ? player : String.valueOf(score));
+            sorted_scores.add(String.valueOf(score));
+            sorted_players.add(player);
         }
-        return top;
+
     }
 
-    private static <K,V extends Comparable<? super V>> SortedSet<Map.Entry<K,V>> entriesSortedByValues(Map<K, V> map) {
-        SortedSet<Map.Entry<K,V>> sortedEntries = new TreeSet<>(
+    private static <K, V extends Comparable<? super V>> SortedSet<Map.Entry<K, V>> entriesSortedByValues(Map<K, V> map) {
+        SortedSet<Map.Entry<K, V>> sortedEntries = new TreeSet<>(
                 (Map.Entry<K, V> e2, Map.Entry<K, V> e1) -> {
                     int res = e1.getValue().compareTo(e2.getValue());
                     if (res == 0) return 1;
@@ -80,4 +81,5 @@ public class Leaderboard {
         sortedEntries.addAll(map.entrySet());
         return sortedEntries;
     }
+
 }
