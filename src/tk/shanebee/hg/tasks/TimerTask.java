@@ -2,6 +2,7 @@ package tk.shanebee.hg.tasks;
 
 import org.bukkit.Bukkit;
 
+import tk.shanebee.hg.Config;
 import tk.shanebee.hg.Game;
 import tk.shanebee.hg.HG;
 import tk.shanebee.hg.Status;
@@ -9,6 +10,7 @@ import tk.shanebee.hg.Status;
 public class TimerTask implements Runnable {
 
 	private int remainingtime;
+	private int teleportTimer = Config.teleportEndTime;
 	private int id;
 	private Game game;
 
@@ -25,7 +27,7 @@ public class TimerTask implements Runnable {
 		
 		remainingtime = (remainingtime - 30);
 
-		if (remainingtime == 30 && HG.plugin.getConfig().getBoolean("settings.teleport-at-end")) {
+		if (remainingtime <= teleportTimer && remainingtime > 10 && Config.teleportEnd) {
 			game.msgAll(HG.lang.game_almost_over);
 			game.respawnAll();
 		} else if (this.remainingtime < 10) {
@@ -48,4 +50,5 @@ public class TimerTask implements Runnable {
 	public void stop() {
 		Bukkit.getScheduler().cancelTask(id);
 	}
+
 }

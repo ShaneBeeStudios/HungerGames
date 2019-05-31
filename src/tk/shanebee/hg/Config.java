@@ -14,6 +14,8 @@ public class Config {
 	public static int playersfortrackingstick;
 	public static int maxchestcontent;
 	public static int maxTeam;
+	public static boolean teleportEnd;
+	public static int teleportEndTime;
 
 	//Reward info
 	static boolean giveReward;
@@ -41,8 +43,10 @@ public class Config {
 		Configuration config = plugin.getConfig().getRoot();
 		assert config != null;
 		config.options().copyDefaults(true);
-		plugin.reloadConfig();
+		//plugin.reloadConfig(); // I feel like this was wrong, so lets just hang out here for a while
+		plugin.saveConfig(); // Added this in place because defaults were not updating
 		config = plugin.getConfig();
+		Util.log("Config loaded!");
 
 		spawnmobs = config.getBoolean("settings.spawn-mobs");
 		spawnmobsinterval = config.getInt("settings.spawn-mobs-interval") * 20;
@@ -64,6 +68,8 @@ public class Config {
 		randomChest = config.getBoolean("random-chest.enabled");
 		randomChestInterval = config.getInt("random-chest.interval") * 20;
 		randomChestMaxContent = config.getInt("random-chest.max-chestcontent");
+		teleportEnd = config.getBoolean("settings.teleport-at-end");
+		teleportEndTime = config.getInt("teleport-at-end-time");
 
 		if (giveReward) {
 			try {
