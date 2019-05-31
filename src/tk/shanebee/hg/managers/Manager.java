@@ -103,7 +103,7 @@ public class Manager {
 	//@Note: dwoikdopw
 	//We need to change this because we want to just create false chest./
 
-	/**public void restoreChests(Game arena) {
+	/*public void restoreChests(Game arena) {
 		ArrayList<Location> chests = arena.getChests();
 		for (Location l : chests) {
 			Block b = l.getBlock();
