@@ -414,7 +414,7 @@ public class Game {
 					Vault.economy.depositPlayer(Bukkit.getServer().getOfflinePlayer(u), db);
 					Util.msg(p, HG.lang.winning_amount.replace("<amount>", String.valueOf(db)));
 				}
-				HG.plugin.leaderboard.addWin(u);
+				HG.plugin.getLeaderboard().addWin(u);
 			}
 		}
 

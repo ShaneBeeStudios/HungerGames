@@ -43,7 +43,7 @@ public class HG extends JavaPlugin {
 	public static Language lang;
 	public KitManager kit;
 	public ItemStackManager ism;
-	public Leaderboard leaderboard;
+	private Leaderboard leaderboard;
 
 	@Override
 	public void onEnable() {
@@ -68,6 +68,7 @@ public class HG extends JavaPlugin {
 		} else {
 			Util.log("&7PAPI not found, Placeholders have been &cdisabled");
 		}
+		//noinspection ConstantConditions
 		getCommand("hg").setExecutor(new CommandListener(this));
 		getServer().getPluginManager().registerEvents(new WandListener(this), this);
 		getServer().getPluginManager().registerEvents(new CancelListener(this), this);
@@ -122,11 +123,15 @@ public class HG extends JavaPlugin {
 		for (String bc : cmds.keySet()) {
 			getServer().getPluginManager().addPermission(new Permission("hg." + bc));
 			if (cArray.contains(bc))
+				//noinspection ConstantConditions
 				getServer().getPluginManager().getPermission("hg." + bc).setDefault(PermissionDefault.TRUE);
 
 		}
 	}
 
+	/**
+	 * Stop all games
+	 */
 	public void stopAll() {
 		ArrayList<UUID> ps = new ArrayList<>();
 		for (Game g : games) {
@@ -142,6 +147,13 @@ public class HG extends JavaPlugin {
 		}
 		players.clear();
 		games.clear();
+	}
+
+	/** Get an instance of HG's leaderboards
+	 * @return Leaderboard
+	 */
+	public Leaderboard getLeaderboard() {
+		return this.leaderboard;
 	}
 
 }
