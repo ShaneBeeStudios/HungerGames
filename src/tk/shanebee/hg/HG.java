@@ -28,7 +28,7 @@ public class HG extends JavaPlugin {
 	//Maps
 	public HashMap<String, BaseCmd> cmds = new HashMap<>();
 	public HashMap<UUID, PlayerData> players = new HashMap<>();
-	public HashMap<UUID, PlayerSession> playerses = new HashMap<>();
+	public HashMap<UUID, PlayerSession> playerSession = new HashMap<>();
 	public HashMap<Integer, ItemStack> items = new HashMap<>();
 
 	//Lists
@@ -39,10 +39,10 @@ public class HG extends JavaPlugin {
 	public static Manager manager;
 	public static Data arenaconfig;
 	public static KillManager killmanager;
-	public static RandomItems ri;
+	public static RandomItems randomItems;
 	public static Language lang;
 	public KitManager kit;
-	public ItemStackManager ism;
+	public ItemStackManager itemStackManager;
 	private Leaderboard leaderboard;
 
 	@Override
@@ -58,8 +58,8 @@ public class HG extends JavaPlugin {
 		arenaconfig = new Data(this);
 		killmanager = new KillManager();
 		kit = new KitManager();
-		ism = new ItemStackManager(this);
-		ri = new RandomItems(this);
+		itemStackManager = new ItemStackManager(this);
+		randomItems = new RandomItems(this);
 		manager = new Manager(this);
 		leaderboard = new Leaderboard(this);
 		if (Bukkit.getPluginManager().getPlugin("PlaceholderAPI") != null) {
@@ -89,8 +89,8 @@ public class HG extends JavaPlugin {
 		arenaconfig = null;
 		killmanager = null;
 		kit = null;
-		ism = null;
-		ri = null;
+		itemStackManager = null;
+		randomItems = null;
 		Util.log("HungerGames has been disabled!");
 	}
 

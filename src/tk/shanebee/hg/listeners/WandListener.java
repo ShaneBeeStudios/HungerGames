@@ -27,7 +27,7 @@ public class WandListener implements Listener {
 
 		if (action.equals(Action.RIGHT_CLICK_BLOCK)) {
 			if (!player.getInventory().getItemInMainHand().getType().equals(Material.BLAZE_ROD)) return;
-			if (!plugin.playerses.containsKey(player.getUniqueId())) return;
+			if (!plugin.playerSession.containsKey(player.getUniqueId())) return;
 			Location l = event.getClickedBlock().getLocation();
 			event.setCancelled(true);
 			for (Game game : HG.plugin.games) {
@@ -36,7 +36,7 @@ public class WandListener implements Listener {
 					return;
 				}
 			}
-			PlayerSession ses = plugin.playerses.get(player.getUniqueId());
+			PlayerSession ses = plugin.playerSession.get(player.getUniqueId());
 			ses.setLoc2(l);
 			Util.msg(player, "Pos2: "+l.getX()+", "+l.getY()+", "+l.getZ());
 			if (!ses.hasValidSelection()) {
@@ -44,7 +44,7 @@ public class WandListener implements Listener {
 			}
 		} else if (action.equals(Action.LEFT_CLICK_BLOCK)) {
 			if (!player.getInventory().getItemInMainHand().getType().equals(Material.BLAZE_ROD)) return;
-			if (!plugin.playerses.containsKey(player.getUniqueId())) return;
+			if (!plugin.playerSession.containsKey(player.getUniqueId())) return;
 			Location l = event.getClickedBlock().getLocation();
 			event.setCancelled(true);
 			for (Game game : HG.plugin.games) {
@@ -53,7 +53,7 @@ public class WandListener implements Listener {
 					return;
 				}
 			}
-			PlayerSession ses = plugin.playerses.get(player.getUniqueId());
+			PlayerSession ses = plugin.playerSession.get(player.getUniqueId());
 			ses.setLoc1(l);
 			Util.msg(player, "Pos1: "+l.getX()+", "+l.getY()+", "+l.getZ());
 			if (!ses.hasValidSelection()) {

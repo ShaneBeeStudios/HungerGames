@@ -79,13 +79,13 @@ public class RandomItems {
 						int c = Integer.parseInt(p.replace("x:", ""));
 						while (c != 0) {
 							c--;
-							plugin.items.put(plugin.items.size() + 1, plugin.ism.getItem(s.replace("x:", ""), true));
+							plugin.items.put(plugin.items.size() + 1, plugin.itemStackManager.getItem(s.replace("x:", ""), true));
 							size++;
 						}
 					}
 				}
 			} else {
-				plugin.items.put(plugin.items.size() + 1, plugin.ism.getItem(s, true));
+				plugin.items.put(plugin.items.size() + 1, plugin.itemStackManager.getItem(s, true));
 			}
 			size++;
 		}

@@ -132,7 +132,7 @@ public class Manager {
 	}
 
 	public ItemStack randomitem() {
-		return plugin.items.get(rg.nextInt(HG.ri.size));
+		return plugin.items.get(rg.nextInt(HG.randomItems.size));
 	}
 	
 	public boolean isInRegion(Location l) {

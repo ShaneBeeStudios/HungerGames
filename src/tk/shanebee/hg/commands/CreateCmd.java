@@ -21,10 +21,10 @@ public class CreateCmd extends BaseCmd {
 
 	@Override
 	public boolean run() {
-		if (!HG.plugin.playerses.containsKey(player.getUniqueId())) {
+		if (!HG.plugin.playerSession.containsKey(player.getUniqueId())) {
 			Util.msg(player, HG.lang.cmd_create_need_selection);
 		} else {
-			PlayerSession s = HG.plugin.playerses.get(player.getUniqueId());
+			PlayerSession s = HG.plugin.playerSession.get(player.getUniqueId());
 			if (!s.hasValidSelection()) {
 				Util.msg(player, HG.lang.cmd_create_need_selection);
 			} else {

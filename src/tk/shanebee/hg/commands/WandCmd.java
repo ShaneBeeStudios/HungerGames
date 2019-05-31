@@ -22,8 +22,8 @@ public class WandCmd extends BaseCmd {
 
 	@Override
 	public boolean run() {
-		if (HG.plugin.playerses.containsKey(player.getUniqueId())) {
-			HG.plugin.playerses.remove(player.getUniqueId());
+		if (HG.plugin.playerSession.containsKey(player.getUniqueId())) {
+			HG.plugin.playerSession.remove(player.getUniqueId());
 			Util.msg(player, "Wand disabled!");
 		} else {
 			ItemStack wand = new ItemStack(Material.BLAZE_ROD, 1);
@@ -35,7 +35,7 @@ public class WandCmd extends BaseCmd {
 			)));
 			wand.setItemMeta(meta);
 			player.getInventory().addItem(wand);
-			HG.plugin.playerses.put(player.getUniqueId(), new PlayerSession(null, null));
+			HG.plugin.playerSession.put(player.getUniqueId(), new PlayerSession(null, null));
 			Util.msg(player, "Wand enabled!");
 		}
 		return true;
