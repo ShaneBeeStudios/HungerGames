@@ -1,6 +1,7 @@
 package tk.shanebee.hg;
 
 import java.util.ArrayList;
+import java.util.Objects;
 import java.util.Random;
 
 import org.bukkit.Bukkit;
@@ -21,6 +22,15 @@ public class Bound {
 	private int z2;
 	private String world;
 
+	/** Create a new bounding box between 2 sets of coordinates
+	 * @param world World this bound is in
+	 * @param x x coord of 1st corner of bound
+	 * @param y y coord of 1st corner of bound
+	 * @param z z coord of 1st corner of bound
+	 * @param x2 x coord of 2nd corner of bound
+	 * @param y2 y coord of 2nd corner of bound
+	 * @param z2 z coord of 2nd corner of bound
+	 */
 	public Bound(String world, int x, int y, int z, int x2, int y2, int z2) {
 		this.world = world;
 		this.x = Math.min(x,x2);
@@ -31,36 +41,52 @@ public class Bound {
 		this.z2 = Math.max(z, z2);
 	}
 
+    /** Create a new bounding box between 2 locations (must be in same world)
+     * @param location Location 1
+     * @param location2 Location 2
+     */
+    public Bound(Location location, Location location2) {
+        this(Objects.requireNonNull(location.getWorld()).getName(), ((int) location.getX()), ((int) location.getY()),
+                ((int) location.getZ()), ((int) location2.getX()), ((int) location2.getY()), ((int) location2.getZ()));
+    }
+
 	public Integer[] getRandomLocs() {
 		Random r = new Random();
 		return new Integer[] {r.nextInt(x2 - x + 1) + x, y2, r.nextInt(z2 - z + 1) + z};
 	}
 
+	/** Check if a location is within the region of this bound
+	 * @param loc Location to check
+	 * @return True if location is within this bound
+	 */
 	public boolean isInRegion(Location loc) {
-		if (!loc.getWorld().getName().equals(world)) return false;
+		if (!Objects.requireNonNull(loc.getWorld()).getName().equals(world)) return false;
 		int cx = loc.getBlockX();
 		int cy = loc.getBlockY();
 		int cz = loc.getBlockZ();
-		if ((cx >= x && cx <= x2) && (cy >= y && cy <= y2) && (cz >= z && cz <= z2)) {
-			return true;
-		}
-		return false;
+		return (cx >= x && cx <= x2) && (cy >= y && cy <= y2) && (cz >= z && cz <= z2);
 	}
 
-	public void removeEntities() {
-		for (Entity e : Bukkit.getWorld(world).getEntities()) {
+	void removeEntities() {
+		for (Entity e : Objects.requireNonNull(Bukkit.getWorld(world)).getEntities()) {
 			if (isInRegion(e.getLocation()) && !(e instanceof Player)) {
 				e.remove();
 			}
 		}
 	}
 
+	/** Get location of all blocks of a type within a bound
+	 * @param type Material type to check
+	 * @return ArrayList of locations of all blocks of this type in this bound
+	 */
+	@SuppressWarnings("unused")
 	public ArrayList<Location> getBlocks(Material type) {
 		World w = Bukkit.getWorld(world);
-		ArrayList <Location> array = new ArrayList<Location>();
+		ArrayList <Location> array = new ArrayList<>();
 		for (int x3 = x; x3 <= x2; x3++) {
 			for (int y3 = y; y3 <= y2; y3++) {
 				for (int z3 = z; z3 <= z2; z3++) {
+					assert w != null;
 					Block b = w.getBlockAt(x3, y3, z3);
 					if (b.getType() == type) {
 						array.add(b.getLocation());
@@ -71,7 +97,27 @@ public class Bound {
 		return array;
 	}
 
+	/** Get the world of this bound
+	 * @return World of this bound
+	 */
 	public World getWorld() {
 		return Bukkit.getWorld(world);
 	}
+
+	/** Get the greater corner of this bound
+	 * @return Location of greater corner
+	 */
+	@SuppressWarnings("unused")
+	public Location getGreaterCorner() {
+		return new Location(Bukkit.getWorld(world), x, y, z);
+	}
+
+	/** Get the lesser corner of this bound
+	 * @return Location of lesser corner
+	 */
+	@SuppressWarnings("unused")
+	public Location getLesserCorner() {
+		return new Location(Bukkit.getWorld(world), x2, y2, z2);
+	}
+
 }

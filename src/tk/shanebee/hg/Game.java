@@ -42,14 +42,28 @@ public class Game {
 	// Task ID's here!
 	private Spawner spawner;
 	private FreeRoamTask freeroam;
+    /**
+     * Start task for this game
+     */
 	public StartingTask starting;
 	private TimerTask timer;
 	private ChestDropTask chestdrop;
 
 
-	public Game(String s, Bound bo, List<Location> spawns, Sign lobbysign, int timer, int minplayers, int maxplayers, int roam, boolean isready) {
-		this.name = s;
-		this.b = bo;
+	/** Create a new game
+	 * @param name Name of this game
+	 * @param bound Bounding region of this game
+	 * @param spawns List of spawns for this game
+	 * @param lobbysign Lobby sign block
+	 * @param timer Length of the game (in seconds)
+	 * @param minplayers Minimum players to be able to start the game
+	 * @param maxplayers Maximum players that can join this game
+	 * @param roam Roam time for this game
+	 * @param isready If the game is ready to start
+	 */
+	public Game(String name, Bound bound, List<Location> spawns, Sign lobbysign, int timer, int minplayers, int maxplayers, int roam, boolean isready) {
+		this.name = name;
+		this.b = bound;
 		this.spawns = spawns;
 		this.s = lobbysign;
 		this.time = timer;
@@ -65,22 +79,36 @@ public class Game {
 		sb = new SBDisplay(this);
 	}
 
-	public Game(String s, Bound c, int timer, int minplayers, int maxplayers, int roam) {
-		this.name = s;
+	/** Create a new game
+	 * @param name Name of this game
+	 * @param bound Bounding region of this game
+	 * @param timer Length of the game (in seconds)
+	 * @param minplayers Minimum players to be able to start the game
+	 * @param maxplayers Maximum players that can join this game
+	 * @param roam Roam time for this game
+	 */
+	public Game(String name, Bound bound, int timer, int minplayers, int maxplayers, int roam) {
+		this.name = name;
 		this.time = timer;
 		this.minplayers = minplayers;
 		this.maxplayers = maxplayers;
 		this.roamtime = roam;
 		this.spawns = new ArrayList<>();
-		this.b = c;
+		this.b = bound;
 		status = Status.NOTREADY;
 		sb = new SBDisplay(this);
 	}
 
+	/** Get the bounding region of this game
+	 * @return Region of this game
+	 */
 	public Bound getRegion() {
 		return b;
 	}
 
+	/**
+	 * Force a rollback for this game
+	 */
 	public void forceRollback() {
 		Collections.reverse(blocks);
 		for (BlockState st : blocks) {
@@ -88,8 +116,11 @@ public class Game {
 		}
 	}
 
-	public void setStatus(Status st) {
-		this.status = st;
+	/** Set the status of the game
+	 * @param status Status to set
+	 */
+	public void setStatus(Status status) {
+		this.status = status;
 		updateLobbyBlock();
 	}
 
@@ -99,39 +130,58 @@ public class Game {
 		}
 	}
 
-	public void addChest(Location l) {
-		chests.add(l);
+	/** Add a chest location to the game
+	 * @param location Location of the chest to add (Needs to actually be a chest there)
+	 */
+	public void addChest(Location location) {
+		chests.add(location);
 	}
 
-	public boolean isLoggedChest(Location l) {
-		return (chests.contains(l));
+	/** Check if chest at this location is logged
+	 * @param location Location of chest to check
+	 * @return True if this chest was added already
+	 */
+	public boolean isLoggedChest(Location location) {
+		return (chests.contains(location));
 	}
 
-	public void removeChest(Location l) {
-		chests.remove(l);
+	/** Remove a chest from the game
+	 * @param location Location of the chest to remove
+	 */
+	public void removeChest(Location location) {
+		chests.remove(location);
 	}
 
-	public void recordBlockBreak(Block bl) {
-		Block top = bl.getRelative(BlockFace.UP);
+	/** Record a block as broken in the arena to be restored when the game finishes
+	 * @param block The block that was broken
+	 */
+	public void recordBlockBreak(Block block) {
+		Block top = block.getRelative(BlockFace.UP);
 
 		if (!top.getType().isSolid() || !top.getType().isBlock()) {
-			addState(bl.getRelative(BlockFace.UP).getState());
+			addState(block.getRelative(BlockFace.UP).getState());
 		}
 
 		for (BlockFace bf : Util.faces) {
-			Block rel = bl.getRelative(bf);
+			Block rel = block.getRelative(bf);
 
-			if (Util.isAttached(bl, rel)) {
+			if (Util.isAttached(block, rel)) {
 				addState(rel.getState());
 			}
 		}
-		addState(bl.getState());
+		addState(block.getState());
 	}
 
-	public void recordBlockPlace(BlockState bs) {
-		blocks.add(bs);
+	/** Add a block to be restored when the game finishes
+	 * @param blockState BlockState to be added to the list
+	 */
+	public void recordBlockPlace(BlockState blockState) {
+		blocks.add(blockState);
 	}
 
+	/** Get the status of the game
+	 * @return Status of the game
+	 */
 	public Status getStatus() {
 		return this.status;
 	}
@@ -145,40 +195,59 @@ public class Game {
 		this.blocks.clear();
 	}
 
+	/** Get a list of all players in the game
+	 * @return UUID list of all players in game
+	 */
 	public List<UUID> getPlayers() {
 		return players;
 	}
 
+	/** Get the name of this game
+	 * @return Name of this game
+	 */
 	public String getName() {
 		return this.name;
 	}
 
-	public boolean isInRegion(Location l) {
-		return b.isInRegion(l);
+	/** Check if a location is within the games arena
+	 * @param location Location to be checked
+	 * @return True if location is within the arena bounds
+	 */
+	public boolean isInRegion(Location location) {
+		return b.isInRegion(location);
 	}
 
+	/** Get a list of all spawn locations
+	 * @return All spawn locations
+	 */
 	public List<Location> getSpawns() {
 		return spawns;
 	}
 
+	/** Get the roam time of the game
+	 * @return The roam time
+	 */
 	public int getRoamTime() {
 		return this.roamtime;
 	}
 
-	public void join(Player p) {
+	/** Join a player to the game
+	 * @param player Player to join the game
+	 */
+	public void join(Player player) {
 		if (status != Status.WAITING && status != Status.STOPPED && status != Status.COUNTDOWN && status != Status.READY) {
-			Util.scm(p, HG.lang.arena_not_ready);
+			Util.scm(player, HG.lang.arena_not_ready);
 		} else if (maxplayers <= players.size()) {
-			p.sendMessage(ChatColor.RED + name + " is currently full!");
-			Util.scm(p, "&c" + name + " " + HG.lang.game_full);
+			player.sendMessage(ChatColor.RED + name + " is currently full!");
+			Util.scm(player, "&c" + name + " " + HG.lang.game_full);
 		} else {
-			if (p.isInsideVehicle()) {
-				p.leaveVehicle();
+			if (player.isInsideVehicle()) {
+				player.leaveVehicle();
 			}
 
 			Bukkit.getScheduler().scheduleSyncDelayedTask(HG.plugin, () -> {
-                players.add(p.getUniqueId());
-                HG.plugin.players.put(p.getUniqueId(), new PlayerData(p, this));
+                players.add(player.getUniqueId());
+                HG.plugin.players.put(player.getUniqueId(), new PlayerData(player, this));
 
 			Location loc = pickSpawn();
 
@@ -188,44 +257,47 @@ public class Game {
 				}
 			}
 
-			p.teleport(loc);
-			heal(p);
-			freeze(p);
+			player.teleport(loc);
+			heal(player);
+			freeze(player);
 
             if (players.size() == 1)
                 status = Status.WAITING;
 			if (players.size() >= minplayers && (status == Status.WAITING || status == Status.READY)) {
 				startPreGame();
 			} else if (status == Status.WAITING) {
-				msgDef(HG.lang.player_joined_game.replace("<player>",
-						p.getName()) + (minplayers - players.size() <= 0 ? "!" : ":" +
+				msgAll(HG.lang.player_joined_game.replace("<player>",
+						player.getName()) + (minplayers - players.size() <= 0 ? "!" : ":" +
 						HG.lang.players_to_start.replace("<amount>", String.valueOf((minplayers - players.size())))));
 			}
-			kitHelp(p);
+			kitHelp(player);
 
 			updateLobbyBlock();
-			sb.setSB(p);
+			sb.setSB(player);
 			sb.setAlive();
             }, 5);
 		}
 	}
 
-	private void kitHelp(Player p) {
+	private void kitHelp(Player player) {
 		// Clear the chat a little bit, making this message easier to see
 		for(int i = 0; i < 20; ++i)
-			Util.scm(p, " ");
+			Util.scm(player, " ");
 		String kit = HG.plugin.kit.getKitList();
-		Util.scm(p, " ");
-		Util.scm(p, HG.lang.kit_join_header);
-		Util.scm(p, " ");
-		Util.scm(p, HG.lang.kit_join_msg);
-		Util.scm(p, " ");
-		Util.scm(p, HG.lang.kit_join_avail + kit);
-		Util.scm(p, " ");
-		Util.scm(p, HG.lang.kit_join_footer);
-		Util.scm(p, " ");
+		Util.scm(player, " ");
+		Util.scm(player, HG.lang.kit_join_header);
+		Util.scm(player, " ");
+		Util.scm(player, HG.lang.kit_join_msg);
+		Util.scm(player, " ");
+		Util.scm(player, HG.lang.kit_join_avail + kit);
+		Util.scm(player, " ");
+		Util.scm(player, HG.lang.kit_join_footer);
+		Util.scm(player, " ");
 	}
 
+	/**
+	 * Respawn all players in the game back to spawn points
+	 */
 	public void respawnAll() {
 		for (UUID u : players) {
 			Player p = Bukkit.getPlayer(u);
@@ -234,6 +306,9 @@ public class Game {
 		}
 	}
 
+	/**
+	 * Start the pregame countdown
+	 */
 	public void startPreGame() {
 		//setStatus(Status.COUNTDOWN);
         status = Status.COUNTDOWN;
@@ -241,12 +316,18 @@ public class Game {
 		updateLobbyBlock();
 	}
 
+	/**
+	 * Start the free roam state of the game
+	 */
 	public void startFreeRoam() {
 		status = Status.BEGINNING;
 		b.removeEntities();
 		freeroam = new FreeRoamTask(this);
 	}
 
+	/**
+	 * Start the game
+	 */
 	public void startGame() {
 		status = Status.RUNNING;
 		if (Config.spawnmobs) spawner = new Spawner(this, Config.spawnmobsinterval);
@@ -256,12 +337,14 @@ public class Game {
 	}
 
 
-	public void addSpawn(Location l) {
-		this.spawns.add(l);
+	/** Add a spawn location to the game
+	 * @param location The location to add
+	 */
+	public void addSpawn(Location location) {
+		this.spawns.add(location);
 	}
 
 	private Location pickSpawn() {
-
 		double spawn = getRandomIntegerBetweenRange(maxplayers - 1);
 		if (containsPlayer(spawns.get(((int) spawn)))) {
 			Collections.shuffle(spawns);
@@ -274,30 +357,25 @@ public class Game {
 		return spawns.get((int) spawn);
 	}
 
-	private boolean containsPlayer(Location l) {
-		if (l == null) return false;
+	private boolean containsPlayer(Location location) {
+		if (location == null) return false;
 
 		for (UUID u : players) {
 			Player p = Bukkit.getPlayer(u);
-			if (p != null && p.getLocation().getBlock().equals(l.getBlock()))
+			if (p != null && p.getLocation().getBlock().equals(location.getBlock()))
 				return true;
 		}
 		return false;
 	}
 
-	public void msgAll(String s) {
+	/** Send a message to all players in the game
+	 * @param message Message to send
+	 */
+	public void msgAll(String message) {
 		for (UUID u : players) {
 			Player p = Bukkit.getPlayer(u);
 			if (p != null)
-				Util.msg(p, s);
-		}
-	}
-
-	public void msgDef(String s) {
-		for (UUID u : players) {
-			Player p = Bukkit.getPlayer(u);
-			if (p != null)
-				Util.scm(p, s);
+				Util.scm(p, message);
 		}
 	}
 
@@ -308,32 +386,42 @@ public class Game {
 		s2.update(true);
 	}
 
-	private void heal(Player p) {
-		for (PotionEffect ef : p.getActivePotionEffects()) {
-			p.removePotionEffect(ef.getType());
+	private void heal(Player player) {
+		for (PotionEffect ef : player.getActivePotionEffects()) {
+			player.removePotionEffect(ef.getType());
 		}
-		p.setHealth(20);
-		p.setFoodLevel(20);
+		player.setHealth(20);
+		player.setFoodLevel(20);
 		try {
-			Bukkit.getScheduler().scheduleSyncDelayedTask(HG.plugin, () -> p.setFireTicks(0), 1);
+			Bukkit.getScheduler().scheduleSyncDelayedTask(HG.plugin, () -> player.setFireTicks(0), 1);
 		} catch (IllegalPluginAccessException ignore) {}
 
 	}
 
-	public void freeze(Player p) {
-		p.addPotionEffect(new PotionEffect(PotionEffectType.JUMP, 23423525, -10));
-		p.setWalkSpeed(0.0001F);
-		p.setFoodLevel(1);
-		p.setAllowFlight(false);
-		p.setFlying(false);
-		p.setGameMode(GameMode.SURVIVAL);
+	/** Freeze a player
+	 * @param player Player to freeze
+	 */
+	public void freeze(Player player) {
+		player.addPotionEffect(new PotionEffect(PotionEffectType.JUMP, 23423525, -10));
+		player.setWalkSpeed(0.0001F);
+		player.setFoodLevel(1);
+		player.setAllowFlight(false);
+		player.setFlying(false);
+		player.setGameMode(GameMode.SURVIVAL);
 	}
 
-	public void unFreeze(Player p) {
-		p.removePotionEffect(PotionEffectType.JUMP);
-		p.setWalkSpeed(0.2F);
+	/** Unfreeze a player
+	 * @param player Player to unfreeze
+	 */
+	public void unFreeze(Player player) {
+		player.removePotionEffect(PotionEffectType.JUMP);
+		player.setWalkSpeed(0.2F);
 	}
 
+	/** Set the lobby block for this game
+	 * @param sign The sign to which the lobby will be set at
+	 * @return True if lobby is set
+	 */
 	public boolean setLobbyBlock(Sign sign) {
 		try {
 			this.s = sign;
@@ -365,8 +453,11 @@ public class Game {
 		return true;
 	}
 
-	public void setExit(Location l) {
-		this.exit = l;
+	/** Set exit location for this game
+	 * @param location Location where players will exit
+	 */
+	public void setExit(Location location) {
+		this.exit = location;
 	}
 
 	void cancelTasks() {
@@ -377,6 +468,16 @@ public class Game {
 		if (chestdrop != null) chestdrop.shutdown();
 	}
 
+	/**
+	 * Stop the game
+	 */
+	public void stop() {
+		stop(false);
+	}
+
+	/** Stop the game
+	 * @param death Whether the game stopped after the result of a death (false = no winnings payed out)
+	 */
 	public void stop(Boolean death) {
 		List<UUID> win = new ArrayList<>();
 		cancelTasks();
@@ -437,21 +538,25 @@ public class Game {
 		sb.resetAlive();
 	}
 
-	public void leave(Player p, Boolean death) {
-		players.remove(p.getUniqueId());
-		unFreeze(p);
-		exit(p);
-		heal(p);
-		if (death) p.spigot().respawn();
-		sb.restoreSB(p);
-		HG.plugin.players.get(p.getUniqueId()).restore(p);
-		HG.plugin.players.remove(p.getUniqueId());
+	/** Make a player leave the game
+	 * @param player Player to leave the game
+	 * @param death Whether the player has died or not (Generally should be false)
+	 */
+	public void leave(Player player, Boolean death) {
+		players.remove(player.getUniqueId());
+		unFreeze(player);
+		exit(player);
+		heal(player);
+		if (death) player.spigot().respawn();
+		sb.restoreSB(player);
+		HG.plugin.players.get(player.getUniqueId()).restore(player);
+		HG.plugin.players.remove(player.getUniqueId());
 		if (status == Status.RUNNING || status == Status.BEGINNING || status == Status.COUNTDOWN) {
 			if (isGameOver()) {
 				stop(death);
 			}
 		} else if (status == Status.WAITING) {
-			msgDef(HG.lang.player_left_game.replace("<player>", p.getName()) +
+			msgAll(HG.lang.player_left_game.replace("<player>", player.getName()) +
 					(minplayers - players.size() <= 0 ? "!" : ":" + HG.lang.players_to_start
 							.replace("<amount>", String.valueOf((minplayers - players.size())))));
 		}
@@ -478,15 +583,18 @@ public class Game {
 		return false;
 	}
 
-	private void exit(Player p) {
-		Util.clearInv(p);
+	private void exit(Player player) {
+		Util.clearInv(player);
 		if (this.exit == null) {
-			p.teleport(s.getWorld().getSpawnLocation());
+			player.teleport(s.getWorld().getSpawnLocation());
 		} else {
-			p.teleport(this.exit);
+			player.teleport(this.exit);
 		}
 	}
 
+	/** Get max players for a game
+	 * @return Max amount of players for this game
+	 */
 	public int getMaxPlayers() {
 		return maxplayers;
 	}

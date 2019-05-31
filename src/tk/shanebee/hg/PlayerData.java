@@ -17,14 +17,18 @@ public class PlayerData {
 	//Ingame data
 	private Team team;
 	private Game game;
-	
-	PlayerData(Player p, Game game) {
+
+	/** New player pre-game data file
+	 * @param player Player to save
+	 * @param game Game they will be entering
+	 */
+	PlayerData(Player player, Game game) {
 		this.game = game;
-		inv = p.getInventory().getContents();
-		equip = p.getInventory().getArmorContents();
-		exp = (int) p.getExp();
-		mode = p.getGameMode();
-		Util.clearInv(p);
+		inv = player.getInventory().getContents();
+		equip = player.getInventory().getArmorContents();
+		exp = (int) player.getExp();
+		mode = player.getGameMode();
+		Util.clearInv(player);
 	}
 
 	void restore(Player p) {

@@ -30,6 +30,9 @@ public class Data {
 		load();
 	}
 
+	/** Get arena data file
+	 * @return Arena data file
+	 */
 	public FileConfiguration getConfig() {
 		return arenadat;
 	}

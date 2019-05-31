@@ -3,6 +3,7 @@ package tk.shanebee.hg.data;
 import org.bukkit.Bukkit;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
+import org.bukkit.entity.Player;
 import tk.shanebee.hg.HG;
 
 import java.io.File;
@@ -26,6 +27,9 @@ public class Leaderboard {
         loadLeaderboard();
     }
 
+    /** Add a win to the leaderboard
+     * @param uuid UUID of player to add
+     */
     public void addWin(UUID uuid) {
         if (wins.containsKey(uuid.toString())) {
             wins.replace(uuid.toString(), wins.get(uuid.toString()) + 1);
@@ -33,6 +37,32 @@ public class Leaderboard {
             wins.put(uuid.toString(), 1);
         }
         saveLeaderboard();
+    }
+
+    /** Add a win to the leaderboard
+     * @param player Player to add
+     */
+    @SuppressWarnings("unused")
+    public void addWin(Player player) {
+        addWin(player.getUniqueId());
+    }
+
+    /** Get the wins for a player from the leaderboard
+     * @param uuid UUID of player to get wins for
+     * @return Number of wins for the player
+     */
+    @SuppressWarnings("WeakerAccess")
+    public int getWins(UUID uuid) {
+        return wins.get(uuid.toString());
+    }
+
+    /** Get the wins for a player from the leaderboard
+     * @param player Player to get wins for
+     * @return Number of wins for the player
+     */
+    @SuppressWarnings("unused")
+    public int getWins(Player player) {
+        return getWins(player.getUniqueId());
     }
 
     private void saveLeaderboard() {

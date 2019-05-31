@@ -15,38 +15,55 @@ public class KitEntry {
 	private String perm;
 	private ItemStack boots;
 	private ItemStack chestplate;
-	private ItemStack pants;
+	private ItemStack leggings;
 	private ItemStack[] inventoryContents;
-	private ArrayList<PotionEffect> posions;
+	private ArrayList<PotionEffect> potions;
 
-	public KitEntry(ItemStack[] ic, ItemStack h, ItemStack b, ItemStack c, ItemStack p, String per, ArrayList<PotionEffect> po) {
+	/** Create new kit entry
+	 * @param ic ItemStacks to add
+	 * @param helmet Helmet to add
+	 * @param boots Boots to add
+	 * @param chestplate Chestplate to add
+	 * @param leggings Leggings to add
+	 * @param permission Permission for this kit
+	 * @param potions Potion effects to add
+	 */
+	public KitEntry(ItemStack[] ic, ItemStack helmet, ItemStack boots, ItemStack chestplate, ItemStack leggings,
+					String permission, ArrayList<PotionEffect> potions) {
 		this.inventoryContents = ic;
-		this.helm = h;
-		this.boots = b;
-		this.chestplate = c;
-		this.pants = p;
-		this.perm = per;
-		this.posions = po;
+		this.helm = helmet;
+		this.boots = boots;
+		this.chestplate = chestplate;
+		this.leggings = leggings;
+		this.perm = permission;
+		this.potions = potions;
 	}
 
-	public boolean hasKitPermission(Player p) {
-		return perm == null || p.hasPermission(perm);
+	/** Check if a player has permission for this kit
+	 * @param player Player to check
+	 * @return True if player has permission for this kit
+	 */
+	public boolean hasKitPermission(Player player) {
+		return perm == null || player.hasPermission(perm);
 	}
 
-	public void setInventoryContent(Player p) {
-		Util.clearInv(p);
-		p.getInventory().setContents(inventoryContents);
-		p.getInventory().setHelmet(helm);
-		p.getInventory().setChestplate(chestplate);
-		p.getInventory().setLeggings(pants);
-		p.getInventory().setBoots(boots);
+	/** Apply this kit to a player
+	 * @param player Player to apply kit to
+	 */
+	public void setInventoryContent(Player player) {
+		Util.clearInv(player);
+		player.getInventory().setContents(inventoryContents);
+		player.getInventory().setHelmet(helm);
+		player.getInventory().setChestplate(chestplate);
+		player.getInventory().setLeggings(leggings);
+		player.getInventory().setBoots(boots);
 
 
-		for (PotionEffect effect : p.getActivePotionEffects()) {
-			p.removePotionEffect(effect.getType());
+		for (PotionEffect effect : player.getActivePotionEffects()) {
+			player.removePotionEffect(effect.getType());
 		}
-		p.addPotionEffects(posions);
-		HG.plugin.players.get(p.getUniqueId()).getGame().freeze(p);
-		p.updateInventory();
+		player.addPotionEffects(potions);
+		HG.plugin.players.get(player.getUniqueId()).getGame().freeze(player);
+		player.updateInventory();
 	}
 }

@@ -97,13 +97,13 @@ public class GameListener implements Listener {
 			Player killer = p.getKiller();
 
 			if (killer != null) {
-				g.msgDef(HG.lang.death_fallen + " &d" + HG.killmanager.getKillString(p.getName(), killer));
+				g.msgAll(HG.lang.death_fallen + " &d" + HG.killmanager.getKillString(p.getName(), killer));
 			} else if (Objects.requireNonNull(p.getLastDamageCause()).getCause() == EntityDamageEvent.DamageCause.ENTITY_ATTACK) {
-				g.msgDef(HG.lang.death_fallen + " &d" + HG.killmanager.getKillString(p.getName(), killerMap.get(p)));
+				g.msgAll(HG.lang.death_fallen + " &d" + HG.killmanager.getKillString(p.getName(), killerMap.get(p)));
 			} else if (p.getLastDamageCause().getCause() == EntityDamageEvent.DamageCause.PROJECTILE) {
-				g.msgDef(HG.lang.death_fallen + " &d" + HG.killmanager.getKillString(p.getName(), killerMap.get(p)));
+				g.msgAll(HG.lang.death_fallen + " &d" + HG.killmanager.getKillString(p.getName(), killerMap.get(p)));
 			} else {
-				g.msgDef(HG.lang.death_fallen + " &d" + HG.killmanager.getDeathString(p.getLastDamageCause().getCause(), p.getName()));
+				g.msgAll(HG.lang.death_fallen + " &d" + HG.killmanager.getDeathString(p.getLastDamageCause().getCause(), p.getName()));
 			}
 			event.setDeathMessage(null);
 			event.getDrops().clear();
