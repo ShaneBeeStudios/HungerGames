@@ -18,8 +18,8 @@ public class Leaderboard {
     public List<String> sorted_players;
     public List<String> sorted_scores;
 
-    public Leaderboard(HG pluging) {
-        this.plugin = pluging;
+    public Leaderboard(HG plugin) {
+        this.plugin = plugin;
         wins = new TreeMap<>();
         sorted_players = new ArrayList<>();
         sorted_scores = new ArrayList<>();
@@ -52,6 +52,7 @@ public class Leaderboard {
         }
         leaderboardConfig = YamlConfiguration.loadConfiguration(config_file);
         if (leaderboardConfig.getConfigurationSection("Total-Wins") == null) return;
+        //noinspection ConstantConditions
         for (String key : leaderboardConfig.getConfigurationSection("Total-Wins").getKeys(false)) {
             wins.put(key, leaderboardConfig.getInt("Total-Wins." + key));
         }
