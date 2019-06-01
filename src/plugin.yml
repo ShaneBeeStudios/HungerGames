@@ -2,7 +2,7 @@ name: HungerGames
 main: tk.shanebee.hg.HG
 authors: [bob7l, Spoopy, ShaneBee]
 description: A Simple, fun, HungerGames plugin
-version: 4.5.0
+version: 4.5.1
 website: https://github.com/ShaneBeeTK/HungerGames
 api-version: 1.13
 softdepend: [Multiverse-Core, MultiWorld, Vault, My_Worlds]
