@@ -37,6 +37,11 @@ class SBDisplay {
 		arena.setScore(g.getPlayers().size() + 1);
 
 		 */
+		ob.unregister();
+		this.ob = board.registerNewObjective(ChatColor.translateAlternateColorCodes('&', HG.lang.players_alive), "dummy", "arena" + g.getName());
+		this.ob.setDisplaySlot(DisplaySlot.SIDEBAR);
+		this.ob.setDisplayName(ChatColor.translateAlternateColorCodes('&', HG.lang.scoreboard_title));
+		String alive = "  " + HG.lang.players_alive_num.replace("<num>", String.valueOf(g.getPlayers().size()));
 
 		Score space1 = ob.getScore(" ");
 		Score space2 = ob.getScore("  ");
@@ -44,10 +49,8 @@ class SBDisplay {
 		Score arena1 = ob.getScore(Util.getColString(HG.lang.scoreboard_arena));
 		Score arena2 = ob.getScore(Util.getColString("  &e" + g.getName()));
 
-
-
 		Score alive1 = ob.getScore(Util.getColString(HG.lang.players_alive));
-		Score alive2 = ob.getScore(Util.getColString("  " + HG.lang.players_alive_num.replace("<num>", String.valueOf(g.getPlayers().size()))));
+		Score alive2 = ob.getScore(Util.getColString(alive));
 
 		space1.setScore(6);
 		arena1.setScore(5);
