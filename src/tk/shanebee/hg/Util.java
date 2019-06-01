@@ -42,6 +42,10 @@ public class Util {
 		Bukkit.getServer().broadcastMessage(ChatColor.translateAlternateColorCodes('&', HG.lang.prefix + " " + s));
 	}
 
+	public static String getColString(String string) {
+		return ChatColor.translateAlternateColorCodes('&', string);
+	}
+
 	public static boolean isInt(String str) {
 		try {
 			Integer.parseInt(str);

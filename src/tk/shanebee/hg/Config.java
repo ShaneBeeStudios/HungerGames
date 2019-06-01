@@ -10,6 +10,7 @@ public class Config {
 	//Basic settings
 	static boolean spawnmobs;
 	static int spawnmobsinterval;
+	public static boolean bossbar;
 	public static int trackingstickuses;
 	public static int playersfortrackingstick;
 	public static int maxchestcontent;
@@ -34,22 +35,25 @@ public class Config {
 	public static int randomChestInterval;
 	static int randomChestMaxContent;
 
+	private HG plugin;
+
 	public Config(HG plugin) {
+		this.plugin = plugin;
 		if (!new File(plugin.getDataFolder(), "config.yml").exists()) {
 			Util.log("Config not found. Generating default config!");
 			plugin.saveDefaultConfig();
 		}
-
 		Configuration config = plugin.getConfig().getRoot();
 		assert config != null;
 		config.options().copyDefaults(true);
-		//plugin.reloadConfig(); // I feel like this was wrong, so lets just hang out here for a while
-		plugin.saveConfig(); // Added this in place because defaults were not updating
+		plugin.reloadConfig();
 		config = plugin.getConfig();
+		updateConfig(config);
 		Util.log("Config loaded!");
 
 		spawnmobs = config.getBoolean("settings.spawn-mobs");
 		spawnmobsinterval = config.getInt("settings.spawn-mobs-interval") * 20;
+		bossbar = config.getBoolean("settings.bossbar-countdown");
 		trackingstickuses = config.getInt("settings.trackingstick-uses");
 		playersfortrackingstick = config.getInt("settings.players-for-trackingstick");
 		maxchestcontent = config.getInt("settings.max-chestcontent");
@@ -86,6 +90,13 @@ public class Config {
 				giveReward = false;
 			}
 		}
+	}
+
+	private void updateConfig(Configuration config) {
+		if (!config.isSet("settings.bossbar-countdown")) {
+			config.set("settings.bossbar-countdown", true);
+		}
+		plugin.saveConfig();
 	}
 
 }

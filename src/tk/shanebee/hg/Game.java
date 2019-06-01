@@ -1,5 +1,9 @@
 package tk.shanebee.hg;
 
+import net.milkbowl.vault.chat.Chat;
+import org.bukkit.boss.BarColor;
+import org.bukkit.boss.BarStyle;
+import org.bukkit.boss.BossBar;
 import org.bukkit.plugin.IllegalPluginAccessException;
 import tk.shanebee.hg.mobhandler.Spawner;
 import tk.shanebee.hg.tasks.ChestDropTask;
@@ -48,6 +52,8 @@ public class Game {
 	public StartingTask starting;
 	private TimerTask timer;
 	private ChestDropTask chestdrop;
+
+	private BossBar bar;
 
 
 	/** Create a new game
@@ -334,6 +340,7 @@ public class Game {
 		if (Config.randomChest) chestdrop = new ChestDropTask(this);
 		timer = new TimerTask(this, time);
 		updateLobbyBlock();
+		createBossbar(time);
 	}
 
 
@@ -493,6 +500,8 @@ public class Game {
 			}
 		}
 		players.clear();
+		if (this.getStatus() == Status.RUNNING)
+			bar.removeAll();
 
 		if (!win.isEmpty() && Config.giveReward && death) {
 			double db = (double) Config.cash / win.size();
@@ -585,6 +594,8 @@ public class Game {
 
 	private void exit(Player player) {
 		Util.clearInv(player);
+		if (this.getStatus() == Status.RUNNING)
+			bar.removePlayer(player);
 		if (this.exit == null) {
 			player.teleport(s.getWorld().getSpawnLocation());
 		} else {
@@ -612,6 +623,31 @@ public class Game {
 
 	private static double getRandomIntegerBetweenRange(double max) {
 		return (int) (Math.random() * ((max - (double) 0) + 1)) + (double) 0;
+	}
+
+	private void createBossbar(int time) {
+		int min = (time / 60);
+		String title = HG.lang.bossbar.replace("<min>", String.valueOf(min)).replace("<sec>", "0");
+		bar = Bukkit.createBossBar(ChatColor.translateAlternateColorCodes('&', title), BarColor.GREEN, BarStyle.SEGMENTED_20);
+		for (UUID uuid : players) {
+			Player player = Bukkit.getPlayer(uuid);
+			assert player != null;
+			bar.addPlayer(player);
+		}
+	}
+
+	public void bossbarUpdate(int remaining) {
+		double remain = ((double) remaining) / ((double) this.time);
+		int min = (remaining / 60);
+		int sec = (remaining % 60);
+		String title = HG.lang.bossbar.replace("<min>", String.valueOf(min)).replace("<sec>", String.valueOf(sec));
+		bar.setTitle(ChatColor.translateAlternateColorCodes('&', title));
+		bar.setProgress(remain);
+		if (remain <= 0.5 && remain >= 0.2)
+			bar.setColor(BarColor.YELLOW);
+		if (remain < 0.2)
+			bar.setColor(BarColor.RED);
+
 	}
 
 }
