@@ -142,13 +142,12 @@ public class Language {
         if (!customLangFile.exists()) {
             plugin.saveResource("language.yml", false);
             lang = YamlConfiguration.loadConfiguration(customLangFile);
-            loadLang();
             Util.log("&7New language.yml created");
         } else {
             lang = YamlConfiguration.loadConfiguration(customLangFile);
-            loadLang();
         }
         updateLang(lang, customLangFile);
+        loadLang();
         Util.log("&7language.yml loaded");
     }
 
@@ -283,6 +282,7 @@ public class Language {
             config.set("scoreboard-arena", "&a&lArena: &b");
             try {
                 config.save(file);
+                loadLang();
             } catch (IOException e) {
                 e.printStackTrace();
             }
