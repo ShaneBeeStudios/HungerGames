@@ -29,9 +29,35 @@ class SBDisplay {
 	}
 
 	void setAlive() {
+		/*
 		Score score = ob.getScore(ChatColor.translateAlternateColorCodes('&', HG.lang.players_alive));
+		Score arena = ob.getScore(ChatColor.translateAlternateColorCodes('&', HG.lang.scoreboard_arena + g.getName()));
 		
 		score.setScore(g.getPlayers().size());
+		arena.setScore(g.getPlayers().size() + 1);
+
+		 */
+
+		Score space1 = ob.getScore(" ");
+		Score space2 = ob.getScore("  ");
+		Score space3 = ob.getScore("   ");
+		Score arena1 = ob.getScore(Util.getColString(HG.lang.scoreboard_arena));
+		Score arena2 = ob.getScore(Util.getColString("  &e" + g.getName()));
+
+
+
+		Score alive1 = ob.getScore(Util.getColString(HG.lang.players_alive));
+		Score alive2 = ob.getScore(Util.getColString("  " + HG.lang.players_alive_num.replace("<num>", String.valueOf(g.getPlayers().size()))));
+
+		space1.setScore(6);
+		arena1.setScore(5);
+		arena2.setScore(4);
+		space2.setScore(3);
+		alive1.setScore(2);
+		alive2.setScore(1);
+		space3.setScore(0);
+
+
 	}
 
 	void resetAlive() {

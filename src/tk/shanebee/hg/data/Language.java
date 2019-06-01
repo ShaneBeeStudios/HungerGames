@@ -6,6 +6,7 @@ import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
 
 import java.io.File;
+import java.io.IOException;
 
 public class Language {
 
@@ -35,7 +36,9 @@ public class Language {
     public String kit_no_perm;
     public String kit_doesnt_exist;
     public String players_alive;
+    public String players_alive_num;
     public String scoreboard_title;
+    public String scoreboard_arena;
     public String team_invite_1;
     public String team_invite_2;
     public String team_invite_3;
@@ -122,6 +125,7 @@ public class Language {
     public String track_new1;
     public String track_new2;
     public String listener_sign_click_hand;
+    public String bossbar;
 
 
 
@@ -144,6 +148,7 @@ public class Language {
             lang = YamlConfiguration.loadConfiguration(customLangFile);
             loadLang();
         }
+        updateLang(lang, customLangFile);
         Util.log("&7language.yml loaded");
     }
 
@@ -173,7 +178,9 @@ public class Language {
         winning_amount = lang.getString("winning-amount");
 
         scoreboard_title = lang.getString("scoreboard-title");
+        scoreboard_arena = lang.getString("scoreboard-arena");
         players_alive = lang.getString("players-alive");
+        players_alive_num = lang.getString("players-alive-num");
         team_invite_1 = lang.getString("team-invite-1");
         team_invite_2 = lang.getString("team-invite-2");
         team_invite_3 = lang.getString("team-invite-3");
@@ -265,7 +272,21 @@ public class Language {
         track_new1 = lang.getString("track-new1");
         track_new2 = lang.getString("track-new2");
         listener_sign_click_hand = lang.getString("listener-sign-click-hand");
+        bossbar = lang.getString("game-bossbar");
+    }
 
+    private void updateLang(FileConfiguration config, File file){
+        if (!config.isSet("game-bossbar")) {
+            config.set("game-bossbar", "&6&lGame Ends In: &b&l<min> &7min &b&l<sec> &7sec");
+            config.set("players-alive", "&d&lTributes:");
+            config.set("players-alive-num", "&e<num> alive");
+            config.set("scoreboard-arena", "&a&lArena: &b");
+            try {
+                config.save(file);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        }
 
     }
 

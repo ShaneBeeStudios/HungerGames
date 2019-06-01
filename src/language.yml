@@ -2,6 +2,8 @@
 #  Change the messages to your liking
 #  Supports '&' color codes
 #  Messages that contain <> indicate things that the plugin replaces, such as <player> or <distance>
+#  Comments in this file will be removed if we update messages during a plugin update
+#  To restore these messages, backup this file, delete it, and restart your server, this will create a new lang file with all the notes
 
 #  GENERAL PLUGIN MESSAGES
 prefix: '&7&l[&3&lHungerGames&7&l]'
@@ -18,6 +20,9 @@ game-almost-over: '&l&cThe game is almost over, fight to the death!'
 game-ending-minsec: '&aThe game is ending in <minutes> minute(s), and <seconds> second(s)!'
 game-ending-min: '&aThe game is ending in <minutes> minute(s)!'
 game-ending-sec: '&athe game is ending in <seconds> second(s)!'
+
+# <min>/<sec> will be replaced with the remaining minutes and seconds in a game
+game-bossbar: '&6&lGame Ends In: &b&l<min> &7min &b&l<sec> &7sec'
 
 #  <amount> will be replaced with amount of players left to start a game
 players-to-start: '&b&l<amount> &6players to start!'
@@ -41,7 +46,10 @@ kit-doesnt-exist: '&cDoes not exist'
 
 #  SCOREBOARD
 scoreboard-title: '&6&lHungerGames'
-players-alive: '&aPlayers-Alive:'
+players-alive: '&d&lTributes:'
+# <num> will be replaced by the number of remaining players in the game
+players-alive-num: '&e<num> alive'
+scoreboard-arena: "&a&lArena: &b"
 
 #  TEAMS
 team-invite-1: '&6*&b&m                                                                             &6*'
