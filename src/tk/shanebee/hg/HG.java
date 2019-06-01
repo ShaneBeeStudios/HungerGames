@@ -142,7 +142,8 @@ public class HG extends JavaPlugin {
 		for (UUID u : ps) {
 			Player p = Bukkit.getPlayer(u);
 			if (p != null) {
-				players.get(u).getGame().leave(p, false);
+				if (players.containsKey(u))
+					players.get(u).getGame().leave(p, false);
 			}
 		}
 		players.clear();
