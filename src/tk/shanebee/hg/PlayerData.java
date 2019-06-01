@@ -32,6 +32,7 @@ public class PlayerData {
 	}
 
 	void restore(Player p) {
+		if (p == null) return;
 		Util.clearInv(p);
 		p.setExp(0);
 		p.setWalkSpeed(0.2f);
