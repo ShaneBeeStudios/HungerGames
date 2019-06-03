@@ -42,20 +42,30 @@ public class Placeholders extends PlaceholderExpansion {
 
     @Override
     public String onPlaceholderRequest(Player player, String identifier) {
-        if (identifier.startsWith("lb_player")) {
+        if (identifier.startsWith("lb_player_")) {
             int leader = Integer.valueOf(identifier.replace("lb_player_", ""));
             if (leaderboard.sorted_players.size() >= leader)
                 return leaderboard.sorted_players.get(leader - 1);
             else
                 return "";
         }
-        if (identifier.startsWith("lb_score")) {
+        if (identifier.startsWith("lb_score_")) {
             int leader = (Integer.valueOf(identifier.replace("lb_score_", "")));
             if (leaderboard.sorted_scores.size() >= leader)
                 return leaderboard.sorted_scores.get(leader - 1);
             else
                 return "";
 
+        }
+        if (identifier.startsWith("lb_combined_")) {
+            int leader = (Integer.valueOf(identifier.replace("lb_combined_", "")));
+            if (leaderboard.sorted_scores.size() >= leader)
+                return leaderboard.sorted_players.get(leader - 1) + " : " + leaderboard.sorted_scores.get(leader - 1);
+            else
+                return "";
+        }
+        if (identifier.equalsIgnoreCase("lb_player")) {
+            return String.valueOf(leaderboard.getWins(player));
         }
         return null;
     }
