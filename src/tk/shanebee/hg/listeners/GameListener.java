@@ -335,9 +335,10 @@ public class GameListener implements Listener {
 	public void blockBreak(BlockBreakEvent event) {
 		Player p = event.getPlayer();
 		Block b = event.getBlock();
-		Game g = plugin.players.get(p.getUniqueId()).getGame();
+
 		if (HG.manager.isInRegion(b.getLocation())) {
 			if (Config.breakblocks && plugin.players.containsKey(p.getUniqueId())) {
+				Game g = plugin.players.get(p.getUniqueId()).getGame();
 				if (g.getStatus() == Status.RUNNING) {
 					if (!Config.blocks.contains(b.getType().toString())) {
 						Util.scm(p, HG.lang.listener_no_edit_block);
@@ -353,8 +354,9 @@ public class GameListener implements Listener {
 					event.setCancelled(true);
 				}
 			} else {
-				if (p.hasPermission("hg.create") && (g.getStatus() == Status.STOPPED || g.getStatus() == Status.READY || g.getStatus() == Status.NOTREADY))
+				if (!plugin.players.containsKey(p.getUniqueId()) && p.hasPermission("hg.create")) {
 					return;
+				}
 				event.setCancelled(true);
 			}
 		}
