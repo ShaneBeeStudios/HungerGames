@@ -1,5 +1,6 @@
 package tk.shanebee.hg.listeners;
 
+import org.bukkit.inventory.EquipmentSlot;
 import tk.shanebee.hg.Game;
 import tk.shanebee.hg.HG;
 import tk.shanebee.hg.PlayerSession;
@@ -28,6 +29,7 @@ public class WandListener implements Listener {
 		if (action.equals(Action.RIGHT_CLICK_BLOCK)) {
 			if (!player.getInventory().getItemInMainHand().getType().equals(Material.BLAZE_ROD)) return;
 			if (!plugin.playerSession.containsKey(player.getUniqueId())) return;
+			if (event.getHand() == EquipmentSlot.OFF_HAND) return;
 			Location l = event.getClickedBlock().getLocation();
 			event.setCancelled(true);
 			for (Game game : HG.plugin.games) {
