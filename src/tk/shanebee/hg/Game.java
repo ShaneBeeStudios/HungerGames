@@ -1,6 +1,5 @@
 package tk.shanebee.hg;
 
-import net.milkbowl.vault.chat.Chat;
 import org.bukkit.boss.BarColor;
 import org.bukkit.boss.BarStyle;
 import org.bukkit.boss.BossBar;
@@ -529,8 +528,10 @@ public class Game {
 		}
 
 		for (Location loc : chests) {
-			((Chest) loc.getBlock().getState()).getInventory().clear();
-			loc.getBlock().getState().update();
+			if (loc.getBlock().getType() == Material.CHEST) {
+				((Chest) loc.getBlock().getState()).getInventory().clear();
+				loc.getBlock().getState().update();
+			}
 		}
 		chests.clear();
 		String winner = Util.translateStop(Util.convertUUIDListToStringList(win));
