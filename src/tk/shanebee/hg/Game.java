@@ -5,6 +5,7 @@ import org.bukkit.boss.BarStyle;
 import org.bukkit.boss.BossBar;
 import org.bukkit.plugin.IllegalPluginAccessException;
 import tk.shanebee.hg.events.PlayerJoinGameEvent;
+import tk.shanebee.hg.events.PlayerLeaveGameEvent;
 import tk.shanebee.hg.mobhandler.Spawner;
 import tk.shanebee.hg.tasks.ChestDropTask;
 import tk.shanebee.hg.tasks.FreeRoamTask;
@@ -555,6 +556,7 @@ public class Game {
 	 * @param death Whether the player has died or not (Generally should be false)
 	 */
 	public void leave(Player player, Boolean death) {
+		Bukkit.getPluginManager().callEvent(new PlayerLeaveGameEvent(this, player, death));
 		players.remove(player.getUniqueId());
 		unFreeze(player);
 		exit(player);
