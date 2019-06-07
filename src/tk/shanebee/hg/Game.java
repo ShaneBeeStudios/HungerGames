@@ -4,6 +4,7 @@ import org.bukkit.boss.BarColor;
 import org.bukkit.boss.BarStyle;
 import org.bukkit.boss.BossBar;
 import org.bukkit.plugin.IllegalPluginAccessException;
+import tk.shanebee.hg.events.PlayerJoinGameEvent;
 import tk.shanebee.hg.mobhandler.Spawner;
 import tk.shanebee.hg.tasks.ChestDropTask;
 import tk.shanebee.hg.tasks.FreeRoamTask;
@@ -251,36 +252,37 @@ public class Game {
 			}
 
 			Bukkit.getScheduler().scheduleSyncDelayedTask(HG.plugin, () -> {
-                players.add(player.getUniqueId());
-                HG.plugin.players.put(player.getUniqueId(), new PlayerData(player, this));
+				players.add(player.getUniqueId());
+				HG.plugin.players.put(player.getUniqueId(), new PlayerData(player, this));
 
-			Location loc = pickSpawn();
+				Location loc = pickSpawn();
 
-			if (loc.getBlock().getRelative(BlockFace.DOWN).getType() == Material.AIR) {
-				while(loc.getBlock().getRelative(BlockFace.DOWN).getType() == Material.AIR) {
-					loc.setY(loc.getY() - 1);
+				if (loc.getBlock().getRelative(BlockFace.DOWN).getType() == Material.AIR) {
+					while (loc.getBlock().getRelative(BlockFace.DOWN).getType() == Material.AIR) {
+						loc.setY(loc.getY() - 1);
+					}
 				}
-			}
 
-			player.teleport(loc);
-			heal(player);
-			freeze(player);
+				player.teleport(loc);
+				heal(player);
+				freeze(player);
 
-            if (players.size() == 1)
-                status = Status.WAITING;
-			if (players.size() >= minplayers && (status == Status.WAITING || status == Status.READY)) {
-				startPreGame();
-			} else if (status == Status.WAITING) {
-				msgAll(HG.lang.player_joined_game.replace("<player>",
-						player.getName()) + (minplayers - players.size() <= 0 ? "!" : ":" +
-						HG.lang.players_to_start.replace("<amount>", String.valueOf((minplayers - players.size())))));
-			}
-			kitHelp(player);
+				if (players.size() == 1)
+					status = Status.WAITING;
+				if (players.size() >= minplayers && (status == Status.WAITING || status == Status.READY)) {
+					startPreGame();
+				} else if (status == Status.WAITING) {
+					msgAll(HG.lang.player_joined_game.replace("<player>",
+							player.getName()) + (minplayers - players.size() <= 0 ? "!" : ":" +
+							HG.lang.players_to_start.replace("<amount>", String.valueOf((minplayers - players.size())))));
+				}
+				kitHelp(player);
 
-			updateLobbyBlock();
-			sb.setSB(player);
-			sb.setAlive();
-            }, 5);
+				updateLobbyBlock();
+				sb.setSB(player);
+				sb.setAlive();
+				Bukkit.getPluginManager().callEvent(new PlayerJoinGameEvent(this, player));
+			}, 5);
 		}
 	}
 
