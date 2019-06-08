@@ -635,7 +635,8 @@ public class Game {
 
 	private void createBossbar(int time) {
 		int min = (time / 60);
-		String title = HG.lang.bossbar.replace("<min>", String.valueOf(min)).replace("<sec>", "0");
+		int sec = (time % 60);
+		String title = HG.lang.bossbar.replace("<min>", String.valueOf(min)).replace("<sec>", String.valueOf(sec));
 		bar = Bukkit.createBossBar(ChatColor.translateAlternateColorCodes('&', title), BarColor.GREEN, BarStyle.SEGMENTED_20);
 		for (UUID uuid : players) {
 			Player player = Bukkit.getPlayer(uuid);
