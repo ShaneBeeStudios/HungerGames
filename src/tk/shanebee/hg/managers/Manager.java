@@ -3,6 +3,7 @@ package tk.shanebee.hg.managers;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
+
 import tk.shanebee.hg.Bound;
 import tk.shanebee.hg.Config;
 import tk.shanebee.hg.Game;
@@ -132,7 +133,7 @@ public class Manager {
 	}
 
 	public ItemStack randomitem() {
-		return plugin.items.get(rg.nextInt(HG.randomItems.size));
+		return plugin.items.get(rg.nextInt(HG.plugin.items.size()));
 	}
 	
 	public boolean isInRegion(Location l) {
