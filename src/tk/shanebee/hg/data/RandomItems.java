@@ -110,7 +110,7 @@ public class RandomItems {
 		items.add("MILK_BUCKET 1 x:2");
 		items.add("FISHING_ROD 1");
 		items.add("COMPASS 1");
-		items.add("STICK 1 name:&6TrackingStick_&aUses:_5 lore:&Left_click_in_the_air:&7To_find_nearby_players");
+		items.add("STICK 1 name:&6TrackingStick_&aUses:_5 lore:&7Left_click_in_the_air:&7To_find_nearby_players");
 		items.add("GOLDEN_HELMET 1");
 		items.add("GOLDEN_CHESTPLATE 1");
 		items.add("BONE 1 x:2");
@@ -124,10 +124,10 @@ public class RandomItems {
 		items.add("MELON_SLICE 1 x:4");
 		items.add("COOKED_BEEF 1 x:2");
 		items.add("ENDER_PEARL 1 x:2");
-		items.add("POTION:SPEED:3600:1 1 x:2");
-		items.add("POTION:HEAL:1:1 1 x:2");
-		items.add("SPLASH_POTION:POISON:320:2 1");
-		items.add("SPLASH_POTION:REGENERATION:660:1 1 x:2");
+		items.add("POTION:SPEED:3600:1 1 x:2 name:&rPotion_of_Swiftness");
+		items.add("POTION:HEAL:1:1 1 x:2 name:&rPotion_of_Healing");
+		items.add("SPLASH_POTION:POISON:320:2 1 name:&rSplash_Potion_of_Poison");
+		items.add("SPLASH_POTION:REGENERATION:660:1 1 x:2 name:&rSplash_Potion_of_Regeneration");
 		items.add("APPLE 2 x:5");
 		item.set("items", items);
 	}
