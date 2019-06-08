@@ -24,6 +24,7 @@ public class Language {
     public String game_ending_minsec;
     public String game_ending_min;
     public String game_ending_sec;
+    public String game_border_closing;
     public String players_to_start;
     public String arena_not_ready;
     public String game_full;
@@ -162,6 +163,7 @@ public class Language {
         game_ending_minsec = lang.getString("game-ending-minsec");
         game_ending_min = lang.getString("game-ending-min");
         game_ending_sec = lang.getString("game-ending-sec");
+        game_border_closing = lang.getString("game-border-closing");
 
         players_to_start = lang.getString("players-to-start");
         arena_not_ready = lang.getString("arena-not-ready");
@@ -280,14 +282,20 @@ public class Language {
             config.set("players-alive", "&d&lTributes:");
             config.set("players-alive-num", "&e<num> alive");
             config.set("scoreboard-arena", "&a&lArena: &b");
-            try {
-                config.save(file);
-                loadLang();
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
         }
+        if (!config.isSet("game-border-closing")) {
+            config.set("game-border-closing", "&6The border is coming, you have <seconds> seconds to get to the center of the arena!");
+        }
+        saveConfig();
+    }
 
+    private void saveConfig() {
+        try {
+            lang.save(customLangFile);
+            loadLang();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
 }

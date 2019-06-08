@@ -11,7 +11,9 @@ import org.bukkit.World;
 import org.bukkit.block.Block;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
+import org.bukkit.util.BoundingBox;
 
+@SuppressWarnings("WeakerAccess")
 public class Bound {
 
 	private int x;
@@ -107,7 +109,6 @@ public class Bound {
 	/** Get the greater corner of this bound
 	 * @return Location of greater corner
 	 */
-	@SuppressWarnings("unused")
 	public Location getGreaterCorner() {
 		return new Location(Bukkit.getWorld(world), x, y, z);
 	}
@@ -115,9 +116,16 @@ public class Bound {
 	/** Get the lesser corner of this bound
 	 * @return Location of lesser corner
 	 */
-	@SuppressWarnings("unused")
 	public Location getLesserCorner() {
 		return new Location(Bukkit.getWorld(world), x2, y2, z2);
+	}
+
+	/** Get the center location of this bound
+	 * @return The center location
+	 */
+	public Location getCenter() {
+		BoundingBox box = new BoundingBox(x, y, z, x2, y2, z2);
+		return new Location(this.getWorld(), box.getCenterX(), box.getCenterY(), box.getCenterZ());
 	}
 
 }

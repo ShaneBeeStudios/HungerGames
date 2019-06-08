@@ -35,6 +35,14 @@ public class Config {
 	public static int randomChestInterval;
 	static int randomChestMaxContent;
 
+	//World border
+	public static boolean borderEnabled;
+	public static boolean borderOnStart;
+	public static boolean centerSpawn;
+	public static int borderCountdownStart;
+	public static int borderCountdownEnd;
+	public static int borderFinalSize;
+
 	private HG plugin;
 
 	public Config(HG plugin) {
@@ -73,7 +81,14 @@ public class Config {
 		randomChestInterval = config.getInt("random-chest.interval") * 20;
 		randomChestMaxContent = config.getInt("random-chest.max-chestcontent");
 		teleportEnd = config.getBoolean("settings.teleport-at-end");
-		teleportEndTime = config.getInt("teleport-at-end-time");
+		teleportEndTime = config.getInt("settings.teleport-at-end-time");
+
+		borderEnabled = config.getBoolean("world-border.enabled");
+		borderOnStart = config.getBoolean("world-border.initiate-on-start");
+		centerSpawn = config.getBoolean("world-border.center-on-first-spawn");
+		borderCountdownStart = config.getInt("world-border.countdown-start");
+		borderCountdownEnd = config.getInt("world-border.countdown-end");
+		borderFinalSize = config.getInt("world-border.final-border-size");
 
 		if (giveReward) {
 			try {
@@ -95,6 +110,14 @@ public class Config {
 	private void updateConfig(Configuration config) {
 		if (!config.isSet("settings.bossbar-countdown")) {
 			config.set("settings.bossbar-countdown", true);
+		}
+		if (!config.isSet("world-border.enabled")) {
+			config.set("world-border.enabled", false);
+			config.set("world-border.initiate-on-start", true);
+			config.set("world-border.countdown-start", 60);
+			config.set("world-border.countdown-end", 30);
+			config.set("world-border.final-border-size", 30);
+			config.set("world-border.center-on-first-spawn", true);
 		}
 		plugin.saveConfig();
 	}

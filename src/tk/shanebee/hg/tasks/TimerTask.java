@@ -10,13 +10,18 @@ import tk.shanebee.hg.Status;
 public class TimerTask implements Runnable {
 
 	private int remainingtime;
-	private int teleportTimer = Config.teleportEndTime;
+	private int teleportTimer;
+	private int borderCountdownStart;
+	private int borderCountdownEnd;
 	private int id;
 	private Game game;
 
 	public TimerTask(Game g, int time) {
 		this.remainingtime = time;
 		this.game = g;
+		this.teleportTimer = Config.teleportEndTime;
+		this.borderCountdownStart = Config.borderCountdownStart;
+		this.borderCountdownEnd = Config.borderCountdownEnd;
 		
 		this.id = Bukkit.getScheduler().scheduleSyncRepeatingTask(HG.plugin, this, 30 * 20L, 30 * 20L);
 	}
@@ -28,7 +33,13 @@ public class TimerTask implements Runnable {
 		remainingtime = (remainingtime - 30);
 		if (Config.bossbar) game.bossbarUpdate(remainingtime);
 
-		if (remainingtime <= teleportTimer && remainingtime > 10 && Config.teleportEnd) {
+		if (Config.borderEnabled && !Config.borderOnStart && remainingtime == borderCountdownStart) {
+			int closingIn = remainingtime - borderCountdownEnd;
+			game.setBorder(closingIn);
+			game.msgAll(HG.lang.game_border_closing.replace("<seconds>", String.valueOf(closingIn)));
+		}
+
+		if (remainingtime == teleportTimer && Config.teleportEnd) {
 			game.msgAll(HG.lang.game_almost_over);
 			game.respawnAll();
 		} else if (this.remainingtime < 10) {

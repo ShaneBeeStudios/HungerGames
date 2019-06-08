@@ -18,11 +18,8 @@ import org.bukkit.entity.Player;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
+import java.util.*;
 import java.util.Map.Entry;
-import java.util.UUID;
 
 public class Game {
 
@@ -343,6 +340,9 @@ public class Game {
 		timer = new TimerTask(this, time);
 		updateLobbyBlock();
 		createBossbar(time);
+		if (Config.borderEnabled && Config.borderOnStart) {
+			setBorder(time);
+		}
 	}
 
 
@@ -453,7 +453,7 @@ public class Game {
 			return false;
 		}
 		try {
-			String[] h = HG.plugin.getConfig().getString("settings.globalexit").split(":");
+			String[] h = Objects.requireNonNull(HG.plugin.getConfig().getString("settings.globalexit")).split(":");
 			this.exit = new Location(Bukkit.getServer().getWorld(h[0]), Integer.parseInt(h[1]) + 0.5,
 					Integer.parseInt(h[2]) + 0.1, Integer.parseInt(h[3]) + 0.5, Float.parseFloat(h[4]), Float.parseFloat(h[5]));
 		} catch (Exception e) {
@@ -549,6 +549,9 @@ public class Game {
 		}
 		b.removeEntities();
 		sb.resetAlive();
+		if (Config.borderEnabled) {
+			resetBorder();
+		}
 	}
 
 	/** Make a player leave the game
@@ -653,6 +656,43 @@ public class Game {
 		if (remain < 0.2)
 			bar.setColor(BarColor.RED);
 
+	}
+
+	private double getBorderSize(Location center) {
+		double x1 = Math.abs(b.getGreaterCorner().getX() - center.getX());
+		double x2 = Math.abs(b.getLesserCorner().getX() - center.getX());
+		double z1 = Math.abs(b.getGreaterCorner().getZ() - center.getZ());
+		double z2 = Math.abs(b.getLesserCorner().getZ() - center.getZ());
+
+		double x = x1 > x2 ? x1 : x2;
+		double z = z1 > z2 ? z1 : z2;
+		double r = x > z ? x : z;
+
+		return (r * 2) + 10;
+	}
+
+	public void setBorder(int time) {
+		Location center;
+		if (Config.centerSpawn) {
+			center = this.spawns.get(0);
+		} else {
+			center = b.getCenter();
+		}
+		World world = center.getWorld();
+		assert world != null;
+		WorldBorder border = world.getWorldBorder();
+
+		border.setCenter(center);
+		border.setSize(((int) getBorderSize(center)));
+		border.setWarningTime(5);
+		border.setDamageBuffer(2);
+		border.setSize(Config.borderFinalSize, time);
+	}
+
+	private void resetBorder() {
+		World world = this.getRegion().getWorld();
+		assert world != null;
+		world.getWorldBorder().reset();
 	}
 
 }

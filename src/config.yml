@@ -43,6 +43,13 @@ rollback:
         - WHITE_WOOL
         - STONE_BRICKS
         - GLASS_PANE
+world-border:
+    enabled: false
+    initiate-on-start: true
+    countdown-start: 60
+    countdown-end: 30
+    final-border-size: 30
+    center-on-first-spawn: true
 kits:
     bowman:
         permission: none

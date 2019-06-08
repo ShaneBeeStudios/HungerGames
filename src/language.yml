@@ -20,6 +20,7 @@ game-almost-over: '&l&cThe game is almost over, fight to the death!'
 game-ending-minsec: '&aThe game is ending in <minutes> minute(s), and <seconds> second(s)!'
 game-ending-min: '&aThe game is ending in <minutes> minute(s)!'
 game-ending-sec: '&athe game is ending in <seconds> second(s)!'
+game-border-closing: '&6The border is coming, you have <seconds> seconds to get to the center of the arena!'
 
 # <min>/<sec> will be replaced with the remaining minutes and seconds in a game
 game-bossbar: '&6&lGame Ends In: &b&l<min> &7min &b&l<sec> &7sec'
