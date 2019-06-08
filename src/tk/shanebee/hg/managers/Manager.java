@@ -1,15 +1,5 @@
 package tk.shanebee.hg.managers;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Random;
-
-import tk.shanebee.hg.Bound;
-import tk.shanebee.hg.Config;
-import tk.shanebee.hg.Game;
-import tk.shanebee.hg.HG;
-import tk.shanebee.hg.Status;
-import tk.shanebee.hg.Util;
 import org.bukkit.Location;
 import org.bukkit.block.Block;
 import org.bukkit.block.Sign;
@@ -19,6 +9,12 @@ import org.bukkit.entity.Player;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.InventoryHolder;
 import org.bukkit.inventory.ItemStack;
+import tk.shanebee.hg.*;
+
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+import java.util.Random;
 
 public class Manager {
 
@@ -123,17 +119,26 @@ public class Manager {
 	
 	public void fillChests(Block b) {
 		Inventory i = ((InventoryHolder)b.getState()).getInventory();
+		List<Integer> slots = new ArrayList<>();
+		for (int slot = 0; slot <= 26; slot++) {
+			slots.add(slot);
+		}
+		Collections.shuffle(slots);
 		i.clear();
 		int c = rg.nextInt(Config.maxchestcontent) + 1;
+		c = c >= Config.minchestcontent ? c : Config.minchestcontent;
 		while (c != 0) {
 			ItemStack it = randomitem();
-			i.setItem(rg.nextInt(27), it);
+			int slot = slots.get(0);
+			slots.remove(0);
+			i.setItem(slot, it);
 			c--;
 		}
 	}
 
 	public ItemStack randomitem() {
-		return plugin.items.get(rg.nextInt(HG.plugin.items.size()));
+		int i = rg.nextInt(HG.plugin.items.size()) + 1;
+		return plugin.items.get(i);
 	}
 	
 	public boolean isInRegion(Location l) {
