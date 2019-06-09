@@ -11,7 +11,8 @@ public class PlayerData {
 	//Pregame data
 	private ItemStack[] inv;
 	private ItemStack[] equip;
-	private int exp;
+	private int expL;
+	private float expP;
 	private GameMode mode;
 	
 	//Ingame data
@@ -26,35 +27,51 @@ public class PlayerData {
 		this.game = game;
 		inv = player.getInventory().getContents();
 		equip = player.getInventory().getArmorContents();
-		exp = (int) player.getExp();
+		expL = player.getLevel();
+		expP = player.getExp();
 		mode = player.getGameMode();
 		Util.clearInv(player);
+		player.setLevel(0);
+		player.setExp(0);
 	}
 
 	void restore(Player p) {
 		if (p == null) return;
 		Util.clearInv(p);
-		p.setExp(0);
 		p.setWalkSpeed(0.2f);
-		p.giveExp(exp);
+		p.setLevel(expL);
+		p.setExp(expP);
 		p.getInventory().setContents(inv);
 		p.getInventory().setArmorContents(equip);
 		p.setGameMode(mode);
 		p.updateInventory();
 	}
-	
-	public boolean isOnTeam(UUID u) {
-		return (team != null && team.isOnTeam(u));
+
+	/** Check if a player is on a team
+	 * @param uuid Uuid of player to check
+	 * @return True if player is on a team
+	 */
+	public boolean isOnTeam(UUID uuid) {
+		return (team != null && team.isOnTeam(uuid));
 	}
 
+	/** Get the game of this player data
+	 * @return The game of this player data
+	 */
 	public Game getGame() {
 		return game;
 	}
 
+	/** Get the team of this player data
+	 * @return The team
+	 */
 	public Team getTeam() {
 		return team;
 	}
-	
+
+	/** Set the team of this player data
+	 * @param team The team to set
+	 */
 	public void setTeam(Team team) {
 		this.team = team;
 	}
