@@ -95,7 +95,7 @@ public class ChestDrop implements Listener {
 			i.clear();
 			int c = rg.nextInt(Config.randomChestMaxContent) + 1;
 			while (c != 0) {
-				ItemStack it = HG.manager.randomitem();
+				ItemStack it = HG.manager.randomitem(false);
 				if (it != null) {
 					i.addItem(it);
 				}

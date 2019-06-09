@@ -2,9 +2,11 @@ package tk.shanebee.hg.listeners;
 
 import org.bukkit.*;
 import org.bukkit.block.Block;
+import org.bukkit.block.ShulkerBox;
 import org.bukkit.block.Sign;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
+import org.bukkit.entity.Shulker;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
@@ -240,7 +242,7 @@ public class GameListener implements Listener {
 		Block b = event.getChest();
 		Game g = event.getGame();
 		if (!g.isLoggedChest(b.getLocation())) {
-			HG.manager.fillChests(b);
+			HG.manager.fillChests(b, event.isBonus());
 			g.addChest(b.getLocation());
 		}
 	}
@@ -249,11 +251,19 @@ public class GameListener implements Listener {
 	public void onChestUse(PlayerInteractEvent event) {
 		Player p = event.getPlayer();
 		if (event.getAction() == Action.RIGHT_CLICK_BLOCK && plugin.players.containsKey(p.getUniqueId())) {
-			Block b = event.getClickedBlock();
-			assert b != null;
-			if (b.getType() == Material.CHEST) {
-				PlayerData pd = plugin.players.get(p.getUniqueId());
-				Bukkit.getServer().getPluginManager().callEvent(new ChestOpenEvent(pd.getGame(), b));
+			Block block = event.getClickedBlock();
+			assert block != null;
+			PlayerData pd = plugin.players.get(p.getUniqueId());
+			if (block.getType() == Material.CHEST) {
+				Bukkit.getServer().getPluginManager().callEvent(new ChestOpenEvent(pd.getGame(), block, false));
+			}
+			if (block.getType() == Material.TRAPPED_CHEST || block.getState() instanceof ShulkerBox) {
+				Bukkit.getServer().getPluginManager().callEvent(new ChestOpenEvent(pd.getGame(), block, true));
+			}
+			if (HG.isRunningMinecraft(1, 14) && block.getType() == Material.BARREL) {
+
+					Bukkit.getServer().getPluginManager().callEvent(new ChestOpenEvent(pd.getGame(), block, true));
+
 			}
 		}
 	}
@@ -315,7 +325,10 @@ public class GameListener implements Listener {
 						event.setCancelled(true);
 					} else {
 						g.recordBlockPlace(event.getBlockReplacedState());
-						if (b.getType() == Material.CHEST) {
+						if (b.getType() == Material.CHEST || b.getType() == Material.TRAPPED_CHEST || b.getState() instanceof Shulker) {
+							g.addChest(b.getLocation());
+						}
+						if (HG.isRunningMinecraft(1, 14) && b.getType() == Material.BARREL) {
 							g.addChest(b.getLocation());
 						}
 					}

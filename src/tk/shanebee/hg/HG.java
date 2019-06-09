@@ -30,6 +30,7 @@ public class HG extends JavaPlugin {
 	public HashMap<UUID, PlayerData> players = new HashMap<>();
 	public HashMap<UUID, PlayerSession> playerSession = new HashMap<>();
 	public HashMap<Integer, ItemStack> items = new HashMap<>();
+	public HashMap<Integer, ItemStack> bonusItems = new HashMap<>();
 
 	//Lists
 	public List<Game> games = new ArrayList<>();
@@ -155,6 +156,12 @@ public class HG extends JavaPlugin {
 	 */
 	public Leaderboard getLeaderboard() {
 		return this.leaderboard;
+	}
+
+	public static boolean isRunningMinecraft(int major, int minor) {
+		int maj = Integer.valueOf(Bukkit.getServer().getClass().getPackage().getName().split("\\.")[3].split("_")[0].replace("v", ""));
+		int min = Integer.valueOf(Bukkit.getServer().getClass().getPackage().getName().split("\\.")[3].split("_")[1]);
+		return maj >= major && min >= minor;
 	}
 
 }

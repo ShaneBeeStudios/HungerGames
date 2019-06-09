@@ -15,6 +15,8 @@ public class Config {
 	public static int playersfortrackingstick;
 	public static int maxchestcontent;
 	public static int minchestcontent;
+	public static int maxbonuscontent;
+	public static int minbonuscontent;
 	public static int maxTeam;
 	public static boolean teleportEnd;
 	public static int teleportEndTime;
@@ -67,6 +69,8 @@ public class Config {
 		playersfortrackingstick = config.getInt("settings.players-for-trackingstick");
 		maxchestcontent = config.getInt("settings.max-chestcontent");
 		minchestcontent = config.getInt("settings.min-chestcontent");
+		maxbonuscontent = config.getInt("settings.max-bonus-chestcontent");
+		minbonuscontent = config.getInt("settings.min-bonus-chestcontent");
 		maxTeam = config.getInt("settings.max-team-size");
 		giveReward = config.getBoolean("reward.enabled");
 		cash = config.getInt("reward.cash");
@@ -121,6 +125,10 @@ public class Config {
 			config.set("world-border.final-border-size", 30);
 			config.set("world-border.center-on-first-spawn", true);
 			config.set("settings.min-chestcontent", 1);
+		}
+		if (!config.isSet("settings.max-bonus-chestcontent")) {
+			config.set("settings.max-bonus-chestcontent", 5);
+			config.set("settings.min-bonus-chestcontent", 1);
 		}
 		plugin.saveConfig();
 	}

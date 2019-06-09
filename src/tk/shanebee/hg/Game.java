@@ -3,6 +3,7 @@ package tk.shanebee.hg;
 import org.bukkit.boss.BarColor;
 import org.bukkit.boss.BarStyle;
 import org.bukkit.boss.BossBar;
+import org.bukkit.inventory.InventoryHolder;
 import org.bukkit.plugin.IllegalPluginAccessException;
 import tk.shanebee.hg.events.PlayerJoinGameEvent;
 import tk.shanebee.hg.events.PlayerLeaveGameEvent;
@@ -530,9 +531,17 @@ public class Game {
 			}
 		}
 
+		/*
 		for (Location loc : chests) {
 			if (loc.getBlock().getType() == Material.CHEST) {
 				((Chest) loc.getBlock().getState()).getInventory().clear();
+				loc.getBlock().getState().update();
+			}
+		}
+		 */
+		for (Location loc : chests) {
+			if (loc.getBlock().getState() instanceof InventoryHolder) {
+				((InventoryHolder) loc.getBlock().getState()).getInventory().clear();
 				loc.getBlock().getState().update();
 			}
 		}

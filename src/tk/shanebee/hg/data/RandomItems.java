@@ -31,6 +31,7 @@ public class RandomItems {
 		}
 		if (!customConfigFile.exists()) {
 			try {
+				//noinspection ResultOfMethodCallIgnored
 				customConfigFile.createNewFile();
 			}
 			catch (IOException e) {
@@ -64,13 +65,13 @@ public class RandomItems {
 
 	public void load() {
 		reloadCustomConfig();
-		size = 0;
 		if (item.getStringList("items").isEmpty()) {
-			setDefaultss();
+			setDefaults();
 			saveCustomConfig();
 			reloadCustomConfig();
 			Util.log("generating defaults for random items!");
 		}
+		// Regular items
 		for (String s : item.getStringList("items")) {
 			String[] amount = s.split(" ");
 			if (s.contains("x:")) {
@@ -80,19 +81,35 @@ public class RandomItems {
 						while (c != 0) {
 							c--;
 							plugin.items.put(plugin.items.size() + 1, plugin.itemStackManager.getItem(s.replace("x:", ""), true));
-							size++;
 						}
 					}
 				}
 			} else {
 				plugin.items.put(plugin.items.size() + 1, plugin.itemStackManager.getItem(s, true));
 			}
-			size++;
+		}
+		// Bonus items
+		for (String s : item.getStringList("bonus")) {
+			String[] amount = s.split(" ");
+			if (s.contains("x:")) {
+				for (String p : amount) {
+					if (p.startsWith("x:")) {
+						int c = Integer.parseInt(p.replace("x:", ""));
+						while (c != 0) {
+							c--;
+							plugin.bonusItems.put(plugin.bonusItems.size() + 1, plugin.itemStackManager.getItem(s.replace("x:", ""), true));
+						}
+					}
+				}
+			} else {
+				plugin.bonusItems.put(plugin.bonusItems.size() + 1, plugin.itemStackManager.getItem(s, true));
+			}
 		}
 		Util.log(plugin.items.size() + " Random items have been loaded!");
+		Util.log(plugin.bonusItems.size() + " Random bonus items have been loaded!");
 	}
 
-	private void setDefaultss() {
+	private void setDefaults() {
 		ArrayList <String> items = new ArrayList <>();
 		items.add("STONE_SWORD 1 x:5");
 		items.add("GOLDEN_SWORD 1");
@@ -104,7 +121,7 @@ public class RandomItems {
 		items.add("IRON_HELMET 1 x:2");
 		items.add("IRON_CHESTPLATE 1 x:2");
 		items.add("IRON_LEGGINGS 1 x:2");
-		items.add("IRON_BOOTS 1 x:2");//280
+		items.add("IRON_BOOTS 1 x:2");
 		items.add("BOW 1 x:3");
 		items.add("ARROW 20 x:2");
 		items.add("MILK_BUCKET 1 x:2");
@@ -130,5 +147,11 @@ public class RandomItems {
 		items.add("SPLASH_POTION:REGENERATION:660:1 1 x:2 name:&rSplash_Potion_of_Regeneration");
 		items.add("APPLE 2 x:5");
 		item.set("items", items);
+
+		ArrayList<String> bonus = new ArrayList<>();
+		bonus.add("DIAMOND_SWORD 1 enchant:DAMAGE_ALL:5 name:&3Power_Sword");
+		bonus.add("DIAMOND_CHESTPLATE 1 enchant:PROTECTION_ENVIRONMENTAL:3 name:&aLife_Saver");
+		item.set("bonus", bonus);
 	}
+
 }

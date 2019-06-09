@@ -13,14 +13,16 @@ public class ChestOpenEvent extends Event {
 
 	private Game game;
 	private Block block;
+	private boolean bonus;
 
 	/** Create a new player open chest event
 	 * @param game The game this is happening in
 	 * @param block The block that is opening
 	 */
-	public ChestOpenEvent(Game game, Block block) {
+	public ChestOpenEvent(Game game, Block block, boolean bonus) {
 		this.game = game;
 		this.block = block;
+		this.bonus = bonus;
 	}
 
 	/** Get the game in this event
@@ -35,6 +37,13 @@ public class ChestOpenEvent extends Event {
 	 */
 	public Block getChest() {
 		return block;
+	}
+
+	/** Check if this chest is a bonus chest
+	 * @return True if bonus chest
+	 */
+	public boolean isBonus() {
+		return bonus;
 	}
 	
 	private static final HandlerList handlers = new HandlerList();

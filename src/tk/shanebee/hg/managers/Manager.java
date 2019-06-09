@@ -117,7 +117,7 @@ public class Manager {
 		}
 	}*/
 	
-	public void fillChests(Block b) {
+	public void fillChests(Block b, boolean bonus) {
 		Inventory i = ((InventoryHolder)b.getState()).getInventory();
 		List<Integer> slots = new ArrayList<>();
 		for (int slot = 0; slot <= 26; slot++) {
@@ -125,10 +125,13 @@ public class Manager {
 		}
 		Collections.shuffle(slots);
 		i.clear();
-		int c = rg.nextInt(Config.maxchestcontent) + 1;
-		c = c >= Config.minchestcontent ? c : Config.minchestcontent;
+		int max = bonus ? Config.maxbonuscontent : Config.maxchestcontent;
+		int min = bonus ? Config.minbonuscontent : Config.minchestcontent;
+
+		int c = rg.nextInt(max) + 1;
+		c = c >= min ? c : min;
 		while (c != 0) {
-			ItemStack it = randomitem();
+			ItemStack it = randomitem(bonus);
 			int slot = slots.get(0);
 			slots.remove(0);
 			i.setItem(slot, it);
@@ -136,9 +139,14 @@ public class Manager {
 		}
 	}
 
-	public ItemStack randomitem() {
-		int i = rg.nextInt(HG.plugin.items.size()) + 1;
-		return plugin.items.get(i);
+	public ItemStack randomitem(boolean bonus) {
+		if (bonus) {
+			int i = rg.nextInt(plugin.bonusItems.size()) + 1;
+			return plugin.bonusItems.get(i);
+		} else {
+			int i = rg.nextInt(plugin.items.size()) + 1;
+			return plugin.items.get(i);
+		}
 	}
 	
 	public boolean isInRegion(Location l) {
