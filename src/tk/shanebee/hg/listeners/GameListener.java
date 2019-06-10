@@ -358,7 +358,10 @@ public class GameListener implements Listener {
 						event.setCancelled(true);
 					} else {
 						g.recordBlockBreak(b);
-						if (b.getType() == Material.CHEST) {
+						if (b.getType() == Material.CHEST || b.getType() == Material.TRAPPED_CHEST || b.getState() instanceof Shulker) {
+							g.removeChest(b.getLocation());
+						}
+						if (HG.isRunningMinecraft(1, 14) && b.getType() == Material.BARREL) {
 							g.removeChest(b.getLocation());
 						}
 					}
