@@ -1,14 +1,14 @@
 package tk.shanebee.hg.listeners;
 
-import tk.shanebee.hg.Game;
-import tk.shanebee.hg.HG;
-import tk.shanebee.hg.Util;
-import tk.shanebee.hg.commands.BaseCmd;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.command.TabCompleter;
 import org.bukkit.util.StringUtil;
+import tk.shanebee.hg.Game;
+import tk.shanebee.hg.HG;
+import tk.shanebee.hg.Util;
+import tk.shanebee.hg.commands.BaseCmd;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -72,6 +72,28 @@ public class CommandListener implements CommandExecutor, TabCompleter {
 						}
 					}
 					return matchesDelete;
+				}
+			} else if (args[0].equalsIgnoreCase("chestrefill")) {
+				ArrayList<String> matchesDelete = new ArrayList<>();
+				if (args.length == 2) {
+					for (Game name : plugin.games) {
+						if (StringUtil.startsWithIgnoreCase(name.getName(), args[1])) {
+							matchesDelete.add(name.getName());
+						}
+					}
+					return matchesDelete;
+				}
+				if (args.length == 3) {
+					ArrayList<String> matchesChestRefill = new ArrayList<>();
+					for (int i = 30; i <= 120; i = i + 30) {
+						if (StringUtil.startsWithIgnoreCase(String.valueOf(i), args[2])) {
+							matchesChestRefill.add(String.valueOf(i));
+						}
+						if (StringUtil.startsWithIgnoreCase("<time=seconds>", args[2])) {
+							matchesChestRefill.add("<time=seconds>");
+						}
+					}
+					return matchesChestRefill;
 				}
 			} else if (args[0].equalsIgnoreCase("kit")) {
 				if (args.length == 2) {
