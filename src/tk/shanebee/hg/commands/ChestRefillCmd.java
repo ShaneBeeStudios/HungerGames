@@ -20,6 +20,10 @@ public class ChestRefillCmd extends BaseCmd {
 		if (game != null) {
 			String name = game.getName();
 			int time = Integer.valueOf(args[2]);
+			if (time % 30 != 0) {
+				Util.scm(player, "&c<time> must be in increments of 30");
+				return true;
+			}
 			HG.arenaconfig.getCustomConfig().set("arenas." + name + ".chest-refill", time);
 			HG.arenaconfig.saveCustomConfig();
 			game.setChestRefillTime(time);
