@@ -21,6 +21,7 @@ game-ending-minsec: '&aThe game is ending in <minutes> minute(s), and <seconds> 
 game-ending-min: '&aThe game is ending in <minutes> minute(s)!'
 game-ending-sec: '&athe game is ending in <seconds> second(s)!'
 game-border-closing: '&6The border is coming, you have <seconds> seconds to get to the center of the arena!'
+game-chests-refill: '&6Chests have been refilled'
 
 # <min>/<sec> will be replaced with the remaining minutes and seconds in a game
 game-bossbar: '&6&lGame Ends In: &b&l<min> &7min &b&l<sec> &7sec'
@@ -172,6 +173,9 @@ cmd-toggle-locked: '&3<arena>&b is now &4LOCKED&b!'
 cmd-handler-nokit: '&cYou can not choose a kit while the game is running!'
 cmd-handler-nocmd: '&cYou can not use non-HungerGames commands while in-game!'
 cmd-handler-playing: '&cThis player is currently playing &3HungerGames!'
+
+## Chest Refill
+cmd-chestrefill-set: '&6Chest refill for &b<arena> &6has been set to &b<sec> seconds'
 
 #  LISTENER
 listener-not-running: '&cThe game is not running!'

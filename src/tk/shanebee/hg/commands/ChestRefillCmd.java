@@ -18,12 +18,12 @@ public class ChestRefillCmd extends BaseCmd {
 	public boolean run() {
 		Game game = HG.manager.getGame(args[1]);
 		if (game != null) {
-			String name = args[1];
+			String name = game.getName();
 			int time = Integer.valueOf(args[2]);
-			HG.arenaconfig.getCustomConfig().set("arenas." + game.getName() + ".chest-refill", time);
+			HG.arenaconfig.getCustomConfig().set("arenas." + name + ".chest-refill", time);
 			HG.arenaconfig.saveCustomConfig();
 			game.setChestRefillTime(time);
-			Util.scm(player, "&6Chest refill for &b" + game.getName() + " &6has been set to &b" + time + " seconds"); //TODO change message to yml
+			Util.scm(player, HG.lang.cmd_chest_refill.replace("<arena>", name).replace("<sec>", String.valueOf(time)));
 		} else {
 			Util.scm(player, HG.lang.cmd_delete_noexist);
 		}

@@ -25,6 +25,7 @@ public class Language {
     public String game_ending_min;
     public String game_ending_sec;
     public String game_border_closing;
+    public String game_chest_refill;
     public String players_to_start;
     public String arena_not_ready;
     public String game_full;
@@ -116,6 +117,7 @@ public class Language {
     public String cmd_handler_nokit;
     public String cmd_handler_nocmd;
     public String cmd_handler_playing;
+    public String cmd_chest_refill;
     public String listener_not_running;
     public String listener_no_edit_block;
     public String listener_no_interact;
@@ -274,6 +276,9 @@ public class Language {
         track_new2 = lang.getString("track-new2");
         listener_sign_click_hand = lang.getString("listener-sign-click-hand");
         bossbar = lang.getString("game-bossbar");
+
+        game_chest_refill = lang.getString("game-chests-refill");
+        cmd_chest_refill = lang.getString("cmd-chestrefill-set");
     }
 
     private void updateLang(FileConfiguration config, File file){
@@ -285,6 +290,10 @@ public class Language {
         }
         if (!config.isSet("game-border-closing")) {
             config.set("game-border-closing", "&6The border is coming, you have <seconds> seconds to get to the center of the arena!");
+        }
+        if (!config.isSet("game-chests-refill")) {
+            config.set("game-chests-refill", "&6Chests have been refilled");
+            config.set("cmd-chestrefill-set", "&6Chest refill for &b<arena> &6has been set to &b<sec> seconds");
         }
         saveConfig();
     }

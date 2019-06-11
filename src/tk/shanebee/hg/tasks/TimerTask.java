@@ -41,7 +41,7 @@ public class TimerTask implements Runnable {
 
 		if (game.getChestRefillTime() > 0 && remainingtime == game.getChestRefillTime()) {
 			game.refillChests();
-			game.msgAll("CHESTS HAVE BEEN REFILLED");
+			game.msgAll(HG.lang.game_chest_refill);
 		}
 
 		if (remainingtime == teleportTimer && Config.teleportEnd) {
