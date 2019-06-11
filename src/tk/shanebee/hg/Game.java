@@ -29,6 +29,7 @@ public class Game {
 	private Bound b;
 	private List<UUID> players = new ArrayList<>();
 	private List<Location> chests = new ArrayList<>();
+	private List<Location> playerChests = new ArrayList<>();
 
 	private List<BlockState> blocks = new ArrayList<>();
 	private Location exit;
@@ -41,6 +42,7 @@ public class Game {
 	private Sign s2;
 	private int roamtime;
 	private SBDisplay sb;
+	private int chestRefillTime;
 
 	// Task ID's here!
 	private Spawner spawner;
@@ -66,7 +68,7 @@ public class Game {
 	 * @param roam Roam time for this game
 	 * @param isready If the game is ready to start
 	 */
-	public Game(String name, Bound bound, List<Location> spawns, Sign lobbysign, int timer, int minplayers, int maxplayers, int roam, boolean isready) {
+	public Game(String name, Bound bound, List<Location> spawns, Sign lobbysign, int timer, int minplayers, int maxplayers, int roam, int chestRefill, boolean isready) {
 		this.name = name;
 		this.b = bound;
 		this.spawns = spawns;
@@ -77,6 +79,7 @@ public class Game {
 		this.roamtime = roam;
 		if (isready) status = Status.READY;
 		else status = Status.BROKEN;
+		this.chestRefillTime = chestRefill;
 
 
 		setLobbyBlock(lobbysign);
@@ -129,17 +132,36 @@ public class Game {
 		updateLobbyBlock();
 	}
 
+	public void setChestRefillTime(int time) {
+		this.chestRefillTime = time;
+	}
+
+	public int getChestRefillTime() {
+		return this.chestRefillTime;
+	}
+
+	public void refillChests() {
+		this.chests.clear();
+	}
+
 	private void addState(BlockState s) {
 		if (s.getType() != Material.AIR) {
 			blocks.add(s);
 		}
 	}
 
-	/** Add a chest location to the game
+	/** Add a game chest location to the game
 	 * @param location Location of the chest to add (Needs to actually be a chest there)
 	 */
-	public void addChest(Location location) {
+	public void addGameChest(Location location) {
 		chests.add(location);
+	}
+
+	/** Add a player placed chest to the game
+	 * @param location Location of the chest
+	 */
+	public void addPlayerChest(Location location) {
+		playerChests.add(location);
 	}
 
 	/** Check if chest at this location is logged
@@ -147,14 +169,21 @@ public class Game {
 	 * @return True if this chest was added already
 	 */
 	public boolean isLoggedChest(Location location) {
-		return (chests.contains(location));
+		return chests.contains(location) || playerChests.contains(location);
 	}
 
-	/** Remove a chest from the game
+	/** Remove a game chest from the game
 	 * @param location Location of the chest to remove
 	 */
-	public void removeChest(Location location) {
+	public void removeGameChest(Location location) {
 		chests.remove(location);
+	}
+
+	/** Remove a player placed chest from the game
+	 * @param location Location of the chest
+	 */
+	public void removePlayerChest(Location location) {
+		playerChests.remove(location);
 	}
 
 	/** Record a block as broken in the arena to be restored when the game finishes

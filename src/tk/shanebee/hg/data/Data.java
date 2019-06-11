@@ -112,12 +112,16 @@ public class Data {
 					int timer = 0;
 					int minplayers = 0;
 					int maxplayers = 0;
+					int chestRefill = 0;
 					Bound b = null;
 
 					try {
 						timer = arenadat.getInt("arenas." + s + ".info." + "timer");
 						minplayers = arenadat.getInt("arenas." + s + ".info." + "min-players");
 						maxplayers = arenadat.getInt("arenas." + s + ".info." + "max-players");
+						if (arenadat.isSet("arenas." + s + ".chest-refill")) {
+							chestRefill = arenadat.getInt("arenas." + s + ".chest-refill");
+						}
 					} catch (Exception e) { 
 						Util.warning("Unable to load infomation for arena " + s + "!"); 
 						isReady = false;
@@ -145,7 +149,7 @@ public class Data {
 						Util.warning("Unable to load region bounds for arena " + s + "!"); 
 						isReady = false;
 					}
-					plugin.games.add(new Game(s, b, spawns, lobbysign, timer, minplayers, maxplayers, freeroam, isReady));
+					plugin.games.add(new Game(s, b, spawns, lobbysign, timer, minplayers, maxplayers, freeroam, chestRefill, isReady));
 				}
 			} else {
 				Util.log("No Arenas to load.");

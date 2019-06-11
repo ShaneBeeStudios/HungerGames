@@ -39,6 +39,11 @@ public class TimerTask implements Runnable {
 			game.msgAll(HG.lang.game_border_closing.replace("<seconds>", String.valueOf(closingIn)));
 		}
 
+		if (game.getChestRefillTime() > 0 && remainingtime == game.getChestRefillTime()) {
+			game.refillChests();
+			game.msgAll("CHESTS HAVE BEEN REFILLED");
+		}
+
 		if (remainingtime == teleportTimer && Config.teleportEnd) {
 			game.msgAll(HG.lang.game_almost_over);
 			game.respawnAll();

@@ -239,7 +239,7 @@ public class GameListener implements Listener {
 		Game g = event.getGame();
 		if (!g.isLoggedChest(b.getLocation())) {
 			HG.manager.fillChests(b, event.isBonus());
-			g.addChest(b.getLocation());
+			g.addGameChest(b.getLocation());
 		}
 	}
 
@@ -257,9 +257,7 @@ public class GameListener implements Listener {
 				Bukkit.getServer().getPluginManager().callEvent(new ChestOpenEvent(pd.getGame(), block, true));
 			}
 			if (HG.isRunningMinecraft(1, 14) && block.getType() == Material.BARREL) {
-
 					Bukkit.getServer().getPluginManager().callEvent(new ChestOpenEvent(pd.getGame(), block, true));
-
 			}
 		}
 	}
@@ -322,10 +320,10 @@ public class GameListener implements Listener {
 					} else {
 						g.recordBlockPlace(event.getBlockReplacedState());
 						if (b.getType() == Material.CHEST || b.getType() == Material.TRAPPED_CHEST || b.getState() instanceof Shulker) {
-							g.addChest(b.getLocation());
+							g.addPlayerChest(b.getLocation());
 						}
 						if (HG.isRunningMinecraft(1, 14) && b.getType() == Material.BARREL) {
-							g.addChest(b.getLocation());
+							g.addPlayerChest(b.getLocation());
 						}
 					}
 				} else {
@@ -355,10 +353,12 @@ public class GameListener implements Listener {
 					} else {
 						g.recordBlockBreak(b);
 						if (b.getType() == Material.CHEST || b.getType() == Material.TRAPPED_CHEST || b.getState() instanceof Shulker) {
-							g.removeChest(b.getLocation());
+							g.removeGameChest(b.getLocation());
+							g.removePlayerChest(b.getLocation());
 						}
 						if (HG.isRunningMinecraft(1, 14) && b.getType() == Material.BARREL) {
-							g.removeChest(b.getLocation());
+							g.removeGameChest(b.getLocation());
+							g.removePlayerChest(b.getLocation());
 						}
 					}
 				} else {

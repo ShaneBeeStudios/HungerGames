@@ -113,6 +113,7 @@ public class HG extends JavaPlugin {
 		cmds.put("toggle", new ToggleCmd());
 		cmds.put("setexit", new SetExitCmd());
 		cmds.put("delete", new DeleteCmd());
+		cmds.put("chestrefill", new ChestRefillCmd());
 
 		ArrayList<String> cArray = new ArrayList<>();
 		cArray.add("join");
