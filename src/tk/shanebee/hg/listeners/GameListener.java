@@ -79,8 +79,6 @@ public class GameListener implements Listener {
 		}
 	}
 
-
-
 	@EventHandler(priority = EventPriority.HIGHEST)
 	public void onDeath(PlayerDeathEvent event) {
 		final Player p = event.getEntity();
@@ -136,7 +134,6 @@ public class GameListener implements Listener {
 			}
 		}
 	}
-
 
 	private void useTrackStick(Player p) {
 		ItemStack i = p.getInventory().getItemInMainHand();
@@ -196,7 +193,6 @@ public class GameListener implements Listener {
 			return "UnKnown";
 		}
 	}
-
 
 	private double angle(double d, double e, double f, double g) {
 		//Vector differences
