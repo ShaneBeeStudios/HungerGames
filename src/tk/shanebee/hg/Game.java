@@ -132,14 +132,23 @@ public class Game {
 		updateLobbyBlock();
 	}
 
+	/** Set the chest refill time
+	 * @param time The remaining time in the game for the chests to refill
+	 */
 	public void setChestRefillTime(int time) {
 		this.chestRefillTime = time;
 	}
 
+	/** Get the chest refill time
+	 * @return The remaining time in the game which the chests will refill
+	 */
 	public int getChestRefillTime() {
 		return this.chestRefillTime;
 	}
 
+	/**
+	 * Refill chests in this game
+	 */
 	public void refillChests() {
 		this.chests.clear();
 	}
