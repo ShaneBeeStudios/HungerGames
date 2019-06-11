@@ -412,12 +412,12 @@ public class Game {
 	 * @param player Player to freeze
 	 */
 	public void freeze(Player player) {
+		player.setGameMode(GameMode.SURVIVAL);
 		player.addPotionEffect(new PotionEffect(PotionEffectType.JUMP, 23423525, -10));
 		player.setWalkSpeed(0.0001F);
 		player.setFoodLevel(1);
 		player.setAllowFlight(false);
 		player.setFlying(false);
-		player.setGameMode(GameMode.SURVIVAL);
 	}
 
 	/** Unfreeze a player
