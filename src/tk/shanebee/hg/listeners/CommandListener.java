@@ -14,6 +14,7 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
+@SuppressWarnings("NullableProblems")
 public class CommandListener implements CommandExecutor, TabCompleter {
 
 	private final HG plugin;
