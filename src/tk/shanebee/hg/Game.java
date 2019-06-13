@@ -1,10 +1,19 @@
 package tk.shanebee.hg;
 
+import org.bukkit.*;
+import org.bukkit.block.Block;
+import org.bukkit.block.BlockFace;
+import org.bukkit.block.BlockState;
+import org.bukkit.block.Sign;
+import org.bukkit.block.data.Directional;
 import org.bukkit.boss.BarColor;
 import org.bukkit.boss.BarStyle;
 import org.bukkit.boss.BossBar;
+import org.bukkit.entity.Player;
 import org.bukkit.inventory.InventoryHolder;
 import org.bukkit.plugin.IllegalPluginAccessException;
+import org.bukkit.potion.PotionEffect;
+import org.bukkit.potion.PotionEffectType;
 import tk.shanebee.hg.events.PlayerJoinGameEvent;
 import tk.shanebee.hg.events.PlayerLeaveGameEvent;
 import tk.shanebee.hg.mobhandler.Spawner;
@@ -12,12 +21,6 @@ import tk.shanebee.hg.tasks.ChestDropTask;
 import tk.shanebee.hg.tasks.FreeRoamTask;
 import tk.shanebee.hg.tasks.StartingTask;
 import tk.shanebee.hg.tasks.TimerTask;
-import org.bukkit.*;
-import org.bukkit.block.*;
-import org.bukkit.block.data.Directional;
-import org.bukkit.entity.Player;
-import org.bukkit.potion.PotionEffect;
-import org.bukkit.potion.PotionEffectType;
 
 import java.util.*;
 import java.util.Map.Entry;
@@ -66,9 +69,11 @@ public class Game {
 	 * @param minplayers Minimum players to be able to start the game
 	 * @param maxplayers Maximum players that can join this game
 	 * @param roam Roam time for this game
+	 * @param chestRefill The remaining time in a game when chests refill
 	 * @param isready If the game is ready to start
 	 */
-	public Game(String name, Bound bound, List<Location> spawns, Sign lobbysign, int timer, int minplayers, int maxplayers, int roam, int chestRefill, boolean isready) {
+	public Game(String name, Bound bound, List<Location> spawns, Sign lobbysign, int timer,
+				int minplayers, int maxplayers, int roam, int chestRefill, boolean isready) {
 		this.name = name;
 		this.b = bound;
 		this.spawns = spawns;
@@ -80,7 +85,6 @@ public class Game {
 		if (isready) status = Status.READY;
 		else status = Status.BROKEN;
 		this.chestRefillTime = chestRefill;
-
 
 		setLobbyBlock(lobbysign);
 
