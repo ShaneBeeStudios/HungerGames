@@ -5,6 +5,7 @@ import org.bukkit.block.Block;
 import org.bukkit.block.ShulkerBox;
 import org.bukkit.block.Sign;
 import org.bukkit.entity.Entity;
+import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.entity.Shulker;
 import org.bukkit.event.EventHandler;
@@ -426,7 +427,7 @@ public class GameListener implements Listener {
 	@EventHandler
 	public void onSpawn(EntitySpawnEvent e) {
 		Entity entity = e.getEntity();
-		if (!(entity instanceof Player)) {
+		if (!(entity instanceof Player) && entity instanceof LivingEntity) {
 			if (HG.manager.isInRegion(e.getLocation())) {
 				Game g = HG.manager.getGame(e.getLocation());
 				if (g.getStatus() != Status.RUNNING) {
