@@ -111,8 +111,9 @@ public class GameListener implements Listener {
 
 			for (UUID uuid : g.getPlayers()) {
 				Player player = Bukkit.getPlayer(uuid);
-				assert player != null;
-				player.playSound(player.getLocation(), Sound.UI_TOAST_CHALLENGE_COMPLETE, 5, 1);
+				if (player != null) {
+					player.playSound(player.getLocation(), Sound.UI_TOAST_CHALLENGE_COMPLETE, 5, 1);
+				}
 			}
 
 			Bukkit.getScheduler().scheduleSyncDelayedTask(plugin, () -> {
