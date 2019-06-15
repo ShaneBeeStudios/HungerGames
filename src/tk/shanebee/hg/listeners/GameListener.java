@@ -90,11 +90,6 @@ public class GameListener implements Listener {
 			final Game g = pd.getGame();
 			dropInv(p);
 
-			// TODO Leaving this out for now and replacing with setCancelled to see if this performs any better
-			//p.setHealth((p.getAttribute(Attribute.GENERIC_MAX_HEALTH).getValue()));
-			//p.setHealth(20);
-			p.setHealth(20);
-
 			Player killer = p.getKiller();
 
 			if (killer != null) {

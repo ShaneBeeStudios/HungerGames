@@ -613,9 +613,10 @@ public class Game {
 		Bukkit.getPluginManager().callEvent(new PlayerLeaveGameEvent(this, player, death));
 		players.remove(player.getUniqueId());
 		unFreeze(player);
+		if (death) player.spigot().respawn();
 		exit(player);
 		heal(player);
-		if (death) player.spigot().respawn();
+
 		sb.restoreSB(player);
 		HG.plugin.players.get(player.getUniqueId()).restore(player);
 		HG.plugin.players.remove(player.getUniqueId());
