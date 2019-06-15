@@ -1,10 +1,9 @@
 package tk.shanebee.hg.commands;
 
-import tk.shanebee.hg.HG;
-import tk.shanebee.hg.Util;
-
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
+import tk.shanebee.hg.HG;
+import tk.shanebee.hg.Util;
 
 public abstract class BaseCmd {
 

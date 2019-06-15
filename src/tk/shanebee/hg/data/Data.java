@@ -1,22 +1,18 @@
 package tk.shanebee.hg.data;
 
-import java.io.File;
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
-
-import tk.shanebee.hg.Bound;
-import tk.shanebee.hg.Game;
-import tk.shanebee.hg.HG;
-import tk.shanebee.hg.Util;
-import tk.shanebee.hg.tasks.CompassTask;
-
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
 import org.bukkit.block.Sign;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
+import tk.shanebee.hg.*;
+import tk.shanebee.hg.tasks.CompassTask;
+
+import java.io.File;
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 
 public class Data {
 
@@ -56,27 +52,6 @@ public class Data {
 		}
 	}
 
-	/*
-	public void thisIsAUselessMethod() { //THIS STAY BROKE FIX UM
-		if (customConfigFile == null) {
-			customConfigFile = new File(plugin.getDataFolder(), "arenas.yml");
-		}
-		arenadat = YamlConfiguration.loadConfiguration(customConfigFile);
-
-		// Look for defaults in the jar
-		Reader defConfigStream = null;
-		try {
-			defConfigStream = new InputStreamReader(plugin.getResource("arenas.yml"), "UTF8");
-		} catch (UnsupportedEncodingException e) {
-			e.printStackTrace();
-		}
-		if (defConfigStream != null) {
-			YamlConfiguration defConfig = YamlConfiguration.loadConfiguration(defConfigStream);
-			arenadat.setDefaults(defConfig);
-		}
-	}
-	*/
-
 	public FileConfiguration getCustomConfig() {
 		if (arenadat == null) {
 			this.reloadCustomConfig();
@@ -114,6 +89,10 @@ public class Data {
 					int maxplayers = 0;
 					int chestRefill = 0;
 					Bound b = null;
+					Location borderCenter = null;
+					int borderSize = 0;
+					int borderCountdownStart = 0;
+					int borderCountdownEnd = 0;
 
 					try {
 						timer = arenadat.getInt("arenas." + s + ".info." + "timer");
@@ -122,7 +101,23 @@ public class Data {
 						if (arenadat.isSet("arenas." + s + ".chest-refill")) {
 							chestRefill = arenadat.getInt("arenas." + s + ".chest-refill");
 						}
-					} catch (Exception e) { 
+						if (arenadat.isSet("arenas." + s + ".border.center")) {
+							borderCenter = getSLoc(arenadat.getString("arenas." + s + ".border.center"));
+						}
+						if (arenadat.isSet("arenas." + s + ".border.size")) {
+							borderSize = arenadat.getInt("arenas." + s + ".border.size");
+						} else {
+							borderSize = Config.borderFinalSize;
+						}
+						if (arenadat.isSet("arenas." + s + ".border.countdown-start") &&
+								arenadat.isSet("arenas." + s + ".border.countdown-end")) {
+							borderCountdownStart = arenadat.getInt("arenas." + s + ".border.countdown-start");
+							borderCountdownEnd = arenadat.getInt("arenas." + s + ".border.countdown-end");
+						} else {
+							borderCountdownStart = Config.borderCountdownStart;
+							borderCountdownEnd = Config.borderCountdownEnd;
+						}
+					} catch (Exception e) {
 						Util.warning("Unable to load infomation for arena " + s + "!"); 
 						isReady = false;
 					}
@@ -149,7 +144,9 @@ public class Data {
 						Util.warning("Unable to load region bounds for arena " + s + "!"); 
 						isReady = false;
 					}
-					plugin.games.add(new Game(s, b, spawns, lobbysign, timer, minplayers, maxplayers, freeroam, chestRefill, isReady));
+
+					plugin.games.add(new Game(s, b, spawns, lobbysign, timer, minplayers, maxplayers, freeroam, chestRefill,
+							isReady, borderCenter, borderSize, borderCountdownStart, borderCountdownEnd));
 				}
 			} else {
 				Util.log("No Arenas to load.");

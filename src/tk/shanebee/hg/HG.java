@@ -116,6 +116,7 @@ public class HG extends JavaPlugin {
 		cmds.put("chestrefill", new ChestRefillCmd());
 		cmds.put("bordersize", new BorderSizeCmd());
 		cmds.put("bordercenter", new BorderCenterCmd());
+		cmds.put("bordertimer", new BorderTimerCmd());
 
 		ArrayList<String> cArray = new ArrayList<>();
 		cArray.add("join");

@@ -28,18 +28,44 @@ public class Manager {
 	public void runDebugger(CommandSender sender, String s) {
 		Configuration arenadat = HG.arenaconfig.getCustomConfig();
 		boolean isReady = true;
-		List<Location> spawns = new ArrayList<Location>();
+		List<Location> spawns = new ArrayList<>();
 		Sign lobbysign = null;
 		int timer = 0;
 		int minplayers = 0;
 		int maxplayers = 0;
+		boolean border = Config.borderEnabled;
+		Location borderCenter = null;
+		int borderSize = 0;
+		int borderCountdownStart = 0;
+		int borderCountdownEnd = 0;
+		int chestRefill = 0;
 
 		try {
 			timer = arenadat.getInt("arenas." + s + ".info." + "timer");
 			minplayers = arenadat.getInt("arenas." + s + ".info." + "min-players");
 			maxplayers = arenadat.getInt("arenas." + s + ".info." + "max-players");
+
+			if (arenadat.isSet("arenas." + s + ".border.center")) {
+				borderCenter = HG.arenaconfig.getSLoc(arenadat.getString("arenas." + s + ".border.center"));
+			}
+			if (arenadat.isSet("arenas." + s + ".border.size")) {
+				borderSize = arenadat.getInt("arenas." + s + ".border.size");
+			} else {
+				borderSize = Config.borderFinalSize;
+			}
+			if (arenadat.isSet("arenas." + s + ".border.countdown-start") &&
+					arenadat.isSet("arenas." + s + ".border.countdown-end")) {
+				borderCountdownStart = arenadat.getInt("arenas." + s + ".border.countdown-start");
+				borderCountdownEnd = arenadat.getInt("arenas." + s + ".border.countdown-end");
+			} else {
+				borderCountdownStart = Config.borderCountdownStart;
+				borderCountdownEnd = Config.borderCountdownEnd;
+			}
+			if (arenadat.isSet("arenas." + s + ".chest-refill")) {
+				chestRefill = arenadat.getInt("arenas." + s + ".chest-refill");
+			}
 		} catch (Exception e) { 
-			Util.scm(sender, "&cUnable to load infomation for arena " + s + "!"); 
+			Util.scm(sender, "&cUnable to load information for arena " + s + "!");
 			isReady = false;
 		}
 
@@ -74,10 +100,25 @@ public class Manager {
 		if (isReady) {
 			Util.scm(sender,"&7&l---= &3&lYour HungerGames arena is ready to run! &7&l=---");
 			Util.scm(sender, "&7Spawns:&b " + spawns.size());
-			Util.scm(sender, "&7Lobby:&b z:" + lobbysign.getX() +", y:"+ lobbysign.getY() +", z:"+ lobbysign.getZ());
+			Util.scm(sender, "&7Lobby:&b x:" + lobbysign.getX() +", y:"+ lobbysign.getY() +", z:"+ lobbysign.getZ());
 			Util.scm(sender, "&7Timer:&b " + timer);
 			Util.scm(sender, "&7MinPlayers:&b " + minplayers);
 			Util.scm(sender, "&7MaxPlayers:&b " + maxplayers);
+			if (chestRefill > 0)
+				Util.scm(sender, "&7Chest Refill: &b" + chestRefill + " seconds");
+			if (border) {
+				Util.scm(sender, "&7Border: &aEnabled");
+				if (borderCenter != null)
+					Util.scm(sender, "&7Border Center: &bx:" + borderCenter.getX() + ", y:" + borderCenter.getY() + ", z:" + borderCenter.getZ());
+				if (borderSize > 0)
+					Util.scm(sender, "&7Border Size: &b" + borderSize);
+				if (borderCountdownStart > 0) {
+					Util.scm(sender, "&7Border Timer Start: &b" + borderCountdownStart + " seconds");
+					Util.scm(sender, "&7Border Timer End: &b" + borderCountdownEnd + " seconds");
+				}
+			} else {
+				Util.scm(sender, "&7Border: &cDisabled");
+			}
 		}
 	}
 

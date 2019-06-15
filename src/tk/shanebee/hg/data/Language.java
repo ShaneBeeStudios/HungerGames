@@ -118,6 +118,9 @@ public class Language {
     public String cmd_handler_nocmd;
     public String cmd_handler_playing;
     public String cmd_chest_refill;
+    public String cmd_border_size;
+    public String cmd_border_center;
+    public String cmd_border_timer;
     public String listener_not_running;
     public String listener_no_edit_block;
     public String listener_no_interact;
@@ -279,6 +282,9 @@ public class Language {
 
         game_chest_refill = lang.getString("game-chests-refill");
         cmd_chest_refill = lang.getString("cmd-chestrefill-set");
+        cmd_border_center = lang.getString("cmd-border-center");
+        cmd_border_size = lang.getString("cmd-border-size");
+        cmd_border_timer = lang.getString("cmd-border-timer");
     }
 
     private void updateLang(FileConfiguration config, File file){
@@ -294,6 +300,11 @@ public class Language {
         if (!config.isSet("game-chests-refill")) {
             config.set("game-chests-refill", "&6Chests have been refilled");
             config.set("cmd-chestrefill-set", "&6Chest refill for &b<arena> &6has been set to &b<sec> seconds");
+        }
+        if (!config.isSet("cmd-border-size")) {
+            config.set("cmd-border-size", "&6Border size for &b<arena> &6has been set to &b<size>");
+            config.set("cmd-border-center", "&6Border center for &b<arena> &6has been set at your location");
+            config.set("cmd-border-timer", "&6Border time for &b<arena> &6has been set to start at remaining &b<start> seconds &6and stop at &b<end> seconds");
         }
         saveConfig();
     }

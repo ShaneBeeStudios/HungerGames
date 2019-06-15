@@ -59,6 +59,12 @@ public class Game {
 
 	private BossBar bar;
 
+	// Border stuff here
+	private Location borderCenter;
+	private int borderSize;
+	private int borderCountdownStart;
+	private int borderCountdownEnd;
+
 
 	/** Create a new game
 	 * @param name Name of this game
@@ -72,8 +78,8 @@ public class Game {
 	 * @param chestRefill The remaining time in a game when chests refill
 	 * @param isready If the game is ready to start
 	 */
-	public Game(String name, Bound bound, List<Location> spawns, Sign lobbysign, int timer,
-				int minplayers, int maxplayers, int roam, int chestRefill, boolean isready) {
+	public Game(String name, Bound bound, List<Location> spawns, Sign lobbysign, int timer, int minplayers, int maxplayers, int roam,
+				int chestRefill, boolean isready, Location borderCenter, int borderSize, int borderCountdownStart, int borderCountdownEnd) {
 		this.name = name;
 		this.b = bound;
 		this.spawns = spawns;
@@ -85,6 +91,10 @@ public class Game {
 		if (isready) status = Status.READY;
 		else status = Status.BROKEN;
 		this.chestRefillTime = chestRefill;
+		this.borderCenter = borderCenter;
+		this.borderSize = borderSize;
+		this.borderCountdownStart = borderCountdownStart;
+		this.borderCountdownEnd = borderCountdownEnd;
 
 		setLobbyBlock(lobbysign);
 
@@ -723,10 +733,29 @@ public class Game {
 		return (r * 2) + 10;
 	}
 
+	public void setBorderCenter(Location borderCenter) {
+		this.borderCenter = borderCenter;
+	}
+
+	public void setBorderSize(int borderSize) {
+		this.borderSize = borderSize;
+	}
+
+	public void setBorderTimer(int start, int end) {
+		this.borderCountdownStart = start;
+		this.borderCountdownEnd = end;
+	}
+
+	public List<Integer> getBorderTimer() {
+		return Arrays.asList(borderCountdownStart, borderCountdownEnd);
+	}
+
 	public void setBorder(int time) {
 		Location center;
 		if (Config.centerSpawn) {
 			center = this.spawns.get(0);
+		} else if (borderCenter != null) {
+			center = borderCenter;
 		} else {
 			center = b.getCenter();
 		}
@@ -738,7 +767,7 @@ public class Game {
 		border.setSize(((int) getBorderSize(center)));
 		border.setWarningTime(5);
 		border.setDamageBuffer(2);
-		border.setSize(Config.borderFinalSize, time);
+		border.setSize(borderSize, time);
 	}
 
 	private void resetBorder() {

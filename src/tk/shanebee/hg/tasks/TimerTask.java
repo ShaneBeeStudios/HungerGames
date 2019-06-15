@@ -1,7 +1,6 @@
 package tk.shanebee.hg.tasks;
 
 import org.bukkit.Bukkit;
-
 import tk.shanebee.hg.Config;
 import tk.shanebee.hg.Game;
 import tk.shanebee.hg.HG;
@@ -20,8 +19,8 @@ public class TimerTask implements Runnable {
 		this.remainingtime = time;
 		this.game = g;
 		this.teleportTimer = Config.teleportEndTime;
-		this.borderCountdownStart = Config.borderCountdownStart;
-		this.borderCountdownEnd = Config.borderCountdownEnd;
+		this.borderCountdownStart = g.getBorderTimer().get(0);
+		this.borderCountdownEnd = g.getBorderTimer().get(1);
 		
 		this.id = Bukkit.getScheduler().scheduleSyncRepeatingTask(HG.plugin, this, 30 * 20L, 30 * 20L);
 	}
