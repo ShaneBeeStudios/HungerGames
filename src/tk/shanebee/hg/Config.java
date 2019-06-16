@@ -29,6 +29,7 @@ public class Config {
 
 	//Rollback config info
 	public static boolean breakblocks;
+	public static boolean protectCooldown;
 	public static boolean fixleaves;
 	public static boolean preventtrample;
 	public static List<String> blocks;
@@ -41,7 +42,7 @@ public class Config {
 	//World border
 	public static boolean borderEnabled;
 	public static boolean borderOnStart;
-	public static boolean centerSpawn;
+	static boolean centerSpawn;
 	public static int borderCountdownStart;
 	public static int borderCountdownEnd;
 	public static int borderFinalSize;
@@ -80,6 +81,7 @@ public class Config {
 		giveReward = config.getBoolean("reward.enabled");
 		cash = config.getInt("reward.cash");
 		breakblocks = config.getBoolean("rollback.allow-block-break");
+		protectCooldown = config.getBoolean("rollback.protect-during-cooldown");
 		fixleaves = config.getBoolean("rollback.fix-leaves");
 		preventtrample = config.getBoolean("rollback.prevent-trampling");
 		blocks = config.getStringList("rollback.editable-blocks");
@@ -129,6 +131,9 @@ public class Config {
 		if (!config.isSet("settings.max-bonus-chestcontent")) {
 			config.set("settings.max-bonus-chestcontent", 5);
 			config.set("settings.min-bonus-chestcontent", 1);
+		}
+		if (!config.isSet("rollback.protect-during-cooldown")) {
+			config.set("rollback.protect-during-cooldown", true);
 		}
 		plugin.saveConfig();
 	}
