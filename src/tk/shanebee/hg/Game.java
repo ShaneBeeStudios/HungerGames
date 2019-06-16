@@ -465,7 +465,7 @@ public class Game {
 	 */
 	public void freeze(Player player) {
 		player.setGameMode(GameMode.SURVIVAL);
-		player.addPotionEffect(new PotionEffect(PotionEffectType.JUMP, 23423525, -10));
+		player.addPotionEffect(new PotionEffect(PotionEffectType.JUMP, 23423525, -10, false, false));
 		player.setWalkSpeed(0.0001F);
 		player.setFoodLevel(1);
 		player.setAllowFlight(false);
