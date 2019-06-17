@@ -177,6 +177,11 @@ cmd-handler-playing: '&cThis player is currently playing &3HungerGames!'
 ## Chest Refill
 cmd-chestrefill-set: '&6Chest refill for &b<arena> &6has been set to &b<sec> seconds'
 
+## Border
+cmd-border-size: '&6Border size for &b<arena> &6has been set to &b<size>'
+cmd-border-center: '&6Border center for &b<arena> &6has been set at your location'
+cmd-border-timer: '&6Border time for &b<arena> &6has been set to start at remaining &b<start> seconds &6and stop at &b<end> seconds'
+
 #  LISTENER
 listener-not-running: '&cThe game is not running!'
 listener-no-edit-block: '&cYou cannot edit this block type!'

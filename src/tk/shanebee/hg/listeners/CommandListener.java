@@ -64,7 +64,8 @@ public class CommandListener implements CommandExecutor, TabCompleter {
 					(args[0].equalsIgnoreCase("forcestart")) ||
 					(args[0].equalsIgnoreCase("join")) ||
 					(args[0].equalsIgnoreCase("setlobbywall")) ||
-					(args[0].equalsIgnoreCase("toggle"))) {
+					(args[0].equalsIgnoreCase("toggle")) ||
+					(args[0].equalsIgnoreCase("bordercenter"))) {
 				ArrayList<String> matchesDelete = new ArrayList<>();
 				if (args.length == 2) {
 					for (Game name : plugin.games) {
@@ -95,6 +96,35 @@ public class CommandListener implements CommandExecutor, TabCompleter {
 						}
 					}
 					return matchesChestRefill;
+				}
+			} else if (args[0].equalsIgnoreCase("bordersize")) {
+				ArrayList<String> matchesDelete = new ArrayList<>();
+				if (args.length == 2) {
+					for (Game name : plugin.games) {
+						if (StringUtil.startsWithIgnoreCase(name.getName(), args[1])) {
+							matchesDelete.add(name.getName());
+						}
+					}
+					return matchesDelete;
+				}
+				if (args.length == 3 && args[0].equalsIgnoreCase("bordersize")) {
+					return Collections.singletonList("<size=diameter>");
+				}
+			} else if (args[0].equalsIgnoreCase("bordertimer")) {
+				ArrayList<String> matchesDelete = new ArrayList<>();
+				if (args.length == 2) {
+					for (Game name : plugin.games) {
+						if (StringUtil.startsWithIgnoreCase(name.getName(), args[1])) {
+							matchesDelete.add(name.getName());
+						}
+					}
+					return matchesDelete;
+				}
+				if (args.length == 3 && args[0].equalsIgnoreCase("bordertimer")) {
+					return Collections.singletonList("<start=remaining seconds>");
+				}
+				if (args.length == 4 && args[0].equalsIgnoreCase("bordertimer")) {
+					return Collections.singletonList("<end=remaining seconds>");
 				}
 			} else if (args[0].equalsIgnoreCase("kit")) {
 				if (args.length == 2) {

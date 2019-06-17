@@ -343,7 +343,7 @@ public class GameListener implements Listener {
 		if (HG.manager.isInRegion(b.getLocation())) {
 			if (Config.breakblocks && plugin.players.containsKey(p.getUniqueId())) {
 				Game g = plugin.players.get(p.getUniqueId()).getGame();
-				if (g.getStatus() == Status.RUNNING) {
+				if (g.getStatus() == Status.RUNNING || !Config.protectCooldown) {
 					if (!Config.blocks.contains(b.getType().toString())) {
 						Util.scm(p, HG.lang.listener_no_edit_block);
 						event.setCancelled(true);
