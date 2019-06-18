@@ -7,6 +7,7 @@ import org.bukkit.block.Sign;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
 import tk.shanebee.hg.*;
+import tk.shanebee.hg.managers.KitManager;
 import tk.shanebee.hg.tasks.CompassTask;
 
 import java.io.File;
@@ -95,6 +96,7 @@ public class Data {
 					int borderCountdownStart = 0;
 					int borderCountdownEnd = 0;
 					List<String> commands;
+					KitManager kit;
 
 					try {
 						timer = arenadat.getInt("arenas." + s + ".info." + "timer");
@@ -154,9 +156,15 @@ public class Data {
 						saveCustomConfig();
 						commands = Collections.singletonList("none");
 					}
+					try {
+						kit = plugin.itemStackManager.setGameKits(s, arenadat);
+					} catch (Exception e) {
+						kit = null;
+						e.printStackTrace();
+					}
 
 					plugin.games.add(new Game(s, b, spawns, lobbysign, timer, minplayers, maxplayers, freeroam, chestRefill,
-							isReady, borderCenter, borderSize, borderCountdownStart, borderCountdownEnd, commands));
+							isReady, borderCenter, borderSize, borderCountdownStart, borderCountdownEnd, commands, kit));
 				}
 			} else {
 				Util.log("No Arenas to load.");

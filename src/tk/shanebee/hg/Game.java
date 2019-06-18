@@ -16,6 +16,7 @@ import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 import tk.shanebee.hg.events.PlayerJoinGameEvent;
 import tk.shanebee.hg.events.PlayerLeaveGameEvent;
+import tk.shanebee.hg.managers.KitManager;
 import tk.shanebee.hg.mobhandler.Spawner;
 import tk.shanebee.hg.tasks.ChestDropTask;
 import tk.shanebee.hg.tasks.FreeRoamTask;
@@ -67,6 +68,7 @@ public class Game {
 	private int borderCountdownStart;
 	private int borderCountdownEnd;
 
+	public KitManager kit;
 
 	/** Create a new game
 	 * @param name Name of this game
@@ -85,8 +87,9 @@ public class Game {
 	 * @param borderSize Final size of the border
 	 * @param commands A list of commands to run
 	 */
-	public Game(String name, Bound bound, List<Location> spawns, Sign lobbysign, int timer, int minplayers, int maxplayers, int roam, int chestRefill,
-				boolean isready, Location borderCenter, int borderSize, int borderCountdownStart, int borderCountdownEnd, List<String> commands) {
+	public Game(String name, Bound bound, List<Location> spawns, Sign lobbysign, int timer, int minplayers, int maxplayers,
+				int roam, int chestRefill, boolean isready, Location borderCenter, int borderSize, int borderCountdownStart,
+				int borderCountdownEnd, List<String> commands, KitManager kit) {
 		this.name = name;
 		this.b = bound;
 		this.spawns = spawns;
@@ -107,6 +110,8 @@ public class Game {
 		setLobbyBlock(lobbysign);
 
 		sb = new SBDisplay(this);
+		this.kit = kit != null ? kit : HG.plugin.kit;
+
 	}
 
 	/** Create a new game
@@ -128,6 +133,7 @@ public class Game {
 		status = Status.NOTREADY;
 		sb = new SBDisplay(this);
 		this.commands = new ArrayList<>(Collections.singletonList("none"));
+		kit = HG.plugin.kit;
 	}
 
 	/** Get the bounding region of this game
@@ -351,7 +357,7 @@ public class Game {
 		// Clear the chat a little bit, making this message easier to see
 		for(int i = 0; i < 20; ++i)
 			Util.scm(player, " ");
-		String kit = HG.plugin.kit.getKitList();
+		String kit = this.kit.getKitList();
 		Util.scm(player, " ");
 		Util.scm(player, HG.lang.kit_join_header);
 		Util.scm(player, " ");

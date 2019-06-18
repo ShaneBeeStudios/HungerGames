@@ -4,6 +4,7 @@ import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.command.TabCompleter;
+import org.bukkit.entity.Player;
 import org.bukkit.util.StringUtil;
 import tk.shanebee.hg.Game;
 import tk.shanebee.hg.HG;
@@ -129,12 +130,20 @@ public class CommandListener implements CommandExecutor, TabCompleter {
 			} else if (args[0].equalsIgnoreCase("kit")) {
 				if (args.length == 2) {
 					ArrayList<String> matchesKit = new ArrayList<>();
-					for (String name : plugin.kit.kititems.keySet()) {
-						if (StringUtil.startsWithIgnoreCase(name, args[1])) {
-							matchesKit.add(name);
-						}
+					Game game = null;
+					if (plugin.players.containsKey(((Player) sender).getUniqueId())) {
+						game = plugin.players.get(((Player) sender).getUniqueId()).getGame();
 					}
-					return matchesKit;
+					if (game != null) {
+						for (String name : game.kit.kititems.keySet()) {
+							if (StringUtil.startsWithIgnoreCase(name, args[1])) {
+								matchesKit.add(name);
+							}
+						}
+						return matchesKit;
+					} else {
+						return Collections.singletonList("<not-in-game>");
+					}
 				}
 			} else if (args[0].equalsIgnoreCase("create")) {
 				ArrayList<String> matchesCreate = new ArrayList<>();

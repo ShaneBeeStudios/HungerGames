@@ -56,10 +56,13 @@ public class HG extends JavaPlugin {
 			Util.log("&7Metrics have been &cdisabled");
 		plugin = this;
 		lang = new Language(this);
-		arenaconfig = new Data(this);
-		killmanager = new KillManager();
+
 		kit = new KitManager();
 		itemStackManager = new ItemStackManager(this);
+		arenaconfig = new Data(this);
+
+		killmanager = new KillManager();
+
 		randomItems = new RandomItems(this);
 		manager = new Manager(this);
 		leaderboard = new Leaderboard(this);
