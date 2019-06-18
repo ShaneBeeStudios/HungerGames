@@ -44,9 +44,11 @@ public class ItemStackManager {
 					String[] poti = pot.split(":");
 					PotionEffectType e = PotionEffectType.getByName(poti[0]);
 					if (poti[2].equalsIgnoreCase("forever")) {
+						assert e != null;
 						potions.add(e.createEffect(2147483647, Integer.parseInt(poti[1])));
 					} else {
 						int dur = Integer.parseInt(poti[2]) * 20;
+						assert e != null;
 						potions.add(e.createEffect(dur, Integer.parseInt(poti[1])));
 					}
 				}
@@ -103,6 +105,7 @@ public class ItemStackManager {
 						if (c.name().equalsIgnoreCase(s)) {
 							assert item != null;
 							LeatherArmorMeta lam = (LeatherArmorMeta) item.getItemMeta();
+							assert lam != null;
 							lam.setColor(c.getColor());
 							item.setItemMeta(lam);
 						}
@@ -147,7 +150,7 @@ public class ItemStackManager {
 	private ItemStack itemStringToStack(String item, int amount) {
 		String[] itemArr = item.split(":");
 		if (itemArr[0].equalsIgnoreCase("potion") || itemArr[0].equalsIgnoreCase("splash_potion")) {
-			Boolean splash = itemArr[0].equalsIgnoreCase("splash_potion");
+			boolean splash = itemArr[0].equalsIgnoreCase("splash_potion");
 			if (PotionEffectType.getByName(itemArr[1].toUpperCase()) == null) {
 				Util.warning("Potion effect type not found: " + ChatColor.RED + itemArr[1].toUpperCase());
 				Util.log("  - Check your configs");
@@ -169,6 +172,8 @@ public class ItemStackManager {
 			int amplifier = Integer.valueOf(itemArr[3]);
 			ItemStack potion = new ItemStack(splash ? Material.SPLASH_POTION : Material.POTION);
 			PotionMeta meta = ((PotionMeta) potion.getItemMeta());
+			assert meta != null;
+			assert potType != null;
 			meta.addCustomEffect(new PotionEffect(potType, duration, amplifier), true);
 			potion.setItemMeta(meta);
 			return potion;
