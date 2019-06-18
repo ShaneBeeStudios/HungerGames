@@ -115,6 +115,7 @@ public class GameListener implements Listener {
 				g.leave(p, true);
 				p.playSound(p.getLocation(), Sound.UI_TOAST_CHALLENGE_COMPLETE, 5, 1);
 			}, 1);
+			g.runCommands(Game.CommandType.DEATH, p);
 
 			Bukkit.getScheduler().scheduleSyncDelayedTask(plugin, () -> checkStick(g), 10L);
 		}

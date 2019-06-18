@@ -22,6 +22,7 @@ import tk.shanebee.hg.tasks.FreeRoamTask;
 import tk.shanebee.hg.tasks.StartingTask;
 import tk.shanebee.hg.tasks.TimerTask;
 
+import javax.annotation.Nullable;
 import java.util.*;
 import java.util.Map.Entry;
 
@@ -340,6 +341,7 @@ public class Game {
 				updateLobbyBlock();
 				sb.setSB(player);
 				sb.setAlive();
+				runCommands(CommandType.JOIN, player);
 				Bukkit.getPluginManager().callEvent(new PlayerJoinGameEvent(this, player));
 			}, 5);
 		}
@@ -389,7 +391,7 @@ public class Game {
 		status = Status.BEGINNING;
 		b.removeEntities();
 		freeroam = new FreeRoamTask(this);
-		runCommands(CommandType.START);
+		runCommands(CommandType.START, null);
 	}
 
 	/**
@@ -614,7 +616,7 @@ public class Game {
 		if (Config.borderEnabled) {
 			resetBorder();
 		}
-		runCommands(CommandType.STOP);
+		runCommands(CommandType.STOP, null);
 	}
 
 	/** Make a player leave the game
@@ -782,7 +784,7 @@ public class Game {
 	/** Run commands for this game that are defined in the arenas.yml
 	 * @param commandType Type of command to run
 	 */
-	public void runCommands(CommandType commandType) {
+	public void runCommands(CommandType commandType, @Nullable Player player) {
 		for (String command : commands) {
 			String type = command.split(":")[0];
 			if (!type.equals(commandType.getType())) continue;
@@ -790,6 +792,9 @@ public class Game {
 			command = command.split(":")[1]
 					.replace("<world>", this.b.getWorld().getName())
 					.replace("<arena>", this.getName());
+			if (player != null) {
+				command = command.replace("<player>", player.getName());
+			}
 			Bukkit.dispatchCommand(Bukkit.getConsoleSender(), command);
 		}
 	}
@@ -799,13 +804,21 @@ public class Game {
 	 */
 	public enum CommandType {
 		/**
+		 * A command to run when a player dies in game
+		 */
+		DEATH("death"),
+		/**
 		 * A command to run at the start of a game
 		 */
 		START("start"),
 		/**
 		 * A command to run at the end of a game
 		 */
-		STOP("stop");
+		STOP("stop"),
+		/**
+		 * A command to run when a player joins a game
+		 */
+		JOIN("join");
 
 		String type;
 
