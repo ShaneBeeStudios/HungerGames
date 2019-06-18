@@ -43,6 +43,7 @@ public class Data {
 		}
 		if (!customConfigFile.exists()) {
 			try {
+				//noinspection ResultOfMethodCallIgnored
 				customConfigFile.createNewFile();
 			}
 			catch (IOException e) {
@@ -74,6 +75,7 @@ public class Data {
 		}
 	}
 
+	@SuppressWarnings("ConstantConditions")
 	public void load() {
 		int freeroam = plugin.getConfig().getInt("settings.free-roam");
 
@@ -172,12 +174,14 @@ public class Data {
 						for (String itemString : arenadat.getStringList("arenas." + s + ".items")) {
 							HG.randomItems.loadItems(itemString, items);
 						}
+						Util.log(items.size() + " Random items have been loaded for arena: " + s);
 					}
 					if (!arenadat.getStringList("arenas." + s + ".bonus").isEmpty()) {
 						bonusItems = new HashMap<>();
 						for (String itemString : arenadat.getStringList("arenas." + s + ".bonus")) {
 							HG.randomItems.loadItems(itemString, bonusItems);
 						}
+						Util.log(bonusItems.size() + " Random bonus items have been loaded for arena: " + s);
 					}
 
 					plugin.games.add(new Game(s, b, spawns, lobbysign, timer, minplayers, maxplayers, freeroam, chestRefill,
