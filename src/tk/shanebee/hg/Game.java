@@ -798,6 +798,7 @@ public class Game {
 	 * @param commandType Type of command to run
 	 * @param player The player involved (can be null)
 	 */
+	@SuppressWarnings("ConstantConditions")
 	public void runCommands(CommandType commandType, @Nullable Player player) {
 		for (String command : commands) {
 			String type = command.split(":")[0];
@@ -809,7 +810,13 @@ public class Game {
 			if (player != null) {
 				command = command.replace("<player>", player.getName());
 			}
-			Bukkit.dispatchCommand(Bukkit.getConsoleSender(), command);
+			if (commandType == CommandType.START && command.contains("<player>")) {
+				for (UUID uuid : players) {
+					String newCommand = command.replace("<player>", Bukkit.getPlayer(uuid).getName());
+					Bukkit.dispatchCommand(Bukkit.getConsoleSender(), newCommand);
+				}
+			} else
+				Bukkit.dispatchCommand(Bukkit.getConsoleSender(), command);
 		}
 	}
 
