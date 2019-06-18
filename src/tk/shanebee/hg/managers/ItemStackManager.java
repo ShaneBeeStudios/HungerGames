@@ -17,6 +17,7 @@ import tk.shanebee.hg.HG;
 import tk.shanebee.hg.Util;
 import tk.shanebee.hg.data.KitEntry;
 
+import javax.annotation.Nullable;
 import java.util.ArrayList;
 import java.util.Arrays;
 
@@ -26,66 +27,35 @@ public class ItemStackManager {
 
 	public ItemStackManager(HG p) {
 		this.plugin = p;
-		setkits();
+		setKits();
 	}
 
-	public void setkits() {
-		Configuration config = plugin.getConfig();
-		for (String path : config.getConfigurationSection("kits").getKeys(false)) {
-			try {
-				ArrayList<ItemStack> stack = new ArrayList<>();
-				ArrayList<PotionEffect> potions = new ArrayList<>();
-				String perm = null;
-
-				for (String item : config.getStringList("kits." + path + ".items"))
-					stack.add(getItem(item, true));
-
-				for (String pot : plugin.getConfig().getStringList("kits." + path + ".potion-effects")) {
-					String[] poti = pot.split(":");
-					PotionEffectType e = PotionEffectType.getByName(poti[0]);
-					if (poti[2].equalsIgnoreCase("forever")) {
-						assert e != null;
-						potions.add(e.createEffect(2147483647, Integer.parseInt(poti[1])));
-					} else {
-						int dur = Integer.parseInt(poti[2]) * 20;
-						assert e != null;
-						potions.add(e.createEffect(dur, Integer.parseInt(poti[1])));
-					}
-				}
-
-				ItemStack helm = getItem(config.getString("kits." + path + ".helmet"), false);
-				ItemStack ches = getItem(config.getString("kits." + path + ".chestplate"), false);
-				ItemStack leg = getItem(config.getString("kits." + path + ".leggings"), false);
-				ItemStack boot = getItem(config.getString("kits." + path + ".boots"), false);
-
-				if (plugin.getConfig().getString("kits." + path + ".permission") != null && !plugin.getConfig().getString("kits." + path + ".permission").equals("none"))
-					perm = plugin.getConfig().getString("kits." + path + ".permission");
-
-				plugin.kit.kititems.put(path, new KitEntry(stack.toArray(new ItemStack[0]), helm, boot, ches, leg, perm, potions));
-			} catch (Exception e) {
-				Util.log("-------------------------------------------");
-				Util.log("WARNING: Unable to load kit " + path + "!");
-				Util.log("-------------------------------------------");
-				Util.warning("Exception: " + e.getMessage());
-
-			}
-		}
+	public void setKits() {
+		kitCreator(plugin.getConfig(), plugin.kit, null);
+		Util.log("Loaded kits");
 	}
 
 	public KitManager setGameKits(String gameName, Configuration config) {
-		gameName = "arenas." + gameName;
+		String gamePath = "arenas." + gameName + ".";
 		KitManager kit = new KitManager();
-		if (config.getConfigurationSection(gameName + ".kits") == null) return null;
-		for (String path : config.getConfigurationSection(gameName + ".kits").getKeys(false)) {
+		if (config.getConfigurationSection(gamePath + "kits") == null) return null;
+		kitCreator(config, kit, gamePath);
+		Util.log("Loaded custom kits for arena: " + gameName);
+		return kit;
+	}
+
+	private void kitCreator(Configuration config, KitManager kit, @Nullable String gameName) {
+		if (gameName == null) gameName = "";
+		for (String path : config.getConfigurationSection(gameName + "kits").getKeys(false)) {
 			try {
 				ArrayList<ItemStack> stack = new ArrayList<>();
 				ArrayList<PotionEffect> potions = new ArrayList<>();
 				String perm = null;
 
-				for (String item : config.getStringList(gameName + ".kits." + path + ".items"))
+				for (String item : config.getStringList(gameName + "kits." + path + ".items"))
 					stack.add(getItem(item, true));
 
-				for (String pot : plugin.getConfig().getStringList(gameName + ".kits." + path + ".potion-effects")) {
+				for (String pot : config.getStringList(gameName + "kits." + path + ".potion-effects")) {
 					String[] poti = pot.split(":");
 					PotionEffectType e = PotionEffectType.getByName(poti[0]);
 					if (poti[2].equalsIgnoreCase("forever")) {
@@ -98,24 +68,22 @@ public class ItemStackManager {
 					}
 				}
 
-				ItemStack helm = getItem(config.getString(gameName + ".kits." + path + ".helmet"), false);
-				ItemStack ches = getItem(config.getString(gameName + ".kits." + path + ".chestplate"), false);
-				ItemStack leg = getItem(config.getString(gameName + ".kits." + path + ".leggings"), false);
-				ItemStack boot = getItem(config.getString(gameName + ".kits." + path + ".boots"), false);
+				ItemStack helm = getItem(config.getString(gameName + "kits." + path + ".helmet"), false);
+				ItemStack ches = getItem(config.getString(gameName + "kits." + path + ".chestplate"), false);
+				ItemStack leg = getItem(config.getString(gameName + "kits." + path + ".leggings"), false);
+				ItemStack boot = getItem(config.getString(gameName + "kits." + path + ".boots"), false);
 
-				if (plugin.getConfig().getString(gameName + ".kits." + path + ".permission") != null
-						&& !plugin.getConfig().getString(gameName + ".kits." + path + ".permission").equals("none"))
-					perm = plugin.getConfig().getString(gameName + ".kits." + path + ".permission");
+				if (config.getString(gameName + "kits." + path + ".permission") != null
+						&& !config.getString(gameName + "kits." + path + ".permission").equals("none"))
+					perm = config.getString(gameName + "kits." + path + ".permission");
 
 				kit.kititems.put(path, new KitEntry(stack.toArray(new ItemStack[0]), helm, boot, ches, leg, perm, potions));
 			} catch (Exception e) {
 				Util.log("-------------------------------------------");
-				Util.log("WARNING: Unable to load kit " + gameName + ":" + path + "!");
+				Util.log("WARNING: Unable to load kit " + gameName + path + "!");
 				Util.log("-------------------------------------------");
-
 			}
 		}
-		return kit;
 	}
 
 	@SuppressWarnings("deprecation")
