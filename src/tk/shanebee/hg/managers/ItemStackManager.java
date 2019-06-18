@@ -44,6 +44,7 @@ public class ItemStackManager {
 		return kit;
 	}
 
+	@SuppressWarnings("ConstantConditions")
 	private void kitCreator(Configuration config, KitManager kit, @Nullable String gameName) {
 		if (gameName == null) gameName = "";
 		for (String path : config.getConfigurationSection(gameName + "kits").getKeys(false)) {
