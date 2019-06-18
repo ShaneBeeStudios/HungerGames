@@ -126,6 +126,10 @@ public class ItemStackManager {
 				assert meta != null;
 				meta.setLore(lore);
 				item.setItemMeta(meta);
+			} else if (s.startsWith("data:")) {
+				s = s.replace("data:", "").replace("_", " ");
+				assert item != null;
+				Util.addNBT(item, s);
 			} else if (s.startsWith("ownerName:")) {
 				s = s.replace("ownerName:", "");
 				assert item != null;

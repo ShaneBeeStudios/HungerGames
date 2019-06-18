@@ -1,11 +1,16 @@
 package tk.shanebee.hg;
 
+import com.mojang.brigadier.exceptions.CommandSyntaxException;
+import net.minecraft.server.v1_14_R1.ItemStack;
+import net.minecraft.server.v1_14_R1.MojangsonParser;
+import net.minecraft.server.v1_14_R1.NBTTagCompound;
 import org.bukkit.*;
 import org.bukkit.FireworkEffect.Type;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
 import org.bukkit.block.data.BlockData;
 import org.bukkit.command.CommandSender;
+import org.bukkit.craftbukkit.v1_14_R1.inventory.CraftItemStack;
 import org.bukkit.entity.Firework;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.meta.FireworkMeta;
@@ -160,4 +165,22 @@ public class Util {
 		}
 		return false;
 	}
+
+	public static void addNBT(org.bukkit.inventory.ItemStack item, String value) {
+		ItemStack nms = CraftItemStack.asNMSCopy(item);
+		NBTTagCompound nbt = new NBTTagCompound();
+		if (nms.getTag() != null) {
+			nbt = nms.getTag();
+		}
+		try {
+			NBTTagCompound nbtv = MojangsonParser.parse(value);
+			nbt.a(nbtv);
+			nms.setTag(nbt);
+		} catch (CommandSyntaxException ex) {
+			warning("Invalid NBT tag:");
+			warning("  -" + value);
+		}
+		item.setItemMeta(CraftItemStack.asBukkitCopy(nms).getItemMeta());
+	}
+
 }
