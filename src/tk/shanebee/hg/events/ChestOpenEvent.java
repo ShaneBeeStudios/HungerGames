@@ -18,6 +18,7 @@ public class ChestOpenEvent extends Event {
 	/** Create a new player open chest event
 	 * @param game The game this is happening in
 	 * @param block The block that is opening
+	 * @param bonus If the chest is a bonus chest
 	 */
 	public ChestOpenEvent(Game game, Block block, boolean bonus) {
 		this.game = game;

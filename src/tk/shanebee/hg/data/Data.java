@@ -12,6 +12,7 @@ import tk.shanebee.hg.tasks.CompassTask;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 public class Data {
@@ -93,6 +94,7 @@ public class Data {
 					int borderSize = 0;
 					int borderCountdownStart = 0;
 					int borderCountdownEnd = 0;
+					List<String> commands;
 
 					try {
 						timer = arenadat.getInt("arenas." + s + ".info." + "timer");
@@ -118,14 +120,14 @@ public class Data {
 							borderCountdownEnd = Config.borderCountdownEnd;
 						}
 					} catch (Exception e) {
-						Util.warning("Unable to load infomation for arena " + s + "!"); 
+						Util.warning("Unable to load information for arena " + s + "!");
 						isReady = false;
 					}
 
 					try {
 						lobbysign = (Sign) getSLoc(arenadat.getString("arenas." + s + "." + "lobbysign")).getBlock().getState();
 					} catch (Exception e) { 
-						Util.warning("Unable to load lobbysign for arena " + s + "!"); 
+						Util.warning("Unable to load lobby sign for arena " + s + "!");
 						isReady = false;
 					}
 
@@ -145,8 +147,16 @@ public class Data {
 						isReady = false;
 					}
 
+					if (arenadat.isList("arenas." + s + ".commands")) {
+						commands = arenadat.getStringList("arenas." + s + ".commands");
+					} else {
+						arenadat.set("arenas." + s + ".commands", Collections.singletonList("none"));
+						saveCustomConfig();
+						commands = Collections.singletonList("none");
+					}
+
 					plugin.games.add(new Game(s, b, spawns, lobbysign, timer, minplayers, maxplayers, freeroam, chestRefill,
-							isReady, borderCenter, borderSize, borderCountdownStart, borderCountdownEnd));
+							isReady, borderCenter, borderSize, borderCountdownStart, borderCountdownEnd, commands));
 				}
 			} else {
 				Util.log("No Arenas to load.");
@@ -167,4 +177,5 @@ public class Data {
 		String[] h = s.split(":");
 		return new Location(Bukkit.getServer().getWorld(h[0]), Integer.parseInt(h[1]), Integer.parseInt(h[2]), Integer.parseInt(h[3]));
 	}
+
 }

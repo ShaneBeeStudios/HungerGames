@@ -35,6 +35,7 @@ public class Game {
 	private List<Location> playerChests = new ArrayList<>();
 
 	private List<BlockState> blocks = new ArrayList<>();
+	private List<String> commands;
 	private Location exit;
 	private Status status;
 	private int minplayers;
@@ -77,9 +78,14 @@ public class Game {
 	 * @param roam Roam time for this game
 	 * @param chestRefill The remaining time in a game when chests refill
 	 * @param isready If the game is ready to start
+	 * @param borderCenter The center of the arena
+	 * @param borderCountdownStart Remaining time in a game for the border to start
+	 * @param borderCountdownEnd Remaining time in the game for the border to stop
+	 * @param borderSize Final size of the border
+	 * @param commands A list of commands to run
 	 */
-	public Game(String name, Bound bound, List<Location> spawns, Sign lobbysign, int timer, int minplayers, int maxplayers, int roam,
-				int chestRefill, boolean isready, Location borderCenter, int borderSize, int borderCountdownStart, int borderCountdownEnd) {
+	public Game(String name, Bound bound, List<Location> spawns, Sign lobbysign, int timer, int minplayers, int maxplayers, int roam, int chestRefill,
+				boolean isready, Location borderCenter, int borderSize, int borderCountdownStart, int borderCountdownEnd, List<String> commands) {
 		this.name = name;
 		this.b = bound;
 		this.spawns = spawns;
@@ -95,6 +101,7 @@ public class Game {
 		this.borderSize = borderSize;
 		this.borderCountdownStart = borderCountdownStart;
 		this.borderCountdownEnd = borderCountdownEnd;
+		this.commands = commands;
 
 		setLobbyBlock(lobbysign);
 
@@ -119,6 +126,7 @@ public class Game {
 		this.b = bound;
 		status = Status.NOTREADY;
 		sb = new SBDisplay(this);
+		this.commands = new ArrayList<>(Collections.singletonList("none"));
 	}
 
 	/** Get the bounding region of this game
@@ -381,6 +389,7 @@ public class Game {
 		status = Status.BEGINNING;
 		b.removeEntities();
 		freeroam = new FreeRoamTask(this);
+		runCommands(CommandType.START);
 	}
 
 	/**
@@ -583,14 +592,6 @@ public class Game {
 			}
 		}
 
-		/*
-		for (Location loc : chests) {
-			if (loc.getBlock().getType() == Material.CHEST) {
-				((Chest) loc.getBlock().getState()).getInventory().clear();
-				loc.getBlock().getState().update();
-			}
-		}
-		 */
 		for (Location loc : chests) {
 			if (loc.getBlock().getState() instanceof InventoryHolder) {
 				((InventoryHolder) loc.getBlock().getState()).getInventory().clear();
@@ -613,6 +614,7 @@ public class Game {
 		if (Config.borderEnabled) {
 			resetBorder();
 		}
+		runCommands(CommandType.STOP);
 	}
 
 	/** Make a player leave the game
@@ -775,6 +777,45 @@ public class Game {
 		World world = this.getRegion().getWorld();
 		assert world != null;
 		world.getWorldBorder().reset();
+	}
+
+	/** Run commands for this game that are defined in the arenas.yml
+	 * @param commandType Type of command to run
+	 */
+	public void runCommands(CommandType commandType) {
+		for (String command : commands) {
+			String type = command.split(":")[0];
+			if (!type.equals(commandType.getType())) continue;
+			if (command.equalsIgnoreCase("none")) continue;
+			command = command.split(":")[1]
+					.replace("<world>", this.b.getWorld().getName())
+					.replace("<arena>", this.getName());
+			Bukkit.dispatchCommand(Bukkit.getConsoleSender(), command);
+		}
+	}
+
+	/**
+	 * Command types
+	 */
+	public enum CommandType {
+		/**
+		 * A command to run at the start of a game
+		 */
+		START("start"),
+		/**
+		 * A command to run at the end of a game
+		 */
+		STOP("stop");
+
+		String type;
+
+		CommandType(String type) {
+			this.type = type;
+		}
+
+		public String getType() {
+			return type;
+		}
 	}
 
 }

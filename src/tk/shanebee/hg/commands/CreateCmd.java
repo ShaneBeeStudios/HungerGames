@@ -9,6 +9,8 @@ import tk.shanebee.hg.Util;
 import org.bukkit.Location;
 import org.bukkit.configuration.Configuration;
 
+import java.util.Collections;
+
 
 public class CreateCmd extends BaseCmd {
 
@@ -52,6 +54,7 @@ public class CreateCmd extends BaseCmd {
 					c.set("arenas." + args[1] +".info." + "timer", Integer.parseInt(args[4]));
 					c.set("arenas." + args[1] +".info." + "min-players", Integer.parseInt(args[2]));
 					c.set("arenas." + args[1] +".info." + "max-players", Integer.parseInt(args[3]));
+					c.set("arenas." + args[1] + ".commands", Collections.singletonList("none"));
 					HG.arenaconfig.saveCustomConfig();
 					HG.arenaconfig.reloadCustomConfig();
 
