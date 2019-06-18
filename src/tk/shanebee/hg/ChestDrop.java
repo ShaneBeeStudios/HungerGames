@@ -85,9 +85,10 @@ public class ChestDrop implements Listener {
 	}
 
 	@EventHandler
-	public void onBla(PlayerInteractEvent event) {
+	public void onOpenChestDrop(PlayerInteractEvent event) {
 		if (event.getAction() == Action.RIGHT_CLICK_BLOCK && beforeBlock != null && event.getClickedBlock().getLocation().equals(beforeBlock.getLocation())) {
 			Player p = event.getPlayer();
+			Game game = HG.plugin.players.get(p.getUniqueId()).getGame();
 			Random rg = new Random();
 			invopener = p;
 
@@ -95,7 +96,7 @@ public class ChestDrop implements Listener {
 			i.clear();
 			int c = rg.nextInt(Config.randomChestMaxContent) + 1;
 			while (c != 0) {
-				ItemStack it = HG.manager.randomitem(false);
+				ItemStack it = HG.manager.randomItem(game,false);
 				if (it != null) {
 					i.addItem(it);
 				}

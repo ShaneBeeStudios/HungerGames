@@ -6,6 +6,7 @@ import org.bukkit.Location;
 import org.bukkit.block.Sign;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
+import org.bukkit.inventory.ItemStack;
 import tk.shanebee.hg.*;
 import tk.shanebee.hg.managers.KitManager;
 import tk.shanebee.hg.tasks.CompassTask;
@@ -14,6 +15,7 @@ import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.List;
 
 public class Data {
@@ -98,6 +100,9 @@ public class Data {
 					List<String> commands;
 					KitManager kit;
 
+					HashMap<Integer, ItemStack> items = null;
+					HashMap<Integer, ItemStack> bonusItems = null;
+
 					try {
 						timer = arenadat.getInt("arenas." + s + ".info." + "timer");
 						minplayers = arenadat.getInt("arenas." + s + ".info." + "min-players");
@@ -162,9 +167,21 @@ public class Data {
 						kit = null;
 						e.printStackTrace();
 					}
+					if (!arenadat.getStringList("arenas." + s + ".items").isEmpty()) {
+						items = new HashMap<>();
+						for (String itemString : arenadat.getStringList("arenas." + s + ".items")) {
+							HG.randomItems.loadItems(itemString, items);
+						}
+					}
+					if (!arenadat.getStringList("arenas." + s + ".bonus").isEmpty()) {
+						bonusItems = new HashMap<>();
+						for (String itemString : arenadat.getStringList("arenas." + s + ".bonus")) {
+							HG.randomItems.loadItems(itemString, bonusItems);
+						}
+					}
 
 					plugin.games.add(new Game(s, b, spawns, lobbysign, timer, minplayers, maxplayers, freeroam, chestRefill,
-							isReady, borderCenter, borderSize, borderCountdownStart, borderCountdownEnd, commands, kit));
+							isReady, borderCenter, borderSize, borderCountdownStart, borderCountdownEnd, commands, kit, items, bonusItems));
 				}
 			} else {
 				Util.log("No Arenas to load.");

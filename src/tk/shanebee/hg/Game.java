@@ -11,6 +11,7 @@ import org.bukkit.boss.BarStyle;
 import org.bukkit.boss.BossBar;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.InventoryHolder;
+import org.bukkit.inventory.ItemStack;
 import org.bukkit.plugin.IllegalPluginAccessException;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
@@ -35,6 +36,8 @@ public class Game {
 	private List<UUID> players = new ArrayList<>();
 	private List<Location> chests = new ArrayList<>();
 	private List<Location> playerChests = new ArrayList<>();
+	public HashMap<Integer, ItemStack> items;
+	public HashMap<Integer, ItemStack> bonusItems;
 
 	private List<BlockState> blocks = new ArrayList<>();
 	private List<String> commands;
@@ -89,7 +92,7 @@ public class Game {
 	 */
 	public Game(String name, Bound bound, List<Location> spawns, Sign lobbysign, int timer, int minplayers, int maxplayers,
 				int roam, int chestRefill, boolean isready, Location borderCenter, int borderSize, int borderCountdownStart,
-				int borderCountdownEnd, List<String> commands, KitManager kit) {
+				int borderCountdownEnd, List<String> commands, KitManager kit, HashMap<Integer, ItemStack> items, HashMap<Integer, ItemStack> bonusItems) {
 		this.name = name;
 		this.b = bound;
 		this.spawns = spawns;
@@ -111,6 +114,8 @@ public class Game {
 
 		sb = new SBDisplay(this);
 		this.kit = kit != null ? kit : HG.plugin.kit;
+		this.items = items != null ? items : HG.plugin.items;
+		this.bonusItems = bonusItems != null ? bonusItems : HG.plugin.bonusItems;
 
 	}
 
@@ -134,6 +139,8 @@ public class Game {
 		sb = new SBDisplay(this);
 		this.commands = new ArrayList<>(Collections.singletonList("none"));
 		kit = HG.plugin.kit;
+		this.items = HG.plugin.items;
+		this.bonusItems = HG.plugin.bonusItems;
 	}
 
 	/** Get the bounding region of this game

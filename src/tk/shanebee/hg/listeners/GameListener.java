@@ -236,7 +236,7 @@ public class GameListener implements Listener {
 		Block b = event.getChest();
 		Game g = event.getGame();
 		if (!g.isLoggedChest(b.getLocation())) {
-			HG.manager.fillChests(b, event.isBonus());
+			HG.manager.fillChests(b, g, event.isBonus());
 			g.addGameChest(b.getLocation());
 		}
 	}

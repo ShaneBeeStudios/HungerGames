@@ -136,29 +136,8 @@ public class Manager {
 			g.setStatus(Status.WAITING);
 		}
 	}
-
 	
-	//@Note: dwoikdopw
-	//We need to change this because we want to just create false chest./
-
-	/*public void restoreChests(Game arena) {
-		ArrayList<Location> chests = arena.getChests();
-		for (Location l : chests) {
-			Block b = l.getBlock();
-			if (b.getType().equals(Material.CHEST)) {
-				Inventory i = ((InventoryHolder)b.getState()).getInventory();
-				i.clear();
-				int c = rg.nextInt(Config.maxchestcontent) + 1;
-				while (c != 0) {
-					ItemStack it = randomitem();
-					i.setItem(rg.nextInt(27), it);
-					c--;
-				}
-			}
-		}
-	}*/
-	
-	public void fillChests(Block b, boolean bonus) {
+	public void fillChests(Block b, Game game, boolean bonus) {
 		Inventory i = ((InventoryHolder)b.getState()).getInventory();
 		List<Integer> slots = new ArrayList<>();
 		for (int slot = 0; slot <= 26; slot++) {
@@ -172,7 +151,7 @@ public class Manager {
 		int c = rg.nextInt(max) + 1;
 		c = c >= min ? c : min;
 		while (c != 0) {
-			ItemStack it = randomitem(bonus);
+			ItemStack it = randomItem(game, bonus);
 			int slot = slots.get(0);
 			slots.remove(0);
 			i.setItem(slot, it);
@@ -180,13 +159,13 @@ public class Manager {
 		}
 	}
 
-	public ItemStack randomitem(boolean bonus) {
+	public ItemStack randomItem(Game game, boolean bonus) {
 		if (bonus) {
-			int i = rg.nextInt(plugin.bonusItems.size()) + 1;
-			return plugin.bonusItems.get(i);
+			int i = rg.nextInt(game.bonusItems.size()) + 1;
+			return game.bonusItems.get(i);
 		} else {
-			int i = rg.nextInt(plugin.items.size()) + 1;
-			return plugin.items.get(i);
+			int i = rg.nextInt(game.items.size()) + 1;
+			return game.items.get(i);
 		}
 	}
 	

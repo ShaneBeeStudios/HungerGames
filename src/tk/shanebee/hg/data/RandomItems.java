@@ -3,7 +3,9 @@ package tk.shanebee.hg.data;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.HashMap;
 
+import org.bukkit.inventory.ItemStack;
 import tk.shanebee.hg.HG;
 import tk.shanebee.hg.Util;
 
@@ -73,40 +75,31 @@ public class RandomItems {
 		}
 		// Regular items
 		for (String s : item.getStringList("items")) {
-			String[] amount = s.split(" ");
-			if (s.contains("x:")) {
-				for (String p : amount) {
-					if (p.startsWith("x:")) {
-						int c = Integer.parseInt(p.replace("x:", ""));
-						while (c != 0) {
-							c--;
-							plugin.items.put(plugin.items.size() + 1, plugin.itemStackManager.getItem(s.replace("x:", ""), true));
-						}
-					}
-				}
-			} else {
-				plugin.items.put(plugin.items.size() + 1, plugin.itemStackManager.getItem(s, true));
-			}
+			loadItems(s, plugin.items);
 		}
 		// Bonus items
 		for (String s : item.getStringList("bonus")) {
-			String[] amount = s.split(" ");
-			if (s.contains("x:")) {
-				for (String p : amount) {
-					if (p.startsWith("x:")) {
-						int c = Integer.parseInt(p.replace("x:", ""));
-						while (c != 0) {
-							c--;
-							plugin.bonusItems.put(plugin.bonusItems.size() + 1, plugin.itemStackManager.getItem(s.replace("x:", ""), true));
-						}
-					}
-				}
-			} else {
-				plugin.bonusItems.put(plugin.bonusItems.size() + 1, plugin.itemStackManager.getItem(s, true));
-			}
+			loadItems(s, plugin.bonusItems);
 		}
 		Util.log(plugin.items.size() + " Random items have been loaded!");
 		Util.log(plugin.bonusItems.size() + " Random bonus items have been loaded!");
+	}
+
+	void loadItems(String itemString, HashMap<Integer, ItemStack> map) {
+		String[] amount = itemString.split(" ");
+		if (itemString.contains("x:")) {
+			for (String p : amount) {
+				if (p.startsWith("x:")) {
+					int c = Integer.parseInt(p.replace("x:", ""));
+					while (c != 0) {
+						c--;
+						map.put(map.size() + 1, plugin.itemStackManager.getItem(itemString.replace("x:", ""), true));
+					}
+				}
+			}
+		} else {
+			map.put(map.size() + 1, plugin.itemStackManager.getItem(itemString, true));
+		}
 	}
 
 	private void setDefaults() {

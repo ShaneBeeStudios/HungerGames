@@ -56,14 +56,12 @@ public class HG extends JavaPlugin {
 			Util.log("&7Metrics have been &cdisabled");
 		plugin = this;
 		lang = new Language(this);
-
 		kit = new KitManager();
 		itemStackManager = new ItemStackManager(this);
+		randomItems = new RandomItems(this);
 		arenaconfig = new Data(this);
-
 		killmanager = new KillManager();
 
-		randomItems = new RandomItems(this);
 		manager = new Manager(this);
 		leaderboard = new Leaderboard(this);
 		if (Bukkit.getPluginManager().getPlugin("PlaceholderAPI") != null) {
@@ -81,7 +79,7 @@ public class HG extends JavaPlugin {
 		Util.log("HungerGames has been enabled!");
 		if (this.getDescription().getVersion().contains("Beta")) {
 			Util.log("&eYOU ARE RUNNING A BETA VERSION, please use with caution");
-			Util.log("&eReport any issues to: &bhttps://github.com/ShaneBeeTK/HungerGames/issues");
+			Util.log("&eReport any issues to: &bhttps://bitbucket.org/ShaneBeeStudios/hungergames/issues");
 		}
 	}
 
