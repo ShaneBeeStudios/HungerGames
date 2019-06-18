@@ -19,7 +19,7 @@ public class PlayerJoinGameEvent extends Event {
 		this.player = player;
 	}
 
-	/** Get the player that joined a gam
+	/** Get the player that joined a game
 	 * @return The player that joined the game
 	 */
 	public Player getPlayer() {

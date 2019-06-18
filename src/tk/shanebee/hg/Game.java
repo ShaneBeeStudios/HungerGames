@@ -783,6 +783,7 @@ public class Game {
 
 	/** Run commands for this game that are defined in the arenas.yml
 	 * @param commandType Type of command to run
+	 * @param player The player involved (can be null)
 	 */
 	public void runCommands(CommandType commandType, @Nullable Player player) {
 		for (String command : commands) {
