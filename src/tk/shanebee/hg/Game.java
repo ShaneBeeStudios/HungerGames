@@ -15,6 +15,7 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.plugin.IllegalPluginAccessException;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
+import tk.shanebee.hg.events.GameStartEvent;
 import tk.shanebee.hg.events.PlayerJoinGameEvent;
 import tk.shanebee.hg.events.PlayerLeaveGameEvent;
 import tk.shanebee.hg.managers.KitManager;
@@ -320,6 +321,12 @@ public class Game {
 			player.sendMessage(ChatColor.RED + name + " is currently full!");
 			Util.scm(player, "&c" + name + " " + HG.lang.game_full);
 		} else {
+			// Call PlayerJoinGameEvent
+			PlayerJoinGameEvent event = new PlayerJoinGameEvent(this, player);
+			Bukkit.getPluginManager().callEvent(event);
+			// If cancelled, stop the player from joining the game
+			if (event.isCancelled()) return;
+
 			if (player.isInsideVehicle()) {
 				player.leaveVehicle();
 			}
@@ -355,7 +362,6 @@ public class Game {
 				sb.setSB(player);
 				sb.setAlive();
 				runCommands(CommandType.JOIN, player);
-				Bukkit.getPluginManager().callEvent(new PlayerJoinGameEvent(this, player));
 			}, 5);
 		}
 	}
@@ -391,7 +397,10 @@ public class Game {
 	 * Start the pregame countdown
 	 */
 	public void startPreGame() {
-		//setStatus(Status.COUNTDOWN);
+		// Call the GameStartEvent
+		GameStartEvent event = new GameStartEvent(this);
+		Bukkit.getPluginManager().callEvent(event);
+
         status = Status.COUNTDOWN;
 		starting = new StartingTask(this);
 		updateLobbyBlock();
