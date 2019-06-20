@@ -5,7 +5,7 @@ description: A Simple, fun, HungerGames plugin
 version: 4.9.0
 website: https://bitbucket.org/ShaneBeeStudios/hungergames
 api-version: 1.13
-softdepend: [Multiverse-Core, MultiWorld, Vault, My_Worlds]
+softdepend: [Multiverse-Core, MultiWorld, Vault, My_Worlds, GoldenEnchants]
 
 commands:
   hg:
