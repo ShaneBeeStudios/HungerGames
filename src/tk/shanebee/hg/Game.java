@@ -73,7 +73,7 @@ public class Game {
 	private int borderCountdownStart;
 	private int borderCountdownEnd;
 
-	public KitManager kit;
+	private KitManager kit;
 
 	/** Create a new game
 	 * @param name Name of this game
@@ -366,6 +366,21 @@ public class Game {
 				runCommands(CommandType.JOIN, player);
 			}, 5);
 		}
+	}
+
+	/** Get the kits for this game
+	 * @return The KitManager kit for this game
+	 */
+	public KitManager getKitManager() {
+		return this.kit;
+	}
+
+	/** Set the kits for this game
+	 * @param kit The KitManager kit to set
+	 */
+	@SuppressWarnings("unused")
+	public void setKitManager(KitManager kit) {
+		this.kit = kit;
 	}
 
 	private void kitHelp(Player player) {
@@ -868,20 +883,6 @@ public class Game {
 		public String getType() {
 			return type;
 		}
-	}
-
-	/** Get the kits for this game
-	 * @return The KitManager kit for this game
-	 */
-	public KitManager getKit() {
-		return this.kit;
-	}
-
-	/** Set the kits for this game
-	 * @param kit The KitManager kit to set
-	 */
-	public void setKit(KitManager kit) {
-		this.kit = kit;
 	}
 
 }

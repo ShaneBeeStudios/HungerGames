@@ -135,7 +135,7 @@ public class CommandListener implements CommandExecutor, TabCompleter {
 						game = plugin.players.get(((Player) sender).getUniqueId()).getGame();
 					}
 					if (game != null) {
-						for (String name : game.kit.getKits().keySet()) {
+						for (String name : game.getKitManager().getKits().keySet()) {
 							if (StringUtil.startsWithIgnoreCase(name, args[1])) {
 								matchesKit.add(name);
 							}
