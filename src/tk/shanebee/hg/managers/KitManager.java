@@ -9,26 +9,49 @@ import tk.shanebee.hg.data.KitEntry;
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 
+@SuppressWarnings("unused")
 public class KitManager {
 
 	public HashMap<String, KitEntry> kititems = new HashMap<>();
-	
-	public void setkit(Player p, String path) {
-		if (!kititems.containsKey(path)) {
-			Util.scm(p, ChatColor.RED + path + HG.lang.kit_doesnt_exist);
-			Util.scm(p, "&9&lKits:&b" + getKitList());
-		} else if (!kititems.get(path).hasKitPermission(p))
-			Util.msg(p, HG.lang.kit_no_perm);
+
+	/** Set a kit for a player
+	 * @param player The player to set the kit for
+	 * @param kitName The name of the kit to set
+	 */
+	public void setKit(Player player, String kitName) {
+		if (!kititems.containsKey(kitName)) {
+			Util.scm(player, ChatColor.RED + kitName + HG.lang.kit_doesnt_exist);
+			Util.scm(player, "&9&lKits:&b" + getKitList());
+		} else if (!kititems.get(kitName).hasKitPermission(player))
+			Util.msg(player, HG.lang.kit_no_perm);
 		else {
-			kititems.get(path).setInventoryContent(p);
+			kititems.get(kitName).setInventoryContent(player);
 		}
 	}
-	
+
+	/** Get a list of kits in this KitManager
+	 * @return A string list of all kits
+	 */
 	public String getKitList() {
-		String kits = "";
+		StringBuilder kits = new StringBuilder();
 		for (String s : kititems.keySet()) {
-			kits = kits + ", " + s;
+			kits.append(", ").append(s);
 		}
 		return kits.substring(1);
+	}
+
+	/** Get the kits for this KitManager
+	 * @return The kits
+	 */
+	public HashMap<String, KitEntry> getKits() {
+		return this.kititems;
+	}
+
+	/** Add a kit to this KitManager
+	 * @param name The name of the kit
+	 * @param kit The KitEntry to add
+	 */
+	public void addKit(String name, KitEntry kit) {
+		kititems.put(name, kit);
 	}
 }
