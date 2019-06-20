@@ -21,7 +21,7 @@ public class ReloadCmd extends BaseCmd {
 		HG.arenaconfig.reloadCustomConfig();
 		HG.arenaconfig.load();
 		Util.scm(player, HG.lang.cmd_reload_reloaded_arena);
-		HG.plugin.kit.kititems.clear();
+		HG.plugin.kit.getKits().clear();
 		HG.plugin.itemStackManager.setKits();
 		Util.scm(player, HG.lang.cmd_reload_reloaded_kit);
 		HG.plugin.items.clear();

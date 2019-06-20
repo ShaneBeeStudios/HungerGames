@@ -12,7 +12,7 @@ import org.bukkit.entity.Player;
 @SuppressWarnings("unused")
 public class KitManager {
 
-	public HashMap<String, KitEntry> kititems = new HashMap<>();
+	private HashMap<String, KitEntry> kititems = new HashMap<>();
 
 	/** Set a kit for a player
 	 * @param player The player to set the kit for
