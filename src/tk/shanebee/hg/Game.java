@@ -870,4 +870,18 @@ public class Game {
 		}
 	}
 
+	/** Get the kits for this game
+	 * @return The KitManager kit for this game
+	 */
+	public KitManager getKit() {
+		return this.kit;
+	}
+
+	/** Set the kits for this game
+	 * @param kit The KitManager kit to set
+	 */
+	public void setKit(KitManager kit) {
+		this.kit = kit;
+	}
+
 }
