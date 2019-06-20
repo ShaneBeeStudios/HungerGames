@@ -91,6 +91,7 @@ public class GameListener implements Listener {
 			dropInv(p);
 
 			Player killer = p.getKiller();
+			g.kills.put(killer, g.kills.get(killer) + 1);
 
 			if (killer != null) {
 				g.msgAll(HG.lang.death_fallen + " &d" + HG.killmanager.getKillString(p.getName(), killer));

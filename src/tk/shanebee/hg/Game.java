@@ -39,6 +39,7 @@ public class Game {
 	private List<Location> playerChests = new ArrayList<>();
 	public HashMap<Integer, ItemStack> items;
 	public HashMap<Integer, ItemStack> bonusItems;
+	public HashMap<Player, Integer> kills = new HashMap<>();
 
 	private List<BlockState> blocks = new ArrayList<>();
 	private List<String> commands;
@@ -346,6 +347,7 @@ public class Game {
 				player.teleport(loc);
 				heal(player);
 				freeze(player);
+				kills.put(player, 0);
 
 				if (players.size() == 1)
 					status = Status.WAITING;
@@ -658,6 +660,13 @@ public class Game {
 		HG.plugin.players.remove(player.getUniqueId());
 		if (status == Status.RUNNING || status == Status.BEGINNING || status == Status.COUNTDOWN) {
 			if (isGameOver()) {
+				if (!death) {
+					for (UUID uuid : players) {
+						if (kills.get(Bukkit.getPlayer(uuid)) >= 1) {
+							death = true;
+						}
+					}
+				}
 				stop(death);
 			}
 		} else if (status == Status.WAITING) {
