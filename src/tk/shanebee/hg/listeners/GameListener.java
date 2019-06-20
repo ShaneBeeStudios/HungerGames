@@ -11,10 +11,7 @@ import org.bukkit.entity.Shulker;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
-import org.bukkit.event.block.Action;
-import org.bukkit.event.block.BlockBreakEvent;
-import org.bukkit.event.block.BlockPlaceEvent;
-import org.bukkit.event.block.LeavesDecayEvent;
+import org.bukkit.event.block.*;
 import org.bukkit.event.entity.*;
 import org.bukkit.event.player.PlayerDropItemEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
@@ -27,7 +24,6 @@ import tk.shanebee.hg.*;
 import tk.shanebee.hg.events.ChestOpenEvent;
 
 import java.util.HashMap;
-import java.util.List;
 import java.util.Objects;
 import java.util.UUID;
 
@@ -374,14 +370,24 @@ public class GameListener implements Listener {
 	}
 
 	@EventHandler
-	public void blockExplode(EntityExplodeEvent e) {
-		if (HG.manager.isInRegion(e.getLocation())) {
-			List<Block> blocks = e.blockList();
-			Game g = HG.manager.getGame(e.getLocation());
-			for (Block block : blocks) {
+	public void onEntityExplode(EntityExplodeEvent event) {
+		if (HG.manager.isInRegion(event.getLocation())) {
+			Game g = HG.manager.getGame(event.getLocation());
+			for (Block block : event.blockList()) {
 				g.recordBlockBreak(block);
 			}
-			e.setYield(0);
+			event.setYield(0);
+		}
+	}
+
+	@EventHandler
+	public void onBlockExplode(BlockExplodeEvent event) {
+		if (HG.manager.isInRegion(event.getBlock().getLocation())) {
+			Game g = HG.manager.getGame(event.getBlock().getLocation());
+			for (Block block : event.blockList()) {
+				g.recordBlockBreak(block);
+			}
+			event.setYield(0);
 		}
 	}
 
