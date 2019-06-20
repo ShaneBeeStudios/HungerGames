@@ -166,21 +166,4 @@ public class Util {
 		return false;
 	}
 
-	public static void addNBT(org.bukkit.inventory.ItemStack item, String value) {
-		ItemStack nms = CraftItemStack.asNMSCopy(item);
-		NBTTagCompound nbt = new NBTTagCompound();
-		if (nms.getTag() != null) {
-			nbt = nms.getTag();
-		}
-		try {
-			NBTTagCompound nbtv = MojangsonParser.parse(value);
-			nbt.a(nbtv);
-			nms.setTag(nbt);
-		} catch (CommandSyntaxException ex) {
-			warning("Invalid NBT tag:");
-			warning("  -" + value);
-		}
-		item.setItemMeta(CraftItemStack.asBukkitCopy(nms).getItemMeta());
-	}
-
 }

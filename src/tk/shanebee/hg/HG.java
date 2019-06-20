@@ -17,6 +17,7 @@ import tk.shanebee.hg.listeners.GameListener;
 import tk.shanebee.hg.listeners.WandListener;
 import tk.shanebee.hg.managers.*;
 import tk.shanebee.hg.metrics.Metrics;
+import tk.shanebee.hg.nms.NBTApi;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -45,6 +46,9 @@ public class HG extends JavaPlugin {
 	public KitManager kit;
 	public ItemStackManager itemStackManager;
 	private Leaderboard leaderboard;
+
+	//NMS Nbt
+	public NBTApi nbtApi;
 
 	@Override
 	public void onEnable() {
@@ -76,11 +80,21 @@ public class HG extends JavaPlugin {
 		getServer().getPluginManager().registerEvents(new CancelListener(this), this);
 		getServer().getPluginManager().registerEvents(new GameListener(this), this);
 		loadCmds();
-		Util.log("HungerGames has been enabled!");
+
 		if (this.getDescription().getVersion().contains("Beta")) {
 			Util.log("&eYOU ARE RUNNING A BETA VERSION, please use with caution");
 			Util.log("&eReport any issues to: &bhttps://bitbucket.org/ShaneBeeStudios/hungergames/issues");
 		}
+
+		String nms = Bukkit.getServer().getClass().getPackage().getName().split("\\.")[3];
+		try {
+			nbtApi = (NBTApi) Class.forName(HG.class.getPackage().getName() + ".nms.NMS_" + nms).newInstance();
+			Util.log("&7Compatible NMS version: &b" + nms);
+		} catch (ClassNotFoundException | InstantiationException | IllegalAccessException e) {
+			Util.warning("NMS version " + nms + " not supported, item/kit \"data\" will not be supported");
+			nbtApi = null;
+		}
+		Util.log("HungerGames has been &benabled!");
 	}
 
 	@Override

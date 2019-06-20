@@ -16,6 +16,7 @@ import org.bukkit.potion.PotionEffectType;
 import tk.shanebee.hg.HG;
 import tk.shanebee.hg.Util;
 import tk.shanebee.hg.data.KitEntry;
+import tk.shanebee.hg.nms.NBTApi;
 
 import javax.annotation.Nullable;
 import java.util.ArrayList;
@@ -24,10 +25,12 @@ import java.util.Arrays;
 public class ItemStackManager {
 
 	private HG plugin;
+	private NBTApi nbtApi;
 
 	public ItemStackManager(HG p) {
 		this.plugin = p;
 		setKits();
+		this.nbtApi = p.nbtApi;
 	}
 
 	public void setKits() {
@@ -147,7 +150,8 @@ public class ItemStackManager {
 			} else if (s.startsWith("data:") && HG.isRunningMinecraft(1, 14)) {
 				s = s.replace("data:", "").replace("_", " ");
 				assert item != null;
-				Util.addNBT(item, s);
+				if (nbtApi != null)
+					nbtApi.setNBT(item, s);
 			} else if (s.startsWith("ownerName:")) {
 				s = s.replace("ownerName:", "");
 				assert item != null;
