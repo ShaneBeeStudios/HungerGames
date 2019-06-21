@@ -14,7 +14,11 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.block.Action;
 import org.bukkit.event.player.PlayerInteractEvent;
 
+/**
+ * Internal event listener
+ */
 public class WandListener implements Listener {
+
 	public HG plugin;
 
 	public WandListener(HG instance) {
@@ -22,10 +26,11 @@ public class WandListener implements Listener {
 	}
 
 	@EventHandler
-	public void onSelection(PlayerInteractEvent event) {
+	private void onSelection(PlayerInteractEvent event) {
 		Player player = event.getPlayer();
 		Action action = event.getAction();
 
+		assert event.getClickedBlock() != null;
 		if (action.equals(Action.RIGHT_CLICK_BLOCK)) {
 			if (!player.getInventory().getItemInMainHand().getType().equals(Material.BLAZE_ROD)) return;
 			if (!plugin.playerSession.containsKey(player.getUniqueId())) return;
@@ -63,4 +68,5 @@ public class WandListener implements Listener {
 			}
 		}
 	}
+
 }

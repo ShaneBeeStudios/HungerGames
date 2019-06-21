@@ -27,6 +27,9 @@ import java.util.HashMap;
 import java.util.Objects;
 import java.util.UUID;
 
+/**
+ * Internal event listener
+ */
 public class GameListener implements Listener {
 
 	private HG plugin;
@@ -77,7 +80,7 @@ public class GameListener implements Listener {
 	}
 
 	@EventHandler(priority = EventPriority.HIGHEST)
-	public void onDeath(PlayerDeathEvent event) {
+	private void onDeath(PlayerDeathEvent event) {
 		final Player p = event.getEntity();
 
 		PlayerData pd = plugin.players.get(p.getUniqueId());
@@ -119,7 +122,7 @@ public class GameListener implements Listener {
 	}
 
 	@EventHandler
-	public void onSprint(FoodLevelChangeEvent event) {
+	private void onSprint(FoodLevelChangeEvent event) {
 		Player p = (Player) event.getEntity();
 		if (plugin.players.containsKey(p.getUniqueId())) {
 			Status st = plugin.players.get(p.getUniqueId()).getGame().getStatus();
@@ -198,7 +201,7 @@ public class GameListener implements Listener {
 	}
 
 	@EventHandler(priority = EventPriority.HIGHEST)
-	public void onAttack(EntityDamageByEntityEvent event) {
+	private void onAttack(EntityDamageByEntityEvent event) {
 		Entity defender = event.getEntity();
 		Entity damager = event.getDamager();
 
@@ -229,7 +232,7 @@ public class GameListener implements Listener {
 	}
 
 	@EventHandler
-	public void onChestOpen(ChestOpenEvent event) {
+	private void onChestOpen(ChestOpenEvent event) {
 		Block b = event.getChest();
 		Game g = event.getGame();
 		if (!g.isLoggedChest(b.getLocation())) {
@@ -239,7 +242,7 @@ public class GameListener implements Listener {
 	}
 
 	@EventHandler
-	public void onChestUse(PlayerInteractEvent event) {
+	private void onChestUse(PlayerInteractEvent event) {
 		Player p = event.getPlayer();
 		if (event.getAction() == Action.RIGHT_CLICK_BLOCK && plugin.players.containsKey(p.getUniqueId())) {
 			Block block = event.getClickedBlock();
@@ -258,7 +261,7 @@ public class GameListener implements Listener {
 	}
 
 	@EventHandler
-	public void onItemUseAttempt(PlayerInteractEvent event) {
+	private void onItemUseAttempt(PlayerInteractEvent event) {
 		Player p = event.getPlayer();
 		if (event.getAction() != Action.PHYSICAL && plugin.players.containsKey(p.getUniqueId())) {
 			Status st = plugin.players.get(p.getUniqueId()).getGame().getStatus();
@@ -270,7 +273,7 @@ public class GameListener implements Listener {
 	}
 
 	@EventHandler
-	public void onPlayerClickLobby( PlayerInteractEvent event) {
+	private void onPlayerClickLobby( PlayerInteractEvent event) {
 		Player p = event.getPlayer();
 		if (event.getAction().equals(Action.RIGHT_CLICK_BLOCK)) {
 			Block b = event.getClickedBlock();
@@ -298,7 +301,7 @@ public class GameListener implements Listener {
 	}
 
 	@EventHandler
-	public void blockPlace(BlockPlaceEvent event) {
+	private void blockPlace(BlockPlaceEvent event) {
 		Player p = event.getPlayer();
 		Block b = event.getBlock();
 
@@ -334,7 +337,7 @@ public class GameListener implements Listener {
 	}
 
 	@EventHandler
-	public void blockBreak(BlockBreakEvent event) {
+	private void blockBreak(BlockBreakEvent event) {
 		Player p = event.getPlayer();
 		Block b = event.getBlock();
 
@@ -370,7 +373,7 @@ public class GameListener implements Listener {
 	}
 
 	@EventHandler
-	public void onEntityExplode(EntityExplodeEvent event) {
+	private void onEntityExplode(EntityExplodeEvent event) {
 		if (HG.manager.isInRegion(event.getLocation())) {
 			Game g = HG.manager.getGame(event.getLocation());
 			for (Block block : event.blockList()) {
@@ -381,7 +384,7 @@ public class GameListener implements Listener {
 	}
 
 	@EventHandler
-	public void onBlockExplode(BlockExplodeEvent event) {
+	private void onBlockExplode(BlockExplodeEvent event) {
 		if (HG.manager.isInRegion(event.getBlock().getLocation())) {
 			Game g = HG.manager.getGame(event.getBlock().getLocation());
 			for (Block block : event.blockList()) {
@@ -392,7 +395,7 @@ public class GameListener implements Listener {
 	}
 
 	@EventHandler
-	public void onLeafDecay(LeavesDecayEvent event) {
+	private void onLeafDecay(LeavesDecayEvent event) {
 		if (!Config.fixleaves) return;
 		Block b = event.getBlock();
 		if (HG.manager.isInRegion(b.getLocation())) {
@@ -406,7 +409,7 @@ public class GameListener implements Listener {
 	}
 
 	@EventHandler
-	public void onTrample(PlayerInteractEvent e) {
+	private void onTrample(PlayerInteractEvent e) {
 		if (!Config.preventtrample) return;
 		Player p = e.getPlayer();
 		if (HG.manager.isInRegion(p.getLocation())) {
@@ -421,7 +424,7 @@ public class GameListener implements Listener {
 	}
 
 	@EventHandler
-	public void onDrop(PlayerDropItemEvent event) {
+	private void onDrop(PlayerDropItemEvent event) {
 		Player p = event.getPlayer();
 		if (plugin.players.containsKey(p.getUniqueId()) && plugin.players.get(p.getUniqueId()).getGame().getStatus() == Status.WAITING) {
 			event.setCancelled(true);
@@ -429,7 +432,7 @@ public class GameListener implements Listener {
 	}
 
 	@EventHandler
-	public void onSpawn(EntitySpawnEvent e) {
+	private void onSpawn(EntitySpawnEvent e) {
 		Entity entity = e.getEntity();
 		if (!(entity instanceof Player) && entity instanceof LivingEntity) {
 			if (HG.manager.isInRegion(e.getLocation())) {
@@ -442,7 +445,7 @@ public class GameListener implements Listener {
 	}
 
 	@EventHandler
-	public void onlogout(PlayerQuitEvent event) {
+	private void onlogout(PlayerQuitEvent event) {
 		Player player = event.getPlayer();
 		if (plugin.players.containsKey(player.getUniqueId())) {
 			plugin.players.get(player.getUniqueId()).getGame().leave(player, false);

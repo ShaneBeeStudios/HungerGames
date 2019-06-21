@@ -21,8 +21,8 @@ public class Manager {
 	private HG plugin;
 	private Random rg = new Random();
 	
-	public Manager(HG p) {
-		plugin = p;
+	public Manager(HG plugin) {
+		this.plugin = plugin;
 	}
 	
 	public void runDebugger(CommandSender sender, String s) {
@@ -122,23 +122,23 @@ public class Manager {
 		}
 	}
 
-	public void checkGame(Game g, Player p) {
-		if (g.getSpawns().size() <  g.getMaxPlayers()) {
-			Util.scm(p, "&cYou still need &7" + (g.getMaxPlayers() - g.getSpawns().size()) + " &c more spawns!");
-		} else if (g.getStatus() == Status.BROKEN) {
-			Util.scm(p, "&cYour arena is marked as broken! use &7/hg debug &c to check for errors!");
-			Util.scm(p, "&cIf no errors are found, please use &7/hg toggle " + g.getName() + "&c!");
-		} else if (!g.isLobbyValid()) {
-			Util.scm(p, "&cYour LobbyWall is invalid! Please reset them!");
-			Util.scm(p, "&cSet lobbywall: &7/hg setlobbywall " + g.getName());
+	public void checkGame(Game game, Player player) {
+		if (game.getSpawns().size() <  game.getMaxPlayers()) {
+			Util.scm(player, "&cYou still need &7" + (game.getMaxPlayers() - game.getSpawns().size()) + " &c more spawns!");
+		} else if (game.getStatus() == Status.BROKEN) {
+			Util.scm(player, "&cYour arena is marked as broken! use &7/hg debug &c to check for errors!");
+			Util.scm(player, "&cIf no errors are found, please use &7/hg toggle " + game.getName() + "&c!");
+		} else if (!game.isLobbyValid()) {
+			Util.scm(player, "&cYour LobbyWall is invalid! Please reset them!");
+			Util.scm(player, "&cSet lobbywall: &7/hg setlobbywall " + game.getName());
 		} else {
-			Util.scm(p, "&aYour HungerGames arena is ready to run!");
-			g.setStatus(Status.WAITING);
+			Util.scm(player, "&aYour HungerGames arena is ready to run!");
+			game.setStatus(Status.WAITING);
 		}
 	}
 	
-	public void fillChests(Block b, Game game, boolean bonus) {
-		Inventory i = ((InventoryHolder)b.getState()).getInventory();
+	public void fillChests(Block block, Game game, boolean bonus) {
+		Inventory i = ((InventoryHolder)block.getState()).getInventory();
 		List<Integer> slots = new ArrayList<>();
 		for (int slot = 0; slot <= 26; slot++) {
 			slots.add(slot);
@@ -168,29 +168,42 @@ public class Manager {
 			return game.items.get(i);
 		}
 	}
-	
-	public boolean isInRegion(Location l) {
-		for (Game g : HG.plugin.games) {
-			if (g.isInRegion(l))
+
+	/** Check if a location is in a game's bounds
+	 * @param location The location to check for a game
+	 * @return True if the location is within a game's bounds
+	 */
+	public boolean isInRegion(Location location) {
+		for (Game g : plugin.games) {
+			if (g.isInRegion(location))
 				return true;
 		}
 		return false;
 	}
 
-	public Game getGame(Location l) {
-		for (Game g : HG.plugin.games) {
-			if (g.isInRegion(l))
+	/** Get a game at a location
+	 * @param location The location to check for a game
+	 * @return The game
+	 */
+	public Game getGame(Location location) {
+		for (Game g : plugin.games) {
+			if (g.isInRegion(location))
 				return g;
 		}
 		return null;
 	}
 
-	public Game getGame(String s) {
-		for (Game g : HG.plugin.games) {
-			if (g.getName().equalsIgnoreCase(s)) {
+	/** Get a game by name
+	 * @param name The name of the game to find
+	 * @return The game
+	 */
+	public Game getGame(String name) {
+		for (Game g : plugin.games) {
+			if (g.getName().equalsIgnoreCase(name)) {
 				return g;
 			}
 		}
 		return null;
 	}
+
 }

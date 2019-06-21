@@ -1,15 +1,16 @@
 package tk.shanebee.hg.managers;
 
-import java.util.HashMap;
-
+import org.bukkit.ChatColor;
+import org.bukkit.entity.Player;
 import tk.shanebee.hg.HG;
 import tk.shanebee.hg.Util;
 import tk.shanebee.hg.data.KitEntry;
 
-import org.bukkit.ChatColor;
-import org.bukkit.entity.Player;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
 
-@SuppressWarnings("unused")
+@SuppressWarnings({"unused", "WeakerAccess"})
 public class KitManager {
 
 	private HashMap<String, KitEntry> kititems = new HashMap<>();
@@ -21,7 +22,7 @@ public class KitManager {
 	public void setKit(Player player, String kitName) {
 		if (!kititems.containsKey(kitName)) {
 			Util.scm(player, ChatColor.RED + kitName + HG.plugin.lang.kit_doesnt_exist);
-			Util.scm(player, "&9&lKits:&b" + getKitList());
+			Util.scm(player, "&9&lKits:&b" + getKitListString());
 		} else if (!kititems.get(kitName).hasKitPermission(player))
 			Util.msg(player, HG.plugin.lang.kit_no_perm);
 		else {
@@ -30,9 +31,9 @@ public class KitManager {
 	}
 
 	/** Get a list of kits in this KitManager
-	 * @return A string list of all kits
+	 * @return A string of all kits
 	 */
-	public String getKitList() {
+	public String getKitListString() {
 		StringBuilder kits = new StringBuilder();
 		for (String s : kititems.keySet()) {
 			kits.append(", ").append(s);
@@ -40,8 +41,15 @@ public class KitManager {
 		return kits.substring(1);
 	}
 
+	/** Get a list of kits in this KitManager
+	 * @return A list of all kit's names
+	 */
+	public List<String> getKitList() {
+		return new ArrayList<>(kititems.keySet());
+	}
+
 	/** Get the kits for this KitManager
-	 * @return The kits
+	 * @return A map of the kits
 	 */
 	public HashMap<String, KitEntry> getKits() {
 		return this.kititems;
@@ -54,4 +62,19 @@ public class KitManager {
 	public void addKit(String name, KitEntry kit) {
 		kititems.put(name, kit);
 	}
+
+	/** Remove a kit entry from this KitManager
+	 * @param name The kit entry to remove
+	 */
+	public void removeKit(String name) {
+		kititems.remove(name);
+	}
+
+	/**
+	 * Clear the kit entries in this KitManager
+	 */
+	public void clearKits() {
+		kititems.clear();
+	}
+
 }

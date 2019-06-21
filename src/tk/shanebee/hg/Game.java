@@ -390,7 +390,7 @@ public class Game {
 		// Clear the chat a little bit, making this message easier to see
 		for(int i = 0; i < 20; ++i)
 			Util.scm(player, " ");
-		String kit = this.kit.getKitList();
+		String kit = this.kit.getKitListString();
 		Util.scm(player, " ");
 		Util.scm(player, HG.plugin.lang.kit_join_header);
 		Util.scm(player, " ");

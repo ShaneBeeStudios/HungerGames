@@ -9,15 +9,21 @@ import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.potion.PotionEffect;
 
+@SuppressWarnings("unused")
 public class KitEntry {
 
-	private ItemStack helm;
-	private String perm;
-	private ItemStack boots;
-	private ItemStack chestplate;
-	private ItemStack leggings;
-	private ItemStack[] inventoryContents;
-	private ArrayList<PotionEffect> potions;
+	private ItemStack helm = null;
+	private String perm = null;
+	private ItemStack boots = null;
+	private ItemStack chestplate = null;
+	private ItemStack leggings = null;
+	private ItemStack[] inventoryContents = null;
+	private ArrayList<PotionEffect> potions = null;
+
+	/**
+	 * Create a new, empty kit entry
+	 */
+	public KitEntry() {}
 
 	/** Create new kit entry
 	 * @param ic ItemStacks to add
@@ -47,6 +53,111 @@ public class KitEntry {
 		return perm == null || player.hasPermission(perm);
 	}
 
+	/** Set the helmet for this kit entry
+	 * @param helmet The helmet
+	 */
+	public void setHelmet(ItemStack helmet) {
+		this.helm = helmet;
+	}
+
+	/** Get the helmet for this kit entry
+	 * @return The helmet
+	 */
+	public ItemStack getHelmet() {
+		return this.helm;
+	}
+
+	/** Set the chestplate for this kit entry
+	 * @param chestplate The chestplate
+	 */
+	public void setChestplate(ItemStack chestplate) {
+		this.chestplate = chestplate;
+	}
+
+	/** Get the chestplate for this kit entry
+	 * @return The chestplate
+	 */
+	public ItemStack getChestplate() {
+		return this.chestplate;
+	}
+
+	/** Set the leggings for this kit entry
+	 * @param leggings The leggings
+	 */
+	public void setLeggings(ItemStack leggings) {
+		this.leggings = leggings;
+	}
+
+	/** Get the leggings for this kit entry
+	 * @return The leggings
+	 */
+	public ItemStack getLeggings() {
+		return this.leggings;
+	}
+
+	/** Set the boots for this kit entry
+	 * @param boots The boots
+	 */
+	public void setBoots(ItemStack boots) {
+		this.boots = boots;
+	}
+
+	/** Get the boots for this kit entry
+	 * @return The boots
+	 */
+	public ItemStack getBoots() {
+		return this.boots;
+	}
+
+	/** Set the potion effects for this kit entry
+	 * @param potions List of potion effects
+	 */
+	public void setPotions(ArrayList<PotionEffect> potions) {
+		this.potions = potions;
+	}
+
+	/** Add a potion effect to this kit entry
+	 * @param potion The potion effect to add
+	 */
+	public void addPotion(PotionEffect potion) {
+		this.potions.add(potion);
+	}
+
+	/** Get the potion effects for this kit entry
+	 * @return List of potion effects
+	 */
+	public ArrayList<PotionEffect> getPotions() {
+		return this.potions;
+	}
+
+	/** Set the permission for this kit entry
+	 * @param permission The permission
+	 */
+	public void setPermission(String permission) {
+		this.perm = permission;
+	}
+
+	/** Get the permission for this kit entry
+	 * @return The permission
+	 */
+	public String getPemission() {
+		return this.perm;
+	}
+
+	/** Set the inventory contents for this kit entry
+	 * @param items The inventory contents
+	 */
+	public void setInventoryContents(ItemStack[] items) {
+		this.inventoryContents = items;
+	}
+
+	/** Get the inventory contents for this kit entry
+	 * @return The inventory contents
+	 */
+	public ItemStack[] getInventoryContents() {
+		return this.inventoryContents;
+	}
+
 	/** Apply this kit to a player
 	 * @param player Player to apply kit to
 	 */
@@ -58,7 +169,6 @@ public class KitEntry {
 		player.getInventory().setLeggings(leggings);
 		player.getInventory().setBoots(boots);
 
-
 		for (PotionEffect effect : player.getActivePotionEffects()) {
 			player.removePotionEffect(effect.getType());
 		}
@@ -66,4 +176,5 @@ public class KitEntry {
 		HG.plugin.players.get(player.getUniqueId()).getGame().freeze(player);
 		player.updateInventory();
 	}
+
 }

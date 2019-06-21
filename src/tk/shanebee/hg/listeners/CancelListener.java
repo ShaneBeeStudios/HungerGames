@@ -11,6 +11,9 @@ import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerCommandPreprocessEvent;
 
+/**
+ * Internal event listener
+ */
 public class CancelListener implements Listener {
 
 	public HG plugin;
@@ -20,7 +23,7 @@ public class CancelListener implements Listener {
 	}
 
 	@EventHandler(priority=EventPriority.LOWEST)
-	public void onPlayerCommandPreprocess(PlayerCommandPreprocessEvent event) {
+	private void onPlayerCommandPreprocess(PlayerCommandPreprocessEvent event) {
 		Player player = event.getPlayer();
 		String[] st = event.getMessage().split(" ");
 		if (plugin.players.containsKey(player.getUniqueId()) && !st[0].equalsIgnoreCase("/login")) {
