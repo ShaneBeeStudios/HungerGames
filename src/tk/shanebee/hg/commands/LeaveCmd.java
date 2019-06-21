@@ -17,7 +17,7 @@ public class LeaveCmd extends BaseCmd {
 	public boolean run() {
 		Game g = HG.plugin.players.get(player.getUniqueId()).getGame();
 		g.leave(player, false);
-		Util.scm(player, HG.lang.prefix + HG.lang.cmd_leave_left.replace("<arena>", g.getName()));
+		Util.scm(player, HG.plugin.lang.prefix + HG.plugin.lang.cmd_leave_left.replace("<arena>", g.getName()));
 		return true;
 	}
 }

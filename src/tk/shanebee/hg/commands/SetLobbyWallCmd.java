@@ -28,14 +28,14 @@ public class SetLobbyWallCmd extends BaseCmd {
 				assert l.getWorld() != null;
 				HG.arenaconfig.getCustomConfig().set(("arenas." + args[1] + "." + "lobbysign"), (l.getWorld().getName() + ":" + l.getBlockX() + ":" + l.getBlockY() + ":" + l.getBlockZ()));
 				HG.arenaconfig.saveCustomConfig();
-				Util.msg(player, HG.lang.cmd_lobbywall_set);
+				Util.msg(player, HG.plugin.lang.cmd_lobbywall_set);
 				HG.manager.checkGame(g, player);
 			} else {
-				Util.msg(player, HG.lang.cmd_lobbywall_notcorrect);
-				Util.msg(player, HG.lang.cmd_lobbywall_format);
+				Util.msg(player, HG.plugin.lang.cmd_lobbywall_notcorrect);
+				Util.msg(player, HG.plugin.lang.cmd_lobbywall_format);
 			}
 		} else {
-			player.sendMessage(HG.lang.cmd_delete_noexist);
+			player.sendMessage(HG.plugin.lang.cmd_delete_noexist);
 		}
 		return true;
 	}

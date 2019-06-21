@@ -93,12 +93,12 @@ public class RandomItems {
 					int c = Integer.parseInt(p.replace("x:", ""));
 					while (c != 0) {
 						c--;
-						map.put(map.size() + 1, plugin.itemStackManager.getItem(itemString.replace("x:", ""), true));
+						map.put(map.size() + 1, plugin.getItemStackManager().getItem(itemString.replace("x:", ""), true));
 					}
 				}
 			}
 		} else {
-			map.put(map.size() + 1, plugin.itemStackManager.getItem(itemString, true));
+			map.put(map.size() + 1, plugin.getItemStackManager().getItem(itemString, true));
 		}
 	}
 

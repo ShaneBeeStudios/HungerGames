@@ -20,10 +20,10 @@ public class KitManager {
 	 */
 	public void setKit(Player player, String kitName) {
 		if (!kititems.containsKey(kitName)) {
-			Util.scm(player, ChatColor.RED + kitName + HG.lang.kit_doesnt_exist);
+			Util.scm(player, ChatColor.RED + kitName + HG.plugin.lang.kit_doesnt_exist);
 			Util.scm(player, "&9&lKits:&b" + getKitList());
 		} else if (!kititems.get(kitName).hasKitPermission(player))
-			Util.msg(player, HG.lang.kit_no_perm);
+			Util.msg(player, HG.plugin.lang.kit_no_perm);
 		else {
 			kititems.get(kitName).setInventoryContent(player);
 		}

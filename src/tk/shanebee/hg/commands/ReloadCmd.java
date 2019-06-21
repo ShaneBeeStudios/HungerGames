@@ -15,22 +15,22 @@ public class ReloadCmd extends BaseCmd {
 
 	@Override
 	public boolean run() {
-		Util.scm(player, HG.lang.cmd_reload_attempt);
+		Util.scm(player, HG.plugin.lang.cmd_reload_attempt);
 		HG.plugin.stopAll();
 		HG.arenaconfig.saveCustomConfig();
 		HG.arenaconfig.reloadCustomConfig();
 		HG.arenaconfig.load();
-		Util.scm(player, HG.lang.cmd_reload_reloaded_arena);
-		HG.plugin.kit.getKits().clear();
-		HG.plugin.itemStackManager.setKits();
-		Util.scm(player, HG.lang.cmd_reload_reloaded_kit);
+		Util.scm(player, HG.plugin.lang.cmd_reload_reloaded_arena);
+		HG.plugin.getKitManager().getKits().clear();
+		HG.plugin.getItemStackManager().setKits();
+		Util.scm(player, HG.plugin.lang.cmd_reload_reloaded_kit);
 		HG.plugin.items.clear();
-		HG.randomItems.load();
-		Util.scm(player, HG.lang.cmd_reload_reloaded_items);
+		HG.plugin.getRandomItems().load();
+		Util.scm(player, HG.plugin.lang.cmd_reload_reloaded_items);
 		new Config(HG.plugin);
-		Util.scm(player, HG.lang.cmd_reload_reloaded_config);
+		Util.scm(player, HG.plugin.lang.cmd_reload_reloaded_config);
 		
-		Util.scm(player, HG.lang.cmd_reload_reloaded_success);
+		Util.scm(player, HG.plugin.lang.cmd_reload_reloaded_success);
 		return true;
 	}
 }

@@ -27,9 +27,9 @@ public class ChestRefillCmd extends BaseCmd {
 			HG.arenaconfig.getCustomConfig().set("arenas." + name + ".chest-refill", time);
 			HG.arenaconfig.saveCustomConfig();
 			game.setChestRefillTime(time);
-			Util.scm(player, HG.lang.cmd_chest_refill.replace("<arena>", name).replace("<sec>", String.valueOf(time)));
+			Util.scm(player, HG.plugin.lang.cmd_chest_refill.replace("<arena>", name).replace("<sec>", String.valueOf(time)));
 		} else {
-			Util.scm(player, HG.lang.cmd_delete_noexist);
+			Util.scm(player, HG.plugin.lang.cmd_delete_noexist);
 		}
 		return true;
 	}

@@ -164,7 +164,7 @@ public class Data {
 						commands = Collections.singletonList("none");
 					}
 					try {
-						kit = plugin.itemStackManager.setGameKits(s, arenadat);
+						kit = plugin.getItemStackManager().setGameKits(s, arenadat);
 					} catch (Exception e) {
 						kit = null;
 						e.printStackTrace();
@@ -172,14 +172,14 @@ public class Data {
 					if (!arenadat.getStringList("arenas." + s + ".items").isEmpty()) {
 						items = new HashMap<>();
 						for (String itemString : arenadat.getStringList("arenas." + s + ".items")) {
-							HG.randomItems.loadItems(itemString, items);
+							HG.plugin.getRandomItems().loadItems(itemString, items);
 						}
 						Util.log(items.size() + " Random items have been loaded for arena: " + s);
 					}
 					if (!arenadat.getStringList("arenas." + s + ".bonus").isEmpty()) {
 						bonusItems = new HashMap<>();
 						for (String itemString : arenadat.getStringList("arenas." + s + ".bonus")) {
-							HG.randomItems.loadItems(itemString, bonusItems);
+							HG.plugin.getRandomItems().loadItems(itemString, bonusItems);
 						}
 						Util.log(bonusItems.size() + " Random bonus items have been loaded for arena: " + s);
 					}

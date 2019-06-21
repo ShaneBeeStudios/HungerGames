@@ -24,15 +24,15 @@ public class StopCmd extends BaseCmd {
 					game.stop(false);
 				}
 			}
-			Util.scm(sender, HG.lang.cmd_stop_all);
+			Util.scm(sender, HG.plugin.lang.cmd_stop_all);
 			return true;
 		}
 		Game g = HG.manager.getGame(args[1]);
 		if (g != null) {
 			g.stop(false);
-			Util.scm(sender, HG.lang.cmd_stop_arena.replace("<arena>", args[1]));
+			Util.scm(sender, HG.plugin.lang.cmd_stop_arena.replace("<arena>", args[1]));
 		} else {
-			Util.scm(sender, HG.lang.cmd_stop_noexist.replace("<arena>", args[1]));
+			Util.scm(sender, HG.plugin.lang.cmd_stop_noexist.replace("<arena>", args[1]));
 		}
 		return true;
 	}

@@ -91,6 +91,9 @@ public class Game {
 	 * @param borderCountdownEnd Remaining time in the game for the border to stop
 	 * @param borderSize Final size of the border
 	 * @param commands A list of commands to run
+	 * @param kit The kit to be added to the game
+	 * @param items Map of items to be added to the game
+	 * @param bonusItems Map of bonus items to be added to the game
 	 */
 	public Game(String name, Bound bound, List<Location> spawns, Sign lobbysign, int timer, int minplayers, int maxplayers,
 				int roam, int chestRefill, boolean isready, Location borderCenter, int borderSize, int borderCountdownStart,
@@ -115,7 +118,7 @@ public class Game {
 		setLobbyBlock(lobbysign);
 
 		sb = new SBDisplay(this);
-		this.kit = kit != null ? kit : HG.plugin.kit;
+		this.kit = kit != null ? kit : HG.plugin.getKitManager();
 		this.items = items != null ? items : HG.plugin.items;
 		this.bonusItems = bonusItems != null ? bonusItems : HG.plugin.bonusItems;
 
@@ -140,7 +143,7 @@ public class Game {
 		status = Status.NOTREADY;
 		sb = new SBDisplay(this);
 		this.commands = new ArrayList<>(Collections.singletonList("none"));
-		kit = HG.plugin.kit;
+		kit = HG.plugin.getKitManager();
 		this.items = HG.plugin.items;
 		this.bonusItems = HG.plugin.bonusItems;
 	}
@@ -317,10 +320,10 @@ public class Game {
 	 */
 	public void join(Player player) {
 		if (status != Status.WAITING && status != Status.STOPPED && status != Status.COUNTDOWN && status != Status.READY) {
-			Util.scm(player, HG.lang.arena_not_ready);
+			Util.scm(player, HG.plugin.lang.arena_not_ready);
 		} else if (maxplayers <= players.size()) {
 			player.sendMessage(ChatColor.RED + name + " is currently full!");
-			Util.scm(player, "&c" + name + " " + HG.lang.game_full);
+			Util.scm(player, "&c" + name + " " + HG.plugin.lang.game_full);
 		} else {
 			// Call PlayerJoinGameEvent
 			PlayerJoinGameEvent event = new PlayerJoinGameEvent(this, player);
@@ -354,9 +357,9 @@ public class Game {
 				if (players.size() >= minplayers && (status == Status.WAITING || status == Status.READY)) {
 					startPreGame();
 				} else if (status == Status.WAITING) {
-					msgAll(HG.lang.player_joined_game.replace("<player>",
+					msgAll(HG.plugin.lang.player_joined_game.replace("<player>",
 							player.getName()) + (minplayers - players.size() <= 0 ? "!" : ":" +
-							HG.lang.players_to_start.replace("<amount>", String.valueOf((minplayers - players.size())))));
+							HG.plugin.lang.players_to_start.replace("<amount>", String.valueOf((minplayers - players.size())))));
 				}
 				kitHelp(player);
 
@@ -389,13 +392,13 @@ public class Game {
 			Util.scm(player, " ");
 		String kit = this.kit.getKitList();
 		Util.scm(player, " ");
-		Util.scm(player, HG.lang.kit_join_header);
+		Util.scm(player, HG.plugin.lang.kit_join_header);
 		Util.scm(player, " ");
-		Util.scm(player, HG.lang.kit_join_msg);
+		Util.scm(player, HG.plugin.lang.kit_join_msg);
 		Util.scm(player, " ");
-		Util.scm(player, HG.lang.kit_join_avail + kit);
+		Util.scm(player, HG.plugin.lang.kit_join_avail + kit);
 		Util.scm(player, " ");
-		Util.scm(player, HG.lang.kit_join_footer);
+		Util.scm(player, HG.plugin.lang.kit_join_footer);
 		Util.scm(player, " ");
 	}
 
@@ -627,7 +630,7 @@ public class Game {
 				}
 				if (Config.cash != 0) {
 					Vault.economy.depositPlayer(Bukkit.getServer().getOfflinePlayer(u), db);
-					Util.msg(p, HG.lang.winning_amount.replace("<amount>", String.valueOf(db)));
+					Util.msg(p, HG.plugin.lang.winning_amount.replace("<amount>", String.valueOf(db)));
 				}
 				HG.plugin.getLeaderboard().addWin(u);
 			}
@@ -643,7 +646,7 @@ public class Game {
 		String winner = Util.translateStop(Util.convertUUIDListToStringList(win));
 		// prevent not death winners from gaining a prize
 		if (death)
-			Util.broadcast(HG.lang.player_won.replace("<arena>", name).replace("<winner>", winner));
+			Util.broadcast(HG.plugin.lang.player_won.replace("<arena>", name).replace("<winner>", winner));
 		if (!blocks.isEmpty()) {
 			new Rollback(this);
 		} else {
@@ -685,8 +688,8 @@ public class Game {
 				stop(death);
 			}
 		} else if (status == Status.WAITING) {
-			msgAll(HG.lang.player_left_game.replace("<player>", player.getName()) +
-					(minplayers - players.size() <= 0 ? "!" : ":" + HG.lang.players_to_start
+			msgAll(HG.plugin.lang.player_left_game.replace("<player>", player.getName()) +
+					(minplayers - players.size() <= 0 ? "!" : ":" + HG.plugin.lang.players_to_start
 							.replace("<amount>", String.valueOf((minplayers - players.size())))));
 		}
 		updateLobbyBlock();
@@ -748,7 +751,7 @@ public class Game {
 	private void createBossbar(int time) {
 		int min = (time / 60);
 		int sec = (time % 60);
-		String title = HG.lang.bossbar.replace("<min>", String.valueOf(min)).replace("<sec>", String.valueOf(sec));
+		String title = HG.plugin.lang.bossbar.replace("<min>", String.valueOf(min)).replace("<sec>", String.valueOf(sec));
 		bar = Bukkit.createBossBar(ChatColor.translateAlternateColorCodes('&', title), BarColor.GREEN, BarStyle.SEGMENTED_20);
 		for (UUID uuid : players) {
 			Player player = Bukkit.getPlayer(uuid);
@@ -761,7 +764,7 @@ public class Game {
 		double remain = ((double) remaining) / ((double) this.time);
 		int min = (remaining / 60);
 		int sec = (remaining % 60);
-		String title = HG.lang.bossbar.replace("<min>", String.valueOf(min)).replace("<sec>", String.valueOf(sec));
+		String title = HG.plugin.lang.bossbar.replace("<min>", String.valueOf(min)).replace("<sec>", String.valueOf(sec));
 		bar.setTitle(ChatColor.translateAlternateColorCodes('&', title));
 		bar.setProgress(remain);
 		if (remain <= 0.5 && remain >= 0.2)

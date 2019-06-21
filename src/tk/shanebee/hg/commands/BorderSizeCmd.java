@@ -29,9 +29,9 @@ public class BorderSizeCmd extends BaseCmd {
 			HG.arenaconfig.getCustomConfig().set("arenas." + name + ".border.size", radius);
 			game.setBorderSize(radius);
 			HG.arenaconfig.saveCustomConfig();
-			Util.scm(player, HG.lang.cmd_border_size.replace("<arena>", name).replace("<size>", String.valueOf(radius)));
+			Util.scm(player, HG.plugin.lang.cmd_border_size.replace("<arena>", name).replace("<size>", String.valueOf(radius)));
 		} else {
-			Util.scm(player, HG.lang.cmd_delete_noexist);
+			Util.scm(player, HG.plugin.lang.cmd_delete_noexist);
 		}
 		return true;
 	}

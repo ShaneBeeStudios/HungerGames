@@ -40,11 +40,11 @@ public class HG extends JavaPlugin {
 	public static HG plugin;
 	public static Manager manager;
 	public static Data arenaconfig;
-	public static KillManager killmanager;
-	public static RandomItems randomItems;
-	public static Language lang;
-	public KitManager kit;
-	public ItemStackManager itemStackManager;
+	private KillManager killManager;
+	private RandomItems randomItems;
+	public Language lang;
+	private KitManager kitManager;
+	private ItemStackManager itemStackManager;
 	private Leaderboard leaderboard;
 
 	//NMS Nbt
@@ -60,11 +60,11 @@ public class HG extends JavaPlugin {
 			Util.log("&7Metrics have been &cdisabled");
 		plugin = this;
 		lang = new Language(this);
-		kit = new KitManager();
+		kitManager = new KitManager();
 		itemStackManager = new ItemStackManager(this);
 		randomItems = new RandomItems(this);
 		arenaconfig = new Data(this);
-		killmanager = new KillManager();
+		killManager = new KillManager();
 
 		manager = new Manager(this);
 		leaderboard = new Leaderboard(this);
@@ -103,8 +103,8 @@ public class HG extends JavaPlugin {
 		plugin = null;
 		manager = null;
 		arenaconfig = null;
-		killmanager = null;
-		kit = null;
+		killManager = null;
+		kitManager = null;
 		itemStackManager = null;
 		randomItems = null;
 		Util.log("HungerGames has been disabled!");
@@ -170,11 +170,58 @@ public class HG extends JavaPlugin {
 		games.clear();
 	}
 
+	/** Get the instance of this plugin
+	 * @return This plugin
+	 */
+	public static HG getPlugin() {
+		return plugin;
+	}
+
+	public RandomItems getRandomItems() {
+		return this.randomItems;
+	}
+
+	public KillManager getKillManager() {
+		return this.killManager;
+	}
+
+	/** Get an instance of the plugins main kit manager
+	 * @return The kit manager
+	 */
+	public KitManager getKitManager() {
+		return this.kitManager;
+	}
+
+	public ItemStackManager getItemStackManager() {
+		return this.itemStackManager;
+	}
+
+	/** Get the instance of the manager
+	 * @return The manager
+	 */
+	public Manager getManager() {
+		return manager;
+	}
+
 	/** Get an instance of HG's leaderboards
 	 * @return Leaderboard
 	 */
 	public Leaderboard getLeaderboard() {
 		return this.leaderboard;
+	}
+
+	/** Get the games associated to this plugin
+	 * @return A list of games
+	 */
+	public List<Game> getGames() {
+		return this.games;
+	}
+
+	/** Get the players currently in games
+	 * @return Map of player data
+	 */
+	public HashMap<UUID, PlayerData> getPlayers() {
+		return this.players;
 	}
 
 	public static boolean isRunningMinecraft(int major, int minor) {

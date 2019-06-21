@@ -44,7 +44,7 @@ public class Util {
 	}
 
 	public static void broadcast(String s) {
-		Bukkit.getServer().broadcastMessage(ChatColor.translateAlternateColorCodes('&', HG.lang.prefix + " " + s));
+		Bukkit.getServer().broadcastMessage(ChatColor.translateAlternateColorCodes('&', HG.plugin.lang.prefix + " " + s));
 	}
 
 	public static String getColString(String string) {

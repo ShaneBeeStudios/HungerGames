@@ -66,10 +66,10 @@ public class GameListener implements Listener {
 			for (UUID u : g.getPlayers()) {
 				Player p = Bukkit.getPlayer(u);
 				if (p != null) {
-					Util.scm(p, HG.lang.track_bar);
-					Util.scm(p, HG.lang.track_new1);
-					Util.scm(p, HG.lang.track_new2);
-					Util.scm(p, HG.lang.track_bar);
+					Util.scm(p, HG.plugin.lang.track_bar);
+					Util.scm(p, HG.plugin.lang.track_new1);
+					Util.scm(p, HG.plugin.lang.track_new2);
+					Util.scm(p, HG.plugin.lang.track_bar);
 					p.getInventory().addItem(trackingStick);
 				}
 			}
@@ -90,13 +90,13 @@ public class GameListener implements Listener {
 			g.kills.put(killer, g.kills.get(killer) + 1);
 
 			if (killer != null) {
-				g.msgAll(HG.lang.death_fallen + " &d" + HG.killmanager.getKillString(p.getName(), killer));
+				g.msgAll(HG.plugin.lang.death_fallen + " &d" + plugin.getKillManager().getKillString(p.getName(), killer));
 			} else if (Objects.requireNonNull(p.getLastDamageCause()).getCause() == EntityDamageEvent.DamageCause.ENTITY_ATTACK) {
-				g.msgAll(HG.lang.death_fallen + " &d" + HG.killmanager.getKillString(p.getName(), killerMap.get(p)));
+				g.msgAll(HG.plugin.lang.death_fallen + " &d" + plugin.getKillManager().getKillString(p.getName(), killerMap.get(p)));
 			} else if (p.getLastDamageCause().getCause() == EntityDamageEvent.DamageCause.PROJECTILE) {
-				g.msgAll(HG.lang.death_fallen + " &d" + HG.killmanager.getKillString(p.getName(), killerMap.get(p)));
+				g.msgAll(HG.plugin.lang.death_fallen + " &d" + plugin.getKillManager().getKillString(p.getName(), killerMap.get(p)));
 			} else {
-				g.msgAll(HG.lang.death_fallen + " &d" + HG.killmanager.getDeathString(p.getLastDamageCause().getCause(), p.getName()));
+				g.msgAll(HG.plugin.lang.death_fallen + " &d" + plugin.getKillManager().getDeathString(p.getLastDamageCause().getCause(), p.getName()));
 			}
 			event.setDeathMessage(null);
 			event.getDrops().clear();
@@ -138,7 +138,7 @@ public class GameListener implements Listener {
 		if (im.getDisplayName().startsWith(tsn)) {
 			int uses = Integer.parseInt(im.getDisplayName().replace(tsn, ""));
 			if (uses == 0) {
-				Util.scm(p, HG.lang.track_empty);
+				Util.scm(p, HG.plugin.lang.track_empty);
 			} else {
 				PlayerData pd = plugin.players.get(p.getUniqueId());
 				final Game g = pd.getGame();
@@ -148,7 +148,7 @@ public class GameListener implements Listener {
 						im.setDisplayName(tsn + (uses - 1));
 						Location l = e.getLocation();
 						int range = (int) p.getLocation().distance(l);
-						Util.msg(p, HG.lang.track_nearest
+						Util.msg(p, HG.plugin.lang.track_nearest
 								.replace("<player>", e.getName())
 								.replace("<range>", String.valueOf(range))
 								.replace("<location>", getDirection(p.getLocation().getBlock(), l.getBlock())));
@@ -157,7 +157,7 @@ public class GameListener implements Listener {
 						return;
 					}
 				}
-				Util.msg(p, HG.lang.track_no_near);
+				Util.msg(p, HG.plugin.lang.track_no_near);
 			}
 		}
 	}
@@ -264,7 +264,7 @@ public class GameListener implements Listener {
 			Status st = plugin.players.get(p.getUniqueId()).getGame().getStatus();
 			if (st == Status.WAITING || st == Status.COUNTDOWN) {
 				event.setCancelled(true);
-				Util.scm(p, HG.lang.listener_no_interact);
+				Util.scm(p, HG.plugin.lang.listener_no_interact);
 			}
 		}
 	}
@@ -280,12 +280,12 @@ public class GameListener implements Listener {
 				if (sign.getLine(0).equals(ChatColor.DARK_BLUE + "" + ChatColor.BOLD + "HungerGames")) {
 					Game game = HG.manager.getGame(sign.getLine(1).substring(2));
 					if (game == null) {
-						Util.msg(p, HG.lang.cmd_delete_noexist);
+						Util.msg(p, HG.plugin.lang.cmd_delete_noexist);
 					} else {
 						if (p.getInventory().getItemInMainHand().getType() == Material.AIR) {
 							game.join(p);
 						} else {
-							Util.msg(p, HG.lang.listener_sign_click_hand);
+							Util.msg(p, HG.plugin.lang.listener_sign_click_hand);
 						}
 					}
 				}
@@ -310,7 +310,7 @@ public class GameListener implements Listener {
 
 				if (g.getStatus() == Status.RUNNING || g.getStatus() == Status.BEGINNING) {
 					if (!Config.blocks.contains(b.getType().toString())) {
-						Util.scm(p, HG.lang.listener_no_edit_block);
+						Util.scm(p, HG.plugin.lang.listener_no_edit_block);
 						event.setCancelled(true);
 					} else {
 						g.recordBlockPlace(event.getBlockReplacedState());
@@ -322,7 +322,7 @@ public class GameListener implements Listener {
 						}
 					}
 				} else {
-					Util.scm(p, HG.lang.listener_not_running);
+					Util.scm(p, HG.plugin.lang.listener_not_running);
 					event.setCancelled(true);
 				}
 			} else {
@@ -343,7 +343,7 @@ public class GameListener implements Listener {
 				Game g = plugin.players.get(p.getUniqueId()).getGame();
 				if (g.getStatus() == Status.RUNNING || !Config.protectCooldown) {
 					if (!Config.blocks.contains(b.getType().toString())) {
-						Util.scm(p, HG.lang.listener_no_edit_block);
+						Util.scm(p, HG.plugin.lang.listener_no_edit_block);
 						event.setCancelled(true);
 					} else {
 						g.recordBlockBreak(b);
@@ -357,7 +357,7 @@ public class GameListener implements Listener {
 						}
 					}
 				} else {
-					Util.scm(p, HG.lang.listener_not_running);
+					Util.scm(p, HG.plugin.lang.listener_not_running);
 					event.setCancelled(true);
 				}
 			} else {

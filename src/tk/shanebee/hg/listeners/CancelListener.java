@@ -28,18 +28,18 @@ public class CancelListener implements Listener {
 				if (st.length >= 2 && st[1].equalsIgnoreCase("kit") && plugin.players.get(player.getUniqueId()).getGame().getStatus() == Status.RUNNING) {
 					event.setMessage("/");
 					event.setCancelled(true);
-					Util.msg(player, HG.lang.cmd_handler_nokit);
+					Util.msg(player, HG.plugin.lang.cmd_handler_nokit);
 				}
 				return;
 			}
 			event.setMessage("/");
 			event.setCancelled(true);
-			Util.msg(player, HG.lang.cmd_handler_nocmd);
+			Util.msg(player, HG.plugin.lang.cmd_handler_nocmd);
 		} else if ("/tp".equalsIgnoreCase(st[0]) && st.length >= 2) {
 			Player p = Bukkit.getServer().getPlayer(st[1]);
 			if (p != null) {
 				if (plugin.players.containsKey(p.getUniqueId())) {
-					player.sendMessage(HG.lang.cmd_handler_playing);
+					player.sendMessage(HG.plugin.lang.cmd_handler_playing);
 					event.setMessage("/");
 					event.setCancelled(true);
 				}

@@ -34,7 +34,7 @@ public class ItemStackManager {
 	}
 
 	public void setKits() {
-		kitCreator(plugin.getConfig(), plugin.kit, null);
+		kitCreator(plugin.getConfig(), plugin.getKitManager(), null);
 		Util.log("Loaded kits");
 	}
 

@@ -21,7 +21,7 @@ public class SetExitCmd extends BaseCmd {
 		String loc = l.getWorld().getName() + ":" + l.getBlockX() + ":" + l.getBlockY() + ":" + l.getBlockZ() + ":" + l.getYaw() + ":" + l.getPitch();
 		HG.plugin.getConfig().set("settings.globalexit", loc);
 		HG.plugin.saveConfig();
-		Util.msg(player, HG.lang.cmd_exit_set + " " + loc.replace(":", "&6,&c "));
+		Util.msg(player, HG.plugin.lang.cmd_exit_set + " " + loc.replace(":", "&6,&c "));
 		
 		for (Game g : HG.plugin.games)
 			g.setExit(l);

@@ -21,7 +21,7 @@ public class KitCmd extends BaseCmd {
 		if (st == Status.WAITING || st == Status.COUNTDOWN) {
 			game.getKitManager().setKit(player, args[1]);
 		} else {
-			Util.scm(player, HG.lang.cmd_kit_no_change);
+			Util.scm(player, HG.plugin.lang.cmd_kit_no_change);
 		}
 		return true;
 	}

@@ -21,7 +21,7 @@ public class StartCmd extends BaseCmd {
 		if (g != null) {
 			if (g.getStatus() == Status.WAITING || g.getStatus() == Status.READY) {
 				g.startPreGame();
-				Util.scm(sender, HG.lang.cmd_start_starting.replace("<arena>", args[1]));
+				Util.scm(sender, HG.plugin.lang.cmd_start_starting.replace("<arena>", args[1]));
 			} else if (g.getStatus() == Status.COUNTDOWN) {
 				g.starting.stop();
 				g.startFreeRoam();
@@ -30,7 +30,7 @@ public class StartCmd extends BaseCmd {
 				Util.scm(sender, "&cGame has already started");
 			}
 		} else {
-			sender.sendMessage(HG.lang.cmd_delete_noexist);
+			sender.sendMessage(HG.plugin.lang.cmd_delete_noexist);
 		}
 		return true;
 	}

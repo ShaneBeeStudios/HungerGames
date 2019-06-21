@@ -21,14 +21,14 @@ public class ToggleCmd extends BaseCmd {
 		if (g != null) {
 			if (g.getStatus() == Status.NOTREADY || g.getStatus() == Status.BROKEN) {
 				g.setStatus(Status.READY);
-				Util.scm(sender, HG.lang.cmd_toggle_unlocked.replace("<arena>", g.getName()));
+				Util.scm(sender, HG.plugin.lang.cmd_toggle_unlocked.replace("<arena>", g.getName()));
 			} else {
 				g.stop(false);
 				g.setStatus(Status.NOTREADY);
-				Util.scm(sender, HG.lang.cmd_toggle_locked.replace("<arena>", g.getName()));
+				Util.scm(sender, HG.plugin.lang.cmd_toggle_locked.replace("<arena>", g.getName()));
 			}
 		} else {
-			Util.scm(sender, HG.lang.cmd_delete_noexist);
+			Util.scm(sender, HG.plugin.lang.cmd_delete_noexist);
 		}
 		return true;
 	}

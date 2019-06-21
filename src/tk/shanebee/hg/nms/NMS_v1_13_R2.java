@@ -7,6 +7,9 @@ import net.minecraft.server.v1_13_R2.NBTTagCompound;
 import org.bukkit.craftbukkit.v1_13_R2.inventory.CraftItemStack;
 import tk.shanebee.hg.Util;
 
+/**
+ * Internal use only
+ */
 public class NMS_v1_13_R2 implements NBTApi {
 
 	public void setNBT(org.bukkit.inventory.ItemStack item, String value) {
