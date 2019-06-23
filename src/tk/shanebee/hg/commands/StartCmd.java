@@ -23,7 +23,7 @@ public class StartCmd extends BaseCmd {
 				g.startPreGame();
 				Util.scm(sender, HG.plugin.lang.cmd_start_starting.replace("<arena>", args[1]));
 			} else if (g.getStatus() == Status.COUNTDOWN) {
-				g.starting.stop();
+				g.getStartingTask().stop();
 				g.startFreeRoam();
 				Util.scm(sender, "&aGame starting now");
 			} else {

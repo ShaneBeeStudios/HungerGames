@@ -161,11 +161,11 @@ public class Manager {
 
 	public ItemStack randomItem(Game game, boolean bonus) {
 		if (bonus) {
-			int i = rg.nextInt(game.bonusItems.size()) + 1;
-			return game.bonusItems.get(i);
+			int i = rg.nextInt(game.getBonusItems().size()) + 1;
+			return game.getBonusItems().get(i);
 		} else {
-			int i = rg.nextInt(game.items.size()) + 1;
-			return game.items.get(i);
+			int i = rg.nextInt(game.getItems().size()) + 1;
+			return game.getItems().get(i);
 		}
 	}
 

@@ -29,130 +29,119 @@ import javax.annotation.Nullable;
 import java.util.*;
 import java.util.Map.Entry;
 
+@SuppressWarnings("unused")
 public class Game {
 
+	private HG plugin;
 	private String name;
 	private List<Location> spawns;
-	private Bound b;
+	private Bound bound;
 	private List<UUID> players = new ArrayList<>();
 	private List<Location> chests = new ArrayList<>();
 	private List<Location> playerChests = new ArrayList<>();
-	public HashMap<Integer, ItemStack> items;
-	public HashMap<Integer, ItemStack> bonusItems;
-	public HashMap<Player, Integer> kills = new HashMap<>();
+	private HashMap<Integer, ItemStack> items;
+	private HashMap<Integer, ItemStack> bonusItems;
+	private KitManager kit;
+	private HashMap<Player, Integer> kills = new HashMap<>();
 
 	private List<BlockState> blocks = new ArrayList<>();
-	private List<String> commands;
+	private List<String> commands = null;
 	private Location exit;
 	private Status status;
-	private int minplayers;
-	private int maxplayers;
+	private int minPlayers;
+	private int maxPlayers;
 	private int time;
 	private Sign s;
 	private Sign s1;
 	private Sign s2;
-	private int roamtime;
+	private int roamTime;
 	private SBDisplay sb;
-	private int chestRefillTime;
+	private int chestRefillTime = 0;
 
 	// Task ID's here!
 	private Spawner spawner;
-	private FreeRoamTask freeroam;
-    /**
-     * Start task for this game
-     */
-	public StartingTask starting;
+	private FreeRoamTask freeRoam;
+	private StartingTask starting;
 	private TimerTask timer;
-	private ChestDropTask chestdrop;
+	private ChestDropTask chestDrop;
 
 	private BossBar bar;
 
 	// Border stuff here
-	private Location borderCenter;
+	private Location borderCenter = null;
 	private int borderSize;
 	private int borderCountdownStart;
 	private int borderCountdownEnd;
 
-	private KitManager kit;
-
 	/** Create a new game
+	 * <p>Internally used when loading from config on server start</p>
 	 * @param name Name of this game
 	 * @param bound Bounding region of this game
 	 * @param spawns List of spawns for this game
-	 * @param lobbysign Lobby sign block
+	 * @param lobbySign Lobby sign block
 	 * @param timer Length of the game (in seconds)
-	 * @param minplayers Minimum players to be able to start the game
-	 * @param maxplayers Maximum players that can join this game
+	 * @param minPlayers Minimum players to be able to start the game
+	 * @param maxPlayers Maximum players that can join this game
 	 * @param roam Roam time for this game
-	 * @param chestRefill The remaining time in a game when chests refill
-	 * @param isready If the game is ready to start
-	 * @param borderCenter The center of the arena
-	 * @param borderCountdownStart Remaining time in a game for the border to start
-	 * @param borderCountdownEnd Remaining time in the game for the border to stop
-	 * @param borderSize Final size of the border
-	 * @param commands A list of commands to run
-	 * @param kit The kit to be added to the game
-	 * @param items Map of items to be added to the game
-	 * @param bonusItems Map of bonus items to be added to the game
+	 * @param isReady If the game is ready to start
 	 */
-	public Game(String name, Bound bound, List<Location> spawns, Sign lobbysign, int timer, int minplayers, int maxplayers,
-				int roam, int chestRefill, boolean isready, Location borderCenter, int borderSize, int borderCountdownStart,
-				int borderCountdownEnd, List<String> commands, KitManager kit, HashMap<Integer, ItemStack> items, HashMap<Integer, ItemStack> bonusItems) {
+	public Game(String name, Bound bound, List<Location> spawns, Sign lobbySign, int timer, int minPlayers, int maxPlayers, int roam, boolean isReady) {
+		this.plugin = HG.getPlugin();
 		this.name = name;
-		this.b = bound;
+		this.bound = bound;
 		this.spawns = spawns;
-		this.s = lobbysign;
+		this.s = lobbySign;
 		this.time = timer;
-		this.minplayers = minplayers;
-		this.maxplayers = maxplayers;
-		this.roamtime = roam;
-		if (isready) status = Status.READY;
-		else status = Status.BROKEN;
-		this.chestRefillTime = chestRefill;
-		this.borderCenter = borderCenter;
-		this.borderSize = borderSize;
-		this.borderCountdownStart = borderCountdownStart;
-		this.borderCountdownEnd = borderCountdownEnd;
-		this.commands = commands;
+		this.minPlayers = minPlayers;
+		this.maxPlayers = maxPlayers;
+		this.roamTime = roam;
+		if (isReady) this.status = Status.READY;
+		else this.status = Status.BROKEN;
+		this.borderSize = Config.borderFinalSize;
+		this.borderCountdownStart = Config.borderCountdownStart;
+		this.borderCountdownEnd = Config.borderCountdownEnd;
 
-		setLobbyBlock(lobbysign);
+		setLobbyBlock(lobbySign);
 
-		sb = new SBDisplay(this);
-		this.kit = kit != null ? kit : HG.plugin.getKitManager();
-		this.items = items != null ? items : HG.plugin.items;
-		this.bonusItems = bonusItems != null ? bonusItems : HG.plugin.bonusItems;
-
+		this.sb = new SBDisplay(this);
+		this.kit = plugin.getKitManager();
+		this.items = plugin.items;
+		this.bonusItems = plugin.bonusItems;
 	}
 
 	/** Create a new game
+	 * <p>Internally used when creating a game with the <b>/hg create</b> command</p>
 	 * @param name Name of this game
 	 * @param bound Bounding region of this game
 	 * @param timer Length of the game (in seconds)
-	 * @param minplayers Minimum players to be able to start the game
-	 * @param maxplayers Maximum players that can join this game
+	 * @param minPlayers Minimum players to be able to start the game
+	 * @param maxPlayers Maximum players that can join this game
 	 * @param roam Roam time for this game
 	 */
-	public Game(String name, Bound bound, int timer, int minplayers, int maxplayers, int roam) {
+	public Game(String name, Bound bound, int timer, int minPlayers, int maxPlayers, int roam) {
+		this.plugin = HG.getPlugin();
 		this.name = name;
 		this.time = timer;
-		this.minplayers = minplayers;
-		this.maxplayers = maxplayers;
-		this.roamtime = roam;
+		this.minPlayers = minPlayers;
+		this.maxPlayers = maxPlayers;
+		this.roamTime = roam;
 		this.spawns = new ArrayList<>();
-		this.b = bound;
-		status = Status.NOTREADY;
-		sb = new SBDisplay(this);
-		this.commands = new ArrayList<>(Collections.singletonList("none"));
-		kit = HG.plugin.getKitManager();
-		this.items = HG.plugin.items;
-		this.bonusItems = HG.plugin.bonusItems;
+		this.bound = bound;
+		this.status = Status.NOTREADY;
+		this.sb = new SBDisplay(this);
+		this.kit = plugin.getKitManager();
+		this.items = plugin.items;
+		this.bonusItems = plugin.bonusItems;
+		this.borderSize = Config.borderFinalSize;
+		this.borderCountdownStart = Config.borderCountdownStart;
+		this.borderCountdownEnd = Config.borderCountdownEnd;
 	}
 
 	/** Get the bounding region of this game
 	 * @return Region of this game
 	 */
 	public Bound getRegion() {
-		return b;
+		return bound;
 	}
 
 	/**
@@ -163,6 +152,81 @@ public class Game {
 		for (BlockState st : blocks) {
 			st.update(true);
 		}
+	}
+
+	public void setItems(HashMap<Integer, ItemStack> items) {
+		this.items = items;
+	}
+
+	public HashMap<Integer, ItemStack> getItems() {
+		return this.items;
+	}
+
+	public void addToItems(ItemStack item) {
+		this.items.put(this.items.size() + 1, item);
+	}
+
+	public void clearItems() {
+		this.items.clear();
+	}
+
+	public void resetItemsDefault() {
+		this.items = HG.getPlugin().items;
+	}
+
+	public void setBonusItems(HashMap<Integer, ItemStack> items) {
+		this.bonusItems = items;
+	}
+
+	public HashMap<Integer, ItemStack> getBonusItems() {
+		return this.bonusItems;
+	}
+
+	public void addToBonusItems(ItemStack item) {
+		this.bonusItems.put(this.bonusItems.size() + 1, item);
+	}
+
+	public void clearBonusItems() {
+		this.bonusItems.clear();
+	}
+
+	public void resetBonusItemsDefault() {
+		this.bonusItems = HG.getPlugin().bonusItems;
+	}
+
+	/** Set the list of a commands to run for this game
+	 * <p><b>format = </b> "type:command"</p>
+	 * <p><b>types = </b> start, stop, death, join</p>
+	 * @param commands List of commands
+	 */
+	public void setCommands(List<String> commands) {
+		this.commands = commands;
+	}
+
+	/** Add a command to the list of commands for this game
+	 * @param command The command to add
+	 * @param type The type of the command
+	 */
+	public void addCommand(String command, CommandType type) {
+		this.commands.add(type.getType() + ":" + command);
+	}
+
+	/** Add a kill to a player
+	 * @param player The player to add a kill to
+	 */
+	public void addKill(Player player) {
+		this.kills.put(player, this.kills.get(player) + 1);
+	}
+
+	public StartingTask getStartingTask() {
+		return this.starting;
+	}
+
+	/** Set the chest refill time for this game
+	 * @param refill Remaining time in game (seconds : 30 second intervals)
+	 */
+	public void setChestRefill(int refill) {
+		this.chestRefillTime = refill;
 	}
 
 	/** Set the status of the game
@@ -298,7 +362,7 @@ public class Game {
 	 * @return True if location is within the arena bounds
 	 */
 	public boolean isInRegion(Location location) {
-		return b.isInRegion(location);
+		return bound.isInRegion(location);
 	}
 
 	/** Get a list of all spawn locations
@@ -312,7 +376,7 @@ public class Game {
 	 * @return The roam time
 	 */
 	public int getRoamTime() {
-		return this.roamtime;
+		return this.roamTime;
 	}
 
 	/** Join a player to the game
@@ -321,7 +385,7 @@ public class Game {
 	public void join(Player player) {
 		if (status != Status.WAITING && status != Status.STOPPED && status != Status.COUNTDOWN && status != Status.READY) {
 			Util.scm(player, HG.plugin.lang.arena_not_ready);
-		} else if (maxplayers <= players.size()) {
+		} else if (maxPlayers <= players.size()) {
 			player.sendMessage(ChatColor.RED + name + " is currently full!");
 			Util.scm(player, "&c" + name + " " + HG.plugin.lang.game_full);
 		} else {
@@ -354,12 +418,12 @@ public class Game {
 
 				if (players.size() == 1)
 					status = Status.WAITING;
-				if (players.size() >= minplayers && (status == Status.WAITING || status == Status.READY)) {
+				if (players.size() >= minPlayers && (status == Status.WAITING || status == Status.READY)) {
 					startPreGame();
 				} else if (status == Status.WAITING) {
 					msgAll(HG.plugin.lang.player_joined_game.replace("<player>",
-							player.getName()) + (minplayers - players.size() <= 0 ? "!" : ":" +
-							HG.plugin.lang.players_to_start.replace("<amount>", String.valueOf((minplayers - players.size())))));
+							player.getName()) + (minPlayers - players.size() <= 0 ? "!" : ":" +
+							HG.plugin.lang.players_to_start.replace("<amount>", String.valueOf((minPlayers - players.size())))));
 				}
 				kitHelp(player);
 
@@ -431,8 +495,8 @@ public class Game {
 	 */
 	public void startFreeRoam() {
 		status = Status.BEGINNING;
-		b.removeEntities();
-		freeroam = new FreeRoamTask(this);
+		bound.removeEntities();
+		freeRoam = new FreeRoamTask(this);
 		runCommands(CommandType.START, null);
 	}
 
@@ -442,7 +506,7 @@ public class Game {
 	public void startGame() {
 		status = Status.RUNNING;
 		if (Config.spawnmobs) spawner = new Spawner(this, Config.spawnmobsinterval);
-		if (Config.randomChest) chestdrop = new ChestDropTask(this);
+		if (Config.randomChest) chestDrop = new ChestDropTask(this);
 		timer = new TimerTask(this, time);
 		updateLobbyBlock();
 		createBossbar(time);
@@ -460,7 +524,7 @@ public class Game {
 	}
 
 	private Location pickSpawn() {
-		double spawn = getRandomIntegerBetweenRange(maxplayers - 1);
+		double spawn = getRandomIntegerBetweenRange(maxPlayers - 1);
 		if (containsPlayer(spawns.get(((int) spawn)))) {
 			Collections.shuffle(spawns);
 			for (Location l : spawns) {
@@ -496,7 +560,7 @@ public class Game {
 
 	private void updateLobbyBlock() {
 		s1.setLine(1, status.getName());
-		s2.setLine(1, ChatColor.BOLD + "" + players.size() + "/" + maxplayers);
+		s2.setLine(1, ChatColor.BOLD + "" + players.size() + "/" + maxPlayers);
 		s1.update(true);
 		s2.update(true);
 	}
@@ -551,7 +615,7 @@ public class Game {
 			s1.setLine(0, ChatColor.DARK_BLUE + "" + ChatColor.BOLD + "Game Status");
 			s1.setLine(1, status.getName());
 			s2.setLine(0, ChatColor.DARK_BLUE + "" + ChatColor.BOLD + "Alive");
-			s2.setLine(1, ChatColor.BOLD + "" + 0 + "/" + maxplayers);
+			s2.setLine(1, ChatColor.BOLD + "" + 0 + "/" + maxPlayers);
 			s.update(true);
 			s1.update(true);
 			s2.update(true);
@@ -579,8 +643,8 @@ public class Game {
 		if (spawner != null) spawner.stop();
 		if (timer != null) timer.stop();
 		if (starting != null) starting.stop();
-		if (freeroam != null) freeroam.stop();
-		if (chestdrop != null) chestdrop.shutdown();
+		if (freeRoam != null) freeRoam.stop();
+		if (chestDrop != null) chestDrop.shutdown();
 	}
 
 	/**
@@ -653,7 +717,7 @@ public class Game {
 			status = Status.READY;
 			updateLobbyBlock();
 		}
-		b.removeEntities();
+		bound.removeEntities();
 		sb.resetAlive();
 		if (Config.borderEnabled) {
 			resetBorder();
@@ -689,8 +753,8 @@ public class Game {
 			}
 		} else if (status == Status.WAITING) {
 			msgAll(HG.plugin.lang.player_left_game.replace("<player>", player.getName()) +
-					(minplayers - players.size() <= 0 ? "!" : ":" + HG.plugin.lang.players_to_start
-							.replace("<amount>", String.valueOf((minplayers - players.size())))));
+					(minPlayers - players.size() <= 0 ? "!" : ":" + HG.plugin.lang.players_to_start
+							.replace("<amount>", String.valueOf((minPlayers - players.size())))));
 		}
 		updateLobbyBlock();
 		sb.setAlive();
@@ -730,7 +794,7 @@ public class Game {
 	 * @return Max amount of players for this game
 	 */
 	public int getMaxPlayers() {
-		return maxplayers;
+		return maxPlayers;
 	}
 
 	public boolean isLobbyValid() {
@@ -775,10 +839,10 @@ public class Game {
 	}
 
 	private double getBorderSize(Location center) {
-		double x1 = Math.abs(b.getGreaterCorner().getX() - center.getX());
-		double x2 = Math.abs(b.getLesserCorner().getX() - center.getX());
-		double z1 = Math.abs(b.getGreaterCorner().getZ() - center.getZ());
-		double z2 = Math.abs(b.getLesserCorner().getZ() - center.getZ());
+		double x1 = Math.abs(bound.getGreaterCorner().getX() - center.getX());
+		double x2 = Math.abs(bound.getLesserCorner().getX() - center.getX());
+		double z1 = Math.abs(bound.getGreaterCorner().getZ() - center.getZ());
+		double z2 = Math.abs(bound.getLesserCorner().getZ() - center.getZ());
 
 		double x = x1 > x2 ? x1 : x2;
 		double z = z1 > z2 ? z1 : z2;
@@ -811,7 +875,7 @@ public class Game {
 		} else if (borderCenter != null) {
 			center = borderCenter;
 		} else {
-			center = b.getCenter();
+			center = bound.getCenter();
 		}
 		World world = center.getWorld();
 		assert world != null;
@@ -836,12 +900,13 @@ public class Game {
 	 */
 	@SuppressWarnings("ConstantConditions")
 	public void runCommands(CommandType commandType, @Nullable Player player) {
+		if (commands == null) return;
 		for (String command : commands) {
 			String type = command.split(":")[0];
 			if (!type.equals(commandType.getType())) continue;
 			if (command.equalsIgnoreCase("none")) continue;
 			command = command.split(":")[1]
-					.replace("<world>", this.b.getWorld().getName())
+					.replace("<world>", this.bound.getWorld().getName())
 					.replace("<arena>", this.getName());
 			if (player != null) {
 				command = command.replace("<player>", player.getName());

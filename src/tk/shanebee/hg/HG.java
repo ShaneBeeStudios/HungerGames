@@ -217,6 +217,10 @@ public class HG extends JavaPlugin {
 		return this.games;
 	}
 
+	public void addGame(Game game) {
+		this.games.add(game);
+	}
+
 	/** Get the players currently in games
 	 * @return Map of player data
 	 */

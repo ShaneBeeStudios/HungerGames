@@ -93,41 +93,13 @@ public class Data {
 					int timer = 0;
 					int minplayers = 0;
 					int maxplayers = 0;
-					int chestRefill = 0;
 					Bound b = null;
-					Location borderCenter = null;
-					int borderSize = 0;
-					int borderCountdownStart = 0;
-					int borderCountdownEnd = 0;
 					List<String> commands;
-					KitManager kit;
-
-					HashMap<Integer, ItemStack> items = null;
-					HashMap<Integer, ItemStack> bonusItems = null;
 
 					try {
 						timer = arenadat.getInt("arenas." + s + ".info." + "timer");
 						minplayers = arenadat.getInt("arenas." + s + ".info." + "min-players");
 						maxplayers = arenadat.getInt("arenas." + s + ".info." + "max-players");
-						if (arenadat.isSet("arenas." + s + ".chest-refill")) {
-							chestRefill = arenadat.getInt("arenas." + s + ".chest-refill");
-						}
-						if (arenadat.isSet("arenas." + s + ".border.center")) {
-							borderCenter = getSLoc(arenadat.getString("arenas." + s + ".border.center"));
-						}
-						if (arenadat.isSet("arenas." + s + ".border.size")) {
-							borderSize = arenadat.getInt("arenas." + s + ".border.size");
-						} else {
-							borderSize = Config.borderFinalSize;
-						}
-						if (arenadat.isSet("arenas." + s + ".border.countdown-start") &&
-								arenadat.isSet("arenas." + s + ".border.countdown-end")) {
-							borderCountdownStart = arenadat.getInt("arenas." + s + ".border.countdown-start");
-							borderCountdownEnd = arenadat.getInt("arenas." + s + ".border.countdown-end");
-						} else {
-							borderCountdownStart = Config.borderCountdownStart;
-							borderCountdownEnd = Config.borderCountdownEnd;
-						}
 					} catch (Exception e) {
 						Util.warning("Unable to load information for arena " + s + "!");
 						isReady = false;
@@ -156,6 +128,47 @@ public class Data {
 						isReady = false;
 					}
 
+					Game game = new Game(s, b, spawns, lobbysign, timer, minplayers, maxplayers, freeroam, isReady);
+					plugin.addGame(game);
+
+					try {
+						KitManager kit = plugin.getItemStackManager().setGameKits(s, arenadat);
+						game.setKitManager(kit);
+					} catch (Exception e) {
+						e.printStackTrace();
+					}
+
+					if (!arenadat.getStringList("arenas." + s + ".items").isEmpty()) {
+						HashMap<Integer, ItemStack> items = new HashMap<>();
+						for (String itemString : arenadat.getStringList("arenas." + s + ".items")) {
+							HG.plugin.getRandomItems().loadItems(itemString, items);
+						}
+						game.setItems(items);
+						Util.log(items.size() + " Random items have been loaded for arena: " + s);
+					}
+					if (!arenadat.getStringList("arenas." + s + ".bonus").isEmpty()) {
+						HashMap<Integer, ItemStack> bonusItems = new HashMap<>();
+						for (String itemString : arenadat.getStringList("arenas." + s + ".bonus")) {
+							HG.plugin.getRandomItems().loadItems(itemString, bonusItems);
+						}
+						game.setBonusItems(bonusItems);
+						Util.log(bonusItems.size() + " Random bonus items have been loaded for arena: " + s);
+					}
+
+					if (arenadat.isSet("arenas." + s + ".border.center")) {
+						Location borderCenter = getSLoc(arenadat.getString("arenas." + s + ".border.center"));
+						game.setBorderCenter(borderCenter);
+					}
+					if (arenadat.isSet("arenas." + s + ".border.size")) {
+						int borderSize = arenadat.getInt("arenas." + s + ".border.size");
+						game.setBorderSize(borderSize);
+					}
+					if (arenadat.isSet("arenas." + s + ".border.countdown-start") &&
+							arenadat.isSet("arenas." + s + ".border.countdown-end")) {
+						int borderCountdownStart = arenadat.getInt("arenas." + s + ".border.countdown-start");
+						int borderCountdownEnd = arenadat.getInt("arenas." + s + ".border.countdown-end");
+						game.setBorderTimer(borderCountdownStart, borderCountdownEnd);
+					}
 					if (arenadat.isList("arenas." + s + ".commands")) {
 						commands = arenadat.getStringList("arenas." + s + ".commands");
 					} else {
@@ -163,29 +176,12 @@ public class Data {
 						saveCustomConfig();
 						commands = Collections.singletonList("none");
 					}
-					try {
-						kit = plugin.getItemStackManager().setGameKits(s, arenadat);
-					} catch (Exception e) {
-						kit = null;
-						e.printStackTrace();
-					}
-					if (!arenadat.getStringList("arenas." + s + ".items").isEmpty()) {
-						items = new HashMap<>();
-						for (String itemString : arenadat.getStringList("arenas." + s + ".items")) {
-							HG.plugin.getRandomItems().loadItems(itemString, items);
-						}
-						Util.log(items.size() + " Random items have been loaded for arena: " + s);
-					}
-					if (!arenadat.getStringList("arenas." + s + ".bonus").isEmpty()) {
-						bonusItems = new HashMap<>();
-						for (String itemString : arenadat.getStringList("arenas." + s + ".bonus")) {
-							HG.plugin.getRandomItems().loadItems(itemString, bonusItems);
-						}
-						Util.log(bonusItems.size() + " Random bonus items have been loaded for arena: " + s);
+					game.setCommands(commands);
+					if (arenadat.isSet("arenas." + s + ".chest-refill")) {
+						int chestRefill = arenadat.getInt("arenas." + s + ".chest-refill");
+						game.setChestRefillTime(chestRefill);
 					}
 
-					plugin.games.add(new Game(s, b, spawns, lobbysign, timer, minplayers, maxplayers, freeroam, chestRefill,
-							isReady, borderCenter, borderSize, borderCountdownStart, borderCountdownEnd, commands, kit, items, bonusItems));
 				}
 			} else {
 				Util.log("No Arenas to load.");
