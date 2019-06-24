@@ -201,20 +201,37 @@ public class GameListener implements Listener {
 	}
 
 	@EventHandler(priority = EventPriority.HIGHEST)
+	private void onTarget(EntityTargetEvent event) {
+		Entity target = event.getTarget();
+		if (target instanceof Player) {
+			if (plugin.getSpectators().containsKey(target.getUniqueId())) {
+				event.setCancelled(true);
+			}
+		}
+	}
+
+	@EventHandler(priority = EventPriority.HIGHEST)
 	private void onAttack(EntityDamageByEntityEvent event) {
 		Entity defender = event.getEntity();
 		Entity damager = event.getDamager();
 
+		if (damager instanceof Player) {
+			if (plugin.getSpectators().containsKey(damager.getUniqueId())) {
+				event.setCancelled(true);
+			}
+		}
+
 		if (defender instanceof Player) {
+			if (plugin.getSpectators().containsKey(damager.getUniqueId())) {
+				event.setCancelled(true);
+			}
 			if (plugin.players.get(defender.getUniqueId()) != null) {
 				if (!killerMap.containsKey(defender))
 					killerMap.put(((Player) defender), damager);
 				else
 					killerMap.replace(((Player) defender), damager);
 			}
-		}
 
-		if (defender instanceof Player) {
 			Player p = (Player) defender;
 			PlayerData pd = plugin.players.get(p.getUniqueId());
 
@@ -263,6 +280,9 @@ public class GameListener implements Listener {
 	@EventHandler
 	private void onItemUseAttempt(PlayerInteractEvent event) {
 		Player p = event.getPlayer();
+		if (plugin.getSpectators().containsKey(p.getUniqueId())) {
+			event.setCancelled(true);
+		}
 		if (event.getAction() != Action.PHYSICAL && plugin.players.containsKey(p.getUniqueId())) {
 			Status st = plugin.players.get(p.getUniqueId()).getGame().getStatus();
 			if (st == Status.WAITING || st == Status.COUNTDOWN) {
@@ -305,6 +325,9 @@ public class GameListener implements Listener {
 		Player p = event.getPlayer();
 		Block b = event.getBlock();
 
+		if (plugin.getSpectators().containsKey(p.getUniqueId())) {
+			event.setCancelled(true);
+		}
 		if (HG.manager.isInRegion(b.getLocation())) {
 
 			if (Config.breakblocks && plugin.players.containsKey(p.getUniqueId())) {
@@ -341,6 +364,9 @@ public class GameListener implements Listener {
 		Player p = event.getPlayer();
 		Block b = event.getBlock();
 
+		if (plugin.getSpectators().containsKey(p.getUniqueId())) {
+			event.setCancelled(true);
+		}
 		if (HG.manager.isInRegion(b.getLocation())) {
 			if (Config.breakblocks && plugin.players.containsKey(p.getUniqueId())) {
 				Game g = plugin.players.get(p.getUniqueId()).getGame();
@@ -409,15 +435,18 @@ public class GameListener implements Listener {
 	}
 
 	@EventHandler
-	private void onTrample(PlayerInteractEvent e) {
+	private void onTrample(PlayerInteractEvent event) {
 		if (!Config.preventtrample) return;
-		Player p = e.getPlayer();
+		Player p = event.getPlayer();
+		if (plugin.getSpectators().containsKey(p.getUniqueId())) {
+			event.setCancelled(true);
+		}
 		if (HG.manager.isInRegion(p.getLocation())) {
-			if (e.getAction() == Action.PHYSICAL) {
-				assert e.getClickedBlock() != null;
-				Material block = e.getClickedBlock().getType();
+			if (event.getAction() == Action.PHYSICAL) {
+				assert event.getClickedBlock() != null;
+				Material block = event.getClickedBlock().getType();
 				if (block == Material.FARMLAND) {
-					e.setCancelled(true);
+					event.setCancelled(true);
 				}
 			}
 		}
@@ -450,6 +479,7 @@ public class GameListener implements Listener {
 		if (plugin.players.containsKey(player.getUniqueId())) {
 			plugin.players.get(player.getUniqueId()).getGame().leave(player, false);
 		}
+		//TODO put something here for spectator leaving the game
 	}
 
 }

@@ -37,6 +37,7 @@ public class Game {
 	private List<Location> spawns;
 	private Bound bound;
 	private List<UUID> players = new ArrayList<>();
+	private List<Player> spectators = new ArrayList<>();
 	private List<Location> chests = new ArrayList<>();
 	private List<Location> playerChests = new ArrayList<>();
 	private HashMap<Integer, ItemStack> items;
@@ -72,6 +73,9 @@ public class Game {
 	private int borderSize;
 	private int borderCountdownStart;
 	private int borderCountdownEnd;
+
+	private boolean spectate = Config.spectateEnabled;
+	private boolean spectateOnDeath = Config.spectateOnDeath;
 
 	/** Create a new game
 	 * <p>Internally used when loading from config on server start</p>
@@ -348,6 +352,10 @@ public class Game {
 	 */
 	public List<UUID> getPlayers() {
 		return players;
+	}
+
+	public List<Player> getSpectators() {
+		return this.spectators;
 	}
 
 	/** Get the name of this game
@@ -672,6 +680,10 @@ public class Game {
 			}
 		}
 		players.clear();
+		for (Player player : spectators) {
+			leaveSpectate(player);
+		}
+		spectators.clear();
 		if (this.getStatus() == Status.RUNNING)
 			bar.removeAll();
 
@@ -733,13 +745,20 @@ public class Game {
 		Bukkit.getPluginManager().callEvent(new PlayerLeaveGameEvent(this, player, death));
 		players.remove(player.getUniqueId());
 		unFreeze(player);
-		if (death) player.spigot().respawn();
-		exit(player);
+		if (death) {
+			player.spigot().respawn();
+		}
+		if (death && spectate && spectateOnDeath) {
+			spectate(player);
+		} else {
+			exit(player);
+			sb.restoreSB(player);
+			HG.plugin.players.get(player.getUniqueId()).restore(player);
+			HG.plugin.players.remove(player.getUniqueId());
+		}
 		heal(player);
 
-		sb.restoreSB(player);
-		HG.plugin.players.get(player.getUniqueId()).restore(player);
-		HG.plugin.players.remove(player.getUniqueId());
+
 		if (status == Status.RUNNING || status == Status.BEGINNING || status == Status.COUNTDOWN) {
 			if (isGameOver()) {
 				if (!death) {
@@ -894,10 +913,39 @@ public class Game {
 		world.getWorldBorder().reset();
 	}
 
-	public void spectate(Player player) {
-		plugin.getSpectators().put(player.getUniqueId(), new PlayerData(player, this));
-		player.teleport(this.getSpawns().get(0));
-		player.setAllowFlight(true);
+	public void spectate(Player spectator) {
+		if (plugin.getPlayers().containsKey(spectator.getUniqueId())) {
+			PlayerData spectatorData = plugin.getPlayers().get(spectator.getUniqueId());
+			plugin.getSpectators().put(spectator.getUniqueId(), spectatorData);
+			plugin.getPlayers().remove(spectator.getUniqueId());
+		} else {
+			plugin.getSpectators().put(spectator.getUniqueId(), new PlayerData(spectator, this));
+		}
+		this.spectators.add(spectator);
+		spectator.setGameMode(GameMode.SURVIVAL);
+		spectator.teleport(this.getSpawns().get(0));
+		spectator.setAllowFlight(true);
+
+		for (UUID uuid : players) {
+			Player player = Bukkit.getPlayer(uuid);
+			if (player == null) continue;
+			player.hidePlayer(plugin, spectator);
+		}
+		for (Player player : spectators) {
+			player.hidePlayer(plugin, spectator);
+		}
+		bar.addPlayer(spectator);
+	}
+
+	public void leaveSpectate(Player spectator) {
+		exit(spectator);
+		plugin.getSpectators().get(spectator.getUniqueId()).restore(spectator);
+		plugin.getSpectators().remove(spectator.getUniqueId());
+		spectator.setAllowFlight(false);
+		for (Player player : Bukkit.getOnlinePlayers()) {
+			player.showPlayer(plugin, spectator);
+		}
+		bar.removePlayer(spectator);
 	}
 
 	/** Run commands for this game that are defined in the arenas.yml

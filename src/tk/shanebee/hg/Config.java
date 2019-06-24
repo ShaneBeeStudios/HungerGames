@@ -47,6 +47,10 @@ public class Config {
 	public static int borderCountdownEnd;
 	public static int borderFinalSize;
 
+	//Spectate
+	public static boolean spectateEnabled;
+	public static boolean spectateOnDeath;
+
 	private HG plugin;
 
 	public Config(HG plugin) {
@@ -98,6 +102,9 @@ public class Config {
 		borderCountdownEnd = config.getInt("world-border.countdown-end");
 		borderFinalSize = config.getInt("world-border.final-border-size");
 
+		spectateEnabled = config.getBoolean("spectate.enabled");
+		spectateOnDeath = config.getBoolean("spectate.death-to-spectate");
+
 		if (giveReward) {
 			try {
 				Vault.setupEconomy();
@@ -134,6 +141,10 @@ public class Config {
 		}
 		if (!config.isSet("rollback.protect-during-cooldown")) {
 			config.set("rollback.protect-during-cooldown", true);
+		}
+		if (!config.isSet("spectate.enabled")) {
+			config.set("spectate.enabled", false);
+			config.set("spectate.death-to-spectate", true);
 		}
 		plugin.saveConfig();
 	}

@@ -133,6 +133,9 @@ public class HG extends JavaPlugin {
 		cmds.put("bordersize", new BorderSizeCmd());
 		cmds.put("bordercenter", new BorderCenterCmd());
 		cmds.put("bordertimer", new BorderTimerCmd());
+		if (Config.spectateEnabled) {
+			cmds.put("spectate", new SpectateCmd());
+		}
 
 		ArrayList<String> cArray = new ArrayList<>();
 		cArray.add("join");

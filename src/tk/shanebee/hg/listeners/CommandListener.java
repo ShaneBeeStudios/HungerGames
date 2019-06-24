@@ -6,6 +6,7 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.command.TabCompleter;
 import org.bukkit.entity.Player;
 import org.bukkit.util.StringUtil;
+import tk.shanebee.hg.Config;
 import tk.shanebee.hg.Game;
 import tk.shanebee.hg.HG;
 import tk.shanebee.hg.Util;
@@ -66,7 +67,8 @@ public class CommandListener implements CommandExecutor, TabCompleter {
 					(args[0].equalsIgnoreCase("join")) ||
 					(args[0].equalsIgnoreCase("setlobbywall")) ||
 					(args[0].equalsIgnoreCase("toggle")) ||
-					(args[0].equalsIgnoreCase("bordercenter"))) {
+					(args[0].equalsIgnoreCase("bordercenter")) ||
+					((args[0].equalsIgnoreCase("spectate")) && Config.spectateEnabled)) {
 				ArrayList<String> matchesDelete = new ArrayList<>();
 				if (args.length == 2) {
 					for (Game name : plugin.games) {

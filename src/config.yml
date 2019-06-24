@@ -54,6 +54,9 @@ world-border:
     countdown-end: 30
     final-border-size: 30
     center-on-first-spawn: true
+spectate:
+    enabled: false
+    death-to-spectate: true
 kits:
     bowman:
         permission: none

@@ -27,7 +27,7 @@ public abstract class BaseCmd {
 		}
 		if (!s.hasPermission("hg." + cmdName))
 			Util.scm(sender, HG.plugin.lang.cmd_base_noperm.replace("<command>", cmdName));
-		else if (forceInGame && !HG.plugin.players.containsKey(player.getUniqueId()))
+		else if (forceInGame && !HG.plugin.players.containsKey(player.getUniqueId()) && !HG.plugin.getSpectators().containsKey(player.getUniqueId()))
 			Util.scm(sender, HG.plugin.lang.cmd_base_nogame);
 		else if (forceInRegion && !HG.manager.isInRegion(player.getLocation()))
 			Util.scm(sender, HG.plugin.lang.cmd_base_noregion);
