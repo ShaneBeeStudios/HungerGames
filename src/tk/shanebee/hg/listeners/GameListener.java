@@ -90,9 +90,9 @@ public class GameListener implements Listener {
 			dropInv(p);
 
 			Player killer = p.getKiller();
-			g.addKill(killer);
 
 			if (killer != null) {
+				g.addKill(killer);
 				g.msgAll(HG.plugin.lang.death_fallen + " &d" + plugin.getKillManager().getKillString(p.getName(), killer));
 			} else if (Objects.requireNonNull(p.getLastDamageCause()).getCause() == EntityDamageEvent.DamageCause.ENTITY_ATTACK) {
 				g.msgAll(HG.plugin.lang.death_fallen + " &d" + plugin.getKillManager().getKillString(p.getName(), killerMap.get(p)));
