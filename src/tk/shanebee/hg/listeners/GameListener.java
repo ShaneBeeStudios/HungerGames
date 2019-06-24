@@ -474,12 +474,14 @@ public class GameListener implements Listener {
 	}
 
 	@EventHandler
-	private void onlogout(PlayerQuitEvent event) {
+	private void onLogout(PlayerQuitEvent event) {
 		Player player = event.getPlayer();
 		if (plugin.players.containsKey(player.getUniqueId())) {
 			plugin.players.get(player.getUniqueId()).getGame().leave(player, false);
 		}
-		//TODO put something here for spectator leaving the game
+		if (plugin.getSpectators().containsKey(player.getUniqueId())) {
+			plugin.getSpectators().get(player.getUniqueId()).getGame().leaveSpectate(player);
+		}
 	}
 
 }
