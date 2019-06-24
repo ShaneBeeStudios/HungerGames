@@ -29,6 +29,7 @@ public class HG extends JavaPlugin {
 	//Maps
 	public HashMap<String, BaseCmd> cmds = new HashMap<>();
 	public HashMap<UUID, PlayerData> players = new HashMap<>();
+	private HashMap<UUID, PlayerData> spectators = new HashMap<>();
 	public HashMap<UUID, PlayerSession> playerSession = new HashMap<>();
 	public HashMap<Integer, ItemStack> items = new HashMap<>();
 	public HashMap<Integer, ItemStack> bonusItems = new HashMap<>();
@@ -226,6 +227,10 @@ public class HG extends JavaPlugin {
 	 */
 	public HashMap<UUID, PlayerData> getPlayers() {
 		return this.players;
+	}
+
+	public HashMap<UUID, PlayerData> getSpectators() {
+		return this.spectators;
 	}
 
 	public static boolean isRunningMinecraft(int major, int minor) {

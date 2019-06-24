@@ -894,6 +894,12 @@ public class Game {
 		world.getWorldBorder().reset();
 	}
 
+	public void spectate(Player player) {
+		plugin.getSpectators().put(player.getUniqueId(), new PlayerData(player, this));
+		player.teleport(this.getSpawns().get(0));
+		player.setAllowFlight(true);
+	}
+
 	/** Run commands for this game that are defined in the arenas.yml
 	 * @param commandType Type of command to run
 	 * @param player The player involved (can be null)
