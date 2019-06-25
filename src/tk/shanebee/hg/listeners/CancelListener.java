@@ -26,9 +26,11 @@ public class CancelListener implements Listener {
 	private void onPlayerCommandPreprocess(PlayerCommandPreprocessEvent event) {
 		Player player = event.getPlayer();
 		String[] st = event.getMessage().split(" ");
-		if (plugin.players.containsKey(player.getUniqueId()) && !st[0].equalsIgnoreCase("/login")) {
+		if ((plugin.players.containsKey(player.getUniqueId()) || plugin.getSpectators().containsKey(player.getUniqueId())) &&
+				!st[0].equalsIgnoreCase("/login")) {
 			if (st[0].equalsIgnoreCase("/hg")) {
-				if (st.length >= 2 && st[1].equalsIgnoreCase("kit") && plugin.players.get(player.getUniqueId()).getGame().getStatus() == Status.RUNNING) {
+				if (st.length >= 2 && st[1].equalsIgnoreCase("kit") &&
+						plugin.players.get(player.getUniqueId()).getGame().getStatus() == Status.RUNNING) {
 					event.setMessage("/");
 					event.setCancelled(true);
 					Util.msg(player, HG.plugin.lang.cmd_handler_nokit);
