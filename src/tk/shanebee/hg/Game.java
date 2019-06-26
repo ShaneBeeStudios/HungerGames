@@ -37,7 +37,7 @@ public class Game {
 	private List<Location> spawns;
 	private Bound bound;
 	private List<UUID> players = new ArrayList<>();
-	private List<Player> spectators = new ArrayList<>();
+	private List<UUID> spectators = new ArrayList<>();
 	private List<Location> chests = new ArrayList<>();
 	private List<Location> playerChests = new ArrayList<>();
 	private HashMap<Integer, ItemStack> items;
@@ -354,7 +354,7 @@ public class Game {
 		return players;
 	}
 
-	public List<Player> getSpectators() {
+	public List<UUID> getSpectators() {
 		return this.spectators;
 	}
 
@@ -680,12 +680,23 @@ public class Game {
 			}
 		}
 		players.clear();
-		for (Player player : spectators) {
-			leaveSpectate(player);
+
+		for (UUID uuid : spectators) {
+			Player spectator = Bukkit.getPlayer(uuid);
+			if (spectator != null) {
+				exit(spectator);
+				spectator.setAllowFlight(false);
+				HG.plugin.getSpectators().get(spectator.getUniqueId()).restore(spectator);
+				HG.plugin.getSpectators().remove(spectator.getUniqueId());
+				sb.restoreSB(spectator);
+			}
 		}
 		spectators.clear();
-		if (this.getStatus() == Status.RUNNING)
+
+		if (this.getStatus() == Status.RUNNING) {
 			bar.removeAll();
+			bar = null;
+		}
 
 		if (!win.isEmpty() && Config.giveReward && death) {
 			double db = (double) Config.cash / win.size();
@@ -841,6 +852,11 @@ public class Game {
 			assert player != null;
 			bar.addPlayer(player);
 		}
+		for (UUID uuid : spectators) {
+			Player player = Bukkit.getPlayer(uuid);
+			assert player != null;
+			bar.addPlayer(player);
+		}
 	}
 
 	public void bossbarUpdate(int remaining) {
@@ -870,10 +886,16 @@ public class Game {
 		return (r * 2) + 10;
 	}
 
+	/** Set the center of the border of this game
+	 * @param borderCenter  Location of the center
+	 */
 	public void setBorderCenter(Location borderCenter) {
 		this.borderCenter = borderCenter;
 	}
 
+	/** Set the final size for the border of this game
+	 * @param borderSize The final size of the border
+	 */
 	public void setBorderSize(int borderSize) {
 		this.borderSize = borderSize;
 	}
@@ -913,6 +935,9 @@ public class Game {
 		world.getWorldBorder().reset();
 	}
 
+	/** Put a player into spectator for this game
+	 * @param spectator The player to spectate
+	 */
 	public void spectate(Player spectator) {
 		if (plugin.getPlayers().containsKey(spectator.getUniqueId())) {
 			PlayerData spectatorData = plugin.getPlayers().get(spectator.getUniqueId());
@@ -921,7 +946,7 @@ public class Game {
 		} else {
 			plugin.getSpectators().put(spectator.getUniqueId(), new PlayerData(spectator, this));
 		}
-		this.spectators.add(spectator);
+		this.spectators.add(spectator.getUniqueId());
 		spectator.setGameMode(GameMode.SURVIVAL);
 		spectator.teleport(this.getSpawns().get(0));
 		spectator.setAllowFlight(true);
@@ -931,21 +956,27 @@ public class Game {
 			if (player == null) continue;
 			player.hidePlayer(plugin, spectator);
 		}
-		for (Player player : spectators) {
+		for (UUID uuid : spectators) {
+			Player player = Bukkit.getPlayer(uuid);
+			if (player == null) continue;
 			player.hidePlayer(plugin, spectator);
 		}
-		bar.addPlayer(spectator);
+		if (bar != null)
+			bar.addPlayer(spectator);
 	}
 
+	/** Remove a player from spectator of this game
+	 * @param spectator The player to remove
+	 */
 	public void leaveSpectate(Player spectator) {
 		exit(spectator);
 		plugin.getSpectators().get(spectator.getUniqueId()).restore(spectator);
 		plugin.getSpectators().remove(spectator.getUniqueId());
+		spectators.remove(spectator.getUniqueId());
 		spectator.setAllowFlight(false);
 		for (Player player : Bukkit.getOnlinePlayers()) {
 			player.showPlayer(plugin, spectator);
 		}
-		bar.removePlayer(spectator);
 	}
 
 	/** Run commands for this game that are defined in the arenas.yml
