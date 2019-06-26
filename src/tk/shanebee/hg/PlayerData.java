@@ -6,6 +6,7 @@ import org.bukkit.inventory.ItemStack;
 
 import java.util.UUID;
 
+@SuppressWarnings("WeakerAccess")
 public class PlayerData {
 
 	//Pregame data
@@ -75,4 +76,12 @@ public class PlayerData {
 	public void setTeam(Team team) {
 		this.team = team;
 	}
+
+	/** Get the gamemode of this player data
+	 * @return Gamemode of this player data
+	 */
+	public GameMode getGameMode() {
+		return this.mode;
+	}
+
 }
