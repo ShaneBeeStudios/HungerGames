@@ -685,6 +685,7 @@ public class Game {
 			Player spectator = Bukkit.getPlayer(uuid);
 			if (spectator != null) {
 				exit(spectator);
+				revealPlayer(spectator);
 				spectator.setAllowFlight(false);
 				HG.plugin.getSpectators().get(spectator.getUniqueId()).restore(spectator);
 				HG.plugin.getSpectators().remove(spectator.getUniqueId());
@@ -974,8 +975,12 @@ public class Game {
 		plugin.getSpectators().remove(spectator.getUniqueId());
 		spectators.remove(spectator.getUniqueId());
 		spectator.setAllowFlight(false);
+		revealPlayer(spectator);
+	}
+
+	private void revealPlayer(Player hidden) {
 		for (Player player : Bukkit.getOnlinePlayers()) {
-			player.showPlayer(plugin, spectator);
+			player.showPlayer(plugin, hidden);
 		}
 	}
 
