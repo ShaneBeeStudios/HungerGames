@@ -57,6 +57,8 @@ world-border:
 spectate:
     enabled: false
     death-to-spectate: true
+    hide-spectators: true
+    fly: true
 kits:
     bowman:
         permission: none

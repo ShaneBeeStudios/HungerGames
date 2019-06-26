@@ -685,8 +685,10 @@ public class Game {
 			Player spectator = Bukkit.getPlayer(uuid);
 			if (spectator != null) {
 				exit(spectator);
-				revealPlayer(spectator);
-				spectator.setAllowFlight(false);
+				if (Config.spectateHide)
+					revealPlayer(spectator);
+				if (Config.spectateFly)
+					spectator.setAllowFlight(false);
 				HG.plugin.getSpectators().get(spectator.getUniqueId()).restore(spectator);
 				HG.plugin.getSpectators().remove(spectator.getUniqueId());
 				sb.restoreSB(spectator);
@@ -950,17 +952,20 @@ public class Game {
 		this.spectators.add(spectator.getUniqueId());
 		spectator.setGameMode(GameMode.SURVIVAL);
 		spectator.teleport(this.getSpawns().get(0));
-		spectator.setAllowFlight(true);
+		if (Config.spectateFly)
+			spectator.setAllowFlight(true);
 
-		for (UUID uuid : players) {
-			Player player = Bukkit.getPlayer(uuid);
-			if (player == null) continue;
-			player.hidePlayer(plugin, spectator);
-		}
-		for (UUID uuid : spectators) {
-			Player player = Bukkit.getPlayer(uuid);
-			if (player == null) continue;
-			player.hidePlayer(plugin, spectator);
+		if (Config.spectateHide) {
+			for (UUID uuid : players) {
+				Player player = Bukkit.getPlayer(uuid);
+				if (player == null) continue;
+				player.hidePlayer(plugin, spectator);
+			}
+			for (UUID uuid : spectators) {
+				Player player = Bukkit.getPlayer(uuid);
+				if (player == null) continue;
+				player.hidePlayer(plugin, spectator);
+			}
 		}
 		if (bar != null)
 			bar.addPlayer(spectator);
@@ -974,8 +979,10 @@ public class Game {
 		plugin.getSpectators().get(spectator.getUniqueId()).restore(spectator);
 		plugin.getSpectators().remove(spectator.getUniqueId());
 		spectators.remove(spectator.getUniqueId());
-		spectator.setAllowFlight(false);
-		revealPlayer(spectator);
+		if (Config.spectateFly)
+			spectator.setAllowFlight(false);
+		if (Config.spectateHide)
+			revealPlayer(spectator);
 	}
 
 	private void revealPlayer(Player hidden) {

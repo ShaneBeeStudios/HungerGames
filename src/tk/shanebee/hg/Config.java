@@ -50,6 +50,8 @@ public class Config {
 	//Spectate
 	public static boolean spectateEnabled;
 	public static boolean spectateOnDeath;
+	public static boolean spectateHide;
+	public static boolean spectateFly;
 
 	private HG plugin;
 
@@ -104,6 +106,8 @@ public class Config {
 
 		spectateEnabled = config.getBoolean("spectate.enabled");
 		spectateOnDeath = config.getBoolean("spectate.death-to-spectate");
+		spectateHide = config.getBoolean("spectate.hide-spectators");
+		spectateFly = config.getBoolean("spectate.fly");
 
 		if (giveReward) {
 			try {
@@ -145,6 +149,8 @@ public class Config {
 		if (!config.isSet("spectate.enabled")) {
 			config.set("spectate.enabled", false);
 			config.set("spectate.death-to-spectate", true);
+			config.set("spectate.hide-spectators", true);
+			config.set("spectate.fly", true);
 		}
 		plugin.saveConfig();
 	}
