@@ -396,7 +396,7 @@ public class Game {
 		} else if (maxPlayers <= players.size()) {
 			player.sendMessage(ChatColor.RED + name + " is currently full!");
 			Util.scm(player, "&c" + name + " " + HG.plugin.lang.game_full);
-		} else {
+		} else if (!players.contains(player.getUniqueId())) {
 			// Call PlayerJoinGameEvent
 			PlayerJoinGameEvent event = new PlayerJoinGameEvent(this, player);
 			Bukkit.getPluginManager().callEvent(event);
@@ -407,8 +407,8 @@ public class Game {
 				player.leaveVehicle();
 			}
 
+			players.add(player.getUniqueId());
 			Bukkit.getScheduler().scheduleSyncDelayedTask(HG.plugin, () -> {
-				players.add(player.getUniqueId());
 				HG.plugin.players.put(player.getUniqueId(), new PlayerData(player, this));
 
 				Location loc = pickSpawn();
