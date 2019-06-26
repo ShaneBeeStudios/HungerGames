@@ -222,7 +222,7 @@ public class GameListener implements Listener {
 		}
 
 		if (defender instanceof Player) {
-			if (plugin.getSpectators().containsKey(damager.getUniqueId())) {
+			if (plugin.getSpectators().containsKey(defender.getUniqueId())) {
 				event.setCancelled(true);
 			}
 			if (plugin.players.get(defender.getUniqueId()) != null) {
@@ -293,7 +293,7 @@ public class GameListener implements Listener {
 	}
 
 	@EventHandler
-	private void onPlayerClickLobby( PlayerInteractEvent event) {
+	private void onPlayerClickLobby(PlayerInteractEvent event) {
 		Player p = event.getPlayer();
 		if (event.getAction().equals(Action.RIGHT_CLICK_BLOCK)) {
 			Block b = event.getClickedBlock();
