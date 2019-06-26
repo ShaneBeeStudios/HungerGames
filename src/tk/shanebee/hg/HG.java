@@ -162,15 +162,19 @@ public class HG extends JavaPlugin {
 			g.cancelTasks();
 			g.forceRollback();
 			ps.addAll(g.getPlayers());
+			ps.addAll(g.getSpectators());
 		}
 		for (UUID u : ps) {
 			Player p = Bukkit.getPlayer(u);
 			if (p != null) {
 				if (players.containsKey(u))
 					players.get(u).getGame().leave(p, false);
+				if (spectators.containsKey(u))
+					spectators.get(u).getGame().leaveSpectate(p);
 			}
 		}
 		players.clear();
+		spectators.clear();
 		games.clear();
 	}
 
