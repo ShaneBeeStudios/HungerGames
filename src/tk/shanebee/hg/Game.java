@@ -687,8 +687,11 @@ public class Game {
 				exit(spectator);
 				if (Config.spectateHide)
 					revealPlayer(spectator);
-				if (Config.spectateFly)
-					spectator.setAllowFlight(false);
+				if (Config.spectateFly) {
+					GameMode mode = HG.plugin.getSpectators().get(uuid).getGameMode();
+					if (mode == GameMode.SURVIVAL || mode == GameMode.ADVENTURE)
+						spectator.setAllowFlight(false);
+				}
 				HG.plugin.getSpectators().get(spectator.getUniqueId()).restore(spectator);
 				HG.plugin.getSpectators().remove(spectator.getUniqueId());
 				sb.restoreSB(spectator);
@@ -976,13 +979,16 @@ public class Game {
 	 */
 	public void leaveSpectate(Player spectator) {
 		exit(spectator);
+		if (Config.spectateFly) {
+			GameMode mode = plugin.getSpectators().get(spectator.getUniqueId()).getGameMode();
+			if (mode == GameMode.SURVIVAL || mode == GameMode.ADVENTURE)
+				spectator.setAllowFlight(false);
+		}
+		if (Config.spectateHide)
+			revealPlayer(spectator);
 		plugin.getSpectators().get(spectator.getUniqueId()).restore(spectator);
 		plugin.getSpectators().remove(spectator.getUniqueId());
 		spectators.remove(spectator.getUniqueId());
-		if (Config.spectateFly)
-			spectator.setAllowFlight(false);
-		if (Config.spectateHide)
-			revealPlayer(spectator);
 	}
 
 	private void revealPlayer(Player hidden) {
