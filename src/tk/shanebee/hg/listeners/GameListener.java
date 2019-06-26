@@ -222,9 +222,6 @@ public class GameListener implements Listener {
 		}
 
 		if (defender instanceof Player) {
-			if (plugin.getSpectators().containsKey(defender.getUniqueId())) {
-				event.setCancelled(true);
-			}
 			if (plugin.players.get(defender.getUniqueId()) != null) {
 				if (!killerMap.containsKey(defender))
 					killerMap.put(((Player) defender), damager);
@@ -245,6 +242,18 @@ public class GameListener implements Listener {
 					event.setCancelled(true);
 				} else if (event.isCancelled()) event.setCancelled(false);
 			}
+		}
+	}
+
+	@EventHandler(priority = EventPriority.HIGHEST)
+	private void onDamage(EntityDamageEvent event) {
+		if (event.getEntity() instanceof Player) {
+			Player defender = (Player) event.getEntity();
+			if (plugin.getSpectators().containsKey(defender.getUniqueId())) {
+				event.setCancelled(true);
+				defender.setFireTicks(0);
+			}
+
 		}
 	}
 
