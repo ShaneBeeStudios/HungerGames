@@ -131,12 +131,9 @@ public class Data {
 					Game game = new Game(s, b, spawns, lobbysign, timer, minplayers, maxplayers, freeroam, isReady);
 					plugin.addGame(game);
 
-					try {
-						KitManager kit = plugin.getItemStackManager().setGameKits(s, arenadat);
+					KitManager kit = plugin.getItemStackManager().setGameKits(s, arenadat);
+					if (kit != null)
 						game.setKitManager(kit);
-					} catch (Exception e) {
-						e.printStackTrace();
-					}
 
 					if (!arenadat.getStringList("arenas." + s + ".items").isEmpty()) {
 						HashMap<Integer, ItemStack> items = new HashMap<>();
