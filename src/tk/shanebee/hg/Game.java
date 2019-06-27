@@ -393,6 +393,9 @@ public class Game {
 	public void join(Player player) {
 		if (status != Status.WAITING && status != Status.STOPPED && status != Status.COUNTDOWN && status != Status.READY) {
 			Util.scm(player, HG.plugin.lang.arena_not_ready);
+			if ((status == Status.RUNNING || status == Status.BEGINNING) && Config.spectateEnabled) {
+				Util.scm(player, plugin.lang.arena_spectate.replace("<arena>", this.getName()));
+			}
 		} else if (maxPlayers <= players.size()) {
 			player.sendMessage(ChatColor.RED + name + " is currently full!");
 			Util.scm(player, "&c" + name + " " + HG.plugin.lang.game_full);

@@ -28,6 +28,7 @@ public class Language {
     public String game_chest_refill;
     public String players_to_start;
     public String arena_not_ready;
+    public String arena_spectate;
     public String game_full;
     public String player_won;
     public String winning_amount;
@@ -172,6 +173,7 @@ public class Language {
 
         players_to_start = lang.getString("players-to-start");
         arena_not_ready = lang.getString("arena-not-ready");
+        arena_spectate = lang.getString("arena-spectate");
         game_full = lang.getString("game-full");
         player_won = lang.getString("player-won");
 
@@ -305,6 +307,9 @@ public class Language {
             config.set("cmd-border-size", "&6Border size for &b<arena> &6has been set to &b<size>");
             config.set("cmd-border-center", "&6Border center for &b<arena> &6has been set at your location");
             config.set("cmd-border-timer", "&6Border time for &b<arena> &6has been set to start at remaining &b<start> seconds &6and stop at &b<end> seconds");
+        }
+        if (!config.isSet("arena-spectate")) {
+            config.set("arena-spectate", "&6You can spectate this arena by running &3/hg spectate <arena>");
         }
         saveConfig();
     }
