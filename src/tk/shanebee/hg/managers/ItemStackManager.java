@@ -195,7 +195,7 @@ public class ItemStackManager {
 			PotionEffectType potType = PotionEffectType.getByName(itemArr[1].toUpperCase());
 			int duration = Integer.valueOf(itemArr[2]);
 			int amplifier = Integer.valueOf(itemArr[3]);
-			ItemStack potion = new ItemStack(splash ? Material.SPLASH_POTION : Material.POTION);
+			ItemStack potion = new ItemStack(splash ? Material.SPLASH_POTION : Material.POTION, amount);
 			PotionMeta meta = ((PotionMeta) potion.getItemMeta());
 			assert meta != null;
 			assert potType != null;
