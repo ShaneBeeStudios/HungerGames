@@ -73,6 +73,36 @@ public class Util {
 		}
 	}
 
+	/** Get relative attached blocks
+	 * @param block The block to check
+	 * @return A list of relative attached blocks
+	 * @deprecated This may be broken in the future
+	 */
+	@SuppressWarnings("DeprecatedIsStillUsed")
+	@Deprecated
+	public static List<Block> getAttachedBlocks(Block block) {
+		List<Block> blocks = new ArrayList<>();
+		if (block.getRelative(BlockFace.NORTH).getState().getData() instanceof Attachable) {
+			blocks.add(block.getRelative(BlockFace.NORTH));
+		}
+		if (block.getRelative(BlockFace.SOUTH).getState().getData() instanceof Attachable) {
+			blocks.add(block.getRelative(BlockFace.SOUTH));
+		}
+		if (block.getRelative(BlockFace.EAST).getState().getData() instanceof Attachable) {
+			blocks.add(block.getRelative(BlockFace.EAST));
+		}
+		if (block.getRelative(BlockFace.WEST).getState().getData() instanceof Attachable) {
+			blocks.add(block.getRelative(BlockFace.WEST));
+		}
+		if (block.getRelative(BlockFace.DOWN).getState().getData() instanceof Attachable) {
+			blocks.add(block.getRelative(BlockFace.DOWN));
+		}
+		if (block.getRelative(BlockFace.UP).getState().getData() instanceof Attachable) {
+			blocks.add(block.getRelative(BlockFace.UP));
+		}
+		return blocks;
+	}
+
 	public static void clearInv(Player p) {
 		p.getInventory().clear();
 		p.getEquipment().clear();

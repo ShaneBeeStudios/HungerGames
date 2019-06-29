@@ -385,6 +385,11 @@ public class GameListener implements Listener {
 						event.setCancelled(true);
 					} else {
 						g.recordBlockBreak(b);
+						// This may break in the future
+						//noinspection deprecation
+						for (Block attached : Util.getAttachedBlocks(b)) {
+							g.recordBlockBreak(attached);
+						}
 						if (b.getType() == Material.CHEST || b.getType() == Material.TRAPPED_CHEST || b.getState() instanceof Shulker) {
 							g.removeGameChest(b.getLocation());
 							g.removePlayerChest(b.getLocation());
