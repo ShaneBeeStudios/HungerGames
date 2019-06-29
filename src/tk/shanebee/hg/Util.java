@@ -15,6 +15,7 @@ import org.bukkit.entity.Firework;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.meta.FireworkMeta;
 import org.bukkit.material.Attachable;
+import org.bukkit.material.MaterialData;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -71,36 +72,6 @@ public class Util {
 			default:
 				return BlockFace.WEST;
 		}
-	}
-
-	/** Get relative attached blocks
-	 * @param block The block to check
-	 * @return A list of relative attached blocks
-	 * @deprecated This may be broken in the future
-	 */
-	@SuppressWarnings("DeprecatedIsStillUsed")
-	@Deprecated
-	public static List<Block> getAttachedBlocks(Block block) {
-		List<Block> blocks = new ArrayList<>();
-		if (block.getRelative(BlockFace.NORTH).getState().getData() instanceof Attachable) {
-			blocks.add(block.getRelative(BlockFace.NORTH));
-		}
-		if (block.getRelative(BlockFace.SOUTH).getState().getData() instanceof Attachable) {
-			blocks.add(block.getRelative(BlockFace.SOUTH));
-		}
-		if (block.getRelative(BlockFace.EAST).getState().getData() instanceof Attachable) {
-			blocks.add(block.getRelative(BlockFace.EAST));
-		}
-		if (block.getRelative(BlockFace.WEST).getState().getData() instanceof Attachable) {
-			blocks.add(block.getRelative(BlockFace.WEST));
-		}
-		if (block.getRelative(BlockFace.DOWN).getState().getData() instanceof Attachable) {
-			blocks.add(block.getRelative(BlockFace.DOWN));
-		}
-		if (block.getRelative(BlockFace.UP).getState().getData() instanceof Attachable) {
-			blocks.add(block.getRelative(BlockFace.UP));
-		}
-		return blocks;
 	}
 
 	public static void clearInv(Player p) {
@@ -161,9 +132,10 @@ public class Util {
 		fw.setFireworkMeta(fm);
 	}
 
+	@SuppressWarnings("deprecation")
 	static boolean isAttached(Block base, Block attached) {
-		//MaterialData bs = attached.getState().getData();
-		BlockData bs = attached.getBlockData();
+		MaterialData bs = attached.getState().getData();
+		//BlockData bs = attached.getBlockData();
 
 		if (!(bs instanceof Attachable)) return false;
 
