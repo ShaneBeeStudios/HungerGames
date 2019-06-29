@@ -408,6 +408,17 @@ public class GameListener implements Listener {
 	}
 
 	@EventHandler
+	private void onBlockDrop(BlockPhysicsEvent event) {
+		Block block = event.getBlock();
+		if (Config.breakblocks && HG.manager.isInRegion(block.getLocation())) {
+			Game game = HG.manager.getGame(block.getLocation());
+			if (game.getStatus() == Status.RUNNING || game.getStatus() == Status.BEGINNING) {
+				game.recordBlockBreak(block);
+			}
+		}
+	}
+
+	@EventHandler
 	private void onEntityExplode(EntityExplodeEvent event) {
 		if (HG.manager.isInRegion(event.getLocation())) {
 			Game g = HG.manager.getGame(event.getLocation());
