@@ -420,11 +420,12 @@ public class GameListener implements Listener {
 
 	@EventHandler
 	private void onFallingBlockLand(EntityChangeBlockEvent event) {
-		if (event.getBlock().getType() == Material.AIR) {
+		Block block = event.getBlock();
+		if (block.getType() == Material.AIR || block.getType() == Material.WATER || block.getType() == Material.LAVA) {
 			if (Config.breakblocks && HG.manager.isInRegion(event.getEntity().getLocation())) {
 				Game game = HG.manager.getGame(event.getEntity().getLocation());
 				if (game.getStatus() == Status.RUNNING || game.getStatus() == Status.BEGINNING) {
-					game.recordBlockPlace(event.getBlock().getState());
+					game.recordBlockPlace(block.getState());
 				}
 			}
 		}
