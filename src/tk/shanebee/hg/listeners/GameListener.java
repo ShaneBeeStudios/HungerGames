@@ -218,15 +218,13 @@ public class GameListener implements Listener {
 		if (damager instanceof Player) {
 			if (plugin.getSpectators().containsKey(damager.getUniqueId())) {
 				event.setCancelled(true);
+				return;
 			}
 		}
 
 		if (defender instanceof Player) {
 			if (plugin.players.get(defender.getUniqueId()) != null) {
-				if (!killerMap.containsKey(defender))
-					killerMap.put(((Player) defender), damager);
-				else
-					killerMap.replace(((Player) defender), damager);
+				killerMap.put(((Player) defender), damager);
 			}
 
 			Player p = (Player) defender;
