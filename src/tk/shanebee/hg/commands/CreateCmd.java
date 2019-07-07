@@ -43,7 +43,7 @@ public class CreateCmd extends BaseCmd {
 					Location l = s.getLoc1();
 					Location l2 = s.getLoc2();
 					int freeroam = HG.plugin.getConfig().getInt("settings.free-roam");
-					Configuration c = HG.arenaconfig.getCustomConfig();
+					Configuration c = HG.plugin.getArenaConfig().getCustomConfig();
 					c.set("arenas." + args[1] +".bound.world", player.getWorld().getName());
 					c.set("arenas." + args[1] +".bound.x", l.getBlockX());
 					c.set("arenas." + args[1] +".bound.y", l.getBlockY());
@@ -55,8 +55,8 @@ public class CreateCmd extends BaseCmd {
 					c.set("arenas." + args[1] +".info." + "min-players", Integer.parseInt(args[2]));
 					c.set("arenas." + args[1] +".info." + "max-players", Integer.parseInt(args[3]));
 					c.set("arenas." + args[1] + ".commands", Collections.singletonList("none"));
-					HG.arenaconfig.saveCustomConfig();
-					HG.arenaconfig.reloadCustomConfig();
+					HG.plugin.getArenaConfig().saveCustomConfig();
+					HG.plugin.getArenaConfig().reloadCustomConfig();
 
 					Bound b = new Bound(player.getWorld().getName(), l.getBlockX(), l.getBlockY(), l.getBlockZ(), l2.getBlockX(), l2.getBlockY(), l2.getBlockZ());
 					HG.plugin.games.add(new Game(args[1], b, Integer.parseInt(args[4]), Integer.parseInt(args[2]), Integer.parseInt(args[3]), freeroam));

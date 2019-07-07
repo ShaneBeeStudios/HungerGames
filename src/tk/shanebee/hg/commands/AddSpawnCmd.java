@@ -22,7 +22,7 @@ public class AddSpawnCmd extends BaseCmd {
 	public boolean run() {
 		Game g = HG.plugin.getManager().getGame(player.getLocation());
 		int num = g.getSpawns().size() + 1;
-		Configuration c = HG.arenaconfig.getCustomConfig();
+		Configuration c = HG.plugin.getArenaConfig().getCustomConfig();
 		List<String> d = c.getStringList("arenas."+g.getName() + ".spawns");
 		Location l = player.getLocation();
 		for (Location lb : g.getSpawns()) {
@@ -34,7 +34,7 @@ public class AddSpawnCmd extends BaseCmd {
 		d.add(l.getWorld().getName() + ":" + l.getBlockX() + ":" + l.getBlockY() + ":" + l.getBlockZ() + ":" + l.getYaw() + ":" + l.getPitch());
 		c.set("arenas."+g.getName()+".spawns", d);
 		g.addSpawn(l);
-		HG.arenaconfig.saveCustomConfig();
+		HG.plugin.getArenaConfig().saveCustomConfig();
 		Util.scm(player, HG.plugin.lang.cmd_spawn_set.replace("<number>", String.valueOf(num)));
 		
         HG.plugin.getManager().checkGame(g, player);

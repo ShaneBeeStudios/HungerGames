@@ -24,8 +24,8 @@ public class ChestRefillCmd extends BaseCmd {
 				Util.scm(player, "&c<time> must be in increments of 30");
 				return true;
 			}
-			HG.arenaconfig.getCustomConfig().set("arenas." + name + ".chest-refill", time);
-			HG.arenaconfig.saveCustomConfig();
+			HG.plugin.getArenaConfig().getCustomConfig().set("arenas." + name + ".chest-refill", time);
+			HG.plugin.getArenaConfig().saveCustomConfig();
 			game.setChestRefillTime(time);
 			Util.scm(player, HG.plugin.lang.cmd_chest_refill.replace("<arena>", name).replace("<sec>", String.valueOf(time)));
 		} else {

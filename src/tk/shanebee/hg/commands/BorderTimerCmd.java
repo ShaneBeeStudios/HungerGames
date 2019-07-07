@@ -38,9 +38,9 @@ public class BorderTimerCmd extends BaseCmd {
 				Util.scm(player, sendHelpLine());
 				return false;
 			}
-			HG.arenaconfig.getCustomConfig().set("arenas." + name + ".border.countdown-start", start);
-			HG.arenaconfig.getCustomConfig().set("arenas." + name + ".border.countdown-end", end);
-			HG.arenaconfig.saveCustomConfig();
+			HG.plugin.getArenaConfig().getCustomConfig().set("arenas." + name + ".border.countdown-start", start);
+			HG.plugin.getArenaConfig().getCustomConfig().set("arenas." + name + ".border.countdown-end", end);
+			HG.plugin.getArenaConfig().saveCustomConfig();
 			game.setBorderTimer(start, end);
 			Util.scm(player, HG.plugin.lang.cmd_border_timer.replace("<arena>", name).replace("<start>", args[2]).replace("<end>", args[3]));
 		} else {

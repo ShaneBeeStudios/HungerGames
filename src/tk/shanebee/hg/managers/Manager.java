@@ -26,7 +26,7 @@ public class Manager {
 	}
 	
 	public void runDebugger(CommandSender sender, String s) {
-		Configuration arenadat = HG.arenaconfig.getCustomConfig();
+		Configuration arenadat = HG.plugin.getArenaConfig().getCustomConfig();
 		boolean isReady = true;
 		List<Location> spawns = new ArrayList<>();
 		Sign lobbysign = null;
@@ -46,7 +46,7 @@ public class Manager {
 			maxplayers = arenadat.getInt("arenas." + s + ".info." + "max-players");
 
 			if (arenadat.isSet("arenas." + s + ".border.center")) {
-				borderCenter = HG.arenaconfig.getSLoc(arenadat.getString("arenas." + s + ".border.center"));
+				borderCenter = HG.plugin.getArenaConfig().getSLoc(arenadat.getString("arenas." + s + ".border.center"));
 			}
 			if (arenadat.isSet("arenas." + s + ".border.size")) {
 				borderSize = arenadat.getInt("arenas." + s + ".border.size");
@@ -70,7 +70,7 @@ public class Manager {
 		}
 
 		try {
-			lobbysign = (Sign) HG.arenaconfig.getSLoc(arenadat.getString("arenas." + s + "." + "lobbysign")).getBlock().getState();
+			lobbysign = (Sign) HG.plugin.getArenaConfig().getSLoc(arenadat.getString("arenas." + s + "." + "lobbysign")).getBlock().getState();
 		} catch (Exception e) { 
 			Util.scm(sender, "&cUnable to load lobbysign for arena " + s + "!"); 
 			isReady = false;
@@ -78,7 +78,7 @@ public class Manager {
 
 		try {
 			for (String l : arenadat.getStringList("arenas." + s + "." + "spawns")) {
-				spawns.add(HG.arenaconfig.getLocFromString(l));
+				spawns.add(HG.plugin.getArenaConfig().getLocFromString(l));
 			}
 			int count = arenadat.getStringList("arenas." + s + "." + "spawns").size();
 			if (count < maxplayers) {
@@ -92,7 +92,7 @@ public class Manager {
 
 		try {
 			@SuppressWarnings("unused")
-			Bound b = new Bound(arenadat.getString("arenas." + s + ".bound." + "world"), HG.arenaconfig.BC(s, "x"), HG.arenaconfig.BC(s, "y"), HG.arenaconfig.BC(s, "z"), HG.arenaconfig.BC(s, "x2"), HG.arenaconfig.BC(s, "y2"), HG.arenaconfig.BC(s, "z2"));
+			Bound b = new Bound(arenadat.getString("arenas." + s + ".bound." + "world"), HG.plugin.getArenaConfig().BC(s, "x"), HG.plugin.getArenaConfig().BC(s, "y"), HG.plugin.getArenaConfig().BC(s, "z"), HG.plugin.getArenaConfig().BC(s, "x2"), HG.plugin.getArenaConfig().BC(s, "y2"), HG.plugin.getArenaConfig().BC(s, "z2"));
 		} catch (Exception e) { 
 			Util.scm(sender, "&cUnable to load region bounds for arena " + s + "!"); 
 			isReady = false;

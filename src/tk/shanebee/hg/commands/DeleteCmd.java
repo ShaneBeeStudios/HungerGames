@@ -41,8 +41,8 @@ public class DeleteCmd extends BaseCmd {
 						}
 					}
 				}
-				HG.arenaconfig.getCustomConfig().set("arenas." + args[1], null);
-				HG.arenaconfig.saveCustomConfig();
+				HG.plugin.getArenaConfig().getCustomConfig().set("arenas." + args[1], null);
+				HG.plugin.getArenaConfig().saveCustomConfig();
 				Util.scm(sender, HG.plugin.lang.cmd_delete_deleted.replace("<arena>", g.getName()));
 				HG.plugin.games.remove(g);
 			} catch (Exception e) {
