@@ -14,7 +14,7 @@ public class DebugCmd extends BaseCmd {
 
 	@Override
 	public boolean run() {
-			HG.manager.runDebugger(sender, args[1]);
+			HG.plugin.getManager().runDebugger(sender, args[1]);
 		return true;
 	}
 }

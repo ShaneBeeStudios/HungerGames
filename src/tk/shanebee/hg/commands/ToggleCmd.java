@@ -17,7 +17,7 @@ public class ToggleCmd extends BaseCmd {
 
 	@Override
 	public boolean run() {
-		Game g = HG.manager.getGame(args[1]);
+		Game g = HG.plugin.getManager().getGame(args[1]);
 		if (g != null) {
 			if (g.getStatus() == Status.NOTREADY || g.getStatus() == Status.BROKEN) {
 				g.setStatus(Status.READY);

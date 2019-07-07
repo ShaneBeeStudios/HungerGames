@@ -22,7 +22,7 @@ public class DeleteCmd extends BaseCmd {
 
 	@Override
 	public boolean run() {
-		Game g = HG.manager.getGame(args[1]);
+		Game g = HG.plugin.getManager().getGame(args[1]);
 		if (g != null) {
 			try {
 				Util.scm(sender, HG.plugin.lang.cmd_delete_attempt.replace("<arena>", g.getName()));

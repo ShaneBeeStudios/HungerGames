@@ -27,7 +27,7 @@ public class StopCmd extends BaseCmd {
 			Util.scm(sender, HG.plugin.lang.cmd_stop_all);
 			return true;
 		}
-		Game g = HG.manager.getGame(args[1]);
+		Game g = HG.plugin.getManager().getGame(args[1]);
 		if (g != null) {
 			g.stop(false);
 			Util.scm(sender, HG.plugin.lang.cmd_stop_arena.replace("<arena>", args[1]));

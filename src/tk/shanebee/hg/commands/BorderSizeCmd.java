@@ -16,7 +16,7 @@ public class BorderSizeCmd extends BaseCmd {
 
 	@Override
 	public boolean run() {
-		Game game = HG.manager.getGame(args[1]);
+		Game game = HG.plugin.getManager().getGame(args[1]);
 		if (game != null) {
 			String name = game.getName();
 			int radius;

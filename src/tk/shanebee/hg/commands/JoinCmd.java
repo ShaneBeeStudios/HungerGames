@@ -20,7 +20,7 @@ public class JoinCmd extends BaseCmd {
 		if (HG.plugin.players.containsKey(player.getUniqueId())) {
 			Util.scm(player, HG.plugin.lang.cmd_join_in_game);
 		} else {
-			Game g = HG.manager.getGame(args[1]);
+			Game g = HG.plugin.getManager().getGame(args[1]);
 			if (g != null && !g.getPlayers().contains(player.getUniqueId())) {
 				g.join(player);
 			} else {

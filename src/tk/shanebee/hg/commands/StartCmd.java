@@ -17,7 +17,7 @@ public class StartCmd extends BaseCmd {
 
 	@Override
 	public boolean run() {
-		Game g = HG.manager.getGame(args[1]);
+		Game g = HG.plugin.getManager().getGame(args[1]);
 		if (g != null) {
 			if (g.getStatus() == Status.WAITING || g.getStatus() == Status.READY) {
 				g.startPreGame();

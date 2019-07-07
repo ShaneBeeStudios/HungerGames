@@ -19,7 +19,7 @@ public class SpectateCmd extends BaseCmd {
 		if (HG.plugin.getPlayers().containsKey(player.getUniqueId()) || HG.plugin.getSpectators().containsKey(player.getUniqueId())) {
 			Util.scm(player, HG.plugin.lang.cmd_join_in_game);
 		} else {
-			Game game = HG.manager.getGame(args[1]);
+			Game game = HG.plugin.getManager().getGame(args[1]);
 			if (game != null && !game.getPlayers().contains(player.getUniqueId()) && !game.getSpectators().contains(player)) {
 				Status status = game.getStatus();
 				if (status == Status.RUNNING || status == Status.BEGINNING) {

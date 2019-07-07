@@ -39,7 +39,7 @@ public class HG extends JavaPlugin {
 
 	//Instances
 	public static HG plugin;
-	public static Manager manager;
+	public Manager manager;
 	public static Data arenaconfig;
 	private KillManager killManager;
 	private RandomItems randomItems;
@@ -208,7 +208,7 @@ public class HG extends JavaPlugin {
 	 * @return The manager
 	 */
 	public Manager getManager() {
-		return manager;
+		return this.manager;
 	}
 
 	/** Get an instance of HG's leaderboards

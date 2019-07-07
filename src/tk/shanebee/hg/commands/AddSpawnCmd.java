@@ -20,7 +20,7 @@ public class AddSpawnCmd extends BaseCmd {
 
 	@Override
 	public boolean run() {
-		Game g = HG.manager.getGame(player.getLocation());
+		Game g = HG.plugin.getManager().getGame(player.getLocation());
 		int num = g.getSpawns().size() + 1;
 		Configuration c = HG.arenaconfig.getCustomConfig();
 		List<String> d = c.getStringList("arenas."+g.getName() + ".spawns");
@@ -37,7 +37,7 @@ public class AddSpawnCmd extends BaseCmd {
 		HG.arenaconfig.saveCustomConfig();
 		Util.scm(player, HG.plugin.lang.cmd_spawn_set.replace("<number>", String.valueOf(num)));
 		
-        HG.manager.checkGame(g, player);
+        HG.plugin.getManager().checkGame(g, player);
 		return true;
 	}
 }
