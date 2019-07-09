@@ -707,26 +707,28 @@ public class Game {
 			bar = null;
 		}
 
-		if (!win.isEmpty() && Config.giveReward && death) {
+		if (!win.isEmpty() && death) {
 			double db = (double) Config.cash / win.size();
 			for (UUID u : win) {
-				Player p = Bukkit.getPlayer(u);
-				assert p != null;
-				if (!Config.rewardCommands.isEmpty()) {
-					for (String cmd : Config.rewardCommands) {
-						if (!cmd.equalsIgnoreCase("none"))
-							Bukkit.dispatchCommand(Bukkit.getConsoleSender(), cmd.replace("<player>", p.getName()));
+				if (Config.giveReward) {
+					Player p = Bukkit.getPlayer(u);
+					assert p != null;
+					if (!Config.rewardCommands.isEmpty()) {
+						for (String cmd : Config.rewardCommands) {
+							if (!cmd.equalsIgnoreCase("none"))
+								Bukkit.dispatchCommand(Bukkit.getConsoleSender(), cmd.replace("<player>", p.getName()));
+						}
 					}
-				}
-				if (!Config.rewardMessages.isEmpty()) {
-					for (String msg : Config.rewardMessages) {
-						if (!msg.equalsIgnoreCase("none"))
-							Util.scm(p, msg.replace("<player>", p.getName()));
+					if (!Config.rewardMessages.isEmpty()) {
+						for (String msg : Config.rewardMessages) {
+							if (!msg.equalsIgnoreCase("none"))
+								Util.scm(p, msg.replace("<player>", p.getName()));
+						}
 					}
-				}
-				if (Config.cash != 0) {
-					Vault.economy.depositPlayer(Bukkit.getServer().getOfflinePlayer(u), db);
-					Util.msg(p, HG.plugin.lang.winning_amount.replace("<amount>", String.valueOf(db)));
+					if (Config.cash != 0) {
+						Vault.economy.depositPlayer(Bukkit.getServer().getOfflinePlayer(u), db);
+						Util.msg(p, HG.plugin.lang.winning_amount.replace("<amount>", String.valueOf(db)));
+					}
 				}
 				HG.plugin.getLeaderboard().addWin(u);
 			}
