@@ -504,6 +504,15 @@ public class GameListener implements Listener {
 	}
 
 	@EventHandler
+	private void onPickup(EntityPickupItemEvent event) {
+		if (event.getEntity() instanceof Player) {
+			if (plugin.getSpectators().containsKey(event.getEntity().getUniqueId())) {
+				event.setCancelled(true);
+			}
+		}
+	}
+
+	@EventHandler
 	private void onLogout(PlayerQuitEvent event) {
 		Player player = event.getPlayer();
 		if (plugin.players.containsKey(player.getUniqueId())) {
