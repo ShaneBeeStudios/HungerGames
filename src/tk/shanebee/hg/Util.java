@@ -16,32 +16,59 @@ import java.util.List;
 import java.util.Objects;
 import java.util.UUID;
 
+/**
+ * Generalized utility class for shortcut methods
+ */
+@SuppressWarnings("WeakerAccess")
 public class Util {
 
 	static final BlockFace[] faces = new BlockFace[]{BlockFace.EAST, BlockFace.WEST, BlockFace.NORTH, BlockFace.SOUTH};
 
+	/** Log a message to console prefixed with the plugin's name
+	 * @param s Message to log to console
+	 */
 	public static void log(String s) {
 		Bukkit.getConsoleSender().sendMessage(ChatColor.translateAlternateColorCodes('&', "&7[&3&lHungerGames&7] " + s));
 	}
 
+	/** Send a warning to console prefixed with the plugin's name
+	 * @param s Message to log to console
+	 */
 	public static void warning(String s) {
 		String warnPrefix = "&7[&e&lHungerGames&7] ";
 		Bukkit.getConsoleSender().sendMessage(ChatColor.translateAlternateColorCodes('&',
 				warnPrefix + "&eWARNING: " + s));
 	}
 
+	/** Send a colored message to a player or console
+	 * @param sender Receiver of message
+	 * @param s Message to send
+	 * @deprecated Use {@link #scm(CommandSender, String)} instead
+	 */
+	@Deprecated
 	public static void msg(CommandSender sender, String s) {
 		sender.sendMessage(ChatColor.translateAlternateColorCodes('&', s));
 	}
 
+	/** Send a colored message to a player or console
+	 * @param sender Receiver of message
+	 * @param s Message to send
+	 */
 	public static void scm(CommandSender sender, String s) {
 		sender.sendMessage(ChatColor.translateAlternateColorCodes('&', s));
 	}
 
+	/** Broadcast a message prefixed with plugin name
+	 * @param s Message to send
+	 */
 	public static void broadcast(String s) {
 		Bukkit.getServer().broadcastMessage(ChatColor.translateAlternateColorCodes('&', HG.plugin.lang.prefix + " " + s));
 	}
 
+	/** Shortcut for adding color to a string
+	 * @param string String including color codes
+	 * @return Formatted string
+	 */
 	public static String getColString(String string) {
 		return ChatColor.translateAlternateColorCodes('&', string);
 	}
@@ -68,30 +95,29 @@ public class Util {
 		}
 	}
 
-	public static void clearInv(Player p) {
-		p.getInventory().clear();
-		p.getEquipment().clear();
-		p.getInventory().setHelmet(null);
-		p.getInventory().setChestplate(null);
-		p.getInventory().setLeggings(null);
-		p.getInventory().setBoots(null);
-		p.updateInventory();
+	/** Clear the inventory of a player including equipment
+	 * @param player Player to clear inventory
+	 */
+	public static void clearInv(Player player) {
+		player.getInventory().clear();
+		player.getEquipment().clear();
+		player.getInventory().setHelmet(null);
+		player.getInventory().setChestplate(null);
+		player.getInventory().setLeggings(null);
+		player.getInventory().setBoots(null);
+		player.updateInventory();
 	}
 
+	/** Convert a list of UUIDs to a string of player names
+	 * @param uuid UUID list to convert
+	 * @return String of player names
+	 */
 	public static List<String> convertUUIDListToStringList(List<UUID> uuid) {
 		List<String> winners = new ArrayList<>();
 		for (UUID id : uuid) {
-			winners.add(Objects.requireNonNull(getOnlinePlayer(id)).getName());
+			winners.add(Objects.requireNonNull(Bukkit.getPlayer(id)).getName());
 		}
 		return winners;
-	}
-
-	private static Player getOnlinePlayer(UUID uuid) {
-		Player player = Bukkit.getPlayer(uuid);
-		if (player != null) {
-			return player;
-		}
-		return null;
 	}
 
 	static String translateStop(List<String> win) {
@@ -115,6 +141,7 @@ public class Util {
 	}
 
 	static void shootFirework(Location l) {
+		assert l.getWorld() != null;
 		Firework fw = l.getWorld().spawn(l, Firework.class);
 		FireworkMeta fm = fw.getFireworkMeta();
 		List<Color> c = new ArrayList<>();
@@ -138,6 +165,7 @@ public class Util {
 		return attached.getRelative(at.getAttachedFace()).equals(base);
 	}
 
+	@SuppressWarnings("SameParameterValue")
 	private static boolean isRunningMinecraft(int maj, int min) {
 		String version = Bukkit.getServer().getClass().getPackage().getName().split("\\.")[3];
 		int major = Integer.valueOf(version.split("_")[0].replace("v", ""));
@@ -145,6 +173,11 @@ public class Util {
 		return maj == major && min == minor;
 	}
 
+	/** Check if a block is a wall sign
+	 * <p>Due to sign material changes in 1.14 this method checks for both 1.13 and 1.14+</p>
+	 * @param item Material to check
+	 * @return True if material is a wall sign
+	 */
 	public static boolean isWallSign(Material item) {
 		if (isRunningMinecraft(1, 13)) {
 			return item == Material.getMaterial("WALL_SIGN");

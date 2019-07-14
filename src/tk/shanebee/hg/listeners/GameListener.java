@@ -21,6 +21,7 @@ import org.bukkit.inventory.PlayerInventory;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.util.Vector;
 import tk.shanebee.hg.*;
+import tk.shanebee.hg.data.Leaderboard;
 import tk.shanebee.hg.events.ChestOpenEvent;
 
 import java.util.HashMap;
@@ -93,6 +94,7 @@ public class GameListener implements Listener {
 
 			if (killer != null) {
 				g.addKill(killer);
+				plugin.getLeaderboard().addStat(killer, Leaderboard.Stats.KILLS);
 				g.msgAll(HG.plugin.lang.death_fallen + " &d" + plugin.getKillManager().getKillString(p.getName(), killer));
 			} else if (Objects.requireNonNull(p.getLastDamageCause()).getCause() == EntityDamageEvent.DamageCause.ENTITY_ATTACK) {
 				g.msgAll(HG.plugin.lang.death_fallen + " &d" + plugin.getKillManager().getKillString(p.getName(), killerMap.get(p)));
@@ -103,6 +105,8 @@ public class GameListener implements Listener {
 			}
 			event.setDeathMessage(null);
 			event.getDrops().clear();
+			plugin.getLeaderboard().addStat(p, Leaderboard.Stats.DEATHS);
+			plugin.getLeaderboard().addStat(p, Leaderboard.Stats.GAMES);
 
 			for (UUID uuid : g.getPlayers()) {
 				Player player = Bukkit.getPlayer(uuid);

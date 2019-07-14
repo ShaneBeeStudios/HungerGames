@@ -24,7 +24,7 @@ public class PlayerData {
 	 * @param player Player to save
 	 * @param game Game they will be entering
 	 */
-	PlayerData(Player player, Game game) {
+	public PlayerData(Player player, Game game) {
 		this.game = game;
 		inv = player.getInventory().getContents();
 		equip = player.getInventory().getArmorContents();
@@ -36,16 +36,19 @@ public class PlayerData {
 		player.setExp(0);
 	}
 
-	void restore(Player p) {
-		if (p == null) return;
-		Util.clearInv(p);
-		p.setWalkSpeed(0.2f);
-		p.setLevel(expL);
-		p.setExp(expP);
-		p.getInventory().setContents(inv);
-		p.getInventory().setArmorContents(equip);
-		p.setGameMode(mode);
-		p.updateInventory();
+	/** Restore a player's saved data
+	 * @param player Player to restore data to
+	 */
+	public void restore(Player player) {
+		if (player == null) return;
+		Util.clearInv(player);
+		player.setWalkSpeed(0.2f);
+		player.setLevel(expL);
+		player.setExp(expP);
+		player.getInventory().setContents(inv);
+		player.getInventory().setArmorContents(equip);
+		player.setGameMode(mode);
+		player.updateInventory();
 	}
 
 	/** Check if a player is on a team

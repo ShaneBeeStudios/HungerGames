@@ -4,7 +4,7 @@ import org.bukkit.inventory.ItemStack;
 
 /**
  * NBT class for adding NBT to items
- * <p>(Mainly for internal use</p>
+ * <p>(Mainly for internal use)</p>
  */
 public interface NBTApi {
 

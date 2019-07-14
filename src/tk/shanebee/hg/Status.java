@@ -3,6 +3,9 @@ package tk.shanebee.hg;
 
 import org.bukkit.ChatColor;
 
+/**
+ * Game status types
+ */
 public enum Status {
 
 	/**

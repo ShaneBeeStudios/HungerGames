@@ -15,6 +15,7 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.plugin.IllegalPluginAccessException;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
+import tk.shanebee.hg.data.Leaderboard;
 import tk.shanebee.hg.events.GameStartEvent;
 import tk.shanebee.hg.events.PlayerJoinGameEvent;
 import tk.shanebee.hg.events.PlayerLeaveGameEvent;
@@ -730,7 +731,8 @@ public class Game {
 						Util.msg(p, HG.plugin.lang.winning_amount.replace("<amount>", String.valueOf(db)));
 					}
 				}
-				HG.plugin.getLeaderboard().addWin(u);
+				plugin.getLeaderboard().addStat(u, Leaderboard.Stats.WINS);
+				plugin.getLeaderboard().addStat(u, Leaderboard.Stats.GAMES);
 			}
 		}
 
