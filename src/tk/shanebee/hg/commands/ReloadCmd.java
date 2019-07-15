@@ -17,7 +17,7 @@ public class ReloadCmd extends BaseCmd {
 	public boolean run() {
 		Util.scm(player, HG.plugin.lang.cmd_reload_attempt);
 		HG.plugin.stopAll();
-		HG.plugin.getArenaConfig().saveCustomConfig();
+		//HG.plugin.getArenaConfig().saveCustomConfig();
 		HG.plugin.getArenaConfig().reloadCustomConfig();
 		HG.plugin.getArenaConfig().load();
 		Util.scm(player, HG.plugin.lang.cmd_reload_reloaded_arena);
@@ -29,8 +29,9 @@ public class ReloadCmd extends BaseCmd {
 		Util.scm(player, HG.plugin.lang.cmd_reload_reloaded_items);
 		new Config(HG.plugin);
 		Util.scm(player, HG.plugin.lang.cmd_reload_reloaded_config);
-		
+
 		Util.scm(player, HG.plugin.lang.cmd_reload_reloaded_success);
 		return true;
 	}
+
 }
