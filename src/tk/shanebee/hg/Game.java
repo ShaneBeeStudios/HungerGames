@@ -728,7 +728,7 @@ public class Game {
 					}
 					if (Config.cash != 0) {
 						Vault.economy.depositPlayer(Bukkit.getServer().getOfflinePlayer(u), db);
-						Util.msg(p, HG.plugin.lang.winning_amount.replace("<amount>", String.valueOf(db)));
+						Util.scm(p, HG.plugin.lang.winning_amount.replace("<amount>", String.valueOf(db)));
 					}
 				}
 				plugin.getLeaderboard().addStat(u, Leaderboard.Stats.WINS);
