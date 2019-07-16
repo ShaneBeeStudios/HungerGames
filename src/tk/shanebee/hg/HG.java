@@ -19,23 +19,20 @@ import tk.shanebee.hg.managers.*;
 import tk.shanebee.hg.metrics.Metrics;
 import tk.shanebee.hg.nms.NBTApi;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.UUID;
+import java.util.*;
 
 public class HG extends JavaPlugin {
 
 	//Maps
-	public HashMap<String, BaseCmd> cmds = new HashMap<>();
-	public HashMap<UUID, PlayerData> players = new HashMap<>();
-	private HashMap<UUID, PlayerData> spectators = new HashMap<>();
-	public HashMap<UUID, PlayerSession> playerSession = new HashMap<>();
-	public HashMap<Integer, ItemStack> items = new HashMap<>();
-	public HashMap<Integer, ItemStack> bonusItems = new HashMap<>();
+	private Map<String, BaseCmd> cmds = new HashMap<>();
+	private Map<UUID, PlayerData> players = new HashMap<>();
+	private Map<UUID, PlayerData> spectators = new HashMap<>();
+	private Map<UUID, PlayerSession> playerSession = new HashMap<>();
+	private Map<Integer, ItemStack> items = new HashMap<>();
+	private Map<Integer, ItemStack> bonusItems = new HashMap<>();
 
 	//Lists
-	public List<Game> games = new ArrayList<>();
+	private List<Game> games = new ArrayList<>();
 
 	//Instances
 	public static HG plugin;
@@ -43,13 +40,13 @@ public class HG extends JavaPlugin {
 	private Data arenaconfig;
 	private KillManager killManager;
 	private RandomItems randomItems;
-	public Language lang;
+	private Language lang;
 	private KitManager kitManager;
 	private ItemStackManager itemStackManager;
 	private Leaderboard leaderboard;
 
 	//NMS Nbt
-	public NBTApi nbtApi;
+	private NBTApi nbtApi;
 
 	@Override
 	public void onEnable() {
@@ -185,10 +182,16 @@ public class HG extends JavaPlugin {
 		return plugin;
 	}
 
+	/** Get an instance of the RandomItems manager
+	 * @return RandomItems manager
+	 */
 	public RandomItems getRandomItems() {
 		return this.randomItems;
 	}
 
+	/** Get an instance of the KillManager
+	 * @return KillManager
+	 */
 	public KillManager getKillManager() {
 		return this.killManager;
 	}
@@ -200,6 +203,9 @@ public class HG extends JavaPlugin {
 		return this.kitManager;
 	}
 
+	/** Get an instance of the ItemStackManager
+	 * @return ItemStackManager
+	 */
 	public ItemStackManager getItemStackManager() {
 		return this.itemStackManager;
 	}
@@ -211,6 +217,9 @@ public class HG extends JavaPlugin {
 		return this.manager;
 	}
 
+	/** Get an instance of the ArenaConfig
+	 * @return ArenaConfig
+	 */
 	public Data getArenaConfig() {
 		return this.arenaconfig;
 	}
@@ -222,26 +231,67 @@ public class HG extends JavaPlugin {
 		return this.leaderboard;
 	}
 
-	/** Get the games associated to this plugin
+	/** Get a list of all loaded games
 	 * @return A list of games
 	 */
 	public List<Game> getGames() {
 		return this.games;
 	}
 
-	public void addGame(Game game) {
-		this.games.add(game);
-	}
-
 	/** Get the players currently in games
 	 * @return Map of player data
 	 */
-	public HashMap<UUID, PlayerData> getPlayers() {
+	public Map<UUID, PlayerData> getPlayers() {
 		return this.players;
 	}
 
-	public HashMap<UUID, PlayerData> getSpectators() {
+	/** Get a map of players currently spectating games
+	 * @return Map of spectators
+	 */
+	public Map<UUID, PlayerData> getSpectators() {
 		return this.spectators;
+	}
+
+	/** Get player sessions map
+	 * @return Player Sessions map
+	 */
+	public Map<UUID, PlayerSession> getPlayerSessions() {
+		return this.playerSession;
+	}
+
+	/** Get general items map
+	 * @return Items map
+	 */
+	public Map<Integer, ItemStack> getItems() {
+		return this.items;
+	}
+
+	/** Get general bonus items map
+	 * @return Bonus items map
+	 */
+	public Map<Integer, ItemStack> getBonusItems() {
+		return this.bonusItems;
+	}
+
+	/** Get a map of commands
+	 * @return Map of commands
+	 */
+	public Map<String, BaseCmd> getCommands() {
+		return this.cmds;
+	}
+
+	/** Get an instance of the language file
+	 * @return Language file
+	 */
+	public Language getLang() {
+		return this.lang;
+	}
+
+	/** Get the NBT API
+	 * @return NBT API
+	 */
+	public NBTApi getNbtApi() {
+		return this.nbtApi;
 	}
 
 	public static boolean isRunningMinecraft(int major, int minor) {

@@ -62,7 +62,7 @@ public class Util {
 	 * @param s Message to send
 	 */
 	public static void broadcast(String s) {
-		Bukkit.getServer().broadcastMessage(ChatColor.translateAlternateColorCodes('&', HG.plugin.lang.prefix + " " + s));
+		Bukkit.getServer().broadcastMessage(ChatColor.translateAlternateColorCodes('&', HG.plugin.getLang().prefix + " " + s));
 	}
 
 	/** Shortcut for adding color to a string

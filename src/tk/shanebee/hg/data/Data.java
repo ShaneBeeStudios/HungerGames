@@ -129,7 +129,7 @@ public class Data {
 					}
 
 					Game game = new Game(s, b, spawns, lobbysign, timer, minplayers, maxplayers, freeroam, isReady);
-					plugin.addGame(game);
+					plugin.getGames().add(game);
 
 					KitManager kit = plugin.getItemStackManager().setGameKits(s, arenadat);
 					if (kit != null)

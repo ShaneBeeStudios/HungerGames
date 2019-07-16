@@ -27,7 +27,7 @@ public class AddSpawnCmd extends BaseCmd {
 		Location l = player.getLocation();
 		for (Location lb : g.getSpawns()) {
 			if (lb.getBlock().equals(l.getBlock())) {
-				Util.scm(player, HG.plugin.lang.cmd_spawn_same);
+				Util.scm(player, HG.plugin.getLang().cmd_spawn_same);
 				return true;
 			}
 		}
@@ -35,7 +35,7 @@ public class AddSpawnCmd extends BaseCmd {
 		c.set("arenas."+g.getName()+".spawns", d);
 		g.addSpawn(l);
 		HG.plugin.getArenaConfig().saveCustomConfig();
-		Util.scm(player, HG.plugin.lang.cmd_spawn_set.replace("<number>", String.valueOf(num)));
+		Util.scm(player, HG.plugin.getLang().cmd_spawn_set.replace("<number>", String.valueOf(num)));
 		
         HG.plugin.getManager().checkGame(g, player);
 		return true;

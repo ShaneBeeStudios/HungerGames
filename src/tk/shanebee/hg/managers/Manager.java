@@ -174,7 +174,7 @@ public class Manager {
 	 * @return True if the location is within a game's bounds
 	 */
 	public boolean isInRegion(Location location) {
-		for (Game g : plugin.games) {
+		for (Game g : plugin.getGames()) {
 			if (g.isInRegion(location))
 				return true;
 		}
@@ -186,7 +186,7 @@ public class Manager {
 	 * @return The game
 	 */
 	public Game getGame(Location location) {
-		for (Game g : plugin.games) {
+		for (Game g : plugin.getGames()) {
 			if (g.isInRegion(location))
 				return g;
 		}
@@ -198,7 +198,7 @@ public class Manager {
 	 * @return The game
 	 */
 	public Game getGame(String name) {
-		for (Game g : plugin.games) {
+		for (Game g : plugin.getGames()) {
 			if (g.getName().equalsIgnoreCase(name)) {
 				return g;
 			}

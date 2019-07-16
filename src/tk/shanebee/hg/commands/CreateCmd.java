@@ -23,21 +23,21 @@ public class CreateCmd extends BaseCmd {
 
 	@Override
 	public boolean run() {
-		if (!HG.plugin.playerSession.containsKey(player.getUniqueId())) {
-			Util.msg(player, HG.plugin.lang.cmd_create_need_selection);
+		if (!HG.plugin.getPlayerSessions().containsKey(player.getUniqueId())) {
+			Util.scm(player, HG.plugin.getLang().cmd_create_need_selection);
 		} else {
-			PlayerSession s = HG.plugin.playerSession.get(player.getUniqueId());
+			PlayerSession s = HG.plugin.getPlayerSessions().get(player.getUniqueId());
 			if (!s.hasValidSelection()) {
-				Util.msg(player, HG.plugin.lang.cmd_create_need_selection);
+				Util.scm(player, HG.plugin.getLang().cmd_create_need_selection);
 			} else {
 				if (!Util.isInt(args[2]) || !Util.isInt(args[3]) || !Util.isInt(args[4])) {
-					player.sendMessage(HG.plugin.lang.cmd_base_wrongusage + " " + sendHelpLine());
+					player.sendMessage(HG.plugin.getLang().cmd_base_wrongusage + " " + sendHelpLine());
 				} else if (Integer.parseInt(args[4]) % 30 != 0) {
-					Util.scm(player, HG.plugin.lang.cmd_create_divisible_1);
-					Util.scm(player, HG.plugin.lang.cmd_create_divisible_2);
+					Util.scm(player, HG.plugin.getLang().cmd_create_divisible_1);
+					Util.scm(player, HG.plugin.getLang().cmd_create_divisible_2);
 					return true;
 				} else if (Integer.parseInt(args[2]) > Integer.parseInt(args[3])) {
-					Util.scm(player, HG.plugin.lang.cmd_create_minmax);
+					Util.scm(player, HG.plugin.getLang().cmd_create_minmax);
 					sendHelpLine();
 				} else {
 					Location l = s.getLoc1();
@@ -59,8 +59,8 @@ public class CreateCmd extends BaseCmd {
 					HG.plugin.getArenaConfig().reloadCustomConfig();
 
 					Bound b = new Bound(player.getWorld().getName(), l.getBlockX(), l.getBlockY(), l.getBlockZ(), l2.getBlockX(), l2.getBlockY(), l2.getBlockZ());
-					HG.plugin.games.add(new Game(args[1], b, Integer.parseInt(args[4]), Integer.parseInt(args[2]), Integer.parseInt(args[3]), freeroam));
-					Util.msg(player, HG.plugin.lang.cmd_create_created.replace("<arena>", args[1]));
+					HG.plugin.getGames().add(new Game(args[1], b, Integer.parseInt(args[4]), Integer.parseInt(args[2]), Integer.parseInt(args[3]), freeroam));
+					Util.scm(player, HG.plugin.getLang().cmd_create_created.replace("<arena>", args[1]));
 					return true;
 				}
 			}

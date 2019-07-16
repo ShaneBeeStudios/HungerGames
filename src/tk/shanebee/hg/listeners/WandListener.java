@@ -33,38 +33,38 @@ public class WandListener implements Listener {
 		assert event.getClickedBlock() != null;
 		if (action.equals(Action.RIGHT_CLICK_BLOCK)) {
 			if (!player.getInventory().getItemInMainHand().getType().equals(Material.BLAZE_ROD)) return;
-			if (!plugin.playerSession.containsKey(player.getUniqueId())) return;
+			if (!plugin.getPlayerSessions().containsKey(player.getUniqueId())) return;
 			if (event.getHand() == EquipmentSlot.OFF_HAND) return;
 			Location l = event.getClickedBlock().getLocation();
 			event.setCancelled(true);
-			for (Game game : HG.plugin.games) {
+			for (Game game : HG.plugin.getGames()) {
 				if (game.getRegion().isInRegion(l)) {
 					Util.scm(player, "&cThis location is already within an arena");
 					return;
 				}
 			}
-			PlayerSession ses = plugin.playerSession.get(player.getUniqueId());
+			PlayerSession ses = plugin.getPlayerSessions().get(player.getUniqueId());
 			ses.setLoc2(l);
-			Util.msg(player, "Pos2: "+l.getX()+", "+l.getY()+", "+l.getZ());
+			Util.scm(player, "Pos2: "+l.getX()+", "+l.getY()+", "+l.getZ());
 			if (!ses.hasValidSelection()) {
-				Util.msg(player, "Now you need to set position 1!");
+				Util.scm(player, "Now you need to set position 1!");
 			}
 		} else if (action.equals(Action.LEFT_CLICK_BLOCK)) {
 			if (!player.getInventory().getItemInMainHand().getType().equals(Material.BLAZE_ROD)) return;
-			if (!plugin.playerSession.containsKey(player.getUniqueId())) return;
+			if (!plugin.getPlayerSessions().containsKey(player.getUniqueId())) return;
 			Location l = event.getClickedBlock().getLocation();
 			event.setCancelled(true);
-			for (Game game : HG.plugin.games) {
+			for (Game game : HG.plugin.getGames()) {
 				if (game.getRegion().isInRegion(l)) {
 					Util.scm(player, "&cThis location is already within an arena");
 					return;
 				}
 			}
-			PlayerSession ses = plugin.playerSession.get(player.getUniqueId());
+			PlayerSession ses = plugin.getPlayerSessions().get(player.getUniqueId());
 			ses.setLoc1(l);
-			Util.msg(player, "Pos1: "+l.getX()+", "+l.getY()+", "+l.getZ());
+			Util.scm(player, "Pos1: "+l.getX()+", "+l.getY()+", "+l.getZ());
 			if (!ses.hasValidSelection()) {
-				Util.msg(player, "Now you need to set position 2!");
+				Util.scm(player, "Now you need to set position 2!");
 			}
 		}
 	}

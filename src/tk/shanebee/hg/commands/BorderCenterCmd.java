@@ -26,9 +26,9 @@ public class BorderCenterCmd extends BaseCmd {
 			HG.plugin.getArenaConfig().getCustomConfig().set("arenas." + name + ".border.center", loc);
 			game.setBorderCenter(l);
 			HG.plugin.getArenaConfig().saveCustomConfig();
-			Util.scm(player, HG.plugin.lang.cmd_border_center.replace("<arena>", name));
+			Util.scm(player, HG.plugin.getLang().cmd_border_center.replace("<arena>", name));
 		} else {
-			Util.scm(player, HG.plugin.lang.cmd_delete_noexist);
+			Util.scm(player, HG.plugin.getLang().cmd_delete_noexist);
 		}
 		return true;
 	}

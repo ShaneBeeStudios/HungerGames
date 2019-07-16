@@ -19,8 +19,8 @@ public class FreeRoamTask implements Runnable {
 		for (UUID u : g.getPlayers()) {
 			Player p = Bukkit.getPlayer(u);
 			if (p != null) {
-				Util.scm(p,HG.plugin.lang.roam_game_started);
-				Util.scm(p,HG.plugin.lang.roam_time.replace("<roam>", String.valueOf(g.getRoamTime())));
+				Util.scm(p,HG.plugin.getLang().roam_game_started);
+				Util.scm(p,HG.plugin.getLang().roam_time.replace("<roam>", String.valueOf(g.getRoamTime())));
 				p.setHealth(20);
 				p.setFoodLevel(20);
 				g.unFreeze(p);
@@ -31,7 +31,7 @@ public class FreeRoamTask implements Runnable {
 
 	@Override
 	public void run() {
-		game.msgAll(HG.plugin.lang.roam_finished);
+		game.msgAll(HG.plugin.getLang().roam_finished);
 		game.startGame();
 	}
 

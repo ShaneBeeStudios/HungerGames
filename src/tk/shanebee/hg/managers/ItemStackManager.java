@@ -27,7 +27,7 @@ public class ItemStackManager {
 	public ItemStackManager(HG p) {
 		this.plugin = p;
 		setKits();
-		this.nbtApi = p.nbtApi;
+		this.nbtApi = p.getNbtApi();
 	}
 
 	public void setKits() {

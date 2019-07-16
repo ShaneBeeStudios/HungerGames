@@ -26,13 +26,13 @@ public abstract class BaseCmd {
 			else player = (Player) s;
 		}
 		if (!s.hasPermission("hg." + cmdName))
-			Util.scm(sender, HG.plugin.lang.cmd_base_noperm.replace("<command>", cmdName));
-		else if (forceInGame && !HG.plugin.players.containsKey(player.getUniqueId()) && !HG.plugin.getSpectators().containsKey(player.getUniqueId()))
-			Util.scm(sender, HG.plugin.lang.cmd_base_nogame);
+			Util.scm(sender, HG.plugin.getLang().cmd_base_noperm.replace("<command>", cmdName));
+		else if (forceInGame && !HG.plugin.getPlayers().containsKey(player.getUniqueId()) && !HG.plugin.getSpectators().containsKey(player.getUniqueId()))
+			Util.scm(sender, HG.plugin.getLang().cmd_base_nogame);
 		else if (forceInRegion && !HG.plugin.getManager().isInRegion(player.getLocation()))
-			Util.scm(sender, HG.plugin.lang.cmd_base_noregion);
+			Util.scm(sender, HG.plugin.getLang().cmd_base_noregion);
 		else if (argLength > arg.length)
-			Util.scm(s, HG.plugin.lang.cmd_base_wrongusage + " " + sendHelpLine());
+			Util.scm(s, HG.plugin.getLang().cmd_base_wrongusage + " " + sendHelpLine());
 		else return run();
 		return true;
 	}

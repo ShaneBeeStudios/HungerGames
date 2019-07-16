@@ -173,7 +173,7 @@ public class KitEntry {
 			player.removePotionEffect(effect.getType());
 		}
 		player.addPotionEffects(potions);
-		HG.plugin.players.get(player.getUniqueId()).getGame().freeze(player);
+		HG.plugin.getPlayers().get(player.getUniqueId()).getGame().freeze(player);
 		player.updateInventory();
 	}
 

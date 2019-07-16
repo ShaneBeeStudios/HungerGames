@@ -1,7 +1,5 @@
 package tk.shanebee.hg;
 
-import java.util.Random;
-
 import org.bukkit.*;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockState;
@@ -19,6 +17,8 @@ import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.event.world.ChunkUnloadEvent;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
+
+import java.util.Random;
 
 
 public class ChestDrop implements Listener {
@@ -88,7 +88,7 @@ public class ChestDrop implements Listener {
 	public void onOpenChestDrop(PlayerInteractEvent event) {
 		if (event.getAction() == Action.RIGHT_CLICK_BLOCK && beforeBlock != null && event.getClickedBlock().getLocation().equals(beforeBlock.getLocation())) {
 			Player p = event.getPlayer();
-			Game game = HG.plugin.players.get(p.getUniqueId()).getGame();
+			Game game = HG.plugin.getPlayers().get(p.getUniqueId()).getGame();
 			Random rg = new Random();
 			invopener = p;
 

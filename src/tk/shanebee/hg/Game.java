@@ -41,10 +41,10 @@ public class Game {
 	private List<UUID> spectators = new ArrayList<>();
 	private List<Location> chests = new ArrayList<>();
 	private List<Location> playerChests = new ArrayList<>();
-	private HashMap<Integer, ItemStack> items;
-	private HashMap<Integer, ItemStack> bonusItems;
+	private Map<Integer, ItemStack> items;
+	private Map<Integer, ItemStack> bonusItems;
 	private KitManager kit;
-	private HashMap<Player, Integer> kills = new HashMap<>();
+	private Map<Player, Integer> kills = new HashMap<>();
 
 	private List<BlockState> blocks = new ArrayList<>();
 	private List<String> commands = null;
@@ -110,8 +110,8 @@ public class Game {
 
 		this.sb = new SBDisplay(this);
 		this.kit = plugin.getKitManager();
-		this.items = plugin.items;
-		this.bonusItems = plugin.bonusItems;
+		this.items = plugin.getItems();
+		this.bonusItems = plugin.getBonusItems();
 	}
 
 	/** Create a new game
@@ -135,8 +135,8 @@ public class Game {
 		this.status = Status.NOTREADY;
 		this.sb = new SBDisplay(this);
 		this.kit = plugin.getKitManager();
-		this.items = plugin.items;
-		this.bonusItems = plugin.bonusItems;
+		this.items = plugin.getItems();
+		this.bonusItems = plugin.getBonusItems();
 		this.borderSize = Config.borderFinalSize;
 		this.borderCountdownStart = Config.borderCountdownStart;
 		this.borderCountdownEnd = Config.borderCountdownEnd;
@@ -163,7 +163,7 @@ public class Game {
 		this.items = items;
 	}
 
-	public HashMap<Integer, ItemStack> getItems() {
+	public Map<Integer, ItemStack> getItems() {
 		return this.items;
 	}
 
@@ -176,14 +176,14 @@ public class Game {
 	}
 
 	public void resetItemsDefault() {
-		this.items = HG.getPlugin().items;
+		this.items = HG.getPlugin().getItems();
 	}
 
-	public void setBonusItems(HashMap<Integer, ItemStack> items) {
+	public void setBonusItems(Map<Integer, ItemStack> items) {
 		this.bonusItems = items;
 	}
 
-	public HashMap<Integer, ItemStack> getBonusItems() {
+	public Map<Integer, ItemStack> getBonusItems() {
 		return this.bonusItems;
 	}
 
@@ -196,7 +196,7 @@ public class Game {
 	}
 
 	public void resetBonusItemsDefault() {
-		this.bonusItems = HG.getPlugin().bonusItems;
+		this.bonusItems = HG.getPlugin().getBonusItems();
 	}
 
 	/** Set the list of a commands to run for this game
@@ -393,13 +393,13 @@ public class Game {
 	 */
 	public void join(Player player) {
 		if (status != Status.WAITING && status != Status.STOPPED && status != Status.COUNTDOWN && status != Status.READY) {
-			Util.scm(player, HG.plugin.lang.arena_not_ready);
+			Util.scm(player, HG.plugin.getLang().arena_not_ready);
 			if ((status == Status.RUNNING || status == Status.BEGINNING) && Config.spectateEnabled) {
-				Util.scm(player, plugin.lang.arena_spectate.replace("<arena>", this.getName()));
+				Util.scm(player, plugin.getLang().arena_spectate.replace("<arena>", this.getName()));
 			}
 		} else if (maxPlayers <= players.size()) {
 			player.sendMessage(ChatColor.RED + name + " is currently full!");
-			Util.scm(player, "&c" + name + " " + HG.plugin.lang.game_full);
+			Util.scm(player, "&c" + name + " " + HG.plugin.getLang().game_full);
 		} else if (!players.contains(player.getUniqueId())) {
 			// Call PlayerJoinGameEvent
 			PlayerJoinGameEvent event = new PlayerJoinGameEvent(this, player);
@@ -413,7 +413,7 @@ public class Game {
 
 			players.add(player.getUniqueId());
 			Bukkit.getScheduler().scheduleSyncDelayedTask(HG.plugin, () -> {
-				HG.plugin.players.put(player.getUniqueId(), new PlayerData(player, this));
+				HG.plugin.getPlayers().put(player.getUniqueId(), new PlayerData(player, this));
 
 				Location loc = pickSpawn();
 
@@ -433,9 +433,9 @@ public class Game {
 				if (players.size() >= minPlayers && (status == Status.WAITING || status == Status.READY)) {
 					startPreGame();
 				} else if (status == Status.WAITING) {
-					msgAll(HG.plugin.lang.player_joined_game.replace("<player>",
+					msgAll(HG.plugin.getLang().player_joined_game.replace("<player>",
 							player.getName()) + (minPlayers - players.size() <= 0 ? "!" : ":" +
-							HG.plugin.lang.players_to_start.replace("<amount>", String.valueOf((minPlayers - players.size())))));
+							HG.plugin.getLang().players_to_start.replace("<amount>", String.valueOf((minPlayers - players.size())))));
 				}
 				kitHelp(player);
 
@@ -468,13 +468,13 @@ public class Game {
 			Util.scm(player, " ");
 		String kit = this.kit.getKitListString();
 		Util.scm(player, " ");
-		Util.scm(player, HG.plugin.lang.kit_join_header);
+		Util.scm(player, HG.plugin.getLang().kit_join_header);
 		Util.scm(player, " ");
-		Util.scm(player, HG.plugin.lang.kit_join_msg);
+		Util.scm(player, HG.plugin.getLang().kit_join_msg);
 		Util.scm(player, " ");
-		Util.scm(player, HG.plugin.lang.kit_join_avail + kit);
+		Util.scm(player, HG.plugin.getLang().kit_join_avail + kit);
 		Util.scm(player, " ");
-		Util.scm(player, HG.plugin.lang.kit_join_footer);
+		Util.scm(player, HG.plugin.getLang().kit_join_footer);
 		Util.scm(player, " ");
 	}
 
@@ -677,8 +677,8 @@ public class Game {
 			if (p != null) {
 				heal(p);
 				exit(p);
-				HG.plugin.players.get(p.getUniqueId()).restore(p);
-				HG.plugin.players.remove(p.getUniqueId());
+				HG.plugin.getPlayers().get(p.getUniqueId()).restore(p);
+				HG.plugin.getPlayers().remove(p.getUniqueId());
 				win.add(p.getUniqueId());
 				sb.restoreSB(p);
 			}
@@ -728,7 +728,7 @@ public class Game {
 					}
 					if (Config.cash != 0) {
 						Vault.economy.depositPlayer(Bukkit.getServer().getOfflinePlayer(u), db);
-						Util.scm(p, HG.plugin.lang.winning_amount.replace("<amount>", String.valueOf(db)));
+						Util.scm(p, HG.plugin.getLang().winning_amount.replace("<amount>", String.valueOf(db)));
 					}
 				}
 				plugin.getLeaderboard().addStat(u, Leaderboard.Stats.WINS);
@@ -746,7 +746,7 @@ public class Game {
 		String winner = Util.translateStop(Util.convertUUIDListToStringList(win));
 		// prevent not death winners from gaining a prize
 		if (death)
-			Util.broadcast(HG.plugin.lang.player_won.replace("<arena>", name).replace("<winner>", winner));
+			Util.broadcast(HG.plugin.getLang().player_won.replace("<arena>", name).replace("<winner>", winner));
 		if (!blocks.isEmpty()) {
 			new Rollback(this);
 		} else {
@@ -777,8 +777,8 @@ public class Game {
 		} else {
 			exit(player);
 			sb.restoreSB(player);
-			HG.plugin.players.get(player.getUniqueId()).restore(player);
-			HG.plugin.players.remove(player.getUniqueId());
+			HG.plugin.getPlayers().get(player.getUniqueId()).restore(player);
+			HG.plugin.getPlayers().remove(player.getUniqueId());
 		}
 		heal(player);
 
@@ -795,8 +795,8 @@ public class Game {
 				stop(death);
 			}
 		} else if (status == Status.WAITING) {
-			msgAll(HG.plugin.lang.player_left_game.replace("<player>", player.getName()) +
-					(minPlayers - players.size() <= 0 ? "!" : ":" + HG.plugin.lang.players_to_start
+			msgAll(HG.plugin.getLang().player_left_game.replace("<player>", player.getName()) +
+					(minPlayers - players.size() <= 0 ? "!" : ":" + HG.plugin.getLang().players_to_start
 							.replace("<amount>", String.valueOf((minPlayers - players.size())))));
 		}
 		updateLobbyBlock();
@@ -805,7 +805,7 @@ public class Game {
 
 	private boolean isGameOver() {
 		if (players.size() <= 1) return true;
-		for (Entry<UUID, PlayerData> f : HG.plugin.players.entrySet()) {
+		for (Entry<UUID, PlayerData> f : HG.plugin.getPlayers().entrySet()) {
 
 			Team t = f.getValue().getTeam();
 
@@ -858,7 +858,7 @@ public class Game {
 	private void createBossbar(int time) {
 		int min = (time / 60);
 		int sec = (time % 60);
-		String title = HG.plugin.lang.bossbar.replace("<min>", String.valueOf(min)).replace("<sec>", String.valueOf(sec));
+		String title = HG.plugin.getLang().bossbar.replace("<min>", String.valueOf(min)).replace("<sec>", String.valueOf(sec));
 		bar = Bukkit.createBossBar(ChatColor.translateAlternateColorCodes('&', title), BarColor.GREEN, BarStyle.SEGMENTED_20);
 		for (UUID uuid : players) {
 			Player player = Bukkit.getPlayer(uuid);
@@ -876,7 +876,7 @@ public class Game {
 		double remain = ((double) remaining) / ((double) this.time);
 		int min = (remaining / 60);
 		int sec = (remaining % 60);
-		String title = HG.plugin.lang.bossbar.replace("<min>", String.valueOf(min)).replace("<sec>", String.valueOf(sec));
+		String title = HG.plugin.getLang().bossbar.replace("<min>", String.valueOf(min)).replace("<sec>", String.valueOf(sec));
 		bar.setTitle(ChatColor.translateAlternateColorCodes('&', title));
 		bar.setProgress(remain);
 		if (remain <= 0.5 && remain >= 0.2)

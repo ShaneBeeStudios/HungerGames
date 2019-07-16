@@ -1,13 +1,12 @@
 package tk.shanebee.hg.commands;
 
-import tk.shanebee.hg.HG;
-import tk.shanebee.hg.PlayerSession;
-import tk.shanebee.hg.Util;
-
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
+import tk.shanebee.hg.HG;
+import tk.shanebee.hg.PlayerSession;
+import tk.shanebee.hg.Util;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -22,9 +21,9 @@ public class WandCmd extends BaseCmd {
 
 	@Override
 	public boolean run() {
-		if (HG.plugin.playerSession.containsKey(player.getUniqueId())) {
-			HG.plugin.playerSession.remove(player.getUniqueId());
-			Util.msg(player, "Wand disabled!");
+		if (HG.plugin.getPlayerSessions().containsKey(player.getUniqueId())) {
+			HG.plugin.getPlayerSessions().remove(player.getUniqueId());
+			Util.scm(player, "Wand disabled!");
 		} else {
 			ItemStack wand = new ItemStack(Material.BLAZE_ROD, 1);
 			ItemMeta meta = wand.getItemMeta();
@@ -35,8 +34,8 @@ public class WandCmd extends BaseCmd {
 			)));
 			wand.setItemMeta(meta);
 			player.getInventory().addItem(wand);
-			HG.plugin.playerSession.put(player.getUniqueId(), new PlayerSession(null, null));
-			Util.msg(player, "Wand enabled!");
+			HG.plugin.getPlayerSessions().put(player.getUniqueId(), new PlayerSession(null, null));
+			Util.scm(player, "Wand enabled!");
 		}
 		return true;
 	}

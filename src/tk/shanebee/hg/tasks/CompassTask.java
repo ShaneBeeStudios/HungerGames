@@ -1,7 +1,5 @@
 package tk.shanebee.hg.tasks;
 
-import java.util.UUID;
-
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
@@ -9,10 +7,11 @@ import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
-
 import tk.shanebee.hg.Game;
 import tk.shanebee.hg.HG;
 import tk.shanebee.hg.PlayerData;
+
+import java.util.UUID;
 
 public class CompassTask implements Runnable {
 
@@ -28,13 +27,13 @@ public class CompassTask implements Runnable {
 		for (Player p : Bukkit.getOnlinePlayers()) {
 
 			if (p.getInventory().contains(Material.COMPASS)) {
-				PlayerData pd = plugin.players.get(p.getUniqueId());
+				PlayerData pd = plugin.getPlayers().get(p.getUniqueId());
 
 				if (pd != null) {
 
 					String[] st = getNearestPlayer(p, pd);
 					String info = ChatColor.translateAlternateColorCodes('&',
-							HG.plugin.lang.compass_nearest_player.replace("<player>", st[0]).replace("<distance>", st[1]));
+							HG.plugin.getLang().compass_nearest_player.replace("<player>", st[0]).replace("<distance>", st[1]));
 
 					for (ItemStack it : p.getInventory()) {
 						if (it != null && it.getType() == Material.COMPASS) {
@@ -56,7 +55,7 @@ public class CompassTask implements Runnable {
 		return i;
 	}
 
-	public String[] getNearestPlayer(Player p, PlayerData pd) {
+	private String[] getNearestPlayer(Player p, PlayerData pd) {
 
 		Game g = pd.getGame();
 
@@ -76,7 +75,7 @@ public class CompassTask implements Runnable {
 
 				Location l = p2.getLocation();
 
-				int c = (int) (cal((int) (x - l.getX())) + cal((int) (y - l.getY())) + cal((int) (z - l.getZ())));
+				int c = cal((int) (x - l.getX())) + cal((int) (y - l.getY())) + cal((int) (z - l.getZ()));
 
 				if (i > c) {
 					player = p2;

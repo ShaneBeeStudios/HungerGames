@@ -15,8 +15,8 @@ public class StartingTask implements Runnable {
 	public StartingTask(Game g) {
 		this.timer = 30;
 		this.game = g;
-		Util.broadcast(HG.plugin.lang.game_started.replace("<arena>", g.getName()));
-		Util.broadcast(HG.plugin.lang.game_join.replace("<arena>", g.getName()));
+		Util.broadcast(HG.plugin.getLang().game_started.replace("<arena>", g.getName()));
+		Util.broadcast(HG.plugin.getLang().game_join.replace("<arena>", g.getName()));
 
 		this.id = Bukkit.getScheduler().scheduleSyncRepeatingTask(HG.plugin, this, 5 * 20L, 5 * 20L);
 	}
@@ -29,7 +29,7 @@ public class StartingTask implements Runnable {
 			stop();
 			game.startFreeRoam();
 		} else {
-			game.msgAll(HG.plugin.lang.game_countdown.replace("<timer>", String.valueOf(timer)));
+			game.msgAll(HG.plugin.getLang().game_countdown.replace("<timer>", String.valueOf(timer)));
 		}
 	}
 

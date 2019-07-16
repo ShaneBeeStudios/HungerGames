@@ -13,7 +13,7 @@ import org.bukkit.World;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
 
-public class Spawner implements Runnable{
+public class Spawner implements Runnable {
 
 	private Game g;
 	private int id;
@@ -92,16 +92,15 @@ public class Spawner implements Runnable{
 		return r;
 	}
 
-	@SuppressWarnings("deprecation")
 	private Location getSafeLoc(World w, int x, int y, int z) {
 		int trys = 30;
-		
+
 		while (trys > 0) {
-			
+
 			trys--;
-			
+
 			Material m = w.getBlockAt(x, y, z).getType();
-			
+
 			if (m.isSolid()) {
 				y++;
 			} else if (w.getBlockAt(x, y - 1, z).getType() == Material.AIR) {
@@ -118,8 +117,9 @@ public class Spawner implements Runnable{
 		}
 		return null;
 	}
-	
+
 	public void stop() {
 		Bukkit.getScheduler().cancelTask(id);
 	}
+
 }

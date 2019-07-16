@@ -35,16 +35,16 @@ public class TimerTask implements Runnable {
 		if (Config.borderEnabled && !Config.borderOnStart && remainingtime == borderCountdownStart) {
 			int closingIn = remainingtime - borderCountdownEnd;
 			game.setBorder(closingIn);
-			game.msgAll(HG.plugin.lang.game_border_closing.replace("<seconds>", String.valueOf(closingIn)));
+			game.msgAll(HG.plugin.getLang().game_border_closing.replace("<seconds>", String.valueOf(closingIn)));
 		}
 
 		if (game.getChestRefillTime() > 0 && remainingtime == game.getChestRefillTime()) {
 			game.refillChests();
-			game.msgAll(HG.plugin.lang.game_chest_refill);
+			game.msgAll(HG.plugin.getLang().game_chest_refill);
 		}
 
 		if (remainingtime == teleportTimer && Config.teleportEnd) {
-			game.msgAll(HG.plugin.lang.game_almost_over);
+			game.msgAll(HG.plugin.getLang().game_almost_over);
 			game.respawnAll();
 		} else if (this.remainingtime < 10) {
 			stop();
@@ -55,11 +55,11 @@ public class TimerTask implements Runnable {
 				int asd = this.remainingtime % 60;
 				if (minutes != 0) {
 					if (asd == 0)
-						game.msgAll(HG.plugin.lang.game_ending_min.replace("<minutes>", String.valueOf(minutes)));
+						game.msgAll(HG.plugin.getLang().game_ending_min.replace("<minutes>", String.valueOf(minutes)));
 					else
 
-						game.msgAll(HG.plugin.lang.game_ending_minsec.replace("<minutes>", String.valueOf(minutes)).replace("<seconds>", String.valueOf(asd)));
-				} else game.msgAll(HG.plugin.lang.game_ending_sec.replace("<seconds>", String.valueOf(this.remainingtime)));
+						game.msgAll(HG.plugin.getLang().game_ending_minsec.replace("<minutes>", String.valueOf(minutes)).replace("<seconds>", String.valueOf(asd)));
+				} else game.msgAll(HG.plugin.getLang().game_ending_sec.replace("<seconds>", String.valueOf(this.remainingtime)));
 			}
 		}
 	}

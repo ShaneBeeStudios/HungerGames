@@ -26,13 +26,13 @@ public class CommandListener implements CommandExecutor, TabCompleter {
 	}
 
 	public boolean onCommand(CommandSender s, Command command, String label, String[] args) {
-		if (args.length == 0 || !plugin.cmds.containsKey(args[0])) {
+		if (args.length == 0 || !plugin.getCommands().containsKey(args[0])) {
 			Util.scm(s, "&4*&c&m                         &7*( &3&lHungerGames &7)*&c&m                          &4*");
-			for (BaseCmd cmd : plugin.cmds.values().toArray(new BaseCmd[0])) {
+			for (BaseCmd cmd : plugin.getCommands().values().toArray(new BaseCmd[0])) {
 				if (s.hasPermission("hg." + cmd.cmdName)) Util.scm(s, "  &7&l- " + cmd.sendHelpLine());
 			}
 			Util.scm(s, "&4*&c&m                                                                             &4*");
-		} else plugin.cmds.get(args[0]).processCmd(plugin, s, args);
+		} else plugin.getCommands().get(args[0]).processCmd(plugin, s, args);
 		return true;
 	}
 
@@ -40,7 +40,7 @@ public class CommandListener implements CommandExecutor, TabCompleter {
 	public List<String> onTabComplete(CommandSender sender, Command command, String s, String[] args) {
 		if (args.length == 1) {
 			ArrayList<String> matches = new ArrayList<>();
-			for (String name : plugin.cmds.keySet()) {
+			for (String name : plugin.getCommands().keySet()) {
 				if (StringUtil.startsWithIgnoreCase(name, args[0])) {
 					if (sender.hasPermission("hg." + name))
 						matches.add(name);
@@ -71,7 +71,7 @@ public class CommandListener implements CommandExecutor, TabCompleter {
 					((args[0].equalsIgnoreCase("spectate")) && Config.spectateEnabled)) {
 				ArrayList<String> matchesDelete = new ArrayList<>();
 				if (args.length == 2) {
-					for (Game name : plugin.games) {
+					for (Game name : plugin.getGames()) {
 						if (StringUtil.startsWithIgnoreCase(name.getName(), args[1])) {
 							matchesDelete.add(name.getName());
 						}
@@ -81,7 +81,7 @@ public class CommandListener implements CommandExecutor, TabCompleter {
 			} else if (args[0].equalsIgnoreCase("chestrefill")) {
 				ArrayList<String> matchesDelete = new ArrayList<>();
 				if (args.length == 2) {
-					for (Game name : plugin.games) {
+					for (Game name : plugin.getGames()) {
 						if (StringUtil.startsWithIgnoreCase(name.getName(), args[1])) {
 							matchesDelete.add(name.getName());
 						}
@@ -103,7 +103,7 @@ public class CommandListener implements CommandExecutor, TabCompleter {
 			} else if (args[0].equalsIgnoreCase("bordersize")) {
 				ArrayList<String> matchesDelete = new ArrayList<>();
 				if (args.length == 2) {
-					for (Game name : plugin.games) {
+					for (Game name : plugin.getGames()) {
 						if (StringUtil.startsWithIgnoreCase(name.getName(), args[1])) {
 							matchesDelete.add(name.getName());
 						}
@@ -116,7 +116,7 @@ public class CommandListener implements CommandExecutor, TabCompleter {
 			} else if (args[0].equalsIgnoreCase("bordertimer")) {
 				ArrayList<String> matchesDelete = new ArrayList<>();
 				if (args.length == 2) {
-					for (Game name : plugin.games) {
+					for (Game name : plugin.getGames()) {
 						if (StringUtil.startsWithIgnoreCase(name.getName(), args[1])) {
 							matchesDelete.add(name.getName());
 						}
@@ -133,8 +133,8 @@ public class CommandListener implements CommandExecutor, TabCompleter {
 				if (args.length == 2) {
 					ArrayList<String> matchesKit = new ArrayList<>();
 					Game game = null;
-					if (plugin.players.containsKey(((Player) sender).getUniqueId())) {
-						game = plugin.players.get(((Player) sender).getUniqueId()).getGame();
+					if (plugin.getPlayers().containsKey(((Player) sender).getUniqueId())) {
+						game = plugin.getPlayers().get(((Player) sender).getUniqueId()).getGame();
 					}
 					if (game != null) {
 						for (String name : game.getKitManager().getKits().keySet()) {

@@ -26,25 +26,25 @@ public class CancelListener implements Listener {
 	private void onPlayerCommandPreprocess(PlayerCommandPreprocessEvent event) {
 		Player player = event.getPlayer();
 		String[] st = event.getMessage().split(" ");
-		if ((plugin.players.containsKey(player.getUniqueId()) || plugin.getSpectators().containsKey(player.getUniqueId())) &&
+		if ((plugin.getPlayers().containsKey(player.getUniqueId()) || plugin.getSpectators().containsKey(player.getUniqueId())) &&
 				!st[0].equalsIgnoreCase("/login")) {
 			if (st[0].equalsIgnoreCase("/hg")) {
 				if (st.length >= 2 && st[1].equalsIgnoreCase("kit") &&
-						plugin.players.get(player.getUniqueId()).getGame().getStatus() == Status.RUNNING) {
+						plugin.getPlayers().get(player.getUniqueId()).getGame().getStatus() == Status.RUNNING) {
 					event.setMessage("/");
 					event.setCancelled(true);
-					Util.msg(player, HG.plugin.lang.cmd_handler_nokit);
+					Util.scm(player, HG.plugin.getLang().cmd_handler_nokit);
 				}
 				return;
 			}
 			event.setMessage("/");
 			event.setCancelled(true);
-			Util.msg(player, HG.plugin.lang.cmd_handler_nocmd);
+			Util.scm(player, HG.plugin.getLang().cmd_handler_nocmd);
 		} else if ("/tp".equalsIgnoreCase(st[0]) && st.length >= 2) {
 			Player p = Bukkit.getServer().getPlayer(st[1]);
 			if (p != null) {
-				if (plugin.players.containsKey(p.getUniqueId())) {
-					player.sendMessage(HG.plugin.lang.cmd_handler_playing);
+				if (plugin.getPlayers().containsKey(p.getUniqueId())) {
+					player.sendMessage(HG.plugin.getLang().cmd_handler_playing);
 					event.setMessage("/");
 					event.setCancelled(true);
 				}

@@ -1,18 +1,17 @@
 package tk.shanebee.hg.data;
 
-import java.io.File;
-import java.io.IOException;
-import java.util.ArrayList;
-import java.util.HashMap;
-
-import org.bukkit.inventory.ItemStack;
-import tk.shanebee.hg.HG;
-import tk.shanebee.hg.Util;
-
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
+import org.bukkit.inventory.ItemStack;
+import tk.shanebee.hg.HG;
+import tk.shanebee.hg.Util;
+
+import java.io.File;
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Map;
 
 public class RandomItems {
 
@@ -75,17 +74,17 @@ public class RandomItems {
 		}
 		// Regular items
 		for (String s : item.getStringList("items")) {
-			loadItems(s, plugin.items);
+			loadItems(s, plugin.getItems());
 		}
 		// Bonus items
 		for (String s : item.getStringList("bonus")) {
-			loadItems(s, plugin.bonusItems);
+			loadItems(s, plugin.getBonusItems());
 		}
-		Util.log(plugin.items.size() + " Random items have been loaded!");
-		Util.log(plugin.bonusItems.size() + " Random bonus items have been loaded!");
+		Util.log(plugin.getItems().size() + " Random items have been loaded!");
+		Util.log(plugin.getBonusItems().size() + " Random bonus items have been loaded!");
 	}
 
-	void loadItems(String itemString, HashMap<Integer, ItemStack> map) {
+	void loadItems(String itemString, Map<Integer, ItemStack> map) {
 		String[] amount = itemString.split(" ");
 		if (itemString.contains("x:")) {
 			for (String p : amount) {

@@ -19,17 +19,17 @@ public class Team {
 	
 	
 	public void invite(Player p) {
-		Util.scm(p, HG.plugin.lang.team_invite_1);
-		Util.scm(p, HG.plugin.lang.team_invite_2.replace("<inviter>", leader.toString()));
-		Util.scm(p, HG.plugin.lang.team_invite_3);
-		Util.scm(p, HG.plugin.lang.team_invite_4);
+		Util.scm(p, HG.plugin.getLang().team_invite_1);
+		Util.scm(p, HG.plugin.getLang().team_invite_2.replace("<inviter>", leader.toString()));
+		Util.scm(p, HG.plugin.getLang().team_invite_3);
+		Util.scm(p, HG.plugin.getLang().team_invite_4);
 		pending.add(p.getUniqueId());
 	}
 	
 	public void acceptInvite(Player p) {
 		pending.remove(p.getUniqueId());
 		players.add(p.getUniqueId());
-		Util.msg(p, HG.plugin.lang.joined_team);
+		Util.scm(p, HG.plugin.getLang().joined_team);
 	}
 	
 	public boolean isOnTeam(UUID p) {
