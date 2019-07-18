@@ -176,7 +176,7 @@ public class Leaderboard {
             default:
                 map = this.wins;
         }
-        return map.get(uuid.toString());
+        return map.getOrDefault(uuid.toString(), 0);
     }
 
     /** Gets a list of players from a stat
