@@ -962,6 +962,7 @@ public class Game {
 		this.spectators.add(spectator.getUniqueId());
 		spectator.setGameMode(GameMode.SURVIVAL);
 		spectator.teleport(this.getSpawns().get(0));
+		spectator.setCollidable(false);
 		if (Config.spectateFly)
 			spectator.setAllowFlight(true);
 
@@ -986,6 +987,7 @@ public class Game {
 	 */
 	public void leaveSpectate(Player spectator) {
 		exit(spectator);
+		spectator.setCollidable(true);
 		if (Config.spectateFly) {
 			GameMode mode = plugin.getSpectators().get(spectator.getUniqueId()).getGameMode();
 			if (mode == GameMode.SURVIVAL || mode == GameMode.ADVENTURE)
