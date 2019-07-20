@@ -710,6 +710,7 @@ public class Game {
 			Player spectator = Bukkit.getPlayer(uuid);
 			if (spectator != null) {
 				exit(spectator);
+				spectator.setCollidable(true);
 				if (Config.spectateHide)
 					revealPlayer(spectator);
 				if (Config.spectateFly) {
