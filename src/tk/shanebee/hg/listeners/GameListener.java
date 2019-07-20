@@ -21,7 +21,6 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.PlayerInventory;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.util.Vector;
-import org.spigotmc.event.player.PlayerSpawnLocationEvent;
 import tk.shanebee.hg.*;
 import tk.shanebee.hg.data.Leaderboard;
 import tk.shanebee.hg.events.ChestOpenEvent;
@@ -82,7 +81,7 @@ public class GameListener implements Listener {
 		}
 	}
 
-	@EventHandler(priority = EventPriority.HIGHEST)
+	@EventHandler(priority = EventPriority.MONITOR)
 	private void onDeath(PlayerDeathEvent event) {
 		final Player p = event.getEntity();
 
