@@ -388,6 +388,27 @@ public class Game {
 		return this.roamTime;
 	}
 
+	/** Get the exit location associated with this game
+	 * @return Exit location
+	 */
+	public Location getExit() {
+		return this.exit;
+	}
+
+	/** Get the location of the lobby for this game
+	 * @return Location of the lobby sign
+	 */
+	public Location getLobbyLocation() {
+		return this.s.getLocation();
+	}
+
+	/** Get max players for a game
+	 * @return Max amount of players for this game
+	 */
+	public int getMaxPlayers() {
+		return maxPlayers;
+	}
+
 	/** Join a player to the game
 	 * @param player Player to join the game
 	 */
@@ -770,19 +791,31 @@ public class Game {
 		players.remove(player.getUniqueId());
 		unFreeze(player);
 		if (death) {
-			player.spigot().respawn();
-		}
-		if (death && spectate && spectateOnDeath) {
-			spectate(player);
+			Bukkit.getScheduler().runTaskLater(plugin, () -> player.spigot().respawn(), 2);
+			Bukkit.getScheduler().runTaskLater(plugin, () -> {
+				if (this.getStatus() == Status.RUNNING)
+					bar.removePlayer(player);
+				player.playSound(player.getLocation(), Sound.UI_TOAST_CHALLENGE_COMPLETE, 5, 1);
+				sb.restoreSB(player);
+				HG.plugin.getPlayers().get(player.getUniqueId()).restore(player);
+				HG.plugin.getPlayers().remove(player.getUniqueId());
+				heal(player);
+				if (spectate && spectateOnDeath && !isGameOver()) {
+					spectate(player);
+					player.sendTitle(getName(), "You are now spectating!", 10, 100, 10); //TODO this a temp test
+				}
+			}, 20);
+
 		} else {
 			exit(player);
 			sb.restoreSB(player);
 			HG.plugin.getPlayers().get(player.getUniqueId()).restore(player);
 			HG.plugin.getPlayers().remove(player.getUniqueId());
 		}
-		heal(player);
+		Bukkit.getScheduler().runTaskLater(plugin, () -> updateAfterDeath(player, death), 40);
+	}
 
-
+	private void updateAfterDeath(Player player, boolean death) {
 		if (status == Status.RUNNING || status == Status.BEGINNING || status == Status.COUNTDOWN) {
 			if (isGameOver()) {
 				if (!death) {
@@ -831,13 +864,6 @@ public class Game {
 		} else {
 			player.teleport(this.exit);
 		}
-	}
-
-	/** Get max players for a game
-	 * @return Max amount of players for this game
-	 */
-	public int getMaxPlayers() {
-		return maxPlayers;
 	}
 
 	public boolean isLobbyValid() {

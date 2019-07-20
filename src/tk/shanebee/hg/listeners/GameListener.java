@@ -16,10 +16,12 @@ import org.bukkit.event.entity.*;
 import org.bukkit.event.player.PlayerDropItemEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
+import org.bukkit.event.player.PlayerRespawnEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.PlayerInventory;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.util.Vector;
+import org.spigotmc.event.player.PlayerSpawnLocationEvent;
 import tk.shanebee.hg.*;
 import tk.shanebee.hg.data.Leaderboard;
 import tk.shanebee.hg.events.ChestOpenEvent;
@@ -115,13 +117,23 @@ public class GameListener implements Listener {
 				}
 			}
 
-			Bukkit.getScheduler().scheduleSyncDelayedTask(plugin, () -> {
-				g.leave(p, true);
-				p.playSound(p.getLocation(), Sound.UI_TOAST_CHALLENGE_COMPLETE, 5, 1);
-			}, 1);
+			g.leave(p, true);
 			g.runCommands(Game.CommandType.DEATH, p);
 
 			Bukkit.getScheduler().scheduleSyncDelayedTask(plugin, () -> checkStick(g), 10L);
+		}
+	}
+
+	@EventHandler(priority = EventPriority.MONITOR)
+	private void onRespawn(PlayerRespawnEvent event) {
+		Player player = event.getPlayer();
+		if (HG.plugin.getPlayers().containsKey(player.getUniqueId())) {
+			Game game = HG.plugin.getPlayers().get(player.getUniqueId()).getGame();
+			if (game.getExit() != null) {
+				event.setRespawnLocation(game.getExit());
+			} else {
+				event.setRespawnLocation(game.getLobbyLocation().getWorld().getSpawnLocation());
+			}
 		}
 	}
 
