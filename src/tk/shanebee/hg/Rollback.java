@@ -8,26 +8,29 @@ import org.bukkit.block.BlockState;
 public class Rollback implements Runnable {
 
 	private final Iterator<BlockState> session;
-	private Game g;
+	private Game game;
+	private int blocks_per_second;
 	private int timerID;
 
-	public Rollback(Game g) {
-		this.g = g;
-		g.setStatus(Status.ROLLBACK);
-		this.session = g.getBlocks().iterator();
+	public Rollback(Game game) {
+		this.game = game;
+		this.blocks_per_second = Config.blocks_per_second / 10;
+		game.setStatus(Status.ROLLBACK);
+		this.session = game.getBlocks().iterator();
 		timerID = Bukkit.getServer().getScheduler().scheduleSyncRepeatingTask(HG.plugin, this, 1, 2);
 	}
 
 	public void run() {
 		int i = 0;
-		while (i < 50 && session.hasNext()) {
+		while (i < blocks_per_second && session.hasNext()) {
 			i++;
 			session.next().update(true);
 		}
 		if (!session.hasNext()) {
 			Bukkit.getServer().getScheduler().cancelTask(timerID);
-			g.resetBlocks();
-			g.setStatus(Status.READY);
+			game.resetBlocks();
+			game.setStatus(Status.READY);
 		}
 	}
+
 }

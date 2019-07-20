@@ -33,6 +33,7 @@ random-chest:
     max-chestcontent: 9
 rollback:
     allow-block-break: false
+    blocks-per-second: 500
     protect-during-cooldown: true
     fix-leaves: true
     prevent-trampling: true

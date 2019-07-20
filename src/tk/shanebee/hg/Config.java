@@ -29,6 +29,7 @@ public class Config {
 
 	//Rollback config info
 	public static boolean breakblocks;
+	public static int blocks_per_second;
 	public static boolean protectCooldown;
 	public static boolean fixleaves;
 	public static boolean preventtrample;
@@ -87,6 +88,7 @@ public class Config {
 		giveReward = config.getBoolean("reward.enabled");
 		cash = config.getInt("reward.cash");
 		breakblocks = config.getBoolean("rollback.allow-block-break");
+		blocks_per_second = config.getInt("rollback.blocks-per-second");
 		protectCooldown = config.getBoolean("rollback.protect-during-cooldown");
 		fixleaves = config.getBoolean("rollback.fix-leaves");
 		preventtrample = config.getBoolean("rollback.prevent-trampling");
@@ -151,6 +153,9 @@ public class Config {
 			config.set("spectate.death-to-spectate", true);
 			config.set("spectate.hide-spectators", true);
 			config.set("spectate.fly", true);
+		}
+		if (!config.isSet("rollback.blocks-per-second")) {
+			config.set("rollback.blocks-per-second", 500);
 		}
 		plugin.saveConfig();
 	}
