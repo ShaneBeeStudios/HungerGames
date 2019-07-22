@@ -111,7 +111,7 @@ public class GameListener implements Listener {
 
 			for (UUID uuid : g.getPlayers()) {
 				Player player = Bukkit.getPlayer(uuid);
-				if (player != null) {
+				if (player != null && player != p) {
 					player.playSound(player.getLocation(), Sound.UI_TOAST_CHALLENGE_COMPLETE, 5, 1);
 				}
 			}
