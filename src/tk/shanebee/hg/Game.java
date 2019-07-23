@@ -602,8 +602,8 @@ public class Game {
 		for (PotionEffect ef : player.getActivePotionEffects()) {
 			player.removePotionEffect(ef.getType());
 		}
-		player.setHealth(20);
-		player.setFoodLevel(20);
+		//player.setHealth(20);
+		//player.setFoodLevel(20);
 		try {
 			Bukkit.getScheduler().scheduleSyncDelayedTask(HG.plugin, () -> player.setFireTicks(0), 1);
 		} catch (IllegalPluginAccessException ignore) {}
@@ -806,6 +806,7 @@ public class Game {
 			}
 		} else {
 			exit(player);
+			heal(player);
 			sb.restoreSB(player);
 			HG.plugin.getPlayers().get(player.getUniqueId()).restore(player);
 			HG.plugin.getPlayers().remove(player.getUniqueId());

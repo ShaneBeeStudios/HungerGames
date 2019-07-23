@@ -14,9 +14,12 @@ public class PlayerData {
 	private ItemStack[] equip;
 	private int expL;
 	private float expP;
+	private double health;
+	private int food;
+	private float saturation;
 	private GameMode mode;
 	
-	//Ingame data
+	//InGame data
 	private Team team;
 	private Game game;
 
@@ -31,6 +34,9 @@ public class PlayerData {
 		expL = player.getLevel();
 		expP = player.getExp();
 		mode = player.getGameMode();
+		food = player.getFoodLevel();
+		saturation = player.getSaturation();
+		health = player.getHealth();
 		Util.clearInv(player);
 		player.setLevel(0);
 		player.setExp(0);
@@ -45,6 +51,9 @@ public class PlayerData {
 		player.setWalkSpeed(0.2f);
 		player.setLevel(expL);
 		player.setExp(expP);
+		player.setHealth(health);
+		player.setFoodLevel(food);
+		player.setSaturation(saturation);
 		player.getInventory().setContents(inv);
 		player.getInventory().setArmorContents(equip);
 		player.setGameMode(mode);
