@@ -691,6 +691,7 @@ public class Game {
 	 * @param death Whether the game stopped after the result of a death (false = no winnings payed out)
 	 */
 	public void stop(Boolean death) {
+		bound.removeEntities();
 		List<UUID> win = new ArrayList<>();
 		cancelTasks();
 		for (UUID u : players) {
@@ -775,7 +776,6 @@ public class Game {
 			status = Status.READY;
 			updateLobbyBlock();
 		}
-		bound.removeEntities();
 		sb.resetAlive();
 		if (Config.borderEnabled) {
 			resetBorder();
@@ -811,7 +811,7 @@ public class Game {
 			HG.plugin.getPlayers().get(player.getUniqueId()).restore(player);
 			HG.plugin.getPlayers().remove(player.getUniqueId());
 		}
-		Bukkit.getScheduler().runTaskLater(plugin, () -> updateAfterDeath(player, death), 40);
+		updateAfterDeath(player, death);
 	}
 
 	private void updateAfterDeath(Player player, boolean death) {
