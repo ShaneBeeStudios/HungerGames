@@ -16,7 +16,6 @@ import org.bukkit.event.entity.*;
 import org.bukkit.event.player.PlayerDropItemEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
-import org.bukkit.event.player.PlayerRespawnEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.PlayerInventory;
 import org.bukkit.inventory.meta.ItemMeta;
@@ -25,7 +24,6 @@ import tk.shanebee.hg.*;
 import tk.shanebee.hg.data.Leaderboard;
 import tk.shanebee.hg.events.ChestOpenEvent;
 
-import java.util.HashMap;
 import java.util.Objects;
 import java.util.UUID;
 
@@ -37,7 +35,7 @@ public class GameListener implements Listener {
 	private HG plugin;
 	private String tsn = ChatColor.GOLD + "TrackingStick " + ChatColor.GREEN + "Uses: ";
 	private ItemStack trackingStick;
-	private HashMap<Player, Entity> killerMap = new HashMap<>();
+	//private HashMap<Player, Entity> killerMap = new HashMap<>(); ON HOLD for now
 
 	public GameListener(HG plugin) {
 		this.plugin = plugin;
@@ -81,59 +79,86 @@ public class GameListener implements Listener {
 		}
 	}
 
-	@EventHandler(priority = EventPriority.MONITOR)
-	private void onDeath(PlayerDeathEvent event) {
-		final Player p = event.getEntity();
+	@EventHandler(priority = EventPriority.HIGHEST)
+	private void onAttack(EntityDamageByEntityEvent event) {
+		Entity defender = event.getEntity();
+		Entity damager = event.getDamager();
 
-		PlayerData pd = plugin.getPlayers().get(p.getUniqueId());
-
-		if (pd != null) {
-			final Game g = pd.getGame();
-			dropInv(p);
-
-			Player killer = p.getKiller();
-
-			if (killer != null) {
-				g.addKill(killer);
-				plugin.getLeaderboard().addStat(killer, Leaderboard.Stats.KILLS);
-				g.msgAll(HG.plugin.getLang().death_fallen + " &d" + plugin.getKillManager().getKillString(p.getName(), killer));
-			} else if (Objects.requireNonNull(p.getLastDamageCause()).getCause() == EntityDamageEvent.DamageCause.ENTITY_ATTACK) {
-				g.msgAll(HG.plugin.getLang().death_fallen + " &d" + plugin.getKillManager().getKillString(p.getName(), killerMap.get(p)));
-			} else if (p.getLastDamageCause().getCause() == EntityDamageEvent.DamageCause.PROJECTILE) {
-				g.msgAll(HG.plugin.getLang().death_fallen + " &d" + plugin.getKillManager().getKillString(p.getName(), killerMap.get(p)));
-			} else {
-				g.msgAll(HG.plugin.getLang().death_fallen + " &d" + plugin.getKillManager().getDeathString(p.getLastDamageCause().getCause(), p.getName()));
+		if (damager instanceof Player) {
+			if (plugin.getSpectators().containsKey(damager.getUniqueId())) {
+				event.setCancelled(true);
+				return;
 			}
-			event.setDeathMessage(null);
-			event.getDrops().clear();
-			plugin.getLeaderboard().addStat(p, Leaderboard.Stats.DEATHS);
-			plugin.getLeaderboard().addStat(p, Leaderboard.Stats.GAMES);
+		}
+		if (defender instanceof Player) {
+			Player player = (Player) defender;
+			PlayerData pd = plugin.getPlayers().get(player.getUniqueId());
 
-			for (UUID uuid : g.getPlayers()) {
-				Player player = Bukkit.getPlayer(uuid);
-				if (player != null && player != p) {
-					player.playSound(player.getLocation(), Sound.UI_TOAST_CHALLENGE_COMPLETE, 5, 1);
+			if (pd != null) {
+				Game game = pd.getGame();
+
+				if (game.getStatus() != Status.RUNNING) {
+					event.setCancelled(true);
+				} else if (pd.isOnTeam(player.getUniqueId()) && damager instanceof Player && pd.getTeam().isOnTeam(damager.getUniqueId())) {
+					Util.scm(damager, "&c" + player.getName() + " is on your team!");
+					event.setCancelled(true);
+				} else if (event.getFinalDamage() >= player.getHealth()) {
+					event.setCancelled(true);
+					processDeath(player, game, damager);
 				}
 			}
-
-			g.leave(p, true);
-			g.runCommands(Game.CommandType.DEATH, p);
-
-			Bukkit.getScheduler().scheduleSyncDelayedTask(plugin, () -> checkStick(g), 10L);
 		}
 	}
 
-	@EventHandler(priority = EventPriority.MONITOR)
-	private void onRespawn(PlayerRespawnEvent event) {
-		Player player = event.getPlayer();
-		if (HG.plugin.getPlayers().containsKey(player.getUniqueId())) {
-			Game game = HG.plugin.getPlayers().get(player.getUniqueId()).getGame();
-			if (game.getExit() != null) {
-				event.setRespawnLocation(game.getExit());
-			} else {
-				event.setRespawnLocation(game.getLobbyLocation().getWorld().getSpawnLocation());
+	@EventHandler(priority =  EventPriority.HIGHEST)
+	private void onDeathByOther(EntityDamageEvent event) {
+		if (event.getEntity() instanceof Player) {
+			final Player player = ((Player) event.getEntity());
+			if (plugin.getSpectators().containsKey(player.getUniqueId())) {
+				event.setCancelled(true);
+				player.setFireTicks(0);
+				return;
+			}
+			if (event instanceof EntityDamageByEntityEvent) return;
+			if (event.getFinalDamage() >= player.getHealth()) {
+				PlayerData pd = plugin.getPlayers().get(player.getUniqueId());
+				if (pd != null) {
+					event.setCancelled(true);
+					processDeath(player, pd.getGame(), null);
+				}
 			}
 		}
+	}
+
+	private void processDeath(Player player, Game game, Entity damager) {
+		dropInv(player);
+
+		if (damager instanceof Player) {
+			game.addKill(((Player) damager));
+			plugin.getLeaderboard().addStat(((Player) damager), Leaderboard.Stats.KILLS);
+			game.msgAll(HG.plugin.getLang().death_fallen + " &d" + plugin.getKillManager().getKillString(player.getName(), damager));
+		} else if (Objects.requireNonNull(player.getLastDamageCause()).getCause() == EntityDamageEvent.DamageCause.ENTITY_ATTACK) {
+			game.msgAll(HG.plugin.getLang().death_fallen + " &d" + plugin.getKillManager().getKillString(player.getName(), damager));
+		} else if (player.getLastDamageCause().getCause() == EntityDamageEvent.DamageCause.PROJECTILE) {
+			game.msgAll(HG.plugin.getLang().death_fallen + " &d" + plugin.getKillManager().getKillString(player.getName(), damager));
+		} else {
+			game.msgAll(HG.plugin.getLang().death_fallen + " &d" + plugin.getKillManager().getDeathString(player.getLastDamageCause().getCause(), player.getName()));
+		}
+		plugin.getLeaderboard().addStat(player, Leaderboard.Stats.DEATHS);
+		plugin.getLeaderboard().addStat(player, Leaderboard.Stats.GAMES);
+
+		for (UUID uuid : game.getPlayers()) {
+			Player alive = Bukkit.getPlayer(uuid);
+			if (alive != null && player != alive) {
+				alive.playSound(alive.getLocation(), Sound.UI_TOAST_CHALLENGE_COMPLETE, 5, 1);
+			}
+		}
+
+		game.leave(player, true);
+		game.runCommands(Game.CommandType.DEATH, player);
+
+		Bukkit.getScheduler().scheduleSyncDelayedTask(plugin, () -> checkStick(game), 10L);
+
 	}
 
 	@EventHandler
@@ -221,50 +246,6 @@ public class GameListener implements Listener {
 		if (target instanceof Player) {
 			if (plugin.getSpectators().containsKey(target.getUniqueId())) {
 				event.setCancelled(true);
-			}
-		}
-	}
-
-	@EventHandler(priority = EventPriority.HIGHEST)
-	private void onAttack(EntityDamageByEntityEvent event) {
-		Entity defender = event.getEntity();
-		Entity damager = event.getDamager();
-
-		if (damager instanceof Player) {
-			if (plugin.getSpectators().containsKey(damager.getUniqueId())) {
-				event.setCancelled(true);
-				return;
-			}
-		}
-
-		if (defender instanceof Player) {
-			if (plugin.getPlayers().get(defender.getUniqueId()) != null) {
-				killerMap.put(((Player) defender), damager);
-			}
-
-			Player p = (Player) defender;
-			PlayerData pd = plugin.getPlayers().get(p.getUniqueId());
-
-			if (pd != null) {
-				Game g = pd.getGame();
-
-				if (g.getStatus() != Status.RUNNING) {
-					event.setCancelled(true);
-				} else if (pd.isOnTeam(p.getUniqueId()) && damager instanceof Player && pd.getTeam().isOnTeam(damager.getUniqueId())) {
-					Util.scm(damager, "&c" + p.getName() + " is on your team!");
-					event.setCancelled(true);
-				} else if (event.isCancelled()) event.setCancelled(false);
-			}
-		}
-	}
-
-	@EventHandler(priority = EventPriority.HIGHEST)
-	private void onDamage(EntityDamageEvent event) {
-		if (event.getEntity() instanceof Player) {
-			Player defender = (Player) event.getEntity();
-			if (plugin.getSpectators().containsKey(defender.getUniqueId())) {
-				event.setCancelled(true);
-				defender.setFireTicks(0);
 			}
 		}
 	}

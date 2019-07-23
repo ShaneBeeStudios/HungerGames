@@ -792,21 +792,18 @@ public class Game {
 		players.remove(player.getUniqueId());
 		unFreeze(player);
 		if (death) {
-			Bukkit.getScheduler().runTaskLater(plugin, () -> player.spigot().respawn(), 2);
-			Bukkit.getScheduler().runTaskLater(plugin, () -> {
-				if (this.getStatus() == Status.RUNNING)
-					bar.removePlayer(player);
-				player.playSound(player.getLocation(), Sound.UI_TOAST_CHALLENGE_COMPLETE, 5, 1);
-				sb.restoreSB(player);
-				HG.plugin.getPlayers().get(player.getUniqueId()).restore(player);
-				HG.plugin.getPlayers().remove(player.getUniqueId());
-				heal(player);
-				if (spectate && spectateOnDeath && !isGameOver()) {
-					spectate(player);
-					player.sendTitle(getName(), "You are now spectating!", 10, 100, 10); //TODO this a temp test
-				}
-			}, 20);
-
+			exit(player);
+			if (this.getStatus() == Status.RUNNING)
+				bar.removePlayer(player);
+			player.playSound(player.getLocation(), Sound.UI_TOAST_CHALLENGE_COMPLETE, 5, 1);
+			sb.restoreSB(player);
+			HG.plugin.getPlayers().get(player.getUniqueId()).restore(player);
+			HG.plugin.getPlayers().remove(player.getUniqueId());
+			heal(player);
+			if (spectate && spectateOnDeath && !isGameOver()) {
+				spectate(player);
+				player.sendTitle(getName(), "You are now spectating!", 10, 100, 10); //TODO this a temp test
+			}
 		} else {
 			exit(player);
 			sb.restoreSB(player);
