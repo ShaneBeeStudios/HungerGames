@@ -14,4 +14,6 @@ public interface NBTApi {
 	 */
 	void setNBT(ItemStack item, String string);
 
+	String getNBT(org.bukkit.inventory.ItemStack i);
+
 }

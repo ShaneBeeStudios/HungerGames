@@ -56,6 +56,14 @@ public class HG extends JavaPlugin {
 			Util.log("&7Metrics have been &aenabled");
 		else
 			Util.log("&7Metrics have been &cdisabled");
+		String nms = Bukkit.getServer().getClass().getPackage().getName().split("\\.")[3];
+		try {
+			nbtApi = (NBTApi) Class.forName(HG.class.getPackage().getName() + ".nms.NMS_" + nms).newInstance();
+			Util.log("&7Compatible NMS version: &b" + nms);
+		} catch (ClassNotFoundException | InstantiationException | IllegalAccessException e) {
+			Util.warning("NMS version " + nms + " not supported, item/kit \"data\" will not be supported");
+			nbtApi = null;
+		}
 		plugin = this;
 		lang = new Language(this);
 		kitManager = new KitManager();
@@ -84,14 +92,6 @@ public class HG extends JavaPlugin {
 			Util.log("&eReport any issues to: &bhttps://bitbucket.org/ShaneBeeStudios/hungergames/issues");
 		}
 
-		String nms = Bukkit.getServer().getClass().getPackage().getName().split("\\.")[3];
-		try {
-			nbtApi = (NBTApi) Class.forName(HG.class.getPackage().getName() + ".nms.NMS_" + nms).newInstance();
-			Util.log("&7Compatible NMS version: &b" + nms);
-		} catch (ClassNotFoundException | InstantiationException | IllegalAccessException e) {
-			Util.warning("NMS version " + nms + " not supported, item/kit \"data\" will not be supported");
-			nbtApi = null;
-		}
 		Util.log("HungerGames has been &benabled!");
 	}
 
@@ -132,6 +132,9 @@ public class HG extends JavaPlugin {
 		cmds.put("bordertimer", new BorderTimerCmd());
 		if (Config.spectateEnabled) {
 			cmds.put("spectate", new SpectateCmd());
+		}
+		if (nbtApi != null) {
+			cmds.put("nbt", new NBTCmd());
 		}
 
 		ArrayList<String> cArray = new ArrayList<>();

@@ -153,8 +153,8 @@ public class ItemStackManager {
 				assert meta != null;
 				meta.setLore(lore);
 				item.setItemMeta(meta);
-			} else if (s.startsWith("data:") && HG.isRunningMinecraft(1, 14)) {
-				s = s.replace("data:", "").replace("_", " ");
+			} else if (s.startsWith("data:")) {
+				s = s.replace("data:", "").replace("~", " ");
 				assert item != null;
 				if (nbtApi != null)
 					nbtApi.setNBT(item, s);

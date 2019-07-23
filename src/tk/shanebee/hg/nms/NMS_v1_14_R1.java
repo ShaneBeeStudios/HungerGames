@@ -29,4 +29,10 @@ public class NMS_v1_14_R1 implements NBTApi {
 		item.setItemMeta(CraftItemStack.asBukkitCopy(nms).getItemMeta());
 	}
 
+	public String getNBT(org.bukkit.inventory.ItemStack i) {
+		NBTTagCompound nbt = CraftItemStack.asNMSCopy(i).getTag();
+		if (nbt == null) return null;
+		return nbt.toString();
+	}
+
 }
