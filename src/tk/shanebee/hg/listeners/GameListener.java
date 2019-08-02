@@ -123,8 +123,8 @@ public class GameListener implements Listener {
 			if (event.getFinalDamage() >= player.getHealth()) {
 				PlayerData pd = plugin.getPlayers().get(player.getUniqueId());
 				if (pd != null) {
-					event.setCancelled(true);
 					processDeath(player, pd.getGame(), null);
+					event.setCancelled(true);
 				}
 			}
 		}
@@ -137,7 +137,7 @@ public class GameListener implements Listener {
 			game.addKill(((Player) damager));
 			plugin.getLeaderboard().addStat(((Player) damager), Leaderboard.Stats.KILLS);
 			game.msgAll(HG.plugin.getLang().death_fallen + " &d" + plugin.getKillManager().getKillString(player.getName(), damager));
-		} else if (Objects.requireNonNull(player.getLastDamageCause()).getCause() == EntityDamageEvent.DamageCause.ENTITY_ATTACK) {
+		} else if (player.getLastDamageCause().getCause() == EntityDamageEvent.DamageCause.ENTITY_ATTACK) {
 			game.msgAll(HG.plugin.getLang().death_fallen + " &d" + plugin.getKillManager().getKillString(player.getName(), damager));
 		} else if (player.getLastDamageCause().getCause() == EntityDamageEvent.DamageCause.PROJECTILE) {
 			game.msgAll(HG.plugin.getLang().death_fallen + " &d" + plugin.getKillManager().getKillString(player.getName(), damager));
