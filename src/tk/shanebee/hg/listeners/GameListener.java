@@ -24,7 +24,6 @@ import tk.shanebee.hg.*;
 import tk.shanebee.hg.data.Leaderboard;
 import tk.shanebee.hg.events.ChestOpenEvent;
 
-import java.util.Objects;
 import java.util.UUID;
 
 /**
@@ -103,8 +102,8 @@ public class GameListener implements Listener {
 					Util.scm(damager, "&c" + player.getName() + " is on your team!");
 					event.setCancelled(true);
 				} else if (event.getFinalDamage() >= player.getHealth()) {
+					processDeath(player, game, damager, event.getCause());
 					event.setCancelled(true);
-					processDeath(player, game, damager);
 				}
 			}
 		}
@@ -123,26 +122,26 @@ public class GameListener implements Listener {
 			if (event.getFinalDamage() >= player.getHealth()) {
 				PlayerData pd = plugin.getPlayers().get(player.getUniqueId());
 				if (pd != null) {
-					processDeath(player, pd.getGame(), null);
+					processDeath(player, pd.getGame(), null, event.getCause());
 					event.setCancelled(true);
 				}
 			}
 		}
 	}
 
-	private void processDeath(Player player, Game game, Entity damager) {
+	private void processDeath(Player player, Game game, Entity damager, EntityDamageEvent.DamageCause cause) {
 		dropInv(player);
 
 		if (damager instanceof Player) {
 			game.addKill(((Player) damager));
 			plugin.getLeaderboard().addStat(((Player) damager), Leaderboard.Stats.KILLS);
 			game.msgAll(HG.plugin.getLang().death_fallen + " &d" + plugin.getKillManager().getKillString(player.getName(), damager));
-		} else if (player.getLastDamageCause().getCause() == EntityDamageEvent.DamageCause.ENTITY_ATTACK) {
+		} else if (cause == EntityDamageEvent.DamageCause.ENTITY_ATTACK) {
 			game.msgAll(HG.plugin.getLang().death_fallen + " &d" + plugin.getKillManager().getKillString(player.getName(), damager));
-		} else if (player.getLastDamageCause().getCause() == EntityDamageEvent.DamageCause.PROJECTILE) {
+		} else if (cause == EntityDamageEvent.DamageCause.PROJECTILE) {
 			game.msgAll(HG.plugin.getLang().death_fallen + " &d" + plugin.getKillManager().getKillString(player.getName(), damager));
 		} else {
-			game.msgAll(HG.plugin.getLang().death_fallen + " &d" + plugin.getKillManager().getDeathString(player.getLastDamageCause().getCause(), player.getName()));
+			game.msgAll(HG.plugin.getLang().death_fallen + " &d" + plugin.getKillManager().getDeathString(cause, player.getName()));
 		}
 		plugin.getLeaderboard().addStat(player, Leaderboard.Stats.DEATHS);
 		plugin.getLeaderboard().addStat(player, Leaderboard.Stats.GAMES);
