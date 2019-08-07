@@ -824,7 +824,13 @@ public class Game {
 						}
 					}
 				}
-				stop(death);
+				boolean finalDeath = death;
+				Bukkit.getScheduler().runTaskLater(plugin, () -> {
+					stop(finalDeath);
+					updateLobbyBlock();
+					sb.setAlive();
+				}, 20);
+
 			}
 		} else if (status == Status.WAITING) {
 			msgAll(HG.plugin.getLang().player_left_game.replace("<player>", player.getName()) +
