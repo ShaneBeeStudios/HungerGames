@@ -965,9 +965,10 @@ public class Game {
 		World world = center.getWorld();
 		assert world != null;
 		WorldBorder border = world.getWorldBorder();
+		double size = Math.min(border.getSize(), getBorderSize(center));
 
 		border.setCenter(center);
-		border.setSize(((int) getBorderSize(center)));
+		border.setSize(((int) size));
 		border.setWarningTime(5);
 		border.setDamageBuffer(2);
 		border.setSize(borderSize, time);

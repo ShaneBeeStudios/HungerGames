@@ -22,17 +22,17 @@ public class TimerTask implements Runnable {
 		this.borderCountdownStart = g.getBorderTimer().get(0);
 		this.borderCountdownEnd = g.getBorderTimer().get(1);
 		
-		this.id = Bukkit.getScheduler().scheduleSyncRepeatingTask(HG.plugin, this, 30 * 20L, 30 * 20L);
+		this.id = Bukkit.getScheduler().scheduleSyncRepeatingTask(HG.plugin, this, 0, 30 * 20L);
 	}
 	
 	@Override
 	public void run() {
 		if (game == null || game.getStatus() != Status.RUNNING) stop(); //A quick null check!
 		
-		remainingtime = (remainingtime - 30);
+
 		if (Config.bossbar) game.bossbarUpdate(remainingtime);
 
-		if (Config.borderEnabled && !Config.borderOnStart && remainingtime == borderCountdownStart) {
+		if (Config.borderEnabled && remainingtime == borderCountdownStart) {
 			int closingIn = remainingtime - borderCountdownEnd;
 			game.setBorder(closingIn);
 			game.msgAll(HG.plugin.getLang().game_border_closing.replace("<seconds>", String.valueOf(closingIn)));
@@ -62,6 +62,7 @@ public class TimerTask implements Runnable {
 				} else game.msgAll(HG.plugin.getLang().game_ending_sec.replace("<seconds>", String.valueOf(this.remainingtime)));
 			}
 		}
+		remainingtime = (remainingtime - 30);
 	}
 	
 	public void stop() {
