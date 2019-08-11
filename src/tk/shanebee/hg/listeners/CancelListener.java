@@ -44,7 +44,7 @@ public class CancelListener implements Listener {
 			Player p = Bukkit.getServer().getPlayer(st[1]);
 			if (p != null) {
 				if (plugin.getPlayers().containsKey(p.getUniqueId())) {
-					player.sendMessage(HG.plugin.getLang().cmd_handler_playing);
+					Util.scm(player, HG.plugin.getLang().cmd_handler_playing);
 					event.setMessage("/");
 					event.setCancelled(true);
 				}
