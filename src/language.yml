@@ -6,7 +6,7 @@
 #  To restore these messages, backup this file, delete it, and restart your server, this will create a new lang file with all the notes
 
 #  GENERAL PLUGIN MESSAGES
-prefix: '&7&l[&3&lHungerGames&7&l]'
+prefix: '&7&l[&3&lHungerGames&7&l] '
 
 #  GAME MESSAGES
 #  <player> will be replaced with name of player
