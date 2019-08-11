@@ -102,8 +102,8 @@ public class GameListener implements Listener {
 					Util.scm(damager, "&c" + player.getName() + " is on your team!");
 					event.setCancelled(true);
 				} else if (event.getFinalDamage() >= player.getHealth()) {
-					processDeath(player, game, damager, event.getCause());
 					event.setCancelled(true);
+					processDeath(player, game, damager, event.getCause());
 				}
 			}
 		}
@@ -122,8 +122,8 @@ public class GameListener implements Listener {
 			if (event.getFinalDamage() >= player.getHealth()) {
 				PlayerData pd = plugin.getPlayers().get(player.getUniqueId());
 				if (pd != null) {
-					processDeath(player, pd.getGame(), null, event.getCause());
 					event.setCancelled(true);
+					processDeath(player, pd.getGame(), null, event.getCause());
 				}
 			}
 		}
@@ -336,7 +336,7 @@ public class GameListener implements Listener {
 				Game g = plugin.getPlayers().get(p.getUniqueId()).getGame();
 
 				if (g.getStatus() == Status.RUNNING || g.getStatus() == Status.BEGINNING) {
-					if (!Config.blocks.contains(b.getType().toString())) {
+					if (!Config.blocks.contains(b.getType().toString()) && !Config.blocks.contains("ALL")) {
 						Util.scm(p, HG.plugin.getLang().listener_no_edit_block);
 						event.setCancelled(true);
 					} else {
@@ -372,7 +372,7 @@ public class GameListener implements Listener {
 			if (Config.breakblocks && plugin.getPlayers().containsKey(p.getUniqueId())) {
 				Game g = plugin.getPlayers().get(p.getUniqueId()).getGame();
 				if (g.getStatus() == Status.RUNNING || !Config.protectCooldown) {
-					if (!Config.blocks.contains(b.getType().toString())) {
+					if (!Config.blocks.contains(b.getType().toString()) && !Config.blocks.contains("ALL")) {
 						Util.scm(p, HG.plugin.getLang().listener_no_edit_block);
 						event.setCancelled(true);
 					} else {
