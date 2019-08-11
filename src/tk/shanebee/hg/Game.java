@@ -449,7 +449,7 @@ public class Game {
 				freeze(player);
 				kills.put(player, 0);
 
-				if (players.size() == 1)
+				if (players.size() == 1 && status == Status.READY)
 					status = Status.WAITING;
 				if (players.size() >= minPlayers && (status == Status.WAITING || status == Status.READY)) {
 					startPreGame();
@@ -491,10 +491,12 @@ public class Game {
 		Util.scm(player, " ");
 		Util.scm(player, HG.plugin.getLang().kit_join_header);
 		Util.scm(player, " ");
-		Util.scm(player, HG.plugin.getLang().kit_join_msg);
-		Util.scm(player, " ");
-		Util.scm(player, HG.plugin.getLang().kit_join_avail + kit);
-		Util.scm(player, " ");
+		if (player.hasPermission("hg.kit")) {
+			Util.scm(player, HG.plugin.getLang().kit_join_msg);
+			Util.scm(player, " ");
+			Util.scm(player, HG.plugin.getLang().kit_join_avail + kit);
+			Util.scm(player, " ");
+		}
 		Util.scm(player, HG.plugin.getLang().kit_join_footer);
 		Util.scm(player, " ");
 	}
@@ -528,6 +530,7 @@ public class Game {
 	 */
 	public void startFreeRoam() {
 		status = Status.BEGINNING;
+		updateLobbyBlock();
 		bound.removeEntities();
 		freeRoam = new FreeRoamTask(this);
 		runCommands(CommandType.START, null);
