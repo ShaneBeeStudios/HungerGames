@@ -1,6 +1,8 @@
 package tk.shanebee.hg;
 
+import org.bukkit.Bukkit;
 import org.bukkit.GameMode;
+import org.bukkit.attribute.Attribute;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 
@@ -51,13 +53,23 @@ public class PlayerData {
 		player.setWalkSpeed(0.2f);
 		player.setLevel(expL);
 		player.setExp(expP);
-		player.setHealth(health);
 		player.setFoodLevel(food);
 		player.setSaturation(saturation);
 		player.getInventory().setContents(inv);
 		player.getInventory().setArmorContents(equip);
 		player.setGameMode(mode);
 		player.updateInventory();
+		restoreHealth(player);
+	}
+
+	// Restores later if player has an item in their inventory which changes their max health value
+	private void restoreHealth(Player player) {
+		double att = player.getAttribute(Attribute.GENERIC_MAX_HEALTH).getValue();
+		if (health > att) {
+			Bukkit.getScheduler().runTaskLater(HG.getPlugin(), () -> player.setHealth(health), 10);
+		} else {
+			player.setHealth(health);
+		}
 	}
 
 	/** Check if a player is on a team
