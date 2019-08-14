@@ -1,12 +1,13 @@
 package tk.shanebee.hg.data;
 
-import tk.shanebee.hg.HG;
-import tk.shanebee.hg.Util;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
+import tk.shanebee.hg.HG;
+import tk.shanebee.hg.Util;
 
 import java.io.File;
-import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
 
 public class Language {
 
@@ -133,8 +134,8 @@ public class Language {
     public String track_new2;
     public String listener_sign_click_hand;
     public String bossbar;
-
-
+    public String lb_blank_space;
+    public String lb_combined_separator;
 
 
     public Language(HG plugin) {
@@ -153,9 +154,36 @@ public class Language {
         } else {
             lang = YamlConfiguration.loadConfiguration(customLangFile);
         }
-        updateLang(lang, customLangFile);
         loadLang();
+        matchConfig(lang, customLangFile);
         Util.log("&7language.yml loaded");
+    }
+
+    // Used to update config
+    private void matchConfig(FileConfiguration config, File file) {
+        try {
+            boolean hasUpdated = false;
+            InputStream test = plugin.getResource(file.getName());
+            assert test != null;
+            InputStreamReader is = new InputStreamReader(test);
+            YamlConfiguration defConfig = YamlConfiguration.loadConfiguration(is);
+            for (String key : defConfig.getConfigurationSection("").getKeys(false)) {
+                if (!config.contains(key)) {
+                    config.set(key, defConfig.get(key));
+                    hasUpdated = true;
+                }
+            }
+            for (String key : config.getConfigurationSection("").getKeys(false)) {
+                if (!defConfig.contains(key)) {
+                    config.set(key, null);
+                    hasUpdated = true;
+                }
+            }
+            if (hasUpdated)
+                config.save(file);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     private void loadLang() {
@@ -287,40 +315,9 @@ public class Language {
         cmd_border_center = lang.getString("cmd-border-center");
         cmd_border_size = lang.getString("cmd-border-size");
         cmd_border_timer = lang.getString("cmd-border-timer");
-    }
 
-    private void updateLang(FileConfiguration config, File file){
-        if (!config.isSet("game-bossbar")) {
-            config.set("game-bossbar", "&6&lGame Ends In: &b&l<min> &7min &b&l<sec> &7sec");
-            config.set("players-alive", "&d&lTributes:");
-            config.set("players-alive-num", "&e<num> alive");
-            config.set("scoreboard-arena", "&a&lArena: &b");
-        }
-        if (!config.isSet("game-border-closing")) {
-            config.set("game-border-closing", "&6The border is coming, you have <seconds> seconds to get to the center of the arena!");
-        }
-        if (!config.isSet("game-chests-refill")) {
-            config.set("game-chests-refill", "&6Chests have been refilled");
-            config.set("cmd-chestrefill-set", "&6Chest refill for &b<arena> &6has been set to &b<sec> seconds");
-        }
-        if (!config.isSet("cmd-border-size")) {
-            config.set("cmd-border-size", "&6Border size for &b<arena> &6has been set to &b<size>");
-            config.set("cmd-border-center", "&6Border center for &b<arena> &6has been set at your location");
-            config.set("cmd-border-timer", "&6Border time for &b<arena> &6has been set to start at remaining &b<start> seconds &6and stop at &b<end> seconds");
-        }
-        if (!config.isSet("arena-spectate")) {
-            config.set("arena-spectate", "&6You can spectate this arena by running &3/hg spectate <arena>");
-        }
-        saveConfig();
-    }
-
-    private void saveConfig() {
-        try {
-            lang.save(customLangFile);
-            loadLang();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+        lb_blank_space = lang.getString("lb-blank-space");
+        lb_combined_separator = lang.getString("lb-combined-separator");
     }
 
 }

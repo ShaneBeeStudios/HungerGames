@@ -1,8 +1,10 @@
 package tk.shanebee.hg.managers;
 
 import me.clip.placeholderapi.expansion.PlaceholderExpansion;
+import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.Player;
 import tk.shanebee.hg.HG;
+import tk.shanebee.hg.data.Language;
 import tk.shanebee.hg.data.Leaderboard;
 
 /**
@@ -12,10 +14,12 @@ public class Placeholders extends PlaceholderExpansion {
 
     private HG plugin;
     private Leaderboard leaderboard;
+    private Language lang;
 
     public Placeholders(HG plugin) {
         this.plugin = plugin;
         this.leaderboard = plugin.getLeaderboard();
+        this.lang = plugin.getLang();
     }
 
     @Override
@@ -46,27 +50,27 @@ public class Placeholders extends PlaceholderExpansion {
     @Override
     public String onPlaceholderRequest(Player player, String identifier) {
         if (identifier.startsWith("lb_player_")) {
-            int leader = Integer.valueOf(identifier.replace("lb_player_", ""));
+            int leader = Integer.parseInt(identifier.replace("lb_player_", ""));
             if (leaderboard.getStatsPlayers(Leaderboard.Stats.WINS).size() >= leader)
                 return leaderboard.getStatsPlayers(Leaderboard.Stats.WINS).get(leader - 1);
             else
-                return "";
+                return lang.lb_blank_space;
         }
         if (identifier.startsWith("lb_score_")) {
-            int leader = (Integer.valueOf(identifier.replace("lb_score_", "")));
+            int leader = (Integer.parseInt(identifier.replace("lb_score_", "")));
             if (leaderboard.getStatsScores(Leaderboard.Stats.WINS).size() >= leader)
                 return leaderboard.getStatsScores(Leaderboard.Stats.WINS).get(leader - 1);
             else
-                return "";
+                return lang.lb_blank_space;
 
         }
         if (identifier.startsWith("lb_combined_")) {
-            int leader = (Integer.valueOf(identifier.replace("lb_combined_", "")));
+            int leader = (Integer.parseInt(identifier.replace("lb_combined_", "")));
             if (leaderboard.getStatsPlayers(Leaderboard.Stats.WINS).size() >= leader)
-                return leaderboard.getStatsPlayers(Leaderboard.Stats.WINS).get(leader - 1) + " : " +
+                return leaderboard.getStatsPlayers(Leaderboard.Stats.WINS).get(leader - 1) + lang.lb_combined_separator +
                         leaderboard.getStatsScores(Leaderboard.Stats.WINS).get(leader - 1);
             else
-                return "";
+                return lang.lb_blank_space + lang.lb_combined_separator + lang.lb_blank_space;
         }
         if (identifier.equalsIgnoreCase("lb_player")) {
             return String.valueOf(leaderboard.getStat(player, Leaderboard.Stats.WINS));

@@ -196,3 +196,7 @@ track-empty: '&cThis tracking stick is out of uses!'
 track-bar: '&a&l[]------------------------------------------[]'
 track-new1: '&a&l |&6&l   You have been given a player-tracking stick! &a&l |'
 track-new2: '&a&l |&6&l   Swing the stick to track players!                &a&l |'
+
+#  LEADERBOARD
+lb-blank-space: ''
+lb-combined-separator: ' : '
