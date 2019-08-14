@@ -106,7 +106,7 @@ public class Placeholders extends PlaceholderExpansion {
         if (leaderboard.getStatsPlayers(stat).size() >= leader) {
             return leaderboard.getStatsPlayers(stat).get(leader - 1);
         } else {
-            return "";
+            return lang.lb_blank_space;
         }
     }
 
@@ -117,7 +117,7 @@ public class Placeholders extends PlaceholderExpansion {
         if (leaderboard.getStatsScores(stat).size() >= leader) {
             return leaderboard.getStatsScores(stat).get(leader - 1);
         } else {
-            return "";
+            return lang.lb_blank_space;
         }
     }
 
