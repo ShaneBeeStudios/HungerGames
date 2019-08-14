@@ -154,8 +154,8 @@ public class Language {
         } else {
             lang = YamlConfiguration.loadConfiguration(customLangFile);
         }
-        loadLang();
         matchConfig(lang, customLangFile);
+		loadLang();
         Util.log("&7language.yml loaded");
     }
 
