@@ -159,7 +159,7 @@ public class GameListener implements Listener {
 		game.leave(player, true);
 		game.runCommands(Game.CommandType.DEATH, player);
 
-		Bukkit.getScheduler().scheduleSyncDelayedTask(plugin, () -> checkStick(game), 10L);
+		Bukkit.getScheduler().scheduleSyncDelayedTask(plugin, () -> checkStick(game), 40L);
 
 	}
 
