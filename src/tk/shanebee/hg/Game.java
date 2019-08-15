@@ -434,9 +434,9 @@ public class Game {
 
 			players.add(player.getUniqueId());
 			Bukkit.getScheduler().scheduleSyncDelayedTask(HG.plugin, () -> {
-				HG.plugin.getPlayers().put(player.getUniqueId(), new PlayerData(player, this));
-
 				Location loc = pickSpawn();
+				player.teleport(loc);
+				HG.plugin.getPlayers().put(player.getUniqueId(), new PlayerData(player, this));
 
 				if (loc.getBlock().getRelative(BlockFace.DOWN).getType() == Material.AIR) {
 					while (loc.getBlock().getRelative(BlockFace.DOWN).getType() == Material.AIR) {
@@ -444,7 +444,6 @@ public class Game {
 					}
 				}
 
-				player.teleport(loc);
 				heal(player);
 				freeze(player);
 				kills.put(player, 0);
@@ -795,11 +794,11 @@ public class Game {
 		players.remove(player.getUniqueId());
 		unFreeze(player);
 		if (death) {
-			exit(player);
 			if (this.getStatus() == Status.RUNNING)
 				bar.removePlayer(player);
-			player.playSound(player.getLocation(), Sound.UI_TOAST_CHALLENGE_COMPLETE, 5, 1);
 			sb.restoreSB(player);
+			exit(player);
+			player.playSound(player.getLocation(), Sound.UI_TOAST_CHALLENGE_COMPLETE, 5, 1);
 			HG.plugin.getPlayers().get(player.getUniqueId()).restore(player);
 			HG.plugin.getPlayers().remove(player.getUniqueId());
 			heal(player);
