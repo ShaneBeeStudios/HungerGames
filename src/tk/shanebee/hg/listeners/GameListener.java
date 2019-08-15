@@ -103,7 +103,7 @@ public class GameListener implements Listener {
 					event.setCancelled(true);
 				} else if (event.getFinalDamage() >= player.getHealth()) {
 					event.setCancelled(true);
-					processDeath(player, game, damager, event.getCause());
+					Bukkit.getScheduler().runTaskLater(plugin, () -> processDeath(player, game, damager, event.getCause()), 5);
 				}
 			}
 		}
@@ -119,9 +119,12 @@ public class GameListener implements Listener {
 				return;
 			}
 			if (event instanceof EntityDamageByEntityEvent) return;
-			if (event.getFinalDamage() >= player.getHealth()) {
-				PlayerData pd = plugin.getPlayers().get(player.getUniqueId());
-				if (pd != null) {
+			PlayerData pd = plugin.getPlayers().get(player.getUniqueId());
+			if (pd != null) {
+				if (pd.getGame().getStatus() != Status.RUNNING) {
+					event.setCancelled(true);
+				}
+				if (event.getFinalDamage() >= player.getHealth()) {
 					event.setCancelled(true);
 					processDeath(player, pd.getGame(), null, event.getCause());
 				}
