@@ -23,8 +23,8 @@ public class Rollback implements Runnable {
 	public void run() {
 		int i = 0;
 		while (i < blocks_per_second && session.hasNext()) {
-			i++;
 			session.next().update(true);
+			i++;
 		}
 		if (!session.hasNext()) {
 			Bukkit.getServer().getScheduler().cancelTask(timerID);

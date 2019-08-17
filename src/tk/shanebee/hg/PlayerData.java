@@ -59,6 +59,7 @@ public class PlayerData {
 		player.getInventory().setArmorContents(equip);
 		player.setGameMode(mode);
 		player.updateInventory();
+		player.setInvulnerable(false);
 		restoreHealth(player);
 	}
 

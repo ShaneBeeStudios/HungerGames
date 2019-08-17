@@ -436,14 +436,13 @@ public class Game {
 			Bukkit.getScheduler().scheduleSyncDelayedTask(HG.plugin, () -> {
 				Location loc = pickSpawn();
 				player.teleport(loc);
-				HG.plugin.getPlayers().put(player.getUniqueId(), new PlayerData(player, this));
 
 				if (loc.getBlock().getRelative(BlockFace.DOWN).getType() == Material.AIR) {
 					while (loc.getBlock().getRelative(BlockFace.DOWN).getType() == Material.AIR) {
 						loc.setY(loc.getY() - 1);
 					}
 				}
-
+				HG.plugin.getPlayers().put(player.getUniqueId(), new PlayerData(player, this));
 				heal(player);
 				freeze(player);
 				kills.put(player, 0);
@@ -604,8 +603,8 @@ public class Game {
 		for (PotionEffect ef : player.getActivePotionEffects()) {
 			player.removePotionEffect(ef.getType());
 		}
-		//player.setHealth(20);
-		//player.setFoodLevel(20);
+		player.setHealth(20);
+		player.setFoodLevel(20);
 		try {
 			Bukkit.getScheduler().scheduleSyncDelayedTask(HG.plugin, () -> player.setFireTicks(0), 1);
 		} catch (IllegalPluginAccessException ignore) {}
@@ -622,6 +621,7 @@ public class Game {
 		player.setFoodLevel(1);
 		player.setAllowFlight(false);
 		player.setFlying(false);
+		player.setInvulnerable(true);
 	}
 
 	/** Unfreeze a player
@@ -630,6 +630,7 @@ public class Game {
 	public void unFreeze(Player player) {
 		player.removePotionEffect(PotionEffectType.JUMP);
 		player.setWalkSpeed(0.2F);
+		player.setInvulnerable(false);
 	}
 
 	/** Set the lobby block for this game
@@ -699,12 +700,11 @@ public class Game {
 		for (UUID u : players) {
 			Player p = Bukkit.getPlayer(u);
 			if (p != null) {
-				heal(p);
-				exit(p);
 				HG.plugin.getPlayers().get(p.getUniqueId()).restore(p);
 				HG.plugin.getPlayers().remove(p.getUniqueId());
 				win.add(p.getUniqueId());
 				sb.restoreSB(p);
+				exit(p);
 			}
 		}
 		players.clear();
@@ -712,7 +712,6 @@ public class Game {
 		for (UUID uuid : spectators) {
 			Player spectator = Bukkit.getPlayer(uuid);
 			if (spectator != null) {
-				exit(spectator);
 				spectator.setCollidable(true);
 				if (Config.spectateHide)
 					revealPlayer(spectator);
@@ -723,6 +722,7 @@ public class Game {
 				}
 				HG.plugin.getSpectators().get(spectator.getUniqueId()).restore(spectator);
 				HG.plugin.getSpectators().remove(spectator.getUniqueId());
+				exit(spectator);
 				sb.restoreSB(spectator);
 			}
 		}
@@ -796,22 +796,22 @@ public class Game {
 		if (death) {
 			if (this.getStatus() == Status.RUNNING)
 				bar.removePlayer(player);
-			sb.restoreSB(player);
-			exit(player);
-			player.playSound(player.getLocation(), Sound.UI_TOAST_CHALLENGE_COMPLETE, 5, 1);
 			HG.plugin.getPlayers().get(player.getUniqueId()).restore(player);
 			HG.plugin.getPlayers().remove(player.getUniqueId());
+			exit(player);
 			heal(player);
+			sb.restoreSB(player);
+			player.playSound(player.getLocation(), Sound.UI_TOAST_CHALLENGE_COMPLETE, 5, 1);
 			if (spectate && spectateOnDeath && !isGameOver()) {
 				spectate(player);
 				player.sendTitle(getName(), "You are now spectating!", 10, 100, 10); //TODO this a temp test
 			}
 		} else {
+			HG.plugin.getPlayers().get(player.getUniqueId()).restore(player);
+			HG.plugin.getPlayers().remove(player.getUniqueId());
 			exit(player);
 			heal(player);
 			sb.restoreSB(player);
-			HG.plugin.getPlayers().get(player.getUniqueId()).restore(player);
-			HG.plugin.getPlayers().remove(player.getUniqueId());
 		}
 		updateAfterDeath(player, death);
 	}
@@ -863,7 +863,7 @@ public class Game {
 	}
 
 	private void exit(Player player) {
-		Util.clearInv(player);
+		//Util.clearInv(player);
 		if (this.getStatus() == Status.RUNNING)
 			bar.removePlayer(player);
 		if (this.exit == null) {
@@ -925,9 +925,9 @@ public class Game {
 		double z1 = Math.abs(bound.getGreaterCorner().getZ() - center.getZ());
 		double z2 = Math.abs(bound.getLesserCorner().getZ() - center.getZ());
 
-		double x = x1 > x2 ? x1 : x2;
-		double z = z1 > z2 ? z1 : z2;
-		double r = x > z ? x : z;
+		double x = Math.max(x1, x2);
+		double z = Math.max(z1, z2);
+		double r = Math.max(x, z);
 
 		return (r * 2) + 10;
 	}

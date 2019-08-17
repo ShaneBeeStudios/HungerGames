@@ -121,9 +121,6 @@ public class GameListener implements Listener {
 			if (event instanceof EntityDamageByEntityEvent) return;
 			PlayerData pd = plugin.getPlayers().get(player.getUniqueId());
 			if (pd != null) {
-				if (pd.getGame().getStatus() != Status.RUNNING) {
-					event.setCancelled(true);
-				}
 				if (event.getFinalDamage() >= player.getHealth()) {
 					event.setCancelled(true);
 					processDeath(player, pd.getGame(), null, event.getCause());
