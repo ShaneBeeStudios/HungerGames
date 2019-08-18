@@ -13,7 +13,7 @@ import java.util.List;
 import java.util.Objects;
 import java.util.Random;
 
-@SuppressWarnings("WeakerAccess")
+@SuppressWarnings({"WeakerAccess", "unused"})
 public class Bound {
 
 	private int x;
@@ -71,7 +71,10 @@ public class Bound {
 		return (cx >= x && cx <= x2) && (cy >= y && cy <= y2) && (cz >= z && cz <= z2);
 	}
 
-	void removeEntities() {
+	/**
+	 * Kill/Remove all entities in this bound
+	 */
+	public void removeEntities() {
 		entities.forEach(Entity::remove);
 		entities.clear();
 	}
@@ -81,6 +84,13 @@ public class Bound {
 	 */
 	public void addEntity(Entity entity) {
 		this.entities.add(entity);
+	}
+
+	/** Get a list of all entities in this bound
+	 * @return Entities in this bound
+	 */
+	public List<Entity> getEntities() {
+		return this.entities;
 	}
 
 	/** Get location of all blocks of a type within a bound
