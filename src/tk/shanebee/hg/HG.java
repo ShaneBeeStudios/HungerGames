@@ -298,8 +298,8 @@ public class HG extends JavaPlugin {
 	}
 
 	public static boolean isRunningMinecraft(int major, int minor) {
-		int maj = Integer.valueOf(Bukkit.getServer().getClass().getPackage().getName().split("\\.")[3].split("_")[0].replace("v", ""));
-		int min = Integer.valueOf(Bukkit.getServer().getClass().getPackage().getName().split("\\.")[3].split("_")[1]);
+		int maj = Integer.parseInt(Bukkit.getServer().getClass().getPackage().getName().split("\\.")[3].split("_")[0].replace("v", ""));
+		int min = Integer.parseInt(Bukkit.getServer().getClass().getPackage().getName().split("\\.")[3].split("_")[1]);
 		return maj >= major && min >= minor;
 	}
 
