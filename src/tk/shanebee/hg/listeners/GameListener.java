@@ -103,7 +103,7 @@ public class GameListener implements Listener {
 					event.setCancelled(true);
 				} else if (event.getFinalDamage() >= player.getHealth()) {
 					event.setCancelled(true);
-					Bukkit.getScheduler().runTaskLater(plugin, () -> processDeath(player, game, damager, event.getCause()), 5);
+					processDeath(player, game, damager, event.getCause());
 				}
 			}
 		}
@@ -131,32 +131,34 @@ public class GameListener implements Listener {
 
 	private void processDeath(Player player, Game game, Entity damager, EntityDamageEvent.DamageCause cause) {
 		dropInv(player);
-
-		if (damager instanceof Player) {
-			game.addKill(((Player) damager));
-			plugin.getLeaderboard().addStat(((Player) damager), Leaderboard.Stats.KILLS);
-			game.msgAll(HG.plugin.getLang().death_fallen + " &d" + plugin.getKillManager().getKillString(player.getName(), damager));
-		} else if (cause == EntityDamageEvent.DamageCause.ENTITY_ATTACK) {
-			game.msgAll(HG.plugin.getLang().death_fallen + " &d" + plugin.getKillManager().getKillString(player.getName(), damager));
-		} else if (cause == EntityDamageEvent.DamageCause.PROJECTILE) {
-			game.msgAll(HG.plugin.getLang().death_fallen + " &d" + plugin.getKillManager().getKillString(player.getName(), damager));
-		} else {
-			game.msgAll(HG.plugin.getLang().death_fallen + " &d" + plugin.getKillManager().getDeathString(cause, player.getName()));
-		}
-		plugin.getLeaderboard().addStat(player, Leaderboard.Stats.DEATHS);
-		plugin.getLeaderboard().addStat(player, Leaderboard.Stats.GAMES);
-
-		for (UUID uuid : game.getPlayers()) {
-			Player alive = Bukkit.getPlayer(uuid);
-			if (alive != null && player != alive) {
-				alive.playSound(alive.getLocation(), Sound.UI_TOAST_CHALLENGE_COMPLETE, 5, 1);
+		player.setHealth(20);
+		Bukkit.getScheduler().runTaskLater(plugin, () -> {
+			if (damager instanceof Player) {
+				game.addKill(((Player) damager));
+				plugin.getLeaderboard().addStat(((Player) damager), Leaderboard.Stats.KILLS);
+				game.msgAll(HG.plugin.getLang().death_fallen + " &d" + plugin.getKillManager().getKillString(player.getName(), damager));
+			} else if (cause == EntityDamageEvent.DamageCause.ENTITY_ATTACK) {
+				game.msgAll(HG.plugin.getLang().death_fallen + " &d" + plugin.getKillManager().getKillString(player.getName(), damager));
+			} else if (cause == EntityDamageEvent.DamageCause.PROJECTILE) {
+				game.msgAll(HG.plugin.getLang().death_fallen + " &d" + plugin.getKillManager().getKillString(player.getName(), damager));
+			} else {
+				game.msgAll(HG.plugin.getLang().death_fallen + " &d" + plugin.getKillManager().getDeathString(cause, player.getName()));
 			}
-		}
+			plugin.getLeaderboard().addStat(player, Leaderboard.Stats.DEATHS);
+			plugin.getLeaderboard().addStat(player, Leaderboard.Stats.GAMES);
 
-		game.leave(player, true);
-		game.runCommands(Game.CommandType.DEATH, player);
+			for (UUID uuid : game.getPlayers()) {
+				Player alive = Bukkit.getPlayer(uuid);
+				if (alive != null && player != alive) {
+					alive.playSound(alive.getLocation(), Sound.UI_TOAST_CHALLENGE_COMPLETE, 5, 1);
+				}
+			}
 
-		Bukkit.getScheduler().scheduleSyncDelayedTask(plugin, () -> checkStick(game), 40L);
+			game.leave(player, true);
+			game.runCommands(Game.CommandType.DEATH, player);
+
+			Bukkit.getScheduler().scheduleSyncDelayedTask(plugin, () -> checkStick(game), 40L);
+		}, 1);
 
 	}
 
