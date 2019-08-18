@@ -355,6 +355,13 @@ public class Game {
 		return players;
 	}
 
+	/** Get the bounding box of this game
+	 * @return Bound of this game
+	 */
+	public Bound getBound() {
+		return this.bound;
+	}
+
 	public List<UUID> getSpectators() {
 		return this.spectators;
 	}
@@ -447,8 +454,9 @@ public class Game {
 				freeze(player);
 				kills.put(player, 0);
 
-				if (players.size() == 1 && status == Status.READY)
+				if (players.size() == 1 && status == Status.READY) {
 					status = Status.WAITING;
+				}
 				if (players.size() >= minPlayers && (status == Status.WAITING || status == Status.READY)) {
 					startPreGame();
 				} else if (status == Status.WAITING) {
@@ -575,7 +583,9 @@ public class Game {
 
 		for (UUID u : players) {
 			Player p = Bukkit.getPlayer(u);
-			if (p != null && p.getLocation().distance(location) <= 1.5)
+			assert p != null;
+			if (!isInRegion(p.getLocation())) continue;
+			if (p.getLocation().distance(location) <= 1.5)
 				return true;
 		}
 		return false;

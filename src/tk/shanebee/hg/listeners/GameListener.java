@@ -16,6 +16,7 @@ import org.bukkit.event.entity.*;
 import org.bukkit.event.player.PlayerDropItemEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.event.player.PlayerQuitEvent;
+import org.bukkit.event.player.PlayerTeleportEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.PlayerInventory;
 import org.bukkit.inventory.meta.ItemMeta;
@@ -498,6 +499,12 @@ public class GameListener implements Listener {
 				}
 			}
 		}
+		if (!(entity instanceof Player)) {
+			if (HG.plugin.getManager().isInRegion(e.getLocation())) {
+				Game g = HG.plugin.getManager().getGame(e.getLocation());
+				g.getBound().addEntity(entity);
+			}
+		}
 	}
 
 	@EventHandler
@@ -517,6 +524,19 @@ public class GameListener implements Listener {
 		}
 		if (plugin.getSpectators().containsKey(player.getUniqueId())) {
 			plugin.getSpectators().get(player.getUniqueId()).getGame().leaveSpectate(player);
+		}
+	}
+
+	@EventHandler
+	private void onTeleportIntoArena(PlayerTeleportEvent event) {
+		Player player = event.getPlayer();
+		Location location = event.getTo();
+		for (Game game : plugin.getGames()) {
+			if (game.isInRegion(location) && game.getStatus() == Status.RUNNING) {
+				if (event.getCause() == PlayerTeleportEvent.TeleportCause.ENDER_PEARL && !game.getPlayers().contains(player.getUniqueId())) {
+					event.setCancelled(true);
+				}
+			}
 		}
 	}
 
