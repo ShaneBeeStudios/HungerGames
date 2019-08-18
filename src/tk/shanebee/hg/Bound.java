@@ -1,17 +1,17 @@
 package tk.shanebee.hg;
 
-import java.util.ArrayList;
-import java.util.Objects;
-import java.util.Random;
-
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.World;
 import org.bukkit.block.Block;
 import org.bukkit.entity.Entity;
-import org.bukkit.entity.Player;
 import org.bukkit.util.BoundingBox;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Objects;
+import java.util.Random;
 
 @SuppressWarnings("WeakerAccess")
 public class Bound {
@@ -23,6 +23,7 @@ public class Bound {
 	private int y2;
 	private int z2;
 	private String world;
+	private List<Entity> entities;
 
 	/** Create a new bounding box between 2 sets of coordinates
 	 * @param world World this bound is in
@@ -41,6 +42,7 @@ public class Bound {
 		this.x2 = Math.max(x,x2);
 		this.y2 = Math.max(y, y2);
 		this.z2 = Math.max(z, z2);
+		this.entities = new ArrayList<>();
 	}
 
     /** Create a new bounding box between 2 locations (must be in same world)
@@ -70,11 +72,15 @@ public class Bound {
 	}
 
 	void removeEntities() {
-		for (Entity e : Objects.requireNonNull(Bukkit.getWorld(world)).getEntities()) {
-			if (isInRegion(e.getLocation()) && !(e instanceof Player)) {
-				e.remove();
-			}
-		}
+		entities.forEach(Entity::remove);
+		entities.clear();
+	}
+
+	/** Add an entity to the entity list
+	 * @param entity The entity to add
+	 */
+	public void addEntity(Entity entity) {
+		this.entities.add(entity);
 	}
 
 	/** Get location of all blocks of a type within a bound
