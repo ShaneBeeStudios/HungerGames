@@ -22,8 +22,8 @@ public class SetLobbyWallCmd extends BaseCmd {
 	public boolean run() {
 		Game g = HG.plugin.getManager().getGame(args[1]);
 		if (g != null) {
-			Block b = player.getTargetBlock(null, 6);
-			if (Util.isWallSign(b.getType()) && g.setLobbyBlock((Sign)b.getState())) {
+			Block b = player.getTargetBlockExact(6);
+			if (b !=  null && Util.isWallSign(b.getType()) && g.setLobbyBlock((Sign)b.getState())) {
 				Location l = b.getLocation();
 				assert l.getWorld() != null;
 				HG.plugin.getArenaConfig().getCustomConfig().set(("arenas." + args[1] + "." + "lobbysign"), (l.getWorld().getName() + ":" + l.getBlockX() + ":" + l.getBlockY() + ":" + l.getBlockZ()));
