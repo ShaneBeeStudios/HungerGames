@@ -630,7 +630,6 @@ public class Game {
 	public void unFreeze(Player player) {
 		player.removePotionEffect(PotionEffectType.JUMP);
 		player.setWalkSpeed(0.2F);
-		player.setInvulnerable(false);
 	}
 
 	/** Set the lobby block for this game
@@ -863,7 +862,7 @@ public class Game {
 	}
 
 	private void exit(Player player) {
-		//Util.clearInv(player);
+		player.setInvulnerable(false);
 		if (this.getStatus() == Status.RUNNING)
 			bar.removePlayer(player);
 		if (this.exit == null) {

@@ -6,6 +6,8 @@ import tk.shanebee.hg.Game;
 import tk.shanebee.hg.HG;
 import tk.shanebee.hg.Status;
 
+import java.util.Objects;
+
 public class TimerTask implements Runnable {
 
 	private int remainingtime;
@@ -21,6 +23,7 @@ public class TimerTask implements Runnable {
 		this.teleportTimer = Config.teleportEndTime;
 		this.borderCountdownStart = g.getBorderTimer().get(0);
 		this.borderCountdownEnd = g.getBorderTimer().get(1);
+		g.getPlayers().forEach(uuid -> Objects.requireNonNull(Bukkit.getPlayer(uuid)).setInvulnerable(false));
 		
 		this.id = Bukkit.getScheduler().scheduleSyncRepeatingTask(HG.plugin, this, 0, 30 * 20L);
 	}
