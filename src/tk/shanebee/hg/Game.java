@@ -575,7 +575,7 @@ public class Game {
 
 		for (UUID u : players) {
 			Player p = Bukkit.getPlayer(u);
-			if (p != null && p.getLocation().getBlock().equals(location.getBlock()))
+			if (p != null && p.getLocation().distance(location) <= 1.5)
 				return true;
 		}
 		return false;
