@@ -7,8 +7,8 @@ public class MetricsHandler {
 	private Metrics metrics;
 
 	public MetricsHandler(boolean isPremium) {
-		addSimplePie("premium", isPremium);
 		this.metrics = HG.getPlugin().getMetrics();
+		addSimplePie("premium", isPremium);
 	}
 
 	private void addSimplePie(String id, boolean value) {

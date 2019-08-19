@@ -52,6 +52,7 @@ public class HG extends JavaPlugin {
 
 	@Override
 	public void onEnable() {
+		plugin = this;
 		new Config(this);
 		metrics = new Metrics(this);
 		if (metrics.isEnabled()) {
@@ -68,7 +69,6 @@ public class HG extends JavaPlugin {
 			Util.warning("NMS version " + nms + " not supported, item/kit \"data\" will not be supported");
 			nbtApi = null;
 		}
-		plugin = this;
 		lang = new Language(this);
 		kitManager = new KitManager();
 		itemStackManager = new ItemStackManager(this);
