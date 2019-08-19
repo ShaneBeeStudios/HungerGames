@@ -17,6 +17,7 @@ import tk.shanebee.hg.listeners.GameListener;
 import tk.shanebee.hg.listeners.WandListener;
 import tk.shanebee.hg.managers.*;
 import tk.shanebee.hg.metrics.Metrics;
+import tk.shanebee.hg.metrics.MetricsHandler;
 import tk.shanebee.hg.nms.NBTApi;
 
 import java.util.*;
@@ -44,6 +45,7 @@ public class HG extends JavaPlugin {
 	private KitManager kitManager;
 	private ItemStackManager itemStackManager;
 	private Leaderboard leaderboard;
+	private Metrics metrics;
 
 	//NMS Nbt
 	private NBTApi nbtApi;
@@ -51,9 +53,11 @@ public class HG extends JavaPlugin {
 	@Override
 	public void onEnable() {
 		new Config(this);
-		Metrics metrics = new Metrics(this);
-		if (metrics.isEnabled())
+		metrics = new Metrics(this);
+		if (metrics.isEnabled()) {
 			Util.log("&7Metrics have been &aenabled");
+			new MetricsHandler(false);
+		}
 		else
 			Util.log("&7Metrics have been &cdisabled");
 		String nms = Bukkit.getServer().getClass().getPackage().getName().split("\\.")[3];
@@ -301,6 +305,10 @@ public class HG extends JavaPlugin {
 		int maj = Integer.parseInt(Bukkit.getServer().getClass().getPackage().getName().split("\\.")[3].split("_")[0].replace("v", ""));
 		int min = Integer.parseInt(Bukkit.getServer().getClass().getPackage().getName().split("\\.")[3].split("_")[1]);
 		return maj >= major && min >= minor;
+	}
+
+	public Metrics getMetrics() {
+		return this.metrics;
 	}
 
 }
