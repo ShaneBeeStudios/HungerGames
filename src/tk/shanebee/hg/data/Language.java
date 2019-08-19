@@ -30,6 +30,7 @@ public class Language {
     public String players_to_start;
     public String arena_not_ready;
     public String arena_spectate;
+    public String arena_tp_no_perm;
     public String game_full;
     public String player_won;
     public String winning_amount;
@@ -202,6 +203,7 @@ public class Language {
         players_to_start = lang.getString("players-to-start");
         arena_not_ready = lang.getString("arena-not-ready");
         arena_spectate = lang.getString("arena-spectate");
+        arena_tp_no_perm = lang.getString("arena-tp-no-perm");
         game_full = lang.getString("game-full");
         player_won = lang.getString("player-won");
 

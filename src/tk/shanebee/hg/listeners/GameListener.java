@@ -22,6 +22,7 @@ import org.bukkit.inventory.PlayerInventory;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.util.Vector;
 import tk.shanebee.hg.*;
+import tk.shanebee.hg.data.Language;
 import tk.shanebee.hg.data.Leaderboard;
 import tk.shanebee.hg.events.ChestOpenEvent;
 
@@ -35,7 +36,7 @@ public class GameListener implements Listener {
 	private HG plugin;
 	private String tsn = ChatColor.GOLD + "TrackingStick " + ChatColor.GREEN + "Uses: ";
 	private ItemStack trackingStick;
-	//private HashMap<Player, Entity> killerMap = new HashMap<>(); ON HOLD for now
+	private Language lang;
 
 	public GameListener(HG plugin) {
 		this.plugin = plugin;
@@ -45,6 +46,7 @@ public class GameListener implements Listener {
 		im.setDisplayName(tsn + Config.trackingstickuses);
 		it.setItemMeta(im);
 		trackingStick = it;
+		this.lang = plugin.getLang();
 	}
 
 	private void dropInv(Player p) {
@@ -531,10 +533,15 @@ public class GameListener implements Listener {
 	private void onTeleportIntoArena(PlayerTeleportEvent event) {
 		Player player = event.getPlayer();
 		Location location = event.getTo();
-		for (Game game : plugin.getGames()) {
-			if (game.isInRegion(location) && game.getStatus() == Status.RUNNING) {
-				if (event.getCause() == PlayerTeleportEvent.TeleportCause.ENDER_PEARL && !game.getPlayers().contains(player.getUniqueId())) {
-					event.setCancelled(true);
+		if (plugin.getManager().isInRegion(location)) {
+			Game game = plugin.getManager().getGame(location);
+			if (!player.hasPermission("hg.create") && !game.getPlayers().contains(player.getUniqueId())) {
+				event.setCancelled(true);
+				switch (event.getCause()) {
+					case PLUGIN:
+					case COMMAND:
+					case UNKNOWN:
+						Util.scm(player, lang.arena_tp_no_perm);
 				}
 			}
 		}
