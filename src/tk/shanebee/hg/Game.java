@@ -713,6 +713,7 @@ public class Game {
 				HG.plugin.getPlayers().remove(p.getUniqueId());
 				win.add(p.getUniqueId());
 				sb.restoreSB(p);
+				unFreeze(p);
 				exit(p);
 			}
 		}
