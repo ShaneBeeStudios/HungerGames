@@ -108,7 +108,7 @@ public class ItemStackManager {
 					level = Integer.parseInt(d[1]);
 				}
 				for (Enchantment e : Enchantment.values()) {
-					if (e.getName().equalsIgnoreCase(d[0])) {
+					if (e.getKey().getKey().equalsIgnoreCase(d[0]) || e.getName().equalsIgnoreCase(d[0])) {
 						assert item != null;
 						item.addUnsafeEnchantment(e, level);
 					}
