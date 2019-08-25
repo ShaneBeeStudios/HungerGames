@@ -535,7 +535,7 @@ public class GameListener implements Listener {
 		Location location = event.getTo();
 		if (plugin.getManager().isInRegion(location)) {
 			Game game = plugin.getManager().getGame(location);
-			if (!player.hasPermission("hg.create") && !game.getPlayers().contains(player.getUniqueId())) {
+			if (!player.hasPermission("hg.create") && !game.getPlayers().contains(player.getUniqueId()) && !game.getSpectators().contains(player.getUniqueId())) {
 				event.setCancelled(true);
 				switch (event.getCause()) {
 					case PLUGIN:
