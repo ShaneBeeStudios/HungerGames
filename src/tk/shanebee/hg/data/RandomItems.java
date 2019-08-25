@@ -125,7 +125,7 @@ public class RandomItems {
 		items.add("BONE 1 x:2");
 		items.add("GOLDEN_LEGGINGS 1");
 		items.add("GOLDEN_BOOTS 1");
-		items.add("DIAMOND_SWORD 1 name:&6Death_Dealer");
+		items.add("DIAMOND_SWORD 1 enchant:sharpness:1 name:&6Death_Dealer");
 		items.add("GOLDEN_APPLE 1");
 		items.add("CHAINMAIL_CHESTPLATE 1 x:1");
 		items.add("CHAINMAIL_LEGGINGS 1 x:1");
@@ -141,8 +141,8 @@ public class RandomItems {
 		item.set("items", items);
 
 		ArrayList<String> bonus = new ArrayList<>();
-		bonus.add("DIAMOND_SWORD 1 enchant:DAMAGE_ALL:5 name:&3Power_Sword");
-		bonus.add("DIAMOND_CHESTPLATE 1 enchant:PROTECTION_ENVIRONMENTAL:3 name:&aLife_Saver");
+		bonus.add("DIAMOND_SWORD 1 enchant:sharpness:5 name:&3Power_Sword");
+		bonus.add("DIAMOND_CHESTPLATE 1 enchant:protection:3 name:&aLife_Saver");
 		item.set("bonus", bonus);
 	}
 

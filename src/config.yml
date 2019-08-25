@@ -97,9 +97,9 @@ kits:
     ninja:
         permission: none
         helmet: LEATHER_HELMET color:black
-        chestplate: LEATHER_CHESTPLATE color:black name:&7Ninja-Jacket lore:&6Ninja-Stealth-Suit:&4------------- enchant:PROTECTION_FIRE
+        chestplate: LEATHER_CHESTPLATE color:black name:&7Ninja-Jacket lore:&6Ninja-Stealth-Suit:&4------------- enchant:fire_protection
         leggings: LEATHER_LEGGINGS color:black
-        boots: LEATHER_BOOTS color:black enchant:PROTECTION_FALL
+        boots: LEATHER_BOOTS color:black enchant:feather_falling
         items:
             - POTION:HEAL:60:1 2 name:&bSuper_Healing
         potion-effects:
@@ -111,7 +111,7 @@ kits:
         leggings:
         boots:
         items:
-            - IRON_SWORD 1 enchant:DAMAGE_ALL:2 enchant:DAMAGE_UNDEAD:2 name:&bOP_&6Sword?
+            - IRON_SWORD 1 enchant:sharpness:2 enchant:smite:2 name:&bOP_&6Sword?
             - BREAD 4
             - POTION:HEAL:60:2 2 name:&bSuper_Duper_Healing
         potion-effects:
