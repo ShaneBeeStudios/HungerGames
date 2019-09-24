@@ -715,6 +715,7 @@ public class Game {
 				sb.restoreSB(p);
 				unFreeze(p);
 				exit(p);
+				heal(p);
 			}
 		}
 		players.clear();
