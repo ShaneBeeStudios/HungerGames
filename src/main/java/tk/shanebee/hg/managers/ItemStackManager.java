@@ -131,7 +131,7 @@ public class ItemStackManager {
 					assert item != null;
 					PotionMeta meta = ((PotionMeta) item.getItemMeta());
 					assert meta != null;
-					meta.setColor(Color.fromRGB(Integer.valueOf(s)));
+					meta.setColor(Color.fromRGB(Integer.parseInt(s)));
 					item.setItemMeta(meta);
 				} catch (Exception ignore) {
 				}
@@ -192,8 +192,8 @@ public class ItemStackManager {
 				return null;
 			}
 			PotionEffectType potType = PotionEffectType.getByName(itemArr[1].toUpperCase());
-			int duration = Integer.valueOf(itemArr[2]);
-			int amplifier = Integer.valueOf(itemArr[3]);
+			int duration = Integer.parseInt(itemArr[2]);
+			int amplifier = Integer.parseInt(itemArr[3]);
 			ItemStack potion = new ItemStack(splash ? Material.SPLASH_POTION : Material.POTION, amount);
 			PotionMeta meta = ((PotionMeta) potion.getItemMeta());
 			assert meta != null;
