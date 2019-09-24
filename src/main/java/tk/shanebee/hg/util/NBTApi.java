@@ -15,13 +15,17 @@ public class NBTApi {
 	 * @param value The NBT string to add to the item
 	 */
     public ItemStack getItemWithNBT(ItemStack item, String value) {
-        NBTItem nbtItem = new NBTItem(item);
-        nbtItem.mergeCompound(new NBTContainer(value));
-        return NBTItem.convertNBTtoItem(nbtItem);
+        NBTContainer container = NBTItem.convertItemtoNBT(item);
+        container.mergeCompound(new NBTContainer(value));
+        return NBTItem.convertNBTtoItem(container);
     }
 
-    public String getNBT(org.bukkit.inventory.ItemStack i) {
-        return NBTItem.convertItemtoNBT(i).asNBTString();
+    /** Get the NBT from an item
+     * @param item ItemStack to get NBT from
+     * @return NBT string
+     */
+    public String getNBT(org.bukkit.inventory.ItemStack item) {
+        return NBTItem.convertItemtoNBT(item).asNBTString();
     }
 
 }
