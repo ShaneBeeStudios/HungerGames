@@ -70,6 +70,8 @@ public class ChestDrop implements Listener {
 
 			Location l = beforeBlock.getLocation();
 			Util.shootFirework(new Location(l.getWorld(), l.getX() + 0.5, l.getY(), l.getZ() + 0.5));
+			event.setCancelled(true);
+			event.getBlock().setType(Material.ENDER_CHEST);
 		}
 	}
 
@@ -78,6 +80,7 @@ public class ChestDrop implements Listener {
 		for (HumanEntity p : event.getViewers()) {
 			if (p.equals(invopener)) {
 				Location l = beforeBlock.getLocation();
+				assert l.getWorld() != null;
 				l.getWorld().createExplosion(l.getBlockX(), l.getBlockY(), l.getBlockZ(), 1, false, false);
 				remove();
 				return;
