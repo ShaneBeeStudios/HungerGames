@@ -18,15 +18,16 @@ public class NBTApi {
     public ItemStack getItemWithNBT(ItemStack item, String value) {
         NBTItem nbtItem = new NBTItem(item);
         nbtItem.mergeCompound(new NBTContainer(value));
-        return NBTItem.convertNBTtoItem(nbtItem);
+        return nbtItem.getItem();
     }
 
     /** Get the NBT string from an item
      * @param item Item to grab NBT from
      * @return NBT string from item
      */
-    public String getNBT(ItemStack item) {
-        return NBTItem.convertItemtoNBT(item).asNBTString();
+    public String getNBT(org.bukkit.inventory.ItemStack item) {
+        NBTItem nbtItem = new NBTItem(item);
+        return nbtItem.getCompound().toString();
     }
 
 }
