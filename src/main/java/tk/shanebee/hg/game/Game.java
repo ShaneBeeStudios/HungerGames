@@ -454,12 +454,19 @@ public class Game {
 		return this.s.getLocation();
 	}
 
-	/** Get max players for a game
+	/** Get max players for this game
 	 * @return Max amount of players for this game
 	 */
 	public int getMaxPlayers() {
 		return maxPlayers;
 	}
+
+    /** Get min players for this game
+     * @return Min amount of players for this game
+     */
+	public int getMinPlayers() {
+	    return minPlayers;
+    }
 
 	public int getCost() {
 		return this.cost;
