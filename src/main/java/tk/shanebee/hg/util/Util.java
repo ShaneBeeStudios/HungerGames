@@ -167,12 +167,11 @@ public class Util {
 	}
 
 	@SuppressWarnings("SameParameterValue")
-	private static boolean isRunningMinecraft(int maj, int min) {
-		String version = Bukkit.getServer().getClass().getPackage().getName().split("\\.")[3];
-		int major = Integer.valueOf(version.split("_")[0].replace("v", ""));
-		int minor = Integer.valueOf(version.split("_")[1]);
-		return maj == major && min == minor;
-	}
+    public static boolean isRunningMinecraft(int major, int minor) {
+        int maj = Integer.parseInt(Bukkit.getServer().getClass().getPackage().getName().split("\\.")[3].split("_")[0].replace("v", ""));
+        int min = Integer.parseInt(Bukkit.getServer().getClass().getPackage().getName().split("\\.")[3].split("_")[1]);
+        return maj >= major && min >= minor;
+    }
 
 	/** Check if a block is a wall sign
 	 * <p>Due to sign material changes in 1.14 this method checks for both 1.13 and 1.14+</p>
@@ -180,9 +179,7 @@ public class Util {
 	 * @return True if material is a wall sign
 	 */
 	public static boolean isWallSign(Material item) {
-		if (isRunningMinecraft(1, 13)) {
-			return item == Material.getMaterial("WALL_SIGN");
-		} else {
+		if (isRunningMinecraft(1, 14)) {
 			switch (item) {
 				case ACACIA_WALL_SIGN:
 				case BIRCH_WALL_SIGN:
@@ -191,9 +188,12 @@ public class Util {
 				case OAK_WALL_SIGN:
 				case SPRUCE_WALL_SIGN:
 					return true;
+                default:
+                    return false;
 			}
-		}
-		return false;
+		} else {
+            return item == Material.getMaterial("WALL_SIGN");
+        }
 	}
 
 }

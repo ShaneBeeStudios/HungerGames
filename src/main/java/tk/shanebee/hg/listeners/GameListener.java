@@ -278,7 +278,7 @@ public class GameListener implements Listener {
 			if (block.getType() == Material.TRAPPED_CHEST || block.getState() instanceof ShulkerBox) {
 				Bukkit.getServer().getPluginManager().callEvent(new ChestOpenEvent(pd.getGame(), block, true));
 			}
-			if (HG.isRunningMinecraft(1, 14) && block.getType() == Material.BARREL) {
+			if (Util.isRunningMinecraft(1, 14) && block.getType() == Material.BARREL) {
 					Bukkit.getServer().getPluginManager().callEvent(new ChestOpenEvent(pd.getGame(), block, true));
 			}
 		}
@@ -350,7 +350,7 @@ public class GameListener implements Listener {
 						if (b.getType() == Material.CHEST || b.getType() == Material.TRAPPED_CHEST || b.getState() instanceof Shulker) {
 							g.addPlayerChest(b.getLocation());
 						}
-						if (HG.isRunningMinecraft(1, 14) && b.getType() == Material.BARREL) {
+						if (Util.isRunningMinecraft(1, 14) && b.getType() == Material.BARREL) {
 							g.addPlayerChest(b.getLocation());
 						}
 					}
@@ -387,7 +387,7 @@ public class GameListener implements Listener {
 							g.removeGameChest(b.getLocation());
 							g.removePlayerChest(b.getLocation());
 						}
-						if (HG.isRunningMinecraft(1, 14) && b.getType() == Material.BARREL) {
+						if (Util.isRunningMinecraft(1, 14) && b.getType() == Material.BARREL) {
 							g.removeGameChest(b.getLocation());
 							g.removePlayerChest(b.getLocation());
 						}
