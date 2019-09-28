@@ -5,7 +5,7 @@ import org.bukkit.Material;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import tk.shanebee.hg.HG;
-import tk.shanebee.hg.PlayerSession;
+import tk.shanebee.hg.data.PlayerSession;
 import tk.shanebee.hg.util.Util;
 
 import java.util.ArrayList;
@@ -21,8 +21,8 @@ public class WandCmd extends BaseCmd {
 
 	@Override
 	public boolean run() {
-		if (HG.plugin.getPlayerSessions().containsKey(player.getUniqueId())) {
-			HG.plugin.getPlayerSessions().remove(player.getUniqueId());
+		if (HG.getPlugin().getPlayerSessions().containsKey(player.getUniqueId())) {
+			HG.getPlugin().getPlayerSessions().remove(player.getUniqueId());
 			Util.scm(player, "Wand disabled!");
 		} else {
 			ItemStack wand = new ItemStack(Material.BLAZE_ROD, 1);
@@ -34,7 +34,7 @@ public class WandCmd extends BaseCmd {
 			)));
 			wand.setItemMeta(meta);
 			player.getInventory().addItem(wand);
-			HG.plugin.getPlayerSessions().put(player.getUniqueId(), new PlayerSession(null, null));
+			HG.getPlugin().getPlayerSessions().put(player.getUniqueId(), new PlayerSession(null, null));
 			Util.scm(player, "Wand enabled!");
 		}
 		return true;

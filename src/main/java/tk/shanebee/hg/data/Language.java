@@ -9,6 +9,9 @@ import java.io.File;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 
+/**
+ * Language handler for plugin messages
+ */
 public class Language {
 
     private FileConfiguration lang = null;
@@ -30,7 +33,6 @@ public class Language {
     public String players_to_start;
     public String arena_not_ready;
     public String arena_spectate;
-    public String arena_tp_no_perm;
     public String game_full;
     public String player_won;
     public String winning_amount;
@@ -91,8 +93,10 @@ public class Language {
     public String cmd_delete_failed;
     public String cmd_delete_noexist;
     public String cmd_join_in_game;
+    public String cmd_join_no_money;
     public String cmd_kit_no_change;
     public String cmd_leave_left;
+    public String cmd_leave_refund;
     public String cmd_reload_attempt;
     public String cmd_reload_reloaded_arena;
     public String cmd_reload_reloaded_kit;
@@ -137,6 +141,7 @@ public class Language {
     public String bossbar;
     public String lb_blank_space;
     public String lb_combined_separator;
+    public String lobby_sign_cost;
 
 
     public Language(HG plugin) {
@@ -203,7 +208,6 @@ public class Language {
         players_to_start = lang.getString("players-to-start");
         arena_not_ready = lang.getString("arena-not-ready");
         arena_spectate = lang.getString("arena-spectate");
-        arena_tp_no_perm = lang.getString("arena-tp-no-perm");
         game_full = lang.getString("game-full");
         player_won = lang.getString("player-won");
 
@@ -271,8 +275,10 @@ public class Language {
         cmd_delete_failed = lang.getString("cmd-delete-failed");
         cmd_delete_noexist = lang.getString("cmd-delete-noexist");
         cmd_join_in_game = lang.getString("cmd-join-in-game");
+        cmd_join_no_money = lang.getString("cmd-join-no-money");
         cmd_kit_no_change = lang.getString("cmd-kit-no-change");
         cmd_leave_left = lang.getString("cmd-leave-left");
+        cmd_leave_refund = lang.getString("cmd-leave-refund");
         cmd_reload_attempt = lang.getString("cmd-reload-attempt");
         cmd_reload_reloaded_arena = lang.getString("cmd-reload-reloaded-arena");
         cmd_reload_reloaded_config = lang.getString("cmd-reload-reloaded-config");
@@ -320,6 +326,8 @@ public class Language {
 
         lb_blank_space = lang.getString("lb-blank-space");
         lb_combined_separator = lang.getString("lb-combined-separator");
+
+        lobby_sign_cost = lang.getString("lobby-sign-cost");
     }
 
 }

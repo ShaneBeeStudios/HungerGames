@@ -13,6 +13,9 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Map;
 
+/**
+ * Handler for random items
+ */
 public class RandomItems {
 
 	private FileConfiguration item = null;

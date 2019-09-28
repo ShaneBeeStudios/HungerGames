@@ -30,7 +30,6 @@ game-bossbar: '&6&lGame Ends In: &b&l<min> &7min &b&l<sec> &7sec'
 players-to-start: '&b&l<amount> &6players to start!'
 arena-not-ready: '&cThis arena is not ready! Please wait before joining!'
 arena-spectate: '&6You can spectate this arena by running &3/hg spectate <arena>'
-arena-tp-no-perm: '&cYou do not have permission to teleport into this arena!'
 game-full: '&cis currently full!'
 
 #  <arena> will be replaced with name of arena the player won in
@@ -126,12 +125,14 @@ cmd-delete-noexist: '&cThis arena does not exist!'
 
 ## Join
 cmd-join-in-game: '&cYou are already in a game!'
+cmd-join-no-money: '&cYou do not have enough money to join this game. Cost: &b$<cost>'
 
 ## Kit
 cmd-kit-no-change: '&cYou can not change your kit while the game is running!'
 
 ## Leave
 cmd-leave-left: '&6You left &b&l<arena>&c!'
+cmd-leave-refund: '&6You got a refund of &b$<cost> &6for leaving the game before it started'
 
 ## Reload
 cmd-reload-attempt: '&a&lAttempting to reload HungerGames!'
@@ -148,6 +149,7 @@ cmd-exit-set: '&6Global Exit Spawn Set:'
 cmd-lobbywall-set: '&aThe lobbyWallSign has been set!'
 cmd-lobbywall-notcorrect: '&cThese signs are not in correct format!'
 cmd-lobbywall-format: '&cformat: &6[sign] &c[sign] [sign]'
+lobby-sign-cost: 'Cost $<cost>'
 
 ## Start
 cmd-start-starting: '&b<arena>&6 is now starting!'

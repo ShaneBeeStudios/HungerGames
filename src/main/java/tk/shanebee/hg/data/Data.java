@@ -8,6 +8,8 @@ import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.inventory.ItemStack;
 import tk.shanebee.hg.*;
+import tk.shanebee.hg.game.Bound;
+import tk.shanebee.hg.game.Game;
 import tk.shanebee.hg.managers.KitManager;
 import tk.shanebee.hg.tasks.CompassTask;
 import tk.shanebee.hg.util.Util;
@@ -19,6 +21,9 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 
+/**
+ * General data handler for the plugin
+ */
 public class Data {
 
 	private FileConfiguration arenadat = null;
@@ -92,6 +97,7 @@ public class Data {
 					List<Location> spawns = new ArrayList<>();
 					Sign lobbysign = null;
 					int timer = 0;
+					int cost = 0;
 					int minplayers = 0;
 					int maxplayers = 0;
 					Bound b = null;
@@ -104,6 +110,10 @@ public class Data {
 					} catch (Exception e) {
 						Util.warning("Unable to load information for arena " + s + "!");
 						isReady = false;
+					}
+					try {
+						cost = arenadat.getInt("arenas." + s + ".info." + "cost");
+					} catch (Exception ignore) {
 					}
 
 					try {
@@ -129,7 +139,7 @@ public class Data {
 						isReady = false;
 					}
 
-					Game game = new Game(s, b, spawns, lobbysign, timer, minplayers, maxplayers, freeroam, isReady);
+					Game game = new Game(s, b, spawns, lobbysign, timer, minplayers, maxplayers, freeroam, isReady, cost);
 					plugin.getGames().add(game);
 
 					KitManager kit = plugin.getItemStackManager().setGameKits(s, arenadat);
@@ -139,7 +149,7 @@ public class Data {
 					if (!arenadat.getStringList("arenas." + s + ".items").isEmpty()) {
 						HashMap<Integer, ItemStack> items = new HashMap<>();
 						for (String itemString : arenadat.getStringList("arenas." + s + ".items")) {
-							HG.plugin.getRandomItems().loadItems(itemString, items);
+							HG.getPlugin().getRandomItems().loadItems(itemString, items);
 						}
 						game.setItems(items);
 						Util.log(items.size() + " Random items have been loaded for arena: " + s);
@@ -147,7 +157,7 @@ public class Data {
 					if (!arenadat.getStringList("arenas." + s + ".bonus").isEmpty()) {
 						HashMap<Integer, ItemStack> bonusItems = new HashMap<>();
 						for (String itemString : arenadat.getStringList("arenas." + s + ".bonus")) {
-							HG.plugin.getRandomItems().loadItems(itemString, bonusItems);
+							HG.getPlugin().getRandomItems().loadItems(itemString, bonusItems);
 						}
 						game.setBonusItems(bonusItems);
 						Util.log(bonusItems.size() + " Random bonus items have been loaded for arena: " + s);

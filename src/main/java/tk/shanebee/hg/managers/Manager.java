@@ -10,6 +10,9 @@ import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.InventoryHolder;
 import org.bukkit.inventory.ItemStack;
 import tk.shanebee.hg.*;
+import tk.shanebee.hg.data.Config;
+import tk.shanebee.hg.game.Bound;
+import tk.shanebee.hg.game.Game;
 import tk.shanebee.hg.util.Util;
 
 import java.util.ArrayList;
@@ -17,6 +20,9 @@ import java.util.Collections;
 import java.util.List;
 import java.util.Random;
 
+/**
+ * General manager for games
+ */
 public class Manager {
 
 	private HG plugin;
@@ -25,9 +31,13 @@ public class Manager {
 	public Manager(HG plugin) {
 		this.plugin = plugin;
 	}
-	
-	public void runDebugger(CommandSender sender, String s) {
-		Configuration arenadat = HG.plugin.getArenaConfig().getCustomConfig();
+
+    /** Run arena debugger
+     * @param sender Sender who issued this debuger
+     * @param gameName Name of the game to debug
+     */
+	public void runDebugger(CommandSender sender, String gameName) {
+		Configuration arenadat = HG.getPlugin().getArenaConfig().getCustomConfig();
 		boolean isReady = true;
 		List<Location> spawns = new ArrayList<>();
 		Sign lobbysign = null;
@@ -42,60 +52,60 @@ public class Manager {
 		int chestRefill = 0;
 
 		try {
-			timer = arenadat.getInt("arenas." + s + ".info." + "timer");
-			minplayers = arenadat.getInt("arenas." + s + ".info." + "min-players");
-			maxplayers = arenadat.getInt("arenas." + s + ".info." + "max-players");
+			timer = arenadat.getInt("arenas." + gameName + ".info." + "timer");
+			minplayers = arenadat.getInt("arenas." + gameName + ".info." + "min-players");
+			maxplayers = arenadat.getInt("arenas." + gameName + ".info." + "max-players");
 
-			if (arenadat.isSet("arenas." + s + ".border.center")) {
-				borderCenter = HG.plugin.getArenaConfig().getSLoc(arenadat.getString("arenas." + s + ".border.center"));
+			if (arenadat.isSet("arenas." + gameName + ".border.center")) {
+				borderCenter = HG.getPlugin().getArenaConfig().getSLoc(arenadat.getString("arenas." + gameName + ".border.center"));
 			}
-			if (arenadat.isSet("arenas." + s + ".border.size")) {
-				borderSize = arenadat.getInt("arenas." + s + ".border.size");
+			if (arenadat.isSet("arenas." + gameName + ".border.size")) {
+				borderSize = arenadat.getInt("arenas." + gameName + ".border.size");
 			} else {
 				borderSize = Config.borderFinalSize;
 			}
-			if (arenadat.isSet("arenas." + s + ".border.countdown-start") &&
-					arenadat.isSet("arenas." + s + ".border.countdown-end")) {
-				borderCountdownStart = arenadat.getInt("arenas." + s + ".border.countdown-start");
-				borderCountdownEnd = arenadat.getInt("arenas." + s + ".border.countdown-end");
+			if (arenadat.isSet("arenas." + gameName + ".border.countdown-start") &&
+					arenadat.isSet("arenas." + gameName + ".border.countdown-end")) {
+				borderCountdownStart = arenadat.getInt("arenas." + gameName + ".border.countdown-start");
+				borderCountdownEnd = arenadat.getInt("arenas." + gameName + ".border.countdown-end");
 			} else {
 				borderCountdownStart = Config.borderCountdownStart;
 				borderCountdownEnd = Config.borderCountdownEnd;
 			}
-			if (arenadat.isSet("arenas." + s + ".chest-refill")) {
-				chestRefill = arenadat.getInt("arenas." + s + ".chest-refill");
+			if (arenadat.isSet("arenas." + gameName + ".chest-refill")) {
+				chestRefill = arenadat.getInt("arenas." + gameName + ".chest-refill");
 			}
 		} catch (Exception e) { 
-			Util.scm(sender, "&cUnable to load information for arena " + s + "!");
+			Util.scm(sender, "&cUnable to load information for arena " + gameName + "!");
 			isReady = false;
 		}
 
 		try {
-			lobbysign = (Sign) HG.plugin.getArenaConfig().getSLoc(arenadat.getString("arenas." + s + "." + "lobbysign")).getBlock().getState();
+			lobbysign = (Sign) HG.getPlugin().getArenaConfig().getSLoc(arenadat.getString("arenas." + gameName + "." + "lobbysign")).getBlock().getState();
 		} catch (Exception e) { 
-			Util.scm(sender, "&cUnable to load lobbysign for arena " + s + "!"); 
+			Util.scm(sender, "&cUnable to load lobbysign for arena " + gameName + "!");
 			isReady = false;
 		}
 
 		try {
-			for (String l : arenadat.getStringList("arenas." + s + "." + "spawns")) {
-				spawns.add(HG.plugin.getArenaConfig().getLocFromString(l));
+			for (String l : arenadat.getStringList("arenas." + gameName + "." + "spawns")) {
+				spawns.add(HG.getPlugin().getArenaConfig().getLocFromString(l));
 			}
-			int count = arenadat.getStringList("arenas." + s + "." + "spawns").size();
+			int count = arenadat.getStringList("arenas." + gameName + "." + "spawns").size();
 			if (count < maxplayers) {
 				Util.scm(sender, "&cYou need to add " + (maxplayers - count) + " more spawns!"); 
 				isReady = false;
 			}
 		} catch (Exception e) { 
-			Util.scm(sender, "&cUnable to load random spawns for arena " + s + "!"); 
+			Util.scm(sender, "&cUnable to load random spawns for arena " + gameName + "!");
 			isReady = false;
 		}
 
 		try {
 			@SuppressWarnings("unused")
-			Bound b = new Bound(arenadat.getString("arenas." + s + ".bound." + "world"), HG.plugin.getArenaConfig().BC(s, "x"), HG.plugin.getArenaConfig().BC(s, "y"), HG.plugin.getArenaConfig().BC(s, "z"), HG.plugin.getArenaConfig().BC(s, "x2"), HG.plugin.getArenaConfig().BC(s, "y2"), HG.plugin.getArenaConfig().BC(s, "z2"));
+            Bound b = new Bound(arenadat.getString("arenas." + gameName + ".bound." + "world"), HG.getPlugin().getArenaConfig().BC(gameName, "x"), HG.getPlugin().getArenaConfig().BC(gameName, "y"), HG.getPlugin().getArenaConfig().BC(gameName, "z"), HG.getPlugin().getArenaConfig().BC(gameName, "x2"), HG.getPlugin().getArenaConfig().BC(gameName, "y2"), HG.getPlugin().getArenaConfig().BC(gameName, "z2"));
 		} catch (Exception e) { 
-			Util.scm(sender, "&cUnable to load region bounds for arena " + s + "!"); 
+			Util.scm(sender, "&cUnable to load region bounds for arena " + gameName + "!");
 			isReady = false;
 		}
 		if (isReady) {
@@ -123,6 +133,10 @@ public class Manager {
 		}
 	}
 
+    /** Check the status of a game while being set up
+     * @param game Game to check
+     * @param player Player issuing the check
+     */
 	public void checkGame(Game game, Player player) {
 		if (game.getSpawns().size() <  game.getMaxPlayers()) {
 			Util.scm(player, "&cYou still need &7" + (game.getMaxPlayers() - game.getSpawns().size()) + " &c more spawns!");
@@ -137,7 +151,12 @@ public class Manager {
 			game.setStatus(Status.WAITING);
 		}
 	}
-	
+
+    /** Fill chests in a game
+     * @param block Chest to fill
+     * @param game Game this chest is in
+     * @param bonus Whether or not this is a bonus chest
+     */
 	public void fillChests(Block block, Game game, boolean bonus) {
 		Inventory i = ((InventoryHolder)block.getState()).getInventory();
 		List<Integer> slots = new ArrayList<>();
@@ -150,7 +169,7 @@ public class Manager {
 		int min = bonus ? Config.minbonuscontent : Config.minchestcontent;
 
 		int c = rg.nextInt(max) + 1;
-		c = c >= min ? c : min;
+		c = Math.max(c, min);
 		while (c != 0) {
 			ItemStack it = randomItem(game, bonus);
 			int slot = slots.get(0);
@@ -160,6 +179,11 @@ public class Manager {
 		}
 	}
 
+    /** Get a random item from a game's item list
+     * @param game Game to get the item from
+     * @param bonus Whether or not its a bonus item
+     * @return Random ItemStack
+     */
 	public ItemStack randomItem(Game game, boolean bonus) {
 		if (bonus) {
 			int i = rg.nextInt(game.getBonusItems().size()) + 1;

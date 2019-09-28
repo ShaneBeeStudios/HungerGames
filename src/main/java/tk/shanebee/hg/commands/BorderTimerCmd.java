@@ -1,6 +1,6 @@
 package tk.shanebee.hg.commands;
 
-import tk.shanebee.hg.Game;
+import tk.shanebee.hg.game.Game;
 import tk.shanebee.hg.HG;
 import tk.shanebee.hg.util.Util;
 
@@ -16,14 +16,14 @@ public class BorderTimerCmd extends BaseCmd {
 
 	@Override
 	public boolean run() {
-		Game game = HG.plugin.getManager().getGame(args[1]);
+		Game game = HG.getPlugin().getManager().getGame(args[1]);
 		if (game != null) {
 			String name = game.getName();
 			int start;
 			int end;
 			try {
-				start = Integer.valueOf(args[2]);
-				end = Integer.valueOf(args[3]);
+				start = Integer.parseInt(args[2]);
+				end = Integer.parseInt(args[3]);
 				if (start % 30 != 0) {
 					Util.scm(player, sendHelpLine());
 					Util.scm(player, "&7<&rstart&7> &cneeds to be an increment of 30");
@@ -38,13 +38,13 @@ public class BorderTimerCmd extends BaseCmd {
 				Util.scm(player, sendHelpLine());
 				return false;
 			}
-			HG.plugin.getArenaConfig().getCustomConfig().set("arenas." + name + ".border.countdown-start", start);
-			HG.plugin.getArenaConfig().getCustomConfig().set("arenas." + name + ".border.countdown-end", end);
-			HG.plugin.getArenaConfig().saveCustomConfig();
+			HG.getPlugin().getArenaConfig().getCustomConfig().set("arenas." + name + ".border.countdown-start", start);
+			HG.getPlugin().getArenaConfig().getCustomConfig().set("arenas." + name + ".border.countdown-end", end);
+			HG.getPlugin().getArenaConfig().saveCustomConfig();
 			game.setBorderTimer(start, end);
-			Util.scm(player, HG.plugin.getLang().cmd_border_timer.replace("<arena>", name).replace("<start>", args[2]).replace("<end>", args[3]));
+			Util.scm(player, HG.getPlugin().getLang().cmd_border_timer.replace("<arena>", name).replace("<start>", args[2]).replace("<end>", args[3]));
 		} else {
-			Util.scm(player, HG.plugin.getLang().cmd_delete_noexist);
+			Util.scm(player, HG.getPlugin().getLang().cmd_delete_noexist);
 		}
 		return true;
 	}

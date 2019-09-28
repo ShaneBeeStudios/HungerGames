@@ -15,9 +15,13 @@ import tk.shanebee.hg.util.Util;
 import tk.shanebee.hg.data.KitEntry;
 import tk.shanebee.hg.util.NBTApi;
 
+import org.jetbrains.annotations.Nullable;
 import java.util.ArrayList;
 import java.util.Arrays;
 
+/**
+ * Manage item stacks for kits and chests
+ */
 public class ItemStackManager {
 
 	private HG plugin;
@@ -34,6 +38,11 @@ public class ItemStackManager {
 		Util.log("Loaded kits");
 	}
 
+    /** Set the kits for a game from a config
+     * @param gameName The game to set the kits for
+     * @param config Config the kit is pulled from
+     * @return New KitManager for a game
+     */
 	public KitManager setGameKits(String gameName, Configuration config) {
 		String gamePath = "arenas." + gameName + ".";
 		KitManager kit = new KitManager();
@@ -44,7 +53,7 @@ public class ItemStackManager {
 	}
 
 	@SuppressWarnings("ConstantConditions")
-	private void kitCreator(Configuration config, KitManager kit, String gameName) {
+	private void kitCreator(Configuration config, KitManager kit, @Nullable String gameName) {
 		if (gameName == null) gameName = "";
 		for (String path : config.getConfigurationSection(gameName + "kits").getKeys(false)) {
 			try {
@@ -86,6 +95,11 @@ public class ItemStackManager {
 		}
 	}
 
+    /** Get an ItemStack from a string
+     * @param args String to convert to an item
+     * @param isItem Whether this is an item stack or a single item (ie: armor)
+     * @return New ItemStack
+     */
 	@SuppressWarnings("deprecation")
 	public ItemStack getItem(String args, boolean isItem) {
 		if (args == null) return null;
@@ -131,7 +145,7 @@ public class ItemStackManager {
 					assert item != null;
 					PotionMeta meta = ((PotionMeta) item.getItemMeta());
 					assert meta != null;
-					meta.setColor(Color.fromRGB(Integer.parseInt(s)));
+					meta.setColor(Color.fromRGB(Integer.valueOf(s)));
 					item.setItemMeta(meta);
 				} catch (Exception ignore) {
 				}
@@ -156,7 +170,8 @@ public class ItemStackManager {
 				s = s.replace("data:", "").replace("~", " ");
 				assert item != null;
 				if (nbtApi != null)
-					item = nbtApi.getItemWithNBT(item, s);
+					//nbtApi.setNBT(item, s);
+				    item = nbtApi.getItemWithNBT(item, s);
 			} else if (s.startsWith("ownerName:")) {
 				s = s.replace("ownerName:", "");
 				assert item != null;
@@ -192,8 +207,8 @@ public class ItemStackManager {
 				return null;
 			}
 			PotionEffectType potType = PotionEffectType.getByName(itemArr[1].toUpperCase());
-			int duration = Integer.parseInt(itemArr[2]);
-			int amplifier = Integer.parseInt(itemArr[3]);
+			int duration = Integer.valueOf(itemArr[2]);
+			int amplifier = Integer.valueOf(itemArr[3]);
 			ItemStack potion = new ItemStack(splash ? Material.SPLASH_POTION : Material.POTION, amount);
 			PotionMeta meta = ((PotionMeta) potion.getItemMeta());
 			assert meta != null;

@@ -1,5 +1,7 @@
 package tk.shanebee.hg;
 
+import io.lumine.xikage.mythicmobs.MythicMobs;
+import io.lumine.xikage.mythicmobs.mobs.MobManager;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
@@ -7,14 +9,9 @@ import org.bukkit.permissions.Permission;
 import org.bukkit.permissions.PermissionDefault;
 import org.bukkit.plugin.java.JavaPlugin;
 import tk.shanebee.hg.commands.*;
-import tk.shanebee.hg.data.Data;
-import tk.shanebee.hg.data.Language;
-import tk.shanebee.hg.data.Leaderboard;
-import tk.shanebee.hg.data.RandomItems;
-import tk.shanebee.hg.listeners.CancelListener;
-import tk.shanebee.hg.listeners.CommandListener;
-import tk.shanebee.hg.listeners.GameListener;
-import tk.shanebee.hg.listeners.WandListener;
+import tk.shanebee.hg.data.*;
+import tk.shanebee.hg.game.Game;
+import tk.shanebee.hg.listeners.*;
 import tk.shanebee.hg.managers.*;
 import tk.shanebee.hg.metrics.Metrics;
 import tk.shanebee.hg.metrics.MetricsHandler;
@@ -23,6 +20,9 @@ import tk.shanebee.hg.util.Util;
 
 import java.util.*;
 
+/**
+ * <b>Main class for HungerGames</b>
+ */
 public class HG extends JavaPlugin {
 
 	//Maps
@@ -37,7 +37,7 @@ public class HG extends JavaPlugin {
 	private List<Game> games = new ArrayList<>();
 
 	//Instances
-	public static HG plugin;
+	private static HG plugin;
 	private Manager manager;
 	private Data arenaconfig;
 	private KillManager killManager;
@@ -47,38 +47,66 @@ public class HG extends JavaPlugin {
 	private ItemStackManager itemStackManager;
 	private Leaderboard leaderboard;
 	private Metrics metrics;
+	private MobManager mmMobManager;
+
+	//Mobs
+	private MobConfig mobConfig;
 
 	//NMS Nbt
 	private NBTApi nbtApi;
 
 	@Override
 	public void onEnable() {
+		if (!Util.isRunningMinecraft(1, 13)) {
+			Util.warning("HungerGames does not support your version!");
+			Util.warning("Only versions 1.13+ are supported");
+			Bukkit.getPluginManager().disablePlugin(this);
+			return;
+		}
 		plugin = this;
 		new Config(this);
 		metrics = new Metrics(this);
 		if (metrics.isEnabled()) {
 			Util.log("&7Metrics have been &aenabled");
-			new MetricsHandler(false);
+			new MetricsHandler(true);
 		}
 		else
 			Util.log("&7Metrics have been &cdisabled");
-
+		String nms = Bukkit.getServer().getClass().getPackage().getName().split("\\.")[3];
 		nbtApi = new NBTApi();
+
+		//MythicMob check
+		if (Bukkit.getPluginManager().getPlugin("MythicMobs") != null) {
+			mmMobManager = MythicMobs.inst().getMobManager();
+			Util.log("&7MythicMobs found, MythicMobs hook &aenabled");
+		} else {
+			Util.log("&7MythicMobs not found, MythicMobs hooks have been &cdisabled");
+		}
 		lang = new Language(this);
 		kitManager = new KitManager();
 		itemStackManager = new ItemStackManager(this);
+		mobConfig = new MobConfig(this);
 		randomItems = new RandomItems(this);
 		arenaconfig = new Data(this);
 		killManager = new KillManager();
 
 		manager = new Manager(this);
 		leaderboard = new Leaderboard(this);
+		//PAPI check
 		if (Bukkit.getPluginManager().getPlugin("PlaceholderAPI") != null) {
 			new Placeholders(this).register();
 			Util.log("&7PAPI found, Placeholders have been &aenabled");
 		} else {
 			Util.log("&7PAPI not found, Placeholders have been &cdisabled");
 		}
+		//mcMMO check
+		if (Bukkit.getPluginManager().getPlugin("mcMMO") != null) {
+			getServer().getPluginManager().registerEvents(new McmmoListeners(this), this);
+			Util.log("&7mcMMO found, mcMMO event hooks &aenabled");
+		} else {
+			Util.log("&7mcMMO not found, mcMMO event hooks have been &cdisabled");
+		}
+
 		//noinspection ConstantConditions
 		getCommand("hg").setExecutor(new CommandListener(this));
 		getServer().getPluginManager().registerEvents(new WandListener(this), this);
@@ -226,7 +254,7 @@ public class HG extends JavaPlugin {
 		return this.arenaconfig;
 	}
 
-	/** Get an instance of HG's leaderboards
+	/** Get an instance of AG's leaderboards
 	 * @return Leaderboard
 	 */
 	public Leaderboard getLeaderboard() {
@@ -289,6 +317,13 @@ public class HG extends JavaPlugin {
 		return this.lang;
 	}
 
+	/** Get an instance of the mob confile
+	 * @return Mob config
+	 */
+	public MobConfig getMobConfig() {
+		return this.mobConfig;
+	}
+
 	/** Get the NBT API
 	 * @return NBT API
 	 */
@@ -298,6 +333,13 @@ public class HG extends JavaPlugin {
 
 	public Metrics getMetrics() {
 		return this.metrics;
+	}
+
+	/** Get an instance of the MythicMobs MobManager
+	 * @return MythicMobs MobManager
+	 */
+	public MobManager getMmMobManager() {
+		return this.mmMobManager;
 	}
 
 }

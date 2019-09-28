@@ -6,8 +6,8 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.command.TabCompleter;
 import org.bukkit.entity.Player;
 import org.bukkit.util.StringUtil;
-import tk.shanebee.hg.Config;
-import tk.shanebee.hg.Game;
+import tk.shanebee.hg.data.Config;
+import tk.shanebee.hg.game.Game;
 import tk.shanebee.hg.HG;
 import tk.shanebee.hg.util.Util;
 import tk.shanebee.hg.commands.BaseCmd;
@@ -16,6 +16,9 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
+/**
+ * Internal command listener
+ */
 @SuppressWarnings("NullableProblems")
 public class CommandListener implements CommandExecutor, TabCompleter {
 
@@ -165,6 +168,10 @@ public class CommandListener implements CommandExecutor, TabCompleter {
 					case 5:
 						if (StringUtil.startsWithIgnoreCase("<time-seconds>", args[4]))
 							matchesCreate.add("<time-seconds>");
+						break;
+					case 6:
+						if (StringUtil.startsWithIgnoreCase("<cost>", args[5]))
+							matchesCreate.add("<cost>");
 						break;
 				}
 				return matchesCreate;

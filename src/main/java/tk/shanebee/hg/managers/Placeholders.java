@@ -1,7 +1,6 @@
 package tk.shanebee.hg.managers;
 
 import me.clip.placeholderapi.expansion.PlaceholderExpansion;
-import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.Player;
 import tk.shanebee.hg.HG;
 import tk.shanebee.hg.data.Language;

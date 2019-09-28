@@ -1,0 +1,95 @@
+# Mob Manager
+# Customize the mobs that spawn in your games
+
+mobs:
+  # These mobs will only spawn during day time
+  day:
+    # Default will apply to all arenas which don't have a custom mob setup
+    default:
+      1:
+        type: SHEEP
+        chance: 2
+      2:
+        type: COW
+        chance: 3
+      3:
+        type: PIG
+        chance: 3
+      4:
+        type: CHICKEN
+      5:
+        type: PARROT
+        chance: 2
+      6:
+        type: SPIDER
+      7:
+        type: CREEPER
+
+  # These mobs will only spawn during night time
+  night:
+    # Default will apply to all arenas which don't have a custom mob setup
+    default:
+      1:
+        type: ZOMBIE
+        chance: 4
+      2:
+        type: DROWNED
+        chance: 2
+      3:
+        type: SKELETON
+        chance: 2
+      4:
+        type: STRAY
+      5:
+        type: CREEPER
+
+    # Example setup for mobs (plugin will ignore these examples)
+    # Arena name
+    example-night:
+      # Example setup for vanilla mobs
+      1:
+        # Bukkit enum for EntityType (required)
+        type: SKELETON
+        # The amount of times this mob will be added to the list to randomly pull from (optional - default = 1)
+        chance: 3
+        # The custom name that will appear above this mobs head (optional)
+        name: '&7Night Guard'
+        # The item in this mobs hand
+        hand: DIAMOND_SWORD
+        # The item in this mobs off hand
+        off-hand: DIAMOND_AXE
+        # The helmet this mob will be wearing (optional)
+        helmet: LEATHER_HELMET color:black
+        # The chestplate this mob will be wearing (optional)
+        chestplate: LEATHER_CHESTPLATE color:black
+        # The leggings this mob will be wearing (optional)
+        leggings: LEATHER_LEGGINGS color:black
+        # The boots this mob will be wearing (optional)
+        boots: LEATHER_BOOTS color:black
+        # The death message that will be sent when a player is killed by this mob (optional)
+        death: '&c<player> was killed by a deadly Night Guard'
+        # The potion effects to be applied to this mob (optional)
+        potion-effects:
+          - SPEED:1:forever
+      2:
+        type: ZOMBIE
+        chance: 10
+        name: '&3The Beast'
+        helmet: GOLDEN_HELMET
+        chestplate: LEATHER_CHESTPLATE color:green
+        leggings: LEATHER_LEGGINGS color:green
+        boots: LEATHER_BOOTS color:green
+        death: '&b<player> &cwas slaughtered by &bThe Beast'
+        potion-effects:
+          - HEALTH_BOOST:1:forever
+
+      # Example setup for MythicMobs
+      3:
+        # Preface your MythicMob with "MM:"
+        type: MM:SkeletonKing
+        # I have no clue what level is for (optional - default = 1)
+        level: 1
+        # The amount of times this mob will be added to the list to randomly pull from (optional - default = 1)
+        chance: 3
+        # The death message that will be sent when a player is killed by this mob (optional)
+        death: '&b<player> &cwas sliced in half by a &eSkeleton King'

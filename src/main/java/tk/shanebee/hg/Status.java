@@ -1,6 +1,5 @@
 package tk.shanebee.hg;
 
-
 import org.bukkit.ChatColor;
 
 /**

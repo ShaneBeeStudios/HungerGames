@@ -1,6 +1,6 @@
 package tk.shanebee.hg.commands;
 
-import tk.shanebee.hg.Game;
+import tk.shanebee.hg.game.Game;
 import tk.shanebee.hg.HG;
 import tk.shanebee.hg.Status;
 import tk.shanebee.hg.util.Util;
@@ -17,11 +17,11 @@ public class StartCmd extends BaseCmd {
 
 	@Override
 	public boolean run() {
-		Game g = HG.plugin.getManager().getGame(args[1]);
+		Game g = HG.getPlugin().getManager().getGame(args[1]);
 		if (g != null) {
 			if (g.getStatus() == Status.WAITING || g.getStatus() == Status.READY) {
 				g.startPreGame();
-				Util.scm(sender, HG.plugin.getLang().cmd_start_starting.replace("<arena>", args[1]));
+				Util.scm(sender, HG.getPlugin().getLang().cmd_start_starting.replace("<arena>", args[1]));
 			} else if (g.getStatus() == Status.COUNTDOWN) {
 				g.getStartingTask().stop();
 				g.startFreeRoam();
@@ -30,7 +30,7 @@ public class StartCmd extends BaseCmd {
 				Util.scm(sender, "&cGame has already started");
 			}
 		} else {
-			sender.sendMessage(HG.plugin.getLang().cmd_delete_noexist);
+			sender.sendMessage(HG.getPlugin().getLang().cmd_delete_noexist);
 		}
 		return true;
 	}
