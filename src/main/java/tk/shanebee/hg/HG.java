@@ -254,7 +254,7 @@ public class HG extends JavaPlugin {
 		return this.arenaconfig;
 	}
 
-	/** Get an instance of AG's leaderboards
+	/** Get an instance of HG's leaderboards
 	 * @return Leaderboard
 	 */
 	public Leaderboard getLeaderboard() {

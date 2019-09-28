@@ -36,8 +36,8 @@ public class SBDisplay {
 
 	public void setAlive() {
 		/*
-		Score score = ob.getScore(ChatColor.translateAlternateColorCodes('&', AG.getPlugin().getLang().players_alive));
-		Score arena = ob.getScore(ChatColor.translateAlternateColorCodes('&', AG.getPlugin().getLang().scoreboard_arena + g.getName()));
+		Score score = ob.getScore(ChatColor.translateAlternateColorCodes('&', HG.getPlugin().getLang().players_alive));
+		Score arena = ob.getScore(ChatColor.translateAlternateColorCodes('&', HG.getPlugin().getLang().scoreboard_arena + g.getName()));
 		
 		score.setScore(g.getPlayers().size());
 		arena.setScore(g.getPlayers().size() + 1);
