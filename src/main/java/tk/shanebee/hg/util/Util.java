@@ -166,6 +166,11 @@ public class Util {
 		return attached.getRelative(at.getAttachedFace()).equals(base);
 	}
 
+    /** Check if the server is running a specific Minecraft version or higher
+     * @param major Major version to check (Will probably always be 1)
+     * @param minor Minor version to check
+     * @return True if server is running this version of Minecraft or higher
+     */
 	@SuppressWarnings("SameParameterValue")
     public static boolean isRunningMinecraft(int major, int minor) {
         int maj = Integer.parseInt(Bukkit.getServer().getClass().getPackage().getName().split("\\.")[3].split("_")[0].replace("v", ""));
