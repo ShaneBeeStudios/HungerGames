@@ -13,11 +13,12 @@ public class NBTApi {
 	/** Set the NBT of an item
 	 * @param item The item to set
 	 * @param value The NBT string to add to the item
+     * @return ItemStack with the new NBT added
 	 */
     public ItemStack getItemWithNBT(ItemStack item, String value) {
-        NBTContainer container = NBTItem.convertItemtoNBT(item);
-        container.mergeCompound(new NBTContainer(value));
-        return NBTItem.convertNBTtoItem(container);
+        NBTItem nbtItem = new NBTItem(item);
+        nbtItem.mergeCompound(new NBTContainer(value));
+        return nbtItem.getItem();
     }
 
     /** Get the NBT from an item
@@ -25,7 +26,8 @@ public class NBTApi {
      * @return NBT string
      */
     public String getNBT(org.bukkit.inventory.ItemStack item) {
-        return NBTItem.convertItemtoNBT(item).asNBTString();
+        NBTItem nbtItem = new NBTItem(item);
+        return nbtItem.getCompound().toString();
     }
 
 }
