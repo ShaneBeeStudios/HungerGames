@@ -19,61 +19,60 @@ import org.bukkit.entity.Player;
 
 public class ChestDropTask implements Runnable {
 
-	private Game g;
-	private int timerID;
-	private List<ChestDrop> chests = new ArrayList<>();
+    private Game g;
+    private int timerID;
+    private List<ChestDrop> chests = new ArrayList<>();
 
-	public ChestDropTask(Game g) {
-		this.g = g;
-		timerID = Bukkit.getServer().getScheduler().scheduleSyncRepeatingTask(HG.getPlugin(), this, Config.randomChestInterval, Config.randomChestInterval);
-	}
+    public ChestDropTask(Game g) {
+        this.g = g;
+        timerID = Bukkit.getServer().getScheduler().scheduleSyncRepeatingTask(HG.getPlugin(), this, Config.randomChestInterval, Config.randomChestInterval);
+    }
 
-	@SuppressWarnings("deprecation")
-	public void run() {
-		Integer[] i = g.getRegion().getRandomLocs();
+    public void run() {
+        Integer[] i = g.getRegion().getRandomLocs();
 
-		int x = i[0];
-		int y = i[1];
-		int z = i[2];
-		World w = g.getRegion().getWorld();
+        int x = i[0];
+        int y = i[1];
+        int z = i[2];
+        World w = g.getRegion().getWorld();
 
-		while (w.getBlockAt(x, y, z).getType() == Material.AIR) {
-			y--;
-			
-			if (y <= 0) {
-				i = g.getRegion().getRandomLocs();
+        while (w.getBlockAt(x, y, z).getType() == Material.AIR) {
+            y--;
 
-				x = i[0];
-				y = i[1];
-				z = i[2];
-			}
-		}
+            if (y <= 0) {
+                i = g.getRegion().getRandomLocs();
 
-		y = y + 10;
+                x = i[0];
+                y = i[1];
+                z = i[2];
+            }
+        }
 
-		Location l = new Location(w, x, y, z);
+        y = y + 10;
 
-		FallingBlock fb = l.getWorld().spawnFallingBlock(l, Bukkit.getServer().createBlockData(Material.ENDER_CHEST));
+        Location l = new Location(w, x, y, z);
 
-		chests.add(new ChestDrop(fb));
+        FallingBlock fb = w.spawnFallingBlock(l, Bukkit.getServer().createBlockData(Material.STRIPPED_SPRUCE_WOOD));
 
-		for (UUID u : g.getPlayers()) {
-			Player p = Bukkit.getPlayer(u);
-			if (p != null) {
-			Util.scm(p, HG.getPlugin().getLang().chest_drop_1);
-			Util.scm(p, HG.getPlugin().getLang().chest_drop_2
-					.replace("<x>", String.valueOf(x))
-					.replace("<y>", String.valueOf(y))
-					.replace("<z>", String.valueOf(z)));
-			Util.scm(p, HG.getPlugin().getLang().chest_drop_1);
-			}
-		}
-	}
+        chests.add(new ChestDrop(fb));
 
-	public void shutdown() {
-		Bukkit.getScheduler().cancelTask(timerID);
-		for (ChestDrop cd : chests) {
-			if (cd != null) cd.remove();
-		}
-	}
+        for (UUID u : g.getPlayers()) {
+            Player p = Bukkit.getPlayer(u);
+            if (p != null) {
+                Util.scm(p, HG.getPlugin().getLang().chest_drop_1);
+                Util.scm(p, HG.getPlugin().getLang().chest_drop_2
+                        .replace("<x>", String.valueOf(x))
+                        .replace("<y>", String.valueOf(y))
+                        .replace("<z>", String.valueOf(z)));
+                Util.scm(p, HG.getPlugin().getLang().chest_drop_1);
+            }
+        }
+    }
+
+    public void shutdown() {
+        Bukkit.getScheduler().cancelTask(timerID);
+        for (ChestDrop cd : chests) {
+            if (cd != null) cd.remove();
+        }
+    }
 }
