@@ -313,17 +313,7 @@ public class GameListener implements Listener {
 						Util.scm(p, HG.getPlugin().getLang().cmd_delete_noexist);
 					} else {
 						if (p.getInventory().getItemInMainHand().getType() == Material.AIR) {
-							if (Config.economy) {
-								if (Vault.economy.getBalance(p) >= game.getCost()) {
-									Vault.economy.withdrawPlayer(p, game.getCost());
-									game.join(p);
-								} else {
-									Util.scm(p, HG.getPlugin().getLang().prefix +
-											HG.getPlugin().getLang().cmd_join_no_money.replace("<cost>", String.valueOf(game.getCost())));
-								}
-							} else {
-								game.join(p);
-							}
+							game.join(p);
 						} else {
 							Util.scm(p, HG.getPlugin().getLang().listener_sign_click_hand);
 						}

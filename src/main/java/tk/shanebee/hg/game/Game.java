@@ -489,6 +489,9 @@ public class Game {
 			player.sendMessage(ChatColor.RED + name + " is currently full!");
 			Util.scm(player, "&c" + name + " " + HG.getPlugin().getLang().game_full);
 		} else if (!players.contains(player.getUniqueId())) {
+		    if (!vaultCheck(player)) {
+		        return;
+            }
 			// Call PlayerJoinGameEvent
 			PlayerJoinGameEvent event = new PlayerJoinGameEvent(this, player);
 			Bukkit.getPluginManager().callEvent(event);
@@ -1141,6 +1144,20 @@ public class Game {
 				Bukkit.dispatchCommand(Bukkit.getConsoleSender(), command);
 		}
 	}
+
+	private boolean vaultCheck(Player player) {
+        if (Config.economy) {
+            if (Vault.economy.getBalance(player) >= cost) {
+                Vault.economy.withdrawPlayer(player, cost);
+                return true;
+            } else {
+                Util.scm(player, HG.getPlugin().getLang().prefix +
+                        HG.getPlugin().getLang().cmd_join_no_money.replace("<cost>", String.valueOf(cost)));
+                return false;
+            }
+        }
+        return true;
+    }
 
 	/**
 	 * Command types
