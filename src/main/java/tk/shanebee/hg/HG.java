@@ -72,7 +72,6 @@ public class HG extends JavaPlugin {
 		}
 		else
 			Util.log("&7Metrics have been &cdisabled");
-		String nms = Bukkit.getServer().getClass().getPackage().getName().split("\\.")[3];
 		nbtApi = new NBTApi();
 
 		//MythicMob check
