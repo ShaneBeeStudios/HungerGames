@@ -154,6 +154,7 @@ public class HG extends JavaPlugin {
 		cmds.put("setexit", new SetExitCmd());
 		cmds.put("delete", new DeleteCmd());
 		cmds.put("chestrefill", new ChestRefillCmd());
+		cmds.put("chestrefillnow", new ChestRefillNowCmd());
 		cmds.put("bordersize", new BorderSizeCmd());
 		cmds.put("bordercenter", new BorderCenterCmd());
 		cmds.put("bordertimer", new BorderTimerCmd());

@@ -125,6 +125,7 @@ public class Language {
     public String cmd_handler_nocmd;
     public String cmd_handler_playing;
     public String cmd_chest_refill;
+    public String cmd_chest_refill_now;
     public String cmd_border_size;
     public String cmd_border_center;
     public String cmd_border_timer;
@@ -320,6 +321,7 @@ public class Language {
 
         game_chest_refill = lang.getString("game-chests-refill");
         cmd_chest_refill = lang.getString("cmd-chestrefill-set");
+        cmd_chest_refill_now = lang.getString("cmd-chestrefill-now");
         cmd_border_center = lang.getString("cmd-border-center");
         cmd_border_size = lang.getString("cmd-border-size");
         cmd_border_timer = lang.getString("cmd-border-timer");

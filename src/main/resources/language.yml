@@ -180,6 +180,7 @@ cmd-handler-playing: '&cThis player is currently playing &3HungerGames!'
 
 ## Chest Refill
 cmd-chestrefill-set: '&6Chest refill for &b<arena> &6has been set to &b<sec> seconds'
+cmd-chestrefill-now: '&6Chests have now been refilled in &b<arena>'
 
 ## Border
 cmd-border-size: '&6Border size for &b<arena> &6has been set to &b<size>'
