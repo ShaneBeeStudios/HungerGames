@@ -19,14 +19,14 @@ import org.bukkit.inventory.PlayerInventory;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.metadata.FixedMetadataValue;
 import org.bukkit.util.Vector;
-import tk.shanebee.hg.*;
+import tk.shanebee.hg.HG;
+import tk.shanebee.hg.Status;
 import tk.shanebee.hg.data.Config;
 import tk.shanebee.hg.data.Leaderboard;
 import tk.shanebee.hg.data.PlayerData;
 import tk.shanebee.hg.events.ChestOpenEvent;
 import tk.shanebee.hg.game.Game;
 import tk.shanebee.hg.util.Util;
-import tk.shanebee.hg.util.Vault;
 
 import java.util.UUID;
 
@@ -337,30 +337,34 @@ public class GameListener implements Listener {
 		}
 		if (HG.getPlugin().getManager().isInRegion(b.getLocation())) {
 
+            Game g = plugin.getPlayers().get(p.getUniqueId()).getGame();
+
 			if (Config.breakblocks && plugin.getPlayers().containsKey(p.getUniqueId())) {
-
-				Game g = plugin.getPlayers().get(p.getUniqueId()).getGame();
-
 				if (g.getStatus() == Status.RUNNING || g.getStatus() == Status.BEGINNING) {
 					if (!Config.blocks.contains(b.getType().toString()) && !Config.blocks.contains("ALL")) {
 						Util.scm(p, HG.getPlugin().getLang().listener_no_edit_block);
 						event.setCancelled(true);
 					} else {
 						g.recordBlockPlace(event.getBlockReplacedState());
-						if (b.getType() == Material.CHEST || b.getType() == Material.TRAPPED_CHEST || b.getState() instanceof Shulker) {
-							g.addPlayerChest(b.getLocation());
-						}
-						if (Util.isRunningMinecraft(1, 14) && b.getType() == Material.BARREL) {
-							g.addPlayerChest(b.getLocation());
-						}
+						if (isChest(b)) {
+                            g.addPlayerChest(b.getLocation());
+                        }
 					}
 				} else {
 					Util.scm(p, HG.getPlugin().getLang().listener_not_running);
 					event.setCancelled(true);
 				}
 			} else {
-				if (p.hasPermission("hg.create") && HG.getPlugin().getManager().getGame(b.getLocation()).getStatus() != Status.RUNNING)
-					return;
+				if (p.hasPermission("hg.create")) {
+				    Status status = HG.getPlugin().getManager().getGame(b.getLocation()).getStatus();
+				    switch (status) {
+                        case BEGINNING:
+                        case RUNNING:
+                            g.recordBlockPlace(event.getBlockReplacedState());
+                        default:
+                            return;
+                    }
+                }
 				event.setCancelled(true);
 			}
 		}
@@ -375,35 +379,45 @@ public class GameListener implements Listener {
 			event.setCancelled(true);
 		}
 		if (HG.getPlugin().getManager().isInRegion(b.getLocation())) {
+            Game g = plugin.getPlayers().get(p.getUniqueId()).getGame();
 			if (Config.breakblocks && plugin.getPlayers().containsKey(p.getUniqueId())) {
-				Game g = plugin.getPlayers().get(p.getUniqueId()).getGame();
 				if (g.getStatus() == Status.RUNNING || !Config.protectCooldown) {
 					if (!Config.blocks.contains(b.getType().toString()) && !Config.blocks.contains("ALL")) {
 						Util.scm(p, HG.getPlugin().getLang().listener_no_edit_block);
 						event.setCancelled(true);
 					} else {
 						g.recordBlockBreak(b);
-						if (b.getType() == Material.CHEST || b.getType() == Material.TRAPPED_CHEST || b.getState() instanceof Shulker) {
-							g.removeGameChest(b.getLocation());
-							g.removePlayerChest(b.getLocation());
-						}
-						if (Util.isRunningMinecraft(1, 14) && b.getType() == Material.BARREL) {
-							g.removeGameChest(b.getLocation());
-							g.removePlayerChest(b.getLocation());
-						}
+						if (isChest(b)) {
+                            g.removeGameChest(b.getLocation());
+                            g.removePlayerChest(b.getLocation());
+                        }
 					}
 				} else {
 					Util.scm(p, HG.getPlugin().getLang().listener_not_running);
 					event.setCancelled(true);
 				}
 			} else {
-				if (!plugin.getPlayers().containsKey(p.getUniqueId()) && p.hasPermission("hg.create")) {
-					return;
-				}
+                if (!plugin.getPlayers().containsKey(p.getUniqueId()) && p.hasPermission("hg.create")) {
+                    Status status = HG.getPlugin().getManager().getGame(b.getLocation()).getStatus();
+                    switch (status) {
+                        case BEGINNING:
+                        case RUNNING:
+                            g.removeGameChest(b.getLocation());
+                        default:
+                            return;
+                    }
+                }
 				event.setCancelled(true);
 			}
 		}
 	}
+
+    private boolean isChest(Block block) {
+        if (block.getType() == Material.CHEST || block.getType() == Material.TRAPPED_CHEST || block.getState() instanceof Shulker) {
+            return true;
+        }
+        return Util.isRunningMinecraft(1, 14) && block.getType() == Material.BARREL;
+    }
 
 	@EventHandler
 	private void onBlockFall(BlockPhysicsEvent event) {
