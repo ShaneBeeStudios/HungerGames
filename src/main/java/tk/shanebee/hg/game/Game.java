@@ -20,6 +20,7 @@ import tk.shanebee.hg.*;
 import tk.shanebee.hg.data.Config;
 import tk.shanebee.hg.data.Leaderboard;
 import tk.shanebee.hg.data.PlayerData;
+import tk.shanebee.hg.events.GameEndEvent;
 import tk.shanebee.hg.events.GameStartEvent;
 import tk.shanebee.hg.events.PlayerJoinGameEvent;
 import tk.shanebee.hg.events.PlayerLeaveGameEvent;
@@ -862,6 +863,13 @@ public class Game {
 			resetBorder();
 		}
 		runCommands(CommandType.STOP, null);
+
+        // Call GameEndEvent
+        Collection<Player> winners = new ArrayList<>();
+        for (UUID uuid : win) {
+            winners.add(Bukkit.getPlayer(uuid));
+        }
+        Bukkit.getPluginManager().callEvent(new GameEndEvent(this, winners, death));
 	}
 
 	/** Make a player leave the game
