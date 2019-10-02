@@ -127,23 +127,21 @@ public class Config {
 		mcmmoUseSkills = config.getBoolean("mcmmo.use-skills");
 		mcmmoGainExp = config.getBoolean("mcmmo.gain-experience");
 
-		if (giveReward) {
-			try {
-				Vault.setupEconomy();
-				if (Vault.economy == null) {
-					Util.log("&cUnable to setup vault!");
-					Util.log(" - &cEconomy provider is missing.");
-					Util.log(" - Cash rewards will not be given out..");
-					giveReward = false;
-					economy = false;
-				}
-			} catch (NoClassDefFoundError e) {
-				Util.log("&cUnable to setup vault!");
-				Util.log("  - Cash rewards will not be given out..");
-				giveReward = false;
-				economy = false;
-			}
-		}
+        try {
+            Vault.setupEconomy();
+            if (Vault.economy == null) {
+                Util.log("&cUnable to setup vault!");
+                Util.log(" - &cEconomy provider is missing.");
+                Util.log(" - Cash rewards will not be given out..");
+                giveReward = false;
+                economy = false;
+            }
+        } catch (NoClassDefFoundError e) {
+            Util.log("&cUnable to setup vault!");
+            Util.log("  - Cash rewards will not be given out..");
+            giveReward = false;
+            economy = false;
+        }
 	}
 
 	private void updateConfig(Configuration config) {
