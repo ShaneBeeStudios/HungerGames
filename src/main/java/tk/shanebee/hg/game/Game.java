@@ -522,9 +522,9 @@ public class Game {
 				if (players.size() >= minPlayers && (status == Status.WAITING || status == Status.READY)) {
 					startPreGame();
 				} else if (status == Status.WAITING) {
-					msgAll(HG.getPlugin().getLang().player_joined_game.replace("<player>",
-							player.getName()) + (minPlayers - players.size() <= 0 ? "!" : ":" +
-							HG.getPlugin().getLang().players_to_start.replace("<amount>", String.valueOf((minPlayers - players.size())))));
+					Util.broadcast(HG.getPlugin().getLang().player_joined_game.replace("<player>",
+                            player.getName()) + (minPlayers - players.size() <= 0 ? "!" : ":" +
+                            HG.getPlugin().getLang().players_to_start.replace("<amount>", String.valueOf((minPlayers - players.size())))));
 				}
 				kitHelp(player);
 
