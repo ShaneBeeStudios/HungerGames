@@ -778,6 +778,7 @@ public class Game {
 		for (UUID u : players) {
 			Player p = Bukkit.getPlayer(u);
 			if (p != null) {
+                heal(p);
 				HG.getPlugin().getPlayers().get(p.getUniqueId()).restore(p);
 				HG.getPlugin().getPlayers().remove(p.getUniqueId());
 				win.add(p.getUniqueId());
@@ -874,10 +875,10 @@ public class Game {
 		if (death) {
 			if (this.getStatus() == Status.RUNNING)
 				bar.removePlayer(player);
+            heal(player);
 			HG.getPlugin().getPlayers().get(player.getUniqueId()).restore(player);
 			HG.getPlugin().getPlayers().remove(player.getUniqueId());
 			exit(player);
-			heal(player);
 			sb.restoreSB(player);
 			player.playSound(player.getLocation(), Sound.UI_TOAST_CHALLENGE_COMPLETE, 5, 1);
 			if (spectate && spectateOnDeath && !isGameOver()) {
@@ -885,10 +886,10 @@ public class Game {
 				player.sendTitle(getName(), "You are now spectating!", 10, 100, 10); //TODO this a temp test
 			}
 		} else {
+            heal(player);
 			HG.getPlugin().getPlayers().get(player.getUniqueId()).restore(player);
 			HG.getPlugin().getPlayers().remove(player.getUniqueId());
 			exit(player);
-			heal(player);
 			sb.restoreSB(player);
 		}
 		updateAfterDeath(player, death);
