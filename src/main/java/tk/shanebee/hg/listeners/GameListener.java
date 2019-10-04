@@ -432,21 +432,23 @@ public class GameListener implements Listener {
     }
 
     private void handleBucketEvent(PlayerBucketEvent event, boolean fill) {
-	    Block block = null;
+	    Block block;
 	    if (Util.methodExists(PlayerBucketEvent.class, "getBlock")) {
 	        block = event.getBlock();
+        } else {
+	        block = event.getBlockClicked().getRelative(event.getBlockFace());
         }
 	    Player player = event.getPlayer();
 	    final boolean WATER = event.getBucket() == Material.WATER_BUCKET && Config.blocks.contains("WATER");
 	    final boolean LAVA = event.getBucket() == Material.LAVA_BUCKET && Config.blocks.contains("LAVA");
 
-        if (plugin.getManager().isInRegion(event.getBlockClicked().getLocation())) {
+        if (plugin.getManager().isInRegion(block.getLocation())) {
             if (Config.breakblocks && plugin.getPlayers().containsKey(player.getUniqueId())) {
                 Game game = plugin.getPlayers().get(player.getUniqueId()).getGame();
                 if (game.getStatus() == Status.RUNNING || !Config.protectCooldown) {
-                    if (block != null && fill && (Config.blocks.contains(block.getType().toString()) || Config.blocks.contains("ALL"))) {
+                    if (fill && (Config.blocks.contains(block.getType().toString()) || Config.blocks.contains("ALL"))) {
                         game.recordBlockBreak(block);
-                    } else if (block != null && !fill && (WATER || LAVA || Config.blocks.contains("ALL"))) {
+                    } else if (!fill && (WATER || LAVA || Config.blocks.contains("ALL"))) {
                         game.recordBlockPlace(block.getState());
                     } else {
                         Util.scm(player, plugin.getLang().listener_no_edit_block);
