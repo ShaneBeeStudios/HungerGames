@@ -12,6 +12,7 @@ public class SpectateCmd extends BaseCmd {
 		cmdName = "spectate";
 		forceInGame = false;
 		argLength = 2;
+        usage = "<arena-name>";
 	}
 
 	@Override
