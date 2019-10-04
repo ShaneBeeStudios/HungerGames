@@ -421,6 +421,49 @@ public class GameListener implements Listener {
 		}
 	}
 
+	@EventHandler
+    private void onBucketEmpty(PlayerBucketEmptyEvent event) {
+	    handleBucketEvent(event, false);
+    }
+
+    @EventHandler
+    private void onBucketDrain(PlayerBucketFillEvent event) {
+	    handleBucketEvent(event, true);
+    }
+
+    private void handleBucketEvent(PlayerBucketEvent event, boolean fill) {
+	    Block block = null;
+	    if (Util.methodExists(PlayerBucketEvent.class, "getBlock")) {
+	        block = event.getBlock();
+        }
+	    Player player = event.getPlayer();
+	    final boolean WATER = event.getBucket() == Material.WATER_BUCKET && Config.blocks.contains("WATER");
+	    final boolean LAVA = event.getBucket() == Material.LAVA_BUCKET && Config.blocks.contains("LAVA");
+
+        if (plugin.getManager().isInRegion(event.getBlockClicked().getLocation())) {
+            if (Config.breakblocks && plugin.getPlayers().containsKey(player.getUniqueId())) {
+                Game game = plugin.getPlayers().get(player.getUniqueId()).getGame();
+                if (game.getStatus() == Status.RUNNING || !Config.protectCooldown) {
+                    if (block != null && fill && (Config.blocks.contains(block.getType().toString()) || Config.blocks.contains("ALL"))) {
+                        game.recordBlockBreak(block);
+                    } else if (block != null && !fill && (WATER || LAVA || Config.blocks.contains("ALL"))) {
+                        game.recordBlockPlace(block.getState());
+                    } else {
+                        Util.scm(player, plugin.getLang().listener_no_edit_block);
+                        event.setCancelled(true);
+                    }
+                } else {
+                    Util.scm(player, plugin.getLang().listener_not_running);
+                    event.setCancelled(true);
+                }
+            } else {
+                if (plugin.getPlayers().containsKey(player.getUniqueId()) || !player.hasPermission("hg.create")) {
+                    event.setCancelled(true);
+                }
+            }
+        }
+    }
+
     private boolean isChest(Block block) {
         if (block.getType() == Material.CHEST || block.getType() == Material.TRAPPED_CHEST || block.getState() instanceof Shulker) {
             return true;
