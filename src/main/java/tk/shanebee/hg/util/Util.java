@@ -213,4 +213,19 @@ public class Util {
 	    return isWallSign(block.getType());
     }
 
+    /** Check if a method exists
+     * @param c Class that contains this method
+     * @param methodName Method to check
+     * @param parameterTypes Parameter types if the method contains any
+     * @return True if this method exists
+     */
+    public static boolean methodExists(final Class<?> c, final String methodName, final Class<?>... parameterTypes) {
+        try {
+            c.getDeclaredMethod(methodName, parameterTypes);
+            return true;
+        } catch (final NoSuchMethodException | SecurityException e) {
+            return false;
+        }
+    }
+
 }
