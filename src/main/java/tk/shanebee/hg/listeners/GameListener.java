@@ -344,9 +344,8 @@ public class GameListener implements Listener {
 		}
 		if (HG.getPlugin().getManager().isInRegion(b.getLocation())) {
 
-            Game g = plugin.getPlayers().get(p.getUniqueId()).getGame();
-
 			if (Config.breakblocks && plugin.getPlayers().containsKey(p.getUniqueId())) {
+                Game g = plugin.getPlayers().get(p.getUniqueId()).getGame();
 				if (g.getStatus() == Status.RUNNING || g.getStatus() == Status.BEGINNING) {
 					if (!Config.blocks.contains(b.getType().toString()) && !Config.blocks.contains("ALL")) {
 						Util.scm(p, HG.getPlugin().getLang().listener_no_edit_block);
@@ -363,7 +362,8 @@ public class GameListener implements Listener {
 				}
 			} else {
 				if (p.hasPermission("hg.create")) {
-				    Status status = HG.getPlugin().getManager().getGame(b.getLocation()).getStatus();
+				    Game g = plugin.getManager().getGame(b.getLocation());
+				    Status status = g.getStatus();
 				    switch (status) {
                         case BEGINNING:
                         case RUNNING:
@@ -386,8 +386,9 @@ public class GameListener implements Listener {
 			event.setCancelled(true);
 		}
 		if (HG.getPlugin().getManager().isInRegion(b.getLocation())) {
-            Game g = plugin.getPlayers().get(p.getUniqueId()).getGame();
+
 			if (Config.breakblocks && plugin.getPlayers().containsKey(p.getUniqueId())) {
+                Game g = plugin.getPlayers().get(p.getUniqueId()).getGame();
 				if (g.getStatus() == Status.RUNNING || !Config.protectCooldown) {
 					if (!Config.blocks.contains(b.getType().toString()) && !Config.blocks.contains("ALL")) {
 						Util.scm(p, HG.getPlugin().getLang().listener_no_edit_block);
@@ -405,7 +406,8 @@ public class GameListener implements Listener {
 				}
 			} else {
                 if (!plugin.getPlayers().containsKey(p.getUniqueId()) && p.hasPermission("hg.create")) {
-                    Status status = HG.getPlugin().getManager().getGame(b.getLocation()).getStatus();
+                    Game g = HG.getPlugin().getManager().getGame(b.getLocation());
+                    Status status = g.getStatus();
                     switch (status) {
                         case BEGINNING:
                         case RUNNING:
