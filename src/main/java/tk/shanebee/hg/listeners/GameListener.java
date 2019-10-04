@@ -26,6 +26,7 @@ import tk.shanebee.hg.data.Leaderboard;
 import tk.shanebee.hg.data.PlayerData;
 import tk.shanebee.hg.events.ChestOpenEvent;
 import tk.shanebee.hg.game.Game;
+import tk.shanebee.hg.managers.KillManager;
 import tk.shanebee.hg.util.Util;
 
 import java.util.UUID;
@@ -39,6 +40,7 @@ public class GameListener implements Listener {
 	private String tsn = ChatColor.GOLD + "TrackingStick " + ChatColor.GREEN + "Uses: ";
 	private ItemStack trackingStick;
 	//private HashMap<Player, Entity> killerMap = new HashMap<>(); ON HOLD for now
+    private KillManager killManager;
 
 	public GameListener(HG plugin) {
 		this.plugin = plugin;
@@ -48,6 +50,7 @@ public class GameListener implements Listener {
 		im.setDisplayName(tsn + Config.trackingstickuses);
 		it.setItemMeta(im);
 		trackingStick = it;
+        killManager = plugin.getKillManager();
 	}
 
 	private void dropInv(Player p) {
@@ -140,13 +143,17 @@ public class GameListener implements Listener {
 			if (damager instanceof Player) {
 				game.addKill(((Player) damager));
 				plugin.getLeaderboard().addStat(((Player) damager), Leaderboard.Stats.KILLS);
-				game.msgAll(HG.getPlugin().getLang().death_fallen + " &d" + plugin.getKillManager().getKillString(player.getName(), damager));
+				game.msgAll(HG.getPlugin().getLang().death_fallen + " &d" + killManager.getKillString(player.getName(), damager));
 			} else if (cause == EntityDamageEvent.DamageCause.ENTITY_ATTACK) {
-				game.msgAll(HG.getPlugin().getLang().death_fallen + " &d" + plugin.getKillManager().getKillString(player.getName(), damager));
+				game.msgAll(HG.getPlugin().getLang().death_fallen + " &d" + killManager.getKillString(player.getName(), damager));
 			} else if (cause == EntityDamageEvent.DamageCause.PROJECTILE) {
-				game.msgAll(HG.getPlugin().getLang().death_fallen + " &d" + plugin.getKillManager().getKillString(player.getName(), damager));
+				game.msgAll(HG.getPlugin().getLang().death_fallen + " &d" + killManager.getKillString(player.getName(), damager));
+				if (killManager.isShotByPlayer(damager) && killManager.getShooter(damager) != player) {
+				    game.addKill(killManager.getShooter(damager));
+                    plugin.getLeaderboard().addStat(killManager.getShooter(damager), Leaderboard.Stats.KILLS);
+                }
 			} else {
-				game.msgAll(HG.getPlugin().getLang().death_fallen + " &d" + plugin.getKillManager().getDeathString(cause, player.getName()));
+				game.msgAll(HG.getPlugin().getLang().death_fallen + " &d" + killManager.getDeathString(cause, player.getName()));
 			}
 			plugin.getLeaderboard().addStat(player, Leaderboard.Stats.DEATHS);
 			plugin.getLeaderboard().addStat(player, Leaderboard.Stats.GAMES);
@@ -555,6 +562,9 @@ public class GameListener implements Listener {
 			event.getProjectile().setMetadata("death-message",
 					new FixedMetadataValue(plugin, event.getEntity().getMetadata("death-message").get(0).asString()));
 		}
+		if (event.getEntity() instanceof Player && plugin.getPlayers().containsKey(event.getEntity().getUniqueId())) {
+		    event.getProjectile().setMetadata("shooter", new FixedMetadataValue(plugin, event.getEntity().getName()));
+        }
 	}
 
 	@EventHandler
