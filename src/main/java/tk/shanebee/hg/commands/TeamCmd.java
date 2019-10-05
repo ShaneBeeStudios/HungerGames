@@ -127,7 +127,7 @@ public class TeamCmd extends BaseCmd {
             }
 		} else {
 			Util.scm(player, "&c" + args[1] + " is not a valid command!");
-			Util.scm(player, "&cValid arguments: &6invite&c, &6accept ");
+            Util.scm(sender, sendHelpLine());
 		}
 		return true;
 	}
