@@ -2,8 +2,10 @@ package tk.shanebee.hg;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 import java.util.UUID;
 
+import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import tk.shanebee.hg.util.Util;
 
@@ -21,7 +23,7 @@ public class Team {
 	
 	public void invite(Player p) {
 		Util.scm(p, HG.plugin.getLang().team_invite_1);
-		Util.scm(p, HG.plugin.getLang().team_invite_2.replace("<inviter>", leader.toString()));
+		Util.scm(p, HG.plugin.getLang().team_invite_2.replace("<inviter>", Objects.requireNonNull(Bukkit.getPlayer(leader)).getName()));
 		Util.scm(p, HG.plugin.getLang().team_invite_3);
 		Util.scm(p, HG.plugin.getLang().team_invite_4);
 		pending.add(p.getUniqueId());
