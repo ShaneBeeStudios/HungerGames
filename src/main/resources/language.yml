@@ -57,7 +57,7 @@ scoreboard-arena: "&a&lArena: &b"
 
 #  TEAMS
 team-invite-1: '&6*&b&m                                                                             &6*'
-team-invite-2: '| &f<inviter> &3just invited you to a &fTeam&3!'
+team-invite-2: '| &f<inviter> &3Just invited you to a &fTeam&3!'
 team-invite-3: '| &3Type &f/hg team accept &3To join!'
 team-invite-4: '&6*&b&m                                                                             &6*'
 joined-team: '&3You successfully joined this team!'
