@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
+import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import tk.shanebee.hg.HG;
 import tk.shanebee.hg.util.Util;
@@ -27,8 +28,10 @@ public class Team {
      * @param player Player to invite
      */
 	public void invite(Player player) {
+	    Player p = Bukkit.getPlayer(leader);
+	    assert p != null;
 		Util.scm(player, HG.getPlugin().getLang().team_invite_1);
-		Util.scm(player, HG.getPlugin().getLang().team_invite_2.replace("<inviter>", leader.toString()));
+		Util.scm(player, HG.getPlugin().getLang().team_invite_2.replace("<inviter>", p.getName()));
 		Util.scm(player, HG.getPlugin().getLang().team_invite_3);
 		Util.scm(player, HG.getPlugin().getLang().team_invite_4);
 		pending.add(player.getUniqueId());
