@@ -122,6 +122,7 @@ public class Language {
     public String cmd_team_no_team;
     public String cmd_team_not_on_team;
     public String cmd_team_tp;
+    public String cmd_team_self;
     public String cmd_toggle_locked;
     public String cmd_toggle_unlocked;
     public String cmd_handler_nokit;
@@ -308,6 +309,7 @@ public class Language {
         cmd_team_no_team = lang.getString("cmd-team-no-team");
         cmd_team_not_on_team = lang.getString("cmd-team-not-on-team");
         cmd_team_tp = lang.getString("cmd-team-tp");
+        cmd_team_self = lang.getString("cmd-team-self");
         cmd_toggle_unlocked = lang.getString("cmd-toggle-unlocked");
         cmd_toggle_locked = lang.getString("cmd-toggle-locked");
         cmd_handler_nokit = lang.getString("cmd-handler-nokit");

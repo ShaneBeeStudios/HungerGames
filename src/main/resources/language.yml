@@ -171,6 +171,7 @@ cmd-team-joined: '&b<player> &6Just joined your team!'
 cmd-team-no-team: '&cYou are not on a team!'
 cmd-team-not-on-team: '&b<player> &cis not on your team!'
 cmd-team-tp: '&6Teleporting to &b<player>'
+cmd-team-self: '&cYou can not invite yourself to your own team.'
 
 ## Toggle
 cmd-toggle-unlocked: '&b<arena>&6 is now &aUNLOCKED!'

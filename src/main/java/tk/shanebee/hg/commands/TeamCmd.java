@@ -37,6 +37,10 @@ public class TeamCmd extends BaseCmd {
 					Util.scm(player, HG.getPlugin().getLang().cmd_team_not_avail.replace("<player>", args[2]));
 					return true;
 				}
+				if (p == player) {
+				    Util.scm(player, lang.cmd_team_self);
+				    return true;
+                }
 
 				if (pd.getTeam() != null) {
 
