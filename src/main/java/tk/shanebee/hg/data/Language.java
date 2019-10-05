@@ -119,6 +119,9 @@ public class Language {
     public String cmd_team_wrong;
     public String cmd_team_no_pend;
     public String cmd_team_joined;
+    public String cmd_team_no_team;
+    public String cmd_team_not_on_team;
+    public String cmd_team_tp;
     public String cmd_toggle_locked;
     public String cmd_toggle_unlocked;
     public String cmd_handler_nokit;
@@ -302,6 +305,9 @@ public class Language {
         cmd_team_wrong = lang.getString("cmd-team-wrong");
         cmd_team_no_pend = lang.getString("cmd-team-no-pending");
         cmd_team_joined = lang.getString("cmd-team-joined");
+        cmd_team_no_team = lang.getString("cmd-team-no-team");
+        cmd_team_not_on_team = lang.getString("cmd-team-not-on-team");
+        cmd_team_tp = lang.getString("cmd-team-tp");
         cmd_toggle_unlocked = lang.getString("cmd-toggle-unlocked");
         cmd_toggle_locked = lang.getString("cmd-toggle-locked");
         cmd_handler_nokit = lang.getString("cmd-handler-nokit");

@@ -19,7 +19,7 @@ public class TeamCmd extends BaseCmd {
 		cmdName = "team";
 		forceInGame = true;
 		argLength = 2;
-		usage = "<invite/accept>";
+		usage = "<invite/accept/tp>";
 	}
 
 	@Override
@@ -78,28 +78,49 @@ public class TeamCmd extends BaseCmd {
 			}
 		} else if (args[1].equalsIgnoreCase("accept")) {
 
-			Team t = HG.getPlugin().getPlayers().get(player.getUniqueId()).getTeam();
+            Team t = HG.getPlugin().getPlayers().get(player.getUniqueId()).getTeam();
 
-			if (t == null) {
-				Util.scm(player, HG.getPlugin().getLang().cmd_team_no_pend);
-				return true;
-			}
-			if (t.getPenders().contains(player.getUniqueId())) {
+            if (t == null) {
+                Util.scm(player, HG.getPlugin().getLang().cmd_team_no_pend);
+                return true;
+            }
+            if (t.getPenders().contains(player.getUniqueId())) {
 
-				t.acceptInvite(player);
-				for (UUID u : t.getPlayers()) {
-					Player p = Bukkit.getPlayer(u);
+                t.acceptInvite(player);
+                for (UUID u : t.getPlayers()) {
+                    Player p = Bukkit.getPlayer(u);
 
-					if (p != null) {
-						Util.scm(p, "&6*&b&m                                                                             &6*");
-						Util.scm(p, HG.getPlugin().getLang().cmd_team_joined.replace("<player>", player.getName()));
-						Util.scm(p, "&6*&b&m                                                                             &6*");
-					}
-					return true;
-				}
+                    if (p != null) {
+                        Util.scm(p, "&6*&b&m                                                                             &6*");
+                        Util.scm(p, HG.getPlugin().getLang().cmd_team_joined.replace("<player>", player.getName()));
+                        Util.scm(p, "&6*&b&m                                                                             &6*");
+                    }
+                    return true;
+                }
 
-				return true;
-			}
+                return true;
+            }
+        } else if (args[1].equalsIgnoreCase("tp")) {
+		    if (!player.hasPermission("hg.team.tp")) {
+		        Util.scm(player, lang.cmd_base_noperm.replace("<command>", "team tp"));
+		        return true;
+            }
+		    Team team = plugin.getPlayers().get(player.getUniqueId()).getTeam();
+		    if (team == null) {
+		        Util.scm(player, lang.cmd_team_no_team);
+                return true;
+            }
+		    if (args.length >= 3) {
+		        Player tpTo = Bukkit.getPlayer(args[2]);
+		        if (tpTo != null && team.isOnTeam(tpTo.getUniqueId())) {
+		            player.teleport(tpTo);
+		            Util.scm(player, lang.cmd_team_tp.replace("<player>", tpTo.getName()));
+                } else {
+		            Util.scm(player, lang.cmd_team_not_on_team.replace("<player>", args[2]));
+                }
+		    } else {
+		        Util.scm(player, "&cWrong usage: " + sendHelpLine().replace("invite/accept/", "") + " <&rplayer&7>");
+            }
 		} else {
 			Util.scm(player, "&c" + args[1] + " is not a valid command!");
 			Util.scm(player, "&cValid arguments: &6invite&c, &6accept ");

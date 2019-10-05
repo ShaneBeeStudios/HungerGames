@@ -1,5 +1,7 @@
 package tk.shanebee.hg.listeners;
 
+import com.google.common.collect.ImmutableList;
+import org.bukkit.Bukkit;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
@@ -7,14 +9,14 @@ import org.bukkit.command.TabCompleter;
 import org.bukkit.entity.Player;
 import org.bukkit.util.StringUtil;
 import tk.shanebee.hg.data.Config;
+import tk.shanebee.hg.data.PlayerData;
 import tk.shanebee.hg.game.Game;
 import tk.shanebee.hg.HG;
+import tk.shanebee.hg.game.Team;
 import tk.shanebee.hg.util.Util;
 import tk.shanebee.hg.commands.BaseCmd;
 
-import java.util.ArrayList;
-import java.util.Collections;
-import java.util.List;
+import java.util.*;
 
 /**
  * Internal command listener
@@ -51,9 +53,14 @@ public class CommandListener implements CommandExecutor, TabCompleter {
 			}
 			return matches;
 		} else if (args.length >= 2) {
-			if (args[0].equalsIgnoreCase("team")) {
+			if (args[0].equalsIgnoreCase("team") && sender instanceof Player) {
 				if (args.length == 2) {
-					String[] listTeam = {"invite", "accept"};
+					List<String> listTeam = new ArrayList<>();
+					listTeam.add("invite");
+					listTeam.add("accept");
+					if (sender.hasPermission("hg.team.tp")) {
+					    listTeam.add("tp");
+					}
 					ArrayList<String> matchesTeam = new ArrayList<>();
 					for (String name : listTeam) {
 						if (StringUtil.startsWithIgnoreCase(name, args[1])) {
@@ -62,6 +69,27 @@ public class CommandListener implements CommandExecutor, TabCompleter {
 					}
 					return matchesTeam;
 				}
+				if (args.length == 3 && args[1].equalsIgnoreCase("tp")) {
+                    PlayerData pd = plugin.getPlayers().get((((Player) sender).getUniqueId()));
+                    if (pd == null) return ImmutableList.of();
+                    Team team = pd.getTeam();
+                    if (team != null) {
+                        List<String> teamMembers = new ArrayList<>();
+                        for (UUID member : team.getPlayers()) {
+                            Player player = Bukkit.getPlayer(member);
+                            if (player != null) {
+                                teamMembers.add(player.getName());
+                            }
+                        }
+                        ArrayList<String> matchesTeam = new ArrayList<>();
+                        for (String name : teamMembers) {
+                            if (StringUtil.startsWithIgnoreCase(name, args[2])) {
+                                matchesTeam.add(name);
+                            }
+                        }
+                        return matchesTeam;
+                    }
+                }
 				return null;
 			} else if (args[0].equalsIgnoreCase("delete") ||
 					args[0].equalsIgnoreCase("debug") ||

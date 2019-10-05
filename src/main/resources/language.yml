@@ -168,6 +168,9 @@ cmd-team-invited: '&b<player> &6Has been invited!'
 cmd-team-wrong: '&cWrong Usage: &6/hg team invite &b<name>'
 cmd-team-no-pending: '&cYou have no pending invites...'
 cmd-team-joined: '&b<player> &6Just joined your team!'
+cmd-team-no-team: '&cYou are not on a team!'
+cmd-team-not-on-team: '&b<player> &cis not on your team!'
+cmd-team-tp: '&6Teleporting to &b<player>'
 
 ## Toggle
 cmd-toggle-unlocked: '&b<arena>&6 is now &aUNLOCKED!'
