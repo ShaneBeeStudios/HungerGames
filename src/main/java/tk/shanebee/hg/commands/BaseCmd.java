@@ -3,9 +3,13 @@ package tk.shanebee.hg.commands;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import tk.shanebee.hg.HG;
+import tk.shanebee.hg.data.Language;
 import tk.shanebee.hg.util.Util;
 
 public abstract class BaseCmd {
+
+    HG plugin;
+    Language lang;
 
 	public CommandSender sender;
 	public String[] args;
@@ -20,6 +24,8 @@ public abstract class BaseCmd {
 	public boolean processCmd(HG p, CommandSender s, String[] arg) {
 		sender = s;
 		args = arg;
+		this.plugin = p;
+		this.lang = p.getLang();
 
 		if (forcePlayer) {
 			if (!(s instanceof Player)) return false;
