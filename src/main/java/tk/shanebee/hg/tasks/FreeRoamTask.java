@@ -5,7 +5,7 @@ import java.util.UUID;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 
-import tk.shanebee.hg.Game;
+import tk.shanebee.hg.game.Game;
 import tk.shanebee.hg.HG;
 import tk.shanebee.hg.util.Util;
 
@@ -19,19 +19,19 @@ public class FreeRoamTask implements Runnable {
 		for (UUID u : g.getPlayers()) {
 			Player p = Bukkit.getPlayer(u);
 			if (p != null) {
-				Util.scm(p,HG.plugin.getLang().roam_game_started);
-				Util.scm(p,HG.plugin.getLang().roam_time.replace("<roam>", String.valueOf(g.getRoamTime())));
+				Util.scm(p, HG.getPlugin().getLang().roam_game_started);
+				Util.scm(p, HG.getPlugin().getLang().roam_time.replace("<roam>", String.valueOf(g.getRoamTime())));
 				p.setHealth(20);
 				p.setFoodLevel(20);
 				g.unFreeze(p);
 			}
 		}
-		this.id = Bukkit.getScheduler().scheduleSyncDelayedTask(HG.plugin, this, g.getRoamTime() * 20L);
+		this.id = Bukkit.getScheduler().scheduleSyncDelayedTask(HG.getPlugin(), this, g.getRoamTime() * 20L);
 	}
 
 	@Override
 	public void run() {
-		game.msgAll(HG.plugin.getLang().roam_finished);
+		game.msgAll(HG.getPlugin().getLang().roam_finished);
 		game.startGame();
 	}
 

@@ -1,4 +1,4 @@
-package tk.shanebee.hg;
+package tk.shanebee.hg.data;
 
 import org.bukkit.Location;
 

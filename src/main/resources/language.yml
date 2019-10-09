@@ -30,7 +30,6 @@ game-bossbar: '&6&lGame Ends In: &b&l<min> &7min &b&l<sec> &7sec'
 players-to-start: '&b&l<amount> &6players to start!'
 arena-not-ready: '&cThis arena is not ready! Please wait before joining!'
 arena-spectate: '&6You can spectate this arena by running &3/hg spectate <arena>'
-arena-tp-no-perm: '&cYou do not have permission to teleport into this arena!'
 game-full: '&cis currently full!'
 
 #  <arena> will be replaced with name of arena the player won in
@@ -57,7 +56,7 @@ scoreboard-arena: "&a&lArena: &b"
 
 #  TEAMS
 team-invite-1: '&6*&b&m                                                                             &6*'
-team-invite-2: '| &f<inviter> &3Just invited you to a &fTeam&3!'
+team-invite-2: '| &f<inviter> &3just invited you to a &fTeam&3!'
 team-invite-3: '| &3Type &f/hg team accept &3To join!'
 team-invite-4: '&6*&b&m                                                                             &6*'
 joined-team: '&3You successfully joined this team!'
@@ -126,12 +125,14 @@ cmd-delete-noexist: '&cThis arena does not exist!'
 
 ## Join
 cmd-join-in-game: '&cYou are already in a game!'
+cmd-join-no-money: '&cYou do not have enough money to join this game. Cost: &b$<cost>'
 
 ## Kit
 cmd-kit-no-change: '&cYou can not change your kit while the game is running!'
 
 ## Leave
 cmd-leave-left: '&6You left &b&l<arena>&c!'
+cmd-leave-refund: '&6You got a refund of &b$<cost> &6for leaving the game before it started'
 
 ## Reload
 cmd-reload-attempt: '&a&lAttempting to reload HungerGames!'
@@ -148,6 +149,7 @@ cmd-exit-set: '&6Global Exit Spawn Set:'
 cmd-lobbywall-set: '&aThe lobbyWallSign has been set!'
 cmd-lobbywall-notcorrect: '&cThese signs are not in correct format!'
 cmd-lobbywall-format: '&cformat: &6[sign] &c[sign] [sign]'
+lobby-sign-cost: 'Cost $<cost>'
 
 ## Start
 cmd-start-starting: '&b<arena>&6 is now starting!'
@@ -166,6 +168,10 @@ cmd-team-invited: '&b<player> &6Has been invited!'
 cmd-team-wrong: '&cWrong Usage: &6/hg team invite &b<name>'
 cmd-team-no-pending: '&cYou have no pending invites...'
 cmd-team-joined: '&b<player> &6Just joined your team!'
+cmd-team-no-team: '&cYou are not on a team!'
+cmd-team-not-on-team: '&b<player> &cis not on your team!'
+cmd-team-tp: '&6Teleporting to &b<player>'
+cmd-team-self: '&cYou can not invite yourself to your own team.'
 
 ## Toggle
 cmd-toggle-unlocked: '&b<arena>&6 is now &aUNLOCKED!'
@@ -178,6 +184,7 @@ cmd-handler-playing: '&cThis player is currently playing &3HungerGames!'
 
 ## Chest Refill
 cmd-chestrefill-set: '&6Chest refill for &b<arena> &6has been set to &b<sec> seconds'
+cmd-chestrefill-now: '&6Chests have now been refilled in &b<arena>'
 
 ## Border
 cmd-border-size: '&6Border size for &b<arena> &6has been set to &b<size>'

@@ -1,9 +1,9 @@
 package tk.shanebee.hg.listeners;
 
 import org.bukkit.inventory.EquipmentSlot;
-import tk.shanebee.hg.Game;
+import tk.shanebee.hg.game.Game;
 import tk.shanebee.hg.HG;
-import tk.shanebee.hg.PlayerSession;
+import tk.shanebee.hg.data.PlayerSession;
 import tk.shanebee.hg.util.Util;
 
 import org.bukkit.Location;
@@ -37,7 +37,7 @@ public class WandListener implements Listener {
 			if (event.getHand() == EquipmentSlot.OFF_HAND) return;
 			Location l = event.getClickedBlock().getLocation();
 			event.setCancelled(true);
-			for (Game game : HG.plugin.getGames()) {
+			for (Game game : HG.getPlugin().getGames()) {
 				if (game.getRegion().isInRegion(l)) {
 					Util.scm(player, "&cThis location is already within an arena");
 					return;
@@ -54,7 +54,7 @@ public class WandListener implements Listener {
 			if (!plugin.getPlayerSessions().containsKey(player.getUniqueId())) return;
 			Location l = event.getClickedBlock().getLocation();
 			event.setCancelled(true);
-			for (Game game : HG.plugin.getGames()) {
+			for (Game game : HG.getPlugin().getGames()) {
 				if (game.getRegion().isInRegion(l)) {
 					Util.scm(player, "&cThis location is already within an arena");
 					return;

@@ -1,39 +1,41 @@
-package tk.shanebee.hg.mobhandler;
-
-import java.util.Random;
-import java.util.UUID;
-
-import tk.shanebee.hg.Game;
-import tk.shanebee.hg.HG;
+package tk.shanebee.hg.tasks;
 
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.World;
-import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
+import tk.shanebee.hg.game.Game;
+import tk.shanebee.hg.HG;
+import tk.shanebee.hg.data.MobEntry;
+import tk.shanebee.hg.managers.MobManager;
 
-public class Spawner implements Runnable {
+import java.util.Random;
+import java.util.UUID;
 
-	private Game g;
+public class SpawnerTask implements Runnable {
+
+	private Game game;
 	private int id;
 	private Random rg = new Random();
+	private MobManager mobManager;
 
-	public Spawner(Game game, int i) {
-		this.g = game;
-		this.id = Bukkit.getScheduler().scheduleSyncRepeatingTask(HG.plugin, this, i, i);
+	public SpawnerTask(Game game, int i) {
+		this.game = game;
+		this.id = Bukkit.getScheduler().scheduleSyncRepeatingTask(HG.getPlugin(), this, i, i);
+		this.mobManager = game.getMobManager();
 	}
 
 	@Override
 	public void run() {
-		for (UUID u : g.getPlayers()) {
+		for (UUID u : game.getPlayers()) {
 			Player p = Bukkit.getPlayer(u);
 			if (p != null) {
-				Location l = p.getLocation();
-				World w = l.getWorld();
-				int x = l.getBlockX();
-				int z = l.getBlockZ();
-				int y = l.getBlockY();
+				Location location = p.getLocation();
+				World world = location.getWorld();
+				int x = location.getBlockX();
+				int z = location.getBlockZ();
+				int y = location.getBlockY();
 
 				int ran1 = getRandomNumber();
 				int ran2 = getRandomNumber();
@@ -41,19 +43,28 @@ public class Spawner implements Runnable {
 				x = x + ran1;
 				z = z + ran2;
 
-				l = getSafeLoc(w, x, y, z);
+				location = getSafeLoc(world, x, y, z);
 
-				if (l != null && g.isInRegion(l))
-					w.spawnEntity(l, pickRandomMob(!isDay(w), rg.nextInt(10)));
+				if (location != null && game.isInRegion(location)) {
+					MobEntry mobEntry;
+					assert world != null;
+					if (isDay(world)) {
+						mobEntry = mobManager.getDayMobs().get(rg.nextInt(mobManager.getDayMobs().size()));
+					} else {
+						mobEntry = mobManager.getNightMobs().get(rg.nextInt(mobManager.getNightMobs().size()));
+					}
+					mobEntry.spawn(location);
+					//w.spawnEntity(l, pickRandomMob(!isDay(w), rg.nextInt(10)));
+				}
 			}
 		}
 	}
 
-	public boolean isDay(World w) {
+	private boolean isDay(World w) {
 		long time = w.getTime();
 		return time < 12300 || time > 23850;
 	}
-
+	/*  NEW MOB SPAWNING ENGINE IN PLAY - leaving this here for a while, just in case
 	private EntityType pickRandomMob(boolean isNight, int x) {
 		if (isNight) {
 			if (x < 3)
@@ -83,6 +94,8 @@ public class Spawner implements Runnable {
 			return EntityType.CREEPER;
 		}
 	}
+
+	 */
 
 	private int getRandomNumber() {
 		int r = rg.nextInt(25) - rg.nextInt(25);

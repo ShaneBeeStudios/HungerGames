@@ -1,7 +1,6 @@
 package tk.shanebee.hg.managers;
 
 import me.clip.placeholderapi.expansion.PlaceholderExpansion;
-import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.Player;
 import tk.shanebee.hg.HG;
 import tk.shanebee.hg.data.Language;
@@ -75,20 +74,33 @@ public class Placeholders extends PlaceholderExpansion {
         if (identifier.equalsIgnoreCase("lb_player")) {
             return String.valueOf(leaderboard.getStat(player, Leaderboard.Stats.WINS));
         }
-        String[] ind = identifier.split("_");
-        switch (ind[1]) {
-            case "wins":
-            case "kills":
-            case "deaths":
-            case "games":
-                if (ind[2].equalsIgnoreCase("p"))
-                    return getStatPlayers(identifier);
-                else if (ind[2].equalsIgnoreCase("s"))
-                    return getStatScores(identifier);
-                else if (ind[2].equalsIgnoreCase("c"))
-                    return getStatPlayers(identifier) + " : " + getStatScores(identifier);
-                else if (ind[2].equalsIgnoreCase("player"))
-                    return getStatsPlayer(identifier, player);
+        String[] id = identifier.split("_");
+        switch (id[0]) {
+            case "lb":
+                switch (id[1]) {
+                    case "wins":
+                    case "kills":
+                    case "deaths":
+                    case "games":
+                        if (id[2].equalsIgnoreCase("p"))
+                            return getStatPlayers(identifier);
+                        else if (id[2].equalsIgnoreCase("s"))
+                            return getStatScores(identifier);
+                        else if (id[2].equalsIgnoreCase("c"))
+                            return getStatPlayers(identifier) + " : " + getStatScores(identifier);
+                        else if (id[2].equalsIgnoreCase("player"))
+                            return getStatsPlayer(identifier, player);
+                }
+            case "status":
+                return HG.getPlugin().getManager().getGame(id[1]).getStatus().getName();
+            case "cost":
+                return String.valueOf(HG.getPlugin().getManager().getGame(id[1]).getCost());
+            case "playerscurrent":
+                return String.valueOf(HG.getPlugin().getManager().getGame(id[1]).getPlayers().size());
+            case "playersmax":
+                return String.valueOf(HG.getPlugin().getManager().getGame(id[1]).getMaxPlayers());
+            case "playersmin":
+                return String.valueOf(HG.getPlugin().getManager().getGame(id[1]).getMinPlayers());
         }
         return null;
     }
@@ -102,7 +114,7 @@ public class Placeholders extends PlaceholderExpansion {
     private String getStatPlayers(String identifier) {
         String[] ind = identifier.split("_");
         Leaderboard.Stats stat = Leaderboard.Stats.valueOf(ind[1].toUpperCase());
-        int leader = (Integer.valueOf(ind[3]));
+        int leader = (Integer.parseInt(ind[3]));
         if (leaderboard.getStatsPlayers(stat).size() >= leader) {
             return leaderboard.getStatsPlayers(stat).get(leader - 1);
         } else {
@@ -113,7 +125,7 @@ public class Placeholders extends PlaceholderExpansion {
     private String getStatScores(String identifier) {
         String[] ind = identifier.split("_");
         Leaderboard.Stats stat = Leaderboard.Stats.valueOf(ind[1].toUpperCase());
-        int leader = (Integer.valueOf(ind[3]));
+        int leader = (Integer.parseInt(ind[3]));
         if (leaderboard.getStatsScores(stat).size() >= leader) {
             return leaderboard.getStatsScores(stat).get(leader - 1);
         } else {

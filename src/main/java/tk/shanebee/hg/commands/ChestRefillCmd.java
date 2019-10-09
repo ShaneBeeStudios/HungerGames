@@ -1,6 +1,6 @@
 package tk.shanebee.hg.commands;
 
-import tk.shanebee.hg.Game;
+import tk.shanebee.hg.game.Game;
 import tk.shanebee.hg.HG;
 import tk.shanebee.hg.util.Util;
 
@@ -16,7 +16,7 @@ public class ChestRefillCmd extends BaseCmd {
 
 	@Override
 	public boolean run() {
-		Game game = HG.plugin.getManager().getGame(args[1]);
+		Game game = HG.getPlugin().getManager().getGame(args[1]);
 		if (game != null) {
 			String name = game.getName();
 			int time = Integer.valueOf(args[2]);
@@ -24,12 +24,12 @@ public class ChestRefillCmd extends BaseCmd {
 				Util.scm(player, "&c<time> must be in increments of 30");
 				return true;
 			}
-			HG.plugin.getArenaConfig().getCustomConfig().set("arenas." + name + ".chest-refill", time);
-			HG.plugin.getArenaConfig().saveCustomConfig();
+			HG.getPlugin().getArenaConfig().getCustomConfig().set("arenas." + name + ".chest-refill", time);
+			HG.getPlugin().getArenaConfig().saveCustomConfig();
 			game.setChestRefillTime(time);
-			Util.scm(player, HG.plugin.getLang().cmd_chest_refill.replace("<arena>", name).replace("<sec>", String.valueOf(time)));
+			Util.scm(player, HG.getPlugin().getLang().cmd_chest_refill.replace("<arena>", name).replace("<sec>", String.valueOf(time)));
 		} else {
-			Util.scm(player, HG.plugin.getLang().cmd_delete_noexist);
+			Util.scm(player, HG.getPlugin().getLang().cmd_delete_noexist);
 		}
 		return true;
 	}

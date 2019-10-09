@@ -2,7 +2,7 @@ package tk.shanebee.hg.commands;
 
 import java.util.List;
 
-import tk.shanebee.hg.Game;
+import tk.shanebee.hg.game.Game;
 import tk.shanebee.hg.HG;
 import tk.shanebee.hg.util.Util;
 
@@ -20,24 +20,24 @@ public class AddSpawnCmd extends BaseCmd {
 
 	@Override
 	public boolean run() {
-		Game g = HG.plugin.getManager().getGame(player.getLocation());
+		Game g = HG.getPlugin().getManager().getGame(player.getLocation());
 		int num = g.getSpawns().size() + 1;
-		Configuration c = HG.plugin.getArenaConfig().getCustomConfig();
+		Configuration c = HG.getPlugin().getArenaConfig().getCustomConfig();
 		List<String> d = c.getStringList("arenas."+g.getName() + ".spawns");
 		Location l = player.getLocation();
 		for (Location lb : g.getSpawns()) {
 			if (lb.getBlock().equals(l.getBlock())) {
-				Util.scm(player, HG.plugin.getLang().cmd_spawn_same);
+				Util.scm(player, HG.getPlugin().getLang().cmd_spawn_same);
 				return true;
 			}
 		}
 		d.add(l.getWorld().getName() + ":" + l.getBlockX() + ":" + l.getBlockY() + ":" + l.getBlockZ() + ":" + l.getYaw() + ":" + l.getPitch());
 		c.set("arenas."+g.getName()+".spawns", d);
 		g.addSpawn(l);
-		HG.plugin.getArenaConfig().saveCustomConfig();
-		Util.scm(player, HG.plugin.getLang().cmd_spawn_set.replace("<number>", String.valueOf(num)));
+		HG.getPlugin().getArenaConfig().saveCustomConfig();
+		Util.scm(player, HG.getPlugin().getLang().cmd_spawn_set.replace("<number>", String.valueOf(num)));
 		
-        HG.plugin.getManager().checkGame(g, player);
+        HG.getPlugin().getManager().checkGame(g, player);
 		return true;
 	}
 }

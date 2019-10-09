@@ -19,7 +19,7 @@ public class NBTCmd extends BaseCmd {
 		forceInGame = false;
 		argLength = 1;
 		usage = "";
-		api = HG.plugin.getNbtApi();
+		api = HG.getPlugin().getNbtApi();
 	}
 
 

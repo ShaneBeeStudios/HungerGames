@@ -9,6 +9,9 @@ import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.potion.PotionEffect;
 
+/**
+ * Handler for creating individual kit entries
+ */
 @SuppressWarnings("unused")
 public class KitEntry {
 
@@ -173,7 +176,7 @@ public class KitEntry {
 			player.removePotionEffect(effect.getType());
 		}
 		player.addPotionEffects(potions);
-		HG.plugin.getPlayers().get(player.getUniqueId()).getGame().freeze(player);
+		HG.getPlugin().getPlayers().get(player.getUniqueId()).getGame().freeze(player);
 		player.updateInventory();
 	}
 

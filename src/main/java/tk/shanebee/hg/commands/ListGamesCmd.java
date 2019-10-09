@@ -1,6 +1,6 @@
 package tk.shanebee.hg.commands;
 
-import tk.shanebee.hg.Game;
+import tk.shanebee.hg.game.Game;
 import tk.shanebee.hg.HG;
 import tk.shanebee.hg.util.Util;
 
@@ -16,7 +16,7 @@ public class ListGamesCmd extends BaseCmd {
 	@Override
 	public boolean run() {
 		Util.scm(sender, "&6&l Games:");
-		for (Game g : HG.plugin.getGames()) {
+		for (Game g : HG.getPlugin().getGames()) {
 			Util.scm(sender, " &4 - &6" + g.getName() + "&4:&6" + g.getStatus().getName());
 		}
 		return true;

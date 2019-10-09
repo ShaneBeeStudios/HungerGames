@@ -1,6 +1,6 @@
 package tk.shanebee.hg.commands;
 
-import tk.shanebee.hg.Game;
+import tk.shanebee.hg.game.Game;
 import tk.shanebee.hg.HG;
 import tk.shanebee.hg.util.Util;
 
@@ -16,7 +16,7 @@ public class BorderSizeCmd extends BaseCmd {
 
 	@Override
 	public boolean run() {
-		Game game = HG.plugin.getManager().getGame(args[1]);
+		Game game = HG.getPlugin().getManager().getGame(args[1]);
 		if (game != null) {
 			String name = game.getName();
 			int radius;
@@ -26,12 +26,12 @@ public class BorderSizeCmd extends BaseCmd {
 				Util.scm(player, sendHelpLine());
 				return false;
 			}
-			HG.plugin.getArenaConfig().getCustomConfig().set("arenas." + name + ".border.size", radius);
+			HG.getPlugin().getArenaConfig().getCustomConfig().set("arenas." + name + ".border.size", radius);
 			game.setBorderSize(radius);
-			HG.plugin.getArenaConfig().saveCustomConfig();
-			Util.scm(player, HG.plugin.getLang().cmd_border_size.replace("<arena>", name).replace("<size>", String.valueOf(radius)));
+			HG.getPlugin().getArenaConfig().saveCustomConfig();
+			Util.scm(player, HG.getPlugin().getLang().cmd_border_size.replace("<arena>", name).replace("<size>", String.valueOf(radius)));
 		} else {
-			Util.scm(player, HG.plugin.getLang().cmd_delete_noexist);
+			Util.scm(player, HG.getPlugin().getLang().cmd_delete_noexist);
 		}
 		return true;
 	}

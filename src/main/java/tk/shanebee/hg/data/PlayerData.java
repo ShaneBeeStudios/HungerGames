@@ -1,14 +1,20 @@
-package tk.shanebee.hg;
+package tk.shanebee.hg.data;
 
 import org.bukkit.Bukkit;
 import org.bukkit.GameMode;
 import org.bukkit.attribute.Attribute;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
+import tk.shanebee.hg.HG;
+import tk.shanebee.hg.game.Game;
+import tk.shanebee.hg.game.Team;
 import tk.shanebee.hg.util.Util;
 
 import java.util.UUID;
 
+/**
+ * Player data object for holding pre-game player info
+ */
 @SuppressWarnings("WeakerAccess")
 public class PlayerData {
 

@@ -6,7 +6,7 @@
 
     <groupId>tk.shanebee.hg</groupId>
     <artifactId>HungerGames</artifactId>
-    <version>4.11.0</version>
+    <version>4.12.0-Beta6</version>
 
     <properties>
         <maven.compiler.source>1.8</maven.compiler.source>
@@ -62,6 +62,33 @@
             <groupId>de.tr7zw</groupId>
             <artifactId>item-nbt-api</artifactId>
             <version>2.0.0</version>
+        </dependency>
+        <dependency>
+            <groupId>com.gmail.nossr50.mcMMO</groupId>
+            <artifactId>mcMMO</artifactId>
+            <version>2.1.108</version>
+            <scope>provided</scope>
+            <exclusions>
+                <exclusion>
+                    <groupId>com.sk89q.worldguard</groupId>
+                    <artifactId>worldguard-core</artifactId>
+                </exclusion>
+                <exclusion>
+                    <groupId>com.sk89q.worldguard</groupId>
+                    <artifactId>worldguard-legacy</artifactId>
+                </exclusion>
+                <exclusion>
+                    <groupId>org.apache.maven.scm</groupId>
+                    <artifactId>maven-scm-provider-gitexe</artifactId>
+                </exclusion>
+            </exclusions>
+        </dependency>
+        <dependency>
+            <groupId>io.lumine.xikage</groupId>
+            <artifactId>MythicMobs</artifactId>
+            <version>4.6.5</version>
+            <scope>system</scope>
+            <systemPath>${project.basedir}/libs/MythicMobs-4.6.5.jar</systemPath>
         </dependency>
     </dependencies>
 
@@ -124,6 +151,7 @@
                     <include>items.yml</include>
                     <include>language.yml</include>
                     <include>leaderboard.yml</include>
+                    <include>mobs.yml</include>
                 </includes>
             </resource>
         </resources>

@@ -63,7 +63,7 @@ public class Util {
 	 * @param s Message to send
 	 */
 	public static void broadcast(String s) {
-		Bukkit.getServer().broadcastMessage(ChatColor.translateAlternateColorCodes('&', HG.plugin.getLang().prefix + " " + s));
+		Bukkit.getServer().broadcastMessage(ChatColor.translateAlternateColorCodes('&', HG.getPlugin().getLang().prefix + " " + s));
 	}
 
 	/** Shortcut for adding color to a string
@@ -74,9 +74,13 @@ public class Util {
 		return ChatColor.translateAlternateColorCodes('&', string);
 	}
 
-	public static boolean isInt(String str) {
+    /** Check if a string is an Integer
+     * @param string String to get
+     * @return True if string is an Integer
+     */
+	public static boolean isInt(String string) {
 		try {
-			Integer.parseInt(str);
+			Integer.parseInt(string);
 		} catch (NumberFormatException e) {
 			return false;
 		}
@@ -166,19 +170,19 @@ public class Util {
 		return attached.getRelative(at.getAttachedFace()).equals(base);
 	}
 
-    /** Check if the server is running a specific Minecraft version or higher
-     * @param major Major version to check (Will probably always be 1)
-     * @param minor Minor version to check
-     * @return True if server is running this version of Minecraft or higher
+    /** Check if running a specific version of Minecraft or higher.
+     * @param major Major version of Minecraft to check (Will most likely always be 1)
+     * @param minor Minor version of Minecraft to check
+     * @return True if the server is running this version or higher
      */
 	@SuppressWarnings("SameParameterValue")
-    public static boolean isRunningMinecraft(int major, int minor) {
-        int maj = Integer.parseInt(Bukkit.getServer().getClass().getPackage().getName().split("\\.")[3].split("_")[0].replace("v", ""));
-        int min = Integer.parseInt(Bukkit.getServer().getClass().getPackage().getName().split("\\.")[3].split("_")[1]);
-        return maj >= major && min >= minor;
-    }
+	public static boolean isRunningMinecraft(int major, int minor) {
+		int maj = Integer.parseInt(Bukkit.getServer().getClass().getPackage().getName().split("\\.")[3].split("_")[0].replace("v", ""));
+		int min = Integer.parseInt(Bukkit.getServer().getClass().getPackage().getName().split("\\.")[3].split("_")[1]);
+		return maj >= major && min >= minor;
+	}
 
-	/** Check if a block is a wall sign
+	/** Check if a material is a wall sign
 	 * <p>Due to sign material changes in 1.14 this method checks for both 1.13 and 1.14+</p>
 	 * @param item Material to check
 	 * @return True if material is a wall sign
@@ -193,12 +197,35 @@ public class Util {
 				case OAK_WALL_SIGN:
 				case SPRUCE_WALL_SIGN:
 					return true;
-                default:
-                    return false;
 			}
 		} else {
-            return item == Material.getMaterial("WALL_SIGN");
-        }
+			return item == Material.getMaterial("WALL_SIGN");
+		}
+		return false;
 	}
+
+    /** Check if a material is a wall sign
+     * <p>Due to sign material changes in 1.14 this method checks for both 1.13 and 1.14+</p>
+     * @param block Block to check
+     * @return True if block is a wall sign
+     */
+	public static boolean isWallSign(Block block) {
+	    return isWallSign(block.getType());
+    }
+
+    /** Check if a method exists
+     * @param c Class that contains this method
+     * @param methodName Method to check
+     * @param parameterTypes Parameter types if the method contains any
+     * @return True if this method exists
+     */
+    public static boolean methodExists(final Class<?> c, final String methodName, final Class<?>... parameterTypes) {
+        try {
+            c.getDeclaredMethod(methodName, parameterTypes);
+            return true;
+        } catch (final NoSuchMethodException | SecurityException e) {
+            return false;
+        }
+    }
 
 }

@@ -1,16 +1,22 @@
-package tk.shanebee.hg;
+package tk.shanebee.hg.data;
 
 import org.bukkit.configuration.Configuration;
+import tk.shanebee.hg.HG;
 import tk.shanebee.hg.util.Util;
+import tk.shanebee.hg.util.Vault;
 
 import java.io.File;
 import java.util.List;
 
+/**
+ * Main config class <b>Internal Use Only</b>
+ */
 public class Config {
 
 	//Basic settings
-	static boolean spawnmobs;
-	static int spawnmobsinterval;
+	public static boolean economy = true;
+	public static boolean spawnmobs;
+	public static int spawnmobsinterval;
 	public static boolean bossbar;
 	public static int trackingstickuses;
 	public static int playersfortrackingstick;
@@ -23,10 +29,10 @@ public class Config {
 	public static int teleportEndTime;
 
 	//Reward info
-	static boolean giveReward;
-	static int cash;
-	static List<String> rewardCommands;
-	static List<String> rewardMessages;
+	public static boolean giveReward;
+	public static int cash;
+	public static List<String> rewardCommands;
+	public static List<String> rewardMessages;
 
 	//Rollback config info
 	public static boolean breakblocks;
@@ -37,14 +43,14 @@ public class Config {
 	public static List<String> blocks;
 
 	//Random chest
-	static boolean randomChest;
+	public static boolean randomChest;
 	public static int randomChestInterval;
-	static int randomChestMaxContent;
+	public static int randomChestMaxContent;
 
 	//World border
 	public static boolean borderEnabled;
 	public static boolean borderOnStart;
-	static boolean centerSpawn;
+	public static boolean centerSpawn;
 	public static int borderCountdownStart;
 	public static int borderCountdownEnd;
 	public static int borderFinalSize;
@@ -54,6 +60,11 @@ public class Config {
 	public static boolean spectateOnDeath;
 	public static boolean spectateHide;
 	public static boolean spectateFly;
+	public static boolean spectateChat;
+
+	//mcMMO
+	public static boolean mcmmoUseSkills;
+	public static boolean mcmmoGainExp;
 
 	private HG plugin;
 
@@ -111,44 +122,29 @@ public class Config {
 		spectateOnDeath = config.getBoolean("spectate.death-to-spectate");
 		spectateHide = config.getBoolean("spectate.hide-spectators");
 		spectateFly = config.getBoolean("spectate.fly");
+		spectateChat = config.getBoolean("spectate.chat");
 
-		if (giveReward) {
-			try {
-				Vault.setupEconomy();
-				if (Vault.economy == null) {
-					Util.log("&cUnable to setup vault!");
-					Util.log(" - &cEconomy provider is missing.");
-					Util.log(" - Cash rewards will not be given out..");
-					giveReward = false;
-				}
-			} catch (NoClassDefFoundError e) {
-				Util.log("&cUnable to setup vault!");
-				Util.log("  - Cash rewards will not be given out..");
-				giveReward = false;
-			}
-		}
+		mcmmoUseSkills = config.getBoolean("mcmmo.use-skills");
+		mcmmoGainExp = config.getBoolean("mcmmo.gain-experience");
+
+        try {
+            Vault.setupEconomy();
+            if (Vault.economy == null) {
+                Util.log("&cUnable to setup vault!");
+                Util.log(" - &cEconomy provider is missing.");
+                Util.log(" - Cash rewards will not be given out..");
+                giveReward = false;
+                economy = false;
+            }
+        } catch (NoClassDefFoundError e) {
+            Util.log("&cUnable to setup vault!");
+            Util.log("  - Cash rewards will not be given out..");
+            giveReward = false;
+            economy = false;
+        }
 	}
 
 	private void updateConfig(Configuration config) {
-		if (!config.isSet("settings.bossbar-countdown")) {
-			config.set("settings.bossbar-countdown", true);
-		}
-		if (!config.isSet("world-border.enabled")) {
-			config.set("world-border.enabled", false);
-			config.set("world-border.initiate-on-start", true);
-			config.set("world-border.countdown-start", 60);
-			config.set("world-border.countdown-end", 30);
-			config.set("world-border.final-border-size", 30);
-			config.set("world-border.center-on-first-spawn", true);
-			config.set("settings.min-chestcontent", 1);
-		}
-		if (!config.isSet("settings.max-bonus-chestcontent")) {
-			config.set("settings.max-bonus-chestcontent", 5);
-			config.set("settings.min-bonus-chestcontent", 1);
-		}
-		if (!config.isSet("rollback.protect-during-cooldown")) {
-			config.set("rollback.protect-during-cooldown", true);
-		}
 		if (!config.isSet("spectate.enabled")) {
 			config.set("spectate.enabled", false);
 			config.set("spectate.death-to-spectate", true);
@@ -157,6 +153,11 @@ public class Config {
 		}
 		if (!config.isSet("rollback.blocks-per-second")) {
 			config.set("rollback.blocks-per-second", 500);
+		}
+		if (!config.isSet("spectate.chat")) {
+			config.set("spectate.chat", false);
+			config.set("mcmmo.use-skills", false);
+			config.set("mcmmo.gain-experience", false);
 		}
 		plugin.saveConfig();
 	}

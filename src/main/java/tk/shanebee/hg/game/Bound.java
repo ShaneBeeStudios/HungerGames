@@ -1,4 +1,4 @@
-package tk.shanebee.hg;
+package tk.shanebee.hg.game;
 
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
@@ -13,6 +13,9 @@ import java.util.List;
 import java.util.Objects;
 import java.util.Random;
 
+/**
+ * Bounding box object for creating regions
+ */
 @SuppressWarnings({"WeakerAccess", "unused"})
 public class Bound {
 

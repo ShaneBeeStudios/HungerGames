@@ -1,4 +1,4 @@
-package tk.shanebee.hg;
+package tk.shanebee.hg.managers;
 
 import java.util.HashMap;
 
@@ -10,9 +10,14 @@ import org.bukkit.scoreboard.Objective;
 import org.bukkit.scoreboard.Score;
 import org.bukkit.scoreboard.Scoreboard;
 import org.bukkit.scoreboard.ScoreboardManager;
+import tk.shanebee.hg.HG;
+import tk.shanebee.hg.game.Game;
 import tk.shanebee.hg.util.Util;
 
-class SBDisplay {
+/**
+ * General scoreboard manager
+ */
+public class SBDisplay {
 
 	private ScoreboardManager manager;
 	private Scoreboard board;
@@ -20,37 +25,37 @@ class SBDisplay {
 	private HashMap<String, Scoreboard> score = new HashMap<>();
 	private Game g;
 
-	SBDisplay(Game g) {
+	public SBDisplay(Game g) {
 		this.manager = Bukkit.getScoreboardManager();
 		this.board = manager.getNewScoreboard();
-		this.ob = board.registerNewObjective(ChatColor.translateAlternateColorCodes('&', HG.plugin.getLang().players_alive), "dummy", "arena" + g.getName());
+		this.ob = board.registerNewObjective(ChatColor.translateAlternateColorCodes('&', HG.getPlugin().getLang().players_alive), "dummy", "arena" + g.getName());
 		this.ob.setDisplaySlot(DisplaySlot.SIDEBAR);
-		this.ob.setDisplayName(ChatColor.translateAlternateColorCodes('&', HG.plugin.getLang().scoreboard_title));
+		this.ob.setDisplayName(ChatColor.translateAlternateColorCodes('&', HG.getPlugin().getLang().scoreboard_title));
 		this.g = g;
 	}
 
-	void setAlive() {
+	public void setAlive() {
 		/*
-		Score score = ob.getScore(ChatColor.translateAlternateColorCodes('&', HG.plugin.getLang().players_alive));
-		Score arena = ob.getScore(ChatColor.translateAlternateColorCodes('&', HG.plugin.getLang().scoreboard_arena + g.getName()));
+		Score score = ob.getScore(ChatColor.translateAlternateColorCodes('&', HG.getPlugin().getLang().players_alive));
+		Score arena = ob.getScore(ChatColor.translateAlternateColorCodes('&', HG.getPlugin().getLang().scoreboard_arena + g.getName()));
 		
 		score.setScore(g.getPlayers().size());
 		arena.setScore(g.getPlayers().size() + 1);
 
 		 */
 		ob.unregister();
-		this.ob = board.registerNewObjective(ChatColor.translateAlternateColorCodes('&', HG.plugin.getLang().players_alive), "dummy", "arena" + g.getName());
+		this.ob = board.registerNewObjective(ChatColor.translateAlternateColorCodes('&', HG.getPlugin().getLang().players_alive), "dummy", "arena" + g.getName());
 		this.ob.setDisplaySlot(DisplaySlot.SIDEBAR);
-		this.ob.setDisplayName(ChatColor.translateAlternateColorCodes('&', HG.plugin.getLang().scoreboard_title));
-		String alive = "  " + HG.plugin.getLang().players_alive_num.replace("<num>", String.valueOf(g.getPlayers().size()));
+		this.ob.setDisplayName(ChatColor.translateAlternateColorCodes('&', HG.getPlugin().getLang().scoreboard_title));
+		String alive = "  " + HG.getPlugin().getLang().players_alive_num.replace("<num>", String.valueOf(g.getPlayers().size()));
 
 		Score space1 = ob.getScore(" ");
 		Score space2 = ob.getScore("  ");
 		Score space3 = ob.getScore("   ");
-		Score arena1 = ob.getScore(Util.getColString(HG.plugin.getLang().scoreboard_arena));
+		Score arena1 = ob.getScore(Util.getColString(HG.getPlugin().getLang().scoreboard_arena));
 		Score arena2 = ob.getScore(Util.getColString("  &e" + g.getName()));
 
-		Score alive1 = ob.getScore(Util.getColString(HG.plugin.getLang().players_alive));
+		Score alive1 = ob.getScore(Util.getColString(HG.getPlugin().getLang().players_alive));
 		Score alive2 = ob.getScore(Util.getColString(alive));
 
 		space1.setScore(6);
@@ -64,17 +69,17 @@ class SBDisplay {
 
 	}
 
-	void resetAlive() {
-		board.resetScores(ChatColor.translateAlternateColorCodes('&', HG.plugin.getLang().players_alive));
+	public void resetAlive() {
+		board.resetScores(ChatColor.translateAlternateColorCodes('&', HG.getPlugin().getLang().players_alive));
 		score.clear();
 	}
 
-	void setSB(Player p) {
+	public void setSB(Player p) {
 		score.put(p.getName(), p.getScoreboard());
 		p.setScoreboard(board);
 	}
 
-	void restoreSB(Player p) {
+	public void restoreSB(Player p) {
 		if (score.get(p.getName()) == null) {
 			p.setScoreboard(manager.getNewScoreboard());
 		} else {
