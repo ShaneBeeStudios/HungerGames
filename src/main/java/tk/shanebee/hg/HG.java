@@ -68,7 +68,7 @@ public class HG extends JavaPlugin {
 		metrics = new Metrics(this);
 		if (metrics.isEnabled()) {
 			Util.log("&7Metrics have been &aenabled");
-			new MetricsHandler(true);
+			new MetricsHandler(false);
 		}
 		else
 			Util.log("&7Metrics have been &cdisabled");
