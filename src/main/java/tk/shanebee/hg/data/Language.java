@@ -151,6 +151,8 @@ public class Language {
     public String lobby_sign_1_3;
     public String lobby_sign_2_1;
     public String lobby_sign_3_1;
+    public String spectator_compass;
+    public String spectator_compass_head_lore;
 
 
     public Language(HG plugin) {
@@ -346,6 +348,9 @@ public class Language {
         lobby_sign_cost = lang.getString("lobby-signs.sign-1.line-4");
         lobby_sign_2_1 = lang.getString("lobby-signs.sign-2.line-1");
         lobby_sign_3_1 = lang.getString("lobby-signs.sign-3.line-1");
+
+        spectator_compass = lang.getString("spectator-compass");
+        spectator_compass_head_lore = lang.getString("spectator-head-lore");
     }
 
 }

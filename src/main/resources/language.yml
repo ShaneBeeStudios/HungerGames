@@ -39,6 +39,10 @@ player-won: '&b&l<winner> &6won HungerGames at arena &b&l<arena>&7!'
 #  <amount> will be replaced with the amount the player will receive on win
 winning-amount: '&7You received &b$<amount> &7for winning &3&lHunger&b&lGames!'
 
+#  SPECTATOR COMPASS
+spectator-compass: '&3Spectator Compass'
+spectator-head-lore: '&7Click to TP to player'
+
 #  KIT MESSAGES
 kit-join-header: '&c&l>&7&l----------[&f&lWelcome to Hunger&f&lGames&7&l]&7&l----------&c&l<'
 kit-join-msg: '&7&l           - &3Pick a kit using &b/hg kit &7<&rkit-name&7>'

@@ -220,4 +220,13 @@ public class ItemStackManager {
 		return new ItemStack(Material.valueOf(itemArr[0].toUpperCase()), amount);
 	}
 
+	public ItemStack getSpectatorCompass() {
+	    ItemStack compass = new ItemStack(Material.COMPASS);
+	    ItemMeta meta = compass.getItemMeta();
+	    assert meta != null;
+	    meta.setDisplayName(Util.getColString(plugin.getLang().spectator_compass));
+	    compass.setItemMeta(meta);
+	    return compass;
+    }
+
 }

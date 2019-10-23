@@ -299,6 +299,10 @@ public class GameListener implements Listener {
 		Player p = event.getPlayer();
 		if (plugin.getSpectators().containsKey(p.getUniqueId())) {
 			event.setCancelled(true);
+            if (isSpectatorCompass(event)) {
+                handleSpectatorCompass(p);
+                return;
+            }
 		}
 		if (event.getAction() != Action.PHYSICAL && plugin.getPlayers().containsKey(p.getUniqueId())) {
 			Status st = plugin.getPlayers().get(p.getUniqueId()).getGame().getStatus();
@@ -308,6 +312,23 @@ public class GameListener implements Listener {
 			}
 		}
 	}
+
+    private boolean isSpectatorCompass(PlayerInteractEvent event) {
+        Action action = event.getAction();
+        Player player = event.getPlayer();
+        if (action != Action.RIGHT_CLICK_AIR && action != Action.RIGHT_CLICK_BLOCK) return false;
+        if (!plugin.getSpectators().containsKey(player.getUniqueId())) return false;
+
+        ItemStack item = event.getItem();
+        if (item == null || item.getType() != Material.COMPASS) return false;
+        return item.getItemMeta() != null && item.getItemMeta().getDisplayName().equalsIgnoreCase(Util.getColString(lang.spectator_compass));
+
+    }
+
+    private void handleSpectatorCompass(Player player) {
+        Game game = plugin.getSpectators().get(player.getUniqueId()).getGame();
+        game.getSpectatorGUI().openInventory(player);
+    }
 
 	@EventHandler
 	private void onPlayerClickLobby(PlayerInteractEvent event) {

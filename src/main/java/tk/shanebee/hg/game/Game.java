@@ -25,6 +25,7 @@ import tk.shanebee.hg.events.GameEndEvent;
 import tk.shanebee.hg.events.GameStartEvent;
 import tk.shanebee.hg.events.PlayerJoinGameEvent;
 import tk.shanebee.hg.events.PlayerLeaveGameEvent;
+import tk.shanebee.hg.gui.SpectatorGUI;
 import tk.shanebee.hg.managers.KitManager;
 import tk.shanebee.hg.managers.MobManager;
 import tk.shanebee.hg.managers.SBDisplay;
@@ -79,7 +80,9 @@ public class Game {
 	private TimerTask timer;
 	private ChestDropTask chestDrop;
 
+	// Objects
 	private BossBar bar;
+	private SpectatorGUI spectatorGUI;
 
 	// Border stuff here
 	private Location borderCenter = null;
@@ -128,6 +131,7 @@ public class Game {
 		this.items = plugin.getItems();
 		this.bonusItems = plugin.getBonusItems();
 		this.mobManager = new MobManager(this);
+		this.spectatorGUI = new SpectatorGUI(this);
 	}
 
 	/** Create a new game
@@ -160,9 +164,14 @@ public class Game {
 		this.borderCountdownEnd = Config.borderCountdownEnd;
 		this.mobManager = new MobManager(this);
 		this.cost = cost;
+        this.spectatorGUI = new SpectatorGUI(this);
 	}
 
-	/** Get the bounding region of this game
+    public SpectatorGUI getSpectatorGUI() {
+        return spectatorGUI;
+    }
+
+    /** Get the bounding region of this game
 	 * @return Region of this game
 	 */
 	public Bound getRegion() {
@@ -1105,6 +1114,7 @@ public class Game {
 		}
 		if (bar != null)
 			bar.addPlayer(spectator);
+		spectator.getInventory().setItem(0, plugin.getItemStackManager().getSpectatorCompass());
 	}
 
 	/** Remove a player from spectator of this game
