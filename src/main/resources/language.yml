@@ -149,7 +149,15 @@ cmd-exit-set: '&6Global Exit Spawn Set:'
 cmd-lobbywall-set: '&aThe lobbyWallSign has been set!'
 cmd-lobbywall-notcorrect: '&cThese signs are not in correct format!'
 cmd-lobbywall-format: '&cformat: &6[sign] &c[sign] [sign]'
-lobby-sign-cost: 'Cost $<cost>'
+lobby-signs:
+  sign-1:
+    line-1: '&1&lHunger Games'
+    line-3: '&0&lClick To Join'
+    line-4: 'Cost $&b<cost>'
+  sign-2:
+    line-1: '&1&lGame Status'
+  sign-3:
+    line-1: '&1&lAlive'
 
 ## Start
 cmd-start-starting: '&b<arena>&6 is now starting!'

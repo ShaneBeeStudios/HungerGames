@@ -18,6 +18,7 @@ import org.bukkit.potion.PotionEffectType;
 import org.jetbrains.annotations.Nullable;
 import tk.shanebee.hg.*;
 import tk.shanebee.hg.data.Config;
+import tk.shanebee.hg.data.Language;
 import tk.shanebee.hg.data.Leaderboard;
 import tk.shanebee.hg.data.PlayerData;
 import tk.shanebee.hg.events.GameEndEvent;
@@ -42,6 +43,7 @@ import java.util.Map.Entry;
 public class Game {
 
 	private HG plugin;
+	private Language lang;
 	private String name;
 	private List<Location> spawns;
 	private Bound bound;
@@ -103,6 +105,7 @@ public class Game {
 	 */
 	public Game(String name, Bound bound, List<Location> spawns, Sign lobbySign, int timer, int minPlayers, int maxPlayers, int roam, boolean isReady, int cost) {
 		this.plugin = HG.getPlugin();
+		this.lang = plugin.getLang();
 		this.name = name;
 		this.bound = bound;
 		this.spawns = spawns;
@@ -139,6 +142,7 @@ public class Game {
 	 */
 	public Game(String name, Bound bound, int timer, int minPlayers, int maxPlayers, int roam, int cost) {
 		this.plugin = HG.getPlugin();
+        this.lang = plugin.getLang();
 		this.name = name;
 		this.time = timer;
 		this.minPlayers = minPlayers;
@@ -722,14 +726,14 @@ public class Game {
 			this.s1 = (Sign) c.getRelative(face).getState();
 			this.s2 = (Sign) s1.getBlock().getRelative(face).getState();
 
-			s.setLine(0, ChatColor.DARK_BLUE + "" + ChatColor.BOLD + "HungerGames");
+			s.setLine(0, Util.getColString(lang.lobby_sign_1_1));
 			s.setLine(1, ChatColor.BOLD + name);
-			s.setLine(2, ChatColor.BOLD + "Click To Join");
+			s.setLine(2, Util.getColString(lang.lobby_sign_1_3));
 			if (cost > 0)
 				s.setLine(3, Util.getColString(HG.getPlugin().getLang().lobby_sign_cost.replace("<cost>", String.valueOf(cost))));
-			s1.setLine(0, ChatColor.DARK_BLUE + "" + ChatColor.BOLD + "Game Status");
+			s1.setLine(0, Util.getColString(lang.lobby_sign_2_1));
 			s1.setLine(1, status.getName());
-			s2.setLine(0, ChatColor.DARK_BLUE + "" + ChatColor.BOLD + "Alive");
+			s2.setLine(0, Util.getColString(lang.lobby_sign_3_1));
 			s2.setLine(1, ChatColor.BOLD + "" + 0 + "/" + maxPlayers);
 			s.update(true);
 			s1.update(true);

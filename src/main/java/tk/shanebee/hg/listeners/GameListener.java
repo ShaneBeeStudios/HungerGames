@@ -22,6 +22,7 @@ import org.bukkit.util.Vector;
 import tk.shanebee.hg.HG;
 import tk.shanebee.hg.Status;
 import tk.shanebee.hg.data.Config;
+import tk.shanebee.hg.data.Language;
 import tk.shanebee.hg.data.Leaderboard;
 import tk.shanebee.hg.data.PlayerData;
 import tk.shanebee.hg.events.ChestOpenEvent;
@@ -37,6 +38,7 @@ import java.util.UUID;
 public class GameListener implements Listener {
 
 	private HG plugin;
+	private Language lang;
 	private String tsn = ChatColor.GOLD + "TrackingStick " + ChatColor.GREEN + "Uses: ";
 	private ItemStack trackingStick;
 	//private HashMap<Player, Entity> killerMap = new HashMap<>(); ON HOLD for now
@@ -44,6 +46,7 @@ public class GameListener implements Listener {
 
 	public GameListener(HG plugin) {
 		this.plugin = plugin;
+		this.lang = plugin.getLang();
 		ItemStack it = new ItemStack(Material.STICK, 1);
 		ItemMeta im = it.getItemMeta();
 		assert im != null;
@@ -314,7 +317,7 @@ public class GameListener implements Listener {
 			assert b != null;
 			if (Util.isWallSign(b.getType())) {
 				Sign sign = (Sign) b.getState();
-				if (sign.getLine(0).equals(ChatColor.DARK_BLUE + "" + ChatColor.BOLD + "HungerGames")) {
+				if (sign.getLine(0).equals(Util.getColString(lang.lobby_sign_1_1))) {
 					Game game = HG.getPlugin().getManager().getGame(sign.getLine(1).substring(2));
 					if (game == null) {
 						Util.scm(p, HG.getPlugin().getLang().cmd_delete_noexist);

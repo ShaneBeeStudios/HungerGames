@@ -147,6 +147,10 @@ public class Language {
     public String lb_blank_space;
     public String lb_combined_separator;
     public String lobby_sign_cost;
+    public String lobby_sign_1_1;
+    public String lobby_sign_1_3;
+    public String lobby_sign_2_1;
+    public String lobby_sign_3_1;
 
 
     public Language(HG plugin) {
@@ -178,13 +182,13 @@ public class Language {
             assert test != null;
             InputStreamReader is = new InputStreamReader(test);
             YamlConfiguration defConfig = YamlConfiguration.loadConfiguration(is);
-            for (String key : defConfig.getConfigurationSection("").getKeys(false)) {
+            for (String key : defConfig.getConfigurationSection("").getKeys(true)) {
                 if (!config.contains(key)) {
                     config.set(key, defConfig.get(key));
                     hasUpdated = true;
                 }
             }
-            for (String key : config.getConfigurationSection("").getKeys(false)) {
+            for (String key : config.getConfigurationSection("").getKeys(true)) {
                 if (!defConfig.contains(key)) {
                     config.set(key, null);
                     hasUpdated = true;
@@ -337,7 +341,11 @@ public class Language {
         lb_blank_space = lang.getString("lb-blank-space");
         lb_combined_separator = lang.getString("lb-combined-separator");
 
-        lobby_sign_cost = lang.getString("lobby-sign-cost");
+        lobby_sign_1_1 = lang.getString("lobby-signs.sign-1.line-1");
+        lobby_sign_1_3 = lang.getString("lobby-signs.sign-1.line-3");
+        lobby_sign_cost = lang.getString("lobby-signs.sign-1.line-4");
+        lobby_sign_2_1 = lang.getString("lobby-signs.sign-2.line-1");
+        lobby_sign_3_1 = lang.getString("lobby-signs.sign-3.line-1");
     }
 
 }
