@@ -1,6 +1,7 @@
 package tk.shanebee.hg;
 
-import org.bukkit.ChatColor;
+import tk.shanebee.hg.data.Language;
+import tk.shanebee.hg.util.Util;
 
 /**
  * Game status types
@@ -10,47 +11,64 @@ public enum Status {
 	/**
 	 * Game is running
 	 */
-	RUNNING(ChatColor.GREEN  + "" + ChatColor.BOLD +  "Running"),
+	RUNNING,
 	/**
 	 * Game has stopped
 	 */
-	STOPPED(ChatColor.DARK_RED  + "" + ChatColor.BOLD +  "Stopped"),
+	STOPPED,
 	/**
 	 * Game is ready to run
 	 */
-	READY(ChatColor.DARK_PURPLE + "" + ChatColor.BOLD + "Ready"),
+	READY,
 	/**
 	 * Game is waiting
 	 */
-	WAITING(ChatColor.AQUA  + "" + ChatColor.BOLD +  "Waiting..."),
+	WAITING,
 	/**
 	 * Game is broken
 	 */
-	BROKEN(ChatColor.DARK_RED  + "" + ChatColor.BOLD +  "BROKEN"),
+	BROKEN,
 	/**
 	 * Game is currently rolling back blocks
 	 */
-	ROLLBACK(ChatColor.RED  + "" + ChatColor.BOLD +  "Restoring..."),
+	ROLLBACK,
 	/**
 	 * Game is not ready
 	 */
-	NOTREADY(ChatColor.DARK_BLUE  + "" + ChatColor.BOLD +  "NotReady"),
+	NOTREADY,
 	/**
 	 * Game is starting to run
 	 */
-	BEGINNING(ChatColor.GREEN  + "" + ChatColor.BOLD +  "Running"),
+	BEGINNING,
 	/**
 	 * Game is counting down to start
 	 */
-	COUNTDOWN(ChatColor.AQUA  + "" + ChatColor.BOLD +  "Starting...");
+	COUNTDOWN;
 
-	private String name;
-
-	Status(String name) {
-		this.name = name;
-	}
+	Language lang = HG.getPlugin().getLang();
 
 	public String getName() {
-		return name;
+        switch (this) {
+            case RUNNING:
+                return Util.getColString(lang.status_running);
+            case STOPPED:
+                return Util.getColString(lang.status_stopped);
+            case READY:
+                return Util.getColString(lang.status_ready);
+            case WAITING:
+                return Util.getColString(lang.status_waiting);
+            case BROKEN:
+                return Util.getColString(lang.status_broken);
+            case ROLLBACK:
+                return Util.getColString(lang.status_rollback);
+            case NOTREADY:
+                return Util.getColString(lang.status_not_ready);
+            case BEGINNING:
+                return Util.getColString(lang.status_beginning);
+            case COUNTDOWN:
+                return Util.getColString(lang.status_countdown);
+        }
+        return null;
 	}
+
 }

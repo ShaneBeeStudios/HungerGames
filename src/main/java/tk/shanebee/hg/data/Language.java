@@ -57,6 +57,16 @@ public class Language {
     public String roam_game_started;
     public String roam_time;
     public String roam_finished;
+    public String status_running;
+    public String status_stopped;
+    public String status_ready;
+    public String status_waiting;
+    public String status_broken;
+    public String status_rollback;
+    public String status_not_ready;
+    public String status_beginning;
+    public String status_countdown;
+
     public String death_fallen;
     public String death_explosion;
     public String death_custom;
@@ -177,6 +187,7 @@ public class Language {
     }
 
     // Used to update config
+    @SuppressWarnings("ConstantConditions")
     private void matchConfig(FileConfiguration config, File file) {
         try {
             boolean hasUpdated = false;
@@ -351,6 +362,16 @@ public class Language {
 
         spectator_compass = lang.getString("spectator-compass");
         spectator_compass_head_lore = lang.getString("spectator-head-lore");
+
+        status_running = lang.getString("status-running");
+        status_stopped = lang.getString("status-stopped");
+        status_ready = lang.getString("status-ready");
+        status_waiting = lang.getString("status-waiting");
+        status_broken = lang.getString("status-broken");
+        status_rollback = lang.getString("status-rollback");
+        status_not_ready = lang.getString("status-notready");
+        status_beginning = lang.getString("status-beginning");
+        status_countdown = lang.getString("status-countdown");
     }
 
 }

@@ -80,6 +80,17 @@ roam-game-started: '&4[]---------[ &6&lThe game has started! &4]---------[]'
 roam-time: ' &e You have <roam> seconds to roam without taking damage!'
 roam-finished: '&c&lFree-Roam is over, PVP is now enabled!'
 
+#  GAME STATUSES
+status-running: '&a&lRunning'
+status-stopped: '&4&lStopped'
+status-ready: '&5&lReady'
+status-waiting: '&b&lWaiting...'
+status-broken: '&4&lBROKEN'
+status-rollback: '&c&lRestoring...'
+status-notready: '&1&lNotReady'
+status-beginning: '&a&lRunning'
+status-countdown: '&b&lStarting...'
+
 #  DEATH MESSAGES
 death-fallen: '&7&l[&3&lHungerGames Fallen&7&l]'
 death-explosion: '<player> Was blown to bits!'
