@@ -89,7 +89,7 @@ public class ItemStackManager {
 				kit.addKit(path, new KitEntry(stack.toArray(new ItemStack[0]), helm, boot, ches, leg, perm, potions));
 			} catch (Exception e) {
 				Util.log("-------------------------------------------");
-				Util.log("WARNING: Unable to load kit " + gameName + path + "!");
+				Util.warning("Unable to load kit " + gameName + path + "!");
 				Util.log("-------------------------------------------");
 			}
 		}
@@ -97,14 +97,14 @@ public class ItemStackManager {
 
     /** Get an ItemStack from a string
      * @param args String to convert to an item
-     * @param isItem Whether this is an item stack or a single item (ie: armor)
+     * @param isStackable Whether this is stackable or a single item (ie: armor)
      * @return New ItemStack
      */
 	@SuppressWarnings("deprecation")
-	public ItemStack getItem(String args, boolean isItem) {
+	public ItemStack getItem(String args, boolean isStackable) {
 		if (args == null) return null;
 		int amount = 1;
-		if (isItem) {
+		if (isStackable) {
 			String a = args.split(" ")[1];
 			if (Util.isInt(a)) {
 				amount = Integer.parseInt(a);
