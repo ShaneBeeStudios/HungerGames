@@ -145,7 +145,7 @@ public class ItemStackManager {
 					assert item != null;
 					PotionMeta meta = ((PotionMeta) item.getItemMeta());
 					assert meta != null;
-					meta.setColor(Color.fromRGB(Integer.valueOf(s)));
+					meta.setColor(Color.fromRGB(Integer.parseInt(s)));
 					item.setItemMeta(meta);
 				} catch (Exception ignore) {
 				}
@@ -188,37 +188,75 @@ public class ItemStackManager {
 
 	private ItemStack itemStringToStack(String item, int amount) {
 		String[] itemArr = item.split(":");
-		if (itemArr[0].equalsIgnoreCase("potion") || itemArr[0].equalsIgnoreCase("splash_potion")) {
-			boolean splash = itemArr[0].equalsIgnoreCase("splash_potion");
-			if (PotionEffectType.getByName(itemArr[1].toUpperCase()) == null) {
-				Util.warning("Potion effect type not found: " + ChatColor.RED + itemArr[1].toUpperCase());
-				Util.log("  - Check your configs");
-				Util.log("  - Proper example:");
-				Util.log("      &bPOTION:POTION_TYPE:DURATION_IN_TICKS:LEVEL");
-				Util.log("      &bPOTION:HEAL:200:1");
-				return null;
-			}
-			if (itemArr.length != 4) {
-				Util.warning("Improper setup of potion: &c" + item);
-				Util.log("  - Check your configs for missing arguments");
-				Util.log("  - Proper example:");
-				Util.log("      &bPOTION:POTION_TYPE:DURATION_IN_TICKS:LEVEL");
-				Util.log("      &bPOTION:HEAL:200:1");
-				return null;
-			}
-			PotionEffectType potType = PotionEffectType.getByName(itemArr[1].toUpperCase());
-			int duration = Integer.valueOf(itemArr[2]);
-			int amplifier = Integer.valueOf(itemArr[3]);
-			ItemStack potion = new ItemStack(splash ? Material.SPLASH_POTION : Material.POTION, amount);
-			PotionMeta meta = ((PotionMeta) potion.getItemMeta());
-			assert meta != null;
-			assert potType != null;
-			meta.addCustomEffect(new PotionEffect(potType, duration, amplifier), true);
-			potion.setItemMeta(meta);
-			return potion;
+		if (itemArr[0].equalsIgnoreCase("potion") || itemArr[0].equalsIgnoreCase("splash_potion") ||
+                itemArr[0].equalsIgnoreCase("lingering_potion")) {
+		    return getPotion(item, amount);
 		}
 		return new ItemStack(Material.valueOf(itemArr[0].toUpperCase()), amount);
 	}
+
+	// Get a potion item stack from a string
+	private ItemStack getPotion(String item, int amount) {
+	    String[] effects = item.split(";");
+	    String potionType = item.split(":")[0];
+	    ItemStack potion = new ItemStack(Material.valueOf(potionType.toUpperCase()), amount);
+	    PotionMeta potionMeta = ((PotionMeta) potion.getItemMeta());
+
+        for (String effect : effects) {
+            if (!verifyPotionEffects(effect)) {
+                return null;
+            }
+
+            String[] data = effect.split(":");
+            int i = (data[0].contains("potion") || data[0].contains("POTION")) ? 1 : 0;
+            PotionEffectType potType = PotionEffectType.getByName(data[i]);
+            int duration = Integer.parseInt(data[1 + i]);
+            int amplifier = Integer.parseInt(data[2 + i]);
+            assert potionMeta != null;
+            assert potType != null;
+            potionMeta.addCustomEffect(new PotionEffect(potType, duration, amplifier), true);
+        }
+        potion.setItemMeta(potionMeta);
+        return potion;
+    }
+
+    // Verify if the potion effects are valid (including parameters)
+    private boolean verifyPotionEffects(String data) {
+	    String[] potionData = data.split(":");
+	    if (potionData.length == 3 || potionData.length == 4) {
+	        int i = potionData.length == 3 ? 0 : 1;
+	        if (PotionEffectType.getByName(potionData[i].toUpperCase()) == null) {
+                Util.warning("Potion effect type not found: &c" + potionData[i].toUpperCase());
+                Util.log("  - Check your configs");
+                Util.log("  - Proper example:");
+                Util.log("      &bPOTION:POTION_TYPE:DURATION_IN_TICKS:AMPLIFIER");
+                Util.log("      &bPOTION:HEAL:200:1");
+                return false;
+            } else if (!Util.isInt(potionData[i + 1])) {
+                Util.warning("Potion duration incorrect format: &c" + potionData[i + 1]);
+                Util.log("  - Check your configs");
+                Util.log("  - Proper example:");
+                Util.log("      &bPOTION:POTION_TYPE:DURATION_IN_TICKS:AMPLIFIER");
+                Util.log("      &bPOTION:HEAL:200:1");
+                return false;
+            } else if (!Util.isInt(potionData[i + 2])) {
+                Util.warning("Potion amplifier incorrect format: &c" + potionData[i + 2]);
+                Util.log("  - Check your configs");
+                Util.log("  - Proper example:");
+                Util.log("      &bPOTION:POTION_TYPE:DURATION_IN_TICKS:AMPLIFIER");
+                Util.log("      &bPOTION:HEAL:200:1");
+                return false;
+            }
+        } else {
+            Util.warning("Improper setup of potion: &c" + data);
+            Util.log("  - Check your configs for missing arguments");
+            Util.log("  - Proper example:");
+            Util.log("      &bPOTION:POTION_TYPE:DURATION_IN_TICKS:LEVEL");
+            Util.log("      &bPOTION:HEAL:200:1");
+            return false;
+        }
+	    return true;
+    }
 
 	public ItemStack getSpectatorCompass() {
 	    ItemStack compass = new ItemStack(Material.COMPASS);
