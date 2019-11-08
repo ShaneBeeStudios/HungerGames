@@ -27,6 +27,7 @@ public class PlayerData {
 	private int food;
 	private float saturation;
 	private GameMode mode;
+	private UUID uuid;
 	
 	//InGame data
 	private Team team;
@@ -38,6 +39,7 @@ public class PlayerData {
 	 */
 	public PlayerData(Player player, Game game) {
 		this.game = game;
+		this.uuid = player.getUniqueId();
 		inv = player.getInventory().getContents();
 		equip = player.getInventory().getArmorContents();
 		expL = player.getLevel();
@@ -115,5 +117,12 @@ public class PlayerData {
 	public GameMode getGameMode() {
 		return this.mode;
 	}
+
+    /** Get the UUID belonging to this player data
+     * @return UUID belonging to this player data
+     */
+	public UUID getUuid() {
+	    return this.uuid;
+    }
 
 }

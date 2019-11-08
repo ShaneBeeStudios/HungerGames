@@ -39,6 +39,7 @@ public class HG extends JavaPlugin {
 	//Instances
 	private static HG plugin;
 	private Manager manager;
+	private PlayerManager playerManager;
 	private Data arenaconfig;
 	private KillManager killManager;
 	private RandomItems randomItems;
@@ -90,7 +91,9 @@ public class HG extends JavaPlugin {
 		killManager = new KillManager();
 
 		manager = new Manager(this);
+		playerManager = new PlayerManager(players, spectators);
 		leaderboard = new Leaderboard(this);
+
 		//PAPI check
 		if (Bukkit.getPluginManager().getPlugin("PlaceholderAPI") != null) {
 			new Placeholders(this).register();
@@ -247,7 +250,14 @@ public class HG extends JavaPlugin {
 		return this.manager;
 	}
 
-	/** Get an instance of the ArenaConfig
+    /** Get an instance of the PlayerManager
+     * @return PlayerManager
+     */
+    public PlayerManager getPlayerManager() {
+        return playerManager;
+    }
+
+    /** Get an instance of the ArenaConfig
 	 * @return ArenaConfig
 	 */
 	public Data getArenaConfig() {
@@ -270,14 +280,18 @@ public class HG extends JavaPlugin {
 
 	/** Get the players currently in games
 	 * @return Map of player data
+     * @deprecated Use {@link PlayerManager}
 	 */
+	@Deprecated
 	public Map<UUID, PlayerData> getPlayers() {
 		return this.players;
 	}
 
 	/** Get a map of players currently spectating games
 	 * @return Map of spectators
+     * @deprecated Use {@link PlayerManager}
 	 */
+	@Deprecated
 	public Map<UUID, PlayerData> getSpectators() {
 		return this.spectators;
 	}
