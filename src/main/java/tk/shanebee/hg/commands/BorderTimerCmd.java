@@ -16,7 +16,7 @@ public class BorderTimerCmd extends BaseCmd {
 
 	@Override
 	public boolean run() {
-		Game game = HG.getPlugin().getManager().getGame(args[1]);
+		Game game = gameManager.getGame(args[1]);
 		if (game != null) {
 			String name = game.getName();
 			int start;
@@ -38,13 +38,13 @@ public class BorderTimerCmd extends BaseCmd {
 				Util.scm(player, sendHelpLine());
 				return false;
 			}
-			HG.getPlugin().getArenaConfig().getCustomConfig().set("arenas." + name + ".border.countdown-start", start);
-			HG.getPlugin().getArenaConfig().getCustomConfig().set("arenas." + name + ".border.countdown-end", end);
-			HG.getPlugin().getArenaConfig().saveCustomConfig();
+			arenaConfig.getCustomConfig().set("arenas." + name + ".border.countdown-start", start);
+			arenaConfig.getCustomConfig().set("arenas." + name + ".border.countdown-end", end);
+			arenaConfig.saveCustomConfig();
 			game.setBorderTimer(start, end);
-			Util.scm(player, HG.getPlugin().getLang().cmd_border_timer.replace("<arena>", name).replace("<start>", args[2]).replace("<end>", args[3]));
+			Util.scm(player, lang.cmd_border_timer.replace("<arena>", name).replace("<start>", args[2]).replace("<end>", args[3]));
 		} else {
-			Util.scm(player, HG.getPlugin().getLang().cmd_delete_noexist);
+			Util.scm(player, lang.cmd_delete_noexist);
 		}
 		return true;
 	}

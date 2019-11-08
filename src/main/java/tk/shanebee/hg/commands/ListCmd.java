@@ -16,7 +16,7 @@ public class ListCmd extends BaseCmd {
 	@Override
 	public boolean run() {
 		StringBuilder p = new StringBuilder();
-		Game g = HG.getPlugin().getPlayers().get(player.getUniqueId()).getGame();
+        Game g = playerManager.getGame(player);
 		for (String s : Util.convertUUIDListToStringList(g.getPlayers())) {
 			p.append("&6, &c").append(s);
 		}
@@ -24,4 +24,5 @@ public class ListCmd extends BaseCmd {
 		Util.scm(player, "&6Players:" + p);
 		return true;
 	}
+
 }

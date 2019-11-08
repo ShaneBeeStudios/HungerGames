@@ -19,11 +19,11 @@ public class SetExitCmd extends BaseCmd {
 	public boolean run() {
 		Location l = player.getLocation();
 		String loc = l.getWorld().getName() + ":" + l.getBlockX() + ":" + l.getBlockY() + ":" + l.getBlockZ() + ":" + l.getYaw() + ":" + l.getPitch();
-		HG.getPlugin().getConfig().set("settings.globalexit", loc);
-		HG.getPlugin().saveConfig();
-		Util.scm(player, HG.getPlugin().getLang().cmd_exit_set + " " + loc.replace(":", "&6,&c "));
+		plugin.getConfig().set("settings.globalexit", loc);
+		plugin.saveConfig();
+		Util.scm(player, lang.cmd_exit_set + " " + loc.replace(":", "&6,&c "));
 		
-		for (Game g : HG.getPlugin().getGames())
+		for (Game g : plugin.getGames())
 			g.setExit(l);
 		return true;
 	}

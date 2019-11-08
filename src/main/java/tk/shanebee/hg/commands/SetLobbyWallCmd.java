@@ -20,22 +20,22 @@ public class SetLobbyWallCmd extends BaseCmd {
 
 	@Override
 	public boolean run() {
-		Game g = HG.getPlugin().getManager().getGame(args[1]);
+		Game g = gameManager.getGame(args[1]);
 		if (g != null) {
 			Block b = player.getTargetBlockExact(6);
 			if (b !=  null && Util.isWallSign(b.getType()) && g.setLobbyBlock((Sign)b.getState())) {
 				Location l = b.getLocation();
 				assert l.getWorld() != null;
-				HG.getPlugin().getArenaConfig().getCustomConfig().set(("arenas." + args[1] + "." + "lobbysign"), (l.getWorld().getName() + ":" + l.getBlockX() + ":" + l.getBlockY() + ":" + l.getBlockZ()));
-				HG.getPlugin().getArenaConfig().saveCustomConfig();
-				Util.scm(player, HG.getPlugin().getLang().cmd_lobbywall_set);
-				HG.getPlugin().getManager().checkGame(g, player);
+				plugin.getArenaConfig().getCustomConfig().set(("arenas." + args[1] + "." + "lobbysign"), (l.getWorld().getName() + ":" + l.getBlockX() + ":" + l.getBlockY() + ":" + l.getBlockZ()));
+				plugin.getArenaConfig().saveCustomConfig();
+				Util.scm(player, lang.cmd_lobbywall_set);
+				gameManager.checkGame(g, player);
 			} else {
-				Util.scm(player, HG.getPlugin().getLang().cmd_lobbywall_notcorrect);
-				Util.scm(player, HG.getPlugin().getLang().cmd_lobbywall_format);
+				Util.scm(player, lang.cmd_lobbywall_notcorrect);
+				Util.scm(player, lang.cmd_lobbywall_format);
 			}
 		} else {
-			player.sendMessage(HG.getPlugin().getLang().cmd_delete_noexist);
+			player.sendMessage(lang.cmd_delete_noexist);
 		}
 		return true;
 	}

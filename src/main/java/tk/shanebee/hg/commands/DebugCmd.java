@@ -14,7 +14,7 @@ public class DebugCmd extends BaseCmd {
 
 	@Override
 	public boolean run() {
-			HG.getPlugin().getManager().runDebugger(sender, args[1]);
+			gameManager.runDebugger(sender, args[1]);
 		return true;
 	}
 }

@@ -17,16 +17,16 @@ public class ChestRefillNowCmd extends BaseCmd {
 
     @Override
     public boolean run() {
-        Game game = HG.getPlugin().getManager().getGame(args[1]);
+        Game game = gameManager.getGame(args[1]);
         if (game != null) {
             if (game.getStatus() != Status.RUNNING) {
-                Util.scm(sender, HG.getPlugin().getLang().listener_not_running);
+                Util.scm(sender, lang.listener_not_running);
                 return true;
             }
             game.refillChests();
-            Util.scm(sender, HG.getPlugin().getLang().cmd_chest_refill_now.replace("<arena>", game.getName()));
+            Util.scm(sender, lang.cmd_chest_refill_now.replace("<arena>", game.getName()));
         } else {
-            Util.scm(sender, HG.getPlugin().getLang().cmd_delete_noexist);
+            Util.scm(sender, lang.cmd_delete_noexist);
         }
         return true;
     }

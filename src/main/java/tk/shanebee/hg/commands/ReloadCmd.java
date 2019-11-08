@@ -15,22 +15,22 @@ public class ReloadCmd extends BaseCmd {
 
 	@Override
 	public boolean run() {
-		Util.scm(player, HG.getPlugin().getLang().cmd_reload_attempt);
-		HG.getPlugin().stopAll();
-		//HG.getPlugin().getArenaConfig().saveCustomConfig();
-		HG.getPlugin().getArenaConfig().reloadCustomConfig();
-		HG.getPlugin().getArenaConfig().load();
-		Util.scm(player, HG.getPlugin().getLang().cmd_reload_reloaded_arena);
-		HG.getPlugin().getKitManager().getKits().clear();
-		HG.getPlugin().getItemStackManager().setKits();
-		Util.scm(player, HG.getPlugin().getLang().cmd_reload_reloaded_kit);
-		HG.getPlugin().getItems().clear();
-		HG.getPlugin().getRandomItems().load();
-		Util.scm(player, HG.getPlugin().getLang().cmd_reload_reloaded_items);
-		new Config(HG.getPlugin());
-		Util.scm(player, HG.getPlugin().getLang().cmd_reload_reloaded_config);
+		Util.scm(player, lang.cmd_reload_attempt);
+		plugin.stopAll();
+		//plugin.getArenaConfig().saveCustomConfig();
+		plugin.getArenaConfig().reloadCustomConfig();
+		plugin.getArenaConfig().load();
+		Util.scm(player, lang.cmd_reload_reloaded_arena);
+		plugin.getKitManager().getKits().clear();
+		plugin.getItemStackManager().setKits();
+		Util.scm(player, lang.cmd_reload_reloaded_kit);
+		plugin.getItems().clear();
+		plugin.getRandomItems().load();
+		Util.scm(player, lang.cmd_reload_reloaded_items);
+		new Config(plugin);
+		Util.scm(player, lang.cmd_reload_reloaded_config);
 
-		Util.scm(player, HG.getPlugin().getLang().cmd_reload_reloaded_success);
+		Util.scm(player, lang.cmd_reload_reloaded_success);
 		return true;
 	}
 

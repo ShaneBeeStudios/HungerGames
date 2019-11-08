@@ -17,18 +17,18 @@ public class ToggleCmd extends BaseCmd {
 
 	@Override
 	public boolean run() {
-		Game g = HG.getPlugin().getManager().getGame(args[1]);
+		Game g = gameManager.getGame(args[1]);
 		if (g != null) {
 			if (g.getStatus() == Status.NOTREADY || g.getStatus() == Status.BROKEN) {
 				g.setStatus(Status.READY);
-				Util.scm(sender, HG.getPlugin().getLang().cmd_toggle_unlocked.replace("<arena>", g.getName()));
+				Util.scm(sender, lang.cmd_toggle_unlocked.replace("<arena>", g.getName()));
 			} else {
 				g.stop(false);
 				g.setStatus(Status.NOTREADY);
-				Util.scm(sender, HG.getPlugin().getLang().cmd_toggle_locked.replace("<arena>", g.getName()));
+				Util.scm(sender, lang.cmd_toggle_locked.replace("<arena>", g.getName()));
 			}
 		} else {
-			Util.scm(sender, HG.getPlugin().getLang().cmd_delete_noexist);
+			Util.scm(sender, lang.cmd_delete_noexist);
 		}
 		return true;
 	}

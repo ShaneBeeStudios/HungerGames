@@ -18,22 +18,22 @@ public class LeaveCmd extends BaseCmd {
 	@Override
 	public boolean run() {
 		Game game;
-		if (HG.getPlugin().getPlayers().containsKey(player.getUniqueId())) {
-			game = HG.getPlugin().getPlayers().get(player.getUniqueId()).getGame();
+		if (playerManager.hasPlayerData(player)) {
+			game = playerManager.getPlayerData(player).getGame();
 			if (Config.economy) {
 				Status status = game.getStatus();
 				if ((status == Status.WAITING || status == Status.COUNTDOWN) && game.getCost() > 0) {
 					Vault.economy.depositPlayer(player, game.getCost());
-					Util.scm(player, HG.getPlugin().getLang().prefix +
-							HG.getPlugin().getLang().cmd_leave_refund.replace("<cost>", String.valueOf(game.getCost())));
+					Util.scm(player, lang.prefix +
+							lang.cmd_leave_refund.replace("<cost>", String.valueOf(game.getCost())));
 				}
 			}
 			game.leave(player, false);
 		} else {
-			game = HG.getPlugin().getSpectators().get(player.getUniqueId()).getGame();
+			game = playerManager.getSpectatorData(player).getGame();
 			game.leaveSpectate(player);
 		}
-		Util.scm(player, HG.getPlugin().getLang().prefix + HG.getPlugin().getLang().cmd_leave_left.replace("<arena>", game.getName()));
+		Util.scm(player, lang.prefix + lang.cmd_leave_left.replace("<arena>", game.getName()));
 		return true;
 	}
 }

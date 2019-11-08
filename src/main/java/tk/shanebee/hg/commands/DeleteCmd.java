@@ -22,10 +22,10 @@ public class DeleteCmd extends BaseCmd {
 
 	@Override
 	public boolean run() {
-		Game g = HG.getPlugin().getManager().getGame(args[1]);
+		Game g = gameManager.getGame(args[1]);
 		if (g != null) {
 			try {
-				Util.scm(sender, HG.getPlugin().getLang().cmd_delete_attempt.replace("<arena>", g.getName()));
+				Util.scm(sender, lang.cmd_delete_attempt.replace("<arena>", g.getName()));
 
 				if (g.getStatus() == Status.BEGINNING || g.getStatus() == Status.RUNNING) {
 					Util.scm(sender, "  &7- &cGame running! &aStopping..");
@@ -33,7 +33,7 @@ public class DeleteCmd extends BaseCmd {
 					g.stop(false);
 				}
 				if (!g.getPlayers().isEmpty()) {
-					Util.scm(sender, HG.getPlugin().getLang().cmd_delete_kicking);
+					Util.scm(sender, lang.cmd_delete_kicking);
 					for (UUID u : g.getPlayers()) {
 						Player p = Bukkit.getPlayer(u);
 						if (p != null) {
@@ -41,15 +41,15 @@ public class DeleteCmd extends BaseCmd {
 						}
 					}
 				}
-				HG.getPlugin().getArenaConfig().getCustomConfig().set("arenas." + args[1], null);
-				HG.getPlugin().getArenaConfig().saveCustomConfig();
-				Util.scm(sender, HG.getPlugin().getLang().cmd_delete_deleted.replace("<arena>", g.getName()));
-				HG.getPlugin().getGames().remove(g);
+				arenaConfig.getCustomConfig().set("arenas." + args[1], null);
+				arenaConfig.saveCustomConfig();
+				Util.scm(sender, lang.cmd_delete_deleted.replace("<arena>", g.getName()));
+				plugin.getGames().remove(g);
 			} catch (Exception e) {
-				Util.scm(sender, HG.getPlugin().getLang().cmd_delete_failed);
+				Util.scm(sender, lang.cmd_delete_failed);
 			}
 		} else {
-			Util.scm(sender, HG.getPlugin().getLang().cmd_delete_noexist);
+			Util.scm(sender, lang.cmd_delete_noexist);
 		}
 		return true;
 	}

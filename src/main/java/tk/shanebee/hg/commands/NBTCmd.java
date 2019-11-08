@@ -11,7 +11,7 @@ import tk.shanebee.hg.util.NBTApi;
 
 public class NBTCmd extends BaseCmd {
 
-	NBTApi api;
+	private NBTApi api;
 
 	public NBTCmd() {
 		forcePlayer = true;
@@ -19,7 +19,7 @@ public class NBTCmd extends BaseCmd {
 		forceInGame = false;
 		argLength = 1;
 		usage = "";
-		api = HG.getPlugin().getNbtApi();
+		api = plugin.getNbtApi();
 	}
 
 

@@ -3,6 +3,7 @@ package tk.shanebee.hg.commands;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import tk.shanebee.hg.HG;
+import tk.shanebee.hg.data.Data;
 import tk.shanebee.hg.data.Language;
 import tk.shanebee.hg.managers.Manager;
 import tk.shanebee.hg.managers.PlayerManager;
@@ -14,6 +15,7 @@ public abstract class BaseCmd {
     Language lang;
     PlayerManager playerManager;
     Manager gameManager;
+    Data arenaConfig;
 
 	public CommandSender sender;
 	public String[] args;
@@ -31,6 +33,7 @@ public abstract class BaseCmd {
 		this.plugin = plugin;
 		this.playerManager = plugin.getPlayerManager();
 		this.gameManager = plugin.getManager();
+		this.arenaConfig = plugin.getArenaConfig();
 		this.lang = plugin.getLang();
 
 		if (forcePlayer) {

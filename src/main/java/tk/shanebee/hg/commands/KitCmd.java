@@ -16,12 +16,12 @@ public class KitCmd extends BaseCmd {
 
 	@Override
 	public boolean run() {
-		Game game = HG.getPlugin().getPlayers().get(player.getUniqueId()).getGame();
+		Game game = playerManager.getPlayerData(player).getGame();
 		Status st = game.getStatus();
 		if (st == Status.WAITING || st == Status.COUNTDOWN) {
 			game.getKitManager().setKit(player, args[1]);
 		} else {
-			Util.scm(player, HG.getPlugin().getLang().cmd_kit_no_change);
+			Util.scm(player, lang.cmd_kit_no_change);
 		}
 		return true;
 	}

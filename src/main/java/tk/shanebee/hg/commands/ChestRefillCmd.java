@@ -16,20 +16,20 @@ public class ChestRefillCmd extends BaseCmd {
 
 	@Override
 	public boolean run() {
-		Game game = HG.getPlugin().getManager().getGame(args[1]);
+		Game game = gameManager.getGame(args[1]);
 		if (game != null) {
 			String name = game.getName();
-			int time = Integer.valueOf(args[2]);
+			int time = Integer.parseInt(args[2]);
 			if (time % 30 != 0) {
 				Util.scm(player, "&c<time> must be in increments of 30");
 				return true;
 			}
-			HG.getPlugin().getArenaConfig().getCustomConfig().set("arenas." + name + ".chest-refill", time);
-			HG.getPlugin().getArenaConfig().saveCustomConfig();
+			arenaConfig.getCustomConfig().set("arenas." + name + ".chest-refill", time);
+			arenaConfig.saveCustomConfig();
 			game.setChestRefillTime(time);
-			Util.scm(player, HG.getPlugin().getLang().cmd_chest_refill.replace("<arena>", name).replace("<sec>", String.valueOf(time)));
+			Util.scm(player, lang.cmd_chest_refill.replace("<arena>", name).replace("<sec>", String.valueOf(time)));
 		} else {
-			Util.scm(player, HG.getPlugin().getLang().cmd_delete_noexist);
+			Util.scm(player, lang.cmd_delete_noexist);
 		}
 		return true;
 	}

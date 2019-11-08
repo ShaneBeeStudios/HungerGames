@@ -21,20 +21,21 @@ public class WandCmd extends BaseCmd {
 
 	@Override
 	public boolean run() {
-		if (HG.getPlugin().getPlayerSessions().containsKey(player.getUniqueId())) {
-			HG.getPlugin().getPlayerSessions().remove(player.getUniqueId());
+		if (plugin.getPlayerSessions().containsKey(player.getUniqueId())) {
+			plugin.getPlayerSessions().remove(player.getUniqueId());
 			Util.scm(player, "Wand disabled!");
 		} else {
 			ItemStack wand = new ItemStack(Material.BLAZE_ROD, 1);
 			ItemMeta meta = wand.getItemMeta();
-			meta.setDisplayName(ChatColor.translateAlternateColorCodes('&', "&3HungerGames Wand"));
+            assert meta != null;
+            meta.setDisplayName(Util.getColString("&3HungerGames Wand"));
 			meta.setLore(new ArrayList<>(Arrays.asList(
-					ChatColor.translateAlternateColorCodes('&', "&7Left-Click to set position 1"),
-					ChatColor.translateAlternateColorCodes('&', "&7Right-Click to set position 2")
+					Util.getColString("&7Left-Click to set position 1"),
+                    Util.getColString("&7Right-Click to set position 2")
 			)));
 			wand.setItemMeta(meta);
 			player.getInventory().addItem(wand);
-			HG.getPlugin().getPlayerSessions().put(player.getUniqueId(), new PlayerSession(null, null));
+			plugin.getPlayerSessions().put(player.getUniqueId(), new PlayerSession(null, null));
 			Util.scm(player, "Wand enabled!");
 		}
 		return true;
