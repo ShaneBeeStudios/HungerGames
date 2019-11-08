@@ -4,12 +4,16 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import tk.shanebee.hg.HG;
 import tk.shanebee.hg.data.Language;
+import tk.shanebee.hg.managers.Manager;
+import tk.shanebee.hg.managers.PlayerManager;
 import tk.shanebee.hg.util.Util;
 
 public abstract class BaseCmd {
 
     HG plugin;
     Language lang;
+    PlayerManager playerManager;
+    Manager gameManager;
 
 	public CommandSender sender;
 	public String[] args;
@@ -21,24 +25,26 @@ public abstract class BaseCmd {
 	public String usage = "";
 	public Player player;
 
-	public boolean processCmd(HG p, CommandSender s, String[] arg) {
-		sender = s;
-		args = arg;
-		this.plugin = p;
-		this.lang = p.getLang();
+	public boolean processCmd(HG plugin, CommandSender sender, String[] args) {
+		this.sender = sender;
+		this.args = args;
+		this.plugin = plugin;
+		this.playerManager = plugin.getPlayerManager();
+		this.gameManager = plugin.getManager();
+		this.lang = plugin.getLang();
 
 		if (forcePlayer) {
-			if (!(s instanceof Player)) return false;
-			else player = (Player) s;
+			if (!(sender instanceof Player)) return false;
+			else player = (Player) sender;
 		}
-		if (!s.hasPermission("hg." + cmdName))
-			Util.scm(sender, HG.getPlugin().getLang().cmd_base_noperm.replace("<command>", cmdName));
-		else if (forceInGame && !HG.getPlugin().getPlayers().containsKey(player.getUniqueId()) && !HG.getPlugin().getSpectators().containsKey(player.getUniqueId()))
-			Util.scm(sender, HG.getPlugin().getLang().cmd_base_nogame);
-		else if (forceInRegion && !HG.getPlugin().getManager().isInRegion(player.getLocation()))
-			Util.scm(sender, HG.getPlugin().getLang().cmd_base_noregion);
-		else if (argLength > arg.length)
-			Util.scm(s, HG.getPlugin().getLang().cmd_base_wrongusage + " " + sendHelpLine());
+		if (!sender.hasPermission("hg." + cmdName))
+			Util.scm(this.sender, lang.cmd_base_noperm.replace("<command>", cmdName));
+		else if (forceInGame && !playerManager.hasPlayerData(player) && !playerManager.hasSpectatorData(player))
+			Util.scm(this.sender, lang.cmd_base_nogame);
+		else if (forceInRegion && !gameManager.isInRegion(player.getLocation()))
+			Util.scm(this.sender, lang.cmd_base_noregion);
+		else if (argLength > args.length)
+			Util.scm(sender, lang.cmd_base_wrongusage + " " + sendHelpLine());
 		else return run();
 		return true;
 	}
@@ -48,4 +54,5 @@ public abstract class BaseCmd {
 	public String sendHelpLine() {
 		return "&3&l/hg &b" + cmdName + " &6" + usage.replaceAll("<", "&7&l<&f").replaceAll(">", "&7&l>");
 	}
+
 }
