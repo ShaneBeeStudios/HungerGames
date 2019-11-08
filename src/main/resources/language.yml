@@ -50,6 +50,7 @@ kit-join-available: '&3&l  Available Kits:&b'
 kit-join-footer: '&c&l>&7&l------------------------------------------&c&l<'
 kit-no-perm: '&cYou do not have permission to use this kit!'
 kit-doesnt-exist: '&cDoes not exist'
+kit-disabled: '&cKits disabled in this game.'
 
 #  SCOREBOARD
 scoreboard-title: '&6&lHungerGames'
