@@ -38,10 +38,13 @@ public class KitManager {
 	 */
 	public String getKitListString() {
 		StringBuilder kits = new StringBuilder();
-		for (String s : kititems.keySet()) {
-			kits.append(", ").append(s);
-		}
-		return kits.substring(1);
+		if (kititems.size() > 0) {
+            for (String s : kititems.keySet()) {
+                kits.append(", ").append(s);
+            }
+            return kits.substring(1);
+        }
+		return null;
 	}
 
 	/** Get a list of kits in this KitManager
@@ -57,6 +60,13 @@ public class KitManager {
 	public HashMap<String, KitEntry> getKits() {
 		return this.kititems;
 	}
+
+    /** Check if this KitManager actually has kits
+     * @return True if kits exist
+     */
+	public boolean hasKits() {
+	    return this.kititems.size() > 0;
+    }
 
 	/** Add a kit to this KitManager
 	 * @param name The name of the kit

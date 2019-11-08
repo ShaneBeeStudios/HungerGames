@@ -578,15 +578,15 @@ public class Game {
 			Util.scm(player, " ");
 		String kit = this.kit.getKitListString();
 		Util.scm(player, " ");
-		Util.scm(player, HG.getPlugin().getLang().kit_join_header);
+		Util.scm(player, lang.kit_join_header);
 		Util.scm(player, " ");
-		if (player.hasPermission("hg.kit")) {
-			Util.scm(player, HG.getPlugin().getLang().kit_join_msg);
+		if (player.hasPermission("hg.kit") && this.kit.hasKits()) {
+			Util.scm(player, lang.kit_join_msg);
 			Util.scm(player, " ");
-			Util.scm(player, HG.getPlugin().getLang().kit_join_avail + kit);
+			Util.scm(player, lang.kit_join_avail + kit);
 			Util.scm(player, " ");
 		}
-		Util.scm(player, HG.getPlugin().getLang().kit_join_footer);
+		Util.scm(player, lang.kit_join_footer);
 		Util.scm(player, " ");
 	}
 

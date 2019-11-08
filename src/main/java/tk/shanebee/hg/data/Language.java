@@ -42,6 +42,7 @@ public class Language {
     public String kit_join_avail;
     public String kit_no_perm;
     public String kit_doesnt_exist;
+    public String kit_disabled;
     public String players_alive;
     public String players_alive_num;
     public String scoreboard_title;
@@ -239,6 +240,7 @@ public class Language {
         kit_join_avail = lang.getString("kit-join-available");
         kit_no_perm = lang.getString("kit-no-perm");
         kit_doesnt_exist = lang.getString("kit-doesnt-exist");
+        kit_disabled = lang.getString("kit-disabled");
         winning_amount = lang.getString("winning-amount");
 
         scoreboard_title = lang.getString("scoreboard-title");
