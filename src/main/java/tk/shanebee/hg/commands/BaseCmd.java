@@ -17,6 +17,10 @@ public abstract class BaseCmd {
     Manager gameManager;
     Data arenaConfig;
 
+    public BaseCmd() {
+        this.plugin = HG.getPlugin();
+    }
+
 	public CommandSender sender;
 	public String[] args;
 	public String cmdName;
@@ -30,7 +34,6 @@ public abstract class BaseCmd {
 	public boolean processCmd(HG plugin, CommandSender sender, String[] args) {
 		this.sender = sender;
 		this.args = args;
-		this.plugin = plugin;
 		this.playerManager = plugin.getPlayerManager();
 		this.gameManager = plugin.getManager();
 		this.arenaConfig = plugin.getArenaConfig();
