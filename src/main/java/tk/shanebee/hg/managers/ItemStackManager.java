@@ -163,6 +163,26 @@ public class ItemStackManager {
                 assert meta != null;
                 meta.setLore(lore);
                 item.setItemMeta(meta);
+            } else if (s.startsWith("potion:")) {
+			    if (item.getItemMeta() instanceof PotionMeta) {
+                    s = s.replace("potion:", "");
+                    PotionMeta potionMeta = ((PotionMeta) item.getItemMeta());
+                    String[] effects = s.split(";");
+                    for (String effect : effects) {
+                        if (verifyPotionEffects(effect, false)) {
+                            String[] data = effect.split(":");
+                            PotionEffectType potType = PotionEffectType.getByName(data[0]);
+                            int duration = Integer.parseInt(data[1]);
+                            int amplifier = Integer.parseInt(data[2]);
+                            assert potionMeta != null;
+                            assert potType != null;
+                            PotionEffect potionEffect = new PotionEffect(potType, duration, amplifier);
+                            potionMeta.addCustomEffect(potionEffect, true);
+                        }
+                        item.setItemMeta(potionMeta);
+                    }
+                }
+
             } else if (s.startsWith("data:")) {
 				s = s.replace("data:", "").replace("~", " ");
 				if (nbtApi != null)
@@ -183,17 +203,17 @@ public class ItemStackManager {
 	}
 
 	private ItemStack itemStringToStack(String item, int amount) {
-		String[] itemArr = item.split(":");
-		if (itemArr[0].equalsIgnoreCase("potion") || itemArr[0].equalsIgnoreCase("splash_potion") ||
-                itemArr[0].equalsIgnoreCase("lingering_potion")) {
-		    return getPotion(item, amount);
-		}
-		Material mat = verifyMaterial(itemArr[0].toUpperCase());
-		if (mat == null) {
+	    String oldPotion = item.toUpperCase();
+        String[] itemArr = item.split(":");
+        if (oldPotion.startsWith("POTION:") || oldPotion.startsWith("SPLASH_POTION:") || oldPotion.startsWith("LINGERING_POTION:")) {
+            return getPotion(item, amount);
+        }
+        Material mat = verifyMaterial(itemArr[0].toUpperCase());
+        if (mat == null) {
             return null;
         }
         return new ItemStack(mat, amount);
-	}
+    }
 
 	private Material verifyMaterial(String material) {
 	    Material mat;
@@ -207,6 +227,7 @@ public class ItemStackManager {
     }
 
 	// Get a potion item stack from a string
+    // DEPRECATED - will remove in future
 	private ItemStack getPotion(String item, int amount) {
 	    String[] effects = item.split(";");
 	    String potionType = item.split(":")[0];
@@ -214,7 +235,7 @@ public class ItemStackManager {
 	    PotionMeta potionMeta = ((PotionMeta) potion.getItemMeta());
 
         for (String effect : effects) {
-            if (!verifyPotionEffects(effect)) {
+            if (!verifyPotionEffects(effect, true)) {
                 return null;
             }
 
@@ -232,7 +253,8 @@ public class ItemStackManager {
     }
 
     // Verify if the potion effects are valid (including parameters)
-    private boolean verifyPotionEffects(String data) {
+    private boolean verifyPotionEffects(String data, boolean potionItem) {
+	    String pot = potionItem ? "POTION:" : "potion:";
 	    String[] potionData = data.split(":");
 	    if (potionData.length == 3 || potionData.length == 4) {
 	        int i = potionData.length == 3 ? 0 : 1;
@@ -240,30 +262,30 @@ public class ItemStackManager {
                 Util.warning("Potion effect type not found: &c" + potionData[i].toUpperCase());
                 Util.log("  - Check your configs");
                 Util.log("  - Proper example:");
-                Util.log("      &bPOTION:POTION_TYPE:DURATION_IN_TICKS:AMPLIFIER");
-                Util.log("      &bPOTION:HEAL:200:1");
+                Util.log("      &b" + pot + ":POTION_TYPE:DURATION_IN_TICKS:AMPLIFIER");
+                Util.log("      &b" + pot + ":HEAL:200:1");
                 return false;
             } else if (!Util.isInt(potionData[i + 1])) {
                 Util.warning("Potion duration incorrect format: &c" + potionData[i + 1]);
                 Util.log("  - Check your configs");
                 Util.log("  - Proper example:");
-                Util.log("      &bPOTION:POTION_TYPE:DURATION_IN_TICKS:AMPLIFIER");
-                Util.log("      &bPOTION:HEAL:200:1");
+                Util.log("      &b" + pot + ":POTION_TYPE:DURATION_IN_TICKS:AMPLIFIER");
+                Util.log("      &b" + pot + ":HEAL:200:1");
                 return false;
             } else if (!Util.isInt(potionData[i + 2])) {
                 Util.warning("Potion amplifier incorrect format: &c" + potionData[i + 2]);
                 Util.log("  - Check your configs");
                 Util.log("  - Proper example:");
-                Util.log("      &bPOTION:POTION_TYPE:DURATION_IN_TICKS:AMPLIFIER");
-                Util.log("      &bPOTION:HEAL:200:1");
+                Util.log("      &b" + pot + ":POTION_TYPE:DURATION_IN_TICKS:AMPLIFIER");
+                Util.log("      &b" + pot + ":HEAL:200:1");
                 return false;
             }
         } else {
             Util.warning("Improper setup of potion: &c" + data);
             Util.log("  - Check your configs for missing arguments");
             Util.log("  - Proper example:");
-            Util.log("      &bPOTION:POTION_TYPE:DURATION_IN_TICKS:LEVEL");
-            Util.log("      &bPOTION:HEAL:200:1");
+            Util.log("      &b" + pot + ":POTION_TYPE:DURATION_IN_TICKS:LEVEL");
+            Util.log("      &b" + pot + ":HEAL:200:1");
             return false;
         }
 	    return true;
