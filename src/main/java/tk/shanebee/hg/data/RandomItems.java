@@ -136,10 +136,10 @@ public class RandomItems {
 		items.add("MELON_SLICE 1 x:4");
 		items.add("COOKED_BEEF 1 x:2");
 		items.add("ENDER_PEARL 1 x:2");
-		items.add("POTION:SPEED:3600:1 1 x:2 name:&rPotion_of_Swiftness");
-		items.add("POTION:HEAL:1:1 1 x:2 name:&rPotion_of_Healing");
-		items.add("SPLASH_POTION:POISON:320:2 1 name:&rSplash_Potion_of_Poison");
-		items.add("SPLASH_POTION:REGENERATION:660:1 1 x:2 name:&rSplash_Potion_of_Regeneration");
+		items.add("POTION potion:SPEED:3600:1 1 x:2 name:&rPotion_of_Swiftness");
+		items.add("POTION potion:HEAL:1:1 1 x:2 name:&rPotion_of_Healing");
+		items.add("SPLASH_POTION potion:POISON:320:2 1 color:green name:&rSplash_Potion_of_Poison");
+		items.add("SPLASH_POTION potion:REGENERATION:660:1 1 x:2 name:&rSplash_Potion_of_Regeneration");
 		items.add("APPLE 2 x:5");
 		item.set("items", items);
 
