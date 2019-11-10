@@ -24,127 +24,131 @@ import java.util.Arrays;
  */
 public class ItemStackManager {
 
-	private HG plugin;
-	private NBTApi nbtApi;
+    private HG plugin;
+    private NBTApi nbtApi;
 
-	public ItemStackManager(HG p) {
-		this.plugin = p;
-		setKits();
-		this.nbtApi = p.getNbtApi();
-	}
+    public ItemStackManager(HG p) {
+        this.plugin = p;
+        setKits();
+        this.nbtApi = p.getNbtApi();
+    }
 
-	public void setKits() {
-		kitCreator(plugin.getConfig(), plugin.getKitManager(), null);
-		Util.log("Loaded kits");
-	}
+    public void setKits() {
+        kitCreator(plugin.getConfig(), plugin.getKitManager(), null);
+        Util.log("Loaded kits");
+    }
 
-    /** Set the kits for a game from a config
+    /**
+     * Set the kits for a game from a config
+     *
      * @param gameName The game to set the kits for
-     * @param config Config the kit is pulled from
+     * @param config   Config the kit is pulled from
      * @return New KitManager for a game
      */
-	public KitManager setGameKits(String gameName, Configuration config) {
-		String gamePath = "arenas." + gameName + ".";
-		KitManager kit = new KitManager();
-		if (config.getConfigurationSection(gamePath + "kits") == null) return null;
-		kitCreator(config, kit, gamePath);
-		Util.log("Loaded custom kits for arena: " + gameName);
-		return kit;
-	}
+    public KitManager setGameKits(String gameName, Configuration config) {
+        String gamePath = "arenas." + gameName + ".";
+        KitManager kit = new KitManager();
+        if (config.getConfigurationSection(gamePath + "kits") == null) return null;
+        kitCreator(config, kit, gamePath);
+        Util.log("Loaded custom kits for arena: " + gameName);
+        return kit;
+    }
 
-	@SuppressWarnings("ConstantConditions")
-	private void kitCreator(Configuration config, KitManager kit, @Nullable String gameName) {
-		if (gameName == null) gameName = "";
-		for (String path : config.getConfigurationSection(gameName + "kits").getKeys(false)) {
-			try {
-				ArrayList<ItemStack> stack = new ArrayList<>();
-				ArrayList<PotionEffect> potions = new ArrayList<>();
-				String perm = null;
+    @SuppressWarnings("ConstantConditions")
+    private void kitCreator(Configuration config, KitManager kit, @Nullable String gameName) {
+        if (gameName == null) gameName = "";
+        for (String path : config.getConfigurationSection(gameName + "kits").getKeys(false)) {
+            try {
+                ArrayList<ItemStack> stack = new ArrayList<>();
+                ArrayList<PotionEffect> potions = new ArrayList<>();
+                String perm = null;
 
-				for (String item : config.getStringList(gameName + "kits." + path + ".items"))
-					stack.add(getItem(item, true));
+                for (String item : config.getStringList(gameName + "kits." + path + ".items"))
+                    stack.add(getItem(item, true));
 
-				for (String pot : config.getStringList(gameName + "kits." + path + ".potion-effects")) {
-					String[] poti = pot.split(":");
-					PotionEffectType e = PotionEffectType.getByName(poti[0]);
-					if (poti[2].equalsIgnoreCase("forever")) {
-						assert e != null;
-						potions.add(e.createEffect(2147483647, Integer.parseInt(poti[1])));
-					} else {
-						int dur = Integer.parseInt(poti[2]) * 20;
-						assert e != null;
-						potions.add(e.createEffect(dur, Integer.parseInt(poti[1])));
-					}
-				}
+                for (String pot : config.getStringList(gameName + "kits." + path + ".potion-effects")) {
+                    String[] poti = pot.split(":");
+                    PotionEffectType e = PotionEffectType.getByName(poti[0]);
+                    if (poti[2].equalsIgnoreCase("forever")) {
+                        assert e != null;
+                        potions.add(e.createEffect(2147483647, Integer.parseInt(poti[1])));
+                    } else {
+                        int dur = Integer.parseInt(poti[2]) * 20;
+                        assert e != null;
+                        potions.add(e.createEffect(dur, Integer.parseInt(poti[1])));
+                    }
+                }
 
-				ItemStack helm = getItem(config.getString(gameName + "kits." + path + ".helmet"), false);
-				ItemStack ches = getItem(config.getString(gameName + "kits." + path + ".chestplate"), false);
-				ItemStack leg = getItem(config.getString(gameName + "kits." + path + ".leggings"), false);
-				ItemStack boot = getItem(config.getString(gameName + "kits." + path + ".boots"), false);
+                ItemStack helm = getItem(config.getString(gameName + "kits." + path + ".helmet"), false);
+                ItemStack ches = getItem(config.getString(gameName + "kits." + path + ".chestplate"), false);
+                ItemStack leg = getItem(config.getString(gameName + "kits." + path + ".leggings"), false);
+                ItemStack boot = getItem(config.getString(gameName + "kits." + path + ".boots"), false);
 
-				if (config.getString(gameName + "kits." + path + ".permission") != null
-						&& !config.getString(gameName + "kits." + path + ".permission").equals("none"))
-					perm = config.getString(gameName + "kits." + path + ".permission");
+                if (config.getString(gameName + "kits." + path + ".permission") != null
+                        && !config.getString(gameName + "kits." + path + ".permission").equals("none"))
+                    perm = config.getString(gameName + "kits." + path + ".permission");
 
-				kit.addKit(path, new KitEntry(stack.toArray(new ItemStack[0]), helm, boot, ches, leg, perm, potions));
-			} catch (Exception e) {
-				Util.log("-------------------------------------------");
-				Util.warning("Unable to load kit " + gameName + path + "!");
-				Util.log("-------------------------------------------");
-			}
-		}
-	}
+                kit.addKit(path, new KitEntry(stack.toArray(new ItemStack[0]), helm, boot, ches, leg, perm, potions));
+            } catch (Exception e) {
+                Util.log("-------------------------------------------");
+                Util.warning("Unable to load kit " + gameName + path + "!");
+                Util.log("-------------------------------------------");
+            }
+        }
+    }
 
-    /** Get an ItemStack from a string
-     * @param args String to convert to an item
+    /**
+     * Get an ItemStack from a string
+     *
+     * @param args        String to convert to an item
      * @param isStackable Whether this is stackable or a single item (ie: armor)
      * @return New ItemStack
      */
-	@SuppressWarnings("deprecation")
-	public ItemStack getItem(String args, boolean isStackable) {
-		if (args == null) return null;
-		int amount = 1;
-		if (isStackable) {
-			String a = args.split(" ")[1];
-			if (Util.isInt(a)) {
-				amount = Integer.parseInt(a);
-			}
-		}
-		ItemStack item = itemStringToStack(args.split(" ")[0], amount);
-		if (item == null) return null;
+    @SuppressWarnings("deprecation")
+    public ItemStack getItem(String args, boolean isStackable) {
+        if (args == null) return null;
+        int amount = 1;
+        if (isStackable) {
+            String a = args.split(" ")[1];
+            if (Util.isInt(a)) {
+                amount = Integer.parseInt(a);
+            }
+        }
+        ItemStack item = itemStringToStack(args.split(" ")[0], amount);
+        if (item == null) return null;
 
-		String[] ags = args.split(" ");
-		for (String s : ags) {
-			if (s.startsWith("enchant:")) {
-				s = s.replace("enchant:", "").toUpperCase();
-				String[] d = s.split(":");
-				int level = 1;
-				if (d.length != 1 && Util.isInt(d[1])) {
-					level = Integer.parseInt(d[1]);
-				}
-				for (Enchantment e : Enchantment.values()) {
-					if (e.getKey().getKey().equalsIgnoreCase(d[0]) || e.getName().equalsIgnoreCase(d[0])) {
-						item.addUnsafeEnchantment(e, level);
-					}
-				}
-			} else if (s.startsWith("color:")) {
-			    if (item.getItemMeta() instanceof LeatherArmorMeta) {
-			        LeatherArmorMeta meta = ((LeatherArmorMeta) item.getItemMeta());
-			        meta.setColor(getColor(s));
-			        item.setItemMeta(meta);
+        String[] ags = args.split(" ");
+        for (String s : ags) {
+            if (s.startsWith("enchant:")) {
+                s = s.replace("enchant:", "").toUpperCase();
+                String[] d = s.split(":");
+                int level = 1;
+                if (d.length != 1 && Util.isInt(d[1])) {
+                    level = Integer.parseInt(d[1]);
+                }
+                for (Enchantment e : Enchantment.values()) {
+                    if (e.getKey().getKey().equalsIgnoreCase(d[0]) || e.getName().equalsIgnoreCase(d[0])) {
+                        item.addUnsafeEnchantment(e, level);
+                    }
+                }
+            } else if (s.startsWith("color:")) {
+                if (item.getItemMeta() instanceof LeatherArmorMeta) {
+                    LeatherArmorMeta meta = ((LeatherArmorMeta) item.getItemMeta());
+                    meta.setColor(getColor(s));
+                    item.setItemMeta(meta);
                 } else if (item.getItemMeta() instanceof PotionMeta) {
-			        PotionMeta meta = ((PotionMeta) item.getItemMeta());
-			        meta.setColor(getColor(s));
+                    PotionMeta meta = ((PotionMeta) item.getItemMeta());
+                    meta.setColor(getColor(s));
                     item.setItemMeta(meta);
                 }
-			} else if (s.startsWith("name:")) {
-				s = s.replace("name:", "").replace("_", " ");
-				s = ChatColor.translateAlternateColorCodes('&', s);
-				ItemMeta im = item.getItemMeta();
-				assert im != null;
-				im.setDisplayName(s);
-				item.setItemMeta(im);
-			} else if (s.startsWith("lore:")) {
+            } else if (s.startsWith("name:")) {
+                s = s.replace("name:", "").replace("_", " ");
+                s = ChatColor.translateAlternateColorCodes('&', s);
+                ItemMeta im = item.getItemMeta();
+                assert im != null;
+                im.setDisplayName(s);
+                item.setItemMeta(im);
+            } else if (s.startsWith("lore:")) {
                 s = s.replace("lore:", "").replace("_", " ");
                 s = ChatColor.translateAlternateColorCodes('&', s);
                 ItemMeta meta = item.getItemMeta();
@@ -153,7 +157,7 @@ public class ItemStackManager {
                 meta.setLore(lore);
                 item.setItemMeta(meta);
             } else if (s.startsWith("potion:")) {
-			    if (item.getItemMeta() instanceof PotionMeta) {
+                if (item.getItemMeta() instanceof PotionMeta) {
                     s = s.replace("potion:", "");
                     PotionMeta potionMeta = ((PotionMeta) item.getItemMeta());
                     String[] effects = s.split(";");
@@ -173,26 +177,26 @@ public class ItemStackManager {
                 }
 
             } else if (s.startsWith("data:")) {
-				s = s.replace("data:", "").replace("~", " ");
-				if (nbtApi != null)
-					//nbtApi.setNBT(item, s);
-				    item = nbtApi.getItemWithNBT(item, s);
-			} else if (s.startsWith("ownerName:")) {
-				s = s.replace("ownerName:", "");
-				//if (item.getType().equals(Material.PLAYER_HEAD)) {
+                s = s.replace("data:", "").replace("~", " ");
+                if (nbtApi != null)
+                    //nbtApi.setNBT(item, s);
+                    item = nbtApi.getItemWithNBT(item, s);
+            } else if (s.startsWith("ownerName:")) {
+                s = s.replace("ownerName:", "");
+                //if (item.getType().equals(Material.PLAYER_HEAD)) {
                 if (item.getItemMeta() instanceof SkullMeta) {
-					ItemMeta meta = item.getItemMeta();
-					assert meta != null;
-					((SkullMeta) meta).setOwningPlayer(Bukkit.getOfflinePlayer(s));
-					item.setItemMeta(meta);
-				}
-			}
-		}
-		return item;
-	}
+                    ItemMeta meta = item.getItemMeta();
+                    assert meta != null;
+                    ((SkullMeta) meta).setOwningPlayer(Bukkit.getOfflinePlayer(s));
+                    item.setItemMeta(meta);
+                }
+            }
+        }
+        return item;
+    }
 
-	private ItemStack itemStringToStack(String item, int amount) {
-	    String oldPotion = item.toUpperCase();
+    private ItemStack itemStringToStack(String item, int amount) {
+        String oldPotion = item.toUpperCase();
         String[] itemArr = item.split(":");
         if (oldPotion.startsWith("POTION:") || oldPotion.startsWith("SPLASH_POTION:") || oldPotion.startsWith("LINGERING_POTION:")) {
             return getPotion(item, amount);
@@ -204,24 +208,24 @@ public class ItemStackManager {
         return new ItemStack(mat, amount);
     }
 
-	private Material verifyMaterial(String material) {
-	    Material mat;
-	    try {
-	        mat = Material.valueOf(material);
+    private Material verifyMaterial(String material) {
+        Material mat;
+        try {
+            mat = Material.valueOf(material);
         } catch (IllegalArgumentException ex) {
-	        Util.warning("Invalid Material: &7" + material);
-	        return null;
+            Util.warning("Invalid Material: &7" + material);
+            return null;
         }
-	    return mat;
+        return mat;
     }
 
-	// Get a potion item stack from a string
+    // Get a potion item stack from a string
     // DEPRECATED - will remove in future
-	private ItemStack getPotion(String item, int amount) {
-	    String[] effects = item.split(";");
-	    String potionType = item.split(":")[0];
-	    ItemStack potion = new ItemStack(Material.valueOf(potionType.toUpperCase()), amount);
-	    PotionMeta potionMeta = ((PotionMeta) potion.getItemMeta());
+    private ItemStack getPotion(String item, int amount) {
+        String[] effects = item.split(";");
+        String potionType = item.split(":")[0];
+        ItemStack potion = new ItemStack(Material.valueOf(potionType.toUpperCase()), amount);
+        PotionMeta potionMeta = ((PotionMeta) potion.getItemMeta());
 
         for (String effect : effects) {
             if (!verifyPotionEffects(effect, true)) {
@@ -243,11 +247,11 @@ public class ItemStackManager {
 
     // Verify if the potion effects are valid (including parameters)
     private boolean verifyPotionEffects(String data, boolean potionItem) {
-	    String pot = potionItem ? "POTION:" : "potion:";
-	    String[] potionData = data.split(":");
-	    if (potionData.length == 3 || potionData.length == 4) {
-	        int i = potionData.length == 3 ? 0 : 1;
-	        if (PotionEffectType.getByName(potionData[i].toUpperCase()) == null) {
+        String pot = potionItem ? "POTION:" : "potion:";
+        String[] potionData = data.split(":");
+        if (potionData.length == 3 || potionData.length == 4) {
+            int i = potionData.length == 3 ? 0 : 1;
+            if (PotionEffectType.getByName(potionData[i].toUpperCase()) == null) {
                 Util.warning("Potion effect type not found: &c" + potionData[i].toUpperCase());
                 Util.log("  - Check your configs");
                 Util.log("  - Proper example:");
@@ -277,29 +281,31 @@ public class ItemStackManager {
             Util.log("      &b" + pot + ":HEAL:200:1");
             return false;
         }
-	    return true;
+        return true;
     }
 
     private Color getColor(String colorString) {
-	    String dyeString = colorString.replace("color:", "");
-	    try {
-	        DyeColor dc = DyeColor.valueOf(dyeString.toUpperCase());
-	        return dc.getColor();
-        } catch (Exception ignore) {}
+        String dyeString = colorString.replace("color:", "");
+        try {
+            DyeColor dc = DyeColor.valueOf(dyeString.toUpperCase());
+            return dc.getColor();
+        } catch (Exception ignore) {
+        }
 
-	    try {
-	        return Color.fromRGB(Integer.parseInt(dyeString));
-        } catch (Exception ignore) {}
-	    return null;
+        try {
+            return Color.fromRGB(Integer.parseInt(dyeString));
+        } catch (Exception ignore) {
+        }
+        return null;
     }
 
-	public ItemStack getSpectatorCompass() {
-	    ItemStack compass = new ItemStack(Material.COMPASS);
-	    ItemMeta meta = compass.getItemMeta();
-	    assert meta != null;
-	    meta.setDisplayName(Util.getColString(plugin.getLang().spectator_compass));
-	    compass.setItemMeta(meta);
-	    return compass;
+    public ItemStack getSpectatorCompass() {
+        ItemStack compass = new ItemStack(Material.COMPASS);
+        ItemMeta meta = compass.getItemMeta();
+        assert meta != null;
+        meta.setDisplayName(Util.getColString(plugin.getLang().spectator_compass));
+        compass.setItemMeta(meta);
+        return compass;
     }
 
 }
