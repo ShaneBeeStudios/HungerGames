@@ -128,26 +128,15 @@ public class ItemStackManager {
 					}
 				}
 			} else if (s.startsWith("color:")) {
-				try {
-					s = s.replace("color:", "").toUpperCase();
-					for (DyeColor c : DyeColor.values()) {
-						if (c.name().equalsIgnoreCase(s)) {
-							LeatherArmorMeta lam = (LeatherArmorMeta) item.getItemMeta();
-							assert lam != null;
-							lam.setColor(c.getColor());
-							item.setItemMeta(lam);
-						}
-					}
-				} catch (Exception ignore) {
-				}
-				try {
-					s = s.replace("color:", "");
-					PotionMeta meta = ((PotionMeta) item.getItemMeta());
-					assert meta != null;
-					meta.setColor(Color.fromRGB(Integer.parseInt(s)));
-					item.setItemMeta(meta);
-				} catch (Exception ignore) {
-				}
+			    if (item.getItemMeta() instanceof LeatherArmorMeta) {
+			        LeatherArmorMeta meta = ((LeatherArmorMeta) item.getItemMeta());
+			        meta.setColor(getColor(s));
+			        item.setItemMeta(meta);
+                } else if (item.getItemMeta() instanceof PotionMeta) {
+			        PotionMeta meta = ((PotionMeta) item.getItemMeta());
+			        meta.setColor(getColor(s));
+                    item.setItemMeta(meta);
+                }
 			} else if (s.startsWith("name:")) {
 				s = s.replace("name:", "").replace("_", " ");
 				s = ChatColor.translateAlternateColorCodes('&', s);
@@ -289,6 +278,19 @@ public class ItemStackManager {
             return false;
         }
 	    return true;
+    }
+
+    private Color getColor(String colorString) {
+	    String dyeString = colorString.replace("color:", "");
+	    try {
+	        DyeColor dc = DyeColor.valueOf(dyeString.toUpperCase());
+	        return dc.getColor();
+        } catch (Exception ignore) {}
+
+	    try {
+	        return Color.fromRGB(Integer.parseInt(dyeString));
+        } catch (Exception ignore) {}
+	    return null;
     }
 
 	public ItemStack getSpectatorCompass() {
