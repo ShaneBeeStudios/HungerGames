@@ -74,7 +74,7 @@ kits:
         items:
             - BOW name:&2Lucky_Bow
             - ARROW 64 name:&aLucky_Arrow
-            - POTION:HEAL:60:0 2 name:&bHealing
+            - POTION potion:HEAL:60:0 2 name:&bHealing
         potion-effects:
     survivor:
         permission: none
@@ -85,7 +85,7 @@ kits:
         items:
             - STONE_SWORD 1 name:&7Survival_Sword
             - BREAD 4 name:&6Peasant's_Bread
-            - POTION:HEAL:60:0 2 name:&bHealing
+            - POTION potion:HEAL:60:0 2 name:&bHealing
         potion-effects:
     pro:
         permission: none
@@ -96,7 +96,7 @@ kits:
         items:
             - IRON_SWORD 1
             - BREAD 4 name:&8Pro_Bread
-            - POTION:HEAL:60:1 2 name:&bSuper_Healing
+            - POTION potion:HEAL:60:1 2 name:&bSuper_Healing
         potion-effects:
     ninja:
         permission: none
@@ -105,7 +105,7 @@ kits:
         leggings: LEATHER_LEGGINGS color:black
         boots: LEATHER_BOOTS color:black enchant:feather_falling
         items:
-            - POTION:HEAL:60:1 2 name:&bSuper_Healing
+            - POTION potion:HEAL:60:1 2 name:&bSuper_Healing
         potion-effects:
             - SPEED:1:forever
     stupidclass:
@@ -117,6 +117,6 @@ kits:
         items:
             - IRON_SWORD 1 enchant:sharpness:2 enchant:smite:2 name:&bOP_&6Sword?
             - BREAD 4
-            - POTION:HEAL:60:2 2 name:&bSuper_Duper_Healing
+            - POTION potion:HEAL:60:2 2 name:&bSuper_Duper_Healing
         potion-effects:
             - FIRE_RESISTANCE:2:forever
