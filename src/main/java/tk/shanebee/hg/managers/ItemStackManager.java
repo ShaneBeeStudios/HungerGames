@@ -111,6 +111,8 @@ public class ItemStackManager {
 			}
 		}
 		ItemStack item = itemStringToStack(args.split(" ")[0], amount);
+		if (item == null) return null;
+
 		String[] ags = args.split(" ");
 		for (String s : ags) {
 			if (s.startsWith("enchant:")) {
@@ -122,7 +124,6 @@ public class ItemStackManager {
 				}
 				for (Enchantment e : Enchantment.values()) {
 					if (e.getKey().getKey().equalsIgnoreCase(d[0]) || e.getName().equalsIgnoreCase(d[0])) {
-						assert item != null;
 						item.addUnsafeEnchantment(e, level);
 					}
 				}
@@ -131,7 +132,6 @@ public class ItemStackManager {
 					s = s.replace("color:", "").toUpperCase();
 					for (DyeColor c : DyeColor.values()) {
 						if (c.name().equalsIgnoreCase(s)) {
-							assert item != null;
 							LeatherArmorMeta lam = (LeatherArmorMeta) item.getItemMeta();
 							assert lam != null;
 							lam.setColor(c.getColor());
@@ -142,7 +142,6 @@ public class ItemStackManager {
 				}
 				try {
 					s = s.replace("color:", "");
-					assert item != null;
 					PotionMeta meta = ((PotionMeta) item.getItemMeta());
 					assert meta != null;
 					meta.setColor(Color.fromRGB(Integer.parseInt(s)));
@@ -152,30 +151,27 @@ public class ItemStackManager {
 			} else if (s.startsWith("name:")) {
 				s = s.replace("name:", "").replace("_", " ");
 				s = ChatColor.translateAlternateColorCodes('&', s);
-				assert item != null;
 				ItemMeta im = item.getItemMeta();
 				assert im != null;
 				im.setDisplayName(s);
 				item.setItemMeta(im);
 			} else if (s.startsWith("lore:")) {
-				s = s.replace("lore:", "").replace("_", " ");
-				s = ChatColor.translateAlternateColorCodes('&', s);
-				assert item != null;
-				ItemMeta meta = item.getItemMeta();
-				ArrayList<String> lore = new ArrayList<>(Arrays.asList(s.split(":")));
-				assert meta != null;
-				meta.setLore(lore);
-				item.setItemMeta(meta);
-			} else if (s.startsWith("data:")) {
+                s = s.replace("lore:", "").replace("_", " ");
+                s = ChatColor.translateAlternateColorCodes('&', s);
+                ItemMeta meta = item.getItemMeta();
+                ArrayList<String> lore = new ArrayList<>(Arrays.asList(s.split(":")));
+                assert meta != null;
+                meta.setLore(lore);
+                item.setItemMeta(meta);
+            } else if (s.startsWith("data:")) {
 				s = s.replace("data:", "").replace("~", " ");
-				assert item != null;
 				if (nbtApi != null)
 					//nbtApi.setNBT(item, s);
 				    item = nbtApi.getItemWithNBT(item, s);
 			} else if (s.startsWith("ownerName:")) {
 				s = s.replace("ownerName:", "");
-				assert item != null;
-				if (item.getType().equals(Material.PLAYER_HEAD)) {
+				//if (item.getType().equals(Material.PLAYER_HEAD)) {
+                if (item.getItemMeta() instanceof SkullMeta) {
 					ItemMeta meta = item.getItemMeta();
 					assert meta != null;
 					((SkullMeta) meta).setOwningPlayer(Bukkit.getOfflinePlayer(s));
@@ -192,8 +188,23 @@ public class ItemStackManager {
                 itemArr[0].equalsIgnoreCase("lingering_potion")) {
 		    return getPotion(item, amount);
 		}
-		return new ItemStack(Material.valueOf(itemArr[0].toUpperCase()), amount);
+		Material mat = verifyMaterial(itemArr[0].toUpperCase());
+		if (mat == null) {
+            return null;
+        }
+        return new ItemStack(mat, amount);
 	}
+
+	private Material verifyMaterial(String material) {
+	    Material mat;
+	    try {
+	        mat = Material.valueOf(material);
+        } catch (IllegalArgumentException ex) {
+	        Util.warning("Invalid Material: &7" + material);
+	        return null;
+        }
+	    return mat;
+    }
 
 	// Get a potion item stack from a string
 	private ItemStack getPotion(String item, int amount) {
