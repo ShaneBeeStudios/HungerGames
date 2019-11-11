@@ -112,6 +112,7 @@ public class GameListener implements Listener {
 					Util.scm(damager, "&c" + player.getName() + " is on your team!");
 					event.setCancelled(true);
 				} else if (event.getFinalDamage() >= player.getHealth()) {
+					if (hasTotem(player)) return;
 					event.setCancelled(true);
 					processDeath(player, game, damager, event.getCause());
 				}
@@ -132,11 +133,19 @@ public class GameListener implements Listener {
 			PlayerData pd = plugin.getPlayers().get(player.getUniqueId());
 			if (pd != null) {
 				if (event.getFinalDamage() >= player.getHealth()) {
+					if (hasTotem(player)) return;
 					event.setCancelled(true);
 					processDeath(player, pd.getGame(), null, event.getCause());
 				}
 			}
 		}
+	}
+
+	private boolean hasTotem(Player player) {
+		PlayerInventory inv = player.getInventory();
+		if (inv.getItemInMainHand() != null && inv.getItemInMainHand().getType() == Material.TOTEM_OF_UNDYING) return true;
+		if (inv.getItemInOffHand() != null && inv.getItemInOffHand().getType() == Material.TOTEM_OF_UNDYING) return true;
+		return false;
 	}
 
 	private void processDeath(Player player, Game game, Entity damager, EntityDamageEvent.DamageCause cause) {
