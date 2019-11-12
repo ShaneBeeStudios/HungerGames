@@ -70,13 +70,13 @@ public class GameListener implements Listener {
 		for (ItemStack i : inv.getContents()) {
 			if (i != null && i.getType() != Material.AIR) {
 				assert l.getWorld() != null;
-				l.getWorld().dropItemNaturally(l, i);
+				l.getWorld().dropItemNaturally(l, i).setPersistent(false);
 			}
 		}
 		for (ItemStack i : inv.getArmorContents()) {
 			if (i != null && i.getType() != Material.AIR) {
 				assert l.getWorld() != null;
-				l.getWorld().dropItemNaturally(l, i);
+				l.getWorld().dropItemNaturally(l, i).setPersistent(false);
 			}
 		}
 	}
@@ -596,34 +596,35 @@ public class GameListener implements Listener {
 	private void onDrop(PlayerDropItemEvent event) {
 		Player p = event.getPlayer();
 		PlayerData pd = playerManager.getPlayerData(p);
-		if (pd != null && pd.getGame().getStatus() == Status.WAITING) {
-			event.setCancelled(true);
+		if (pd != null) {
+		    if (pd.getGame().getStatus() == Status.WAITING) {
+                event.setCancelled(true);
+            }
 		}
 	}
 
-	@EventHandler
+	@SuppressWarnings("deprecation")
+    @EventHandler
 	private void onSpawn(EntitySpawnEvent event) {
-		Entity entity = event.getEntity();
-		if (!(entity instanceof Player) && entity instanceof LivingEntity) {
-			if (gameManager.isInRegion(event.getLocation())) {
-				Game g = gameManager.getGame(event.getLocation());
-				if (g.getStatus() != Status.RUNNING) {
-					event.setCancelled(true);
-				}
-				if (event instanceof CreatureSpawnEvent) {
-					if (((CreatureSpawnEvent) event).getSpawnReason() != CreatureSpawnEvent.SpawnReason.CUSTOM) {
-						event.setCancelled(true);
-					}
-				}
-			}
-		}
-		if (!(entity instanceof Player)) {
-			if (gameManager.isInRegion(event.getLocation())) {
-				Game g = gameManager.getGame(event.getLocation());
-				g.getBound().addEntity(entity);
-			}
-		}
-	}
+        Entity entity = event.getEntity();
+        if (!(entity instanceof Player)) {
+            if (gameManager.isInRegion(event.getLocation())) {
+                Game g = gameManager.getGame(event.getLocation());
+                if (entity instanceof LivingEntity) {
+                    if (g.getStatus() != Status.RUNNING) {
+                        event.setCancelled(true);
+                    }
+                    if (event instanceof CreatureSpawnEvent) {
+                        if (((CreatureSpawnEvent) event).getSpawnReason() != CreatureSpawnEvent.SpawnReason.CUSTOM) {
+                            event.setCancelled(true);
+                        }
+                    }
+                }
+                entity.setPersistent(false);
+                g.getBound().addEntity(entity);
+            }
+        }
+    }
 
 	@EventHandler
 	private void onPickup(EntityPickupItemEvent event) {
