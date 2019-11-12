@@ -44,7 +44,7 @@ public class PlayerManager {
      * @return True if player is spectating a game and has data
      */
     public boolean hasSpectatorData(Player player) {
-        return hasPlayerData(player.getUniqueId());
+        return hasSpectatorData(player.getUniqueId());
     }
 
     /** Check if a player is spectating a game and has PlayerData
