@@ -6,7 +6,7 @@
 
     <groupId>tk.shanebee.hg</groupId>
     <artifactId>HungerGames</artifactId>
-    <version>4.13.1</version>
+    <version>4.13.2</version>
 
     <properties>
         <maven.compiler.source>1.8</maven.compiler.source>
@@ -37,7 +37,7 @@
         <dependency>
             <groupId>org.spigotmc</groupId>
             <artifactId>spigot-api</artifactId>
-            <version>1.14.4-R0.1-SNAPSHOT</version>
+            <version>1.15-R0.1-SNAPSHOT</version>
             <scope>provided</scope>
         </dependency>
         <dependency>
@@ -61,7 +61,7 @@
         <dependency>
             <groupId>de.tr7zw</groupId>
             <artifactId>item-nbt-api</artifactId>
-            <version>2.0.0</version>
+            <version>2.1.1</version>
         </dependency>
         <dependency>
             <groupId>com.gmail.nossr50.mcMMO</groupId>
