@@ -103,8 +103,12 @@ public class HG extends JavaPlugin {
 		}
 		//mcMMO check
 		if (Bukkit.getPluginManager().getPlugin("mcMMO") != null) {
-			getServer().getPluginManager().registerEvents(new McmmoListeners(this), this);
-			Util.log("&7mcMMO found, mcMMO event hooks &aenabled");
+		    if (Util.classExists("com.gmail.nossr50.events.skills.secondaryabilities.SubSkillEvent")) {
+                getServer().getPluginManager().registerEvents(new McmmoListeners(this), this);
+                Util.log("&7mcMMO found, mcMMO event hooks &aenabled");
+            } else {
+		        Util.log("&7mcMMO classic found. HungerGames does not support mcMMO classic, mcMMO hooks &cdisabled");
+            }
 		} else {
 			Util.log("&7mcMMO not found, mcMMO event hooks have been &cdisabled");
 		}
