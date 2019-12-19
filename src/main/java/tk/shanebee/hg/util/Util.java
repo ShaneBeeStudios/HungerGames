@@ -228,4 +228,17 @@ public class Util {
         }
     }
 
+    /** Check if a class exists
+     * @param className Class to check for existence
+     * @return True if this class exists
+     */
+    public static boolean classExists(final String className) {
+        try {
+            Class.forName(className);
+            return true;
+        } catch (final ClassNotFoundException e) {
+            return false;
+        }
+    }
+
 }
