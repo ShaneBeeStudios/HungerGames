@@ -5,14 +5,18 @@ import org.bukkit.block.Block;
 import org.bukkit.block.ShulkerBox;
 import org.bukkit.block.Sign;
 import org.bukkit.entity.Entity;
+import org.bukkit.entity.Hanging;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.entity.Shulker;
+import org.bukkit.event.Cancellable;
+import org.bukkit.event.Event;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.*;
 import org.bukkit.event.entity.*;
+import org.bukkit.event.hanging.HangingBreakByEntityEvent;
 import org.bukkit.event.player.*;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.PlayerInventory;
@@ -126,7 +130,29 @@ public class GameListener implements Listener {
 				}
 			}
 		}
+
+		// Stop players from removing items from item frames
+		if (defender instanceof Hanging) {
+            handleItemFrame((Hanging) event.getEntity(), event);
+        }
 	}
+
+	@EventHandler // Prevent players breaking item frames
+    private void onBreakItemFrame(HangingBreakByEntityEvent event) {
+	    handleItemFrame(event.getEntity(),event);
+    }
+
+	private void handleItemFrame(Hanging itemFrame, Event event) {
+	    if (gameManager.isInRegion(itemFrame.getLocation())) {
+	        Game game = gameManager.getGame(itemFrame.getLocation());
+	        switch (game.getStatus()) {
+                case RUNNING:
+                case BEGINNING:
+                case COUNTDOWN:
+                    ((Cancellable) event).setCancelled(true);
+            }
+        }
+    }
 
 	@EventHandler(priority =  EventPriority.HIGHEST)
 	private void onDeathByOther(EntityDamageEvent event) {
