@@ -4,8 +4,10 @@ import org.bukkit.*;
 import org.bukkit.block.Block;
 import org.bukkit.block.ShulkerBox;
 import org.bukkit.block.Sign;
+import org.bukkit.entity.ArmorStand;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Hanging;
+import org.bukkit.entity.ItemFrame;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.entity.Shulker;
@@ -647,6 +649,7 @@ public class GameListener implements Listener {
                     }
                 }
                 entity.setPersistent(false);
+                if (entity instanceof ItemFrame || entity instanceof ArmorStand) return;
                 g.getBound().addEntity(entity);
             }
         }
