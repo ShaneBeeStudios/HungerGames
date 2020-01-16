@@ -966,11 +966,11 @@ public class Game {
 		player.setInvulnerable(false);
 		if (this.getStatus() == Status.RUNNING)
 			bar.removePlayer(player);
-		if (this.exit == null) {
-			player.teleport(s.getWorld().getSpawnLocation());
-		} else {
-			player.teleport(this.exit);
-		}
+		if (this.exit != null && this.exit.getWorld() != null) {
+            player.teleport(this.exit);
+        } else {
+		    player.teleport(Bukkit.getWorlds().get(0).getSpawnLocation());
+        }
 	}
 
 	public boolean isLobbyValid() {
