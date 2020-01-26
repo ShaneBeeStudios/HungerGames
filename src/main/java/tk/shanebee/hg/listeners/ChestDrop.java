@@ -20,6 +20,7 @@ import org.bukkit.inventory.ItemStack;
 import tk.shanebee.hg.HG;
 import tk.shanebee.hg.data.Config;
 import tk.shanebee.hg.game.Game;
+import tk.shanebee.hg.managers.PlayerManager;
 import tk.shanebee.hg.util.Util;
 
 import java.util.Random;
@@ -34,12 +35,14 @@ public class ChestDrop implements Listener {
     private BlockState beforeBlock;
     private Player invopener;
     private Chunk c;
+    private PlayerManager playerManager;
 
     public ChestDrop(FallingBlock fb) {
         this.fb = fb;
         this.c = fb.getLocation().getChunk();
         c.load();
         Bukkit.getPluginManager().registerEvents(this, HG.getPlugin());
+        this.playerManager = HG.getPlugin().getPlayerManager();
     }
 
     @EventHandler
@@ -96,13 +99,14 @@ public class ChestDrop implements Listener {
 
     @EventHandler
     public void onOpenChestDrop(PlayerInteractEvent event) {
+        if (event.getClickedBlock() == null) return;
         if (event.getAction() == Action.RIGHT_CLICK_BLOCK && beforeBlock != null && event.getClickedBlock().getLocation().equals(beforeBlock.getLocation())) {
-            Player p = event.getPlayer();
-            Game game = HG.getPlugin().getPlayers().get(p.getUniqueId()).getGame();
+            Player player = event.getPlayer();
+            Game game = playerManager.getPlayerData(player.getUniqueId()).getGame();
             Random rg = new Random();
-            invopener = p;
+            invopener = player;
 
-            Inventory i = Bukkit.getServer().createInventory(p, 54);
+            Inventory i = Bukkit.getServer().createInventory(player, 54);
             i.clear();
             int c = rg.nextInt(Config.randomChestMaxContent) + 1;
             while (c != 0) {
@@ -113,8 +117,8 @@ public class ChestDrop implements Listener {
                 c--;
             }
             event.setCancelled(true);
-            p.playSound(p.getLocation(), Sound.BLOCK_ENDER_CHEST_OPEN, 1, 1);
-            p.openInventory(i);
+            player.playSound(player.getLocation(), Sound.BLOCK_ENDER_CHEST_OPEN, 1, 1);
+            player.openInventory(i);
         }
     }
 
