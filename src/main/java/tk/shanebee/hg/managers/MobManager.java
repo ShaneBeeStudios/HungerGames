@@ -10,6 +10,7 @@ import org.bukkit.potion.PotionEffectType;
 import tk.shanebee.hg.game.Game;
 import tk.shanebee.hg.HG;
 import tk.shanebee.hg.data.MobEntry;
+import tk.shanebee.hg.util.PotionEffectUtils;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -64,7 +65,7 @@ public class MobManager {
 						List<PotionEffect> potions = new ArrayList<>();
 						for (String pot : getSection(key).getStringList("potion-effects")) {
 							String[] poti = pot.split(":");
-							PotionEffectType effectType = PotionEffectType.getByName(poti[0]);
+							PotionEffectType effectType = PotionEffectUtils.get(poti[0]);
 							if (poti[2].equalsIgnoreCase("forever")) {
 								assert effectType != null;
 								potions.add(effectType.createEffect(2147483647, Integer.parseInt(poti[1])));
