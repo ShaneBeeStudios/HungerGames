@@ -11,6 +11,7 @@ import org.bukkit.inventory.meta.SkullMeta;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 import tk.shanebee.hg.HG;
+import tk.shanebee.hg.util.PotionEffectUtils;
 import tk.shanebee.hg.util.Util;
 import tk.shanebee.hg.data.KitEntry;
 import tk.shanebee.hg.util.NBTApi;
@@ -68,14 +69,14 @@ public class ItemStackManager {
 
                 for (String pot : config.getStringList(gameName + "kits." + path + ".potion-effects")) {
                     String[] poti = pot.split(":");
-                    PotionEffectType e = PotionEffectType.getByName(poti[0]);
+                    PotionEffectType type = PotionEffectUtils.getByKey(poti[0]);
                     if (poti[2].equalsIgnoreCase("forever")) {
-                        assert e != null;
-                        potions.add(e.createEffect(2147483647, Integer.parseInt(poti[1])));
+                        assert type != null;
+                        potions.add(type.createEffect(2147483647, Integer.parseInt(poti[1])));
                     } else {
                         int dur = Integer.parseInt(poti[2]) * 20;
-                        assert e != null;
-                        potions.add(e.createEffect(dur, Integer.parseInt(poti[1])));
+                        assert type != null;
+                        potions.add(type.createEffect(dur, Integer.parseInt(poti[1])));
                     }
                 }
 
@@ -164,7 +165,7 @@ public class ItemStackManager {
                     for (String effect : effects) {
                         if (verifyPotionEffects(effect, false)) {
                             String[] data = effect.split(":");
-                            PotionEffectType potType = PotionEffectType.getByName(data[0]);
+                            PotionEffectType potType = PotionEffectUtils.get(data[0]);
                             int duration = Integer.parseInt(data[1]);
                             int amplifier = Integer.parseInt(data[2]);
                             assert potionMeta != null;
@@ -234,7 +235,7 @@ public class ItemStackManager {
 
             String[] data = effect.split(":");
             int i = (data[0].contains("potion") || data[0].contains("POTION")) ? 1 : 0;
-            PotionEffectType potType = PotionEffectType.getByName(data[i]);
+            PotionEffectType potType = PotionEffectUtils.get(data[i]);
             int duration = Integer.parseInt(data[1 + i]);
             int amplifier = Integer.parseInt(data[2 + i]);
             assert potionMeta != null;
@@ -251,7 +252,7 @@ public class ItemStackManager {
         String[] potionData = data.split(":");
         if (potionData.length == 3 || potionData.length == 4) {
             int i = potionData.length == 3 ? 0 : 1;
-            if (PotionEffectType.getByName(potionData[i].toUpperCase()) == null) {
+            if (PotionEffectUtils.get(potionData[i]) == null) {
                 Util.warning("Potion effect type not found: &c" + potionData[i].toUpperCase());
                 Util.log("  - Check your configs");
                 Util.log("  - Proper example:");
