@@ -5,6 +5,7 @@ import tk.shanebee.hg.HG;
 import tk.shanebee.hg.data.PlayerData;
 import tk.shanebee.hg.game.Game;
 
+import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
 
@@ -18,9 +19,9 @@ public class PlayerManager {
     private Map<UUID, PlayerData> playerMap;
     private Map<UUID, PlayerData> spectatorMap;
 
-    public PlayerManager(Map<UUID, PlayerData> playerMap, Map<UUID, PlayerData> spectatorMap) {
-        this.playerMap = playerMap;
-        this.spectatorMap = spectatorMap;
+    public PlayerManager() {
+        this.playerMap = new HashMap<>();
+        this.spectatorMap = new HashMap<>();
     }
 
     /** Check if a player is playing a game and has PlayerData

@@ -27,8 +27,8 @@ public class HG extends JavaPlugin {
 
 	//Maps
 	private Map<String, BaseCmd> cmds = new HashMap<>();
-    private Map<UUID, PlayerData> players = new HashMap<>();
-    private Map<UUID, PlayerData> spectators = new HashMap<>();
+    //private Map<UUID, PlayerData> players = new HashMap<>();
+    //private Map<UUID, PlayerData> spectators = new HashMap<>();
 	private Map<UUID, PlayerSession> playerSession = new HashMap<>();
 	private Map<Integer, ItemStack> items = new HashMap<>();
 	private Map<Integer, ItemStack> bonusItems = new HashMap<>();
@@ -91,7 +91,7 @@ public class HG extends JavaPlugin {
 		killManager = new KillManager();
 
 		manager = new Manager(this);
-		playerManager = new PlayerManager(players, spectators);
+		playerManager = new PlayerManager();
 		leaderboard = new Leaderboard(this);
 
 		//PAPI check
@@ -133,11 +133,16 @@ public class HG extends JavaPlugin {
 		stopAll();
 		plugin = null;
 		manager = null;
+		playerManager = null;
 		arenaconfig = null;
 		killManager = null;
+        randomItems = null;
+        lang = null;
 		kitManager = null;
 		itemStackManager = null;
-		randomItems = null;
+		leaderboard = null;
+		metrics = null;
+		mmMobManager = null;
 		Util.log("HungerGames has been disabled!");
 	}
 
@@ -207,8 +212,6 @@ public class HG extends JavaPlugin {
 				    playerManager.getSpectatorData(u).getGame().leaveSpectate(p);
 			}
 		}
-		players.clear();
-		spectators.clear();
 		games.clear();
 	}
 
