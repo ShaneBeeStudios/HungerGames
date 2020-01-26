@@ -27,6 +27,7 @@ public class CancelListener implements Listener {
 	@EventHandler(priority=EventPriority.LOWEST)
 	private void onPlayerCommandPreprocess(PlayerCommandPreprocessEvent event) {
 		Player player = event.getPlayer();
+		if (player.hasPermission("hg.command.bypass")) return;
         UUID uuid = player.getUniqueId();
 		String[] st = event.getMessage().split(" ");
 		if (playerManager.hasData(uuid) && !st[0].equalsIgnoreCase("/login")) {
