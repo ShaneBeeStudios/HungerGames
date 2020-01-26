@@ -116,6 +116,14 @@ public class PlayerManager {
         return null;
     }
 
+    public boolean hasData(Player player) {
+        return hasData(player.getUniqueId());
+    }
+
+    public boolean hasData(UUID uuid) {
+        return hasPlayerData(uuid) || hasSpectatorData(uuid);
+    }
+
     /** Add a PlayerData to the stored PlayerData map
      * <p>This should mainly be used <b>internally only</b></p>
      * @param playerData PlayerData to add
