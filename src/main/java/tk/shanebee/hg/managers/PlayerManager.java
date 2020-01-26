@@ -124,6 +124,42 @@ public class PlayerManager {
         playerMap.put(playerData.getUuid(), playerData);
     }
 
+    /** Add a PlayerData to the stored SpectatorData map
+     *  <p>This should mainly be used <b>internally only</b></p>
+     * @param playerData PlayerData to add
+     */
+    public void addSpectatorData(PlayerData playerData) {
+        this.spectatorMap.put(playerData.getUuid(), playerData);
+    }
+
+    /** Remove a PlayerData from the PlayerData map
+     * @param player Holder of PlayerData to remove
+     */
+    public void removePlayerData(Player player) {
+        this.playerMap.remove(player.getUniqueId());
+    }
+
+    /** Remove a PlayerData from the PlayerData map
+     * @param uuid UUID of holder of PlayerData to remove
+     */
+    public void removePlayerData(UUID uuid) {
+        this.playerMap.remove(uuid);
+    }
+
+    /** Remove a PlayerData from the SpectatorData map
+     * @param player Holder of PlayerData to remove
+     */
+    public void removeSpectatorData(Player player) {
+        this.spectatorMap.remove(player.getUniqueId());
+    }
+
+    /** Remove a PlayerData from the SpectatorData map
+     * @param uuid UUID of holder of PlayerData to remove
+     */
+    public void removeSpectatorData(UUID uuid) {
+        this.spectatorMap.remove(uuid);
+    }
+
     /** Get the current game of a player
      * @param player Player to get game
      * @return Game of player, null if player is not in a game
