@@ -1,36 +1,37 @@
 package tk.shanebee.hg.listeners;
 
-import tk.shanebee.hg.HG;
-import tk.shanebee.hg.Status;
-import tk.shanebee.hg.util.Util;
-
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerCommandPreprocessEvent;
+import tk.shanebee.hg.HG;
+import tk.shanebee.hg.Status;
+import tk.shanebee.hg.managers.PlayerManager;
+import tk.shanebee.hg.util.Util;
+
+import java.util.UUID;
 
 /**
  * Internal event listener
  */
 public class CancelListener implements Listener {
 
-	public HG plugin;
+	private PlayerManager playerManager;
 
 	public CancelListener(HG instance) {
-		plugin = instance;
+		this.playerManager = instance.getPlayerManager();
 	}
 
 	@EventHandler(priority=EventPriority.LOWEST)
 	private void onPlayerCommandPreprocess(PlayerCommandPreprocessEvent event) {
 		Player player = event.getPlayer();
+        UUID uuid = player.getUniqueId();
 		String[] st = event.getMessage().split(" ");
-		if ((plugin.getPlayers().containsKey(player.getUniqueId()) || plugin.getSpectators().containsKey(player.getUniqueId())) &&
-				!st[0].equalsIgnoreCase("/login")) {
+		if (playerManager.hasData(uuid) && !st[0].equalsIgnoreCase("/login")) {
 			if (st[0].equalsIgnoreCase("/hg")) {
-				if (st.length >= 2 && st[1].equalsIgnoreCase("kit") &&
-						plugin.getPlayers().get(player.getUniqueId()).getGame().getStatus() == Status.RUNNING) {
+				if (st.length >= 2 && st[1].equalsIgnoreCase("kit") && playerManager.getData(uuid).getGame().getStatus() == Status.RUNNING) {
 					event.setMessage("/");
 					event.setCancelled(true);
 					Util.scm(player, HG.getPlugin().getLang().cmd_handler_nokit);
@@ -43,7 +44,7 @@ public class CancelListener implements Listener {
 		} else if ("/tp".equalsIgnoreCase(st[0]) && st.length >= 2) {
 			Player p = Bukkit.getServer().getPlayer(st[1]);
 			if (p != null) {
-				if (plugin.getPlayers().containsKey(p.getUniqueId())) {
+				if (playerManager.hasPlayerData(uuid)) {
 					Util.scm(player, HG.getPlugin().getLang().cmd_handler_playing);
 					event.setMessage("/");
 					event.setCancelled(true);
