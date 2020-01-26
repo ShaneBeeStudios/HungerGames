@@ -28,6 +28,7 @@ import tk.shanebee.hg.events.PlayerLeaveGameEvent;
 import tk.shanebee.hg.gui.SpectatorGUI;
 import tk.shanebee.hg.managers.KitManager;
 import tk.shanebee.hg.managers.MobManager;
+import tk.shanebee.hg.managers.PlayerManager;
 import tk.shanebee.hg.managers.SBDisplay;
 import tk.shanebee.hg.tasks.*;
 import tk.shanebee.hg.tasks.TimerTask;
@@ -35,7 +36,6 @@ import tk.shanebee.hg.util.Util;
 import tk.shanebee.hg.util.Vault;
 
 import java.util.*;
-import java.util.Map.Entry;
 
 /**
  * General game object
@@ -60,6 +60,7 @@ public class Game {
 	private List<BlockState> blocks = new ArrayList<>();
 	private List<String> commands = null;
 	private MobManager mobManager;
+	private PlayerManager playerManager;
 	private Location exit;
 	private Status status;
 	private int minPlayers;
@@ -108,6 +109,7 @@ public class Game {
 	 */
 	public Game(String name, Bound bound, List<Location> spawns, Sign lobbySign, int timer, int minPlayers, int maxPlayers, int roam, boolean isReady, int cost) {
 		this.plugin = HG.getPlugin();
+		this.playerManager = plugin.getPlayerManager();
 		this.lang = plugin.getLang();
 		this.name = name;
 		this.bound = bound;
@@ -146,6 +148,7 @@ public class Game {
 	 */
 	public Game(String name, Bound bound, int timer, int minPlayers, int maxPlayers, int roam, int cost) {
 		this.plugin = HG.getPlugin();
+		this.playerManager = HG.getPlugin().getPlayerManager();
         this.lang = plugin.getLang();
 		this.name = name;
 		this.time = timer;
@@ -494,6 +497,7 @@ public class Game {
 	 * @param player Player to join the game
 	 */
 	public void join(Player player) {
+	    UUID uuid = player.getUniqueId();
 		if (status != Status.WAITING && status != Status.STOPPED && status != Status.COUNTDOWN && status != Status.READY) {
 			Util.scm(player, HG.getPlugin().getLang().arena_not_ready);
 			if ((status == Status.RUNNING || status == Status.BEGINNING) && Config.spectateEnabled) {
@@ -526,7 +530,8 @@ public class Game {
 						loc.setY(loc.getY() - 1);
 					}
 				}
-				HG.getPlugin().getPlayers().put(player.getUniqueId(), new PlayerData(player, this));
+				playerManager.addPlayerData(new PlayerData(player, this));
+
 				heal(player);
 				freeze(player);
 				kills.put(player, 0);
@@ -789,15 +794,15 @@ public class Game {
 		bound.removeEntities();
 		List<UUID> win = new ArrayList<>();
 		cancelTasks();
-		for (UUID u : players) {
-			Player p = Bukkit.getPlayer(u);
-			if (p != null) {
-                heal(p);
-				HG.getPlugin().getPlayers().get(p.getUniqueId()).restore(p);
-				HG.getPlugin().getPlayers().remove(p.getUniqueId());
-				win.add(p.getUniqueId());
-				sb.restoreSB(p);
-				exit(p);
+		for (UUID uuid : players) {
+			Player player = Bukkit.getPlayer(uuid);
+			if (player != null) {
+                heal(player);
+				playerManager.getPlayerData(uuid).restore(player);
+				playerManager.removePlayerData(uuid);
+				win.add(uuid);
+				sb.restoreSB(player);
+				exit(player);
 			}
 		}
 		players.clear();
@@ -809,12 +814,12 @@ public class Game {
 				if (Config.spectateHide)
 					revealPlayer(spectator);
 				if (Config.spectateFly) {
-					GameMode mode = HG.getPlugin().getSpectators().get(uuid).getGameMode();
+                    GameMode mode = playerManager.getSpectatorData(uuid).getGameMode();
 					if (mode == GameMode.SURVIVAL || mode == GameMode.ADVENTURE)
 						spectator.setAllowFlight(false);
 				}
-				HG.getPlugin().getSpectators().get(spectator.getUniqueId()).restore(spectator);
-				HG.getPlugin().getSpectators().remove(spectator.getUniqueId());
+				playerManager.getSpectatorData(uuid).restore(spectator);
+				playerManager.removeSpectatorData(uuid);
 				exit(spectator);
 				sb.restoreSB(spectator);
 			}
@@ -892,13 +897,14 @@ public class Game {
 	public void leave(Player player, Boolean death) {
 		Bukkit.getPluginManager().callEvent(new PlayerLeaveGameEvent(this, player, death));
 		players.remove(player.getUniqueId());
+		UUID uuid = player.getUniqueId();
 		unFreeze(player);
 		if (death) {
 			if (this.getStatus() == Status.RUNNING)
 				bar.removePlayer(player);
             heal(player);
-			HG.getPlugin().getPlayers().get(player.getUniqueId()).restore(player);
-			HG.getPlugin().getPlayers().remove(player.getUniqueId());
+			playerManager.getPlayerData(uuid).restore(player);
+			playerManager.removePlayerData(player);
 			exit(player);
 			sb.restoreSB(player);
 			player.playSound(player.getLocation(), Sound.UI_TOAST_CHALLENGE_COMPLETE, 5, 1);
@@ -908,8 +914,8 @@ public class Game {
 			}
 		} else {
             heal(player);
-			HG.getPlugin().getPlayers().get(player.getUniqueId()).restore(player);
-			HG.getPlugin().getPlayers().remove(player.getUniqueId());
+            playerManager.getPlayerData(uuid).restore(player);
+            playerManager.removePlayerData(player);
 			exit(player);
 			sb.restoreSB(player);
 		}
@@ -943,6 +949,7 @@ public class Game {
 		sb.setAlive();
 	}
 
+	/* ON HOLD FOR NOW
 	private boolean isGameOver() {
 		if (players.size() <= 1) return true;
 		for (Entry<UUID, PlayerData> f : HG.getPlugin().getPlayers().entrySet()) {
@@ -961,6 +968,24 @@ public class Game {
 		}
 		return false;
 	}
+	 */
+
+	private boolean isGameOver() {
+	    if (players.size() <= 1) return true;
+	    for (UUID uuid : players) {
+	        Team team = playerManager.getPlayerData(uuid).getTeam();
+
+	        if (team != null && (team.getPlayers().size() >= players.size())) {
+	            for (UUID u : players) {
+	                if (!team.getPlayers().contains(u)) {
+	                    return false;
+                    }
+                }
+	            return true;
+            }
+        }
+	    return false;
+    }
 
 	private void exit(Player player) {
 		player.setInvulnerable(false);
@@ -1086,14 +1111,15 @@ public class Game {
 	 * @param spectator The player to spectate
 	 */
 	public void spectate(Player spectator) {
-		if (plugin.getPlayers().containsKey(spectator.getUniqueId())) {
-			PlayerData spectatorData = plugin.getPlayers().get(spectator.getUniqueId());
-			plugin.getSpectators().put(spectator.getUniqueId(), spectatorData);
-			plugin.getPlayers().remove(spectator.getUniqueId());
+        UUID uuid = spectator.getUniqueId();
+	    if (plugin.getPlayerManager().hasPlayerData(uuid)) {
+            PlayerData spectatorData = playerManager.getPlayerData(uuid);
+            playerManager.addSpectatorData(spectatorData);
+            playerManager.removePlayerData(uuid);
 		} else {
-			plugin.getSpectators().put(spectator.getUniqueId(), new PlayerData(spectator, this));
+			playerManager.addSpectatorData(new PlayerData(spectator, this));
 		}
-		this.spectators.add(spectator.getUniqueId());
+		this.spectators.add(uuid);
 		spectator.setGameMode(GameMode.SURVIVAL);
 		spectator.teleport(this.getSpawns().get(0));
 		spectator.setCollidable(false);
@@ -1101,13 +1127,13 @@ public class Game {
 			spectator.setAllowFlight(true);
 
 		if (Config.spectateHide) {
-			for (UUID uuid : players) {
-				Player player = Bukkit.getPlayer(uuid);
+			for (UUID u : players) {
+				Player player = Bukkit.getPlayer(u);
 				if (player == null) continue;
 				player.hidePlayer(plugin, spectator);
 			}
-			for (UUID uuid : spectators) {
-				Player player = Bukkit.getPlayer(uuid);
+			for (UUID u : spectators) {
+				Player player = Bukkit.getPlayer(u);
 				if (player == null) continue;
 				player.hidePlayer(plugin, spectator);
 			}
@@ -1123,15 +1149,16 @@ public class Game {
 	public void leaveSpectate(Player spectator) {
 		exit(spectator);
 		spectator.setCollidable(true);
+		UUID uuid = spectator.getUniqueId();
 		if (Config.spectateFly) {
-			GameMode mode = plugin.getSpectators().get(spectator.getUniqueId()).getGameMode();
+            GameMode mode = playerManager.getSpectatorData(uuid).getGameMode();
 			if (mode == GameMode.SURVIVAL || mode == GameMode.ADVENTURE)
 				spectator.setAllowFlight(false);
 		}
 		if (Config.spectateHide)
 			revealPlayer(spectator);
-		plugin.getSpectators().get(spectator.getUniqueId()).restore(spectator);
-		plugin.getSpectators().remove(spectator.getUniqueId());
+		playerManager.getSpectatorData(uuid).restore(spectator);
+		playerManager.removeSpectatorData(uuid);
 		spectators.remove(spectator.getUniqueId());
 	}
 

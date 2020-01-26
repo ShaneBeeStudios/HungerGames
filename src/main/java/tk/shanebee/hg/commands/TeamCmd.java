@@ -24,7 +24,7 @@ public class TeamCmd extends BaseCmd {
 
 	@Override
 	public boolean run() {
-		PlayerData pd = HG.getPlugin().getPlayers().get(player.getUniqueId());
+        PlayerData pd = playerManager.getPlayerData(player.getUniqueId());
 		Game g = pd.getGame();
 
 		if (args[1].equalsIgnoreCase("invite")) {
@@ -44,37 +44,37 @@ public class TeamCmd extends BaseCmd {
 
 				if (pd.getTeam() != null) {
 
-					Team t = pd.getTeam();
+					Team team = pd.getTeam();
 
-					if (!t.getLeader().equals(player.getUniqueId())) {
+					if (!team.getLeader().equals(player.getUniqueId())) {
 						Util.scm(player, HG.getPlugin().getLang().cmd_team_only_leader);
 						return true;
 					}
-					if (t.isOnTeam(p.getUniqueId())) {
+					if (team.isOnTeam(p.getUniqueId())) {
 						Util.scm(player, HG.getPlugin().getLang().cmd_team_on_team.replace("<player>", args[2]));
 						return true;
 					}
 
-					if ((t.getPlayers().size() + t.getPenders().size()) >= Config.maxTeam) {
+					if ((team.getPlayers().size() + team.getPenders().size()) >= Config.maxTeam) {
 						Util.scm(player, HG.getPlugin().getLang().cmd_team_max);
 						return true;
 					}
 
-					HG.getPlugin().getPlayers().get(p.getUniqueId()).setTeam(t);
-					t.invite(p);
+					pd.setTeam(team);
+					team.invite(p);
 					Util.scm(player, HG.getPlugin().getLang().cmd_team_invited.replace("<player>", p.getName()));
 					return true;
 				}
 
-				if (HG.getPlugin().getPlayers().get(p.getUniqueId()).isOnTeam(p.getUniqueId())) {
+				if (pd.isOnTeam(p.getUniqueId())) {
 					Util.scm(player, HG.getPlugin().getLang().cmd_team_on_team.replace("<player>", args[2]));
 					return true;
 				}
 
-				Team t = new Team(player.getUniqueId());
-				HG.getPlugin().getPlayers().get(p.getUniqueId()).setTeam(t);
-				pd.setTeam(t);
-				t.invite(p);
+				Team team = new Team(player.getUniqueId());
+				pd.setTeam(team);
+				pd.setTeam(team);
+				team.invite(p);
 				Util.scm(player, HG.getPlugin().getLang().cmd_team_invited.replace("<player>", p.getName()));
 				return true;
 			} else {
@@ -82,16 +82,16 @@ public class TeamCmd extends BaseCmd {
 			}
 		} else if (args[1].equalsIgnoreCase("accept")) {
 
-            Team t = HG.getPlugin().getPlayers().get(player.getUniqueId()).getTeam();
+            Team team = pd.getTeam();
 
-            if (t == null) {
+            if (team == null) {
                 Util.scm(player, HG.getPlugin().getLang().cmd_team_no_pend);
                 return true;
             }
-            if (t.getPenders().contains(player.getUniqueId())) {
+            if (team.getPenders().contains(player.getUniqueId())) {
 
-                t.acceptInvite(player);
-                for (UUID u : t.getPlayers()) {
+                team.acceptInvite(player);
+                for (UUID u : team.getPlayers()) {
                     Player p = Bukkit.getPlayer(u);
 
                     if (p != null) {
@@ -109,7 +109,7 @@ public class TeamCmd extends BaseCmd {
 		        Util.scm(player, lang.cmd_base_noperm.replace("<command>", "team tp"));
 		        return true;
             }
-		    Team team = plugin.getPlayers().get(player.getUniqueId()).getTeam();
+		    Team team = pd.getTeam();
 		    if (team == null) {
 		        Util.scm(player, lang.cmd_team_no_team);
                 return true;

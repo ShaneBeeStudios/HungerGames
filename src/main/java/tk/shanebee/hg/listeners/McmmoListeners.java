@@ -15,6 +15,7 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import tk.shanebee.hg.data.Config;
 import tk.shanebee.hg.HG;
+import tk.shanebee.hg.managers.PlayerManager;
 
 /**
  * Internal mcMMO listeners
@@ -22,9 +23,11 @@ import tk.shanebee.hg.HG;
 public class McmmoListeners implements Listener {
 
 	private HG plugin;
+	private final PlayerManager playerManager;
 
 	public McmmoListeners(HG plugin) {
 		this.plugin = plugin;
+		this.playerManager = plugin.getPlayerManager();
 	}
 
 	// Handle mcMMO EXP gain events
@@ -46,7 +49,8 @@ public class McmmoListeners implements Listener {
 	private void handleExpEvent(McMMOPlayerExperienceEvent event) {
 		if (!Config.mcmmoGainExp) {
 			Player player = event.getPlayer();
-			if (plugin.getPlayers().containsKey(player.getUniqueId())) {
+			if (playerManager.hasPlayerData(player.getUniqueId())) {
+			//if (playerManager.hasPlayerData(player.getUniqueId())) {
 				event.setCancelled(true);
 			}
 		}
@@ -57,7 +61,7 @@ public class McmmoListeners implements Listener {
 	private void mcMMOUseSkill(McMMOPlayerAbilityActivateEvent event) {
 		if (!Config.mcmmoUseSkills) {
 			Player player = event.getPlayer();
-			if (plugin.getPlayers().containsKey(player.getUniqueId())) {
+			if (playerManager.hasPlayerData(player.getUniqueId())) {
 				event.setCancelled(true);
 			}
 		}
@@ -67,7 +71,7 @@ public class McmmoListeners implements Listener {
 	private void mcMMOUseSubSkill(SubSkillEvent event) {
 		if (!Config.mcmmoUseSkills) {
 			Player player = event.getPlayer();
-			if (plugin.getPlayers().containsKey(player.getUniqueId())) {
+			if (playerManager.hasPlayerData(player.getUniqueId())) {
 				event.setCancelled(true);
 			}
 		}
@@ -77,7 +81,7 @@ public class McmmoListeners implements Listener {
 	private void blockBreakEvent(FakeBlockBreakEvent event) {
 		if (!Config.mcmmoUseSkills) {
 			Player player = event.getPlayer();
-			if (plugin.getPlayers().containsKey(player.getUniqueId())) {
+			if (playerManager.hasPlayerData(player.getUniqueId())) {
 				event.setCancelled(true);
 			}
 		}
@@ -87,7 +91,7 @@ public class McmmoListeners implements Listener {
 	protected void blockDamageEvent(FakeBlockDamageEvent event) {
 		if (!Config.mcmmoUseSkills) {
 			Player player = event.getPlayer();
-			if (plugin.getPlayers().containsKey(player.getUniqueId())) {
+			if (playerManager.hasPlayerData(player.getUniqueId())) {
 				event.setCancelled(true);
 			}
 		}
@@ -98,7 +102,7 @@ public class McmmoListeners implements Listener {
 		if (!Config.mcmmoUseSkills) {
 			Entity damager = event.getDamager();
 			Entity victim = event.getEntity();
-			if (plugin.getPlayers().containsKey(damager.getUniqueId()) || plugin.getPlayers().containsKey(victim.getUniqueId())) {
+			if (playerManager.hasPlayerData(damager.getUniqueId()) || playerManager.hasPlayerData(victim.getUniqueId())) {
 				event.setCancelled(true);
 			}
 		}
@@ -109,7 +113,7 @@ public class McmmoListeners implements Listener {
 		if (!Config.mcmmoUseSkills) {
 			if (event.getEntity() instanceof Player) {
 				Player player = ((Player) event.getEntity());
-				if (plugin.getPlayers().containsKey(player.getUniqueId())) {
+				if (playerManager.hasPlayerData(player.getUniqueId())) {
 					event.setCancelled(true);
 				}
 			}
@@ -120,7 +124,7 @@ public class McmmoListeners implements Listener {
 	private void fishEvent(FakePlayerFishEvent event) {
 		if (!Config.mcmmoUseSkills) {
 			Player player = event.getPlayer();
-			if (plugin.getPlayers().containsKey(player.getUniqueId())) {
+			if (playerManager.hasPlayerData(player.getUniqueId())) {
 				event.setCancelled(true);
 			}
 		}

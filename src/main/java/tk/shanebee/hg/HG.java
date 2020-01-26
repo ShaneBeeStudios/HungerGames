@@ -27,8 +27,8 @@ public class HG extends JavaPlugin {
 
 	//Maps
 	private Map<String, BaseCmd> cmds = new HashMap<>();
-	private Map<UUID, PlayerData> players = new HashMap<>();
-	private Map<UUID, PlayerData> spectators = new HashMap<>();
+    private Map<UUID, PlayerData> players = new HashMap<>();
+    private Map<UUID, PlayerData> spectators = new HashMap<>();
 	private Map<UUID, PlayerSession> playerSession = new HashMap<>();
 	private Map<Integer, ItemStack> items = new HashMap<>();
 	private Map<Integer, ItemStack> bonusItems = new HashMap<>();
@@ -201,10 +201,10 @@ public class HG extends JavaPlugin {
 		for (UUID u : ps) {
 			Player p = Bukkit.getPlayer(u);
 			if (p != null) {
-				if (players.containsKey(u))
-					players.get(u).getGame().leave(p, false);
-				if (spectators.containsKey(u))
-					spectators.get(u).getGame().leaveSpectate(p);
+				if (playerManager.hasPlayerData(u))
+				    playerManager.getPlayerData(u).getGame().leave(p, false);
+				if (playerManager.hasSpectatorData(u))
+				    playerManager.getSpectatorData(u).getGame().leaveSpectate(p);
 			}
 		}
 		players.clear();
@@ -280,24 +280,6 @@ public class HG extends JavaPlugin {
 	 */
 	public List<Game> getGames() {
 		return this.games;
-	}
-
-	/** Get the players currently in games
-	 * @return Map of player data
-     * @deprecated Use {@link PlayerManager}
-	 */
-	@Deprecated
-	public Map<UUID, PlayerData> getPlayers() {
-		return this.players;
-	}
-
-	/** Get a map of players currently spectating games
-	 * @return Map of spectators
-     * @deprecated Use {@link PlayerManager}
-	 */
-	@Deprecated
-	public Map<UUID, PlayerData> getSpectators() {
-		return this.spectators;
 	}
 
 	/** Get player sessions map

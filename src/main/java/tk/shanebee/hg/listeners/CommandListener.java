@@ -13,6 +13,7 @@ import tk.shanebee.hg.data.PlayerData;
 import tk.shanebee.hg.game.Game;
 import tk.shanebee.hg.HG;
 import tk.shanebee.hg.game.Team;
+import tk.shanebee.hg.managers.PlayerManager;
 import tk.shanebee.hg.util.Util;
 import tk.shanebee.hg.commands.BaseCmd;
 
@@ -25,9 +26,11 @@ import java.util.*;
 public class CommandListener implements CommandExecutor, TabCompleter {
 
 	private final HG plugin;
+	private final PlayerManager playerManager;
 
 	public CommandListener(HG plugin) {
 		this.plugin = plugin;
+		this.playerManager = plugin.getPlayerManager();
 	}
 
 	public boolean onCommand(CommandSender s, Command command, String label, String[] args) {
@@ -70,7 +73,7 @@ public class CommandListener implements CommandExecutor, TabCompleter {
 					return matchesTeam;
 				}
 				if (args.length == 3 && args[1].equalsIgnoreCase("tp")) {
-                    PlayerData pd = plugin.getPlayers().get((((Player) sender).getUniqueId()));
+                    PlayerData pd = playerManager.getPlayerData(((Player) sender).getUniqueId());
                     if (pd == null) return ImmutableList.of();
                     Team team = pd.getTeam();
                     if (team != null) {
@@ -164,8 +167,8 @@ public class CommandListener implements CommandExecutor, TabCompleter {
 				if (args.length == 2) {
 					ArrayList<String> matchesKit = new ArrayList<>();
 					Game game = null;
-					if (plugin.getPlayers().containsKey(((Player) sender).getUniqueId())) {
-						game = plugin.getPlayers().get(((Player) sender).getUniqueId()).getGame();
+					if (playerManager.hasPlayerData(((Player) sender).getUniqueId())) {
+						game = playerManager.getPlayerData(((Player) sender).getUniqueId()).getGame();
 					}
 					if (game != null) {
 						for (String name : game.getKitManager().getKits().keySet()) {

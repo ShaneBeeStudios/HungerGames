@@ -10,15 +10,16 @@ import org.bukkit.inventory.meta.ItemMeta;
 import tk.shanebee.hg.game.Game;
 import tk.shanebee.hg.HG;
 import tk.shanebee.hg.data.PlayerData;
+import tk.shanebee.hg.managers.PlayerManager;
 
 import java.util.UUID;
 
 public class CompassTask implements Runnable {
 
-	private HG plugin;
+	private final PlayerManager playerManager;
 
 	public CompassTask(HG plugin) {
-		this.plugin = plugin;
+		this.playerManager = plugin.getPlayerManager();
 		Bukkit.getScheduler().scheduleSyncRepeatingTask(HG.getPlugin(), this, 25L, 25L);
 	}
 
@@ -27,7 +28,7 @@ public class CompassTask implements Runnable {
 		for (Player p : Bukkit.getOnlinePlayers()) {
 
 			if (p.getInventory().contains(Material.COMPASS)) {
-				PlayerData pd = plugin.getPlayers().get(p.getUniqueId());
+				PlayerData pd = playerManager.getPlayerData(p.getUniqueId());
 
 				if (pd != null) {
 
