@@ -2,6 +2,9 @@ package tk.shanebee.hg.util;
 
 import org.bukkit.potion.PotionEffectType;
 
+import java.util.HashMap;
+import java.util.Map;
+
 /**
  * Util for getting {@link PotionEffectType}
  */
@@ -35,25 +38,38 @@ public enum PotionEffectUtils {
     LEVITATION("LEVITATION"),
     LUCK("LUCK"),
     UNLUCK("UNLUCK"),
+    // 1.13
     SLOW_FALLING("SLOW_FALLING"),
     CONDUIT_POWER("CONDUIT_POWER"),
     DOLPHINS_GRACE("DOLPHINS_GRACE"),
+    // 1.14
     BAD_OMEN("BAD_OMEN"),
     HERO_OF_THE_VILLAGE("HERO_OF_THE_VILLAGE");
 
     private String bukkit;
+    private static Map<String, String> BY_NAME = new HashMap<>();
 
     PotionEffectUtils(String bukkit) {
         this.bukkit = bukkit;
     }
 
+    static {
+        for (PotionEffectUtils p : values()) {
+            BY_NAME.put(p.name(), p.bukkit);
+        }
+    }
+
     /** Get a PotionEffectType based on a Minecraft namespace with Bukkit key fallback
      * @param key Key for PotionEffectType (can be Minecraft namespace or Bukkit key)
-     * @return PotionEffectType
+     * @return PotionEffectType (null if MC or Bukkit key does not exist)
      */
     public static PotionEffectType get(String key) {
-        PotionEffectType type = getByKey(key);
-        return type != null ? type : getByBukkit(key);
+        if (BY_NAME.containsKey(key)) {
+            return getByKey(key);
+        } else if (BY_NAME.containsValue(key)) {
+            return getByBukkit(key);
+        }
+        return null;
     }
 
     /** Get a PotionEffectType based on a Minecraft namespace
@@ -72,6 +88,9 @@ public enum PotionEffectUtils {
         return PotionEffectType.getByName(bukkit.toUpperCase());
     }
 
+    /** Get Bukkit key for PotionEffectType
+     * @return Bukkit key
+     */
     public String getBukkitKey() {
         return bukkit;
     }
