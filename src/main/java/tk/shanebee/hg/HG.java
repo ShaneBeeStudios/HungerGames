@@ -27,8 +27,6 @@ public class HG extends JavaPlugin {
 
 	//Maps
 	private Map<String, BaseCmd> cmds = new HashMap<>();
-    //private Map<UUID, PlayerData> players = new HashMap<>();
-    //private Map<UUID, PlayerData> spectators = new HashMap<>();
 	private Map<UUID, PlayerSession> playerSession = new HashMap<>();
 	private Map<Integer, ItemStack> items = new HashMap<>();
 	private Map<Integer, ItemStack> bonusItems = new HashMap<>();
