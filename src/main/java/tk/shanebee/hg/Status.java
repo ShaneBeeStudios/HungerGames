@@ -67,8 +67,9 @@ public enum Status {
                 return Util.getColString(lang.status_beginning);
             case COUNTDOWN:
                 return Util.getColString(lang.status_countdown);
+            default:
+                return Util.getColString("&cERROR!");
         }
-        return null;
 	}
 
 }
