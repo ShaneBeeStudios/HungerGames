@@ -85,11 +85,10 @@ public class HG extends JavaPlugin {
 		itemStackManager = new ItemStackManager(this);
 		mobConfig = new MobConfig(this);
 		randomItems = new RandomItems(this);
+        playerManager = new PlayerManager();
 		arenaconfig = new Data(this);
 		killManager = new KillManager();
-
 		manager = new Manager(this);
-		playerManager = new PlayerManager();
 		leaderboard = new Leaderboard(this);
 
 		//PAPI check
