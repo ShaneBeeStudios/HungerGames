@@ -1,6 +1,10 @@
 package tk.shanebee.hg.listeners;
 
-import org.bukkit.*;
+import org.bukkit.Bukkit;
+import org.bukkit.ChatColor;
+import org.bukkit.Location;
+import org.bukkit.Material;
+import org.bukkit.Sound;
 import org.bukkit.block.Block;
 import org.bukkit.block.ShulkerBox;
 import org.bukkit.block.Sign;
@@ -16,10 +20,23 @@ import org.bukkit.event.Event;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
-import org.bukkit.event.block.*;
+import org.bukkit.event.block.Action;
+import org.bukkit.event.block.BlockBreakEvent;
+import org.bukkit.event.block.BlockExplodeEvent;
+import org.bukkit.event.block.BlockPhysicsEvent;
+import org.bukkit.event.block.BlockPlaceEvent;
+import org.bukkit.event.block.LeavesDecayEvent;
 import org.bukkit.event.entity.*;
+import org.bukkit.event.entity.CreatureSpawnEvent.SpawnReason;
 import org.bukkit.event.hanging.HangingBreakByEntityEvent;
-import org.bukkit.event.player.*;
+import org.bukkit.event.player.AsyncPlayerChatEvent;
+import org.bukkit.event.player.PlayerBucketEmptyEvent;
+import org.bukkit.event.player.PlayerBucketEvent;
+import org.bukkit.event.player.PlayerBucketFillEvent;
+import org.bukkit.event.player.PlayerDropItemEvent;
+import org.bukkit.event.player.PlayerInteractEvent;
+import org.bukkit.event.player.PlayerQuitEvent;
+import org.bukkit.event.player.PlayerTeleportEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.PlayerInventory;
 import org.bukkit.inventory.meta.ItemMeta;
@@ -70,7 +87,8 @@ public class GameListener implements Listener {
         killManager = plugin.getKillManager();
 	}
 
-	private void dropInv(Player p) {
+	@SuppressWarnings("deprecation") // setPersistent() is DRAFT API
+    private void dropInv(Player p) {
 		PlayerInventory inv = p.getInventory();
 		Location l = p.getLocation();
 		for (ItemStack i : inv.getContents()) {
@@ -641,10 +659,13 @@ public class GameListener implements Listener {
                 if (entity instanceof LivingEntity) {
                     if (g.getStatus() != Status.RUNNING) {
                         event.setCancelled(true);
+                        return;
                     }
                     if (event instanceof CreatureSpawnEvent) {
-                        if (((CreatureSpawnEvent) event).getSpawnReason() != CreatureSpawnEvent.SpawnReason.CUSTOM) {
+                        SpawnReason reason = ((CreatureSpawnEvent) event).getSpawnReason();
+                        if (reason != SpawnReason.CUSTOM && reason != SpawnReason.SPAWNER_EGG) {
                             event.setCancelled(true);
+                            return;
                         }
                     }
                 }
