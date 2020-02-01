@@ -1209,7 +1209,15 @@ public class Game {
         return true;
     }
 
-	/**
+    @Override
+    public String toString() {
+        return "Game{" +
+                "name='" + name + '\'' +
+                ", bound=" + bound +
+                '}';
+    }
+
+    /**
 	 * Command types
 	 */
 	public enum CommandType {

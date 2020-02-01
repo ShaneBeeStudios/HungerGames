@@ -10,6 +10,7 @@ import tk.shanebee.hg.game.Game;
 import tk.shanebee.hg.game.Team;
 import tk.shanebee.hg.util.Util;
 
+import java.util.Arrays;
 import java.util.UUID;
 
 /**
@@ -123,6 +124,23 @@ public class PlayerData {
      */
 	public UUID getUuid() {
 	    return this.uuid;
+    }
+
+    @Override
+    public String toString() {
+        return "PlayerData{" +
+                "inv=" + Arrays.toString(inv) +
+                ", equip=" + Arrays.toString(equip) +
+                ", expLevel=" + expL +
+                ", expPoints=" + expP +
+                ", health=" + health +
+                ", food=" + food +
+                ", saturation=" + saturation +
+                ", mode=" + mode +
+                ", uuid=" + uuid +
+                ", team=" + team +
+                ", game=" + game +
+                '}';
     }
 
 }

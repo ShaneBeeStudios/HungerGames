@@ -1,6 +1,7 @@
 package tk.shanebee.hg.data;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 
 import tk.shanebee.hg.HG;
 import tk.shanebee.hg.util.Util;
@@ -179,5 +180,18 @@ public class KitEntry {
 		HG.getPlugin().getPlayerManager().getPlayerData(player.getUniqueId()).getGame().freeze(player);
 		player.updateInventory();
 	}
+
+    @Override
+    public String toString() {
+        return "KitEntry{" +
+                "helm=" + helm +
+                ", perm='" + perm + '\'' +
+                ", boots=" + boots +
+                ", chestplate=" + chestplate +
+                ", leggings=" + leggings +
+                ", inventoryContents=" + Arrays.toString(inventoryContents) +
+                ", potions=" + potions +
+                '}';
+    }
 
 }

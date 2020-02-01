@@ -42,4 +42,13 @@ public class PlayerSession {
 		if (loc1 == null) return "Position 1";
 		else return "Position 2";
 	}
+
+    @Override
+    public String toString() {
+        return "PlayerSession{" +
+                "loc1=" + loc1 +
+                ", loc2=" + loc2 +
+                '}';
+    }
+
 }

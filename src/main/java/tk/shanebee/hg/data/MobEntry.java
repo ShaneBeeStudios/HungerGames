@@ -34,8 +34,8 @@ public class MobEntry {
 	private ItemStack boots = null;
 	private List<PotionEffect> potionEffect = new ArrayList<>();
 	private String deathMessage = null;
-	private String mythicMob;
 	private boolean mythic;
+    private String mythicMob;
 	private int mythicLevel;
 
 	/** Create a new mob entry
@@ -255,5 +255,24 @@ public class MobEntry {
 	public int getMythicLevel() {
 		return this.mythicLevel;
 	}
+
+    @Override
+    public String toString() {
+        return "MobEntry{" +
+                "type=" + type +
+                ", name='" + name + '\'' +
+                ", hand=" + hand +
+                ", offHand=" + offHand +
+                ", helmet=" + helmet +
+                ", chest=" + chest +
+                ", leggings=" + leggings +
+                ", boots=" + boots +
+                ", potionEffect=" + potionEffect +
+                ", deathMessage='" + deathMessage + '\'' +
+                ", mythic=" + mythic +
+                ", mythicMob='" + mythicMob + '\'' +
+                ", mythicLevel=" + mythicLevel +
+                '}';
+    }
 
 }

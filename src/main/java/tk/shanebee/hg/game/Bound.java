@@ -147,4 +147,17 @@ public class Bound {
 		return new Location(this.getWorld(), box.getCenterX(), box.getCenterY(), box.getCenterZ());
 	}
 
+    @Override
+    public String toString() {
+        return "Bound{" +
+                "x=" + x +
+                ", y=" + y +
+                ", z=" + z +
+                ", x2=" + x2 +
+                ", y2=" + y2 +
+                ", z2=" + z2 +
+                ", world='" + world + '\'' +
+                '}';
+    }
+
 }
