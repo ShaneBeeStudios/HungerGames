@@ -1219,6 +1219,7 @@ public class Game {
 	 */
 	public void spectate(Player spectator) {
         UUID uuid = spectator.getUniqueId();
+        spectator.teleport(this.getSpawns().get(0));
 	    if (plugin.getPlayerManager().hasPlayerData(uuid)) {
             PlayerData spectatorData = playerManager.getPlayerData(uuid);
             playerManager.addSpectatorData(spectatorData);
@@ -1228,7 +1229,6 @@ public class Game {
 		}
 		this.spectators.add(uuid);
 		spectator.setGameMode(GameMode.SURVIVAL);
-		spectator.teleport(this.getSpawns().get(0));
 		spectator.setCollidable(false);
 		if (Config.spectateFly)
 			spectator.setAllowFlight(true);
@@ -1254,7 +1254,6 @@ public class Game {
 	 * @param spectator The player to remove
 	 */
 	public void leaveSpectate(Player spectator) {
-		exit(spectator);
 		spectator.setCollidable(true);
 		UUID uuid = spectator.getUniqueId();
 		if (Config.spectateFly) {
@@ -1267,6 +1266,7 @@ public class Game {
 		playerManager.getSpectatorData(uuid).restore(spectator);
 		playerManager.removeSpectatorData(uuid);
 		spectators.remove(spectator.getUniqueId());
+        exit(spectator);
 	}
 
 	private void revealPlayer(Player hidden) {
