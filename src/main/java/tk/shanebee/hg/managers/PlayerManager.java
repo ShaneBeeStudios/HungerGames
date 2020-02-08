@@ -187,6 +187,11 @@ public class PlayerManager {
         else if (hasSpectatorData(uuid))
             return getSpectatorData(uuid).getGame();
         else
+            for (Game game : HG.getPlugin().getGames()) {
+                if (game.getPlayers().contains(uuid)) {
+                    return game;
+                }
+            }
             return null;
     }
 

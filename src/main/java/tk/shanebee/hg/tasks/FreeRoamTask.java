@@ -5,14 +5,14 @@ import java.util.UUID;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 
+import org.bukkit.scheduler.BukkitRunnable;
 import tk.shanebee.hg.game.Game;
 import tk.shanebee.hg.HG;
 import tk.shanebee.hg.util.Util;
 
-public class FreeRoamTask implements Runnable {
+public class FreeRoamTask extends BukkitRunnable {
 
 	private Game game;
-	private int id;
 
 	public FreeRoamTask(Game g) {
 		this.game = g;
@@ -26,16 +26,13 @@ public class FreeRoamTask implements Runnable {
 				g.unFreeze(p);
 			}
 		}
-		this.id = Bukkit.getScheduler().scheduleSyncDelayedTask(HG.getPlugin(), this, g.getRoamTime() * 20L);
+		this.runTaskLater(HG.getPlugin(), g.getRoamTime() * 20L);
 	}
 
 	@Override
 	public void run() {
-		game.msgAll(HG.getPlugin().getLang().roam_finished);
+		game.msgAllInGame(HG.getPlugin().getLang().roam_finished);
 		game.startGame();
 	}
 
-	public void stop() {
-		Bukkit.getScheduler().cancelTask(id);
-	}
 }

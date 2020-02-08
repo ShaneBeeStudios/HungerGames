@@ -11,29 +11,32 @@ public class LeaveCmd extends BaseCmd {
 	public LeaveCmd() {
 		forcePlayer = true;
 		cmdName = "leave";
-		forceInGame = true;
+		forceInGame = false;
 		argLength = 1;
 	}
 
 	@Override
 	public boolean run() {
-		Game game;
-		if (playerManager.hasPlayerData(player)) {
-			game = playerManager.getPlayerData(player).getGame();
-			if (Config.economy) {
-				Status status = game.getStatus();
-				if ((status == Status.WAITING || status == Status.COUNTDOWN) && game.getCost() > 0) {
-					Vault.economy.depositPlayer(player, game.getCost());
-					Util.scm(player, lang.prefix +
-							lang.cmd_leave_refund.replace("<cost>", String.valueOf(game.getCost())));
-				}
-			}
-			game.leave(player, false);
-		} else {
-			game = playerManager.getSpectatorData(player).getGame();
-			game.leaveSpectate(player);
-		}
-		Util.scm(player, lang.prefix + lang.cmd_leave_left.replace("<arena>", game.getName()));
+        String prefix = lang.prefix;
+		Game game = playerManager.getGame(player);
+		if (game != null) {
+            if (Config.economy) {
+                Status status = game.getStatus();
+                if ((status == Status.WAITING || status == Status.COUNTDOWN) && game.getCost() > 0) {
+                    Vault.economy.depositPlayer(player, game.getCost());
+                    Util.scm(player, prefix +
+                            lang.cmd_leave_refund.replace("<cost>", String.valueOf(game.getCost())));
+                }
+            }
+            if (playerManager.hasSpectatorData(player)) {
+                game.leaveSpectate(player);
+            } else {
+                game.leave(player, false);
+            }
+            Util.scm(player, prefix + lang.cmd_leave_left.replace("<arena>", game.getName()));
+        } else {
+		    Util.scm(player, prefix + lang.cmd_base_nogame);
+        }
 		return true;
 	}
 }

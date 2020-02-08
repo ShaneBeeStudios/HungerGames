@@ -21,8 +21,11 @@ public class Language {
     public String prefix;
     public String player_joined_game;
     public String player_left_game;
+    public String game_prefix;
     public String game_started;
     public String game_join;
+    public String game_in_queue;
+    public String game_starting;
     public String game_countdown;
     public String game_almost_over;
     public String game_ending_minsec;
@@ -67,6 +70,7 @@ public class Language {
     public String status_not_ready;
     public String status_beginning;
     public String status_countdown;
+    public String status_loading;
 
     public String death_fallen;
     public String death_explosion;
@@ -219,8 +223,11 @@ public class Language {
         prefix = lang.getString("prefix");
         player_joined_game = lang.getString("player-joined-game");
         player_left_game = lang.getString("player-left-game");
+        game_prefix = lang.getString("game-prefix");
         game_started = lang.getString("game-started");
         game_join = lang.getString("game-join");
+        game_in_queue = lang.getString("game-in-queue");
+        game_starting = lang.getString("game-starting");
         game_countdown = lang.getString("game-countdown");
         game_almost_over = lang.getString("game-almost-over");
         game_ending_minsec = lang.getString("game-ending-minsec");
@@ -374,6 +381,7 @@ public class Language {
         status_not_ready = lang.getString("status-notready");
         status_beginning = lang.getString("status-beginning");
         status_countdown = lang.getString("status-countdown");
+        status_loading = lang.getString("status-loading");
     }
 
 }

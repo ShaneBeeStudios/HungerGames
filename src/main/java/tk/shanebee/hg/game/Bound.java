@@ -1,12 +1,14 @@
 package tk.shanebee.hg.game;
 
 import org.bukkit.Bukkit;
+import org.bukkit.Chunk;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.World;
 import org.bukkit.block.Block;
 import org.bukkit.entity.Entity;
 import org.bukkit.util.BoundingBox;
+import tk.shanebee.hg.util.Util;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -117,6 +119,22 @@ public class Bound {
 		}
 		return array;
 	}
+
+	public List<Chunk> getChunks() {
+	    World world = Bukkit.getWorld(this.world);
+	    if (world == null) return null;
+
+	    List<Chunk> chunks = new ArrayList<>();
+        for (int x3 = x; x3 <= x2; x3++) {
+            for (int z3 = z; z3 <= z2; z3++) {
+                Chunk chunk = world.getChunkAt(x3 >> 4, z3 >> 4);
+                if (!chunks.contains(chunk)) {
+                    chunks.add(chunk);
+                }
+            }
+        }
+        return chunks;
+    }
 
 	/** Get the world of this bound
 	 * @return World of this bound

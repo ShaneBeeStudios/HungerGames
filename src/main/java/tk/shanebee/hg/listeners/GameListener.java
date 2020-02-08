@@ -205,21 +205,21 @@ public class GameListener implements Listener {
 	private void processDeath(Player player, Game game, Entity damager, EntityDamageEvent.DamageCause cause) {
 		dropInv(player);
 		player.setHealth(20);
-		Bukkit.getScheduler().runTaskLater(plugin, () -> {
+		//Bukkit.getScheduler().runTaskLater(plugin, () -> {
 			if (damager instanceof Player) {
 				game.addKill(((Player) damager));
 				leaderboard.addStat(((Player) damager), Leaderboard.Stats.KILLS);
-				game.msgAll(lang.death_fallen + " &d" + killManager.getKillString(player.getName(), damager));
+				game.msgAllInGame(lang.death_fallen + " &d" + killManager.getKillString(player.getName(), damager));
 			} else if (cause == EntityDamageEvent.DamageCause.ENTITY_ATTACK) {
-				game.msgAll(lang.death_fallen + " &d" + killManager.getKillString(player.getName(), damager));
+				game.msgAllInGame(lang.death_fallen + " &d" + killManager.getKillString(player.getName(), damager));
 			} else if (cause == EntityDamageEvent.DamageCause.PROJECTILE) {
-				game.msgAll(lang.death_fallen + " &d" + killManager.getKillString(player.getName(), damager));
+				game.msgAllInGame(lang.death_fallen + " &d" + killManager.getKillString(player.getName(), damager));
 				if (killManager.isShotByPlayer(damager) && killManager.getShooter(damager) != player) {
 				    game.addKill(killManager.getShooter(damager));
                     leaderboard.addStat(killManager.getShooter(damager), Leaderboard.Stats.KILLS);
                 }
 			} else {
-				game.msgAll(lang.death_fallen + " &d" + killManager.getDeathString(cause, player.getName()));
+				game.msgAllInGame(lang.death_fallen + " &d" + killManager.getDeathString(cause, player.getName()));
 			}
 			leaderboard.addStat(player, Leaderboard.Stats.DEATHS);
 			leaderboard.addStat(player, Leaderboard.Stats.GAMES);
@@ -235,7 +235,7 @@ public class GameListener implements Listener {
 			game.runCommands(Game.CommandType.DEATH, player);
 
 			Bukkit.getScheduler().scheduleSyncDelayedTask(plugin, () -> checkStick(game), 40L);
-		}, 1);
+		//}, 1);
 
 	}
 
@@ -407,7 +407,12 @@ public class GameListener implements Listener {
 						Util.scm(p, lang.cmd_delete_noexist);
 					} else {
 						if (p.getInventory().getItemInMainHand().getType() == Material.AIR) {
-							game.join(p);
+						    Game g = playerManager.getGame(p);
+						    if (g != null) {
+						        Util.scm(p, lang.game_in_queue.replace("<arena>", g.getName()));
+						        return;
+                            }
+                            game.preJoin(p);
 						} else {
 							Util.scm(p, lang.listener_sign_click_hand);
 						}
@@ -588,9 +593,14 @@ public class GameListener implements Listener {
 	private void onEntityExplode(EntityExplodeEvent event) {
 		if (gameManager.isInRegion(event.getLocation())) {
 			Game g = gameManager.getGame(event.getLocation());
+			Status status = g.getStatus();
+			if (status != Status.RUNNING) {
+			    event.setCancelled(true);
+			    return;
+            }
 			for (Block block : event.blockList()) {
-				g.recordBlockBreak(block);
-			}
+                g.recordBlockBreak(block);
+            }
 			event.setYield(0);
 		}
 	}
@@ -599,9 +609,14 @@ public class GameListener implements Listener {
 	private void onBlockExplode(BlockExplodeEvent event) {
 		if (gameManager.isInRegion(event.getBlock().getLocation())) {
 			Game g = gameManager.getGame(event.getBlock().getLocation());
+            Status status = g.getStatus();
+            if (status != Status.RUNNING) {
+                event.setCancelled(true);
+                return;
+            }
 			for (Block block : event.blockList()) {
-				g.recordBlockBreak(block);
-			}
+                g.recordBlockBreak(block);
+            }
 			event.setYield(0);
 		}
 	}

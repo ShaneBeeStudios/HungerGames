@@ -10,40 +10,57 @@ public enum Status {
 
 	/**
 	 * Game is running
+     * <p>Game is active with players</p>
 	 */
 	RUNNING,
-	/**
-	 * Game has stopped
-	 */
-	STOPPED,
+    /**
+     * Game is starting to run
+     * <p>This is the free roam period of the game</p>
+     */
+    BEGINNING,
+    /**
+     * Game is counting down to start
+     * <p>Players have joined, wait for more players</p>
+     */
+    COUNTDOWN,
+    /**
+     * Game is starting up
+     * <p>This is the point players are warned before
+     * teleporting them to the arena</p>
+     */
+    STARTING,
+    /**
+     * Game is waiting
+     * <p>At least one player has joined, waiting for minimum</p>
+     */
+    WAITING,
 	/**
 	 * Game is ready to run
+     * <p>Game is ready to join</p>
 	 */
 	READY,
-	/**
-	 * Game is waiting
-	 */
-	WAITING,
 	/**
 	 * Game is broken
 	 */
 	BROKEN,
+    /**
+     * Game has stopped
+     */
+    STOPPED,
 	/**
 	 * Game is currently rolling back blocks
+     * <p>Post-Game fixing arena, this stage may take some time</p>
 	 */
 	ROLLBACK,
 	/**
 	 * Game is not ready
 	 */
 	NOTREADY,
-	/**
-	 * Game is starting to run
-	 */
-	BEGINNING,
-	/**
-	 * Game is counting down to start
-	 */
-	COUNTDOWN;
+
+    /**
+     * Game is loading (pre-loading chunks)
+     */
+    LOADING;
 
 	Language lang = HG.getPlugin().getLang();
 
@@ -65,10 +82,13 @@ public enum Status {
                 return Util.getColString(lang.status_not_ready);
             case BEGINNING:
                 return Util.getColString(lang.status_beginning);
+            case STARTING:
             case COUNTDOWN:
                 return Util.getColString(lang.status_countdown);
+            case LOADING:
+                return Util.getColString(lang.status_loading);
             default:
-                return Util.getColString("&cERROR!");
+                return Util.getColString("&c&lERROR!");
         }
 	}
 
