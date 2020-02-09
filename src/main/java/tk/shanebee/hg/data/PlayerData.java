@@ -17,7 +17,7 @@ import java.util.UUID;
  * Player data object for holding pre-game player info
  */
 @SuppressWarnings("WeakerAccess")
-public class PlayerData {
+public class PlayerData implements Cloneable {
 
 	//Pregame data
 	private ItemStack[] inv;
@@ -74,7 +74,8 @@ public class PlayerData {
 	}
 
 	// Restores later if player has an item in their inventory which changes their max health value
-	private void restoreHealth(Player player) {
+	@SuppressWarnings("ConstantConditions")
+    private void restoreHealth(Player player) {
 		double att = player.getAttribute(Attribute.GENERIC_MAX_HEALTH).getValue();
 		if (health > att) {
 			Bukkit.getScheduler().runTaskLater(HG.getPlugin(), () -> player.setHealth(health), 10);
@@ -124,6 +125,18 @@ public class PlayerData {
      */
 	public UUID getUuid() {
 	    return this.uuid;
+    }
+
+    /** Clone this PlayerData
+     * @return Clone of this PlayerData
+     */
+    @Override
+    public PlayerData clone() {
+        try {
+            return ((PlayerData) super.clone());
+        } catch (CloneNotSupportedException e) {
+            throw new Error(e);
+        }
     }
 
     @Override
