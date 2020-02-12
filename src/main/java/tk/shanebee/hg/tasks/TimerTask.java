@@ -1,6 +1,7 @@
 package tk.shanebee.hg.tasks;
 
 import org.bukkit.Bukkit;
+import org.bukkit.entity.Player;
 import tk.shanebee.hg.data.Config;
 import tk.shanebee.hg.game.Game;
 import tk.shanebee.hg.HG;
@@ -18,15 +19,19 @@ public class TimerTask implements Runnable {
 	private Game game;
 
 	public TimerTask(Game g, int time) {
-		this.remainingtime = time;
-		this.game = g;
-		this.teleportTimer = Config.teleportEndTime;
-		this.borderCountdownStart = g.getBorderTimer().get(0);
-		this.borderCountdownEnd = g.getBorderTimer().get(1);
-		g.getPlayers().forEach(uuid -> Objects.requireNonNull(Bukkit.getPlayer(uuid)).setInvulnerable(false));
-		
-		this.id = Bukkit.getScheduler().scheduleSyncRepeatingTask(HG.getPlugin(), this, 0, 30 * 20L);
-	}
+        this.remainingtime = time;
+        this.game = g;
+        this.teleportTimer = Config.teleportEndTime;
+        this.borderCountdownStart = g.getBorderTimer().get(0);
+        this.borderCountdownEnd = g.getBorderTimer().get(1);
+        g.getPlayers().forEach(uuid -> {
+            Player player = Bukkit.getPlayer(uuid);
+            if (player != null) {
+                player.setInvulnerable(false);
+            }
+        });
+        this.id = Bukkit.getScheduler().scheduleSyncRepeatingTask(HG.getPlugin(), this, 0, 30 * 20L);
+    }
 	
 	@Override
 	public void run() {

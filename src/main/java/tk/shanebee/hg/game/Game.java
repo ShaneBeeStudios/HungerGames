@@ -656,7 +656,7 @@ public class Game {
                 startPreGame();
             }
         } else if ((status == Status.RUNNING || status == Status.BEGINNING) && Config.spectateEnabled) {
-            // TODO spectate
+            spectate(player);
         } else {
             // TODO message about arena in use
             Util.scm(player, "&cERROR -> &6Status: " + this.status.getName());
@@ -1015,17 +1015,17 @@ public class Game {
 		if (playerManager.hasPlayerData(uuid)) {
             unFreeze(player);
             if (death) {
-                if (this.getStatus() == Status.RUNNING)
+                if (this.getStatus() == Status.RUNNING && bar != null)
                     bar.removePlayer(player);
                 heal(player);
                 playerManager.getPlayerData(uuid).restore(player);
                 playerManager.removePlayerData(player);
-                exit(player);
                 sb.restoreSB(player);
                 player.playSound(player.getLocation(), Sound.UI_TOAST_CHALLENGE_COMPLETE, 5, 1);
                 if (spectate && spectateOnDeath && !isGameOver()) {
                     spectate(player);
-                    player.sendTitle(getName(), "You are now spectating!", 10, 100, 10); //TODO this a temp test
+                } else {
+                    exit(player);
                 }
             } else {
                 heal(player);
@@ -1080,15 +1080,18 @@ public class Game {
 	private boolean isGameOver() {
 	    if (players.size() <= 1) return true;
 	    for (UUID uuid : players) {
-	        Team team = playerManager.getPlayerData(uuid).getTeam();
+	        PlayerData data = playerManager.getPlayerData(uuid);
+	        if (data != null) {
+                Team team = data.getTeam();
 
-	        if (team != null && (team.getPlayers().size() >= players.size())) {
-	            for (UUID u : players) {
-	                if (!team.getPlayers().contains(u)) {
-	                    return false;
+                if (team != null && (team.getPlayers().size() >= players.size())) {
+                    for (UUID u : players) {
+                        if (!team.getPlayers().contains(u)) {
+                            return false;
+                        }
                     }
+                    return true;
                 }
-	            return true;
             }
         }
 	    return false;
@@ -1127,13 +1130,13 @@ public class Game {
 		bar = Bukkit.createBossBar(ChatColor.translateAlternateColorCodes('&', title), BarColor.GREEN, BarStyle.SEGMENTED_20);
 		for (UUID uuid : players) {
 			Player player = Bukkit.getPlayer(uuid);
-			assert player != null;
-			bar.addPlayer(player);
+			if (player != null)
+                bar.addPlayer(player);
 		}
 		for (UUID uuid : spectators) {
 			Player player = Bukkit.getPlayer(uuid);
-			assert player != null;
-			bar.addPlayer(player);
+			if (player != null)
+			    bar.addPlayer(player);
 		}
 	}
 
@@ -1220,8 +1223,8 @@ public class Game {
 	public void spectate(Player spectator) {
         UUID uuid = spectator.getUniqueId();
         spectator.teleport(this.getSpawns().get(0));
-	    if (plugin.getPlayerManager().hasPlayerData(uuid)) {
-            PlayerData spectatorData = playerManager.getPlayerData(uuid);
+	    if (playerManager.hasPlayerData(uuid)) {
+            PlayerData spectatorData = playerManager.getPlayerData(uuid).clone();
             playerManager.addSpectatorData(spectatorData);
             playerManager.removePlayerData(uuid);
 		} else {
@@ -1247,6 +1250,9 @@ public class Game {
 		}
 		if (bar != null)
 			bar.addPlayer(spectator);
+        String title = Util.getColString(lang.arena_spectate_title.replace("<arena>", getName()));
+        String subtitle = Util.getColString(lang.arena_spectate_subtitle.replace("<arena>", getName()));
+        spectator.sendTitle(title, subtitle, 10, 80, 10);
 		spectator.getInventory().setItem(0, plugin.getItemStackManager().getSpectatorCompass());
 	}
 
@@ -1265,7 +1271,7 @@ public class Game {
 			revealPlayer(spectator);
 		playerManager.getSpectatorData(uuid).restore(spectator);
 		playerManager.removeSpectatorData(uuid);
-		spectators.remove(spectator.getUniqueId());
+		spectators.remove(uuid);
         exit(spectator);
 	}
 
@@ -1274,6 +1280,12 @@ public class Game {
 			player.showPlayer(plugin, hidden);
 		}
 	}
+
+	public void addFakePlayer() {
+	    this.players.add(UUID.randomUUID());
+	    updateLobbyBlock();
+	    sb.setAlive();
+    }
 
 	/** Run commands for this game that are defined in the arenas.yml
 	 * @param commandType Type of command to run

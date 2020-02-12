@@ -33,6 +33,8 @@ game-bossbar: '&6&lGame Ends In: &b&l<min> &7min &b&l<sec> &7sec'
 players-to-start: '&b&l<amount> &6players to start!'
 arena-not-ready: '&cThis arena is not ready! Please wait before joining!'
 arena-spectate: '&6You can spectate this arena by running &3/hg spectate <arena>'
+arena-spectate-title: '&7Arena: &b<arena>'
+arena-spectate-subtitle: '&7You are now spectating!'
 game-full: '&cis currently full!'
 
 #  <arena> will be replaced with name of arena the player won in

@@ -16,11 +16,14 @@ public class FreeRoamTask extends BukkitRunnable {
 
 	public FreeRoamTask(Game g) {
 		this.game = g;
+		String started = HG.getPlugin().getLang().roam_game_started;
+		String roam_time = HG.getPlugin().getLang().roam_time;
+		int roam_t = g.getRoamTime();
 		for (UUID u : g.getPlayers()) {
 			Player p = Bukkit.getPlayer(u);
 			if (p != null) {
-				Util.scm(p, HG.getPlugin().getLang().roam_game_started);
-				Util.scm(p, HG.getPlugin().getLang().roam_time.replace("<roam>", String.valueOf(g.getRoamTime())));
+				Util.scm(p, started);
+				Util.scm(p, roam_time.replace("<roam>", String.valueOf(roam_t)));
 				p.setHealth(20);
 				p.setFoodLevel(20);
 				g.unFreeze(p);

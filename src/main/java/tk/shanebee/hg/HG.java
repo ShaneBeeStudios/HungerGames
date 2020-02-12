@@ -166,6 +166,7 @@ public class HG extends JavaPlugin {
 		cmds.put("bordersize", new BorderSizeCmd());
 		cmds.put("bordercenter", new BorderCenterCmd());
 		cmds.put("bordertimer", new BorderTimerCmd());
+		cmds.put("fake", new FakePlayerCmd()); // Command for debugging (adds fake players)
 		if (Config.spectateEnabled) {
 			cmds.put("spectate", new SpectateCmd());
 		}
@@ -185,7 +186,6 @@ public class HG extends JavaPlugin {
 			if (cArray.contains(bc))
 				//noinspection ConstantConditions
 				getServer().getPluginManager().getPermission("hg." + bc).setDefault(PermissionDefault.TRUE);
-
 		}
 	}
 
