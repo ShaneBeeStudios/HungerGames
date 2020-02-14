@@ -642,16 +642,17 @@ public class Game {
 
     public boolean preJoin(Player player) {
         UUID uuid = player.getUniqueId();
+        String queue = lang.game_join_queue.replace("<arena>", this.getName());
         if (this.playerManager.getGame(uuid) != null) {
             return false;
         }
         if (status == Status.READY) {
             new PrepareGameTask(this.plugin, this);
             this.players.add(uuid);
-            Util.scm(player, "&aYou are in queue for &6" + this.getName());
+            Util.scm(player, queue);
         } else if (status == Status.WAITING || status == Status.STARTING || status == Status.COUNTDOWN) {
             this.players.add(uuid);
-            Util.scm(player, "&aYou are in queue for &6" + this.getName());
+            Util.scm(player, queue);
             if (this.players.size() >= this.minPlayers) {
                 startPreGame();
             }

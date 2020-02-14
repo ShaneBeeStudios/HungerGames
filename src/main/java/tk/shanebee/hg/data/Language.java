@@ -24,6 +24,7 @@ public class Language {
     public String game_prefix;
     public String game_started;
     public String game_join;
+    public String game_join_queue;
     public String game_in_queue;
     public String game_starting;
     public String game_countdown;
@@ -228,6 +229,7 @@ public class Language {
         game_prefix = lang.getString("game-prefix");
         game_started = lang.getString("game-started");
         game_join = lang.getString("game-join");
+        game_join_queue = lang.getString("game-join-queue");
         game_in_queue = lang.getString("game-in-queue");
         game_starting = lang.getString("game-starting");
         game_countdown = lang.getString("game-countdown");
