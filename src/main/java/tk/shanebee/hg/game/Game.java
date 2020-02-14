@@ -649,7 +649,7 @@ public class Game {
             new PrepareGameTask(this.plugin, this);
             this.players.add(uuid);
             Util.scm(player, "&aYou are in queue for &6" + this.getName());
-        } else if (status == Status.WAITING) {
+        } else if (status == Status.WAITING || status == Status.STARTING || status == Status.COUNTDOWN) {
             this.players.add(uuid);
             Util.scm(player, "&aYou are in queue for &6" + this.getName());
             if (this.players.size() >= this.minPlayers) {
