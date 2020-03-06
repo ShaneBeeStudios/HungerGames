@@ -1,6 +1,7 @@
 package tk.shanebee.hg.managers;
 
 import org.bukkit.Location;
+import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.block.Sign;
 import org.bukkit.command.CommandSender;
@@ -187,11 +188,17 @@ public class Manager {
 	public ItemStack randomItem(Game game, boolean bonus) {
 		if (bonus) {
 		    int r = game.getBonusItems().size();
-			int i = rg.nextInt(Math.max(r, 0)) + 1;
+		    if (r == 0) {
+		        return new ItemStack(Material.AIR);
+            }
+			int i = rg.nextInt(r) + 1;
 			return game.getBonusItems().get(i);
 		} else {
 		    int r = game.getItems().size();
-			int i = rg.nextInt(Math.max(r, 0)) + 1;
+            if (r == 0) {
+                return new ItemStack(Material.AIR);
+            }
+			int i = rg.nextInt(r) + 1;
 			return game.getItems().get(i);
 		}
 	}
