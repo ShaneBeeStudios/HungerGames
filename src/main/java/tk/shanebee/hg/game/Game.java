@@ -1053,7 +1053,6 @@ public class Game {
 					}
 				}
 				boolean finalDeath = death;
-				/* ON HOLD for now
 				BukkitRunnable runnable = new BukkitRunnable() {
                     @Override
                     public void run() {
@@ -1063,10 +1062,7 @@ public class Game {
                     }
                 };
 				runnable.runTaskLater(this.plugin, 20);
-				 */
-                updateLobbyBlock();
-                sb.setAlive();
-                stop(death);
+
                 return;
 			}
 		} else if (status == Status.WAITING) {
