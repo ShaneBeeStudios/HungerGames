@@ -20,19 +20,20 @@ import java.util.UUID;
 public class PlayerData {
 
 	//Pregame data
-	private ItemStack[] inv;
-	private ItemStack[] equip;
-	private int expL;
-	private float expP;
-	private double health;
-	private int food;
-	private float saturation;
-	private GameMode mode;
-	private UUID uuid;
+	private final ItemStack[] inv;
+	private final ItemStack[] equip;
+	private final int expL;
+	private final float expP;
+	private final double health;
+	private final int food;
+	private final float saturation;
+	private final GameMode mode;
+	private final UUID uuid;
 	
 	//InGame data
 	private Team team;
-	private Game game;
+	private Team pendingTeam;
+	private final Game game;
 
 	/** New player pre-game data file
 	 * @param player Player to save
@@ -74,7 +75,8 @@ public class PlayerData {
 	}
 
 	// Restores later if player has an item in their inventory which changes their max health value
-	private void restoreHealth(Player player) {
+	@SuppressWarnings("ConstantConditions")
+    private void restoreHealth(Player player) {
 		double att = player.getAttribute(Attribute.GENERIC_MAX_HEALTH).getValue();
 		if (health > att) {
 			Bukkit.getScheduler().runTaskLater(HG.getPlugin(), () -> player.setHealth(health), 10);
@@ -112,7 +114,21 @@ public class PlayerData {
 		this.team = team;
 	}
 
-	/** Get the gamemode of this player data
+    /** Get the pending team of this player data
+     * @return Pending team of this player data
+     */
+    public Team getPendingTeam() {
+        return pendingTeam;
+    }
+
+    /** Set the pending team of this player data
+     * @param pendingTeam Team for pending
+     */
+    public void setPendingTeam(Team pendingTeam) {
+        this.pendingTeam = pendingTeam;
+    }
+
+    /** Get the gamemode of this player data
 	 * @return Gamemode of this player data
 	 */
 	public GameMode getGameMode() {
@@ -139,6 +155,7 @@ public class PlayerData {
                 ", mode=" + mode +
                 ", uuid=" + uuid +
                 ", team=" + team +
+                ", pending=" + pendingTeam +
                 ", game=" + game +
                 '}';
     }

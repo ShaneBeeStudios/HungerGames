@@ -7,6 +7,7 @@ import java.util.UUID;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import tk.shanebee.hg.HG;
+import tk.shanebee.hg.data.PlayerData;
 import tk.shanebee.hg.util.Util;
 
 /**
@@ -14,13 +15,16 @@ import tk.shanebee.hg.util.Util;
  */
 public class Team {
 
-	private UUID leader;
-	private List<UUID> players = new ArrayList<>();
-	private List<UUID> pending = new ArrayList<>();
+	private final UUID leader;
+	private final List<UUID> players = new ArrayList<>();
+	private final List<UUID> pending = new ArrayList<>();
 	
 	public Team(UUID leader) {
 		this.leader = leader;
+        PlayerData playerData = HG.getPlugin().getPlayerManager().getPlayerData(leader);
 		players.add(leader);
+		playerData.setTeam(this);
+		playerData.setPendingTeam(null);
 	}
 
     /** Invite a player to this team
@@ -35,12 +39,16 @@ public class Team {
 		Util.scm(player, HG.getPlugin().getLang().team_invite_3);
 		Util.scm(player, HG.getPlugin().getLang().team_invite_4);
 		pending.add(player.getUniqueId());
+		HG.getPlugin().getPlayerManager().getData(player).setPendingTeam(this);
 	}
 
     /** Accept the invite to this team
      * @param player Player to force to accept the invite
      */
 	public void acceptInvite(Player player) {
+        PlayerData playerData = HG.getPlugin().getPlayerManager().getPlayerData(player);
+        playerData.setPendingTeam(null);
+        playerData.setTeam(this);
 		pending.remove(player.getUniqueId());
 		players.add(player.getUniqueId());
 		Util.scm(player, HG.getPlugin().getLang().joined_team);
@@ -82,4 +90,26 @@ public class Team {
 	public UUID getLeader() {
 		return leader;
 	}
+
+    /** Send a message to all members of this team
+     * @param message Message to send
+     */
+	public void messageMembers(String message) {
+	    for (UUID uuid : this.players) {
+	        Player player = Bukkit.getPlayer(uuid);
+	        if (player != null) {
+	            Util.scm(player, message);
+            }
+        }
+    }
+
+    @Override
+    public String toString() {
+        return "Team{" +
+                "leader=" + leader +
+                ", players=" + players +
+                ", pending=" + pending +
+                '}';
+    }
+
 }
