@@ -26,13 +26,13 @@ import java.util.*;
 public class HG extends JavaPlugin {
 
     //Maps
-    private Map<String, BaseCmd> cmds = new HashMap<>();
-    private Map<UUID, PlayerSession> playerSession = new HashMap<>();
-    private Map<Integer, ItemStack> items = new HashMap<>();
-    private Map<Integer, ItemStack> bonusItems = new HashMap<>();
+    private final Map<String, BaseCmd> cmds = new HashMap<>();
+    private final Map<UUID, PlayerSession> playerSession = new HashMap<>();
+    private final Map<Integer, ItemStack> items = new HashMap<>();
+    private final Map<Integer, ItemStack> bonusItems = new HashMap<>();
 
     //Lists
-    private List<Game> games = new ArrayList<>();
+    private final List<Game> games = new ArrayList<>();
 
     //Instances
     private static HG plugin;
