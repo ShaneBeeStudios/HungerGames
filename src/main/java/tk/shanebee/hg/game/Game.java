@@ -64,36 +64,36 @@ import java.util.UUID;
 @SuppressWarnings("unused")
 public class Game {
 
-	private HG plugin;
-	private Language lang;
-	private String name;
-	private String prefix;
-	private List<Location> spawns;
-	private Bound bound;
-	private List<UUID> players = new ArrayList<>();
-	private List<UUID> spectators = new ArrayList<>();
-	private List<Location> chests = new ArrayList<>();
-	private List<Location> playerChests = new ArrayList<>();
+	private final HG plugin;
+	private final Language lang;
+	private final String name;
+	private final String prefix;
+	private final List<Location> spawns;
+	private final Bound bound;
+	private final List<UUID> players = new ArrayList<>();
+	private final List<UUID> spectators = new ArrayList<>();
+	private final List<Location> chests = new ArrayList<>();
+	private final List<Location> playerChests = new ArrayList<>();
 	private Map<Integer, ItemStack> items;
 	private Map<Integer, ItemStack> bonusItems;
 	private KitManager kit;
-	private Map<Player, Integer> kills = new HashMap<>();
+	private final Map<Player, Integer> kills = new HashMap<>();
 
-	private List<BlockState> blocks = new ArrayList<>();
+	private final List<BlockState> blocks = new ArrayList<>();
 	private List<String> commands = null;
-	private MobManager mobManager;
-	private PlayerManager playerManager;
+	private final MobManager mobManager;
+	private final PlayerManager playerManager;
 	private Location exit;
 	private Status status;
-	private int minPlayers;
-	private int maxPlayers;
-	private int time;
+	private final int minPlayers;
+	private final int maxPlayers;
+	private final int time;
 	private int cost;
 	private Sign s;
 	private Sign s1;
 	private Sign s2;
-	private int roamTime;
-	private SBDisplay sb;
+	private final int roamTime;
+	private final SBDisplay sb;
 	private int chestRefillTime = 0;
 
 	// Task ID's here!
@@ -106,7 +106,7 @@ public class Game {
 
 	// Objects
 	private BossBar bar;
-	private SpectatorGUI spectatorGUI;
+	private final SpectatorGUI spectatorGUI;
 
 	// Border stuff here
 	private Location borderCenter = null;
@@ -114,8 +114,8 @@ public class Game {
 	private int borderCountdownStart;
 	private int borderCountdownEnd;
 
-	private boolean spectate = Config.spectateEnabled;
-	private boolean spectateOnDeath = Config.spectateOnDeath;
+	private final boolean spectate = Config.spectateEnabled;
+	private final boolean spectateOnDeath = Config.spectateOnDeath;
 
 	/** Create a new game
 	 * <p>Internally used when loading from config on server start</p>
@@ -643,24 +643,36 @@ public class Game {
     public boolean preJoin(Player player) {
         UUID uuid = player.getUniqueId();
         String queue = lang.game_join_queue.replace("<arena>", this.getName());
-        if (this.playerManager.getGame(uuid) != null) {
+        Game game = this.playerManager.getGame(uuid);
+        if (game != null) {
+            Util.scm(player, lang.game_in_queue.replace("<arena>", game.getName()));
             return false;
         }
-        if (status == Status.READY) {
-            new PrepareGameTask(this.plugin, this);
-            this.players.add(uuid);
-            Util.scm(player, queue);
-        } else if (status == Status.WAITING || status == Status.STARTING || status == Status.COUNTDOWN) {
-            this.players.add(uuid);
-            Util.scm(player, queue);
-            if (this.players.size() >= this.minPlayers) {
-                startPreGame();
-            }
-        } else if ((status == Status.RUNNING || status == Status.BEGINNING) && Config.spectateEnabled) {
-            spectate(player);
-        } else {
-            // TODO message about arena in use
-            Util.scm(player, "&cERROR -> &6Status: " + this.status.getName());
+        switch (status) {
+            case READY:
+                new PrepareGameTask(this.plugin, this);
+                this.players.add(uuid);
+                Util.scm(player, queue);
+                break;
+            case WAITING:
+            case STARTING:
+            case COUNTDOWN:
+                this.players.add(uuid);
+                Util.scm(player, queue);
+                if (this.players.size() >= this.minPlayers) {
+                    startPreGame();
+                }
+                break;
+            case RUNNING:
+            case BEGINNING:
+                if (Config.spectateEnabled) {
+                    spectate(player);
+                } else {
+                    Util.scm(player, lang.arena_not_ready);
+                }
+                break;
+            default:
+                Util.scm(player, "&cERROR -> &6Status: " + this.status.getName());
         }
         updateLobbyBlock();
         return true;
@@ -792,13 +804,6 @@ public class Game {
         msgAllInGame(this.prefix + message);
     }
 
-	private void updateLobbyBlock() {
-		s1.setLine(1, status.getName());
-		s2.setLine(1, ChatColor.BOLD + "" + players.size() + "/" + maxPlayers);
-		s1.update(true);
-		s2.update(true);
-	}
-
 	private void heal(Player player) {
 		for (PotionEffect ef : player.getActivePotionEffects()) {
 			player.removePotionEffect(ef.getType());
@@ -812,12 +817,6 @@ public class Game {
             }
         };
         runnable.runTaskLater(this.plugin, 1);
-        /*
-		try {
-			Bukkit.getScheduler().scheduleSyncDelayedTask(HG.getPlugin(), () -> player.setFireTicks(0), 1);
-		} catch (IllegalPluginAccessException ignore) {}
-         */
-
 	}
 
 	/** Freeze a player
@@ -877,6 +876,13 @@ public class Game {
 		}
 		return true;
 	}
+
+    private void updateLobbyBlock() {
+        s1.setLine(1, status.getName());
+        s2.setLine(1, ChatColor.BOLD + "" + players.size() + "/" + maxPlayers);
+        s1.update(true);
+        s2.update(true);
+    }
 
 	/** Set exit location for this game
 	 * @param location Location where players will exit
@@ -1022,12 +1028,12 @@ public class Game {
                 playerManager.getPlayerData(uuid).restore(player);
                 playerManager.removePlayerData(player);
                 sb.restoreSB(player);
-                player.playSound(player.getLocation(), Sound.UI_TOAST_CHALLENGE_COMPLETE, 5, 1);
                 if (spectate && spectateOnDeath && !isGameOver()) {
                     spectate(player);
                 } else {
                     exit(player);
                 }
+                player.playSound(player.getLocation(), Sound.UI_TOAST_CHALLENGE_COMPLETE, 5, 1);
             } else {
                 heal(player);
                 playerManager.getPlayerData(uuid).restore(player);

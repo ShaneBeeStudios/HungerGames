@@ -15,11 +15,6 @@ public class JoinCmd extends BaseCmd {
 
     @Override
     public boolean run() {
-        Game game = playerManager.getGame(player);
-        if (game != null) {
-            Util.scm(player, lang.game_in_queue.replace("<arena>", game.getName()));
-            return true;
-        }
         Game g = gameManager.getGame(args[1]);
         if (g != null) {
             g.preJoin(player);

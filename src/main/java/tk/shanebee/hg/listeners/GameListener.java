@@ -412,11 +412,6 @@ public class GameListener implements Listener {
 						Util.scm(p, lang.cmd_delete_noexist);
 					} else {
 						if (p.getInventory().getItemInMainHand().getType() == Material.AIR) {
-						    Game g = playerManager.getGame(p);
-						    if (g != null) {
-						        Util.scm(p, lang.game_in_queue.replace("<arena>", g.getName()));
-						        return;
-                            }
                             game.preJoin(p);
 						} else {
 							Util.scm(p, lang.listener_sign_click_hand);
