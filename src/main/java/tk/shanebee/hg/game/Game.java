@@ -599,64 +599,6 @@ public class Game {
     @Deprecated
     public void join(Player player) {
         preJoin(player);
-	    /*
-	    UUID uuid = player.getUniqueId();
-		if (status != Status.WAITING && status != Status.STOPPED && status != Status.COUNTDOWN && status != Status.READY) {
-			Util.scm(player, HG.getPlugin().getLang().arena_not_ready);
-			if ((status == Status.RUNNING || status == Status.BEGINNING) && Config.spectateEnabled) {
-				Util.scm(player, plugin.getLang().arena_spectate.replace("<arena>", this.getName()));
-			}
-		} else if (maxPlayers <= players.size()) {
-			player.sendMessage(ChatColor.RED + name + " is currently full!");
-			Util.scm(player, "&c" + name + " " + HG.getPlugin().getLang().game_full);
-		} else if (!players.contains(player.getUniqueId())) {
-		    if (!vaultCheck(player)) {
-		        return;
-            }
-			// Call PlayerJoinGameEvent
-			PlayerJoinGameEvent event = new PlayerJoinGameEvent(this, player);
-			Bukkit.getPluginManager().callEvent(event);
-			// If cancelled, stop the player from joining the game
-			if (event.isCancelled()) return;
-
-			if (player.isInsideVehicle()) {
-				player.leaveVehicle();
-			}
-
-			players.add(player.getUniqueId());
-			Bukkit.getScheduler().scheduleSyncDelayedTask(HG.getPlugin(), () -> {
-				Location loc = pickSpawn();
-				player.teleport(loc);
-
-				if (loc.getBlock().getRelative(BlockFace.DOWN).getType() == Material.AIR) {
-					while (loc.getBlock().getRelative(BlockFace.DOWN).getType() == Material.AIR) {
-						loc.setY(loc.getY() - 1);
-					}
-				}
-				playerManager.addPlayerData(new PlayerData(player, this));
-
-				heal(player);
-				freeze(player);
-				kills.put(player, 0);
-
-				if (players.size() == 1 && status == Status.READY)
-					status = Status.WAITING;
-				if (players.size() >= minPlayers && (status == Status.WAITING || status == Status.READY)) {
-					startPreGame();
-				} else if (status == Status.WAITING) {
-					Util.broadcast(HG.getPlugin().getLang().player_joined_game.replace("<player>",
-                            player.getName()) + (minPlayers - players.size() <= 0 ? "!" : ":" +
-                            HG.getPlugin().getLang().players_to_start.replace("<amount>", String.valueOf((minPlayers - players.size())))));
-				}
-				kitHelp(player);
-
-				updateLobbyBlock();
-				sb.setSB(player);
-				sb.setAlive();
-				runCommands(CommandType.JOIN, player);
-			}, 5);
-		}
-	     */
     }
 
     /**
@@ -716,6 +658,13 @@ public class Game {
         }
     }
 
+    /**
+     * Prejoin a player to this game
+     * <p>Depending on the status of the game, the player will be appropriately placed in the game</p>
+     *
+     * @param player Player to add to the game
+     * @return True if the player was successfully added to the game
+     */
     public boolean preJoin(Player player) {
         UUID uuid = player.getUniqueId();
         String queue = lang.game_join_queue.replace("<arena>", this.getName());
