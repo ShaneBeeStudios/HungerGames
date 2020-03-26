@@ -25,8 +25,8 @@ import java.util.Arrays;
  */
 public class ItemStackManager {
 
-    private HG plugin;
-    private NBTApi nbtApi;
+    private final HG plugin;
+    private final NBTApi nbtApi;
 
     public ItemStackManager(HG p) {
         this.plugin = p;
@@ -109,17 +109,16 @@ public class ItemStackManager {
     public ItemStack getItem(String args, boolean isStackable) {
         if (args == null) return null;
         int amount = 1;
+        String[] split = args.split(" ");
         if (isStackable) {
-            String a = args.split(" ")[1];
-            if (Util.isInt(a)) {
-                amount = Integer.parseInt(a);
+            if (split.length > 1 && Util.isInt(split[1])) {
+                amount = Integer.parseInt(split[1]);
             }
         }
-        ItemStack item = itemStringToStack(args.split(" ")[0], amount);
+        ItemStack item = itemStringToStack(split[0], amount);
         if (item == null) return null;
 
-        String[] ags = args.split(" ");
-        for (String s : ags) {
+        for (String s : split) {
             if (s.startsWith("enchant:")) {
                 s = s.replace("enchant:", "").toUpperCase();
                 String[] d = s.split(":");
@@ -180,11 +179,9 @@ public class ItemStackManager {
             } else if (s.startsWith("data:")) {
                 s = s.replace("data:", "").replace("~", " ");
                 if (nbtApi != null)
-                    //nbtApi.setNBT(item, s);
                     item = nbtApi.getItemWithNBT(item, s);
             } else if (s.startsWith("ownerName:")) {
                 s = s.replace("ownerName:", "");
-                //if (item.getType().equals(Material.PLAYER_HEAD)) {
                 if (item.getItemMeta() instanceof SkullMeta) {
                     ItemMeta meta = item.getItemMeta();
                     assert meta != null;
@@ -200,6 +197,8 @@ public class ItemStackManager {
         String oldPotion = item.toUpperCase();
         String[] itemArr = item.split(":");
         if (oldPotion.startsWith("POTION:") || oldPotion.startsWith("SPLASH_POTION:") || oldPotion.startsWith("LINGERING_POTION:")) {
+            Util.warning("Using old potion item format: &b" + oldPotion);
+            Util.warning("  - This format is deprecated and will be removed in the future, please use new format.");
             return getPotion(item, amount);
         }
         Material mat = verifyMaterial(itemArr[0].toUpperCase());
