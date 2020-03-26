@@ -44,16 +44,6 @@ public class Util {
 	/** Send a colored message to a player or console
 	 * @param sender Receiver of message
 	 * @param s Message to send
-	 * @deprecated Use {@link #scm(CommandSender, String)} instead
-	 */
-	@Deprecated
-	public static void msg(CommandSender sender, String s) {
-		sender.sendMessage(ChatColor.translateAlternateColorCodes('&', s));
-	}
-
-	/** Send a colored message to a player or console
-	 * @param sender Receiver of message
-	 * @param s Message to send
 	 */
 	public static void scm(CommandSender sender, String s) {
 		sender.sendMessage(ChatColor.translateAlternateColorCodes('&', s));
