@@ -16,8 +16,8 @@ import java.util.UUID;
 @SuppressWarnings({"WeakerAccess", "unused"})
 public class PlayerManager {
 
-    private Map<UUID, PlayerData> playerMap;
-    private Map<UUID, PlayerData> spectatorMap;
+    private final Map<UUID, PlayerData> playerMap;
+    private final Map<UUID, PlayerData> spectatorMap;
 
     public PlayerManager() {
         this.playerMap = new HashMap<>();

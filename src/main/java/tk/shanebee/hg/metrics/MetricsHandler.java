@@ -4,7 +4,7 @@ import tk.shanebee.hg.HG;
 
 public class MetricsHandler {
 
-	private Metrics metrics;
+	private final Metrics metrics;
 
 	public MetricsHandler(boolean isPremium) {
 		this.metrics = HG.getPlugin().getMetrics();

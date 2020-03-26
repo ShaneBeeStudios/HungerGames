@@ -1,10 +1,8 @@
 package tk.shanebee.hg.commands;
 
-import org.bukkit.ChatColor;
 import org.bukkit.Material;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
-import tk.shanebee.hg.HG;
 import tk.shanebee.hg.data.PlayerSession;
 import tk.shanebee.hg.util.Util;
 

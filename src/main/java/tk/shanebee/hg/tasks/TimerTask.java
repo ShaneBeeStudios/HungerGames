@@ -11,26 +11,29 @@ import java.util.Objects;
 public class TimerTask implements Runnable {
 
 	private int remainingtime;
-	private int teleportTimer;
-	private int borderCountdownStart;
-	private int borderCountdownEnd;
-	private int id;
-	private Game game;
+	private final int teleportTimer;
+	private final int borderCountdownStart;
+	private final int borderCountdownEnd;
+	private final int id;
+	private final Game game;
 
-	public TimerTask(Game g, int time) {
+	public TimerTask(Game game, int time) {
 		this.remainingtime = time;
-		this.game = g;
+		this.game = game;
 		this.teleportTimer = Config.teleportEndTime;
-		this.borderCountdownStart = g.getBorderTimer().get(0);
-		this.borderCountdownEnd = g.getBorderTimer().get(1);
-		g.getPlayers().forEach(uuid -> Objects.requireNonNull(Bukkit.getPlayer(uuid)).setInvulnerable(false));
+		this.borderCountdownStart = game.getBorderTimer().get(0);
+		this.borderCountdownEnd = game.getBorderTimer().get(1);
+		game.getPlayers().forEach(uuid -> Objects.requireNonNull(Bukkit.getPlayer(uuid)).setInvulnerable(false));
 		
 		this.id = Bukkit.getScheduler().scheduleSyncRepeatingTask(HG.getPlugin(), this, 0, 30 * 20L);
 	}
 	
 	@Override
 	public void run() {
-		if (game == null || game.getStatus() != Status.RUNNING) stop(); //A quick null check!
+		if (game == null || game.getStatus() != Status.RUNNING) { //A quick null check!
+            stop();
+            return;
+        }
 		
 
 		if (Config.bossbar) game.bossbarUpdate(remainingtime);

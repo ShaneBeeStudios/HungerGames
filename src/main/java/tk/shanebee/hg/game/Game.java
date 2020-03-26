@@ -1,6 +1,13 @@
 package tk.shanebee.hg.game;
 
-import org.bukkit.*;
+import org.bukkit.Bukkit;
+import org.bukkit.ChatColor;
+import org.bukkit.GameMode;
+import org.bukkit.Location;
+import org.bukkit.Material;
+import org.bukkit.Sound;
+import org.bukkit.World;
+import org.bukkit.WorldBorder;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
 import org.bukkit.block.BlockState;
@@ -16,7 +23,8 @@ import org.bukkit.plugin.IllegalPluginAccessException;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 import org.jetbrains.annotations.Nullable;
-import tk.shanebee.hg.*;
+import tk.shanebee.hg.HG;
+import tk.shanebee.hg.Status;
 import tk.shanebee.hg.data.Config;
 import tk.shanebee.hg.data.Language;
 import tk.shanebee.hg.data.Leaderboard;
@@ -30,12 +38,24 @@ import tk.shanebee.hg.managers.KitManager;
 import tk.shanebee.hg.managers.MobManager;
 import tk.shanebee.hg.managers.PlayerManager;
 import tk.shanebee.hg.managers.SBDisplay;
-import tk.shanebee.hg.tasks.*;
+import tk.shanebee.hg.tasks.ChestDropTask;
+import tk.shanebee.hg.tasks.FreeRoamTask;
+import tk.shanebee.hg.tasks.Rollback;
+import tk.shanebee.hg.tasks.SpawnerTask;
+import tk.shanebee.hg.tasks.StartingTask;
 import tk.shanebee.hg.tasks.TimerTask;
 import tk.shanebee.hg.util.Util;
 import tk.shanebee.hg.util.Vault;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collection;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Objects;
+import java.util.UUID;
 
 /**
  * General game object
@@ -43,35 +63,35 @@ import java.util.*;
 @SuppressWarnings("unused")
 public class Game {
 
-	private HG plugin;
-	private Language lang;
-	private String name;
-	private List<Location> spawns;
-	private Bound bound;
-	private List<UUID> players = new ArrayList<>();
-	private List<UUID> spectators = new ArrayList<>();
-	private List<Location> chests = new ArrayList<>();
-	private List<Location> playerChests = new ArrayList<>();
+	private final HG plugin;
+	private final Language lang;
+	private final String name;
+	private final List<Location> spawns;
+	private final Bound bound;
+	private final List<UUID> players = new ArrayList<>();
+	private final List<UUID> spectators = new ArrayList<>();
+	private final List<Location> chests = new ArrayList<>();
+	private final List<Location> playerChests = new ArrayList<>();
 	private Map<Integer, ItemStack> items;
 	private Map<Integer, ItemStack> bonusItems;
 	private KitManager kit;
-	private Map<Player, Integer> kills = new HashMap<>();
+	private final Map<Player, Integer> kills = new HashMap<>();
 
-	private List<BlockState> blocks = new ArrayList<>();
+	private final List<BlockState> blocks = new ArrayList<>();
 	private List<String> commands = null;
-	private MobManager mobManager;
-	private PlayerManager playerManager;
+	private final MobManager mobManager;
+	private final PlayerManager playerManager;
 	private Location exit;
 	private Status status;
-	private int minPlayers;
-	private int maxPlayers;
-	private int time;
+	private final int minPlayers;
+	private final int maxPlayers;
+	private final int time;
 	private int cost;
 	private Sign s;
 	private Sign s1;
 	private Sign s2;
-	private int roamTime;
-	private SBDisplay sb;
+	private final int roamTime;
+	private final SBDisplay sb;
 	private int chestRefillTime = 0;
 
 	// Task ID's here!
@@ -83,7 +103,7 @@ public class Game {
 
 	// Objects
 	private BossBar bar;
-	private SpectatorGUI spectatorGUI;
+	private final SpectatorGUI spectatorGUI;
 
 	// Border stuff here
 	private Location borderCenter = null;
@@ -91,8 +111,8 @@ public class Game {
 	private int borderCountdownStart;
 	private int borderCountdownEnd;
 
-	private boolean spectate = Config.spectateEnabled;
-	private boolean spectateOnDeath = Config.spectateOnDeath;
+	private final boolean spectate = Config.spectateEnabled;
+	private final boolean spectateOnDeath = Config.spectateOnDeath;
 
 	/** Create a new game
 	 * <p>Internally used when loading from config on server start</p>

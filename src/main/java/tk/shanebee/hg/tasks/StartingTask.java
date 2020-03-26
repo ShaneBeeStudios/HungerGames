@@ -9,14 +9,14 @@ import tk.shanebee.hg.util.Util;
 public class StartingTask implements Runnable {
 
 	private int timer;
-	private int id;
-	private Game game;
+	private final int id;
+	private final Game game;
 
-	public StartingTask(Game g) {
+	public StartingTask(Game game) {
 		this.timer = 30;
-		this.game = g;
-		Util.broadcast(HG.getPlugin().getLang().game_started.replace("<arena>", g.getName()));
-		Util.broadcast(HG.getPlugin().getLang().game_join.replace("<arena>", g.getName()));
+		this.game = game;
+		Util.broadcast(HG.getPlugin().getLang().game_started.replace("<arena>", game.getName()));
+		Util.broadcast(HG.getPlugin().getLang().game_join.replace("<arena>", game.getName()));
 
 		this.id = Bukkit.getScheduler().scheduleSyncRepeatingTask(HG.getPlugin(), this, 5 * 20L, 5 * 20L);
 	}

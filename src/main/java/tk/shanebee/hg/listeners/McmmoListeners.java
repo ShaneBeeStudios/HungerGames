@@ -22,7 +22,7 @@ import tk.shanebee.hg.managers.PlayerManager;
  */
 public class McmmoListeners implements Listener {
 
-	private HG plugin;
+	private final HG plugin;
 	private final PlayerManager playerManager;
 
 	public McmmoListeners(HG plugin) {

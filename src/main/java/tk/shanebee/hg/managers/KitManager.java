@@ -16,7 +16,7 @@ import java.util.List;
 @SuppressWarnings({"unused", "WeakerAccess"})
 public class KitManager {
 
-	private HashMap<String, KitEntry> kititems = new HashMap<>();
+	private final HashMap<String, KitEntry> kititems = new HashMap<>();
 
 	/** Set a kit for a player
 	 * @param player The player to set the kit for

@@ -66,7 +66,7 @@ public class Config {
 	public static boolean mcmmoUseSkills;
 	public static boolean mcmmoGainExp;
 
-	private HG plugin;
+	private final HG plugin;
 
 	public Config(HG plugin) {
 		this.plugin = plugin;

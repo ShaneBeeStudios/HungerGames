@@ -15,10 +15,10 @@ import java.util.UUID;
 
 public class SpawnerTask implements Runnable {
 
-	private Game game;
-	private int id;
-	private Random rg = new Random();
-	private MobManager mobManager;
+	private final Game game;
+	private final int id;
+	private final Random rg = new Random();
+	private final MobManager mobManager;
 
 	public SpawnerTask(Game game, int i) {
 		this.game = game;

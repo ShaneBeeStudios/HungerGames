@@ -62,15 +62,15 @@ import java.util.UUID;
  */
 public class GameListener implements Listener {
 
-	private HG plugin;
-	private Language lang;
-	private String tsn = ChatColor.GOLD + "TrackingStick " + ChatColor.GREEN + "Uses: ";
-	private ItemStack trackingStick;
+	private final HG plugin;
+	private final Language lang;
+	private final String tsn = ChatColor.GOLD + "TrackingStick " + ChatColor.GREEN + "Uses: ";
+	private final ItemStack trackingStick;
 	//private HashMap<Player, Entity> killerMap = new HashMap<>(); ON HOLD for now
-    private KillManager killManager;
-    private Manager gameManager;
-    private PlayerManager playerManager;
-    private Leaderboard leaderboard;
+    private final KillManager killManager;
+    private final Manager gameManager;
+    private final PlayerManager playerManager;
+    private final Leaderboard leaderboard;
 
 	public GameListener(HG plugin) {
 		this.plugin = plugin;

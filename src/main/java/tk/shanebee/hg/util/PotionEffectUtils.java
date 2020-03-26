@@ -46,8 +46,8 @@ public enum PotionEffectUtils {
     BAD_OMEN("BAD_OMEN"),
     HERO_OF_THE_VILLAGE("HERO_OF_THE_VILLAGE");
 
-    private String bukkit;
-    private static Map<String, String> BY_NAME = new HashMap<>();
+    private final String bukkit;
+    private static final Map<String, String> BY_NAME = new HashMap<>();
 
     PotionEffectUtils(String bukkit) {
         this.bukkit = bukkit;

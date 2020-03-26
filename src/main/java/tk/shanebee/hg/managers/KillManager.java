@@ -8,14 +8,13 @@ import org.bukkit.entity.Projectile;
 import org.bukkit.event.entity.EntityDamageEvent.DamageCause;
 import tk.shanebee.hg.HG;
 import tk.shanebee.hg.data.Language;
-import tk.shanebee.hg.util.Util;
 
 /**
  * Manager for deaths in game
  */
 public class KillManager {
     
-    private Language lang = HG.getPlugin().getLang();
+    private final Language lang = HG.getPlugin().getLang();
 
     /** Get the death message when a player dies of natural causes (non-entity involved deaths)
      * @param dc Cause of the damage

@@ -23,10 +23,10 @@ import java.util.List;
 @SuppressWarnings("unused")
 public class MobManager {
 
-	private List<MobEntry> dayMobs = new ArrayList<>();
-	private List<MobEntry> nightMobs = new ArrayList<>();
-	private FileConfiguration config;
-	private Game game;
+	private final List<MobEntry> dayMobs = new ArrayList<>();
+	private final List<MobEntry> nightMobs = new ArrayList<>();
+	private final FileConfiguration config;
+	private final Game game;
 
 	public MobManager(Game game) {
 		this.game = game;

@@ -19,28 +19,28 @@ import org.bukkit.entity.Player;
 
 public class ChestDropTask implements Runnable {
 
-    private Game g;
-    private int timerID;
-    private List<ChestDrop> chests = new ArrayList<>();
+    private final Game game;
+    private final int timerID;
+    private final List<ChestDrop> chests = new ArrayList<>();
 
-    public ChestDropTask(Game g) {
-        this.g = g;
+    public ChestDropTask(Game game) {
+        this.game = game;
         timerID = Bukkit.getServer().getScheduler().scheduleSyncRepeatingTask(HG.getPlugin(), this, Config.randomChestInterval, Config.randomChestInterval);
     }
 
     public void run() {
-        Integer[] i = g.getRegion().getRandomLocs();
+        Integer[] i = game.getRegion().getRandomLocs();
 
         int x = i[0];
         int y = i[1];
         int z = i[2];
-        World w = g.getRegion().getWorld();
+        World w = game.getRegion().getWorld();
 
         while (w.getBlockAt(x, y, z).getType() == Material.AIR) {
             y--;
 
             if (y <= 0) {
-                i = g.getRegion().getRandomLocs();
+                i = game.getRegion().getRandomLocs();
 
                 x = i[0];
                 y = i[1];
@@ -56,15 +56,15 @@ public class ChestDropTask implements Runnable {
 
         chests.add(new ChestDrop(fb));
 
-        for (UUID u : g.getPlayers()) {
-            Player p = Bukkit.getPlayer(u);
-            if (p != null) {
-                Util.scm(p, HG.getPlugin().getLang().chest_drop_1);
-                Util.scm(p, HG.getPlugin().getLang().chest_drop_2
+        for (UUID uuid : game.getPlayers()) {
+            Player player = Bukkit.getPlayer(uuid);
+            if (player != null) {
+                Util.scm(player, HG.getPlugin().getLang().chest_drop_1);
+                Util.scm(player, HG.getPlugin().getLang().chest_drop_2
                         .replace("<x>", String.valueOf(x))
                         .replace("<y>", String.valueOf(y))
                         .replace("<z>", String.valueOf(z)));
-                Util.scm(p, HG.getPlugin().getLang().chest_drop_1);
+                Util.scm(player, HG.getPlugin().getLang().chest_drop_1);
             }
         }
     }

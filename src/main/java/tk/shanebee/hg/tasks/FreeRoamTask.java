@@ -11,22 +11,22 @@ import tk.shanebee.hg.util.Util;
 
 public class FreeRoamTask implements Runnable {
 
-	private Game game;
-	private int id;
+	private final Game game;
+	private final int id;
 
-	public FreeRoamTask(Game g) {
-		this.game = g;
-		for (UUID u : g.getPlayers()) {
-			Player p = Bukkit.getPlayer(u);
-			if (p != null) {
-				Util.scm(p, HG.getPlugin().getLang().roam_game_started);
-				Util.scm(p, HG.getPlugin().getLang().roam_time.replace("<roam>", String.valueOf(g.getRoamTime())));
-				p.setHealth(20);
-				p.setFoodLevel(20);
-				g.unFreeze(p);
+	public FreeRoamTask(Game game) {
+		this.game = game;
+		for (UUID uuid : game.getPlayers()) {
+			Player player = Bukkit.getPlayer(uuid);
+			if (player != null) {
+				Util.scm(player, HG.getPlugin().getLang().roam_game_started);
+				Util.scm(player, HG.getPlugin().getLang().roam_time.replace("<roam>", String.valueOf(game.getRoamTime())));
+				player.setHealth(20);
+				player.setFoodLevel(20);
+				game.unFreeze(player);
 			}
 		}
-		this.id = Bukkit.getScheduler().scheduleSyncDelayedTask(HG.getPlugin(), this, g.getRoamTime() * 20L);
+		this.id = Bukkit.getScheduler().scheduleSyncDelayedTask(HG.getPlugin(), this, game.getRoamTime() * 20L);
 	}
 
 	@Override
