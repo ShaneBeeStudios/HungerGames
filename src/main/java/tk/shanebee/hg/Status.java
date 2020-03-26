@@ -8,46 +8,46 @@ import tk.shanebee.hg.util.Util;
  */
 public enum Status {
 
-	/**
-	 * Game is running
-	 */
-	RUNNING,
-	/**
-	 * Game has stopped
-	 */
-	STOPPED,
-	/**
-	 * Game is ready to run
-	 */
-	READY,
-	/**
-	 * Game is waiting
-	 */
-	WAITING,
-	/**
-	 * Game is broken
-	 */
-	BROKEN,
-	/**
-	 * Game is currently rolling back blocks
-	 */
-	ROLLBACK,
-	/**
-	 * Game is not ready
-	 */
-	NOTREADY,
-	/**
-	 * Game is starting to run
-	 */
-	BEGINNING,
-	/**
-	 * Game is counting down to start
-	 */
-	COUNTDOWN;
+    /**
+     * Game is running
+     */
+    RUNNING,
+    /**
+     * Game has stopped
+     */
+    STOPPED,
+    /**
+     * Game is ready to run
+     */
+    READY,
+    /**
+     * Game is waiting
+     */
+    WAITING,
+    /**
+     * Game is broken
+     */
+    BROKEN,
+    /**
+     * Game is currently rolling back blocks
+     */
+    ROLLBACK,
+    /**
+     * Game is not ready
+     */
+    NOTREADY,
+    /**
+     * Game is starting to run
+     */
+    BEGINNING,
+    /**
+     * Game is counting down to start
+     */
+    COUNTDOWN;
 
-	Language lang = HG.getPlugin().getLang();
+    Language lang = HG.getPlugin().getLang();
 
-	public String getName() {
+    public String getName() {
         switch (this) {
             case RUNNING:
                 return Util.getColString(lang.status_running);
@@ -70,6 +70,6 @@ public enum Status {
             default:
                 return Util.getColString("&cERROR!");
         }
-	}
+    }
 
 }
