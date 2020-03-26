@@ -2,41 +2,74 @@
 # Revamped by: ShaneBee
 
 # Issues: Please report issues on the BitBucket issue tracker @ https://bitbucket.org/ShaneBeeStudios/hungergames/issues?status=new&status=open
-# Updates: Can be found on SpigotMC @ --- coming soon
+# Updates: Can be found on SpigotMC @ https://www.spigotmc.org/resources/hungergames.65942/
 
 # More Info: See the wiki for more info on this config @ https://bitbucket.org/ShaneBeeStudios/HungerGames/wiki/Config.yml
 
 settings:
+    # If mobs will spawn in the arena, and the interval in between spawns (In seconds)
     spawn-mobs: true
     spawn-mobs-interval: 35
+    # The time once the game starts, how long the players are safe from PvP (In seconds)
     free-roam: 25
+    # Whether the countdown bar shows during games
     bossbar-countdown: true
+    # The amount of uses a tracking stick will have
     trackingstick-uses: 8
     players-for-trackingstick: 5
+    # Maximum amount of items that will spawn in chests
     max-chestcontent: 5
+    # Minimum amount of items that will spawn in chests
     min-chestcontent: 1
+    # Maximum amount of items that will spawn in bonus chests
     max-bonus-chestcontent: 5
+    # Minimum amount of items that will spawn in bonus chests
     min-bonus-chestcontent: 1
+    # When the game has x seconds left, teleport the players back to their starting point
     teleport-at-end: false
+    # The time in seconds to teleport players back to their starting point
+    # (note: increments of 30, ex: 30, 60, 90, 120, etc)
     teleport-at-end-time: 30
+    # Maximum team size
     max-team-size: 3
 reward:
+    # Whether players get a reward when the game is done!
     enabled: true
+    # The cash prize the winner receives. (Set to 0 if you would prefer to use commands instead of money)
     cash: 500
+    # You can have the game run commands when a player wins
+    # Can be used for things like vote crate keys, GriefPrevention claim blocks, etc.
+    # Examples:     <player> will be replaced by winner
+    #commands:
+    #  - 'say Hi <player>'
+    #  - 'crates key give <player> vote 1'
     commands:
         - none
+    # You can send messages to the winner when they win
+    #Examples:     <player> will be replaced by winner, supports color codes
+    #messages:
+    #  - '&7Congrats &b<player> &7you won a vote key for winning &3Hunger&bGames'
     messages:
         - none
 random-chest:
+    # Random chests will fall from the sky and alert players of there whereabouts
     enabled: false
+    # The seconds in between each random chest falling
     interval: 30
+    # Max contents in each chest
     max-chestcontent: 9
 rollback:
+    # Let players break blocks in the arena, and restore when the game is done
     allow-block-break: false
+    # The amount of blocks that will be restored during rollback per second (this number is actually divided by 10 and restored in 2 tick intervals)
     blocks-per-second: 500
+    # When enabled, will not allow players to break blocks during the free-roam time
     protect-during-cooldown: true
+    # If allow-block-break is true, this will fix leaves that decay if a tree is broken
     fix-leaves: true
+    # Prevent players from trampling crops in your arenas
     prevent-trampling: true
+    # List of blocks players can break (use ALL for all blocks)
     editable-blocks:
         - GRASS
         - TALL_GRASS
@@ -48,34 +81,76 @@ rollback:
         - WHITE_WOOL
         - STONE_BRICKS
         - GLASS_PANE
+
+## WORLD BORDER
+# (Note) ONLY use this if you have a world dedicated to 1 arena.
+# - Will not work if more than 1 arena is in a world, will screw up other arenas
+# - Will not work if the world is used for other purposes - Will kill players outside of the arena
 world-border:
+    # Enable the world borders for arenas
     enabled: false
+    # If true, when the game starts a world border will start just outside of the arena
+    # It will count down based on the time of the arena
     initiate-on-start: true
+    # When the countdown for the arena will start
+    # If `initiate-on-start` is true, the border will just countdown quicker at this time
+    # (ex: 60 = 60 seconds left in the game)(needs to be in increments of 30)
     countdown-start: 60
+    # The time left for the border to stop (any amount, must be less than countdown-start)
+    # (ex: if countdown-start = 60 and countdown-end = 30, once the border starts, the border will shrink to the centre in 30 seconds)
+    # (ex: if countdown-start = 60 and countdown-end = 55, once the border starts, the border will shrink to the centre in 5 seconds)
     countdown-end: 30
+    # Final border size from the centre outward
     final-border-size: 30
+    # If true, the centre of the arena will be based on the first spawn location you set
+    # If false, the centre will be calculated by the centre of the arena
     center-on-first-spawn: true
+
+## SPECTATE
+# When enabled players can spectate games without interfering with players in the game
 spectate:
+    # Disabled by default
     enabled: false
+    # When a player dies, they will automatically be put into spectator
     death-to-spectate: true
+    # Hide spectating players from other players
     hide-spectators: true
+    # Allow spectators to fly in the arena
     fly: true
+    # If spectators are allowed to chat
     chat: false
+
 mcmmo:
+    # If players can use mcMMO skills
     use-skills: false
+    # If players can gain mcMMO experience doing tasks in games
     gain-experience: false
+
+## KITS
+# Create new ones, rename the current ones, delete them, go nuts
+# These kits will be global for all arenas, to make custom kits for each arena, do so in the arenas.yml config
+# See wiki for a more detailed explanation of this section
+# https://bitbucket.org/ShaneBeeStudios/HungerGames/wiki/Config.yml
 kits:
+    # the name of the kit, change to whatever you would like
     bowman:
+        # whether or not this kit requires a permission
+        # use whatever permission string you wish
+        # ex: permission: some.random.permission.of.my.choice
         permission: none
+        # armor, supports color (leather only), name, lore and enchantments
         helmet: LEATHER_HELMET color:red
         chestplate: LEATHER_CHESTPLATE color:red
         leggings: LEATHER_LEGGINGS color:red
         boots: LEATHER_BOOTS color:red
+        # Items player's will receive in the kit, supports amount, name, lore and enchantments
         items:
             - BOW name:&2Lucky_Bow
             - ARROW 64 name:&aLucky_Arrow
             - POTION potion:HEAL:60:0 2 name:&bHealing
         potion-effects:
+        # Potion effects to be applied to the player, supports timed and "forever"
+            - SPEED:1:forever
     survivor:
         permission: none
         helmet: LEATHER_HELMET
