@@ -12,7 +12,7 @@ import java.io.File;
  */
 public class MobConfig {
 
-	private HG plugin;
+	private final HG plugin;
 	private FileConfiguration mobs = null;
 	private File mobFile = null;
 

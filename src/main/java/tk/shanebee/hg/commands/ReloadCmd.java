@@ -1,7 +1,6 @@
 package tk.shanebee.hg.commands;
 
 import tk.shanebee.hg.data.Config;
-import tk.shanebee.hg.HG;
 import tk.shanebee.hg.util.Util;
 
 public class ReloadCmd extends BaseCmd {

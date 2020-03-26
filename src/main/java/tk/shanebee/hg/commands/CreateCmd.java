@@ -1,13 +1,11 @@
 package tk.shanebee.hg.commands;
 
-import tk.shanebee.hg.game.Bound;
-import tk.shanebee.hg.game.Game;
-import tk.shanebee.hg.HG;
-import tk.shanebee.hg.data.PlayerSession;
-import tk.shanebee.hg.util.Util;
-
 import org.bukkit.Location;
 import org.bukkit.configuration.Configuration;
+import tk.shanebee.hg.data.PlayerSession;
+import tk.shanebee.hg.game.Bound;
+import tk.shanebee.hg.game.Game;
+import tk.shanebee.hg.util.Util;
 
 import java.util.Collections;
 

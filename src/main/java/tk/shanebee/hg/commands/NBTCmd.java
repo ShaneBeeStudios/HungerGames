@@ -5,13 +5,12 @@ import org.bukkit.Material;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
-import tk.shanebee.hg.HG;
-import tk.shanebee.hg.util.Util;
 import tk.shanebee.hg.util.NBTApi;
+import tk.shanebee.hg.util.Util;
 
 public class NBTCmd extends BaseCmd {
 
-	private NBTApi api;
+	private final NBTApi api;
 
 	public NBTCmd() {
 		forcePlayer = true;

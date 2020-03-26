@@ -32,7 +32,7 @@ public class MobEntry {
 	private ItemStack chest = null;
 	private ItemStack leggings = null;
 	private ItemStack boots = null;
-	private List<PotionEffect> potionEffect = new ArrayList<>();
+	private final List<PotionEffect> potionEffect = new ArrayList<>();
 	private String deathMessage = null;
 	private boolean mythic;
     private String mythicMob;

@@ -21,14 +21,14 @@ import java.util.Random;
 @SuppressWarnings({"WeakerAccess", "unused"})
 public class Bound {
 
-	private int x;
-	private int y;
-	private int z;
-	private int x2;
-	private int y2;
-	private int z2;
-	private String world;
-	private List<Entity> entities;
+	private final int x;
+	private final int y;
+	private final int z;
+	private final int x2;
+	private final int y2;
+	private final int z2;
+	private final String world;
+	private final List<Entity> entities;
 
 	/** Create a new bounding box between 2 sets of coordinates
 	 * @param world World this bound is in

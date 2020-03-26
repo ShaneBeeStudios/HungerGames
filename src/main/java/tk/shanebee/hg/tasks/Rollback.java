@@ -15,9 +15,9 @@ import tk.shanebee.hg.Status;
 public class Rollback implements Runnable {
 
 	private final Iterator<BlockState> session;
-	private Game game;
-	private int blocks_per_second;
-	private int timerID;
+	private final Game game;
+	private final int blocks_per_second;
+	private final int timerID;
 
 	public Rollback(Game game) {
 		this.game = game;

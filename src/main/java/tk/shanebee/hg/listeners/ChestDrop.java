@@ -31,23 +31,23 @@ import java.util.Random;
  */
 public class ChestDrop implements Listener {
 
-    private FallingBlock fb;
+    private final FallingBlock fb;
     private BlockState beforeBlock;
     private Player invopener;
-    private Chunk c;
-    private PlayerManager playerManager;
+    private final Chunk chunk;
+    private final PlayerManager playerManager;
 
     public ChestDrop(FallingBlock fb) {
         this.fb = fb;
-        this.c = fb.getLocation().getChunk();
-        c.load();
+        this.chunk = fb.getLocation().getChunk();
+        chunk.load();
         Bukkit.getPluginManager().registerEvents(this, HG.getPlugin());
         this.playerManager = HG.getPlugin().getPlayerManager();
     }
 
     @EventHandler
     public void onUnload(ChunkUnloadEvent event) {
-        if (event.getChunk().equals(c)) {
+        if (event.getChunk().equals(chunk)) {
             //event.setCancelled(true); I guess this was removed?!?
             event.getChunk().setForceLoaded(true); // Let's give this a try
         }

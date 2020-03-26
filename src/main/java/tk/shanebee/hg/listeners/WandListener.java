@@ -19,10 +19,10 @@ import org.bukkit.event.player.PlayerInteractEvent;
  */
 public class WandListener implements Listener {
 
-	public HG plugin;
+	public final HG plugin;
 
 	public WandListener(HG instance) {
-		plugin = instance;
+		this.plugin = instance;
 	}
 
 	@EventHandler
