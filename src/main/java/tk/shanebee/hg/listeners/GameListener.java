@@ -13,6 +13,7 @@ import org.bukkit.entity.Entity;
 import org.bukkit.entity.Hanging;
 import org.bukkit.entity.ItemFrame;
 import org.bukkit.entity.LivingEntity;
+import org.bukkit.entity.Mob;
 import org.bukkit.entity.Player;
 import org.bukkit.entity.Shulker;
 import org.bukkit.event.Cancellable;
@@ -134,6 +135,11 @@ public class GameListener implements Listener {
         }
         if (defender instanceof Player) {
             Player player = (Player) defender;
+            if (playerManager.hasSpectatorData(player) && damager instanceof Mob) {
+                ((Mob) damager).setTarget(null);
+                event.setCancelled(true);
+                return;
+            }
             PlayerData pd = playerManager.getPlayerData(player);
 
             if (pd != null) {
