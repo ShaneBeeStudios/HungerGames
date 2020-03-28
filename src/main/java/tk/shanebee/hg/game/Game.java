@@ -22,6 +22,7 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 import org.bukkit.scheduler.BukkitRunnable;
+import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import tk.shanebee.hg.HG;
 import tk.shanebee.hg.Status;
@@ -703,7 +704,7 @@ public class Game {
         return true;
     }
 
-    private void putPlayerInGame(Player player) {
+    private void putPlayerInGame(@NotNull Player player) {
         Location loc = pickSpawn();
         if (loc.getBlock().getRelative(BlockFace.DOWN).getType() == Material.AIR) {
             while (loc.getBlock().getRelative(BlockFace.DOWN).getType() == Material.AIR) {
@@ -743,6 +744,7 @@ public class Game {
     public void startCountdown(boolean bypass) {
         for (UUID u : this.getPlayers()) {
             Player player = Bukkit.getPlayer(u);
+            if (player == null) continue;
             this.putPlayerInGame(player);
         }
         if (bypass) {
