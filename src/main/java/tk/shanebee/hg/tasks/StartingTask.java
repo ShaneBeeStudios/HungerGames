@@ -2,6 +2,7 @@ package tk.shanebee.hg.tasks;
 
 import org.bukkit.scheduler.BukkitRunnable;
 import tk.shanebee.hg.HG;
+import tk.shanebee.hg.data.Config;
 import tk.shanebee.hg.data.Language;
 import tk.shanebee.hg.game.Game;
 import tk.shanebee.hg.util.Util;
@@ -9,11 +10,11 @@ import tk.shanebee.hg.util.Util;
 public class StartingTask extends BukkitRunnable {
 
 	private int timer;
-	private Game game;
-	private Language lang;
+	private final Game game;
+	private final Language lang;
 
 	public StartingTask(Game g) {
-		this.timer = 15;
+		this.timer = Math.max(0, Config.startingTimer);
 		this.game = g;
 		this.lang = HG.getPlugin().getLang();
 		Util.broadcast(lang.game_started.replace("<arena>", g.getName()));

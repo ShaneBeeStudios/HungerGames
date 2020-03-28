@@ -2,15 +2,16 @@ package tk.shanebee.hg.tasks;
 
 import org.bukkit.scheduler.BukkitRunnable;
 import tk.shanebee.hg.HG;
+import tk.shanebee.hg.data.Config;
 import tk.shanebee.hg.game.Game;
 
 public class CountdownTask extends BukkitRunnable {
 
     private int timer;
-    private Game game;
+    private final Game game;
 
     public CountdownTask(Game game) {
-        this.timer = 15;
+        this.timer = Math.max(0, Config.countdownTimer);
         this.game = game;
         this.runTaskTimer(HG.getPlugin(), 5 * 20L, 5 * 20L);
     }

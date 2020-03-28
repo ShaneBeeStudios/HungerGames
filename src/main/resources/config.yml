@@ -10,6 +10,14 @@ settings:
     # If mobs will spawn in the arena, and the interval in between spawns (In seconds)
     spawn-mobs: true
     spawn-mobs-interval: 35
+    # Once enough players are ready for a game to start, the countdown timer will start
+    # This timer will warn players they're about to be teleported into the arena
+    # (in seconds, must be in increments of 5)
+    countdown-timer: 15
+    # Once the players are in the arena, this timer counts down before free roam begins
+    # During this time players are unable to move, but it gives them a chance to choose their kits
+    # (in seconds, must be in increments of 5)
+    starting-timer: 15
     # The time once the game starts, how long the players are safe from PvP (In seconds)
     free-roam: 25
     # Whether the countdown bar shows during games

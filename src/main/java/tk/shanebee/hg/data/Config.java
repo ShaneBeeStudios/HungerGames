@@ -28,6 +28,10 @@ public class Config {
 	public static boolean teleportEnd;
 	public static int teleportEndTime;
 
+	//Timers
+    public static int countdownTimer;
+    public static int startingTimer;
+
 	//Reward info
 	public static boolean giveReward;
 	public static int cash;
@@ -110,6 +114,9 @@ public class Config {
 		randomChestMaxContent = config.getInt("random-chest.max-chestcontent");
 		teleportEnd = config.getBoolean("settings.teleport-at-end");
 		teleportEndTime = config.getInt("settings.teleport-at-end-time");
+
+		countdownTimer = config.getInt("settings.countdown-timer");
+		startingTimer = config.getInt("settings.starting-timer");
 
 		borderEnabled = config.getBoolean("world-border.enabled");
 		borderOnStart = config.getBoolean("world-border.initiate-on-start");
