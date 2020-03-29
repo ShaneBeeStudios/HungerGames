@@ -241,4 +241,19 @@ public class Manager {
 		return null;
 	}
 
+	public int gamesRunning() {
+	    int i = 0;
+	    for (Game game : plugin.getGames()) {
+	        switch (game.getStatus()) {
+                case LOADING:
+                case RUNNING:
+                case STARTING:
+                case COUNTDOWN:
+                case BEGINNING:
+                    i++;
+            }
+        }
+	    return i;
+    }
+
 }
