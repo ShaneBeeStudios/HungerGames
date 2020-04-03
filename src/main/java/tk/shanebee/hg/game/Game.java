@@ -634,11 +634,11 @@ public class Game {
         // Clear the chat a little bit, making this message easier to see
         for (int i = 0; i < 20; ++i)
             Util.scm(player, " ");
-        String kit = this.kit.getKitListString();
+        String kit = this.kit.getKitListString(player);
         Util.scm(player, " ");
         Util.scm(player, lang.kit_join_header);
         Util.scm(player, " ");
-        if (player.hasPermission("hg.kit") && this.kit.hasKits()) {
+        if (player.hasPermission("hg.kit") && this.kit.hasKits() && kit != null) {
             Util.scm(player, lang.kit_join_msg);
             Util.scm(player, " ");
             Util.scm(player, lang.kit_join_avail + kit);
