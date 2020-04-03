@@ -21,7 +21,7 @@ public class KitCmd extends BaseCmd {
 		    Util.scm(player, lang.kit_disabled);
 		    return false;
         }
-		if (st == Status.WAITING || st == Status.COUNTDOWN) {
+		if (st == Status.BEGINNING) {
 			game.getKitManager().setKit(player, args[1]);
 		} else {
 			Util.scm(player, lang.cmd_kit_no_change);
