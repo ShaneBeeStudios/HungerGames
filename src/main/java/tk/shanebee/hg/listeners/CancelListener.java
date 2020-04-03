@@ -31,6 +31,9 @@ public class CancelListener implements Listener {
         UUID uuid = player.getUniqueId();
         String[] st = event.getMessage().split(" ");
         if (playerManager.hasData(uuid) && !st[0].equalsIgnoreCase("/login")) {
+            if (st[0].equalsIgnoreCase("/hg")) {
+                return;
+            }
             event.setMessage("/");
             event.setCancelled(true);
             Util.scm(player, HG.getPlugin().getLang().cmd_handler_nocmd);
