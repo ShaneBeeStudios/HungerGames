@@ -172,7 +172,7 @@ public class CommandListener implements CommandExecutor, TabCompleter {
 						game = playerManager.getPlayerData(((Player) sender).getUniqueId()).getGame();
 					}
 					if (game != null) {
-						for (String name : game.getKitManager().getKits().keySet()) {
+						for (String name : game.getKitManager().getKits(((Player) sender))) {
 							if (StringUtil.startsWithIgnoreCase(name, args[1])) {
 								matchesKit.add(name);
 							}

@@ -4,6 +4,7 @@ import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 import tk.shanebee.hg.HG;
 import tk.shanebee.hg.data.KitEntry;
+import tk.shanebee.hg.data.PlayerData;
 import tk.shanebee.hg.util.Util;
 
 import java.util.ArrayList;
@@ -58,6 +59,20 @@ public class KitManager {
 	public List<String> getKitList() {
 		return new ArrayList<>(kititems.keySet());
 	}
+
+    /** Get a list of kits the player has permission for
+     * @param player Player to check permission for
+     * @return List of kits a player has permission for
+     */
+	public List<String> getKits(Player player) {
+	    List<String> kits = new ArrayList<>();
+	    for (String kit : this.kititems.keySet()) {
+	        if (this.kititems.get(kit).hasKitPermission(player)) {
+	            kits.add(kit);
+            }
+        }
+	    return kits;
+    }
 
 	/** Get the kits for this KitManager
 	 * @return A map of the kits
