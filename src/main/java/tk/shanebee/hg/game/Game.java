@@ -674,6 +674,9 @@ public class Game {
             Util.scm(player, lang.game_in_queue.replace("<arena>", game.getName()));
             return false;
         }
+        if (cost > 0 && !vaultCheck(player)) {
+            return false;
+        }
         switch (status) {
             case READY:
                 new PrepareGameTask(this.plugin, this);
