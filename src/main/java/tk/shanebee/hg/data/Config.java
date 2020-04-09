@@ -1,17 +1,23 @@
 package tk.shanebee.hg.data;
 
-import org.bukkit.configuration.Configuration;
+import org.bukkit.configuration.file.FileConfiguration;
+import org.bukkit.configuration.file.YamlConfiguration;
 import tk.shanebee.hg.HG;
 import tk.shanebee.hg.util.Util;
 import tk.shanebee.hg.util.Vault;
 
 import java.io.File;
+import java.io.InputStream;
+import java.io.InputStreamReader;
 import java.util.List;
 
 /**
  * Main config class <b>Internal Use Only</b>
  */
 public class Config {
+
+    private File configFile;
+    private FileConfiguration config;
 
 	//Basic settings
 	public static boolean economy = true;
@@ -76,67 +82,73 @@ public class Config {
 
 	public Config(HG plugin) {
 		this.plugin = plugin;
-		if (!new File(plugin.getDataFolder(), "config.yml").exists()) {
-			Util.log("Config not found. Generating default config!");
-			plugin.saveDefaultConfig();
-		}
-		Configuration config = plugin.getConfig().getRoot();
-		assert config != null;
-		config.options().copyDefaults(true);
-		plugin.reloadConfig();
-		config = plugin.getConfig();
-		updateConfig(config);
-		Util.log("Config loaded!");
+		loadConfigFile();
+	}
 
-		spawnmobs = config.getBoolean("settings.spawn-mobs");
-		spawnmobsinterval = config.getInt("settings.spawn-mobs-interval") * 20;
-		bossbar = config.getBoolean("settings.bossbar-countdown");
-		trackingstickuses = config.getInt("settings.trackingstick-uses");
-		playersfortrackingstick = config.getInt("settings.players-for-trackingstick");
-		maxchestcontent = config.getInt("settings.max-chestcontent");
-		minchestcontent = config.getInt("settings.min-chestcontent");
-		maxbonuscontent = config.getInt("settings.max-bonus-chestcontent");
-		minbonuscontent = config.getInt("settings.min-bonus-chestcontent");
-		maxTeam = config.getInt("settings.max-team-size");
-		giveReward = config.getBoolean("reward.enabled");
-		cash = config.getInt("reward.cash");
-		rewardCommands = config.getStringList("reward.commands");
-		rewardMessages = config.getStringList("reward.messages");
-		maxTeam = config.getInt("settings.max-team-size");
-		giveReward = config.getBoolean("reward.enabled");
-		cash = config.getInt("reward.cash");
-		breakblocks = config.getBoolean("rollback.allow-block-break");
-		blocks_per_second = config.getInt("rollback.blocks-per-second");
-		rollback_log_console = config.getBoolean("rollback.log-to-console");
-		protectCooldown = config.getBoolean("rollback.protect-during-cooldown");
-		fixleaves = config.getBoolean("rollback.fix-leaves");
-		preventtrample = config.getBoolean("rollback.prevent-trampling");
-		blocks = config.getStringList("rollback.editable-blocks");
-		randomChest = config.getBoolean("random-chest.enabled");
-		randomChestInterval = config.getInt("random-chest.interval") * 20;
-		randomChestMaxContent = config.getInt("random-chest.max-chestcontent");
-		teleportEnd = config.getBoolean("settings.teleport-at-end");
-		teleportEndTime = config.getInt("settings.teleport-at-end-time");
-		death_sound = config.getString("settings.death-sound");
+	private void loadConfigFile() {
+        if (configFile == null) {
+            configFile = new File(plugin.getDataFolder(), "config.yml");
+        }
+        if (!configFile.exists()) {
+            plugin.saveResource("config.yml", false);
+            Util.log("&7New config.yml created");
+        }
+        config = YamlConfiguration.loadConfiguration(configFile);
+        matchConfig(config, configFile);
+        loadConfig();
+        Util.log("&7config.yml loaded");
+    }
 
-		countdownTimer = config.getInt("settings.countdown-timer");
-		startingTimer = config.getInt("settings.starting-timer");
+	private void loadConfig() {
+        spawnmobs = config.getBoolean("settings.spawn-mobs");
+        spawnmobsinterval = config.getInt("settings.spawn-mobs-interval") * 20;
+        bossbar = config.getBoolean("settings.bossbar-countdown");
+        trackingstickuses = config.getInt("settings.trackingstick-uses");
+        playersfortrackingstick = config.getInt("settings.players-for-trackingstick");
+        maxchestcontent = config.getInt("settings.max-chestcontent");
+        minchestcontent = config.getInt("settings.min-chestcontent");
+        maxbonuscontent = config.getInt("settings.max-bonus-chestcontent");
+        minbonuscontent = config.getInt("settings.min-bonus-chestcontent");
+        maxTeam = config.getInt("settings.max-team-size");
+        giveReward = config.getBoolean("reward.enabled");
+        cash = config.getInt("reward.cash");
+        rewardCommands = config.getStringList("reward.commands");
+        rewardMessages = config.getStringList("reward.messages");
+        maxTeam = config.getInt("settings.max-team-size");
+        giveReward = config.getBoolean("reward.enabled");
+        cash = config.getInt("reward.cash");
+        breakblocks = config.getBoolean("rollback.allow-block-break");
+        blocks_per_second = config.getInt("rollback.blocks-per-second");
+        rollback_log_console = config.getBoolean("rollback.log-to-console");
+        protectCooldown = config.getBoolean("rollback.protect-during-cooldown");
+        fixleaves = config.getBoolean("rollback.fix-leaves");
+        preventtrample = config.getBoolean("rollback.prevent-trampling");
+        blocks = config.getStringList("rollback.editable-blocks");
+        randomChest = config.getBoolean("random-chest.enabled");
+        randomChestInterval = config.getInt("random-chest.interval") * 20;
+        randomChestMaxContent = config.getInt("random-chest.max-chestcontent");
+        teleportEnd = config.getBoolean("settings.teleport-at-end");
+        teleportEndTime = config.getInt("settings.teleport-at-end-time");
+        death_sound = config.getString("settings.death-sound");
 
-		borderEnabled = config.getBoolean("world-border.enabled");
-		borderOnStart = config.getBoolean("world-border.initiate-on-start");
-		centerSpawn = config.getBoolean("world-border.center-on-first-spawn");
-		borderCountdownStart = config.getInt("world-border.countdown-start");
-		borderCountdownEnd = config.getInt("world-border.countdown-end");
-		borderFinalSize = config.getInt("world-border.final-border-size");
+        countdownTimer = config.getInt("settings.countdown-timer");
+        startingTimer = config.getInt("settings.starting-timer");
 
-		spectateEnabled = config.getBoolean("spectate.enabled");
-		spectateOnDeath = config.getBoolean("spectate.death-to-spectate");
-		spectateHide = config.getBoolean("spectate.hide-spectators");
-		spectateFly = config.getBoolean("spectate.fly");
-		spectateChat = config.getBoolean("spectate.chat");
+        borderEnabled = config.getBoolean("world-border.enabled");
+        borderOnStart = config.getBoolean("world-border.initiate-on-start");
+        centerSpawn = config.getBoolean("world-border.center-on-first-spawn");
+        borderCountdownStart = config.getInt("world-border.countdown-start");
+        borderCountdownEnd = config.getInt("world-border.countdown-end");
+        borderFinalSize = config.getInt("world-border.final-border-size");
 
-		mcmmoUseSkills = config.getBoolean("mcmmo.use-skills");
-		mcmmoGainExp = config.getBoolean("mcmmo.gain-experience");
+        spectateEnabled = config.getBoolean("spectate.enabled");
+        spectateOnDeath = config.getBoolean("spectate.death-to-spectate");
+        spectateHide = config.getBoolean("spectate.hide-spectators");
+        spectateFly = config.getBoolean("spectate.fly");
+        spectateChat = config.getBoolean("spectate.chat");
+
+        mcmmoUseSkills = config.getBoolean("mcmmo.use-skills");
+        mcmmoGainExp = config.getBoolean("mcmmo.gain-experience");
 
         try {
             Vault.setupEconomy();
@@ -153,24 +165,35 @@ public class Config {
             giveReward = false;
             economy = false;
         }
-	}
 
-	private void updateConfig(Configuration config) {
-		if (!config.isSet("spectate.enabled")) {
-			config.set("spectate.enabled", false);
-			config.set("spectate.death-to-spectate", true);
-			config.set("spectate.hide-spectators", true);
-			config.set("spectate.fly", true);
-		}
-		if (!config.isSet("rollback.blocks-per-second")) {
-			config.set("rollback.blocks-per-second", 500);
-		}
-		if (!config.isSet("spectate.chat")) {
-			config.set("spectate.chat", false);
-			config.set("mcmmo.use-skills", false);
-			config.set("mcmmo.gain-experience", false);
-		}
-		plugin.saveConfig();
-	}
+    }
+
+    // Used to update config
+    @SuppressWarnings("ConstantConditions")
+    private void matchConfig(FileConfiguration config, File file) {
+        try {
+            boolean hasUpdated = false;
+            InputStream test = plugin.getResource(file.getName());
+            assert test != null;
+            InputStreamReader is = new InputStreamReader(test);
+            YamlConfiguration defConfig = YamlConfiguration.loadConfiguration(is);
+            for (String key : defConfig.getConfigurationSection("").getKeys(true)) {
+                if (!config.contains(key) && !key.contains("kits")) {
+                    config.set(key, defConfig.get(key));
+                    hasUpdated = true;
+                }
+            }
+            for (String key : config.getConfigurationSection("").getKeys(true)) {
+                if (!defConfig.contains(key) && !key.contains("kits.") && !key.contains("globalexit")) {
+                    config.set(key, null);
+                    hasUpdated = true;
+                }
+            }
+            if (hasUpdated)
+                config.save(file);
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
 
 }
