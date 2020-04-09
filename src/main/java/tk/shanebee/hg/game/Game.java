@@ -1095,7 +1095,7 @@ public class Game {
                 } else {
                     exit(player);
                 }
-                player.playSound(player.getLocation(), Sound.UI_TOAST_CHALLENGE_COMPLETE, 5, 1);
+                Util.playDeathSound(player);
             } else {
                 heal(player);
                 playerManager.getPlayerData(uuid).restore(player);

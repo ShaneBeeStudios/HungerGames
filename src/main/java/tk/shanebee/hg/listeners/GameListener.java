@@ -4,7 +4,6 @@ import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
 import org.bukkit.Material;
-import org.bukkit.Sound;
 import org.bukkit.block.Block;
 import org.bukkit.block.ShulkerBox;
 import org.bukkit.block.Sign;
@@ -237,7 +236,7 @@ public class GameListener implements Listener {
                 for (UUID uuid : game.getPlayers()) {
                     Player alive = Bukkit.getPlayer(uuid);
                     if (alive != null && player != alive) {
-                        alive.playSound(alive.getLocation(), Sound.UI_TOAST_CHALLENGE_COMPLETE, 5, 1);
+                        Util.playDeathSound(alive);
                     }
                 }
 

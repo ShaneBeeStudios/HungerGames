@@ -40,6 +40,10 @@ settings:
     teleport-at-end-time: 30
     # Maximum team size
     max-team-size: 3
+    # The sound to play when a player dies in game
+    # Supports Bukkit sound enums -> https://hub.spigotmc.org/javadocs/spigot/org/bukkit/Sound.html
+    # Also supports sound names from Minecraft and custom resource packs
+    death-sound: UI_TOAST_CHALLENGE_COMPLETE
 reward:
     # Whether players get a reward when the game is done!
     enabled: true

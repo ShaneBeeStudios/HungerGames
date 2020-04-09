@@ -11,6 +11,7 @@ import org.bukkit.inventory.meta.FireworkMeta;
 import org.bukkit.material.Attachable;
 import org.bukkit.material.MaterialData;
 import tk.shanebee.hg.HG;
+import tk.shanebee.hg.data.Config;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -147,6 +148,16 @@ public class Util {
 		fm.setPower(2);
 		fw.setFireworkMeta(fm);
 	}
+
+	public static void playDeathSound(Player player) {
+	    String soundString = Config.death_sound;
+        try {
+            Sound sound = Sound.valueOf(soundString);
+            player.playSound(player.getLocation(), sound, 5, 1);
+        } catch (IllegalArgumentException ex) {
+            player.playSound(player.getLocation(), soundString, 5, 1);
+        }
+    }
 
 	@SuppressWarnings("deprecation")
     public static boolean isAttached(Block base, Block attached) {

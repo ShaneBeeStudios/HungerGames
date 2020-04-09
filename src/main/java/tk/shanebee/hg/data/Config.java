@@ -27,6 +27,7 @@ public class Config {
 	public static int maxTeam;
 	public static boolean teleportEnd;
 	public static int teleportEndTime;
+	public static String death_sound;
 
 	//Timers
     public static int countdownTimer;
@@ -116,6 +117,7 @@ public class Config {
 		randomChestMaxContent = config.getInt("random-chest.max-chestcontent");
 		teleportEnd = config.getBoolean("settings.teleport-at-end");
 		teleportEndTime = config.getInt("settings.teleport-at-end-time");
+		death_sound = config.getString("settings.death-sound");
 
 		countdownTimer = config.getInt("settings.countdown-timer");
 		startingTimer = config.getInt("settings.starting-timer");
