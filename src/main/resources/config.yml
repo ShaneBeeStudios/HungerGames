@@ -1,4 +1,4 @@
-## HungerGames
+# HungerGames
 # Revamped by: ShaneBee
 
 # Issues: Please report issues on the BitBucket issue tracker @ https://bitbucket.org/ShaneBeeStudios/hungergames/issues?status=new&status=open
@@ -142,6 +142,7 @@ mcmmo:
 
 ## KITS
 # Create new ones, rename the current ones, delete them, go nuts
+# To disable kits, just delete this section
 # These kits will be global for all arenas, to make custom kits for each arena, do so in the arenas.yml config
 # See wiki for a more detailed explanation of this section
 # https://bitbucket.org/ShaneBeeStudios/HungerGames/wiki/Config.yml
