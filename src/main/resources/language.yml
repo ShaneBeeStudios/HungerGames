@@ -179,6 +179,10 @@ lobby-signs:
     line-4: 'Cost $&b<cost>'
   sign-2:
     line-1: '&1&lGame Status'
+    # This line is only used during arena rollback
+    # If you wish to disable this feature, just set the line to ''
+    # Ex: line-2: ''
+    line-2: 'Progress: &3<percent>&r%'
   sign-3:
     line-1: '&1&lAlive'
 

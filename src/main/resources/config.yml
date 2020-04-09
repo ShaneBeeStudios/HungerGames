@@ -71,6 +71,8 @@ rollback:
     allow-block-break: false
     # The amount of blocks that will be restored during rollback per second (this number is actually divided by 10 and restored in 2 tick intervals)
     blocks-per-second: 500
+    # When enabled, a message will be sent to console showing progress of the rollback
+    log-to-console: true
     # When enabled, will not allow players to break blocks during the free-roam time
     protect-during-cooldown: true
     # If allow-block-break is true, this will fix leaves that decay if a tree is broken

@@ -41,6 +41,7 @@ public class Config {
 	//Rollback config info
 	public static boolean breakblocks;
 	public static int blocks_per_second;
+	public static boolean rollback_log_console;
 	public static boolean protectCooldown;
 	public static boolean fixleaves;
 	public static boolean preventtrample;
@@ -105,6 +106,7 @@ public class Config {
 		cash = config.getInt("reward.cash");
 		breakblocks = config.getBoolean("rollback.allow-block-break");
 		blocks_per_second = config.getInt("rollback.blocks-per-second");
+		rollback_log_console = config.getBoolean("rollback.log-to-console");
 		protectCooldown = config.getBoolean("rollback.protect-during-cooldown");
 		fixleaves = config.getBoolean("rollback.fix-leaves");
 		preventtrample = config.getBoolean("rollback.prevent-trampling");

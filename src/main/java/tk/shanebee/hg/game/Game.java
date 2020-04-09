@@ -901,6 +901,7 @@ public class Game {
                 s.setLine(3, Util.getColString(HG.getPlugin().getLang().lobby_sign_cost.replace("<cost>", String.valueOf(cost))));
             s1.setLine(0, Util.getColString(lang.lobby_sign_2_1));
             s1.setLine(1, status.getName());
+            s1.setLine(2, "");
             s2.setLine(0, Util.getColString(lang.lobby_sign_3_1));
             s2.setLine(1, ChatColor.BOLD + "" + 0 + "/" + maxPlayers);
             s.update(true);
@@ -921,9 +922,22 @@ public class Game {
 
     private void updateLobbyBlock() {
         s1.setLine(1, status.getName());
+        s1.setLine(2, "");
         s2.setLine(1, ChatColor.BOLD + "" + players.size() + "/" + maxPlayers);
         s1.update(true);
         s2.update(true);
+    }
+
+    /**
+     * Set restore percent on lobby sign
+     * <p>This is mainly used internally to show the percentage during rollback</p>
+     *
+     * @param percent Percent to show on sign
+     */
+    public void setRestorePercent(int percent) {
+        String rollback = lang.lobby_sign_2_2.replace("<percent>", String.valueOf(percent));
+        s1.setLine(2, Util.getColString(rollback));
+        s1.update(true);
     }
 
     /**
