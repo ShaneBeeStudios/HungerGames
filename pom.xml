@@ -6,7 +6,7 @@
 
     <groupId>tk.shanebee.hg</groupId>
     <artifactId>HungerGames</artifactId>
-    <version>4.14.0-Beta7</version>
+    <version>4.14.0-Beta7.1</version>
 
     <properties>
         <maven.compiler.source>1.8</maven.compiler.source>
