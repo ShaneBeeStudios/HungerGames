@@ -2,15 +2,13 @@ name: Create Beta Release
 
 on:
   push:
-    # Sequence of patterns matched against refs/tags
-    tags:
-      - 'disabled' # Push events to matching v*, i.e. v1.0, v20.15.10
-
+    branches: 'why-cant-i-disable-this'
 
 jobs:
   build:
-    name: Create Beta Release
+
     runs-on: ubuntu-latest
+
     steps:
       - uses: actions/checkout@v2
       - name: Set up JDK 1.8
@@ -19,17 +17,3 @@ jobs:
           java-version: 1.8
       - name: Build with Maven
         run: mvn -B package --file pom.xml
-      - name: Create Release
-        id: create_release
-        uses: actions/create-release@latest
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }} # This token is provided by Actions, you do not need to create your own token
-        with:
-          tag_name: ${{ github.ref }}
-          release_name: Release ${{ github.ref }}
-          body: |
-            Changes in this Release
-            - First Change
-            - Second Change
-          draft: false
-          prerelease: true
