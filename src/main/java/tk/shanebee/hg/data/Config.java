@@ -34,6 +34,7 @@ public class Config {
 	public static boolean teleportEnd;
 	public static int teleportEndTime;
 	public static String death_sound;
+	public static boolean preload_chunks;
 
 	//Timers
     public static int countdownTimer;
@@ -130,6 +131,7 @@ public class Config {
         teleportEnd = config.getBoolean("settings.teleport-at-end");
         teleportEndTime = config.getInt("settings.teleport-at-end-time");
         death_sound = config.getString("settings.death-sound");
+        preload_chunks = config.getBoolean("settings.preload-chunks");
 
         countdownTimer = config.getInt("settings.countdown-timer");
         startingTimer = config.getInt("settings.starting-timer");

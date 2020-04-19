@@ -10,9 +10,9 @@ import java.util.Iterator;
 
 public class PrepareGameTask extends BukkitRunnable {
 
-    private Game game;
-    private HG plugin;
-    private Iterator<Chunk> chunks;
+    private final Game game;
+    private final HG plugin;
+    private final Iterator<Chunk> chunks;
 
     public PrepareGameTask(HG plugin, Game game) {
         this.plugin = plugin;
@@ -21,8 +21,6 @@ public class PrepareGameTask extends BukkitRunnable {
         this.chunks = game.getBound().getChunks().iterator();
         this.runTaskTimer(plugin, 1, 1);
     }
-
-
 
     @Override
     public void run() {

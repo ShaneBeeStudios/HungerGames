@@ -44,6 +44,9 @@ settings:
     # Supports Bukkit sound enums -> https://hub.spigotmc.org/javadocs/spigot/org/bukkit/Sound.html
     # Also supports sound names from Minecraft and custom resource packs
     death-sound: UI_TOAST_CHALLENGE_COMPLETE
+    # When enabled, chunks at an arena will pre-load to help reduce stress when players TP to the arena
+    # If you have an extremely large arena and this is causing problems, disable it
+    preload-chunks: true
 reward:
     # Whether players get a reward when the game is done!
     enabled: true
