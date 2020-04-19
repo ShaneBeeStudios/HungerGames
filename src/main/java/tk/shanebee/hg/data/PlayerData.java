@@ -17,7 +17,7 @@ import java.util.UUID;
  * Player data object for holding pre-game player info
  */
 @SuppressWarnings("WeakerAccess")
-public class PlayerData {
+public class PlayerData implements Cloneable {
 
 	//Pregame data
 	private final ItemStack[] inv;
@@ -140,6 +140,18 @@ public class PlayerData {
      */
 	public UUID getUuid() {
 	    return this.uuid;
+    }
+
+    /** Clone this PlayerData
+     * @return Clone of this PlayerData
+     */
+    @Override
+    public PlayerData clone() {
+        try {
+            return ((PlayerData) super.clone());
+        } catch (CloneNotSupportedException e) {
+            throw new Error(e);
+        }
     }
 
     @Override

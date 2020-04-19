@@ -21,8 +21,12 @@ public class Language {
     public String prefix;
     public String player_joined_game;
     public String player_left_game;
+    public String game_prefix;
     public String game_started;
     public String game_join;
+    public String game_join_queue;
+    public String game_in_queue;
+    public String game_starting;
     public String game_countdown;
     public String game_almost_over;
     public String game_ending_minsec;
@@ -33,6 +37,8 @@ public class Language {
     public String players_to_start;
     public String arena_not_ready;
     public String arena_spectate;
+    public String arena_spectate_title;
+    public String arena_spectate_subtitle;
     public String game_full;
     public String player_won;
     public String winning_amount;
@@ -67,6 +73,7 @@ public class Language {
     public String status_not_ready;
     public String status_beginning;
     public String status_countdown;
+    public String status_loading;
 
     public String death_fallen;
     public String death_explosion;
@@ -161,6 +168,7 @@ public class Language {
     public String lobby_sign_1_1;
     public String lobby_sign_1_3;
     public String lobby_sign_2_1;
+    public String lobby_sign_2_2;
     public String lobby_sign_3_1;
     public String spectator_compass;
     public String spectator_compass_head_lore;
@@ -219,8 +227,12 @@ public class Language {
         prefix = lang.getString("prefix");
         player_joined_game = lang.getString("player-joined-game");
         player_left_game = lang.getString("player-left-game");
+        game_prefix = lang.getString("game-prefix");
         game_started = lang.getString("game-started");
         game_join = lang.getString("game-join");
+        game_join_queue = lang.getString("game-join-queue");
+        game_in_queue = lang.getString("game-in-queue");
+        game_starting = lang.getString("game-starting");
         game_countdown = lang.getString("game-countdown");
         game_almost_over = lang.getString("game-almost-over");
         game_ending_minsec = lang.getString("game-ending-minsec");
@@ -231,6 +243,8 @@ public class Language {
         players_to_start = lang.getString("players-to-start");
         arena_not_ready = lang.getString("arena-not-ready");
         arena_spectate = lang.getString("arena-spectate");
+        arena_spectate_title = lang.getString("arena-spectate-title");
+        arena_spectate_subtitle = lang.getString("arena-spectate-subtitle");
         game_full = lang.getString("game-full");
         player_won = lang.getString("player-won");
 
@@ -360,6 +374,7 @@ public class Language {
         lobby_sign_1_3 = lang.getString("lobby-signs.sign-1.line-3");
         lobby_sign_cost = lang.getString("lobby-signs.sign-1.line-4");
         lobby_sign_2_1 = lang.getString("lobby-signs.sign-2.line-1");
+        lobby_sign_2_2 = lang.getString("lobby-signs.sign-2.line-2");
         lobby_sign_3_1 = lang.getString("lobby-signs.sign-3.line-1");
 
         spectator_compass = lang.getString("spectator-compass");
@@ -374,6 +389,7 @@ public class Language {
         status_not_ready = lang.getString("status-notready");
         status_beginning = lang.getString("status-beginning");
         status_countdown = lang.getString("status-countdown");
+        status_loading = lang.getString("status-loading");
     }
 
 }

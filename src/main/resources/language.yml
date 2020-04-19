@@ -13,13 +13,17 @@ prefix: '&7&l[&3&lHungerGames&7&l] '
 player-joined-game: '&b&l<player> &7Has joined the game'
 player-left-game: '&b&l<player> &cHas left the game'
 #  <arena> will be replaced with the name of the arena
+game-prefix: '&7&l[&b&l<arena>&7&l]'
 game-started: '&6&l Arena &c&l<arena> &6&lwill begin in 30 seconds!'
 game-join: '&6&l Use:&c&l /hg join <arena>&6&l to join!'
+game-join-queue: '&aYou are now in queue for &6<arena>'
+game-in-queue: '&cYou are already in queue for <arena>'
+game-starting: '&6&lGame starting... you will be teleported in &b&l<timer> &6&lseconds'
 game-countdown: 'The game will start in <timer> seconds..'
 game-almost-over: '&l&cThe game is almost over, fight to the death!'
 game-ending-minsec: '&aThe game is ending in <minutes> minute(s), and <seconds> second(s)!'
 game-ending-min: '&aThe game is ending in <minutes> minute(s)!'
-game-ending-sec: '&athe game is ending in <seconds> second(s)!'
+game-ending-sec: '&aThe game is ending in <seconds> second(s)!'
 game-border-closing: '&6The border is coming, you have <seconds> seconds to get to the center of the arena!'
 game-chests-refill: '&6Chests have been refilled'
 
@@ -30,6 +34,8 @@ game-bossbar: '&6&lGame Ends In: &b&l<min> &7min &b&l<sec> &7sec'
 players-to-start: '&b&l<amount> &6players to start!'
 arena-not-ready: '&cThis arena is not ready! Please wait before joining!'
 arena-spectate: '&6You can spectate this arena by running &3/hg spectate <arena>'
+arena-spectate-title: '&7Arena: &b<arena>'
+arena-spectate-subtitle: '&7You are now spectating!'
 game-full: '&cis currently full!'
 
 #  <arena> will be replaced with name of arena the player won in
@@ -91,6 +97,7 @@ status-rollback: '&c&lRestoring...'
 status-notready: '&1&lNotReady'
 status-beginning: '&a&lRunning'
 status-countdown: '&b&lStarting...'
+status-loading: '&6&lLoading...'
 
 #  DEATH MESSAGES
 death-fallen: '&7&l[&3&lHungerGames Fallen&7&l]'
@@ -172,6 +179,10 @@ lobby-signs:
     line-4: 'Cost $&b<cost>'
   sign-2:
     line-1: '&1&lGame Status'
+    # This line is only used during arena rollback
+    # If you wish to disable this feature, just set the line to ''
+    # Ex: line-2: ''
+    line-2: 'Progress: &3<percent>&r%'
   sign-3:
     line-1: '&1&lAlive'
 

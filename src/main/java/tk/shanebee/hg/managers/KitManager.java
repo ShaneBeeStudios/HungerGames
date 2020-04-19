@@ -3,8 +3,9 @@ package tk.shanebee.hg.managers;
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 import tk.shanebee.hg.HG;
-import tk.shanebee.hg.util.Util;
 import tk.shanebee.hg.data.KitEntry;
+import tk.shanebee.hg.data.PlayerData;
+import tk.shanebee.hg.util.Util;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -25,7 +26,7 @@ public class KitManager {
 	public void setKit(Player player, String kitName) {
 		if (!kititems.containsKey(kitName)) {
 			Util.scm(player, ChatColor.RED + kitName + HG.getPlugin().getLang().kit_doesnt_exist);
-			Util.scm(player, "&9&lKits:&b" + getKitListString());
+			Util.scm(player, "&9&lKits:&b" + getKitListString(player));
 		} else if (!kititems.get(kitName).hasKitPermission(player))
 			Util.scm(player, HG.getPlugin().getLang().kit_no_perm);
 		else {
@@ -33,19 +34,24 @@ public class KitManager {
 		}
 	}
 
-	/** Get a list of kits in this KitManager
-	 * @return A string of all kits
-	 */
-	public String getKitListString() {
-		StringBuilder kits = new StringBuilder();
-		if (kititems.size() > 0) {
+    /** Get a list of kits in this KitManager based on a player's permission
+     * @param player Player to check for permissions
+     * @return A string of all kits this player has access to
+     */
+    public String getKitListString(Player player) {
+        StringBuilder kits = new StringBuilder();
+        if (kititems.size() > 0) {
             for (String s : kititems.keySet()) {
-                kits.append(", ").append(s);
+                if (kititems.get(s).hasKitPermission(player)) {
+                    kits.append(", ").append(s);
+                }
             }
-            return kits.substring(1);
+            if (kits.length() > 1) {
+                return kits.substring(1);
+            }
         }
-		return null;
-	}
+        return null;
+    }
 
 	/** Get a list of kits in this KitManager
 	 * @return A list of all kit's names
@@ -53,6 +59,20 @@ public class KitManager {
 	public List<String> getKitList() {
 		return new ArrayList<>(kititems.keySet());
 	}
+
+    /** Get a list of kits the player has permission for
+     * @param player Player to check permission for
+     * @return List of kits a player has permission for
+     */
+	public List<String> getKits(Player player) {
+	    List<String> kits = new ArrayList<>();
+	    for (String kit : this.kititems.keySet()) {
+	        if (this.kititems.get(kit).hasKitPermission(player)) {
+	            kits.add(kit);
+            }
+        }
+	    return kits;
+    }
 
 	/** Get the kits for this KitManager
 	 * @return A map of the kits

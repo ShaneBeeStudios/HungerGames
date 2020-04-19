@@ -6,7 +6,7 @@
 
     <groupId>tk.shanebee.hg</groupId>
     <artifactId>HungerGames</artifactId>
-    <version>4.13.9</version>
+    <version>4.14.0-Beta7</version>
 
     <properties>
         <maven.compiler.source>1.8</maven.compiler.source>
@@ -26,10 +26,6 @@
         <repository>
             <id>CodeMC</id>
             <url>https://repo.codemc.org/repository/maven-public</url>
-        </repository>
-        <repository>
-            <id>vault-repo</id>
-            <url>http://nexus.hc.to/content/repositories/pub_releases</url>
         </repository>
     </repositories>
 
@@ -134,6 +130,7 @@
                 <configuration>
                     <links>
                         <link>https://hub.spigotmc.org/javadocs/spigot/</link>
+                        <link>https://ci.md-5.net/job/BungeeCord/ws/chat/target/apidocs/</link>
                     </links>
                 </configuration>
             </plugin>

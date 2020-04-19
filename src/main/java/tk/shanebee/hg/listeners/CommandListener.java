@@ -97,12 +97,13 @@ public class CommandListener implements CommandExecutor, TabCompleter {
 			} else if (args[0].equalsIgnoreCase("delete") ||
 					args[0].equalsIgnoreCase("debug") ||
 					args[0].equalsIgnoreCase("stop") ||
-					(args[0].equalsIgnoreCase("forcestart")) ||
-					(args[0].equalsIgnoreCase("join")) ||
-					(args[0].equalsIgnoreCase("setlobbywall")) ||
-					(args[0].equalsIgnoreCase("toggle")) ||
-					(args[0].equalsIgnoreCase("bordercenter")) ||
-					((args[0].equalsIgnoreCase("spectate")) && Config.spectateEnabled)) {
+					args[0].equalsIgnoreCase("forcestart") ||
+					args[0].equalsIgnoreCase("join") ||
+					args[0].equalsIgnoreCase("setlobbywall") ||
+					args[0].equalsIgnoreCase("toggle") ||
+					args[0].equalsIgnoreCase("bordercenter") ||
+                    args[0].equalsIgnoreCase("fake") ||
+                    ((args[0].equalsIgnoreCase("spectate")) && Config.spectateEnabled)) {
 				ArrayList<String> matchesDelete = new ArrayList<>();
 				if (args.length == 2) {
 					for (Game name : plugin.getGames()) {
@@ -171,7 +172,7 @@ public class CommandListener implements CommandExecutor, TabCompleter {
 						game = playerManager.getPlayerData(((Player) sender).getUniqueId()).getGame();
 					}
 					if (game != null) {
-						for (String name : game.getKitManager().getKits().keySet()) {
+						for (String name : game.getKitManager().getKits(((Player) sender))) {
 							if (StringUtil.startsWithIgnoreCase(name, args[1])) {
 								matchesKit.add(name);
 							}

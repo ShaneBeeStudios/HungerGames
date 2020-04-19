@@ -4,6 +4,7 @@ import io.lumine.xikage.mythicmobs.MythicMobs;
 import io.lumine.xikage.mythicmobs.mobs.MobManager;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
+import org.bukkit.event.HandlerList;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.permissions.Permission;
 import org.bukkit.permissions.PermissionDefault;
@@ -26,10 +27,10 @@ import java.util.*;
 public class HG extends JavaPlugin {
 
     //Maps
-    private final Map<String, BaseCmd> cmds = new HashMap<>();
-    private final Map<UUID, PlayerSession> playerSession = new HashMap<>();
-    private final Map<Integer, ItemStack> items = new HashMap<>();
-    private final Map<Integer, ItemStack> bonusItems = new HashMap<>();
+    private Map<String, BaseCmd> cmds;
+    private Map<UUID, PlayerSession> playerSession;
+    private Map<Integer, ItemStack> items;
+    private Map<Integer, ItemStack> bonusItems;
 
     //Lists
     private final List<Game> games = new ArrayList<>();
@@ -56,6 +57,16 @@ public class HG extends JavaPlugin {
 
     @Override
     public void onEnable() {
+        loadPlugin(true);
+    }
+
+    private void loadPlugin(boolean load) {
+        if (load) {
+            cmds = new HashMap<>();
+        }
+        playerSession = new HashMap<>();
+        items = new HashMap<>();
+        bonusItems = new HashMap<>();
         if (!Util.isRunningMinecraft(1, 13)) {
             Util.warning("HungerGames does not support your version!");
             Util.warning("Only versions 1.13+ are supported");
@@ -109,12 +120,14 @@ public class HG extends JavaPlugin {
             Util.log("&7mcMMO not found, mcMMO event hooks have been &cdisabled");
         }
 
-        //noinspection ConstantConditions
-        getCommand("hg").setExecutor(new CommandListener(this));
+        if (load) {
+            //noinspection ConstantConditions
+            getCommand("hg").setExecutor(new CommandListener(this));
+            loadCmds();
+        }
         getServer().getPluginManager().registerEvents(new WandListener(this), this);
         getServer().getPluginManager().registerEvents(new CancelListener(this), this);
         getServer().getPluginManager().registerEvents(new GameListener(this), this);
-        loadCmds();
 
         if (this.getDescription().getVersion().contains("Beta")) {
             Util.log("&eYOU ARE RUNNING A BETA VERSION, please use with caution");
@@ -122,23 +135,48 @@ public class HG extends JavaPlugin {
         }
 
         Util.log("HungerGames has been &benabled!");
+
+    }
+
+    /**
+     * Reload the plugin
+     */
+    public void reloadPlugin() {
+        unloadPlugin(true);
+    }
+
+    private void unloadPlugin(boolean reload) {
+        stopAll();
+        playerSession = null;
+        items = null;
+        bonusItems = null;
+        plugin = null;
+        metrics = null;
+        nbtApi = null;
+        mmMobManager = null;
+        lang = null;
+        kitManager = null;
+        itemStackManager = null;
+        mobConfig = null;
+        randomItems = null;
+        playerManager = null;
+        arenaconfig = null;
+        killManager = null;
+        manager = null;
+        leaderboard = null;
+        HandlerList.unregisterAll(this);
+        if (reload) {
+            loadPlugin(false);
+        } else {
+            cmds = null;
+        }
     }
 
     @Override
     public void onDisable() {
-        stopAll();
-        plugin = null;
-        manager = null;
-        playerManager = null;
-        arenaconfig = null;
-        killManager = null;
-        randomItems = null;
-        lang = null;
-        kitManager = null;
-        itemStackManager = null;
-        leaderboard = null;
-        metrics = null;
-        mmMobManager = null;
+        // I know this seems odd, but this method just
+        // nulls everything to prevent memory leaks
+        unloadPlugin(false);
         Util.log("HungerGames has been disabled!");
     }
 
@@ -165,6 +203,7 @@ public class HG extends JavaPlugin {
         cmds.put("bordersize", new BorderSizeCmd());
         cmds.put("bordercenter", new BorderCenterCmd());
         cmds.put("bordertimer", new BorderTimerCmd());
+        cmds.put("fake", new FakePlayerCmd()); // Command for debugging (adds fake players)
         if (Config.spectateEnabled) {
             cmds.put("spectate", new SpectateCmd());
         }
@@ -184,7 +223,6 @@ public class HG extends JavaPlugin {
             if (cArray.contains(bc))
                 //noinspection ConstantConditions
                 getServer().getPluginManager().getPermission("hg." + bc).setDefault(PermissionDefault.TRUE);
-
         }
     }
 
