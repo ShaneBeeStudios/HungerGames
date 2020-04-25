@@ -1,10 +1,10 @@
 # HungerGames
 # Revamped by: ShaneBee
 
-# Issues: Please report issues on the BitBucket issue tracker @ https://bitbucket.org/ShaneBeeStudios/hungergames/issues?status=new&status=open
+# Issues: Please report issues on the BitBucket issue tracker @ https://github.com/ShaneBeeStudios/hungergames/issues
 # Updates: Can be found on SpigotMC @ https://www.spigotmc.org/resources/hungergames.65942/
 
-# More Info: See the wiki for more info on this config @ https://bitbucket.org/ShaneBeeStudios/HungerGames/wiki/Config.yml
+# More Info: See the wiki for more info on this config @ https://github.com/ShaneBeeStudios/HungerGames/wiki/Config.yml
 
 settings:
     # If mobs will spawn in the arena, and the interval in between spawns (In seconds)
