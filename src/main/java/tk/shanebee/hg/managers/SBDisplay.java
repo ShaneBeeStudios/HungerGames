@@ -23,11 +23,12 @@ public class SBDisplay {
 	private final Scoreboard board;
 	private Objective ob;
 	private final HashMap<String, Scoreboard> score = new HashMap<>();
-	private Game g;
+	private final Game g;
 
 	public SBDisplay(Game g) {
 		this.manager = Bukkit.getScoreboardManager();
-		this.board = manager.getNewScoreboard();
+        assert manager != null;
+        this.board = manager.getNewScoreboard();
 		this.ob = board.registerNewObjective(ChatColor.translateAlternateColorCodes('&', HG.getPlugin().getLang().players_alive), "dummy", "arena" + g.getName());
 		this.ob.setDisplaySlot(DisplaySlot.SIDEBAR);
 		this.ob.setDisplayName(ChatColor.translateAlternateColorCodes('&', HG.getPlugin().getLang().scoreboard_title));

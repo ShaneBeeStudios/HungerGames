@@ -4,7 +4,6 @@ import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 import tk.shanebee.hg.HG;
 import tk.shanebee.hg.data.KitEntry;
-import tk.shanebee.hg.data.PlayerData;
 import tk.shanebee.hg.util.Util;
 
 import java.util.ArrayList;

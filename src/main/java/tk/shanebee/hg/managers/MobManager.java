@@ -34,7 +34,8 @@ public class MobManager {
 		loadMobs();
 	}
 
-	private void loadMobs() {
+	@SuppressWarnings("ConstantConditions")
+    private void loadMobs() {
 		String gameName = "default";
 		for (String time : Arrays.asList("day", "night")) {
 			if (config.getConfigurationSection("mobs." + time + "." + game.getName()) != null) {

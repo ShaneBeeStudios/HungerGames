@@ -67,7 +67,6 @@ public class GameListener implements Listener {
     private final Language lang;
     private final String tsn = ChatColor.GOLD + "TrackingStick " + ChatColor.GREEN + "Uses: ";
     private final ItemStack trackingStick;
-    //private HashMap<Player, Entity> killerMap = new HashMap<>(); ON HOLD for now
     private final KillManager killManager;
     private final Manager gameManager;
     private final PlayerManager playerManager;
@@ -88,7 +87,7 @@ public class GameListener implements Listener {
         killManager = plugin.getKillManager();
     }
 
-    @SuppressWarnings("deprecation") // setPersistent() is DRAFT API
+    @SuppressWarnings({"deprecation", "ConstantConditions"}) // setPersistent() is DRAFT API
     private void dropInv(Player p) {
         PlayerInventory inv = p.getInventory();
         Location l = p.getLocation();

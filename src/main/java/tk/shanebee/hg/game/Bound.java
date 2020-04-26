@@ -8,7 +8,6 @@ import org.bukkit.World;
 import org.bukkit.block.Block;
 import org.bukkit.entity.Entity;
 import org.bukkit.util.BoundingBox;
-import tk.shanebee.hg.util.Util;
 
 import java.util.ArrayList;
 import java.util.List;

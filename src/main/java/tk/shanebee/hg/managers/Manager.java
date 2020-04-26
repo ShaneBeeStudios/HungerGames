@@ -38,7 +38,8 @@ public class Manager {
      * @param sender Sender who issued this debuger
      * @param gameName Name of the game to debug
      */
-	public void runDebugger(CommandSender sender, String gameName) {
+	@SuppressWarnings("ConstantConditions")
+    public void runDebugger(CommandSender sender, String gameName) {
 		Configuration arenadat = HG.getPlugin().getArenaConfig().getCustomConfig();
 		boolean isReady = true;
 		List<Location> spawns = new ArrayList<>();
