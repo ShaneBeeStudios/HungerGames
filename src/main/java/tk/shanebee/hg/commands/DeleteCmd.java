@@ -25,7 +25,7 @@ public class DeleteCmd extends BaseCmd {
 			try {
 				Util.scm(sender, lang.cmd_delete_attempt.replace("<arena>", g.getName()));
 
-				if (g.getStatus() == Status.BEGINNING || g.getStatus() == Status.RUNNING) {
+				if (g.getStatus() == Status.FREE_ROAM || g.getStatus() == Status.RUNNING) {
 					Util.scm(sender, "  &7- &cGame running! &aStopping..");
 					g.forceRollback();
 					g.stop(false);

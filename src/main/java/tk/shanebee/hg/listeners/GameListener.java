@@ -173,7 +173,7 @@ public class GameListener implements Listener {
             Game game = gameManager.getGame(itemFrame.getLocation());
             switch (game.getStatus()) {
                 case RUNNING:
-                case BEGINNING:
+                case FREE_ROAM:
                 case COUNTDOWN:
                     ((Cancellable) event).setCancelled(true);
             }
@@ -250,12 +250,12 @@ public class GameListener implements Listener {
 
     }
 
-    @EventHandler
+    @EventHandler(priority = EventPriority.HIGHEST)
     private void onSprint(FoodLevelChangeEvent event) {
         Player p = (Player) event.getEntity();
         if (playerManager.hasPlayerData(p)) {
             Status st = playerManager.getPlayerData(p).getGame().getStatus();
-            if (st == Status.WAITING || st == Status.COUNTDOWN) {
+            if (st == Status.COUNTDOWN) {
                 event.setFoodLevel(1);
                 event.setCancelled(true);
             }
@@ -444,7 +444,7 @@ public class GameListener implements Listener {
 
             if (Config.breakblocks && playerManager.hasPlayerData(p)) {
                 Game g = playerManager.getPlayerData(p).getGame();
-                if (g.getStatus() == Status.RUNNING || g.getStatus() == Status.BEGINNING) {
+                if (g.getStatus() == Status.RUNNING || g.getStatus() == Status.FREE_ROAM) {
                     if (!Config.blocks.contains(b.getType().toString()) && !Config.blocks.contains("ALL")) {
                         Util.scm(p, lang.listener_no_edit_block);
                         event.setCancelled(true);
@@ -463,7 +463,7 @@ public class GameListener implements Listener {
                     Game g = plugin.getManager().getGame(b.getLocation());
                     Status status = g.getStatus();
                     switch (status) {
-                        case BEGINNING:
+                        case FREE_ROAM:
                         case RUNNING:
                             g.recordBlockPlace(event.getBlockReplacedState());
                         default:
@@ -507,7 +507,7 @@ public class GameListener implements Listener {
                     Game g = gameManager.getGame(b.getLocation());
                     Status status = g.getStatus();
                     switch (status) {
-                        case BEGINNING:
+                        case FREE_ROAM:
                         case RUNNING:
                             g.removeGameChest(b.getLocation());
                         default:
@@ -576,7 +576,7 @@ public class GameListener implements Listener {
         Block block = event.getBlock();
         if (Config.breakblocks && gameManager.isInRegion(block.getLocation())) {
             Game game = gameManager.getGame(block.getLocation());
-            if (game.getStatus() == Status.RUNNING || game.getStatus() == Status.BEGINNING) {
+            if (game.getStatus() == Status.RUNNING || game.getStatus() == Status.FREE_ROAM) {
                 game.recordBlockBreak(block);
             }
         }
@@ -588,7 +588,7 @@ public class GameListener implements Listener {
         if (block.getType() == Material.AIR || block.getType() == Material.WATER || block.getType() == Material.LAVA) {
             if (Config.breakblocks && gameManager.isInRegion(event.getEntity().getLocation())) {
                 Game game = gameManager.getGame(event.getEntity().getLocation());
-                if (game.getStatus() == Status.RUNNING || game.getStatus() == Status.BEGINNING) {
+                if (game.getStatus() == Status.RUNNING || game.getStatus() == Status.FREE_ROAM) {
                     game.recordBlockPlace(block.getState());
                 }
             }

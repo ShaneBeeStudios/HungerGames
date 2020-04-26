@@ -14,13 +14,16 @@ public enum Status {
      */
     RUNNING,
     /**
-     * Game is starting to run
-     * <p>This is the free roam period of the game</p>
+     * Game is in free roam state
+     * <p>This is the free roam period of the game where
+     * players can not PvP</p>
      */
-    BEGINNING,
+    FREE_ROAM,
     /**
      * Game is counting down to start
-     * <p>Players have joined, wait for more players</p>
+     * <p>This is the point at which players have been teleported
+     * to the arena, they can not move, and they have a chance
+     * to choose their kits</p>
      */
     COUNTDOWN,
     /**
@@ -79,7 +82,7 @@ public enum Status {
                 return Util.getColString(lang.status_rollback);
             case NOTREADY:
                 return Util.getColString(lang.status_not_ready);
-            case BEGINNING:
+            case FREE_ROAM:
                 return Util.getColString(lang.status_beginning);
             case STARTING:
             case COUNTDOWN:

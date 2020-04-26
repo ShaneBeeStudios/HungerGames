@@ -696,7 +696,7 @@ public class Game {
                 }
                 break;
             case RUNNING:
-            case BEGINNING:
+            case FREE_ROAM:
                 if (Config.spectateEnabled) {
                     spectate(player);
                 } else {
@@ -765,7 +765,7 @@ public class Game {
      * Start the free roam state of the game
      */
     public void startFreeRoam() {
-        status = Status.BEGINNING;
+        status = Status.FREE_ROAM;
         updateLobbyBlock();
         freeRoam = new FreeRoamTask(this);
         runCommands(CommandType.START, null);
@@ -977,7 +977,7 @@ public class Game {
         bound.removeEntities();
         List<UUID> win = new ArrayList<>();
         cancelTasks();
-        if (status == Status.RUNNING || status == Status.BEGINNING || status == Status.COUNTDOWN) {
+        if (status == Status.RUNNING || status == Status.FREE_ROAM || status == Status.COUNTDOWN) {
             for (UUID uuid : players) {
                 Player player = Bukkit.getPlayer(uuid);
                 if (player != null) {
@@ -1114,7 +1114,7 @@ public class Game {
     }
 
     private void updateAfterDeath(Player player, boolean death) {
-        if (status == Status.RUNNING || status == Status.BEGINNING || status == Status.COUNTDOWN) {
+        if (status == Status.RUNNING || status == Status.FREE_ROAM || status == Status.COUNTDOWN) {
             if (isGameOver()) {
                 if (!death) {
                     for (UUID uuid : players) {

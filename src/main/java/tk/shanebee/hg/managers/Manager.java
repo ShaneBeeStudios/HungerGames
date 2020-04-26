@@ -249,7 +249,7 @@ public class Manager {
                 case RUNNING:
                 case STARTING:
                 case COUNTDOWN:
-                case BEGINNING:
+                case FREE_ROAM:
                     i++;
             }
         }
