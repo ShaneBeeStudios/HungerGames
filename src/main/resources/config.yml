@@ -148,7 +148,7 @@ mcmmo:
 # To disable kits, just delete this section
 # These kits will be global for all arenas, to make custom kits for each arena, do so in the arenas.yml config
 # See wiki for a more detailed explanation of this section
-# https://bitbucket.org/ShaneBeeStudios/HungerGames/wiki/Config.yml
+# https://github.com/ShaneBeeStudios/HungerGames/wiki/Arena-Setup#arena-config
 kits:
     # the name of the kit, change to whatever you would like
     bowman:
