@@ -12,7 +12,7 @@ import tk.shanebee.hg.util.Util;
 
 public class FreeRoamTask extends BukkitRunnable {
 
-	private Game game;
+	private final Game game;
 
 	public FreeRoamTask(Game g) {
 		this.game = g;
