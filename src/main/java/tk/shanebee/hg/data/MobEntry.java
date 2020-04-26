@@ -32,27 +32,27 @@ public class MobEntry {
 	private ItemStack chest = null;
 	private ItemStack leggings = null;
 	private ItemStack boots = null;
-	private final List<PotionEffect> potionEffect = new ArrayList<>();
+	private final List<PotionEffect> potionEffects = new ArrayList<>();
 	private String deathMessage = null;
-	private boolean mythic;
+	private final boolean mythic;
     private String mythicMob;
 	private int mythicLevel;
 
 	/** Create a new mob entry
-	 * @param type Type of new mob
+	 * @param entityType Type of new mob
 	 * @param name Name of new mob
 	 */
-	public MobEntry(EntityType type, String name) {
-		this(type);
-		this.mythic = false;
+	public MobEntry(EntityType entityType, String name) {
+		this(entityType);
 		this.name = name;
 	}
 
 	/** Create a new mob entry
-	 * @param type Type of new mob
+	 * @param entityType Type of new mob
 	 */
-	public MobEntry(EntityType type) {
-		this.type = type;
+	public MobEntry(EntityType entityType) {
+		this.type = entityType;
+        this.mythic = false;
 	}
 
 	/** Create a new mob entry using a MythicMob
@@ -163,22 +163,22 @@ public class MobEntry {
 	/** Get the potion effects for this mob entry
 	 * @return List of potion effects for this mob entry
 	 */
-	public List<PotionEffect> getPotionEffect() {
-		return this.potionEffect;
+	public List<PotionEffect> getPotionEffects() {
+		return this.potionEffects;
 	}
 
 	/** Add a potion effect to this mob entry
 	 * @param potionEffect Potion effect to add
 	 */
 	public void addPotionEffect(PotionEffect potionEffect) {
-		this.potionEffect.add(potionEffect);
+		this.potionEffects.add(potionEffect);
 	}
 
 	/** Add a list of potion effects to this mob entry
 	 * @param potionEffects Potion effect list to add
 	 */
 	public void addPotionEffects(List<PotionEffect> potionEffects) {
-		this.potionEffect.addAll(potionEffects);
+		this.potionEffects.addAll(potionEffects);
 	}
 
 	/** Get the death message for this mob entry
@@ -225,12 +225,10 @@ public class MobEntry {
 					equip.setLeggings(leggings);
 				if (boots != null)
 					equip.setBoots(boots);
-				if (potionEffect != null) {
-					for (PotionEffect effect : this.potionEffect) {
-						mob.addPotionEffect(effect);
-					}
-				}
-				if (deathMessage != null)
+                for (PotionEffect effect : this.potionEffects) {
+                    mob.addPotionEffect(effect);
+                }
+                if (deathMessage != null)
 					mob.setMetadata("death-message", new FixedMetadataValue(HG.getPlugin(), deathMessage));
 			}
 		} else {
@@ -267,7 +265,7 @@ public class MobEntry {
                 ", chest=" + chest +
                 ", leggings=" + leggings +
                 ", boots=" + boots +
-                ", potionEffect=" + potionEffect +
+                ", potionEffect=" + potionEffects +
                 ", deathMessage='" + deathMessage + '\'' +
                 ", mythic=" + mythic +
                 ", mythicMob='" + mythicMob + '\'' +

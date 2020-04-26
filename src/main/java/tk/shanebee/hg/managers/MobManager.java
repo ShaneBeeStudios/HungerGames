@@ -11,6 +11,7 @@ import tk.shanebee.hg.game.Game;
 import tk.shanebee.hg.HG;
 import tk.shanebee.hg.data.MobEntry;
 import tk.shanebee.hg.util.PotionEffectUtils;
+import tk.shanebee.hg.util.Util;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -52,7 +53,13 @@ public class MobManager {
 					}
 					// REGULAR MOB
 					else {
-						EntityType type = EntityType.valueOf(getString(key, "type"));
+					    String typeString = getString(key, "type");
+                        EntityType type = getEntityType(typeString);
+                        if (type == null) {
+                            Util.warning("Invalid mob entry: &c" + typeString);
+                            continue;
+                        }
+
 						entry = new MobEntry(type);
 						if (getString(key, "name") != null) {
 							entry.setName(getString(key, "name"));
@@ -110,6 +117,13 @@ public class MobManager {
 	private ItemStack getItemStack(String key, String section) {
 		return HG.getPlugin().getItemStackManager().getItem(getString(key, section), false);
 	}
+
+	private EntityType getEntityType(String type) {
+	    try {
+	        return EntityType.valueOf(type.toUpperCase());
+        } catch (IllegalArgumentException ignore) {}
+	    return null;
+    }
 
 	/** Get list of MobEntries for day time
 	 * @return List of MobEntries
