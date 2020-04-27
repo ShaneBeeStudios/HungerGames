@@ -168,10 +168,10 @@ public class Util {
     public static void playDeathSound(Player player) {
         String soundString = Config.death_sound;
         try {
-            Sound sound = Sound.valueOf(soundString);
+            Sound sound = Sound.valueOf(soundString.toUpperCase());
             player.playSound(player.getLocation(), sound, 5, 1);
         } catch (IllegalArgumentException ex) {
-            player.playSound(player.getLocation(), soundString, 5, 1);
+            player.playSound(player.getLocation(), soundString.toLowerCase(), 5, 1);
         }
     }
 
