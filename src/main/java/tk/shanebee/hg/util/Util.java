@@ -21,7 +21,7 @@ import java.util.UUID;
 /**
  * Generalized utility class for shortcut methods
  */
-@SuppressWarnings("WeakerAccess")
+@SuppressWarnings({"WeakerAccess", "unused", "ConstantConditions"})
 public class Util {
 
     public static final BlockFace[] faces = new BlockFace[]{BlockFace.EAST, BlockFace.WEST, BlockFace.NORTH, BlockFace.SOUTH};
