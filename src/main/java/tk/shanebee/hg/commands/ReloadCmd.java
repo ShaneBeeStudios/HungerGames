@@ -38,9 +38,16 @@ public class ReloadCmd extends BaseCmd {
             Text.sendMessage(sender, msg1);
             Text.sendMessage(sender, msg2);
             if (sender instanceof Player) {
-                TextComponent yes = Text.clickableCommand("&aYES", "/hg reload confirm",    "&7Click &aYES", "&7to stop all games", "&7and reload");
+                TextComponent yes = Text.clickableCommand("&aYES", "/hg reload confirm", lines -> {
+                    lines.add("&7Click &aYES");
+                    lines.add("&7to stop all games");
+                    lines.add("&7and reload");
+                });
                 TextComponent space = Text.message(" &7or ");
-                TextComponent no = Text.clickableCommand("&cNO", "/hg reload cancel", "&7Click &cNO", "&7to cancel reload");
+                TextComponent no = Text.clickableCommand("&cNO", "/hg reload cancel", lines -> {
+                    lines.add("&7Click &cNO");
+                    lines.add("&7to cancel reload");
+                });
                 Text.sendMessage(sender, yes, space, no);
             } else {
                 Util.log("&6Type &bhg reload confirm &6to force reload.");

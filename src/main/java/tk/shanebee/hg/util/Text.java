@@ -8,6 +8,10 @@ import org.bukkit.command.CommandSender;
 import org.jetbrains.annotations.NotNull;
 import tk.shanebee.hg.HG;
 
+import java.util.ArrayList;
+import java.util.List;
+import java.util.function.Consumer;
+
 /**
  * {@link TextComponent} API
  */
@@ -29,16 +33,18 @@ public class Text {
      *
      * @param message Message to be clicked
      * @param command Command to run when clicked
-     * @param hover   Messages to show in hover
+     * @param hover   Consumer to add lines to the hover message
      * @return new clickable TextComponent
      */
-    public static TextComponent clickableCommand(@NotNull String message, @NotNull String command, String... hover) {
+    public static TextComponent clickableCommand(@NotNull String message, @NotNull String command, Consumer<List<String>> hover) {
         TextComponent msg = message(message);
         msg.setClickEvent(new ClickEvent(ClickEvent.Action.RUN_COMMAND, command));
         if (hover != null) {
-            BaseComponent[] comp = new BaseComponent[hover.length];
-            for (int i = 0; i < hover.length; i++) {
-                comp[i] = message(hover[i] + (i == hover.length - 1 ? "" : "\n"));
+            List<String> hovers = new ArrayList<>();
+            hover.accept(hovers);
+            BaseComponent[] comp = new BaseComponent[hovers.size()];
+            for (int i = 0; i < hovers.size(); i++) {
+                comp[i] = message(hovers.get(i) + (i == hovers.size() - 1 ? "" : "\n"));
             }
             msg.setHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, comp));
         }
