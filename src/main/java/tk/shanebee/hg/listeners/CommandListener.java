@@ -8,16 +8,18 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.command.TabCompleter;
 import org.bukkit.entity.Player;
 import org.bukkit.util.StringUtil;
+import tk.shanebee.hg.HG;
+import tk.shanebee.hg.commands.BaseCmd;
 import tk.shanebee.hg.data.Config;
 import tk.shanebee.hg.data.PlayerData;
 import tk.shanebee.hg.game.Game;
-import tk.shanebee.hg.HG;
 import tk.shanebee.hg.game.Team;
-import tk.shanebee.hg.managers.PlayerManager;
 import tk.shanebee.hg.util.Util;
-import tk.shanebee.hg.commands.BaseCmd;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.List;
+import java.util.UUID;
 
 /**
  * Internal command listener
@@ -26,11 +28,9 @@ import java.util.*;
 public class CommandListener implements CommandExecutor, TabCompleter {
 
 	private final HG plugin;
-	private final PlayerManager playerManager;
 
 	public CommandListener(HG plugin) {
 		this.plugin = plugin;
-		this.playerManager = plugin.getPlayerManager();
 	}
 
 	public boolean onCommand(CommandSender s, Command command, String label, String[] args) {
@@ -73,7 +73,7 @@ public class CommandListener implements CommandExecutor, TabCompleter {
 					return matchesTeam;
 				}
 				if (args.length == 3 && args[1].equalsIgnoreCase("tp")) {
-                    PlayerData pd = playerManager.getPlayerData(((Player) sender).getUniqueId());
+                    PlayerData pd = plugin.getPlayerManager().getPlayerData(((Player) sender).getUniqueId());
                     if (pd == null) return ImmutableList.of();
                     Team team = pd.getTeam();
                     if (team != null) {
@@ -168,8 +168,8 @@ public class CommandListener implements CommandExecutor, TabCompleter {
 				if (args.length == 2) {
 					ArrayList<String> matchesKit = new ArrayList<>();
 					Game game = null;
-					if (playerManager.hasPlayerData(((Player) sender).getUniqueId())) {
-						game = playerManager.getPlayerData(((Player) sender).getUniqueId()).getGame();
+					if (plugin.getPlayerManager().hasPlayerData(((Player) sender).getUniqueId())) {
+						game = plugin.getPlayerManager().getPlayerData(((Player) sender).getUniqueId()).getGame();
 					}
 					if (game != null) {
 						for (String name : game.getKitManager().getKits(((Player) sender))) {
