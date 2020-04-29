@@ -687,14 +687,17 @@ public class Game {
                 Util.scm(player, queue);
                 break;
             case WAITING:
-            case STARTING:
-            case COUNTDOWN:
                 this.players.add(uuid);
                 Util.scm(player, queue);
                 if (this.players.size() >= this.minPlayers) {
                     startPreGame();
                 }
                 break;
+            case STARTING:
+                this.players.add(uuid);
+                Util.scm(player, queue);
+                break;
+            case COUNTDOWN:
             case RUNNING:
             case FREE_ROAM:
                 if (Config.spectateEnabled) {
@@ -737,12 +740,12 @@ public class Game {
      * Start the pregame countdown
      */
     public void startPreGame() {
+        this.status = Status.STARTING;
         // Call the GameStartEvent
         GameStartEvent event = new GameStartEvent(this);
         Bukkit.getPluginManager().callEvent(event);
 
         bound.removeEntities();
-        this.status = Status.STARTING;
         starting = new StartingTask(this);
         updateLobbyBlock();
     }
