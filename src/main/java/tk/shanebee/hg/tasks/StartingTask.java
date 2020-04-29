@@ -20,7 +20,7 @@ public class StartingTask extends BukkitRunnable {
 		Util.broadcast(lang.game_started.replace("<arena>", g.getName()));
 		Util.broadcast(lang.game_join.replace("<arena>", g.getName()));
 
-		this.runTaskTimer(HG.getPlugin(), 5 * 20L, 5 * 20L);
+		this.runTaskTimer(HG.getPlugin(), 20, 5 * 20L);
 	}
 
 	@Override

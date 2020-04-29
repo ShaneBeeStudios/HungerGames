@@ -13,7 +13,7 @@ public class CountdownTask extends BukkitRunnable {
     public CountdownTask(Game game) {
         this.timer = Math.max(0, Config.countdownTimer);
         this.game = game;
-        this.runTaskTimer(HG.getPlugin(), 5 * 20L, 5 * 20L);
+        this.runTaskTimer(HG.getPlugin(), 20, 5 * 20L);
     }
 
     @Override
