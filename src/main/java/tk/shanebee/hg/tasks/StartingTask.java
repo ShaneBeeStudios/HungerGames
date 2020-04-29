@@ -17,7 +17,9 @@ public class StartingTask extends BukkitRunnable {
 		this.timer = Math.max(0, Config.startingTimer);
 		this.game = g;
 		this.lang = HG.getPlugin().getLang();
-		Util.broadcast(lang.game_started.replace("<arena>", g.getName()));
+		Util.broadcast(lang.game_started
+                .replace("<arena>", g.getName())
+                .replace("<seconds>", String.valueOf(timer)));
 		Util.broadcast(lang.game_join.replace("<arena>", g.getName()));
 
 		this.runTaskTimer(HG.getPlugin(), 20, 5 * 20L);

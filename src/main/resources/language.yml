@@ -14,7 +14,8 @@ player-joined-game: '&b&l<player> &7Has joined the game'
 player-left-game: '&b&l<player> &cHas left the game'
 #  <arena> will be replaced with the name of the arena
 game-prefix: '&7&l[&b&l<arena>&7&l]'
-game-started: '&6&l Arena &c&l<arena> &6&lwill begin in 30 seconds!'
+#  <seconds> will be replaced with the time value for the starting task
+game-started: '&6&l Arena &c&l<arena> &6&lwill begin in <seconds> seconds!'
 game-join: '&6&l Use:&c&l /hg join <arena>&6&l to join!'
 game-join-queue: '&aYou are now in queue for &6<arena>'
 game-in-queue: '&cYou are already in queue for <arena>'
