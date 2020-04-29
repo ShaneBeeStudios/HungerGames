@@ -131,7 +131,7 @@ public class HG extends JavaPlugin {
 
         if (this.getDescription().getVersion().contains("Beta")) {
             Util.log("&eYOU ARE RUNNING A BETA VERSION, please use with caution");
-            Util.log("&eReport any issues to: &bhttps://bitbucket.org/ShaneBeeStudios/hungergames/issues");
+            Util.log("&eReport any issues to: &bhttps://github.com/ShaneBeeStudios/hungergames/issues");
         }
 
         Util.log("HungerGames has been &benabled!");
