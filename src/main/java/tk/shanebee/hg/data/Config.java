@@ -198,4 +198,8 @@ public class Config {
         }
     }
 
+    public FileConfiguration getConfig() {
+        return config;
+    }
+
 }

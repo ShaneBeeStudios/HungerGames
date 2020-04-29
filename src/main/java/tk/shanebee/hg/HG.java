@@ -3,12 +3,14 @@ package tk.shanebee.hg;
 import io.lumine.xikage.mythicmobs.MythicMobs;
 import io.lumine.xikage.mythicmobs.mobs.MobManager;
 import org.bukkit.Bukkit;
+import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.entity.Player;
 import org.bukkit.event.HandlerList;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.permissions.Permission;
 import org.bukkit.permissions.PermissionDefault;
 import org.bukkit.plugin.java.JavaPlugin;
+import org.jetbrains.annotations.NotNull;
 import tk.shanebee.hg.commands.*;
 import tk.shanebee.hg.data.*;
 import tk.shanebee.hg.game.Game;
@@ -33,10 +35,11 @@ public class HG extends JavaPlugin {
     private Map<Integer, ItemStack> bonusItems;
 
     //Lists
-    private final List<Game> games = new ArrayList<>();
+    private List<Game> games;
 
     //Instances
     private static HG plugin;
+    private Config config;
     private Manager manager;
     private PlayerManager playerManager;
     private Data arenaconfig;
@@ -64,6 +67,7 @@ public class HG extends JavaPlugin {
         if (load) {
             cmds = new HashMap<>();
         }
+        games = new ArrayList<>();
         playerSession = new HashMap<>();
         items = new HashMap<>();
         bonusItems = new HashMap<>();
@@ -74,7 +78,7 @@ public class HG extends JavaPlugin {
             return;
         }
         plugin = this;
-        new Config(this);
+        config = new Config(this);
         metrics = new Metrics(this);
         if (metrics.isEnabled()) {
             Util.log("&7Metrics have been &aenabled");
@@ -147,10 +151,12 @@ public class HG extends JavaPlugin {
 
     private void unloadPlugin(boolean reload) {
         stopAll();
+        games = null;
         playerSession = null;
         items = null;
         bonusItems = null;
         plugin = null;
+        config = null;
         metrics = null;
         nbtApi = null;
         mmMobManager = null;
@@ -382,6 +388,26 @@ public class HG extends JavaPlugin {
      */
     public Language getLang() {
         return this.lang;
+    }
+
+    /**
+     * Get an instance of {@link Config}
+     *
+     * @return Config file
+     */
+    public Config getHGConfig() {
+        return config;
+    }
+
+    /**
+     * Get the main file configuration from {@link Config}
+     *
+     * @return Main file configuration
+     */
+    @NotNull
+    @Override
+    public FileConfiguration getConfig() {
+        return config.getConfig();
     }
 
     /**
