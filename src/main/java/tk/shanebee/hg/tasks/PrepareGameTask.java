@@ -19,7 +19,7 @@ public class PrepareGameTask extends BukkitRunnable {
         this.game = game;
         game.setStatus(Status.LOADING);
         this.chunks = game.getBound().getChunks().iterator();
-        this.runTaskTimer(plugin, 1, 1);
+        this.runTaskTimer(plugin, 0, 1);
     }
 
     @Override

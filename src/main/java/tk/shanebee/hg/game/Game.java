@@ -678,13 +678,13 @@ public class Game {
         }
         switch (status) {
             case READY:
+                this.players.add(uuid);
+                Util.scm(player, queue);
                 if (Config.preload_chunks) {
                     new PrepareGameTask(this.plugin, this);
                 } else {
                     status = Status.WAITING;
                 }
-                this.players.add(uuid);
-                Util.scm(player, queue);
                 break;
             case WAITING:
                 this.players.add(uuid);
