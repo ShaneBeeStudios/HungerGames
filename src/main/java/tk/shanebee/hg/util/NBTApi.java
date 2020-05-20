@@ -17,7 +17,7 @@ public class NBTApi {
      */
     public ItemStack getItemWithNBT(ItemStack item, String value) {
         NBTItem nbtItem = new NBTItem(item);
-        nbtItem.mergeCompound(new NBTContainer(value));
+        nbtItem.mergeCompound(new NBTContainer(Util.getColString(value)));
         return nbtItem.getItem();
     }
 
@@ -27,7 +27,7 @@ public class NBTApi {
      */
     public String getNBT(org.bukkit.inventory.ItemStack item) {
         NBTItem nbtItem = new NBTItem(item);
-        return nbtItem.getCompound().toString();
+        return nbtItem.getCompound().toString().replace("§", "&");
     }
 
 }

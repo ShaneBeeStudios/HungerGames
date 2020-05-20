@@ -38,7 +38,7 @@ public class NBTCmd extends BaseCmd {
 				Util.scm(player, type.toString() + " " + item.getAmount() + " data:" + nbtString.replace(" ", "~"));
 				Util.scm(player, "&6NBT String also sent to console for easy copy/pasting");
 				Util.scm(console, "&3NBT string from &b" + player.getName() + "&3:");
-				Util.scm(console, type.toString() + " " + item.getAmount() + " data:" + nbtString.replace(" ", "~"));
+                System.out.println(type.toString() + " " + item.getAmount() + " data:" + nbtString.replace(" ", "~"));
 			}
 
 		}
