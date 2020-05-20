@@ -160,14 +160,17 @@ public class Util {
 
 	@SuppressWarnings("deprecation")
     public static boolean isAttached(Block base, Block attached) {
+	    if (attached.getType() == Material.AIR) return false;
+
 		MaterialData bs = attached.getState().getData();
 		//BlockData bs = attached.getBlockData();
 
 		if (!(bs instanceof Attachable)) return false;
 
 		Attachable at = (Attachable) bs;
+		BlockFace face = at.getAttachedFace();
 
-		return attached.getRelative(at.getAttachedFace()).equals(base);
+		return attached.getRelative(face).equals(base);
 	}
 
     /** Check if running a specific version of Minecraft or higher.
