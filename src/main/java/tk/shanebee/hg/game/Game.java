@@ -7,6 +7,7 @@ import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.World;
 import org.bukkit.WorldBorder;
+import org.bukkit.attribute.Attribute;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
 import org.bukkit.block.BlockState;
@@ -850,7 +851,7 @@ public class Game {
         for (PotionEffect ef : player.getActivePotionEffects()) {
             player.removePotionEffect(ef.getType());
         }
-        player.setHealth(20);
+        player.setHealth(player.getAttribute(Attribute.GENERIC_MAX_HEALTH).getValue());
         player.setFoodLevel(20);
         BukkitRunnable runnable = new BukkitRunnable() {
             @Override

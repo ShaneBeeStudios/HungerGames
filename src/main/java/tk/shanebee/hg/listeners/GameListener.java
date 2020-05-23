@@ -4,6 +4,7 @@ import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
 import org.bukkit.Material;
+import org.bukkit.attribute.Attribute;
 import org.bukkit.block.Block;
 import org.bukkit.block.ShulkerBox;
 import org.bukkit.block.Sign;
@@ -210,7 +211,7 @@ public class GameListener implements Listener {
 
     private void processDeath(Player player, Game game, Entity damager, EntityDamageEvent.DamageCause cause) {
         dropInv(player);
-        player.setHealth(20);
+        player.setHealth(player.getAttribute(Attribute.GENERIC_MAX_HEALTH).getValue());
         BukkitRunnable run = new BukkitRunnable() {
             @Override
             public void run() {

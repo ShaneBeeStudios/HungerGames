@@ -3,6 +3,7 @@ package tk.shanebee.hg.tasks;
 import java.util.UUID;
 
 import org.bukkit.Bukkit;
+import org.bukkit.attribute.Attribute;
 import org.bukkit.entity.Player;
 
 import org.bukkit.scheduler.BukkitRunnable;
@@ -24,7 +25,7 @@ public class FreeRoamTask extends BukkitRunnable {
 			if (p != null) {
 				Util.scm(p, started);
 				Util.scm(p, roam_time.replace("<roam>", String.valueOf(roam_t)));
-				p.setHealth(20);
+				p.setHealth(p.getAttribute(Attribute.GENERIC_MAX_HEALTH).getValue());
 				p.setFoodLevel(20);
 				g.unFreeze(p);
 			}
