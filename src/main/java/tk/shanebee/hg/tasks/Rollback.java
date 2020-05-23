@@ -30,7 +30,10 @@ public class Rollback implements Runnable {
 	public void run() {
 		int i = 0;
 		while (i < blocks_per_second && session.hasNext()) {
-			session.next().update(true);
+		    BlockState state = session.next();
+		    if (state != null) {
+                state.update(true);
+            }
 			i++;
 		}
 		if (!session.hasNext()) {
