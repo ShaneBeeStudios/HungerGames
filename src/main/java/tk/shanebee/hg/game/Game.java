@@ -677,11 +677,14 @@ public class Game {
 		return false;
 	}
 
-	/** Send a message to all players in the game
+	/** Send a message to all players/spectators in the game
 	 * @param message Message to send
 	 */
 	public void msgAll(String message) {
-		for (UUID u : players) {
+	    List<UUID> allPlayers = new ArrayList<>();
+	    allPlayers.addAll(players);
+	    allPlayers.addAll(spectators);
+		for (UUID u : allPlayers) {
 			Player p = Bukkit.getPlayer(u);
 			if (p != null)
 				Util.scm(p, message);
