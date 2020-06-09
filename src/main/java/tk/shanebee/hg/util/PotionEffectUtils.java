@@ -46,8 +46,8 @@ public enum PotionEffectUtils {
     BAD_OMEN("BAD_OMEN"),
     HERO_OF_THE_VILLAGE("HERO_OF_THE_VILLAGE");
 
-    private String bukkit;
-    private static Map<String, String> BY_NAME = new HashMap<>();
+    private final String bukkit;
+    private static final Map<String, String> BY_NAME = new HashMap<>();
 
     PotionEffectUtils(String bukkit) {
         this.bukkit = bukkit;
@@ -59,20 +59,26 @@ public enum PotionEffectUtils {
         }
     }
 
-    /** Get a PotionEffectType based on a Minecraft namespace with Bukkit key fallback
+    /**
+     * Get a PotionEffectType based on a Minecraft namespace with Bukkit key fallback
+     *
      * @param key Key for PotionEffectType (can be Minecraft namespace or Bukkit key)
      * @return PotionEffectType (null if MC or Bukkit key does not exist)
      */
     public static PotionEffectType get(String key) {
-        if (BY_NAME.containsKey(key)) {
-            return getByKey(key);
-        } else if (BY_NAME.containsValue(key)) {
-            return getByBukkit(key);
+        String upper = key.toUpperCase();
+        if (BY_NAME.containsKey(upper)) {
+            return getByKey(upper);
+        } else if (BY_NAME.containsValue(upper)) {
+            return getByBukkit(upper);
         }
+        Util.warning("Invalid potion effect type: &7" + upper);
         return null;
     }
 
-    /** Get a PotionEffectType based on a Minecraft namespace
+    /**
+     * Get a PotionEffectType based on a Minecraft namespace
+     *
      * @param key Minecraft namespace
      * @return PotionEffectType
      */
@@ -80,7 +86,9 @@ public enum PotionEffectUtils {
         return getByBukkit(valueOf(key).bukkit);
     }
 
-    /** Get a PotionEffectType based on a Bukkit key
+    /**
+     * Get a PotionEffectType based on a Bukkit key
+     *
      * @param bukkit Key for PotionEffectType
      * @return PotionEffectType
      */
@@ -88,7 +96,9 @@ public enum PotionEffectUtils {
         return PotionEffectType.getByName(bukkit.toUpperCase());
     }
 
-    /** Get Bukkit key for PotionEffectType
+    /**
+     * Get Bukkit key for PotionEffectType
+     *
      * @return Bukkit key
      */
     public String getBukkitKey() {
