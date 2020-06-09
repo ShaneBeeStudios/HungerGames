@@ -93,9 +93,13 @@ public class RandomItems {
 			for (String p : amount) {
 				if (p.startsWith("x:")) {
 					int c = Integer.parseInt(p.replace("x:", ""));
+                    ItemStack stack = plugin.getItemStackManager().getItem(itemString.replace("x:", ""), true);
+                    if (stack == null) {
+                        continue;
+                    }
 					while (c != 0) {
 						c--;
-						map.put(map.size() + 1, plugin.getItemStackManager().getItem(itemString.replace("x:", ""), true));
+						map.put(map.size() + 1, stack.clone());
 					}
 				}
 			}
