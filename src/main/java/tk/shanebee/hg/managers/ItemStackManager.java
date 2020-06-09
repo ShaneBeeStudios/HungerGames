@@ -69,7 +69,7 @@ public class ItemStackManager {
 
                 for (String pot : config.getStringList(gameName + "kits." + path + ".potion-effects")) {
                     String[] poti = pot.split(":");
-                    PotionEffectType type = PotionEffectUtils.getByKey(poti[0]);
+                    PotionEffectType type = PotionEffectUtils.get(poti[0]);
                     if (poti[2].equalsIgnoreCase("forever")) {
                         assert type != null;
                         potions.add(type.createEffect(2147483647, Integer.parseInt(poti[1])));
