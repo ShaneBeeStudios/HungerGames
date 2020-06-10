@@ -1,0 +1,122 @@
+## HungerGames
+# Revamped by: ShaneBee
+
+# Issues: Please report issues on the BitBucket issue tracker @ https://bitbucket.org/ShaneBeeStudios/hungergames/issues?status=new&status=open
+# Updates: Can be found on SpigotMC @ --- coming soon
+
+# More Info: See the wiki for more info on this config @ https://bitbucket.org/ShaneBeeStudios/HungerGames/wiki/Config.yml
+
+settings:
+    spawn-mobs: true
+    spawn-mobs-interval: 35
+    free-roam: 25
+    bossbar-countdown: true
+    trackingstick-uses: 8
+    players-for-trackingstick: 5
+    max-chestcontent: 5
+    min-chestcontent: 1
+    max-bonus-chestcontent: 5
+    min-bonus-chestcontent: 1
+    teleport-at-end: false
+    teleport-at-end-time: 30
+    max-team-size: 3
+reward:
+    enabled: true
+    cash: 500
+    commands:
+        - none
+    messages:
+        - none
+random-chest:
+    enabled: false
+    interval: 30
+    max-chestcontent: 9
+rollback:
+    allow-block-break: false
+    blocks-per-second: 500
+    protect-during-cooldown: true
+    fix-leaves: true
+    prevent-trampling: true
+    editable-blocks:
+        - GRASS
+        - TALL_GRASS
+        - GRASS_BLOCK
+        - DIRT
+        - COBBLESTONE
+        - OAK_PLANKS
+        - SANDSTONE
+        - WHITE_WOOL
+        - STONE_BRICKS
+        - GLASS_PANE
+world-border:
+    enabled: false
+    initiate-on-start: true
+    countdown-start: 60
+    countdown-end: 30
+    final-border-size: 30
+    center-on-first-spawn: true
+spectate:
+    enabled: false
+    death-to-spectate: true
+    hide-spectators: true
+    fly: true
+    chat: false
+mcmmo:
+    use-skills: false
+    gain-experience: false
+kits:
+    bowman:
+        permission: none
+        helmet: LEATHER_HELMET color:red
+        chestplate: LEATHER_CHESTPLATE color:red
+        leggings: LEATHER_LEGGINGS color:red
+        boots: LEATHER_BOOTS color:red
+        items:
+            - BOW name:&2Lucky_Bow
+            - ARROW 64 name:&aLucky_Arrow
+            - POTION potion:HEAL:60:0 2 name:&bHealing
+        potion-effects:
+    survivor:
+        permission: none
+        helmet: LEATHER_HELMET
+        chestplate: LEATHER_CHESTPLATE color:green
+        leggings: LEATHER_LEGGINGS color:green
+        boots: LEATHER_BOOTS
+        items:
+            - STONE_SWORD 1 name:&7Survival_Sword
+            - BREAD 4 name:&6Peasant's_Bread
+            - POTION potion:HEAL:60:0 2 name:&bHealing
+        potion-effects:
+    pro:
+        permission: none
+        helmet: TURTLE_HELMET name:&2Turtle_Shell
+        chestplate:
+        leggings:
+        boots:
+        items:
+            - IRON_SWORD 1
+            - BREAD 4 name:&8Pro_Bread
+            - POTION potion:HEAL:60:1 2 name:&bSuper_Healing
+        potion-effects:
+    ninja:
+        permission: none
+        helmet: LEATHER_HELMET color:black
+        chestplate: LEATHER_CHESTPLATE color:black name:&7Ninja-Jacket lore:&6Ninja-Stealth-Suit:&4------------- enchant:fire_protection
+        leggings: LEATHER_LEGGINGS color:black
+        boots: LEATHER_BOOTS color:black enchant:feather_falling
+        items:
+            - POTION potion:HEAL:60:1 2 name:&bSuper_Healing
+        potion-effects:
+            - SPEED:1:forever
+    stupidclass:
+        permission: hg.vip
+        helmet:
+        chestplate:
+        leggings:
+        boots:
+        items:
+            - IRON_SWORD 1 enchant:sharpness:2 enchant:smite:2 name:&bOP_&6Sword?
+            - BREAD 4
+            - POTION potion:HEAL:60:2 2 name:&bSuper_Duper_Healing
+        potion-effects:
+            - FIRE_RESISTANCE:2:forever

@@ -52,6 +52,7 @@ public class Game {
     private final List<UUID> spectators = new ArrayList<>();
     private final List<Location> chests = new ArrayList<>();
     private final List<Location> playerChests = new ArrayList<>();
+    private Bound chestDropBound;
     private Map<Integer, ItemStack> items;
     private Map<Integer, ItemStack> bonusItems;
     private KitManager kit;
@@ -98,23 +99,25 @@ public class Game {
      * Create a new game
      * <p>Internally used when loading from config on server start</p>
      *
-     * @param name       Name of this game
-     * @param bound      Bounding region of this game
-     * @param spawns     List of spawns for this game
-     * @param lobbySign  Lobby sign block
-     * @param timer      Length of the game (in seconds)
-     * @param minPlayers Minimum players to be able to start the game
-     * @param maxPlayers Maximum players that can join this game
-     * @param roam       Roam time for this game
-     * @param isReady    If the game is ready to start
-     * @param cost       Cost of this game
-     */
-    public Game(String name, Bound bound, List<Location> spawns, Sign lobbySign, int timer, int minPlayers, int maxPlayers, int roam, boolean isReady, int cost) {
+     * @param name               Name of this game
+     * @param bound              Bounding region of this game
+     * @param spawns             List of spawns for this game
+     * @param lobbySign          Lobby sign block
+     * @param timer              Length of the game (in seconds)
+     * @param minPlayers         Minimum players to be able to start the game
+     * @param maxPlayers         Maximum players that can join this game
+     * @param roam               Roam time for this game
+     * @param isReady            If the game is ready to start
+     * @param cost               cost of this game
+     * @param chestDropBound     Bounding region of this game care package drops
+     */ 
+    public Game(String name, Bound bound, List<Location> spawns, Sign lobbySign, int timer, int minPlayers, int maxPlayers, int roam, boolean isReady, int cost, Bound chestDropBound) {
         this.plugin = HG.getPlugin();
         this.playerManager = plugin.getPlayerManager();
         this.lang = plugin.getLang();
         this.name = name;
         this.bound = bound;
+        this.chestDropBound = chestDropBound;
         this.spawns = spawns;
         this.s = lobbySign;
         this.time = timer;
@@ -150,7 +153,7 @@ public class Game {
      * @param roam       Roam time for this game
      * @param cost       Cost of this game
      */
-    public Game(String name, Bound bound, int timer, int minPlayers, int maxPlayers, int roam, int cost) {
+    public Game(String name, Bound bound, int timer, int minPlayers, int maxPlayers, int roam, int cost, Bound chestDropBound) {
         this.plugin = HG.getPlugin();
         this.playerManager = HG.getPlugin().getPlayerManager();
         this.lang = plugin.getLang();
@@ -161,6 +164,7 @@ public class Game {
         this.roamTime = roam;
         this.spawns = new ArrayList<>();
         this.bound = bound;
+        this.chestDropBound = chestDropBound;
         this.status = Status.NOTREADY;
         this.sb = new SBDisplay(this);
         this.kit = plugin.getKitManager();
@@ -174,7 +178,11 @@ public class Game {
         this.spectatorGUI = new SpectatorGUI(this);
     }
 
-    public SpectatorGUI getSpectatorGUI() {
+    /*public Game(String string, Bound b, int parseInt, int parseInt2, int parseInt3, int freeroam2, int cost2) {
+		// TODO Auto-generated constructor stub
+	}*/
+
+	public SpectatorGUI getSpectatorGUI() {
         return spectatorGUI;
     }
 
@@ -185,6 +193,14 @@ public class Game {
      */
     public Bound getRegion() {
         return bound;
+    }
+    
+    /**
+     * Get the region of care package drop
+     * @return Region of care package drop
+     */
+    public Bound getChestDropRegion() {
+        return chestDropBound;
     }
 
     /**
@@ -222,6 +238,48 @@ public class Game {
      */
     public void addToItems(ItemStack item) {
         this.items.put(this.items.size() + 1, item);
+    }
+    
+    /**
+     * Set corner of care package bound
+     * 
+     * @param corner 1st or 2nd corner
+     * @param x      x coordinate of the corner
+     * @param y      y coordinate of the corner
+     * @param z      z coordinate of the corner
+     */
+    public void setCarePackageCorner(int corner, int x, int y, int z) {
+    	Bound chestDropBound = this.chestDropBound;
+    	Bound newChestDropBound;
+    	int x2;
+    	int y2;
+    	int z2;
+    	
+    	if (corner == 1) {
+    		x2 = this.chestDropBound.getCornerCoordinate("x2");
+    		y2 = this.chestDropBound.getCornerCoordinate("y2");
+    		z2 = this.chestDropBound.getCornerCoordinate("z2");
+    		
+    		newChestDropBound = new Bound(chestDropBound.getWorld().getName(), x, y, z, x2, y2, z2);
+    	} else {
+    		x2 = this.chestDropBound.getCornerCoordinate("x");
+    		y2 = this.chestDropBound.getCornerCoordinate("y");
+    		z2 = this.chestDropBound.getCornerCoordinate("z");
+    		
+    		newChestDropBound = new Bound(chestDropBound.getWorld().getName(), x2, y2, z2, x, y, z);
+    	}
+    	
+    	this.setCarePackageBound(newChestDropBound);
+    	
+    }
+    
+    /**
+     * Set bound of care package area
+     * 
+     * @param bound bound of care package area to set
+     */
+    public void setCarePackageBound(Bound bound) {
+    	this.chestDropBound = bound;
     }
 
     /**

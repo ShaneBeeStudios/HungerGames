@@ -164,6 +164,8 @@ public class Language {
     public String lobby_sign_3_1;
     public String spectator_compass;
     public String spectator_compass_head_lore;
+    public String cmd_packagecorner_specify;
+    public String cmd_packagecorner_success;
 
 
     public Language(HG plugin) {
@@ -281,6 +283,9 @@ public class Language {
         death_drowned = lang.getString("death-drowned");
         death_trident = lang.getString("death-trident");
         death_other_entity = lang.getString("death-other-entity");
+        
+        cmd_packagecorner_specify = lang.getString("cmd-packagecorner-specify");
+        cmd_packagecorner_success = lang.getString("cmd-packagecorner-success");
 
         cmd_spawn_same = lang.getString("cmd-spawn-same");
         cmd_spawn_set = lang.getString("cmd-spawn-set");
