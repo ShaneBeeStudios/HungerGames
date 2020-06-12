@@ -197,6 +197,10 @@ cmd-team-not-on-team: '&b<player> &cis not on your team!'
 cmd-team-tp: '&6Teleporting to &b<player>'
 cmd-team-self: '&cYou can not invite yourself to your own team.'
 
+## Package Corner
+cmd-packagecorner-specify: '&cYou must specify a number of the corner (1/2)'
+cmd-packagecorner-success: '&6Corner nr. <corner> of care package drop for arena <arena> has been set'
+
 ## Toggle
 cmd-toggle-unlocked: '&b<arena>&6 is now &aUNLOCKED!'
 cmd-toggle-locked: '&3<arena>&b is now &4LOCKED&b!'

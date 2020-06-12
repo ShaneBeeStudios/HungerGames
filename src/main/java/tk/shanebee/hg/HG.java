@@ -166,6 +166,7 @@ public class HG extends JavaPlugin {
 		cmds.put("bordersize", new BorderSizeCmd());
 		cmds.put("bordercenter", new BorderCenterCmd());
 		cmds.put("bordertimer", new BorderTimerCmd());
+		cmds.put("packagecorner", new SetCarePackageCornerCmd());
 		if (Config.spectateEnabled) {
 			cmds.put("spectate", new SpectateCmd());
 		}

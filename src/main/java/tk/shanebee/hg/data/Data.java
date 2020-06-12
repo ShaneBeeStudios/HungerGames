@@ -92,7 +92,8 @@ public class Data {
 			boolean hasData = arenadat.getConfigurationSection("arenas") != null;
 			
 			if (hasData) {
-				for (String s : arenadat.getConfigurationSection("arenas").getKeys(false)) {
+				// For each arena in config
+				for (String arena : arenadat.getConfigurationSection("arenas").getKeys(false)) {
 					boolean isReady = true;
 					List<Location> spawns = new ArrayList<>();
 					Sign lobbysign = null;
@@ -100,93 +101,121 @@ public class Data {
 					int cost = 0;
 					int minplayers = 0;
 					int maxplayers = 0;
-					Bound b = null;
+					Bound bound = null;
+					Bound carePackageBound = null;
 					List<String> commands;
 
 					try {
-						timer = arenadat.getInt("arenas." + s + ".info." + "timer");
-						minplayers = arenadat.getInt("arenas." + s + ".info." + "min-players");
-						maxplayers = arenadat.getInt("arenas." + s + ".info." + "max-players");
+						timer = arenadat.getInt("arenas." + arena + ".info." + "timer");
+						minplayers = arenadat.getInt("arenas." + arena + ".info." + "min-players");
+						maxplayers = arenadat.getInt("arenas." + arena + ".info." + "max-players");
 					} catch (Exception e) {
-						Util.warning("Unable to load information for arena " + s + "!");
+						Util.warning("Unable to load information for arena " + arena + "!");
 						isReady = false;
 					}
 					try {
-						cost = arenadat.getInt("arenas." + s + ".info." + "cost");
+						cost = arenadat.getInt("arenas." + arena + ".info." + "cost");
 					} catch (Exception ignore) {
 					}
 
 					try {
-						lobbysign = (Sign) getSLoc(arenadat.getString("arenas." + s + "." + "lobbysign")).getBlock().getState();
+						lobbysign = (Sign) getSLoc(arenadat.getString("arenas." + arena + "." + "lobbysign")).getBlock().getState();
 					} catch (Exception e) { 
-						Util.warning("Unable to load lobby sign for arena " + s + "!");
+						Util.warning("Unable to load lobby sign for arena " + arena + "!");
 						isReady = false;
 					}
 
 					try {
-						for (String l : arenadat.getStringList("arenas." + s + "." + "spawns")) {
+						for (String l : arenadat.getStringList("arenas." + arena + "." + "spawns")) {
 							spawns.add(getLocFromString(l));
 						}
 					} catch (Exception e) { 
-						Util.warning("Unable to load random spawns for arena " + s + "!"); 
+						Util.warning("Unable to load random spawns for arena " + arena + "!"); 
 						isReady = false;
 					}
 
 					try {
-						b = new Bound(arenadat.getString("arenas." + s + ".bound." + "world"), BC(s, "x"), BC(s, "y"), BC(s, "z"), BC(s, "x2"), BC(s, "y2"), BC(s, "z2"));
+						bound = new Bound(arenadat.getString("arenas." + arena + ".bound." + "world"), BC(arena, "x"), BC(arena, "y"), BC(arena, "z"), BC(arena, "x2"), BC(arena, "y2"), BC(arena, "z2"));
 					} catch (Exception e) { 
-						Util.warning("Unable to load region bounds for arena " + s + "!"); 
+						Util.warning("Unable to load region bounds for arena " + arena + "!"); 
+						isReady = false;
+					}
+					
+					try {
+						carePackageBound = new Bound(
+								arenadat.getString("arenas." + arena + ".bound." + "world"),
+								CBC(arena, "x"), 
+								CBC(arena, "y"), 
+								CBC(arena, "z"), 
+								CBC(arena, "x2"), 
+								CBC(arena, "y2"), 
+								CBC(arena, "z2"));
+						
+					} catch (Exception e) { 
+						Util.warning("Unable to load care package region bounds for arena " + arena + "!"); 
 						isReady = false;
 					}
 
-					Game game = new Game(s, b, spawns, lobbysign, timer, minplayers, maxplayers, freeroam, isReady, cost);
+					Game game = new Game(
+							arena,
+							bound, 
+							spawns, 
+							lobbysign, 
+							timer, 
+							minplayers, 
+							maxplayers, 
+							freeroam, 
+							isReady, 
+							cost, 
+							carePackageBound);
+					
 					plugin.getGames().add(game);
 
-					KitManager kit = plugin.getItemStackManager().setGameKits(s, arenadat);
+					KitManager kit = plugin.getItemStackManager().setGameKits(arena, arenadat);
 					if (kit != null)
 						game.setKitManager(kit);
 
-					if (!arenadat.getStringList("arenas." + s + ".items").isEmpty()) {
+					if (!arenadat.getStringList("arenas." + arena + ".items").isEmpty()) {
 						HashMap<Integer, ItemStack> items = new HashMap<>();
-						for (String itemString : arenadat.getStringList("arenas." + s + ".items")) {
+						for (String itemString : arenadat.getStringList("arenas." + arena + ".items")) {
 							HG.getPlugin().getRandomItems().loadItems(itemString, items);
 						}
 						game.setItems(items);
-						Util.log(items.size() + " Random items have been loaded for arena: " + s);
+						Util.log(items.size() + " Random items have been loaded for arena: " + arena);
 					}
-					if (!arenadat.getStringList("arenas." + s + ".bonus").isEmpty()) {
+					if (!arenadat.getStringList("arenas." + arena + ".bonus").isEmpty()) {
 						HashMap<Integer, ItemStack> bonusItems = new HashMap<>();
-						for (String itemString : arenadat.getStringList("arenas." + s + ".bonus")) {
+						for (String itemString : arenadat.getStringList("arenas." + arena + ".bonus")) {
 							HG.getPlugin().getRandomItems().loadItems(itemString, bonusItems);
 						}
 						game.setBonusItems(bonusItems);
-						Util.log(bonusItems.size() + " Random bonus items have been loaded for arena: " + s);
+						Util.log(bonusItems.size() + " Random bonus items have been loaded for arena: " + arena);
 					}
 
-					if (arenadat.isSet("arenas." + s + ".border.center")) {
-						Location borderCenter = getSLoc(arenadat.getString("arenas." + s + ".border.center"));
+					if (arenadat.isSet("arenas." + arena + ".border.center")) {
+						Location borderCenter = getSLoc(arenadat.getString("arenas." + arena + ".border.center"));
 						game.setBorderCenter(borderCenter);
 					}
-					if (arenadat.isSet("arenas." + s + ".border.size")) {
-						int borderSize = arenadat.getInt("arenas." + s + ".border.size");
+					if (arenadat.isSet("arenas." + arena + ".border.size")) {
+						int borderSize = arenadat.getInt("arenas." + arena + ".border.size");
 						game.setBorderSize(borderSize);
 					}
-					if (arenadat.isSet("arenas." + s + ".border.countdown-start") &&
-							arenadat.isSet("arenas." + s + ".border.countdown-end")) {
-						int borderCountdownStart = arenadat.getInt("arenas." + s + ".border.countdown-start");
-						int borderCountdownEnd = arenadat.getInt("arenas." + s + ".border.countdown-end");
+					if (arenadat.isSet("arenas." + arena + ".border.countdown-start") &&
+							arenadat.isSet("arenas." + arena + ".border.countdown-end")) {
+						int borderCountdownStart = arenadat.getInt("arenas." + arena + ".border.countdown-start");
+						int borderCountdownEnd = arenadat.getInt("arenas." + arena + ".border.countdown-end");
 						game.setBorderTimer(borderCountdownStart, borderCountdownEnd);
 					}
-					if (arenadat.isList("arenas." + s + ".commands")) {
-						commands = arenadat.getStringList("arenas." + s + ".commands");
+					if (arenadat.isList("arenas." + arena + ".commands")) {
+						commands = arenadat.getStringList("arenas." + arena + ".commands");
 					} else {
-						arenadat.set("arenas." + s + ".commands", Collections.singletonList("none"));
+						arenadat.set("arenas." + arena + ".commands", Collections.singletonList("none"));
 						saveCustomConfig();
 						commands = Collections.singletonList("none");
 					}
 					game.setCommands(commands);
-					if (arenadat.isSet("arenas." + s + ".chest-refill")) {
-						int chestRefill = arenadat.getInt("arenas." + s + ".chest-refill");
+					if (arenadat.isSet("arenas." + arena + ".chest-refill")) {
+						int chestRefill = arenadat.getInt("arenas." + arena + ".chest-refill");
 						game.setChestRefillTime(chestRefill);
 					}
 
@@ -197,8 +226,24 @@ public class Data {
 		}
 	}
 	
+	/**
+	 * Bound config
+	 * @param s
+	 * @param st
+	 * @return
+	 */
 	public int BC(String s, String st) {
 		return arenadat.getInt("arenas." + s + ".bound." + st);
+	}
+	
+	/**
+	 * Chest bound config
+	 * @param arena
+	 * @param coord
+	 * @return
+	 */
+	public int CBC(String arena, String coord) {
+		return arenadat.getInt("arenas." + arena + ".care-package-bound." + coord);
 	}
 
 	public Location getLocFromString(String s) {

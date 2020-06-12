@@ -61,6 +61,25 @@ public class Bound {
 		Random r = new Random();
 		return new Integer[] {r.nextInt(x2 - x + 1) + x, y2, r.nextInt(z2 - z + 1) + z};
 	}
+	
+	public Integer getCornerCoordinate (String coord) {
+		switch (coord) {
+			case "x":
+				return this.x;
+			case "y":
+				return this.y;
+			case "z":
+				return this.z;
+			case "x2":
+				return this.x2;
+			case "y2":
+				return this.y2;
+			case "z2":
+				return this.z2;
+			default:
+				return this.x;
+		}
+	}
 
 	/** Check if a location is within the region of this bound
 	 * @param loc Location to check

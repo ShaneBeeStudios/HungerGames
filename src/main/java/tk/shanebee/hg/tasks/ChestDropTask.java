@@ -19,28 +19,28 @@ import org.bukkit.entity.Player;
 
 public class ChestDropTask implements Runnable {
 
-    private Game g;
+    private Game game;
     private int timerID;
     private List<ChestDrop> chests = new ArrayList<>();
 
-    public ChestDropTask(Game g) {
-        this.g = g;
+    public ChestDropTask(Game game) {
+        this.game = game;
         timerID = Bukkit.getServer().getScheduler().scheduleSyncRepeatingTask(HG.getPlugin(), this, Config.randomChestInterval, Config.randomChestInterval);
     }
 
     public void run() {
-        Integer[] i = g.getRegion().getRandomLocs();
+        Integer[] i = game.getChestDropRegion().getRandomLocs();
 
         int x = i[0];
         int y = i[1];
         int z = i[2];
-        World w = g.getRegion().getWorld();
+        World w = game.getChestDropRegion().getWorld();
 
         while (w.getBlockAt(x, y, z).getType() == Material.AIR) {
             y--;
 
             if (y <= 0) {
-                i = g.getRegion().getRandomLocs();
+                i = game.getChestDropRegion().getRandomLocs();
 
                 x = i[0];
                 y = i[1];
@@ -53,10 +53,10 @@ public class ChestDropTask implements Runnable {
         Location l = new Location(w, x, y, z);
 
         FallingBlock fb = w.spawnFallingBlock(l, Bukkit.getServer().createBlockData(Material.STRIPPED_SPRUCE_WOOD));
-
+ 
         chests.add(new ChestDrop(fb));
 
-        for (UUID u : g.getPlayers()) {
+        for (UUID u : game.getPlayers()) {
             Player p = Bukkit.getPlayer(u);
             if (p != null) {
                 Util.scm(p, HG.getPlugin().getLang().chest_drop_1);
