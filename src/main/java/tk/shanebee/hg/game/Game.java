@@ -752,7 +752,6 @@ public class Game {
             if (p != null && p.getLocation().getBlock().equals(location.getBlock()))
                 return true;
         }
-        location.subtract(1, 1, 1);
         return false;
     }
 
