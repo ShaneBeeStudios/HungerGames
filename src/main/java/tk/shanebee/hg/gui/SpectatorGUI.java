@@ -38,6 +38,7 @@ public class SpectatorGUI implements InventoryHolder, Listener {
     }
 
     private void initializeItems() {
+        inv.clear();
         int i = 0;
         for (UUID uuid : game.getPlayers()) {
             Player player = Bukkit.getPlayer(uuid);
