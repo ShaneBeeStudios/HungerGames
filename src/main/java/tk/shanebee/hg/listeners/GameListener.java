@@ -245,10 +245,15 @@ public class GameListener implements Listener {
 		if (playerManager.hasPlayerData(p)) {
 			Status st = playerManager.getPlayerData(p).getGame().getStatus();
 			if (st == Status.WAITING || st == Status.COUNTDOWN) {
-				event.setFoodLevel(1);
+				p.setFoodLevel(1);
 				event.setCancelled(true);
 			}
 		}
+		// Prevent spectators from losing food level
+		if (playerManager.hasSpectatorData(p)) {
+            p.setFoodLevel(20);
+		    event.setCancelled(true);
+        }
 	}
 
 	private void useTrackStick(Player p) {
@@ -647,6 +652,10 @@ public class GameListener implements Listener {
                 event.setCancelled(true);
             }
 		}
+		// Prevent spectators from dropping items
+		if (playerManager.hasSpectatorData(p)) {
+		    event.setCancelled(true);
+        }
 	}
 
 	@SuppressWarnings("deprecation")
