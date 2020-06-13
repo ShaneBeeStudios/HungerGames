@@ -1183,7 +1183,7 @@ public class Game {
 
     public void setBorder(int time) {
         Location center;
-        if (Config.centerSpawn) {
+        if (Config.centerSpawn && borderCenter == null) {
             center = this.spawns.get(0);
         } else if (borderCenter != null) {
             center = borderCenter;
