@@ -4,6 +4,7 @@ import io.lumine.xikage.mythicmobs.MythicMobs;
 import io.lumine.xikage.mythicmobs.mobs.MobManager;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
+import org.bukkit.event.HandlerList;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.permissions.Permission;
 import org.bukkit.permissions.PermissionDefault;
@@ -26,16 +27,17 @@ import java.util.*;
 public class HG extends JavaPlugin {
 
 	//Maps
-	private Map<String, BaseCmd> cmds = new HashMap<>();
-	private Map<UUID, PlayerSession> playerSession = new HashMap<>();
-	private Map<Integer, ItemStack> items = new HashMap<>();
-	private Map<Integer, ItemStack> bonusItems = new HashMap<>();
+	private Map<String, BaseCmd> cmds;
+	private Map<UUID, PlayerSession> playerSession;
+	private Map<Integer, ItemStack> items;
+	private Map<Integer, ItemStack> bonusItems;
 
 	//Lists
-	private List<Game> games = new ArrayList<>();
+	private List<Game> games;
 
 	//Instances
 	private static HG plugin;
+	private Config config;
 	private Manager manager;
 	private PlayerManager playerManager;
 	private Data arenaconfig;
@@ -56,14 +58,26 @@ public class HG extends JavaPlugin {
 
 	@Override
 	public void onEnable() {
-		if (!Util.isRunningMinecraft(1, 13)) {
-			Util.warning("HungerGames does not support your version!");
-			Util.warning("Only versions 1.13+ are supported");
-			Bukkit.getPluginManager().disablePlugin(this);
-			return;
-		}
-		plugin = this;
-		new Config(this);
+        if (!Util.isRunningMinecraft(1, 13)) {
+            Util.warning("HungerGames does not support your version!");
+            Util.warning("Only versions 1.13+ are supported");
+            Bukkit.getPluginManager().disablePlugin(this);
+            return;
+        }
+        loadPlugin(true);
+    }
+    public void loadPlugin(boolean load) {
+	    plugin = this;
+
+        if (load) {
+            cmds = new HashMap<>();
+        }
+	    games = new ArrayList<>();
+        playerSession = new HashMap<>();
+        items = new HashMap<>();
+        bonusItems = new HashMap<>();
+
+		config = new Config(this);
 		metrics = new Metrics(this);
 		if (metrics.isEnabled()) {
 			Util.log("&7Metrics have been &aenabled");
@@ -110,12 +124,14 @@ public class HG extends JavaPlugin {
 			Util.log("&7mcMMO not found, mcMMO event hooks have been &cdisabled");
 		}
 
-		//noinspection ConstantConditions
-		getCommand("hg").setExecutor(new CommandListener(this));
+		if (load) {
+            //noinspection ConstantConditions
+            getCommand("hg").setExecutor(new CommandListener(this));
+            loadCmds();
+        }
 		getServer().getPluginManager().registerEvents(new WandListener(this), this);
 		getServer().getPluginManager().registerEvents(new CancelListener(this), this);
 		getServer().getPluginManager().registerEvents(new GameListener(this), this);
-		loadCmds();
 
 		if (this.getDescription().getVersion().contains("Beta")) {
 			Util.log("&eYOU ARE RUNNING A BETA VERSION, please use with caution");
@@ -125,23 +141,46 @@ public class HG extends JavaPlugin {
 		Util.log("HungerGames has been &benabled!");
 	}
 
-	@Override
-	public void onDisable() {
-		stopAll();
-		plugin = null;
-		manager = null;
-		playerManager = null;
-		arenaconfig = null;
-		killManager = null;
-        randomItems = null;
+	public void reloadPlugin() {
+	    unloadPlugin(true);
+    }
+
+    private void unloadPlugin(boolean reload) {
+        stopAll();
+        games = null;
+        playerSession = null;
+        items = null;
+        bonusItems = null;
+        plugin = null;
+        config = null;
+        metrics = null;
+        nbtApi = null;
+        mmMobManager = null;
         lang = null;
-		kitManager = null;
-		itemStackManager = null;
-		leaderboard = null;
-		metrics = null;
-		mmMobManager = null;
-		Util.log("HungerGames has been disabled!");
-	}
+        kitManager = null;
+        itemStackManager = null;
+        mobConfig = null;
+        randomItems = null;
+        playerManager = null;
+        arenaconfig = null;
+        killManager = null;
+        manager = null;
+        leaderboard = null;
+        HandlerList.unregisterAll(this);
+        if (reload) {
+            loadPlugin(false);
+        } else {
+            cmds = null;
+        }
+    }
+
+    @Override
+    public void onDisable() {
+        // I know this seems odd, but this method just
+        // nulls everything to prevent memory leaks
+        unloadPlugin(false);
+        Util.log("HungerGames has been disabled!");
+    }
 
 	private void loadCmds() {
 		cmds.put("team", new TeamCmd());
@@ -316,6 +355,15 @@ public class HG extends JavaPlugin {
 	public Language getLang() {
 		return this.lang;
 	}
+
+    /**
+     * Get an instance of {@link Config}
+     *
+     * @return Config file
+     */
+    public Config getHGConfig() {
+        return config;
+    }
 
 	/** Get an instance of the mob confile
 	 * @return Mob config
