@@ -10,7 +10,8 @@ import org.bukkit.entity.Player;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.InventoryHolder;
 import org.bukkit.inventory.ItemStack;
-import tk.shanebee.hg.*;
+import tk.shanebee.hg.HG;
+import tk.shanebee.hg.Status;
 import tk.shanebee.hg.data.Config;
 import tk.shanebee.hg.game.Bound;
 import tk.shanebee.hg.game.Game;
@@ -26,8 +27,8 @@ import java.util.Random;
  */
 public class Manager {
 
-	private HG plugin;
-	private Random rg = new Random();
+	private final HG plugin;
+	private final Random rg = new Random();
 	
 	public Manager(HG plugin) {
 		this.plugin = plugin;
@@ -239,5 +240,22 @@ public class Manager {
 		}
 		return null;
 	}
+
+    /** Get the number of games running
+     * @return Number of games running
+     */
+    public int gamesRunning() {
+        int i = 0;
+        for (Game game : plugin.getGames()) {
+            switch (game.getStatus()) {
+                case RUNNING:
+                case COUNTDOWN:
+                case BEGINNING:
+                case ROLLBACK:
+                    i++;
+            }
+        }
+        return i;
+    }
 
 }
