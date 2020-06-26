@@ -672,9 +672,11 @@ public class GameListener implements Listener {
                     }
                     if (event instanceof CreatureSpawnEvent) {
                         SpawnReason reason = ((CreatureSpawnEvent) event).getSpawnReason();
-                        if (reason != SpawnReason.CUSTOM && reason != SpawnReason.SPAWNER_EGG) {
-                            event.setCancelled(true);
-                            return;
+                        switch (reason) {
+                            case DEFAULT:
+                            case NATURAL:
+                                event.setCancelled(true);
+                                return;
                         }
                     }
                 }
