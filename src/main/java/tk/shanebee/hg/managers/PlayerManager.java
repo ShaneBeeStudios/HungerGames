@@ -169,6 +169,22 @@ public class PlayerManager {
         this.spectatorMap.remove(uuid);
     }
 
+    public boolean transferPlayerDataToSpectator(Player player) {
+        return transferPlayerDataToSpectator(player.getUniqueId());
+    }
+
+    public boolean transferPlayerDataToSpectator(UUID uuid) {
+        if (this.playerMap.containsKey(uuid)) {
+            PlayerData clone = this.playerMap.get(uuid).clone();
+            if (clone != null) {
+                this.spectatorMap.put(uuid, clone);
+                this.playerMap.remove(uuid);
+                return true;
+            }
+        }
+        return false;
+    }
+
     /** Get the current game of a player
      * @param player Player to get game
      * @return Game of player, null if player is not in a game

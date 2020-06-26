@@ -913,9 +913,9 @@ public class Game {
                     if (mode == GameMode.SURVIVAL || mode == GameMode.ADVENTURE)
                         spectator.setAllowFlight(false);
                 }
+                exit(spectator);
                 playerManager.getSpectatorData(uuid).restore(spectator);
                 playerManager.removeSpectatorData(uuid);
-                exit(spectator);
                 sb.restoreSB(spectator);
             }
         }
@@ -1216,9 +1216,7 @@ public class Game {
     public void spectate(Player spectator) {
         UUID uuid = spectator.getUniqueId();
         if (plugin.getPlayerManager().hasPlayerData(uuid)) {
-            PlayerData spectatorData = playerManager.getPlayerData(uuid);
-            playerManager.addSpectatorData(spectatorData);
-            playerManager.removePlayerData(uuid);
+            playerManager.transferPlayerDataToSpectator(uuid);
         } else {
             playerManager.addSpectatorData(new PlayerData(spectator, this));
         }

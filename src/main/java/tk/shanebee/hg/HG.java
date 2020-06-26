@@ -242,10 +242,14 @@ public class HG extends JavaPlugin {
 		for (UUID u : ps) {
 			Player p = Bukkit.getPlayer(u);
 			if (p != null) {
-				if (playerManager.hasPlayerData(u))
-				    playerManager.getPlayerData(u).getGame().leave(p, false);
-				if (playerManager.hasSpectatorData(u))
-				    playerManager.getSpectatorData(u).getGame().leaveSpectate(p);
+				if (playerManager.hasPlayerData(u)) {
+                    playerManager.getPlayerData(u).getGame().leave(p, false);
+                    playerManager.removePlayerData(u);
+                }
+				if (playerManager.hasSpectatorData(u)) {
+                    playerManager.getSpectatorData(u).getGame().leaveSpectate(p);
+                    playerManager.removePlayerData(u);
+                }
 			}
 		}
 		games.clear();

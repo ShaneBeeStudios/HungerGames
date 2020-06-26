@@ -17,7 +17,7 @@ import java.util.UUID;
  * Player data object for holding pre-game player info
  */
 @SuppressWarnings("WeakerAccess")
-public class PlayerData {
+public class PlayerData implements Cloneable {
 
 	//Pregame data
 	private final ItemStack[] inv;
@@ -158,6 +158,16 @@ public class PlayerData {
                 ", pending=" + pendingTeam +
                 ", game=" + game +
                 '}';
+    }
+
+    @Override
+    public PlayerData clone() {
+        try {
+            return (PlayerData) super.clone();
+        } catch (CloneNotSupportedException e) {
+            e.printStackTrace();
+            return null;
+        }
     }
 
 }
