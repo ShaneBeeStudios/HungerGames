@@ -1,7 +1,7 @@
 package tk.shanebee.hg.managers;
 
 import me.clip.placeholderapi.expansion.PlaceholderExpansion;
-import org.bukkit.entity.Player;
+import org.bukkit.OfflinePlayer;
 import tk.shanebee.hg.HG;
 import tk.shanebee.hg.data.Language;
 import tk.shanebee.hg.data.Leaderboard;
@@ -47,7 +47,7 @@ public class Placeholders extends PlaceholderExpansion {
     }
 
     @Override
-    public String onPlaceholderRequest(Player player, String identifier) {
+    public String onRequest(OfflinePlayer player, String identifier) {
         if (identifier.startsWith("lb_player_")) {
             int leader = Integer.parseInt(identifier.replace("lb_player_", ""));
             if (leaderboard.getStatsPlayers(Leaderboard.Stats.WINS).size() >= leader)
@@ -72,7 +72,7 @@ public class Placeholders extends PlaceholderExpansion {
                 return lang.lb_blank_space + lang.lb_combined_separator + lang.lb_blank_space;
         }
         if (identifier.equalsIgnoreCase("lb_player")) {
-            return String.valueOf(leaderboard.getStat(player, Leaderboard.Stats.WINS));
+            return String.valueOf(leaderboard.getStat(player.getUniqueId(), Leaderboard.Stats.WINS));
         }
         String[] id = identifier.split("_");
         switch (id[0]) {
@@ -105,10 +105,10 @@ public class Placeholders extends PlaceholderExpansion {
         return null;
     }
 
-    private String getStatsPlayer(String identifier, Player player) {
+    private String getStatsPlayer(String identifier, OfflinePlayer player) {
         String[] ind = identifier.split("_");
         Leaderboard.Stats stat = Leaderboard.Stats.valueOf(ind[1].toUpperCase());
-        return String.valueOf(leaderboard.getStat(player, stat));
+        return String.valueOf(leaderboard.getStat(player.getUniqueId(), stat));
     }
 
     private String getStatPlayers(String identifier) {
