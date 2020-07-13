@@ -662,6 +662,7 @@ public class GameListener implements Listener {
     @EventHandler
 	private void onSpawn(EntitySpawnEvent event) {
         Entity entity = event.getEntity();
+        if (entity instanceof ItemFrame || entity instanceof ArmorStand) return;
         if (!(entity instanceof Player)) {
             if (gameManager.isInRegion(event.getLocation())) {
                 Game g = gameManager.getGame(event.getLocation());
@@ -681,7 +682,6 @@ public class GameListener implements Listener {
                     }
                 }
                 entity.setPersistent(false);
-                if (entity instanceof ItemFrame || entity instanceof ArmorStand) return;
                 g.getBound().addEntity(entity);
             }
         }
