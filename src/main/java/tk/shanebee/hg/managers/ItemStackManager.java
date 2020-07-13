@@ -58,6 +58,7 @@ public class ItemStackManager {
     @SuppressWarnings("ConstantConditions")
     private void kitCreator(Configuration config, KitManager kit, @Nullable String gameName) {
         if (gameName == null) gameName = "";
+        if (config.getConfigurationSection(gameName + "kits") == null) return;
         for (String path : config.getConfigurationSection(gameName + "kits").getKeys(false)) {
             try {
                 ArrayList<ItemStack> stack = new ArrayList<>();
