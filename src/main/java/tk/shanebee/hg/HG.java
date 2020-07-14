@@ -242,6 +242,7 @@ public class HG extends JavaPlugin {
 		for (UUID u : ps) {
 			Player p = Bukkit.getPlayer(u);
 			if (p != null) {
+			    p.closeInventory();
 				if (playerManager.hasPlayerData(u)) {
                     playerManager.getPlayerData(u).getGame().leave(p, false);
                     playerManager.removePlayerData(u);

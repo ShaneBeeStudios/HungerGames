@@ -783,6 +783,7 @@ public class Game {
         for (PotionEffect ef : player.getActivePotionEffects()) {
             player.removePotionEffect(ef.getType());
         }
+        player.closeInventory();
         player.setHealth(20);
         player.setFoodLevel(20);
         try {
