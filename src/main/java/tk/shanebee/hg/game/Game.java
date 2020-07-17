@@ -9,6 +9,7 @@ import org.bukkit.block.data.Directional;
 import org.bukkit.boss.BarColor;
 import org.bukkit.boss.BarStyle;
 import org.bukkit.boss.BossBar;
+import org.bukkit.entity.ItemFrame;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.InventoryHolder;
 import org.bukkit.inventory.ItemStack;
@@ -18,6 +19,7 @@ import org.bukkit.potion.PotionEffectType;
 import org.jetbrains.annotations.Nullable;
 import tk.shanebee.hg.*;
 import tk.shanebee.hg.data.Config;
+import tk.shanebee.hg.data.ItemFrameData;
 import tk.shanebee.hg.data.Language;
 import tk.shanebee.hg.data.Leaderboard;
 import tk.shanebee.hg.data.PlayerData;
@@ -58,6 +60,7 @@ public class Game {
     private Map<Player, Integer> kills = new HashMap<>();
 
     private final List<BlockState> blocks = new ArrayList<>();
+    private final List<ItemFrameData> itemFrameData = new ArrayList<>();
     private List<String> commands = null;
     private final MobManager mobManager;
     private final PlayerManager playerManager;
@@ -435,6 +438,14 @@ public class Game {
         blocks.add(blockState);
     }
 
+    public void recordItemFrame(ItemFrame itemFrame) {
+        itemFrameData.add(new ItemFrameData(itemFrame));
+    }
+
+    public List<ItemFrameData> getItemFrameData() {
+        return itemFrameData;
+    }
+
     /**
      * Get the status of the game
      *
@@ -451,6 +462,10 @@ public class Game {
 
     public void resetBlocks() {
         this.blocks.clear();
+    }
+
+    public void resetItemFrames() {
+        this.itemFrameData.clear();
     }
 
     /**
@@ -966,7 +981,7 @@ public class Game {
         // prevent not death winners from gaining a prize
         if (death)
             Util.broadcast(HG.getPlugin().getLang().player_won.replace("<arena>", name).replace("<winner>", winner));
-        if (!blocks.isEmpty()) {
+        if (!blocks.isEmpty() || !itemFrameData.isEmpty()) {
             new Rollback(this);
         } else {
             status = Status.READY;

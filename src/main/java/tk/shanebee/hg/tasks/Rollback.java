@@ -6,6 +6,7 @@ import org.bukkit.Bukkit;
 import org.bukkit.block.BlockState;
 import tk.shanebee.hg.HG;
 import tk.shanebee.hg.data.Config;
+import tk.shanebee.hg.data.ItemFrameData;
 import tk.shanebee.hg.game.Game;
 import tk.shanebee.hg.Status;
 
@@ -15,6 +16,7 @@ import tk.shanebee.hg.Status;
 public class Rollback implements Runnable {
 
 	private final Iterator<BlockState> session;
+	private final Iterator<ItemFrameData> itemFrameDataIterator;
 	private Game game;
 	private int blocks_per_second;
 	private int timerID;
@@ -24,11 +26,13 @@ public class Rollback implements Runnable {
 		this.blocks_per_second = Config.blocks_per_second / 10;
 		game.setStatus(Status.ROLLBACK);
 		this.session = game.getBlocks().iterator();
+		this.itemFrameDataIterator = game.getItemFrameData().iterator();
 		timerID = Bukkit.getServer().getScheduler().scheduleSyncRepeatingTask(HG.getPlugin(), this, 1, 2);
 	}
 
 	public void run() {
 		int i = 0;
+		// Rollback blocks
 		while (i < blocks_per_second && session.hasNext()) {
 		    BlockState state = session.next();
 		    if (state != null) {
@@ -36,11 +40,20 @@ public class Rollback implements Runnable {
             }
 			i++;
 		}
-		if (!session.hasNext()) {
-			Bukkit.getServer().getScheduler().cancelTask(timerID);
-			game.resetBlocks();
-			game.setStatus(Status.READY);
-		}
+		if (session.hasNext()) return;
+
+		// Rollback item frames
+		while (itemFrameDataIterator.hasNext()) {
+		    ItemFrameData data = itemFrameDataIterator.next();
+		    if (data != null) {
+		        data.resetItem();
+            }
+        }
+
+        Bukkit.getServer().getScheduler().cancelTask(timerID);
+        game.resetBlocks();
+        game.resetItemFrames();
+        game.setStatus(Status.READY);
 	}
 
 }

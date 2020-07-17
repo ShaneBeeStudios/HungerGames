@@ -33,6 +33,8 @@ random-chest:
     max-chestcontent: 9
 rollback:
     allow-block-break: false
+    # Allow players to take items out of item frames (will be rolled back)
+    allow-itemframe-take: false
     blocks-per-second: 500
     protect-during-cooldown: true
     fix-leaves: true

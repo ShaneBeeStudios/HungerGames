@@ -10,7 +10,7 @@ import org.bukkit.inventory.ItemStack;
 
 import java.util.UUID;
 
-@SuppressWarnings("unused") // will remove later
+
 public class ItemFrameData {
 
     private final Location location;
@@ -18,23 +18,11 @@ public class ItemFrameData {
     private final Rotation rotation;
     private final UUID uuid;
 
-    public ItemFrameData(Location location, ItemStack itemStack, Rotation rotation, UUID uuid) {
-        this.location = location;
-        this.itemStack = itemStack;
-        this.rotation = rotation;
-        this.uuid = uuid;
-    }
-
-    public void respawn() {
-        World world = location.getWorld();
-        if (world == null) return;
-
-        world.spawn(location, ItemFrame.class, itemFrame -> {
-            itemFrame.setRotation(this.rotation);
-            if (this.itemStack != null) {
-                itemFrame.setItem(this.itemStack.clone());
-            }
-        });
+    public ItemFrameData(ItemFrame itemFrame) {
+        this.location = itemFrame.getLocation();
+        this.itemStack = itemFrame.getItem().clone();
+        this.rotation = itemFrame.getRotation();
+        this.uuid = itemFrame.getUniqueId();
     }
 
     public void resetItem() {
@@ -45,6 +33,7 @@ public class ItemFrameData {
         if (entity instanceof ItemFrame && !entity.isDead()) {
             ItemFrame itemFrame = ((ItemFrame) entity);
             itemFrame.setItem(itemStack);
+            itemFrame.setRotation(rotation);
         }
     }
 

@@ -45,6 +45,7 @@ public class Config {
     public static boolean fixleaves;
     public static boolean preventtrample;
     public static List<String> blocks;
+    public static boolean itemframe_take;
 
     //Random chest
     public static boolean randomChest;
@@ -118,6 +119,8 @@ public class Config {
         fixleaves = config.getBoolean("rollback.fix-leaves");
         preventtrample = config.getBoolean("rollback.prevent-trampling");
         blocks = config.getStringList("rollback.editable-blocks");
+        itemframe_take = config.getBoolean("rollback.allow-itemframe-take");
+
         randomChest = config.getBoolean("random-chest.enabled");
         randomChestInterval = config.getInt("random-chest.interval") * 20;
         randomChestMaxContent = config.getInt("random-chest.max-chestcontent");

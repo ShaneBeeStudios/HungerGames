@@ -153,23 +153,27 @@ public class GameListener implements Listener {
 
 		// Stop players from removing items from item frames
 		if (defender instanceof Hanging) {
-            handleItemFrame((Hanging) event.getEntity(), event);
+            handleItemFrame((Hanging) event.getEntity(), event, !Config.itemframe_take);
         }
 	}
 
 	@EventHandler // Prevent players breaking item frames
     private void onBreakItemFrame(HangingBreakByEntityEvent event) {
-	    handleItemFrame(event.getEntity(),event);
+	    handleItemFrame(event.getEntity(),event, true);
     }
 
-	private void handleItemFrame(Hanging itemFrame, Event event) {
+	private void handleItemFrame(Hanging itemFrame, Event event, boolean cancel) {
 	    if (gameManager.isInRegion(itemFrame.getLocation())) {
 	        Game game = gameManager.getGame(itemFrame.getLocation());
 	        switch (game.getStatus()) {
                 case RUNNING:
                 case BEGINNING:
                 case COUNTDOWN:
-                    ((Cancellable) event).setCancelled(true);
+                    if (cancel) {
+                        ((Cancellable) event).setCancelled(true);
+                    } else if (itemFrame instanceof ItemFrame){
+                        game.recordItemFrame(((ItemFrame) itemFrame));
+                    }
             }
         }
     }
