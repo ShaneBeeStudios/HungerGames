@@ -35,7 +35,7 @@ public class ItemStackManager {
     }
 
     public void setKits() {
-        kitCreator(plugin.getConfig(), plugin.getKitManager(), null);
+        kitCreator(plugin.getHGConfig().getConfig(), plugin.getKitManager(), null);
         Util.log("Loaded kits");
     }
 
