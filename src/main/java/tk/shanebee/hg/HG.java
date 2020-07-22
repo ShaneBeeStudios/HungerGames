@@ -124,9 +124,9 @@ public class HG extends JavaPlugin {
 			Util.log("&7mcMMO not found, mcMMO event hooks have been &cdisabled");
 		}
 
+        //noinspection ConstantConditions
+        getCommand("hg").setExecutor(new CommandListener(this));
 		if (load) {
-            //noinspection ConstantConditions
-            getCommand("hg").setExecutor(new CommandListener(this));
             loadCmds();
         }
 		getServer().getPluginManager().registerEvents(new WandListener(this), this);
@@ -135,7 +135,7 @@ public class HG extends JavaPlugin {
 
 		if (this.getDescription().getVersion().contains("Beta")) {
 			Util.log("&eYOU ARE RUNNING A BETA VERSION, please use with caution");
-			Util.log("&eReport any issues to: &bhttps://bitbucket.org/ShaneBeeStudios/hungergames/issues");
+			Util.log("&eReport any issues to: &bhttps://github.com/ShaneBeeStudios/HungerGames/issues");
 		}
 
 		Util.log("HungerGames has been &benabled!");
