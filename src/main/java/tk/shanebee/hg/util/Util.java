@@ -25,48 +25,46 @@ public class Util {
 
 	public static final BlockFace[] faces = new BlockFace[]{BlockFace.EAST, BlockFace.WEST, BlockFace.NORTH, BlockFace.SOUTH};
 
-	/** Log a message to console prefixed with the plugin's name
+	/**
+	 * Log a message to console prefixed with the plugin's name
+	 *
 	 * @param s Message to log to console
 	 */
 	public static void log(String s) {
-		Bukkit.getConsoleSender().sendMessage(ChatColor.translateAlternateColorCodes('&', "&7[&3&lHungerGames&7] " + s));
+		scm(Bukkit.getConsoleSender(), "&7[&3&lHungerGames&7] " + s);
 	}
 
-	/** Send a warning to console prefixed with the plugin's name
+	/**
+	 * Send a warning to console prefixed with the plugin's name
+	 *
 	 * @param s Message to log to console
 	 */
 	public static void warning(String s) {
-		String warnPrefix = "&7[&e&lHungerGames&7] ";
-		Bukkit.getConsoleSender().sendMessage(ChatColor.translateAlternateColorCodes('&',
-				warnPrefix + "&eWARNING: " + s));
+		scm(Bukkit.getConsoleSender(), "&7[&e&lHungerGames&7] &eWARNING: " + s);
 	}
 
-	/** Send a colored message to a player or console
+	/**
+	 * Send a colored message to a player or console
+	 *
 	 * @param sender Receiver of message
-	 * @param s Message to send
-	 * @deprecated Use {@link #scm(CommandSender, String)} instead
-	 */
-	@Deprecated
-	public static void msg(CommandSender sender, String s) {
-		sender.sendMessage(ChatColor.translateAlternateColorCodes('&', s));
-	}
-
-	/** Send a colored message to a player or console
-	 * @param sender Receiver of message
-	 * @param s Message to send
+	 * @param s      Message to send
 	 */
 	public static void scm(CommandSender sender, String s) {
-		sender.sendMessage(ChatColor.translateAlternateColorCodes('&', s));
+		sender.sendMessage(getColString(s) + ChatColor.RESET);
 	}
 
-	/** Broadcast a message prefixed with plugin name
+	/**
+	 * Broadcast a message prefixed with plugin name
+	 *
 	 * @param s Message to send
 	 */
 	public static void broadcast(String s) {
-		Bukkit.getServer().broadcastMessage(ChatColor.translateAlternateColorCodes('&', HG.getPlugin().getLang().prefix + " " + s));
+		Bukkit.broadcastMessage(getColString(HG.getPlugin().getLang().prefix + " " + s));
 	}
 
-	/** Shortcut for adding color to a string
+	/**
+	 * Shortcut for adding color to a string
+	 *
 	 * @param string String including color codes
 	 * @return Formatted string
 	 */
@@ -74,10 +72,12 @@ public class Util {
 		return ChatColor.translateAlternateColorCodes('&', string);
 	}
 
-    /** Check if a string is an Integer
-     * @param string String to get
-     * @return True if string is an Integer
-     */
+	/**
+	 * Check if a string is an Integer
+	 *
+	 * @param string String to get
+	 * @return True if string is an Integer
+	 */
 	public static boolean isInt(String string) {
 		try {
 			Integer.parseInt(string);
@@ -100,12 +100,13 @@ public class Util {
 		}
 	}
 
-	/** Clear the inventory of a player including equipment
+	/**
+	 * Clear the inventory of a player including equipment
+	 *
 	 * @param player Player to clear inventory
 	 */
 	public static void clearInv(Player player) {
 		player.getInventory().clear();
-		player.getEquipment().clear();
 		player.getInventory().setHelmet(null);
 		player.getInventory().setChestplate(null);
 		player.getInventory().setLeggings(null);
@@ -113,7 +114,9 @@ public class Util {
 		player.updateInventory();
 	}
 
-	/** Convert a list of UUIDs to a string of player names
+	/**
+	 * Convert a list of UUIDs to a string of player names
+	 *
 	 * @param uuid UUID list to convert
 	 * @return String of player names
 	 */
@@ -159,8 +162,8 @@ public class Util {
 	}
 
 	@SuppressWarnings("deprecation")
-    public static boolean isAttached(Block base, Block attached) {
-	    if (attached.getType() == Material.AIR) return false;
+	public static boolean isAttached(Block base, Block attached) {
+		if (attached.getType() == Material.AIR) return false;
 
 		MaterialData bs = attached.getState().getData();
 		//BlockData bs = attached.getBlockData();
@@ -173,20 +176,42 @@ public class Util {
 		return attached.getRelative(face).equals(base);
 	}
 
-    /** Check if running a specific version of Minecraft or higher.
-     * @param major Major version of Minecraft to check (Will most likely always be 1)
-     * @param minor Minor version of Minecraft to check
-     * @return True if the server is running this version or higher
-     */
-	@SuppressWarnings("SameParameterValue")
+	/**
+	 * Check if server is running a minimum Minecraft version
+	 *
+	 * @param major Major version to check (Most likely just going to be 1)
+	 * @param minor Minor version to check
+	 * @return True if running this version or higher
+	 */
 	public static boolean isRunningMinecraft(int major, int minor) {
-		int maj = Integer.parseInt(Bukkit.getServer().getClass().getPackage().getName().split("\\.")[3].split("_")[0].replace("v", ""));
-		int min = Integer.parseInt(Bukkit.getServer().getClass().getPackage().getName().split("\\.")[3].split("_")[1]);
-		return maj >= major && min >= minor;
+		return isRunningMinecraft(major, minor, 0);
 	}
 
-	/** Check if a material is a wall sign
+	/**
+	 * Check if server is running a minimum Minecraft version
+	 *
+	 * @param major    Major version to check (Most likely just going to be 1)
+	 * @param minor    Minor version to check
+	 * @param revision Revision to check
+	 * @return True if running this version or higher
+	 */
+	public static boolean isRunningMinecraft(int major, int minor, int revision) {
+		String[] version = Bukkit.getServer().getBukkitVersion().split("-")[0].split("\\.");
+		int maj = Integer.parseInt(version[0]);
+		int min = Integer.parseInt(version[1]);
+		int rev;
+		try {
+			rev = Integer.parseInt(version[2]);
+		} catch (Exception ignore) {
+			rev = 0;
+		}
+		return maj > major || min > minor || (min == minor && rev >= revision);
+	}
+
+	/**
+	 * Check if a material is a wall sign
 	 * <p>Due to sign material changes in 1.14 this method checks for both 1.13 and 1.14+</p>
+	 *
 	 * @param item Material to check
 	 * @return True if material is a wall sign
 	 */
@@ -207,41 +232,36 @@ public class Util {
 		return false;
 	}
 
-    /** Check if a material is a wall sign
-     * <p>Due to sign material changes in 1.14 this method checks for both 1.13 and 1.14+</p>
-     * @param block Block to check
-     * @return True if block is a wall sign
-     */
-	public static boolean isWallSign(Block block) {
-	    return isWallSign(block.getType());
-    }
+	/**
+	 * Check if a method exists
+	 *
+	 * @param c              Class that contains this method
+	 * @param methodName     Method to check
+	 * @param parameterTypes Parameter types if the method contains any
+	 * @return True if this method exists
+	 */
+	public static boolean methodExists(final Class<?> c, final String methodName, final Class<?>... parameterTypes) {
+		try {
+			c.getDeclaredMethod(methodName, parameterTypes);
+			return true;
+		} catch (final NoSuchMethodException | SecurityException e) {
+			return false;
+		}
+	}
 
-    /** Check if a method exists
-     * @param c Class that contains this method
-     * @param methodName Method to check
-     * @param parameterTypes Parameter types if the method contains any
-     * @return True if this method exists
-     */
-    public static boolean methodExists(final Class<?> c, final String methodName, final Class<?>... parameterTypes) {
-        try {
-            c.getDeclaredMethod(methodName, parameterTypes);
-            return true;
-        } catch (final NoSuchMethodException | SecurityException e) {
-            return false;
-        }
-    }
-
-    /** Check if a class exists
-     * @param className Class to check for existence
-     * @return True if this class exists
-     */
-    public static boolean classExists(final String className) {
-        try {
-            Class.forName(className);
-            return true;
-        } catch (final ClassNotFoundException e) {
-            return false;
-        }
-    }
+	/**
+	 * Check if a class exists
+	 *
+	 * @param className Class to check for existence
+	 * @return True if this class exists
+	 */
+	public static boolean classExists(final String className) {
+		try {
+			Class.forName(className);
+			return true;
+		} catch (final ClassNotFoundException e) {
+			return false;
+		}
+	}
 
 }
