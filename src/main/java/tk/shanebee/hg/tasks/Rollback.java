@@ -17,8 +17,8 @@ public class Rollback implements Runnable {
 
 	private final Iterator<BlockState> session;
 	private final Iterator<ItemFrameData> itemFrameDataIterator;
-	private Game game;
-	private int blocks_per_second;
+	private final Game game;
+	private final int blocks_per_second;
 	private int timerID;
 
 	public Rollback(Game game) {
@@ -27,7 +27,7 @@ public class Rollback implements Runnable {
 		game.setStatus(Status.ROLLBACK);
 		this.session = game.getBlocks().iterator();
 		this.itemFrameDataIterator = game.getItemFrameData().iterator();
-		timerID = Bukkit.getServer().getScheduler().scheduleSyncRepeatingTask(HG.getPlugin(), this, 1, 2);
+		timerID = Bukkit.getServer().getScheduler().scheduleSyncDelayedTask(HG.getPlugin(), this, 2);
 	}
 
 	public void run() {
@@ -40,7 +40,10 @@ public class Rollback implements Runnable {
             }
 			i++;
 		}
-		if (session.hasNext()) return;
+		if (session.hasNext()) {
+			timerID = Bukkit.getServer().getScheduler().scheduleSyncDelayedTask(HG.getPlugin(), this, 2);
+			return;
+		}
 
 		// Rollback item frames
 		while (itemFrameDataIterator.hasNext()) {
