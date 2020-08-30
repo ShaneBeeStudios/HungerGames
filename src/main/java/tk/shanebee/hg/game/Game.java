@@ -730,7 +730,9 @@ public class Game {
         if (Config.randomChest) chestDrop = new ChestDropTask(this);
         timer = new TimerTask(this, time);
         updateLobbyBlock();
-        createBossbar(time);
+        if (Config.bossbar) {
+            createBossbar(time);
+        }
         if (Config.borderEnabled && Config.borderOnStart) {
             setBorder(time);
         }
@@ -938,7 +940,9 @@ public class Game {
         spectators.clear();
 
         if (this.getStatus() == Status.RUNNING) {
-            bar.removeAll();
+            if (bar != null) {
+                bar.removeAll();
+            }
             bar = null;
         }
 
@@ -1013,7 +1017,7 @@ public class Game {
         UUID uuid = player.getUniqueId();
         unFreeze(player);
         if (death) {
-            if (this.getStatus() == Status.RUNNING)
+            if (this.getStatus() == Status.RUNNING && bar != null)
                 bar.removePlayer(player);
             heal(player);
             playerManager.getPlayerData(uuid).restore(player);
@@ -1102,7 +1106,7 @@ public class Game {
 
     private void exit(Player player) {
         player.setInvulnerable(false);
-        if (this.getStatus() == Status.RUNNING)
+        if (this.getStatus() == Status.RUNNING && bar != null)
             bar.removePlayer(player);
         if (this.exit != null && this.exit.getWorld() != null) {
             player.teleport(this.exit);
