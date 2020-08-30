@@ -1241,8 +1241,8 @@ public class Game {
             playerManager.addSpectatorData(new PlayerData(spectator, this));
         }
         this.spectators.add(uuid);
-        spectator.setGameMode(GameMode.SURVIVAL);
         spectator.teleport(this.getSpawns().get(0));
+        spectator.setGameMode(GameMode.SURVIVAL);
         spectator.setCollidable(false);
         if (Config.spectateFly)
             spectator.setAllowFlight(true);
