@@ -3,7 +3,7 @@ package tk.shanebee.hg.commands;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import tk.shanebee.hg.HG;
-import tk.shanebee.hg.data.Data;
+import tk.shanebee.hg.data.ArenaConfig;
 import tk.shanebee.hg.data.Language;
 import tk.shanebee.hg.managers.Manager;
 import tk.shanebee.hg.managers.PlayerManager;
@@ -15,7 +15,7 @@ public abstract class BaseCmd {
     Language lang;
     PlayerManager playerManager;
     Manager gameManager;
-    Data arenaConfig;
+    ArenaConfig arenaConfig;
 
     public BaseCmd() {
         this.plugin = HG.getPlugin();

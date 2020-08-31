@@ -40,7 +40,7 @@ public class HG extends JavaPlugin {
 	private Config config;
 	private Manager manager;
 	private PlayerManager playerManager;
-	private Data arenaconfig;
+	private ArenaConfig arenaconfig;
 	private KillManager killManager;
 	private RandomItems randomItems;
 	private Language lang;
@@ -100,7 +100,7 @@ public class HG extends JavaPlugin {
 		mobConfig = new MobConfig(this);
 		randomItems = new RandomItems(this);
         playerManager = new PlayerManager();
-		arenaconfig = new Data(this);
+		arenaconfig = new ArenaConfig(this);
 		killManager = new KillManager();
 		manager = new Manager(this);
 		leaderboard = new Leaderboard(this);
@@ -308,7 +308,7 @@ public class HG extends JavaPlugin {
     /** Get an instance of the ArenaConfig
 	 * @return ArenaConfig
 	 */
-	public Data getArenaConfig() {
+	public ArenaConfig getArenaConfig() {
 		return this.arenaconfig;
 	}
 

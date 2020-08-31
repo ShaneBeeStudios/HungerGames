@@ -25,13 +25,13 @@ import java.util.List;
 /**
  * General data handler for the plugin
  */
-public class Data {
+public class ArenaConfig {
 
 	private FileConfiguration arenadat = null;
 	private File customConfigFile = null;
 	private final HG plugin;
 
-	public Data(HG plugin) {
+	public ArenaConfig(HG plugin) {
 		this.plugin = plugin;
 		reloadCustomConfig();
 		load();
