@@ -15,6 +15,7 @@ import tk.shanebee.hg.Status;
 import tk.shanebee.hg.data.Config;
 import tk.shanebee.hg.game.Bound;
 import tk.shanebee.hg.game.Game;
+import tk.shanebee.hg.game.GameItemData;
 import tk.shanebee.hg.util.Util;
 
 import java.util.ArrayList;
@@ -187,20 +188,21 @@ public class Manager {
      * @return Random ItemStack
      */
 	public ItemStack randomItem(Game game, boolean bonus) {
+		GameItemData gameItemData = game.getGameItemData();
 		if (bonus) {
-		    int r = game.getBonusItems().size();
+		    int r = gameItemData.getBonusItems().size();
 		    if (r == 0) {
 		        return new ItemStack(Material.AIR);
             }
 			int i = rg.nextInt(r) + 1;
-			return game.getBonusItems().get(i);
+			return gameItemData.getBonusItems().get(i);
 		} else {
-		    int r = game.getItems().size();
+		    int r = gameItemData.getItems().size();
             if (r == 0) {
                 return new ItemStack(Material.AIR);
             }
 			int i = rg.nextInt(r) + 1;
-			return game.getItems().get(i);
+			return gameItemData.getItems().get(i);
 		}
 	}
 

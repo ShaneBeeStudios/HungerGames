@@ -1,9 +1,12 @@
 package tk.shanebee.hg.game;
 
-import org.bukkit.*;
+import org.bukkit.Bukkit;
+import org.bukkit.GameMode;
+import org.bukkit.Location;
+import org.bukkit.World;
+import org.bukkit.WorldBorder;
 import org.bukkit.block.Sign;
 import org.bukkit.entity.Player;
-import org.bukkit.inventory.ItemStack;
 import org.jetbrains.annotations.Nullable;
 import tk.shanebee.hg.HG;
 import tk.shanebee.hg.Status;
@@ -16,12 +19,20 @@ import tk.shanebee.hg.managers.KitManager;
 import tk.shanebee.hg.managers.MobManager;
 import tk.shanebee.hg.managers.PlayerManager;
 import tk.shanebee.hg.managers.SBDisplay;
+import tk.shanebee.hg.tasks.ChestDropTask;
+import tk.shanebee.hg.tasks.FreeRoamTask;
+import tk.shanebee.hg.tasks.Rollback;
+import tk.shanebee.hg.tasks.SpawnerTask;
+import tk.shanebee.hg.tasks.StartingTask;
 import tk.shanebee.hg.tasks.TimerTask;
-import tk.shanebee.hg.tasks.*;
 import tk.shanebee.hg.util.Util;
 import tk.shanebee.hg.util.Vault;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collection;
+import java.util.List;
+import java.util.UUID;
 
 /**
  * General game object
@@ -35,8 +46,6 @@ public class Game {
     final List<Location> spawns;
     private final Bound bound;
 
-    private Map<Integer, ItemStack> items;
-    private Map<Integer, ItemStack> bonusItems;
     KitManager kit;
 
     private List<String> commands = null;
@@ -64,6 +73,7 @@ public class Game {
     private final GameBar bar;
     private final GamePlayerData gamePlayerData;
     private final GameBlockData gameBlockData;
+    private final GameItemData gameItemData;
 
     // Border stuff here
     private Location borderCenter = null;
@@ -103,8 +113,6 @@ public class Game {
         this.gameBlockData.setLobbyBlock(lobbySign);
 
         this.kit = plugin.getKitManager();
-        this.items = plugin.getItems();
-        this.bonusItems = plugin.getBonusItems();
     }
 
     /**
@@ -133,8 +141,6 @@ public class Game {
         this.status = Status.NOTREADY;
         this.sb = new SBDisplay(this);
         this.kit = plugin.getKitManager();
-        this.items = plugin.getItems();
-        this.bonusItems = plugin.getBonusItems();
         this.borderSize = Config.borderFinalSize;
         this.borderCountdownStart = Config.borderCountdownStart;
         this.borderCountdownEnd = Config.borderCountdownEnd;
@@ -143,6 +149,7 @@ public class Game {
         this.bar = new GameBar(this);
         this.gamePlayerData = new GamePlayerData(this);
         this.gameBlockData = new GameBlockData(this);
+        this.gameItemData = new GameItemData(this);
     }
 
     /**
@@ -173,89 +180,21 @@ public class Game {
     }
 
     /**
+     * Get an instance of the GameItemData
+     *
+     * @return Instance of GameItemData
+     */
+    public GameItemData getGameItemData() {
+        return gameItemData;
+    }
+
+    /**
      * Get the bounding region of this game
      *
      * @return Region of this game
      */
     public Bound getRegion() {
         return bound;
-    }
-
-    /**
-     * Set the items for this game
-     *
-     * @param items Map of items to set
-     */
-    public void setItems(Map<Integer, ItemStack> items) {
-        this.items = items;
-    }
-
-    /**
-     * Get the items map for this game
-     *
-     * @return Map of items
-     */
-    public Map<Integer, ItemStack> getItems() {
-        return this.items;
-    }
-
-    /**
-     * Add an item to the items map for this game
-     *
-     * @param item ItemStack to add
-     */
-    public void addToItems(ItemStack item) {
-        this.items.put(this.items.size() + 1, item);
-    }
-
-    /**
-     * Clear the items for this game
-     */
-    public void clearItems() {
-        this.items.clear();
-    }
-
-    /**
-     * Reset the items for this game to the plugin's default items list
-     */
-    public void resetItemsDefault() {
-        this.items = HG.getPlugin().getItems();
-    }
-
-    /**
-     * Set the bonus items for this game to a new map
-     *
-     * @param items Map of bonus items
-     */
-    public void setBonusItems(Map<Integer, ItemStack> items) {
-        this.bonusItems = items;
-    }
-
-    public Map<Integer, ItemStack> getBonusItems() {
-        return this.bonusItems;
-    }
-
-    /**
-     * Add an item to this game's bonus items
-     *
-     * @param item ItemStack to add to bonus items
-     */
-    public void addToBonusItems(ItemStack item) {
-        this.bonusItems.put(this.bonusItems.size() + 1, item);
-    }
-
-    /**
-     * Clear this game's bonus items
-     */
-    public void clearBonusItems() {
-        this.bonusItems.clear();
-    }
-
-    /**
-     * Reset the bonus items for this game to the plugin's default bonus items list
-     */
-    public void resetBonusItemsDefault() {
-        this.bonusItems = HG.getPlugin().getBonusItems();
     }
 
     /**

@@ -151,7 +151,7 @@ public class Data {
 						for (String itemString : arenadat.getStringList("arenas." + s + ".items")) {
 							HG.getPlugin().getRandomItems().loadItems(itemString, items);
 						}
-						game.setItems(items);
+						game.getGameItemData().setItems(items);
 						Util.log(items.size() + " Random items have been loaded for arena: " + s);
 					}
 					if (!arenadat.getStringList("arenas." + s + ".bonus").isEmpty()) {
@@ -159,7 +159,7 @@ public class Data {
 						for (String itemString : arenadat.getStringList("arenas." + s + ".bonus")) {
 							HG.getPlugin().getRandomItems().loadItems(itemString, bonusItems);
 						}
-						game.setBonusItems(bonusItems);
+						game.getGameItemData().setBonusItems(bonusItems);
 						Util.log(bonusItems.size() + " Random bonus items have been loaded for arena: " + s);
 					}
 
