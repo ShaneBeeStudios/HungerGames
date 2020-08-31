@@ -204,35 +204,40 @@ public class MobEntry {
 	public void spawn(Location location) {
 		assert location.getWorld() != null;
 		if (!isMythic()) {
-			Entity entity = location.getWorld().spawnEntity(location, this.type);
-			if (name != null) {
-				entity.setCustomName(Util.getColString(name));
-				entity.setCustomNameVisible(true);
-			}
-			if (entity instanceof LivingEntity) {
-				LivingEntity mob = ((LivingEntity) entity);
-				EntityEquipment equip = mob.getEquipment();
-				if (equip == null) return;
-				if (hand != null)
-					equip.setItemInMainHand(hand);
-				if (offHand != null)
-					equip.setItemInOffHand(offHand);
-				if (helmet != null)
-					equip.setHelmet(helmet);
-				if (chest != null)
-					equip.setChestplate(chest);
-				if (leggings != null)
-					equip.setLeggings(leggings);
-				if (boots != null)
-					equip.setBoots(boots);
-				if (potionEffect != null) {
-					for (PotionEffect effect : this.potionEffect) {
-						mob.addPotionEffect(effect);
-					}
-				}
-				if (deathMessage != null)
-					mob.setMetadata("death-message", new FixedMetadataValue(HG.getPlugin(), deathMessage));
-			}
+            Class<? extends Entity> entityClass = this.type.getEntityClass();
+            if (entityClass == null) {
+                return;
+            }
+            location.getWorld().spawn(location, entityClass, entity -> {
+                if (name != null) {
+                    entity.setCustomName(Util.getColString(name));
+                    entity.setCustomNameVisible(true);
+                }
+                if (entity instanceof LivingEntity) {
+                    LivingEntity mob = ((LivingEntity) entity);
+                    EntityEquipment equip = mob.getEquipment();
+                    if (equip == null) return;
+                    if (hand != null)
+                        equip.setItemInMainHand(hand);
+                    if (offHand != null)
+                        equip.setItemInOffHand(offHand);
+                    if (helmet != null)
+                        equip.setHelmet(helmet);
+                    if (chest != null)
+                        equip.setChestplate(chest);
+                    if (leggings != null)
+                        equip.setLeggings(leggings);
+                    if (boots != null)
+                        equip.setBoots(boots);
+                    if (potionEffect != null) {
+                        for (PotionEffect effect : this.potionEffect) {
+                            mob.addPotionEffect(effect);
+                        }
+                    }
+                    if (deathMessage != null)
+                        mob.setMetadata("death-message", new FixedMetadataValue(HG.getPlugin(), deathMessage));
+                }
+            });
 		} else {
 			MythicMob mob = HG.getPlugin().getMmMobManager().getMythicMob(mythicMob);
 			ActiveMob activeMob = mob.spawn(BukkitAdapter.adapt(location), mythicLevel);
