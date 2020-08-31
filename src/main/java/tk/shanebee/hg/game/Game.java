@@ -6,9 +6,6 @@ import org.bukkit.block.BlockFace;
 import org.bukkit.block.BlockState;
 import org.bukkit.block.Sign;
 import org.bukkit.block.data.Directional;
-import org.bukkit.boss.BarColor;
-import org.bukkit.boss.BarStyle;
-import org.bukkit.boss.BossBar;
 import org.bukkit.entity.ItemFrame;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.InventoryHolder;
@@ -57,7 +54,7 @@ public class Game {
     private Map<Integer, ItemStack> items;
     private Map<Integer, ItemStack> bonusItems;
     private KitManager kit;
-    private Map<Player, Integer> kills = new HashMap<>();
+    private final Map<Player, Integer> kills = new HashMap<>();
 
     private final List<BlockState> blocks = new ArrayList<>();
     private final List<ItemFrameData> itemFrameData = new ArrayList<>();
@@ -68,7 +65,7 @@ public class Game {
     private Status status;
     private final int minPlayers;
     private final int maxPlayers;
-    private final int time;
+    final int time;
     private int cost;
     private Sign s;
     private Sign s1;
@@ -85,7 +82,7 @@ public class Game {
     private ChestDropTask chestDrop;
 
     // Objects
-    private BossBar bar;
+    private final GameBar bar;
     private final SpectatorGUI spectatorGUI;
 
     // Border stuff here
@@ -139,6 +136,7 @@ public class Game {
         this.bonusItems = plugin.getBonusItems();
         this.mobManager = new MobManager(this);
         this.spectatorGUI = new SpectatorGUI(this);
+        this.bar = new GameBar(this);
     }
 
     /**
@@ -175,10 +173,15 @@ public class Game {
         this.mobManager = new MobManager(this);
         this.cost = cost;
         this.spectatorGUI = new SpectatorGUI(this);
+        this.bar = new GameBar(this);
     }
 
     public SpectatorGUI getSpectatorGUI() {
         return spectatorGUI;
+    }
+
+    public GameBar getGameBar() {
+        return bar;
     }
 
     /**
@@ -731,7 +734,7 @@ public class Game {
         timer = new TimerTask(this, time);
         updateLobbyBlock();
         if (Config.bossbar) {
-            createBossbar(time);
+            bar.createBossbar(time);
         }
         if (Config.borderEnabled && Config.borderOnStart) {
             setBorder(time);
@@ -940,10 +943,7 @@ public class Game {
         spectators.clear();
 
         if (this.getStatus() == Status.RUNNING) {
-            if (bar != null) {
-                bar.removeAll();
-            }
-            bar = null;
+            bar.clearBar();
         }
 
         if (!win.isEmpty() && death) {
@@ -1130,36 +1130,7 @@ public class Game {
         return (int) (Math.random() * ((max - (double) 0) + 1)) + (double) 0;
     }
 
-    private void createBossbar(int time) {
-        int min = (time / 60);
-        int sec = (time % 60);
-        String title = HG.getPlugin().getLang().bossbar.replace("<min>", String.valueOf(min)).replace("<sec>", String.valueOf(sec));
-        bar = Bukkit.createBossBar(ChatColor.translateAlternateColorCodes('&', title), BarColor.GREEN, BarStyle.SEGMENTED_20);
-        for (UUID uuid : players) {
-            Player player = Bukkit.getPlayer(uuid);
-            assert player != null;
-            bar.addPlayer(player);
-        }
-        for (UUID uuid : spectators) {
-            Player player = Bukkit.getPlayer(uuid);
-            assert player != null;
-            bar.addPlayer(player);
-        }
-    }
 
-    public void bossbarUpdate(int remaining) {
-        double remain = ((double) remaining) / ((double) this.time);
-        int min = (remaining / 60);
-        int sec = (remaining % 60);
-        String title = HG.getPlugin().getLang().bossbar.replace("<min>", String.valueOf(min)).replace("<sec>", String.valueOf(sec));
-        bar.setTitle(ChatColor.translateAlternateColorCodes('&', title));
-        bar.setProgress(remain);
-        if (remain <= 0.5 && remain >= 0.2)
-            bar.setColor(BarColor.YELLOW);
-        if (remain < 0.2)
-            bar.setColor(BarColor.RED);
-
-    }
 
     private double getBorderSize(Location center) {
         double x1 = Math.abs(bound.getGreaterCorner().getX() - center.getX());
@@ -1259,8 +1230,7 @@ public class Game {
                 player.hidePlayer(plugin, spectator);
             }
         }
-        if (bar != null)
-            bar.addPlayer(spectator);
+        bar.addPlayer(spectator);
         spectator.getInventory().setItem(0, plugin.getItemStackManager().getSpectatorCompass());
     }
 

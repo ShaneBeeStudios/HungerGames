@@ -33,7 +33,7 @@ public class TimerTask implements Runnable {
 		if (game == null || game.getStatus() != Status.RUNNING) stop(); //A quick null check!
 		
 
-		if (Config.bossbar) game.bossbarUpdate(remainingtime);
+		if (Config.bossbar) game.getGameBar().bossbarUpdate(remainingtime);
 
 		if (Config.borderEnabled && remainingtime == borderCountdownStart) {
 			int closingIn = remainingtime - borderCountdownEnd;
