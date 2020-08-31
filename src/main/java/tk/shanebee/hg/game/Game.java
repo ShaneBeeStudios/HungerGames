@@ -454,6 +454,9 @@ public class Game {
      * @param death Whether the game stopped after the result of a death (false = no winnings payed out)
      */
     public void stop(Boolean death) {
+        if (Config.borderEnabled) {
+            gameBorderData.resetBorder();
+        }
         bound.removeEntities();
         List<UUID> win = new ArrayList<>();
         cancelTasks();
@@ -532,9 +535,6 @@ public class Game {
             gameBlockData.updateLobbyBlock();
         }
         sb.resetAlive();
-        if (Config.borderEnabled) {
-            gameBorderData.resetBorder();
-        }
         gameCommandData.runCommands(CommandType.STOP, null);
 
         // Call GameEndEvent
