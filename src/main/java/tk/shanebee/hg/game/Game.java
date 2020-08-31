@@ -3,8 +3,6 @@ package tk.shanebee.hg.game;
 import org.bukkit.Bukkit;
 import org.bukkit.GameMode;
 import org.bukkit.Location;
-import org.bukkit.World;
-import org.bukkit.WorldBorder;
 import org.bukkit.block.Sign;
 import org.bukkit.entity.Player;
 import tk.shanebee.hg.HG;
@@ -29,7 +27,6 @@ import tk.shanebee.hg.util.Util;
 import tk.shanebee.hg.util.Vault;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
 import java.util.UUID;
@@ -74,12 +71,7 @@ public class Game {
     private final GameBlockData gameBlockData;
     private final GameItemData gameItemData;
     private final GameCommandData gameCommandData;
-
-    // Border stuff here
-    private Location borderCenter = null;
-    private int borderSize;
-    private int borderCountdownStart;
-    private int borderCountdownEnd;
+    private final GameBorderData gameBorderData;
 
     final boolean spectate = Config.spectateEnabled;
     final boolean spectateOnDeath = Config.spectateOnDeath;
@@ -105,9 +97,6 @@ public class Game {
         this.gameBlockData.sign1 = lobbySign;
         if (isReady) this.status = Status.READY;
         else this.status = Status.BROKEN;
-        this.borderSize = Config.borderFinalSize;
-        this.borderCountdownStart = Config.borderCountdownStart;
-        this.borderCountdownEnd = Config.borderCountdownEnd;
         this.cost = cost;
 
         this.gameBlockData.setLobbyBlock(lobbySign);
@@ -141,9 +130,6 @@ public class Game {
         this.status = Status.NOTREADY;
         this.sb = new SBDisplay(this);
         this.kit = plugin.getKitManager();
-        this.borderSize = Config.borderFinalSize;
-        this.borderCountdownStart = Config.borderCountdownStart;
-        this.borderCountdownEnd = Config.borderCountdownEnd;
         this.mobManager = new MobManager(this);
         this.cost = cost;
         this.bar = new GameBar(this);
@@ -151,6 +137,9 @@ public class Game {
         this.gameBlockData = new GameBlockData(this);
         this.gameItemData = new GameItemData(this);
         this.gameCommandData = new GameCommandData(this);
+        this.gameBorderData = new GameBorderData(this);
+        this.gameBorderData.setBorderSize(Config.borderFinalSize);
+        this.gameBorderData.setBorderTimer(Config.borderCountdownStart, Config.borderCountdownEnd);
     }
 
     /**
@@ -196,6 +185,15 @@ public class Game {
      */
     public GameCommandData getGameCommandData() {
         return gameCommandData;
+    }
+
+    /**
+     * Get an instance of the GameBorderData
+     *
+     * @return Instance of GameBorderData
+     */
+    public GameBorderData getGameBorderData() {
+        return gameBorderData;
     }
 
     /**
@@ -413,7 +411,7 @@ public class Game {
             bar.createBossbar(time);
         }
         if (Config.borderEnabled && Config.borderOnStart) {
-            setBorder(time);
+            gameBorderData.setBorder(time);
         }
     }
 
@@ -425,7 +423,6 @@ public class Game {
     public void addSpawn(Location location) {
         this.spawns.add(location);
     }
-
 
     /**
      * Set exit location for this game
@@ -523,7 +520,6 @@ public class Game {
                 plugin.getLeaderboard().addStat(u, Leaderboard.Stats.GAMES);
             }
         }
-
         gameBlockData.clearChests();
         String winner = Util.translateStop(Util.convertUUIDListToStringList(win));
         // prevent not death winners from gaining a prize
@@ -537,7 +533,7 @@ public class Game {
         }
         sb.resetAlive();
         if (Config.borderEnabled) {
-            resetBorder();
+            gameBorderData.resetBorder();
         }
         gameCommandData.runCommands(CommandType.STOP, null);
 
@@ -592,74 +588,6 @@ public class Game {
         }
         return false;
     }
-
-    private double getBorderSize(Location center) {
-        double x1 = Math.abs(bound.getGreaterCorner().getX() - center.getX());
-        double x2 = Math.abs(bound.getLesserCorner().getX() - center.getX());
-        double z1 = Math.abs(bound.getGreaterCorner().getZ() - center.getZ());
-        double z2 = Math.abs(bound.getLesserCorner().getZ() - center.getZ());
-
-        double x = Math.max(x1, x2);
-        double z = Math.max(z1, z2);
-        double r = Math.max(x, z);
-
-        return (r * 2) + 10;
-    }
-
-    /**
-     * Set the center of the border of this game
-     *
-     * @param borderCenter Location of the center
-     */
-    public void setBorderCenter(Location borderCenter) {
-        this.borderCenter = borderCenter;
-    }
-
-    /**
-     * Set the final size for the border of this game
-     *
-     * @param borderSize The final size of the border
-     */
-    public void setBorderSize(int borderSize) {
-        this.borderSize = borderSize;
-    }
-
-    public void setBorderTimer(int start, int end) {
-        this.borderCountdownStart = start;
-        this.borderCountdownEnd = end;
-    }
-
-    public List<Integer> getBorderTimer() {
-        return Arrays.asList(borderCountdownStart, borderCountdownEnd);
-    }
-
-    public void setBorder(int time) {
-        Location center;
-        if (Config.centerSpawn && borderCenter == null) {
-            center = this.spawns.get(0);
-        } else if (borderCenter != null) {
-            center = borderCenter;
-        } else {
-            center = bound.getCenter();
-        }
-        World world = center.getWorld();
-        assert world != null;
-        WorldBorder border = world.getWorldBorder();
-        double size = Math.min(border.getSize(), getBorderSize(center));
-
-        border.setCenter(center);
-        border.setSize(((int) size));
-        border.setWarningTime(5);
-        border.setDamageBuffer(2);
-        border.setSize(borderSize, time);
-    }
-
-    private void resetBorder() {
-        World world = this.getRegion().getWorld();
-        assert world != null;
-        world.getWorldBorder().reset();
-    }
-
 
     @Override
     public String toString() {

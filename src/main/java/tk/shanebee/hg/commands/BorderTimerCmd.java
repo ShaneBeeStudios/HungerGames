@@ -41,7 +41,7 @@ public class BorderTimerCmd extends BaseCmd {
 			arenaConfig.getCustomConfig().set("arenas." + name + ".border.countdown-start", start);
 			arenaConfig.getCustomConfig().set("arenas." + name + ".border.countdown-end", end);
 			arenaConfig.saveCustomConfig();
-			game.setBorderTimer(start, end);
+			game.getGameBorderData().setBorderTimer(start, end);
 			Util.scm(player, lang.cmd_border_timer.replace("<arena>", name).replace("<start>", args[2]).replace("<end>", args[3]));
 		} else {
 			Util.scm(player, lang.cmd_delete_noexist);

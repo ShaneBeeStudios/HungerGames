@@ -165,17 +165,17 @@ public class Data {
 
 					if (arenadat.isSet("arenas." + s + ".border.center")) {
 						Location borderCenter = getSLoc(arenadat.getString("arenas." + s + ".border.center"));
-						game.setBorderCenter(borderCenter);
+						game.getGameBorderData().setBorderCenter(borderCenter);
 					}
 					if (arenadat.isSet("arenas." + s + ".border.size")) {
 						int borderSize = arenadat.getInt("arenas." + s + ".border.size");
-						game.setBorderSize(borderSize);
+						game.getGameBorderData().setBorderSize(borderSize);
 					}
 					if (arenadat.isSet("arenas." + s + ".border.countdown-start") &&
 							arenadat.isSet("arenas." + s + ".border.countdown-end")) {
 						int borderCountdownStart = arenadat.getInt("arenas." + s + ".border.countdown-start");
 						int borderCountdownEnd = arenadat.getInt("arenas." + s + ".border.countdown-end");
-						game.setBorderTimer(borderCountdownStart, borderCountdownEnd);
+						game.getGameBorderData().setBorderTimer(borderCountdownStart, borderCountdownEnd);
 					}
 					if (arenadat.isList("arenas." + s + ".commands")) {
 						commands = arenadat.getStringList("arenas." + s + ".commands");

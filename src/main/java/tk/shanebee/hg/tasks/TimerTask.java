@@ -21,8 +21,8 @@ public class TimerTask implements Runnable {
 		this.remainingtime = time;
 		this.game = g;
 		this.teleportTimer = Config.teleportEndTime;
-		this.borderCountdownStart = g.getBorderTimer().get(0);
-		this.borderCountdownEnd = g.getBorderTimer().get(1);
+		this.borderCountdownStart = g.getGameBorderData().getBorderTimer().get(0);
+		this.borderCountdownEnd = g.getGameBorderData().getBorderTimer().get(1);
 		g.getGamePlayerData().getPlayers().forEach(uuid -> Objects.requireNonNull(Bukkit.getPlayer(uuid)).setInvulnerable(false));
 		
 		this.id = Bukkit.getScheduler().scheduleSyncRepeatingTask(HG.getPlugin(), this, 0, 30 * 20L);
@@ -37,7 +37,7 @@ public class TimerTask implements Runnable {
 
 		if (Config.borderEnabled && remainingtime == borderCountdownStart) {
 			int closingIn = remainingtime - borderCountdownEnd;
-			game.setBorder(closingIn);
+			game.getGameBorderData().setBorder(closingIn);
 			game.getGamePlayerData().msgAll(HG.getPlugin().getLang().game_border_closing.replace("<seconds>", String.valueOf(closingIn)));
 		}
 
