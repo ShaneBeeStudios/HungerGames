@@ -9,6 +9,7 @@ import tk.shanebee.hg.data.Config;
 import tk.shanebee.hg.data.ItemFrameData;
 import tk.shanebee.hg.game.Game;
 import tk.shanebee.hg.Status;
+import tk.shanebee.hg.game.GameBlockData;
 
 /**
  * Rollback task for resetting blocks after a game finishes
@@ -18,15 +19,17 @@ public class Rollback implements Runnable {
 	private final Iterator<BlockState> session;
 	private final Iterator<ItemFrameData> itemFrameDataIterator;
 	private final Game game;
+	private final GameBlockData gameBlockData;
 	private final int blocks_per_second;
 	private int timerID;
 
 	public Rollback(Game game) {
 		this.game = game;
+		this.gameBlockData = game.getGameBlockData();
 		this.blocks_per_second = Config.blocks_per_second / 10;
 		game.setStatus(Status.ROLLBACK);
-		this.session = game.getBlocks().iterator();
-		this.itemFrameDataIterator = game.getItemFrameData().iterator();
+		this.session = gameBlockData.getBlocks().iterator();
+		this.itemFrameDataIterator = gameBlockData.getItemFrameData().iterator();
 		timerID = Bukkit.getServer().getScheduler().scheduleSyncDelayedTask(HG.getPlugin(), this, 2);
 	}
 
@@ -54,8 +57,8 @@ public class Rollback implements Runnable {
         }
 
         Bukkit.getServer().getScheduler().cancelTask(timerID);
-        game.resetBlocks();
-        game.resetItemFrames();
+        gameBlockData.resetBlocks();
+        gameBlockData.resetItemFrames();
         game.setStatus(Status.READY);
 	}
 

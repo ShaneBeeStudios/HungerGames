@@ -262,7 +262,7 @@ public class GamePlayerData extends Data {
                 }
                 kitHelp(player);
 
-                game.updateLobbyBlock();
+                game.getGameBlockData().updateLobbyBlock();
                 game.sb.setSB(player);
                 game.sb.setAlive();
                 game.runCommands(Game.CommandType.JOIN, player);

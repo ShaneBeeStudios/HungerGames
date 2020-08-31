@@ -23,7 +23,7 @@ public class ChestRefillNowCmd extends BaseCmd {
                 Util.scm(sender, lang.listener_not_running);
                 return true;
             }
-            game.refillChests();
+            game.getGameBlockData().refillChests();
             Util.scm(sender, lang.cmd_chest_refill_now.replace("<arena>", game.getName()));
         } else {
             Util.scm(sender, lang.cmd_delete_noexist);

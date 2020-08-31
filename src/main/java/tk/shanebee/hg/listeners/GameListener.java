@@ -51,6 +51,7 @@ import tk.shanebee.hg.data.Leaderboard;
 import tk.shanebee.hg.data.PlayerData;
 import tk.shanebee.hg.events.ChestOpenEvent;
 import tk.shanebee.hg.game.Game;
+import tk.shanebee.hg.game.GameBlockData;
 import tk.shanebee.hg.game.GamePlayerData;
 import tk.shanebee.hg.managers.KillManager;
 import tk.shanebee.hg.managers.Manager;
@@ -173,7 +174,7 @@ public class GameListener implements Listener {
                     if (cancel) {
                         ((Cancellable) event).setCancelled(true);
                     } else if (itemFrame instanceof ItemFrame){
-                        game.recordItemFrame(((ItemFrame) itemFrame));
+                        game.getGameBlockData().recordItemFrame(((ItemFrame) itemFrame));
                     }
             }
         }
@@ -342,9 +343,9 @@ public class GameListener implements Listener {
 	private void onChestOpen(ChestOpenEvent event) {
 		Block b = event.getChest();
 		Game g = event.getGame();
-		if (!g.isLoggedChest(b.getLocation())) {
+		if (!g.getGameBlockData().isLoggedChest(b.getLocation())) {
 			HG.getPlugin().getManager().fillChests(b, g, event.isBonus());
-			g.addGameChest(b.getLocation());
+			g.getGameBlockData().addGameChest(b.getLocation());
 		}
 	}
 
@@ -448,9 +449,9 @@ public class GameListener implements Listener {
 						Util.scm(p, lang.listener_no_edit_block);
 						event.setCancelled(true);
 					} else {
-						g.recordBlockPlace(event.getBlockReplacedState());
+						g.getGameBlockData().recordBlockPlace(event.getBlockReplacedState());
 						if (isChest(b)) {
-                            g.addPlayerChest(b.getLocation());
+                            g.getGameBlockData().addPlayerChest(b.getLocation());
                         }
 					}
 				} else {
@@ -464,7 +465,7 @@ public class GameListener implements Listener {
 				    switch (status) {
                         case BEGINNING:
                         case RUNNING:
-                            g.recordBlockPlace(event.getBlockReplacedState());
+                            g.getGameBlockData().recordBlockPlace(event.getBlockReplacedState());
                         default:
                             return;
                     }
@@ -491,10 +492,11 @@ public class GameListener implements Listener {
 						Util.scm(p, lang.listener_no_edit_block);
 						event.setCancelled(true);
 					} else {
-						g.recordBlockBreak(b);
+						GameBlockData gameBlockData = g.getGameBlockData();
+						gameBlockData.recordBlockBreak(b);
 						if (isChest(b)) {
-                            g.removeGameChest(b.getLocation());
-                            g.removePlayerChest(b.getLocation());
+                            gameBlockData.removeGameChest(b.getLocation());
+                            gameBlockData.removePlayerChest(b.getLocation());
                         }
 					}
 				} else {
@@ -508,7 +510,7 @@ public class GameListener implements Listener {
                     switch (status) {
                         case BEGINNING:
                         case RUNNING:
-                            g.removeGameChest(b.getLocation());
+							g.getGameBlockData().removeGameChest(b.getLocation());
                         default:
                             return;
                     }
@@ -542,11 +544,12 @@ public class GameListener implements Listener {
         if (plugin.getManager().isInRegion(block.getLocation())) {
             if (Config.breakblocks && playerManager.hasPlayerData(player)) {
                 Game game = playerManager.getPlayerData(player).getGame();
+                GameBlockData gameBlockData = game.getGameBlockData();
                 if (game.getStatus() == Status.RUNNING || !Config.protectCooldown) {
                     if (fill && (Config.blocks.contains(block.getType().toString()) || Config.blocks.contains("ALL"))) {
-                        game.recordBlockBreak(block);
+                        gameBlockData.recordBlockBreak(block);
                     } else if (!fill && (WATER || LAVA || Config.blocks.contains("ALL"))) {
-                        game.recordBlockPlace(block.getState());
+                        gameBlockData.recordBlockPlace(block.getState());
                     } else {
                         Util.scm(player, plugin.getLang().listener_no_edit_block);
                         event.setCancelled(true);
@@ -576,7 +579,7 @@ public class GameListener implements Listener {
 		if (Config.breakblocks && gameManager.isInRegion(block.getLocation())) {
 			Game game = gameManager.getGame(block.getLocation());
 			if (game.getStatus() == Status.RUNNING || game.getStatus() == Status.BEGINNING) {
-				game.recordBlockBreak(block);
+				game.getGameBlockData().recordBlockBreak(block);
 			}
 		}
 	}
@@ -588,7 +591,7 @@ public class GameListener implements Listener {
 			if (Config.breakblocks && gameManager.isInRegion(event.getEntity().getLocation())) {
 				Game game = gameManager.getGame(event.getEntity().getLocation());
 				if (game.getStatus() == Status.RUNNING || game.getStatus() == Status.BEGINNING) {
-					game.recordBlockPlace(block.getState());
+					game.getGameBlockData().recordBlockPlace(block.getState());
 				}
 			}
 		}
@@ -599,7 +602,7 @@ public class GameListener implements Listener {
 		if (gameManager.isInRegion(event.getLocation())) {
 			Game g = gameManager.getGame(event.getLocation());
 			for (Block block : event.blockList()) {
-				g.recordBlockBreak(block);
+				g.getGameBlockData().recordBlockBreak(block);
 			}
 			event.setYield(0);
 		}
@@ -610,7 +613,7 @@ public class GameListener implements Listener {
 		if (gameManager.isInRegion(event.getBlock().getLocation())) {
 			Game g = gameManager.getGame(event.getBlock().getLocation());
 			for (Block block : event.blockList()) {
-				g.recordBlockBreak(block);
+				g.getGameBlockData().recordBlockBreak(block);
 			}
 			event.setYield(0);
 		}
@@ -624,7 +627,7 @@ public class GameListener implements Listener {
 			if (Config.breakblocks) {
 				Game g = gameManager.getGame(b.getLocation());
 				if (g.getStatus() == Status.RUNNING) {
-					g.recordBlockBreak(b);
+					g.getGameBlockData().recordBlockBreak(b);
 				}
 			}
 		}

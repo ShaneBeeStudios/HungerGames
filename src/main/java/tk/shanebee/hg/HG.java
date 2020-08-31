@@ -235,7 +235,7 @@ public class HG extends JavaPlugin {
 		ArrayList<UUID> ps = new ArrayList<>();
 		for (Game g : games) {
 			g.cancelTasks();
-			g.forceRollback();
+			g.getGameBlockData().forceRollback();
 			ps.addAll(g.getGamePlayerData().getPlayers());
 			ps.addAll(g.getGamePlayerData().getSpectators());
 		}

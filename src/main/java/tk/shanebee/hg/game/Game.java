@@ -1,20 +1,13 @@
 package tk.shanebee.hg.game;
 
 import org.bukkit.*;
-import org.bukkit.block.Block;
-import org.bukkit.block.BlockFace;
-import org.bukkit.block.BlockState;
 import org.bukkit.block.Sign;
-import org.bukkit.block.data.Directional;
-import org.bukkit.entity.ItemFrame;
 import org.bukkit.entity.Player;
-import org.bukkit.inventory.InventoryHolder;
 import org.bukkit.inventory.ItemStack;
 import org.jetbrains.annotations.Nullable;
 import tk.shanebee.hg.HG;
 import tk.shanebee.hg.Status;
 import tk.shanebee.hg.data.Config;
-import tk.shanebee.hg.data.ItemFrameData;
 import tk.shanebee.hg.data.Language;
 import tk.shanebee.hg.data.Leaderboard;
 import tk.shanebee.hg.events.GameEndEvent;
@@ -38,29 +31,24 @@ public class Game {
 
     final HG plugin;
     final Language lang;
-    private final String name;
+    final String name;
     final List<Location> spawns;
     private final Bound bound;
-    private final List<Location> chests = new ArrayList<>();
-    private final List<Location> playerChests = new ArrayList<>();
+
     private Map<Integer, ItemStack> items;
     private Map<Integer, ItemStack> bonusItems;
     KitManager kit;
 
-    private final List<BlockState> blocks = new ArrayList<>();
-    private final List<ItemFrameData> itemFrameData = new ArrayList<>();
     private List<String> commands = null;
     private final MobManager mobManager;
     private final PlayerManager playerManager;
     Location exit;
-    private Status status;
+    Status status;
     final int minPlayers;
     final int maxPlayers;
     final int time;
     int cost;
-    private Sign s;
-    private Sign s1;
-    private Sign s2;
+
     private final int roamTime;
     final SBDisplay sb;
     private int chestRefillTime = 0;
@@ -72,9 +60,10 @@ public class Game {
     private TimerTask timer;
     private ChestDropTask chestDrop;
 
-    // Objects
+    // Data Objects
     private final GameBar bar;
     private final GamePlayerData gamePlayerData;
+    private final GameBlockData gameBlockData;
 
     // Border stuff here
     private Location borderCenter = null;
@@ -103,7 +92,7 @@ public class Game {
     public Game(String name, Bound bound, List<Location> spawns, Sign lobbySign, int timer, int minPlayers, int maxPlayers, int roam, boolean isReady, int cost) {
         this(name, bound, timer, minPlayers, maxPlayers, roam, cost);
         this.spawns.addAll(spawns);
-        this.s = lobbySign;
+        this.gameBlockData.sign1 = lobbySign;
         if (isReady) this.status = Status.READY;
         else this.status = Status.BROKEN;
         this.borderSize = Config.borderFinalSize;
@@ -111,7 +100,7 @@ public class Game {
         this.borderCountdownEnd = Config.borderCountdownEnd;
         this.cost = cost;
 
-        setLobbyBlock(lobbySign);
+        this.gameBlockData.setLobbyBlock(lobbySign);
 
         this.kit = plugin.getKitManager();
         this.items = plugin.getItems();
@@ -153,6 +142,7 @@ public class Game {
         this.cost = cost;
         this.bar = new GameBar(this);
         this.gamePlayerData = new GamePlayerData(this);
+        this.gameBlockData = new GameBlockData(this);
     }
 
     /**
@@ -174,22 +164,21 @@ public class Game {
     }
 
     /**
+     * Get an instance of the GameBlockData
+     *
+     * @return Instance of GameBlockData
+     */
+    public GameBlockData getGameBlockData() {
+        return gameBlockData;
+    }
+
+    /**
      * Get the bounding region of this game
      *
      * @return Region of this game
      */
     public Bound getRegion() {
         return bound;
-    }
-
-    /**
-     * Force a rollback for this game
-     */
-    public void forceRollback() {
-        Collections.reverse(blocks);
-        for (BlockState st : blocks) {
-            st.update(true);
-        }
     }
 
     /**
@@ -310,7 +299,7 @@ public class Game {
      */
     public void setStatus(Status status) {
         this.status = status;
-        updateLobbyBlock();
+        gameBlockData.updateLobbyBlock();
     }
 
     /**
@@ -331,103 +320,6 @@ public class Game {
         return this.chestRefillTime;
     }
 
-    /**
-     * Refill chests in this game
-     */
-    public void refillChests() {
-        this.chests.clear();
-    }
-
-    private void addState(BlockState s) {
-        if (s.getType() != Material.AIR) {
-            blocks.add(s);
-        }
-    }
-
-    /**
-     * Add a game chest location to the game
-     *
-     * @param location Location of the chest to add (Needs to actually be a chest there)
-     */
-    public void addGameChest(Location location) {
-        chests.add(location);
-    }
-
-    /**
-     * Add a player placed chest to the game
-     *
-     * @param location Location of the chest
-     */
-    public void addPlayerChest(Location location) {
-        playerChests.add(location);
-    }
-
-    /**
-     * Check if chest at this location is logged
-     *
-     * @param location Location of chest to check
-     * @return True if this chest was added already
-     */
-    public boolean isLoggedChest(Location location) {
-        return chests.contains(location) || playerChests.contains(location);
-    }
-
-    /**
-     * Remove a game chest from the game
-     *
-     * @param location Location of the chest to remove
-     */
-    public void removeGameChest(Location location) {
-        chests.remove(location);
-    }
-
-    /**
-     * Remove a player placed chest from the game
-     *
-     * @param location Location of the chest
-     */
-    public void removePlayerChest(Location location) {
-        playerChests.remove(location);
-    }
-
-    /**
-     * Record a block as broken in the arena to be restored when the game finishes
-     *
-     * @param block The block that was broken
-     */
-    public void recordBlockBreak(Block block) {
-        Block top = block.getRelative(BlockFace.UP);
-
-        if (!top.getType().isSolid() || !top.getType().isBlock()) {
-            addState(block.getRelative(BlockFace.UP).getState());
-        }
-
-        for (BlockFace bf : Util.faces) {
-            Block rel = block.getRelative(bf);
-
-            if (Util.isAttached(block, rel)) {
-                addState(rel.getState());
-            }
-        }
-        addState(block.getState());
-    }
-
-    /**
-     * Add a block to be restored when the game finishes
-     *
-     * @param blockState BlockState to be added to the list
-     */
-    public void recordBlockPlace(BlockState blockState) {
-        blocks.add(blockState);
-    }
-
-    public void recordItemFrame(ItemFrame itemFrame) {
-        itemFrameData.add(new ItemFrameData(itemFrame));
-    }
-
-    public List<ItemFrameData> getItemFrameData() {
-        return itemFrameData;
-    }
 
     /**
      * Get the status of the game
@@ -436,19 +328,6 @@ public class Game {
      */
     public Status getStatus() {
         return this.status;
-    }
-
-    public List<BlockState> getBlocks() {
-        Collections.reverse(blocks);
-        return blocks;
-    }
-
-    public void resetBlocks() {
-        this.blocks.clear();
-    }
-
-    public void resetItemFrames() {
-        this.itemFrameData.clear();
     }
 
     /**
@@ -512,7 +391,7 @@ public class Game {
      * @return Location of the lobby sign
      */
     public Location getLobbyLocation() {
-        return this.s.getLocation();
+        return gameBlockData.sign1.getLocation();
     }
 
     /**
@@ -579,7 +458,7 @@ public class Game {
 
         status = Status.COUNTDOWN;
         starting = new StartingTask(this);
-        updateLobbyBlock();
+        gameBlockData.updateLobbyBlock();
     }
 
     /**
@@ -587,7 +466,7 @@ public class Game {
      */
     public void startFreeRoam() {
         status = Status.BEGINNING;
-        updateLobbyBlock();
+        gameBlockData.updateLobbyBlock();
         bound.removeEntities();
         freeRoam = new FreeRoamTask(this);
         runCommands(CommandType.START, null);
@@ -601,7 +480,7 @@ public class Game {
         if (Config.spawnmobs) spawner = new SpawnerTask(this, Config.spawnmobsinterval);
         if (Config.randomChest) chestDrop = new ChestDropTask(this);
         timer = new TimerTask(this, time);
-        updateLobbyBlock();
+        gameBlockData.updateLobbyBlock();
         if (Config.bossbar) {
             bar.createBossbar(time);
         }
@@ -619,52 +498,6 @@ public class Game {
         this.spawns.add(location);
     }
 
-    void updateLobbyBlock() {
-        if (s1 == null || s2 == null) return;
-        s1.setLine(1, status.getName());
-        s2.setLine(1, ChatColor.BOLD + "" + gamePlayerData.players.size() + "/" + maxPlayers);
-        s1.update(true);
-        s2.update(true);
-    }
-
-    /**
-     * Set the lobby block for this game
-     *
-     * @param sign The sign to which the lobby will be set at
-     * @return True if lobby is set
-     */
-    public boolean setLobbyBlock(Sign sign) {
-        try {
-            this.s = sign;
-            Block c = s.getBlock();
-            BlockFace face = Util.getSignFace(((Directional) s.getBlockData()).getFacing());
-            this.s1 = (Sign) c.getRelative(face).getState();
-            this.s2 = (Sign) s1.getBlock().getRelative(face).getState();
-
-            s.setLine(0, Util.getColString(lang.lobby_sign_1_1));
-            s.setLine(1, ChatColor.BOLD + name);
-            s.setLine(2, Util.getColString(lang.lobby_sign_1_3));
-            if (cost > 0)
-                s.setLine(3, Util.getColString(HG.getPlugin().getLang().lobby_sign_cost.replace("<cost>", String.valueOf(cost))));
-            s1.setLine(0, Util.getColString(lang.lobby_sign_2_1));
-            s1.setLine(1, status.getName());
-            s2.setLine(0, Util.getColString(lang.lobby_sign_3_1));
-            s2.setLine(1, ChatColor.BOLD + "" + 0 + "/" + maxPlayers);
-            s.update(true);
-            s1.update(true);
-            s2.update(true);
-        } catch (Exception e) {
-            return false;
-        }
-        try {
-            String[] h = Objects.requireNonNull(HG.getPlugin().getConfig().getString("settings.globalexit")).split(":");
-            this.exit = new Location(Bukkit.getServer().getWorld(h[0]), Integer.parseInt(h[1]) + 0.5,
-                    Integer.parseInt(h[2]) + 0.1, Integer.parseInt(h[3]) + 0.5, Float.parseFloat(h[4]), Float.parseFloat(h[5]));
-        } catch (Exception e) {
-            this.exit = s.getWorld().getSpawnLocation();
-        }
-        return true;
-    }
 
     /**
      * Set exit location for this game
@@ -763,22 +596,16 @@ public class Game {
             }
         }
 
-        for (Location loc : chests) {
-            if (loc.getBlock().getState() instanceof InventoryHolder) {
-                ((InventoryHolder) loc.getBlock().getState()).getInventory().clear();
-                loc.getBlock().getState().update();
-            }
-        }
-        chests.clear();
+        gameBlockData.clearChests();
         String winner = Util.translateStop(Util.convertUUIDListToStringList(win));
         // prevent not death winners from gaining a prize
         if (death)
             Util.broadcast(HG.getPlugin().getLang().player_won.replace("<arena>", name).replace("<winner>", winner));
-        if (!blocks.isEmpty() || !itemFrameData.isEmpty()) {
+        if (gameBlockData.requiresRollback()) {
             new Rollback(this);
         } else {
             status = Status.READY;
-            updateLobbyBlock();
+            gameBlockData.updateLobbyBlock();
         }
         sb.resetAlive();
         if (Config.borderEnabled) {
@@ -807,7 +634,7 @@ public class Game {
                 boolean finalDeath = death;
                 Bukkit.getScheduler().runTaskLater(plugin, () -> {
                     stop(finalDeath);
-                    updateLobbyBlock();
+                    gameBlockData.updateLobbyBlock();
                     sb.setAlive();
                 }, 20);
 
@@ -817,7 +644,7 @@ public class Game {
                     (minPlayers - gamePlayerData.players.size() <= 0 ? "!" : ":" + HG.getPlugin().getLang().players_to_start
                             .replace("<amount>", String.valueOf((minPlayers - gamePlayerData.players.size())))));
         }
-        updateLobbyBlock();
+        gameBlockData.updateLobbyBlock();
         sb.setAlive();
     }
 
@@ -834,17 +661,6 @@ public class Game {
                 }
                 return true;
             }
-        }
-        return false;
-    }
-
-    public boolean isLobbyValid() {
-        try {
-            if (s != null && s1 != null && s2 != null) {
-                return true;
-            }
-        } catch (Exception e) {
-            return false;
         }
         return false;
     }

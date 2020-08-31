@@ -31,7 +31,7 @@ public class DeleteCmd extends BaseCmd {
 
 				if (g.getStatus() == Status.BEGINNING || g.getStatus() == Status.RUNNING) {
 					Util.scm(sender, "  &7- &cGame running! &aStopping..");
-					g.forceRollback();
+					g.getGameBlockData().forceRollback();
 					g.stop(false);
 				}
 				if (!gamePlayerData.getPlayers().isEmpty()) {

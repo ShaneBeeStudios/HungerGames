@@ -42,7 +42,7 @@ public class TimerTask implements Runnable {
 		}
 
 		if (game.getChestRefillTime() > 0 && remainingtime == game.getChestRefillTime()) {
-			game.refillChests();
+			game.getGameBlockData().refillChests();
 			game.getGamePlayerData().msgAll(HG.getPlugin().getLang().game_chest_refill);
 		}
 

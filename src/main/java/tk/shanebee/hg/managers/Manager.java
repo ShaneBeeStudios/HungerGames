@@ -145,7 +145,7 @@ public class Manager {
 		} else if (game.getStatus() == Status.BROKEN) {
 			Util.scm(player, "&cYour arena is marked as broken! use &7/hg debug &c to check for errors!");
 			Util.scm(player, "&cIf no errors are found, please use &7/hg toggle " + game.getName() + "&c!");
-		} else if (!game.isLobbyValid()) {
+		} else if (!game.getGameBlockData().isLobbyValid()) {
 			Util.scm(player, "&cYour LobbyWall is invalid! Please reset them!");
 			Util.scm(player, "&cSet lobbywall: &7/hg setlobbywall " + game.getName());
 		} else {
