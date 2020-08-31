@@ -7,7 +7,6 @@ import org.bukkit.World;
 import org.bukkit.WorldBorder;
 import org.bukkit.block.Sign;
 import org.bukkit.entity.Player;
-import org.jetbrains.annotations.Nullable;
 import tk.shanebee.hg.HG;
 import tk.shanebee.hg.Status;
 import tk.shanebee.hg.data.Config;
@@ -15,6 +14,7 @@ import tk.shanebee.hg.data.Language;
 import tk.shanebee.hg.data.Leaderboard;
 import tk.shanebee.hg.events.GameEndEvent;
 import tk.shanebee.hg.events.GameStartEvent;
+import tk.shanebee.hg.game.GameCommandData.CommandType;
 import tk.shanebee.hg.managers.KitManager;
 import tk.shanebee.hg.managers.MobManager;
 import tk.shanebee.hg.managers.PlayerManager;
@@ -44,11 +44,10 @@ public class Game {
     final Language lang;
     final String name;
     final List<Location> spawns;
-    private final Bound bound;
+    final Bound bound;
 
     KitManager kit;
 
-    private List<String> commands = null;
     private final MobManager mobManager;
     private final PlayerManager playerManager;
     Location exit;
@@ -74,6 +73,7 @@ public class Game {
     private final GamePlayerData gamePlayerData;
     private final GameBlockData gameBlockData;
     private final GameItemData gameItemData;
+    private final GameCommandData gameCommandData;
 
     // Border stuff here
     private Location borderCenter = null;
@@ -150,6 +150,7 @@ public class Game {
         this.gamePlayerData = new GamePlayerData(this);
         this.gameBlockData = new GameBlockData(this);
         this.gameItemData = new GameItemData(this);
+        this.gameCommandData = new GameCommandData(this);
     }
 
     /**
@@ -189,33 +190,21 @@ public class Game {
     }
 
     /**
+     * Get an instance of the GameCommandData
+     *
+     * @return Instance of GameCommandData
+     */
+    public GameCommandData getGameCommandData() {
+        return gameCommandData;
+    }
+
+    /**
      * Get the bounding region of this game
      *
      * @return Region of this game
      */
     public Bound getRegion() {
         return bound;
-    }
-
-    /**
-     * Set the list of a commands to run for this game
-     * <p><b>format = </b> "type:command"</p>
-     * <p><b>types = </b> start, stop, death, join</p>
-     *
-     * @param commands List of commands
-     */
-    public void setCommands(List<String> commands) {
-        this.commands = commands;
-    }
-
-    /**
-     * Add a command to the list of commands for this game
-     *
-     * @param command The command to add
-     * @param type    The type of the command
-     */
-    public void addCommand(String command, CommandType type) {
-        this.commands.add(type.getType() + ":" + command);
     }
 
     public StartingTask getStartingTask() {
@@ -408,7 +397,7 @@ public class Game {
         gameBlockData.updateLobbyBlock();
         bound.removeEntities();
         freeRoam = new FreeRoamTask(this);
-        runCommands(CommandType.START, null);
+        gameCommandData.runCommands(CommandType.START, null);
     }
 
     /**
@@ -550,7 +539,7 @@ public class Game {
         if (Config.borderEnabled) {
             resetBorder();
         }
-        runCommands(CommandType.STOP, null);
+        gameCommandData.runCommands(CommandType.STOP, null);
 
         // Call GameEndEvent
         Collection<Player> winners = new ArrayList<>();
@@ -671,34 +660,6 @@ public class Game {
         world.getWorldBorder().reset();
     }
 
-    /**
-     * Run commands for this game that are defined in the arenas.yml
-     *
-     * @param commandType Type of command to run
-     * @param player      The player involved (can be null)
-     */
-    @SuppressWarnings("ConstantConditions")
-    public void runCommands(CommandType commandType, @Nullable Player player) {
-        if (commands == null) return;
-        for (String command : commands) {
-            String type = command.split(":")[0];
-            if (!type.equals(commandType.getType())) continue;
-            if (command.equalsIgnoreCase("none")) continue;
-            command = command.split(":")[1]
-                    .replace("<world>", this.bound.getWorld().getName())
-                    .replace("<arena>", this.getName());
-            if (player != null) {
-                command = command.replace("<player>", player.getName());
-            }
-            if (commandType == CommandType.START && command.contains("<player>")) {
-                for (UUID uuid : gamePlayerData.players) {
-                    String newCommand = command.replace("<player>", Bukkit.getPlayer(uuid).getName());
-                    Bukkit.dispatchCommand(Bukkit.getConsoleSender(), newCommand);
-                }
-            } else
-                Bukkit.dispatchCommand(Bukkit.getConsoleSender(), command);
-        }
-    }
 
     @Override
     public String toString() {
@@ -706,38 +667,6 @@ public class Game {
                 "name='" + name + '\'' +
                 ", bound=" + bound +
                 '}';
-    }
-
-    /**
-     * Command types
-     */
-    public enum CommandType {
-        /**
-         * A command to run when a player dies in game
-         */
-        DEATH("death"),
-        /**
-         * A command to run at the start of a game
-         */
-        START("start"),
-        /**
-         * A command to run at the end of a game
-         */
-        STOP("stop"),
-        /**
-         * A command to run when a player joins a game
-         */
-        JOIN("join");
-
-        String type;
-
-        CommandType(String type) {
-            this.type = type;
-        }
-
-        public String getType() {
-            return type;
-        }
     }
 
 }

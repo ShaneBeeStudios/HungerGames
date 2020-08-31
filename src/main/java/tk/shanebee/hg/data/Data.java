@@ -184,7 +184,7 @@ public class Data {
 						saveCustomConfig();
 						commands = Collections.singletonList("none");
 					}
-					game.setCommands(commands);
+					game.getGameCommandData().setCommands(commands);
 					if (arenadat.isSet("arenas." + s + ".chest-refill")) {
 						int chestRefill = arenadat.getInt("arenas." + s + ".chest-refill");
 						game.setChestRefillTime(chestRefill);

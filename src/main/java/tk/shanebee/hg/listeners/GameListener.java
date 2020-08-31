@@ -52,6 +52,7 @@ import tk.shanebee.hg.data.PlayerData;
 import tk.shanebee.hg.events.ChestOpenEvent;
 import tk.shanebee.hg.game.Game;
 import tk.shanebee.hg.game.GameBlockData;
+import tk.shanebee.hg.game.GameCommandData.CommandType;
 import tk.shanebee.hg.game.GamePlayerData;
 import tk.shanebee.hg.managers.KillManager;
 import tk.shanebee.hg.managers.Manager;
@@ -238,7 +239,7 @@ public class GameListener implements Listener {
 			}
 
 			game.getGamePlayerData().leave(player, true);
-			game.runCommands(Game.CommandType.DEATH, player);
+			game.getGameCommandData().runCommands(CommandType.DEATH, player);
 
 			Bukkit.getScheduler().scheduleSyncDelayedTask(plugin, () -> checkStick(game), 40L);
 		}, 1);

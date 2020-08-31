@@ -1,6 +1,11 @@
 package tk.shanebee.hg.game;
 
-import org.bukkit.*;
+import org.bukkit.Bukkit;
+import org.bukkit.ChatColor;
+import org.bukkit.GameMode;
+import org.bukkit.Location;
+import org.bukkit.Material;
+import org.bukkit.Sound;
 import org.bukkit.block.BlockFace;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.IllegalPluginAccessException;
@@ -11,12 +16,18 @@ import tk.shanebee.hg.data.Config;
 import tk.shanebee.hg.data.PlayerData;
 import tk.shanebee.hg.events.PlayerJoinGameEvent;
 import tk.shanebee.hg.events.PlayerLeaveGameEvent;
+import tk.shanebee.hg.game.GameCommandData.CommandType;
 import tk.shanebee.hg.gui.SpectatorGUI;
 import tk.shanebee.hg.managers.PlayerManager;
 import tk.shanebee.hg.util.Util;
 import tk.shanebee.hg.util.Vault;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.UUID;
 import java.util.concurrent.atomic.AtomicReference;
 
 /**
@@ -41,6 +52,7 @@ public class GamePlayerData extends Data {
     }
 
     // TODO Data methods
+
     /**
      * Get a list of all players in the game
      *
@@ -265,7 +277,7 @@ public class GamePlayerData extends Data {
                 game.getGameBlockData().updateLobbyBlock();
                 game.sb.setSB(player);
                 game.sb.setAlive();
-                game.runCommands(Game.CommandType.JOIN, player);
+                game.getGameCommandData().runCommands(CommandType.JOIN, player);
             }, 5);
         }
     }
