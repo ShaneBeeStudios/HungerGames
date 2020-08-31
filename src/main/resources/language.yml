@@ -160,6 +160,7 @@ cmd-reload-reloaded-success: '&l&a- Successfully reloaded HungerGames'
 
 ## Exit
 cmd-exit-set: '&6Global Exit Spawn Set:'
+cmd-exit-set-arena: '&6<arena> Exit Spawn Set:'
 
 ## LobbyWall
 cmd-lobbywall-set: '&aThe lobbyWallSign has been set!'

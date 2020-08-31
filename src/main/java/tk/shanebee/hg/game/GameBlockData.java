@@ -1,6 +1,5 @@
 package tk.shanebee.hg.game;
 
-import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
 import org.bukkit.Material;
@@ -18,7 +17,6 @@ import tk.shanebee.hg.util.Util;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
-import java.util.Objects;
 
 /**
  * Data class for holding a {@link Game Game's} blocks
@@ -206,6 +204,7 @@ public class GameBlockData extends Data {
      * @param sign The sign to which the lobby will be set at
      * @return True if lobby is set
      */
+    @SuppressWarnings("ConstantConditions")
     public boolean setLobbyBlock(Sign sign) {
         try {
             this.sign1 = sign;
@@ -229,25 +228,15 @@ public class GameBlockData extends Data {
         } catch (Exception e) {
             return false;
         }
-        try {
-            String[] h = Objects.requireNonNull(HG.getPlugin().getConfig().getString("settings.globalexit")).split(":");
-            game.exit = new Location(Bukkit.getServer().getWorld(h[0]), Integer.parseInt(h[1]) + 0.5,
-                    Integer.parseInt(h[2]) + 0.1, Integer.parseInt(h[3]) + 0.5, Float.parseFloat(h[4]), Float.parseFloat(h[5]));
-        } catch (Exception e) {
-            game.exit = sign1.getWorld().getSpawnLocation();
-        }
         return true;
     }
 
     public boolean isLobbyValid() {
         try {
-            if (sign1 != null && sign2 != null && sign3 != null) {
-                return true;
-            }
+            return sign1 != null && sign2 != null && sign3 != null;
         } catch (Exception e) {
             return false;
         }
-        return false;
     }
 
 }

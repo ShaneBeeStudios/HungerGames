@@ -8,6 +8,7 @@ import tk.shanebee.hg.util.Util;
 import tk.shanebee.hg.util.Vault;
 
 import java.io.File;
+import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.util.List;
@@ -190,6 +191,14 @@ public class Config {
 
     public Configuration getConfig() {
         return config;
+    }
+
+    public void save() {
+        try {
+            config.save(configFile);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
 }

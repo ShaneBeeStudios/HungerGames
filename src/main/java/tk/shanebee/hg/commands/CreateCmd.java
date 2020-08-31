@@ -30,6 +30,10 @@ public class CreateCmd extends BaseCmd {
 			if (!s.hasValidSelection()) {
 				Util.scm(player, lang.cmd_create_need_selection);
 			} else {
+				if (args[1].equalsIgnoreCase("all")) {
+					Util.scm(player, "&cYou can not name an arena '&ball&c'");
+					return true;
+				}
 				if (!Util.isInt(args[2]) || !Util.isInt(args[3]) || !Util.isInt(args[4])) {
 					player.sendMessage(lang.cmd_base_wrongusage + " " + sendHelpLine());
 				} else if (Integer.parseInt(args[4]) % 30 != 0) {

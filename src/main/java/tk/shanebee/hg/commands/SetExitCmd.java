@@ -1,30 +1,42 @@
 package tk.shanebee.hg.commands;
 
-import tk.shanebee.hg.game.Game;
-import tk.shanebee.hg.HG;
-import tk.shanebee.hg.util.Util;
-
 import org.bukkit.Location;
+import tk.shanebee.hg.game.Game;
+import tk.shanebee.hg.util.Util;
 
 public class SetExitCmd extends BaseCmd {
 
-	public SetExitCmd() {
-		forcePlayer = true;
-		cmdName = "setexit";
-		forceInGame = false;
-		argLength = 1;
-	}
+    public SetExitCmd() {
+        forcePlayer = true;
+        cmdName = "setexit";
+        forceInGame = false;
+        argLength = 2;
+        usage = "<arena-name>";
+    }
 
-	@Override
-	public boolean run() {
-		Location l = player.getLocation();
-		String loc = l.getWorld().getName() + ":" + l.getBlockX() + ":" + l.getBlockY() + ":" + l.getBlockZ() + ":" + l.getYaw() + ":" + l.getPitch();
-		plugin.getConfig().set("settings.globalexit", loc);
-		plugin.saveConfig();
-		Util.scm(player, lang.cmd_exit_set + " " + loc.replace(":", "&6,&c "));
-		
-		for (Game g : plugin.getGames())
-			g.setExit(l);
-		return true;
-	}
+    @Override
+    public boolean run() {
+        Location loc = player.getLocation();
+        String stringLoc = player.getWorld().getName() + ":" + loc.getBlockX() + ":" + loc.getBlockY() + ":" + loc.getBlockZ() + ":" + loc.getYaw() + ":" + loc.getPitch();
+        if (args[1].equalsIgnoreCase("all")) {
+            plugin.getArenaConfig().getConfig().set("global-exit-location", stringLoc);
+            Util.scm(player, lang.cmd_exit_set + " " + stringLoc.replace(":", "&6,&c "));
+            for (Game game : plugin.getGames())
+                game.setExit(loc);
+        } else {
+            Game game = gameManager.getGame(args[1]);
+            if (game == null) {
+                Util.scm(player, lang.cmd_delete_noexist);
+                return true;
+            }
+            plugin.getArenaConfig().getConfig().set("arenas." + game.getName() + ".exit-location", stringLoc);
+            String msg = lang.cmd_exit_set_arena.replace("<arena>", game.getName());
+            Util.scm(player, msg + " " + stringLoc.replace(":", "&6,&c "));
+            game.setExit(loc);
+        }
+        plugin.getArenaConfig().saveCustomConfig();
+
+        return true;
+    }
+
 }

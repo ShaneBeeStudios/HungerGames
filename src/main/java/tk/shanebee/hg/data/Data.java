@@ -4,6 +4,7 @@ import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
 import org.bukkit.block.Sign;
+import org.bukkit.configuration.Configuration;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.inventory.ItemStack;
@@ -83,9 +84,19 @@ public class Data {
 
 	@SuppressWarnings("ConstantConditions")
 	public void load() {
-		int freeroam = plugin.getConfig().getInt("settings.free-roam");
+		Configuration pluginConfig = plugin.getHGConfig().getConfig();
+		int freeroam = pluginConfig.getInt("settings.free-roam");
 
 		if (customConfigFile.exists()) {
+			// TODO remove after a while (aug 30/2020)
+			// Move global exit from config.yml to arenas.yml
+			if (pluginConfig.isSet("settings.globalexit")) {
+				String globalExit = pluginConfig.getString("settings.globalexit");
+				pluginConfig.set("settings.globalexit", null);
+				plugin.getHGConfig().save();
+				arenadat.set("global-exit-location", globalExit);
+				saveCustomConfig();
+			}
 
 			new CompassTask(plugin);
 
@@ -103,28 +114,29 @@ public class Data {
 					Bound b = null;
 					List<String> commands;
 
+					String path = "arenas." + s;
 					try {
-						timer = arenadat.getInt("arenas." + s + ".info." + "timer");
-						minplayers = arenadat.getInt("arenas." + s + ".info." + "min-players");
-						maxplayers = arenadat.getInt("arenas." + s + ".info." + "max-players");
+						timer = arenadat.getInt(path + ".info." + "timer");
+						minplayers = arenadat.getInt(path + ".info." + "min-players");
+						maxplayers = arenadat.getInt(path + ".info." + "max-players");
 					} catch (Exception e) {
 						Util.warning("Unable to load information for arena " + s + "!");
 						isReady = false;
 					}
 					try {
-						cost = arenadat.getInt("arenas." + s + ".info." + "cost");
+						cost = arenadat.getInt(path + ".info." + "cost");
 					} catch (Exception ignore) {
 					}
 
 					try {
-						lobbysign = (Sign) getSLoc(arenadat.getString("arenas." + s + "." + "lobbysign")).getBlock().getState();
+						lobbysign = (Sign) getSLoc(arenadat.getString(path + "." + "lobbysign")).getBlock().getState();
 					} catch (Exception e) { 
 						Util.warning("Unable to load lobby sign for arena " + s + "!");
 						isReady = false;
 					}
 
 					try {
-						for (String l : arenadat.getStringList("arenas." + s + "." + "spawns")) {
+						for (String l : arenadat.getStringList(path + "." + "spawns")) {
 							spawns.add(getLocFromString(l));
 						}
 					} catch (Exception e) { 
@@ -133,7 +145,7 @@ public class Data {
 					}
 
 					try {
-						b = new Bound(arenadat.getString("arenas." + s + ".bound." + "world"), BC(s, "x"), BC(s, "y"), BC(s, "z"), BC(s, "x2"), BC(s, "y2"), BC(s, "z2"));
+						b = new Bound(arenadat.getString(path + ".bound." + "world"), BC(s, "x"), BC(s, "y"), BC(s, "z"), BC(s, "x2"), BC(s, "y2"), BC(s, "z2"));
 					} catch (Exception e) { 
 						Util.warning("Unable to load region bounds for arena " + s + "!"); 
 						isReady = false;
@@ -146,48 +158,62 @@ public class Data {
 					if (kit != null)
 						game.setKitManager(kit);
 
-					if (!arenadat.getStringList("arenas." + s + ".items").isEmpty()) {
+					if (!arenadat.getStringList(path + ".items").isEmpty()) {
 						HashMap<Integer, ItemStack> items = new HashMap<>();
-						for (String itemString : arenadat.getStringList("arenas." + s + ".items")) {
+						for (String itemString : arenadat.getStringList(path + ".items")) {
 							HG.getPlugin().getRandomItems().loadItems(itemString, items);
 						}
 						game.getGameItemData().setItems(items);
 						Util.log(items.size() + " Random items have been loaded for arena: " + s);
 					}
-					if (!arenadat.getStringList("arenas." + s + ".bonus").isEmpty()) {
+					if (!arenadat.getStringList(path + ".bonus").isEmpty()) {
 						HashMap<Integer, ItemStack> bonusItems = new HashMap<>();
-						for (String itemString : arenadat.getStringList("arenas." + s + ".bonus")) {
+						for (String itemString : arenadat.getStringList(path + ".bonus")) {
 							HG.getPlugin().getRandomItems().loadItems(itemString, bonusItems);
 						}
 						game.getGameItemData().setBonusItems(bonusItems);
 						Util.log(bonusItems.size() + " Random bonus items have been loaded for arena: " + s);
 					}
 
-					if (arenadat.isSet("arenas." + s + ".border.center")) {
-						Location borderCenter = getSLoc(arenadat.getString("arenas." + s + ".border.center"));
+					if (arenadat.isSet(path + ".border.center")) {
+						Location borderCenter = getSLoc(arenadat.getString(path + ".border.center"));
 						game.getGameBorderData().setBorderCenter(borderCenter);
 					}
-					if (arenadat.isSet("arenas." + s + ".border.size")) {
-						int borderSize = arenadat.getInt("arenas." + s + ".border.size");
+					if (arenadat.isSet(path + ".border.size")) {
+						int borderSize = arenadat.getInt(path + ".border.size");
 						game.getGameBorderData().setBorderSize(borderSize);
 					}
-					if (arenadat.isSet("arenas." + s + ".border.countdown-start") &&
-							arenadat.isSet("arenas." + s + ".border.countdown-end")) {
-						int borderCountdownStart = arenadat.getInt("arenas." + s + ".border.countdown-start");
-						int borderCountdownEnd = arenadat.getInt("arenas." + s + ".border.countdown-end");
+					if (arenadat.isSet(path + ".border.countdown-start") &&
+							arenadat.isSet(path + ".border.countdown-end")) {
+						int borderCountdownStart = arenadat.getInt(path + ".border.countdown-start");
+						int borderCountdownEnd = arenadat.getInt(path + ".border.countdown-end");
 						game.getGameBorderData().setBorderTimer(borderCountdownStart, borderCountdownEnd);
 					}
-					if (arenadat.isList("arenas." + s + ".commands")) {
-						commands = arenadat.getStringList("arenas." + s + ".commands");
+					if (arenadat.isList(path + ".commands")) {
+						commands = arenadat.getStringList(path + ".commands");
 					} else {
-						arenadat.set("arenas." + s + ".commands", Collections.singletonList("none"));
+						arenadat.set(path + ".commands", Collections.singletonList("none"));
 						saveCustomConfig();
 						commands = Collections.singletonList("none");
 					}
 					game.getGameCommandData().setCommands(commands);
-					if (arenadat.isSet("arenas." + s + ".chest-refill")) {
-						int chestRefill = arenadat.getInt("arenas." + s + ".chest-refill");
+					if (arenadat.isSet(path + ".chest-refill")) {
+						int chestRefill = arenadat.getInt(path + ".chest-refill");
 						game.setChestRefillTime(chestRefill);
+					}
+					try {
+						String exitPath = "arenas." + game.getName() + ".exit-location";
+						String[] locString;
+						if (arenadat.isSet(exitPath)) {
+							locString = arenadat.getString(exitPath).split(":");
+						} else {
+							locString = arenadat.getString("global-exit-location").split(":");
+						}
+						Location location = new Location(Bukkit.getServer().getWorld(locString[0]), Integer.parseInt(locString[1]) + 0.5,
+								Integer.parseInt(locString[2]) + 0.1, Integer.parseInt(locString[3]) + 0.5, Float.parseFloat(locString[4]), Float.parseFloat(locString[5]));
+						game.setExit(location);
+					} catch (Exception ignore) {
+						game.setExit(game.getLobbyLocation().getWorld().getSpawnLocation());
 					}
 
 				}
