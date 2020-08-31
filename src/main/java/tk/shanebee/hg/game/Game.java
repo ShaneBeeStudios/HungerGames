@@ -10,27 +10,21 @@ import org.bukkit.entity.ItemFrame;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.InventoryHolder;
 import org.bukkit.inventory.ItemStack;
-import org.bukkit.plugin.IllegalPluginAccessException;
-import org.bukkit.potion.PotionEffect;
-import org.bukkit.potion.PotionEffectType;
 import org.jetbrains.annotations.Nullable;
-import tk.shanebee.hg.*;
+import tk.shanebee.hg.HG;
+import tk.shanebee.hg.Status;
 import tk.shanebee.hg.data.Config;
 import tk.shanebee.hg.data.ItemFrameData;
 import tk.shanebee.hg.data.Language;
 import tk.shanebee.hg.data.Leaderboard;
-import tk.shanebee.hg.data.PlayerData;
 import tk.shanebee.hg.events.GameEndEvent;
 import tk.shanebee.hg.events.GameStartEvent;
-import tk.shanebee.hg.events.PlayerJoinGameEvent;
-import tk.shanebee.hg.events.PlayerLeaveGameEvent;
-import tk.shanebee.hg.gui.SpectatorGUI;
 import tk.shanebee.hg.managers.KitManager;
 import tk.shanebee.hg.managers.MobManager;
 import tk.shanebee.hg.managers.PlayerManager;
 import tk.shanebee.hg.managers.SBDisplay;
-import tk.shanebee.hg.tasks.*;
 import tk.shanebee.hg.tasks.TimerTask;
+import tk.shanebee.hg.tasks.*;
 import tk.shanebee.hg.util.Util;
 import tk.shanebee.hg.util.Vault;
 
@@ -42,36 +36,33 @@ import java.util.*;
 @SuppressWarnings("unused")
 public class Game {
 
-    private final HG plugin;
-    private final Language lang;
+    final HG plugin;
+    final Language lang;
     private final String name;
-    private final List<Location> spawns;
+    final List<Location> spawns;
     private final Bound bound;
-    private final List<UUID> players = new ArrayList<>();
-    private final List<UUID> spectators = new ArrayList<>();
     private final List<Location> chests = new ArrayList<>();
     private final List<Location> playerChests = new ArrayList<>();
     private Map<Integer, ItemStack> items;
     private Map<Integer, ItemStack> bonusItems;
-    private KitManager kit;
-    private final Map<Player, Integer> kills = new HashMap<>();
+    KitManager kit;
 
     private final List<BlockState> blocks = new ArrayList<>();
     private final List<ItemFrameData> itemFrameData = new ArrayList<>();
     private List<String> commands = null;
     private final MobManager mobManager;
     private final PlayerManager playerManager;
-    private Location exit;
+    Location exit;
     private Status status;
-    private final int minPlayers;
-    private final int maxPlayers;
+    final int minPlayers;
+    final int maxPlayers;
     final int time;
-    private int cost;
+    int cost;
     private Sign s;
     private Sign s1;
     private Sign s2;
     private final int roamTime;
-    private final SBDisplay sb;
+    final SBDisplay sb;
     private int chestRefillTime = 0;
 
     // Task ID's here!
@@ -83,7 +74,7 @@ public class Game {
 
     // Objects
     private final GameBar bar;
-    private final SpectatorGUI spectatorGUI;
+    private final GamePlayerData gamePlayerData;
 
     // Border stuff here
     private Location borderCenter = null;
@@ -91,8 +82,8 @@ public class Game {
     private int borderCountdownStart;
     private int borderCountdownEnd;
 
-    private final boolean spectate = Config.spectateEnabled;
-    private final boolean spectateOnDeath = Config.spectateOnDeath;
+    final boolean spectate = Config.spectateEnabled;
+    final boolean spectateOnDeath = Config.spectateOnDeath;
 
     /**
      * Create a new game
@@ -110,17 +101,9 @@ public class Game {
      * @param cost       Cost of this game
      */
     public Game(String name, Bound bound, List<Location> spawns, Sign lobbySign, int timer, int minPlayers, int maxPlayers, int roam, boolean isReady, int cost) {
-        this.plugin = HG.getPlugin();
-        this.playerManager = plugin.getPlayerManager();
-        this.lang = plugin.getLang();
-        this.name = name;
-        this.bound = bound;
-        this.spawns = spawns;
+        this(name, bound, timer, minPlayers, maxPlayers, roam, cost);
+        this.spawns.addAll(spawns);
         this.s = lobbySign;
-        this.time = timer;
-        this.minPlayers = minPlayers;
-        this.maxPlayers = maxPlayers;
-        this.roamTime = roam;
         if (isReady) this.status = Status.READY;
         else this.status = Status.BROKEN;
         this.borderSize = Config.borderFinalSize;
@@ -130,13 +113,9 @@ public class Game {
 
         setLobbyBlock(lobbySign);
 
-        this.sb = new SBDisplay(this);
         this.kit = plugin.getKitManager();
         this.items = plugin.getItems();
         this.bonusItems = plugin.getBonusItems();
-        this.mobManager = new MobManager(this);
-        this.spectatorGUI = new SpectatorGUI(this);
-        this.bar = new GameBar(this);
     }
 
     /**
@@ -172,16 +151,26 @@ public class Game {
         this.borderCountdownEnd = Config.borderCountdownEnd;
         this.mobManager = new MobManager(this);
         this.cost = cost;
-        this.spectatorGUI = new SpectatorGUI(this);
         this.bar = new GameBar(this);
+        this.gamePlayerData = new GamePlayerData(this);
     }
 
-    public SpectatorGUI getSpectatorGUI() {
-        return spectatorGUI;
-    }
-
+    /**
+     * Get an instance of the GameBar
+     *
+     * @return Instance of GameBar
+     */
     public GameBar getGameBar() {
         return bar;
+    }
+
+    /**
+     * Get an instance of the GamePlayerData
+     *
+     * @return Instance of GamePlayerData
+     */
+    public GamePlayerData getGamePlayerData() {
+        return gamePlayerData;
     }
 
     /**
@@ -299,15 +288,6 @@ public class Game {
      */
     public void addCommand(String command, CommandType type) {
         this.commands.add(type.getType() + ":" + command);
-    }
-
-    /**
-     * Add a kill to a player
-     *
-     * @param player The player to add a kill to
-     */
-    public void addKill(Player player) {
-        this.kills.put(player, this.kills.get(player) + 1);
     }
 
     public StartingTask getStartingTask() {
@@ -472,30 +452,12 @@ public class Game {
     }
 
     /**
-     * Get a list of all players in the game
-     *
-     * @return UUID list of all players in game
-     */
-    public List<UUID> getPlayers() {
-        return players;
-    }
-
-    /**
      * Get the bounding box of this game
      *
      * @return Bound of this game
      */
     public Bound getBound() {
         return this.bound;
-    }
-
-    /**
-     * Get a list of all players currently spectating the game
-     *
-     * @return List of spectators
-     */
-    public List<UUID> getSpectators() {
-        return this.spectators;
     }
 
     /**
@@ -580,70 +542,6 @@ public class Game {
     }
 
     /**
-     * Join a player to the game
-     *
-     * @param player Player to join the game
-     */
-    public void join(Player player) {
-        UUID uuid = player.getUniqueId();
-        if (status != Status.WAITING && status != Status.STOPPED && status != Status.COUNTDOWN && status != Status.READY) {
-            Util.scm(player, HG.getPlugin().getLang().arena_not_ready);
-            if ((status == Status.RUNNING || status == Status.BEGINNING) && Config.spectateEnabled) {
-                Util.scm(player, plugin.getLang().arena_spectate.replace("<arena>", this.getName()));
-            }
-        } else if (maxPlayers <= players.size()) {
-            player.sendMessage(ChatColor.RED + name + " is currently full!");
-            Util.scm(player, "&c" + name + " " + HG.getPlugin().getLang().game_full);
-        } else if (!players.contains(player.getUniqueId())) {
-            if (!vaultCheck(player)) {
-                return;
-            }
-            // Call PlayerJoinGameEvent
-            PlayerJoinGameEvent event = new PlayerJoinGameEvent(this, player);
-            Bukkit.getPluginManager().callEvent(event);
-            // If cancelled, stop the player from joining the game
-            if (event.isCancelled()) return;
-
-            if (player.isInsideVehicle()) {
-                player.leaveVehicle();
-            }
-
-            players.add(player.getUniqueId());
-            Bukkit.getScheduler().scheduleSyncDelayedTask(HG.getPlugin(), () -> {
-                Location loc = pickSpawn();
-                player.teleport(loc);
-
-                if (loc.getBlock().getRelative(BlockFace.DOWN).getType() == Material.AIR) {
-                    while (loc.getBlock().getRelative(BlockFace.DOWN).getType() == Material.AIR) {
-                        loc.setY(loc.getY() - 1);
-                    }
-                }
-                playerManager.addPlayerData(new PlayerData(player, this));
-
-                heal(player);
-                freeze(player);
-                kills.put(player, 0);
-
-                if (players.size() == 1 && status == Status.READY)
-                    status = Status.WAITING;
-                if (players.size() >= minPlayers && (status == Status.WAITING || status == Status.READY)) {
-                    startPreGame();
-                } else if (status == Status.WAITING) {
-                    Util.broadcast(HG.getPlugin().getLang().player_joined_game.replace("<player>",
-                            player.getName()) + (minPlayers - players.size() <= 0 ? "!" : ":" +
-                            HG.getPlugin().getLang().players_to_start.replace("<amount>", String.valueOf((minPlayers - players.size())))));
-                }
-                kitHelp(player);
-
-                updateLobbyBlock();
-                sb.setSB(player);
-                sb.setAlive();
-                runCommands(CommandType.JOIN, player);
-            }, 5);
-        }
-    }
-
-    /**
      * Get the kits for this game
      *
      * @return The KitManager kit for this game
@@ -669,35 +567,6 @@ public class Game {
      */
     public MobManager getMobManager() {
         return this.mobManager;
-    }
-
-    private void kitHelp(Player player) {
-        // Clear the chat a little bit, making this message easier to see
-        for (int i = 0; i < 20; ++i)
-            Util.scm(player, " ");
-        String kit = this.kit.getKitListString();
-        Util.scm(player, " ");
-        Util.scm(player, lang.kit_join_header);
-        Util.scm(player, " ");
-        if (player.hasPermission("hg.kit") && this.kit.hasKits()) {
-            Util.scm(player, lang.kit_join_msg);
-            Util.scm(player, " ");
-            Util.scm(player, lang.kit_join_avail + kit);
-            Util.scm(player, " ");
-        }
-        Util.scm(player, lang.kit_join_footer);
-        Util.scm(player, " ");
-    }
-
-    /**
-     * Respawn all players in the game back to spawn points
-     */
-    public void respawnAll() {
-        for (UUID u : players) {
-            Player p = Bukkit.getPlayer(u);
-            if (p != null)
-                p.teleport(pickSpawn());
-        }
     }
 
     /**
@@ -741,7 +610,6 @@ public class Game {
         }
     }
 
-
     /**
      * Add a spawn location to the game
      *
@@ -751,91 +619,12 @@ public class Game {
         this.spawns.add(location);
     }
 
-    private Location pickSpawn() {
-        double spawn = getRandomIntegerBetweenRange(maxPlayers - 1);
-        if (containsPlayer(spawns.get(((int) spawn)))) {
-            Collections.shuffle(spawns);
-            for (Location l : spawns) {
-                if (!containsPlayer(l)) {
-                    return l;
-                }
-            }
-        }
-        return spawns.get((int) spawn);
-    }
-
-    private boolean containsPlayer(Location location) {
-        if (location == null) return false;
-
-        for (UUID u : players) {
-            Player p = Bukkit.getPlayer(u);
-            if (p != null && p.getLocation().getBlock().equals(location.getBlock()))
-                return true;
-        }
-        return false;
-    }
-
-    /**
-     * Send a message to all players/spectators in the game
-     *
-     * @param message Message to send
-     */
-    public void msgAll(String message) {
-        List<UUID> allPlayers = new ArrayList<>();
-        allPlayers.addAll(players);
-        allPlayers.addAll(spectators);
-        for (UUID u : allPlayers) {
-            Player p = Bukkit.getPlayer(u);
-            if (p != null)
-                Util.scm(p, message);
-        }
-    }
-
-    private void updateLobbyBlock() {
+    void updateLobbyBlock() {
         if (s1 == null || s2 == null) return;
         s1.setLine(1, status.getName());
-        s2.setLine(1, ChatColor.BOLD + "" + players.size() + "/" + maxPlayers);
+        s2.setLine(1, ChatColor.BOLD + "" + gamePlayerData.players.size() + "/" + maxPlayers);
         s1.update(true);
         s2.update(true);
-    }
-
-    private void heal(Player player) {
-        for (PotionEffect ef : player.getActivePotionEffects()) {
-            player.removePotionEffect(ef.getType());
-        }
-        player.closeInventory();
-        player.setHealth(20);
-        player.setFoodLevel(20);
-        try {
-            Bukkit.getScheduler().scheduleSyncDelayedTask(HG.getPlugin(), () -> player.setFireTicks(0), 1);
-        } catch (IllegalPluginAccessException ignore) {
-        }
-
-    }
-
-    /**
-     * Freeze a player
-     *
-     * @param player Player to freeze
-     */
-    public void freeze(Player player) {
-        player.setGameMode(GameMode.SURVIVAL);
-        player.addPotionEffect(new PotionEffect(PotionEffectType.JUMP, 23423525, -10, false, false));
-        player.setWalkSpeed(0.0001F);
-        player.setFoodLevel(1);
-        player.setAllowFlight(false);
-        player.setFlying(false);
-        player.setInvulnerable(true);
-    }
-
-    /**
-     * Unfreeze a player
-     *
-     * @param player Player to unfreeze
-     */
-    public void unFreeze(Player player) {
-        player.removePotionEffect(PotionEffectType.JUMP);
-        player.setWalkSpeed(0.2F);
     }
 
     /**
@@ -910,37 +699,37 @@ public class Game {
         bound.removeEntities();
         List<UUID> win = new ArrayList<>();
         cancelTasks();
-        for (UUID uuid : players) {
+        for (UUID uuid : gamePlayerData.players) {
             Player player = Bukkit.getPlayer(uuid);
             if (player != null) {
-                heal(player);
+                gamePlayerData.heal(player);
                 playerManager.getPlayerData(uuid).restore(player);
                 playerManager.removePlayerData(uuid);
                 win.add(uuid);
                 sb.restoreSB(player);
-                exit(player);
+                gamePlayerData.exit(player);
             }
         }
-        players.clear();
+        gamePlayerData.clearPlayers();
 
-        for (UUID uuid : spectators) {
+        for (UUID uuid : gamePlayerData.spectators) {
             Player spectator = Bukkit.getPlayer(uuid);
             if (spectator != null) {
                 spectator.setCollidable(true);
                 if (Config.spectateHide)
-                    revealPlayer(spectator);
+                    gamePlayerData.revealPlayer(spectator);
                 if (Config.spectateFly) {
                     GameMode mode = playerManager.getSpectatorData(uuid).getGameMode();
                     if (mode == GameMode.SURVIVAL || mode == GameMode.ADVENTURE)
                         spectator.setAllowFlight(false);
                 }
-                exit(spectator);
+                gamePlayerData.exit(spectator);
                 playerManager.getSpectatorData(uuid).restore(spectator);
                 playerManager.removeSpectatorData(uuid);
                 sb.restoreSB(spectator);
             }
         }
-        spectators.clear();
+        gamePlayerData.clearSpectators();
 
         if (this.getStatus() == Status.RUNNING) {
             bar.clearBar();
@@ -1005,46 +794,12 @@ public class Game {
         Bukkit.getPluginManager().callEvent(new GameEndEvent(this, winners, death));
     }
 
-    /**
-     * Make a player leave the game
-     *
-     * @param player Player to leave the game
-     * @param death  Whether the player has died or not (Generally should be false)
-     */
-    public void leave(Player player, Boolean death) {
-        Bukkit.getPluginManager().callEvent(new PlayerLeaveGameEvent(this, player, death));
-        players.remove(player.getUniqueId());
-        UUID uuid = player.getUniqueId();
-        unFreeze(player);
-        if (death) {
-            if (this.getStatus() == Status.RUNNING && bar != null)
-                bar.removePlayer(player);
-            heal(player);
-            playerManager.getPlayerData(uuid).restore(player);
-            playerManager.removePlayerData(player);
-            exit(player);
-            sb.restoreSB(player);
-            player.playSound(player.getLocation(), Sound.UI_TOAST_CHALLENGE_COMPLETE, 5, 1);
-            if (spectate && spectateOnDeath && !isGameOver()) {
-                spectate(player);
-                player.sendTitle(getName(), "You are now spectating!", 10, 100, 10); //TODO this a temp test
-            }
-        } else {
-            heal(player);
-            playerManager.getPlayerData(uuid).restore(player);
-            playerManager.removePlayerData(player);
-            exit(player);
-            sb.restoreSB(player);
-        }
-        updateAfterDeath(player, death);
-    }
-
-    private void updateAfterDeath(Player player, boolean death) {
+    void updateAfterDeath(Player player, boolean death) {
         if (status == Status.RUNNING || status == Status.BEGINNING || status == Status.COUNTDOWN) {
             if (isGameOver()) {
                 if (!death) {
-                    for (UUID uuid : players) {
-                        if (kills.get(Bukkit.getPlayer(uuid)) >= 1) {
+                    for (UUID uuid : gamePlayerData.players) {
+                        if (gamePlayerData.kills.get(Bukkit.getPlayer(uuid)) >= 1) {
                             death = true;
                         }
                     }
@@ -1058,42 +813,21 @@ public class Game {
 
             }
         } else if (status == Status.WAITING) {
-            msgAll(HG.getPlugin().getLang().player_left_game.replace("<player>", player.getName()) +
-                    (minPlayers - players.size() <= 0 ? "!" : ":" + HG.getPlugin().getLang().players_to_start
-                            .replace("<amount>", String.valueOf((minPlayers - players.size())))));
+            gamePlayerData.msgAll(HG.getPlugin().getLang().player_left_game.replace("<player>", player.getName()) +
+                    (minPlayers - gamePlayerData.players.size() <= 0 ? "!" : ":" + HG.getPlugin().getLang().players_to_start
+                            .replace("<amount>", String.valueOf((minPlayers - gamePlayerData.players.size())))));
         }
         updateLobbyBlock();
         sb.setAlive();
     }
 
-	/* ON HOLD FOR NOW
-	private boolean isGameOver() {
-		if (players.size() <= 1) return true;
-		for (Entry<UUID, PlayerData> f : HG.getPlugin().getPlayers().entrySet()) {
-
-			Team t = f.getValue().getTeam();
-
-			if (t != null && (t.getPlayers().size() >= players.size())) {
-				List<UUID> ps = t.getPlayers();
-				for (UUID u : players) {
-					if (!ps.contains(u)) {
-						return false;
-					}
-				}
-				return true;
-			}
-		}
-		return false;
-	}
-	 */
-
-    private boolean isGameOver() {
-        if (players.size() <= 1) return true;
-        for (UUID uuid : players) {
+    boolean isGameOver() {
+        if (gamePlayerData.players.size() <= 1) return true;
+        for (UUID uuid : gamePlayerData.players) {
             Team team = playerManager.getPlayerData(uuid).getTeam();
 
-            if (team != null && (team.getPlayers().size() >= players.size())) {
-                for (UUID u : players) {
+            if (team != null && (team.getPlayers().size() >= gamePlayerData.players.size())) {
+                for (UUID u : gamePlayerData.players) {
                     if (!team.getPlayers().contains(u)) {
                         return false;
                     }
@@ -1102,17 +836,6 @@ public class Game {
             }
         }
         return false;
-    }
-
-    private void exit(Player player) {
-        player.setInvulnerable(false);
-        if (this.getStatus() == Status.RUNNING && bar != null)
-            bar.removePlayer(player);
-        if (this.exit != null && this.exit.getWorld() != null) {
-            player.teleport(this.exit);
-        } else {
-            player.teleport(Bukkit.getWorlds().get(0).getSpawnLocation());
-        }
     }
 
     public boolean isLobbyValid() {
@@ -1125,12 +848,6 @@ public class Game {
         }
         return false;
     }
-
-    private static double getRandomIntegerBetweenRange(double max) {
-        return (int) (Math.random() * ((max - (double) 0) + 1)) + (double) 0;
-    }
-
-
 
     private double getBorderSize(Location center) {
         double x1 = Math.abs(bound.getGreaterCorner().getX() - center.getX());
@@ -1200,68 +917,6 @@ public class Game {
     }
 
     /**
-     * Put a player into spectator for this game
-     *
-     * @param spectator The player to spectate
-     */
-    public void spectate(Player spectator) {
-        UUID uuid = spectator.getUniqueId();
-        if (plugin.getPlayerManager().hasPlayerData(uuid)) {
-            playerManager.transferPlayerDataToSpectator(uuid);
-        } else {
-            playerManager.addSpectatorData(new PlayerData(spectator, this));
-        }
-        this.spectators.add(uuid);
-        spectator.teleport(this.getSpawns().get(0));
-        spectator.setGameMode(GameMode.SURVIVAL);
-        spectator.setCollidable(false);
-        if (Config.spectateFly)
-            spectator.setAllowFlight(true);
-
-        if (Config.spectateHide) {
-            for (UUID u : players) {
-                Player player = Bukkit.getPlayer(u);
-                if (player == null) continue;
-                player.hidePlayer(plugin, spectator);
-            }
-            for (UUID u : spectators) {
-                Player player = Bukkit.getPlayer(u);
-                if (player == null) continue;
-                player.hidePlayer(plugin, spectator);
-            }
-        }
-        bar.addPlayer(spectator);
-        spectator.getInventory().setItem(0, plugin.getItemStackManager().getSpectatorCompass());
-    }
-
-    /**
-     * Remove a player from spectator of this game
-     *
-     * @param spectator The player to remove
-     */
-    public void leaveSpectate(Player spectator) {
-        exit(spectator);
-        spectator.setCollidable(true);
-        UUID uuid = spectator.getUniqueId();
-        if (Config.spectateFly) {
-            GameMode mode = playerManager.getSpectatorData(uuid).getGameMode();
-            if (mode == GameMode.SURVIVAL || mode == GameMode.ADVENTURE)
-                spectator.setAllowFlight(false);
-        }
-        if (Config.spectateHide)
-            revealPlayer(spectator);
-        playerManager.getSpectatorData(uuid).restore(spectator);
-        playerManager.removeSpectatorData(uuid);
-        spectators.remove(spectator.getUniqueId());
-    }
-
-    private void revealPlayer(Player hidden) {
-        for (Player player : Bukkit.getOnlinePlayers()) {
-            player.showPlayer(plugin, hidden);
-        }
-    }
-
-    /**
      * Run commands for this game that are defined in the arenas.yml
      *
      * @param commandType Type of command to run
@@ -1281,27 +936,13 @@ public class Game {
                 command = command.replace("<player>", player.getName());
             }
             if (commandType == CommandType.START && command.contains("<player>")) {
-                for (UUID uuid : players) {
+                for (UUID uuid : gamePlayerData.players) {
                     String newCommand = command.replace("<player>", Bukkit.getPlayer(uuid).getName());
                     Bukkit.dispatchCommand(Bukkit.getConsoleSender(), newCommand);
                 }
             } else
                 Bukkit.dispatchCommand(Bukkit.getConsoleSender(), command);
         }
-    }
-
-    private boolean vaultCheck(Player player) {
-        if (Config.economy) {
-            if (Vault.economy.getBalance(player) >= cost) {
-                Vault.economy.withdrawPlayer(player, cost);
-                return true;
-            } else {
-                Util.scm(player, HG.getPlugin().getLang().prefix +
-                        HG.getPlugin().getLang().cmd_join_no_money.replace("<cost>", String.valueOf(cost)));
-                return false;
-            }
-        }
-        return true;
     }
 
     @Override

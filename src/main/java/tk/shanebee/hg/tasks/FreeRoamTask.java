@@ -16,14 +16,14 @@ public class FreeRoamTask implements Runnable {
 
 	public FreeRoamTask(Game g) {
 		this.game = g;
-		for (UUID u : g.getPlayers()) {
+		for (UUID u : g.getGamePlayerData().getPlayers()) {
 			Player p = Bukkit.getPlayer(u);
 			if (p != null) {
 				Util.scm(p, HG.getPlugin().getLang().roam_game_started);
 				Util.scm(p, HG.getPlugin().getLang().roam_time.replace("<roam>", String.valueOf(g.getRoamTime())));
 				p.setHealth(20);
 				p.setFoodLevel(20);
-				g.unFreeze(p);
+				g.getGamePlayerData().unFreeze(p);
 			}
 		}
 		this.id = Bukkit.getScheduler().scheduleSyncDelayedTask(HG.getPlugin(), this, g.getRoamTime() * 20L);
@@ -31,7 +31,7 @@ public class FreeRoamTask implements Runnable {
 
 	@Override
 	public void run() {
-		game.msgAll(HG.getPlugin().getLang().roam_finished);
+		game.getGamePlayerData().msgAll(HG.getPlugin().getLang().roam_finished);
 		game.startGame();
 	}
 

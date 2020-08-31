@@ -27,7 +27,7 @@ public class TeamCmd extends BaseCmd {
 			if (args.length >= 3) {
 				Player invitee = Bukkit.getPlayer(args[2]);
 
-				if (invitee == null || !g.getPlayers().contains(invitee.getUniqueId())) {
+				if (invitee == null || !g.getGamePlayerData().getPlayers().contains(invitee.getUniqueId())) {
 					Util.scm(player, lang.cmd_team_not_avail.replace("<player>", args[2]));
 					return true;
 				}

@@ -1,18 +1,21 @@
 package tk.shanebee.hg.game;
 
 import tk.shanebee.hg.HG;
+import tk.shanebee.hg.data.Language;
 
 /**
- * General class for storing different aspects of data for {@link Game games}
+ * General class for storing different aspects of data for {@link Game Games}
  */
 public abstract class Data {
 
-    private final Game game;
-    private final HG plugin;
+    final Game game;
+    final HG plugin;
+    final Language lang;
 
     protected Data(Game game) {
         this.game = game;
-        this.plugin = HG.getPlugin();
+        this.plugin = game.plugin;
+        this.lang = game.lang;
     }
 
     /**

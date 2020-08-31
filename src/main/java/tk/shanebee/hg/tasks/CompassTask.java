@@ -68,7 +68,7 @@ public class CompassTask implements Runnable {
 
 		Player player = null;
 
-		for (UUID u: g.getPlayers()) {
+		for (UUID u: g.getGamePlayerData().getPlayers()) {
 
 			Player p2 = Bukkit.getPlayer(u);
 

@@ -236,19 +236,19 @@ public class HG extends JavaPlugin {
 		for (Game g : games) {
 			g.cancelTasks();
 			g.forceRollback();
-			ps.addAll(g.getPlayers());
-			ps.addAll(g.getSpectators());
+			ps.addAll(g.getGamePlayerData().getPlayers());
+			ps.addAll(g.getGamePlayerData().getSpectators());
 		}
 		for (UUID u : ps) {
 			Player p = Bukkit.getPlayer(u);
 			if (p != null) {
 			    p.closeInventory();
 				if (playerManager.hasPlayerData(u)) {
-                    playerManager.getPlayerData(u).getGame().leave(p, false);
+                    playerManager.getPlayerData(u).getGame().getGamePlayerData().leave(p, false);
                     playerManager.removePlayerData(u);
                 }
 				if (playerManager.hasSpectatorData(u)) {
-                    playerManager.getSpectatorData(u).getGame().leaveSpectate(p);
+                    playerManager.getSpectatorData(u).getGame().getGamePlayerData().leaveSpectate(p);
                     playerManager.removePlayerData(u);
                 }
 			}

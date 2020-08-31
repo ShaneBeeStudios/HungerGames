@@ -3,6 +3,7 @@ package tk.shanebee.hg.commands;
 import tk.shanebee.hg.game.Game;
 import tk.shanebee.hg.HG;
 import tk.shanebee.hg.Status;
+import tk.shanebee.hg.game.GamePlayerData;
 import tk.shanebee.hg.util.Util;
 
 public class SpectateCmd extends BaseCmd {
@@ -21,10 +22,11 @@ public class SpectateCmd extends BaseCmd {
 			Util.scm(player, lang.cmd_join_in_game);
 		} else {
 			Game game = gameManager.getGame(args[1]);
-			if (game != null && !game.getPlayers().contains(player.getUniqueId()) && !game.getSpectators().contains(player.getUniqueId())) {
+			GamePlayerData gamePlayerData = game.getGamePlayerData();
+			if (game != null && !gamePlayerData.getPlayers().contains(player.getUniqueId()) && !gamePlayerData.getSpectators().contains(player.getUniqueId())) {
 				Status status = game.getStatus();
 				if (status == Status.RUNNING || status == Status.BEGINNING) {
-					game.spectate(player);
+					gamePlayerData.spectate(player);
 				} else {
 					Util.scm(player, "This game is not running, status: " + status);
 				}

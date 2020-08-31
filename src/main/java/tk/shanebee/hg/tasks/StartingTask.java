@@ -31,7 +31,7 @@ public class StartingTask implements Runnable {
 			stop();
 			game.startFreeRoam();
 		} else {
-			game.msgAll(HG.getPlugin().getLang().game_countdown.replace("<timer>", String.valueOf(timer)));
+			game.getGamePlayerData().msgAll(HG.getPlugin().getLang().game_countdown.replace("<timer>", String.valueOf(timer)));
 		}
 	}
 

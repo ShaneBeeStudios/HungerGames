@@ -2,6 +2,7 @@ package tk.shanebee.hg.commands;
 
 import tk.shanebee.hg.HG;
 import tk.shanebee.hg.game.Game;
+import tk.shanebee.hg.game.GamePlayerData;
 import tk.shanebee.hg.util.Util;
 
 public class JoinCmd extends BaseCmd {
@@ -21,8 +22,8 @@ public class JoinCmd extends BaseCmd {
 			Util.scm(player, HG.getPlugin().getLang().cmd_join_in_game);
 		} else {
 			Game g = gameManager.getGame(args[1]);
-			if (g != null && !g.getPlayers().contains(player.getUniqueId())) {
-				g.join(player);
+			if (g != null && !g.getGamePlayerData().getPlayers().contains(player.getUniqueId())) {
+				g.getGamePlayerData().join(player);
 			} else {
 				Util.scm(player, lang.cmd_delete_noexist);
 			}

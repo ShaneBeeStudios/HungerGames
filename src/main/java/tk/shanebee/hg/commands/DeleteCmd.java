@@ -3,6 +3,7 @@ package tk.shanebee.hg.commands;
 import tk.shanebee.hg.game.Game;
 import tk.shanebee.hg.HG;
 import tk.shanebee.hg.Status;
+import tk.shanebee.hg.game.GamePlayerData;
 import tk.shanebee.hg.util.Util;
 
 import java.util.UUID;
@@ -24,6 +25,7 @@ public class DeleteCmd extends BaseCmd {
 	public boolean run() {
 		Game g = gameManager.getGame(args[1]);
 		if (g != null) {
+			GamePlayerData gamePlayerData = g.getGamePlayerData();
 			try {
 				Util.scm(sender, lang.cmd_delete_attempt.replace("<arena>", g.getName()));
 
@@ -32,12 +34,12 @@ public class DeleteCmd extends BaseCmd {
 					g.forceRollback();
 					g.stop(false);
 				}
-				if (!g.getPlayers().isEmpty()) {
+				if (!gamePlayerData.getPlayers().isEmpty()) {
 					Util.scm(sender, lang.cmd_delete_kicking);
-					for (UUID u : g.getPlayers()) {
+					for (UUID u : gamePlayerData.getPlayers()) {
 						Player p = Bukkit.getPlayer(u);
 						if (p != null) {
-							g.leave(p, false);
+							gamePlayerData.leave(p, false);
 						}
 					}
 				}

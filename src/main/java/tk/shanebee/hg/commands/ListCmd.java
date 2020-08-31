@@ -1,7 +1,6 @@
 package tk.shanebee.hg.commands;
 
 import tk.shanebee.hg.game.Game;
-import tk.shanebee.hg.HG;
 import tk.shanebee.hg.util.Util;
 
 public class ListCmd extends BaseCmd {
@@ -17,7 +16,7 @@ public class ListCmd extends BaseCmd {
 	public boolean run() {
 		StringBuilder p = new StringBuilder();
         Game g = playerManager.getGame(player);
-		for (String s : Util.convertUUIDListToStringList(g.getPlayers())) {
+		for (String s : Util.convertUUIDListToStringList(g.getGamePlayerData().getPlayers())) {
 			p.append("&6, &c").append(s);
 		}
 		p = new StringBuilder(p.substring(3));

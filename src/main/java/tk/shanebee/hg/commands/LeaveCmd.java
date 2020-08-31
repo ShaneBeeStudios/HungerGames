@@ -28,10 +28,10 @@ public class LeaveCmd extends BaseCmd {
 							lang.cmd_leave_refund.replace("<cost>", String.valueOf(game.getCost())));
 				}
 			}
-			game.leave(player, false);
+			game.getGamePlayerData().leave(player, false);
 		} else {
 			game = playerManager.getSpectatorData(player).getGame();
-			game.leaveSpectate(player);
+			game.getGamePlayerData().leaveSpectate(player);
 		}
 		Util.scm(player, lang.prefix + lang.cmd_leave_left.replace("<arena>", game.getName()));
 		return true;

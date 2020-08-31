@@ -33,12 +33,12 @@ public class GameBar extends Data {
         int sec = (time % 60);
         String title = this.title.replace("<min>", String.valueOf(min)).replace("<sec>", String.valueOf(sec));
         bar = Bukkit.createBossBar(Util.getColString(title), BarColor.GREEN, BarStyle.SEGMENTED_20);
-        for (UUID uuid : getGame().getPlayers()) {
+        for (UUID uuid : getGame().getGamePlayerData().getPlayers()) {
             Player player = Bukkit.getPlayer(uuid);
             assert player != null;
             bar.addPlayer(player);
         }
-        for (UUID uuid : getGame().getSpectators()) {
+        for (UUID uuid : getGame().getGamePlayerData().getSpectators()) {
             Player player = Bukkit.getPlayer(uuid);
             assert player != null;
             bar.addPlayer(player);

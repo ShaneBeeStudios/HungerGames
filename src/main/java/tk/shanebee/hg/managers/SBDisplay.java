@@ -47,7 +47,7 @@ public class SBDisplay {
 		this.ob = board.registerNewObjective(ChatColor.translateAlternateColorCodes('&', HG.getPlugin().getLang().players_alive), "dummy", "arena" + g.getName());
 		this.ob.setDisplaySlot(DisplaySlot.SIDEBAR);
 		this.ob.setDisplayName(ChatColor.translateAlternateColorCodes('&', HG.getPlugin().getLang().scoreboard_title));
-		String alive = "  " + HG.getPlugin().getLang().players_alive_num.replace("<num>", String.valueOf(g.getPlayers().size()));
+		String alive = "  " + HG.getPlugin().getLang().players_alive_num.replace("<num>", String.valueOf(g.getGamePlayerData().getPlayers().size()));
 
 		Score space1 = ob.getScore(" ");
 		Score space2 = ob.getScore("  ");

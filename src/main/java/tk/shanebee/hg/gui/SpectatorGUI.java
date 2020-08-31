@@ -40,7 +40,7 @@ public class SpectatorGUI implements InventoryHolder, Listener {
     private void initializeItems() {
         inv.clear();
         int i = 0;
-        for (UUID uuid : game.getPlayers()) {
+        for (UUID uuid : game.getGamePlayerData().getPlayers()) {
             Player player = Bukkit.getPlayer(uuid);
             if (player == null) continue;
             inv.setItem(i, getHead(player));
@@ -68,7 +68,7 @@ public class SpectatorGUI implements InventoryHolder, Listener {
     @EventHandler
     private void onClick(InventoryClickEvent event) {
         if (inv.getHolder() != this) return;
-        if (!game.getSpectators().contains(event.getWhoClicked().getUniqueId())) return;
+        if (!game.getGamePlayerData().getSpectators().contains(event.getWhoClicked().getUniqueId())) return;
 
         event.setCancelled(true);
         Player player = ((Player) event.getWhoClicked());
@@ -83,7 +83,7 @@ public class SpectatorGUI implements InventoryHolder, Listener {
 
     private Player getClicked(SkullMeta meta) {
         OfflinePlayer player = meta.getOwningPlayer();
-        if (player == null || !player.isOnline() || !game.getPlayers().contains(player.getUniqueId())) return null;
+        if (player == null || !player.isOnline() || !game.getGamePlayerData().getPlayers().contains(player.getUniqueId())) return null;
         return ((Player) player);
     }
 

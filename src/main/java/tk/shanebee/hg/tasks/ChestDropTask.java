@@ -56,7 +56,7 @@ public class ChestDropTask implements Runnable {
 
         chests.add(new ChestDrop(fb));
 
-        for (UUID u : g.getPlayers()) {
+        for (UUID u : g.getGamePlayerData().getPlayers()) {
             Player p = Bukkit.getPlayer(u);
             if (p != null) {
                 Util.scm(p, HG.getPlugin().getLang().chest_drop_1);

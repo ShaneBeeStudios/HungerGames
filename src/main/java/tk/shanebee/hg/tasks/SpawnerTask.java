@@ -28,7 +28,7 @@ public class SpawnerTask implements Runnable {
 
 	@Override
 	public void run() {
-		for (UUID u : game.getPlayers()) {
+		for (UUID u : game.getGamePlayerData().getPlayers()) {
 			Player p = Bukkit.getPlayer(u);
 			if (p != null) {
 				Location location = p.getLocation();
