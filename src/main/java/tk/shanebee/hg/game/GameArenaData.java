@@ -90,10 +90,22 @@ public class GameArenaData extends Data {
         return minPlayers;
     }
 
+    /**
+     * Get the cost for this game
+     * <p>This is the price the player must pay to play this game</p>
+     *
+     * @return Cost of game
+     */
     public int getCost() {
         return this.cost;
     }
 
+    /**
+     * Set the cost for this game
+     * <p>This is the price the player must pay to play this game</p>
+     *
+     * @param cost Cost of game
+     */
     public void setCost(int cost) {
         this.cost = cost;
     }
@@ -152,18 +164,6 @@ public class GameArenaData extends Data {
     public void setExit(Location location) {
         this.exit = location;
     }
-
-    /**
-     * Set the chest refill time for this game
-     *
-     * @param refill Remaining time in game (seconds : 30 second intervals)
-     */
-    @SuppressWarnings("unused")
-    public void setChestRefill(int refill) {
-        this.chestRefillTime = refill;
-    }
-
-
 
     /**
      * Set the chest refill time
