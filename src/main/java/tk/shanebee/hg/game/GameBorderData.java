@@ -8,6 +8,9 @@ import tk.shanebee.hg.data.Config;
 import java.util.Arrays;
 import java.util.List;
 
+/**
+ * Data class for holding a {@link Game Game's} world border
+ */
 public class GameBorderData extends Data {
 
     private Location borderCenter = null;
@@ -86,4 +89,5 @@ public class GameBorderData extends Data {
         assert world != null;
         world.getWorldBorder().reset();
     }
+
 }
