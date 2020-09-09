@@ -192,8 +192,8 @@ public class GameBlockData extends Data {
 
     void updateLobbyBlock() {
         if (sign2 == null || sign3 == null) return;
-        sign2.setLine(1, game.status.getName());
-        sign3.setLine(1, ChatColor.BOLD + "" + game.getGamePlayerData().players.size() + "/" + game.maxPlayers);
+        sign2.setLine(1, game.gameArenaData.status.getName());
+        sign3.setLine(1, ChatColor.BOLD + "" + game.getGamePlayerData().players.size() + "/" + game.gameArenaData.maxPlayers);
         sign2.update(true);
         sign3.update(true);
     }
@@ -214,14 +214,14 @@ public class GameBlockData extends Data {
             this.sign3 = (Sign) sign2.getBlock().getRelative(face).getState();
 
             sign1.setLine(0, Util.getColString(lang.lobby_sign_1_1));
-            sign1.setLine(1, ChatColor.BOLD + game.name);
+            sign1.setLine(1, ChatColor.BOLD + game.gameArenaData.name);
             sign1.setLine(2, Util.getColString(lang.lobby_sign_1_3));
-            if (game.cost > 0)
-                sign1.setLine(3, Util.getColString(HG.getPlugin().getLang().lobby_sign_cost.replace("<cost>", String.valueOf(game.cost))));
+            if (game.gameArenaData.cost > 0)
+                sign1.setLine(3, Util.getColString(HG.getPlugin().getLang().lobby_sign_cost.replace("<cost>", String.valueOf(game.gameArenaData.cost))));
             sign2.setLine(0, Util.getColString(lang.lobby_sign_2_1));
-            sign2.setLine(1, game.status.getName());
+            sign2.setLine(1, game.gameArenaData.status.getName());
             sign3.setLine(0, Util.getColString(lang.lobby_sign_3_1));
-            sign3.setLine(1, ChatColor.BOLD + "" + 0 + "/" + game.maxPlayers);
+            sign3.setLine(1, ChatColor.BOLD + "" + 0 + "/" + game.gameArenaData.maxPlayers);
             sign1.update(true);
             sign2.update(true);
             sign3.update(true);

@@ -2,6 +2,7 @@ package tk.shanebee.hg.commands;
 
 import org.bukkit.Location;
 import tk.shanebee.hg.game.Game;
+import tk.shanebee.hg.game.GameArenaData;
 import tk.shanebee.hg.util.Util;
 
 public class SetExitCmd extends BaseCmd {
@@ -22,17 +23,18 @@ public class SetExitCmd extends BaseCmd {
             plugin.getArenaConfig().getConfig().set("global-exit-location", stringLoc);
             Util.scm(player, lang.cmd_exit_set + " " + stringLoc.replace(":", "&6,&c "));
             for (Game game : plugin.getGames())
-                game.setExit(loc);
+                game.getGameArenaData().setExit(loc);
         } else {
             Game game = gameManager.getGame(args[1]);
+            GameArenaData gameArenaData = game.getGameArenaData();
             if (game == null) {
                 Util.scm(player, lang.cmd_delete_noexist);
                 return true;
             }
-            plugin.getArenaConfig().getConfig().set("arenas." + game.getName() + ".exit-location", stringLoc);
-            String msg = lang.cmd_exit_set_arena.replace("<arena>", game.getName());
+            plugin.getArenaConfig().getConfig().set("arenas." + gameArenaData.getName() + ".exit-location", stringLoc);
+            String msg = lang.cmd_exit_set_arena.replace("<arena>", gameArenaData.getName());
             Util.scm(player, msg + " " + stringLoc.replace(":", "&6,&c "));
-            game.setExit(loc);
+            gameArenaData.setExit(loc);
         }
         plugin.getArenaConfig().saveCustomConfig();
 

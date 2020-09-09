@@ -3,6 +3,7 @@ package tk.shanebee.hg.commands;
 import org.bukkit.Location;
 import org.bukkit.configuration.Configuration;
 import tk.shanebee.hg.game.Game;
+import tk.shanebee.hg.game.GameArenaData;
 import tk.shanebee.hg.util.Util;
 
 import java.util.List;
@@ -18,24 +19,25 @@ public class AddSpawnCmd extends BaseCmd {
 
 	@Override
 	public boolean run() {
-		Game g = gameManager.getGame(player.getLocation());
-		int num = g.getSpawns().size() + 1;
+		Game game = gameManager.getGame(player.getLocation());
+		GameArenaData gameArenaData = game.getGameArenaData();
+		int num = gameArenaData.getSpawns().size() + 1;
 		Configuration c = arenaConfig.getCustomConfig();
-		List<String> d = c.getStringList("arenas." + g.getName() + ".spawns");
+		List<String> d = c.getStringList("arenas." + gameArenaData.getName() + ".spawns");
 		Location l = player.getLocation();
-		for (Location lb : g.getSpawns()) {
+		for (Location lb : gameArenaData.getSpawns()) {
 			if (lb.getBlock().equals(l.getBlock())) {
 				Util.scm(player, lang.cmd_spawn_same);
 				return true;
 			}
 		}
 		d.add(l.getWorld().getName() + ":" + l.getBlockX() + ":" + l.getBlockY() + ":" + l.getBlockZ() + ":" + l.getYaw() + ":" + l.getPitch());
-		c.set("arenas." + g.getName() + ".spawns", d);
-		g.addSpawn(l);
+		c.set("arenas." + gameArenaData.getName() + ".spawns", d);
+		gameArenaData.addSpawn(l);
 		arenaConfig.saveCustomConfig();
 		Util.scm(player, lang.cmd_spawn_set.replace("<number>", String.valueOf(num)));
 
-		gameManager.checkGame(g, player);
+		gameManager.checkGame(game, player);
 		return true;
 	}
 }

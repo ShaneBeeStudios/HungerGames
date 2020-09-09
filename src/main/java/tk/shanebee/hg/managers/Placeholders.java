@@ -92,15 +92,15 @@ public class Placeholders extends PlaceholderExpansion {
                             return getStatsPlayer(identifier, player);
                 }
             case "status":
-                return HG.getPlugin().getManager().getGame(id[1]).getStatus().getName();
+                return HG.getPlugin().getManager().getGame(id[1]).getGameArenaData().getStatus().getName();
             case "cost":
-                return String.valueOf(HG.getPlugin().getManager().getGame(id[1]).getCost());
+                return String.valueOf(HG.getPlugin().getManager().getGame(id[1]).getGameArenaData().getCost());
             case "playerscurrent":
                 return String.valueOf(HG.getPlugin().getManager().getGame(id[1]).getGamePlayerData().getPlayers().size());
             case "playersmax":
-                return String.valueOf(HG.getPlugin().getManager().getGame(id[1]).getMaxPlayers());
+                return String.valueOf(HG.getPlugin().getManager().getGame(id[1]).getGameArenaData().getMaxPlayers());
             case "playersmin":
-                return String.valueOf(HG.getPlugin().getManager().getGame(id[1]).getMinPlayers());
+                return String.valueOf(HG.getPlugin().getManager().getGame(id[1]).getGameArenaData().getMinPlayers());
         }
         return null;
     }

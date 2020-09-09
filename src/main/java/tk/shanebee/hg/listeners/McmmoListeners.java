@@ -134,7 +134,7 @@ public class McmmoListeners implements Listener {
 	private void itemSpawnEvent(McMMOItemSpawnEvent event) {
 		if (!Config.mcmmoUseSkills) {
 			Location loc = event.getLocation();
-			plugin.getGames().stream().filter(game -> game.isInRegion(loc)).map(game -> true).forEach(event::setCancelled);
+			plugin.getGames().stream().filter(game -> game.getGameArenaData().isInRegion(loc)).map(game -> true).forEach(event::setCancelled);
 		}
 	}
 

@@ -18,7 +18,7 @@ public class BorderCenterCmd extends BaseCmd {
 	public boolean run() {
 		Game game = gameManager.getGame(args[1]);
 		if (game != null) {
-			String name = game.getName();
+			String name = game.getGameArenaData().getName();
 			Location l = player.getLocation();
 			assert l.getWorld() != null;
 			String loc = l.getWorld().getName() + ":" + l.getBlockX() + ":" + l.getBlockY() + ":" + l.getBlockZ();

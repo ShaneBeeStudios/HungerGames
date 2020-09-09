@@ -16,7 +16,7 @@ public class KitCmd extends BaseCmd {
 	@Override
 	public boolean run() {
 		Game game = playerManager.getPlayerData(player).getGame();
-		Status st = game.getStatus();
+		Status st = game.getGameArenaData().getStatus();
 		if (!game.getKitManager().hasKits()) {
 		    Util.scm(player, lang.kit_disabled);
 		    return false;

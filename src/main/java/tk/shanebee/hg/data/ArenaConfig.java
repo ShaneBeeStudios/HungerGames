@@ -11,6 +11,7 @@ import org.bukkit.inventory.ItemStack;
 import tk.shanebee.hg.*;
 import tk.shanebee.hg.game.Bound;
 import tk.shanebee.hg.game.Game;
+import tk.shanebee.hg.game.GameArenaData;
 import tk.shanebee.hg.managers.KitManager;
 import tk.shanebee.hg.tasks.CompassTask;
 import tk.shanebee.hg.util.Util;
@@ -197,12 +198,13 @@ public class ArenaConfig {
 						commands = Collections.singletonList("none");
 					}
 					game.getGameCommandData().setCommands(commands);
+					GameArenaData gameArenaData = game.getGameArenaData();
 					if (arenadat.isSet(path + ".chest-refill")) {
 						int chestRefill = arenadat.getInt(path + ".chest-refill");
-						game.setChestRefillTime(chestRefill);
+						gameArenaData.setChestRefillTime(chestRefill);
 					}
 					try {
-						String exitPath = "arenas." + game.getName() + ".exit-location";
+						String exitPath = "arenas." + gameArenaData.getName() + ".exit-location";
 						String[] locString;
 						if (arenadat.isSet(exitPath)) {
 							locString = arenadat.getString(exitPath).split(":");
@@ -211,9 +213,9 @@ public class ArenaConfig {
 						}
 						Location location = new Location(Bukkit.getServer().getWorld(locString[0]), Integer.parseInt(locString[1]) + 0.5,
 								Integer.parseInt(locString[2]) + 0.1, Integer.parseInt(locString[3]) + 0.5, Float.parseFloat(locString[4]), Float.parseFloat(locString[5]));
-						game.setExit(location);
+						gameArenaData.setExit(location);
 					} catch (Exception ignore) {
-						game.setExit(game.getLobbyLocation().getWorld().getSpawnLocation());
+						gameArenaData.setExit(game.getLobbyLocation().getWorld().getSpawnLocation());
 					}
 
 				}

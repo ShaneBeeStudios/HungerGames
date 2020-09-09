@@ -19,12 +19,12 @@ public class ChestRefillNowCmd extends BaseCmd {
     public boolean run() {
         Game game = gameManager.getGame(args[1]);
         if (game != null) {
-            if (game.getStatus() != Status.RUNNING) {
+            if (game.getGameArenaData().getStatus() != Status.RUNNING) {
                 Util.scm(sender, lang.listener_not_running);
                 return true;
             }
             game.getGameBlockData().refillChests();
-            Util.scm(sender, lang.cmd_chest_refill_now.replace("<arena>", game.getName()));
+            Util.scm(sender, lang.cmd_chest_refill_now.replace("<arena>", game.getGameArenaData().getName()));
         } else {
             Util.scm(sender, lang.cmd_delete_noexist);
         }

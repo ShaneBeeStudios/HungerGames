@@ -27,7 +27,7 @@ public class Rollback implements Runnable {
 		this.game = game;
 		this.gameBlockData = game.getGameBlockData();
 		this.blocks_per_second = Config.blocks_per_second / 10;
-		game.setStatus(Status.ROLLBACK);
+		game.getGameArenaData().setStatus(Status.ROLLBACK);
 		this.session = gameBlockData.getBlocks().iterator();
 		this.itemFrameDataIterator = gameBlockData.getItemFrameData().iterator();
 		timerID = Bukkit.getServer().getScheduler().scheduleSyncDelayedTask(HG.getPlugin(), this, 2);
@@ -59,7 +59,7 @@ public class Rollback implements Runnable {
         Bukkit.getServer().getScheduler().cancelTask(timerID);
         gameBlockData.resetBlocks();
         gameBlockData.resetItemFrames();
-        game.setStatus(Status.READY);
+        game.getGameArenaData().setStatus(Status.READY);
 	}
 
 }

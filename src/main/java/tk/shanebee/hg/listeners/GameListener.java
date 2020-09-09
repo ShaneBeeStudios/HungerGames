@@ -51,6 +51,7 @@ import tk.shanebee.hg.data.Leaderboard;
 import tk.shanebee.hg.data.PlayerData;
 import tk.shanebee.hg.events.ChestOpenEvent;
 import tk.shanebee.hg.game.Game;
+import tk.shanebee.hg.game.GameArenaData;
 import tk.shanebee.hg.game.GameBlockData;
 import tk.shanebee.hg.game.GameCommandData.CommandType;
 import tk.shanebee.hg.game.GamePlayerData;
@@ -141,7 +142,7 @@ public class GameListener implements Listener {
 			if (pd != null) {
 				Game game = pd.getGame();
 
-				if (game.getStatus() != Status.RUNNING) {
+				if (game.getGameArenaData().getStatus() != Status.RUNNING) {
 					event.setCancelled(true);
 				} else if (pd.isOnTeam(player.getUniqueId()) && damager instanceof Player && pd.getTeam().isOnTeam(damager.getUniqueId())) {
 					Util.scm(damager, "&c" + player.getName() + " is on your team!");
@@ -168,7 +169,7 @@ public class GameListener implements Listener {
 	private void handleItemFrame(Hanging itemFrame, Event event, boolean cancel) {
 	    if (gameManager.isInRegion(itemFrame.getLocation())) {
 	        Game game = gameManager.getGame(itemFrame.getLocation());
-	        switch (game.getStatus()) {
+	        switch (game.getGameArenaData().getStatus()) {
                 case RUNNING:
                 case BEGINNING:
                 case COUNTDOWN:
@@ -250,7 +251,7 @@ public class GameListener implements Listener {
 	private void onSprint(FoodLevelChangeEvent event) {
 		Player p = (Player) event.getEntity();
 		if (playerManager.hasPlayerData(p)) {
-			Status st = playerManager.getPlayerData(p).getGame().getStatus();
+			Status st = playerManager.getPlayerData(p).getGame().getGameArenaData().getStatus();
 			if (st == Status.WAITING || st == Status.COUNTDOWN) {
 				p.setFoodLevel(1);
 				event.setCancelled(true);
@@ -380,7 +381,7 @@ public class GameListener implements Listener {
             }
 		}
 		if (event.getAction() != Action.PHYSICAL && playerManager.hasPlayerData(p)) {
-			Status st = playerManager.getPlayerData(p).getGame().getStatus();
+			Status st = playerManager.getPlayerData(p).getGame().getGameArenaData().getStatus();
 			if (st == Status.WAITING || st == Status.COUNTDOWN) {
 				event.setCancelled(true);
 				Util.scm(p, lang.listener_no_interact);
@@ -445,7 +446,8 @@ public class GameListener implements Listener {
 
 			if (Config.breakblocks && playerManager.hasPlayerData(p)) {
                 Game g = playerManager.getPlayerData(p).getGame();
-				if (g.getStatus() == Status.RUNNING || g.getStatus() == Status.BEGINNING) {
+                Status status = g.getGameArenaData().getStatus();
+				if (status == Status.RUNNING || status == Status.BEGINNING) {
 					if (!Config.blocks.contains(b.getType().toString()) && !Config.blocks.contains("ALL")) {
 						Util.scm(p, lang.listener_no_edit_block);
 						event.setCancelled(true);
@@ -462,7 +464,7 @@ public class GameListener implements Listener {
 			} else {
 				if (p.hasPermission("hg.create")) {
 				    Game g = plugin.getManager().getGame(b.getLocation());
-				    Status status = g.getStatus();
+				    Status status = g.getGameArenaData().getStatus();
 				    switch (status) {
                         case BEGINNING:
                         case RUNNING:
@@ -488,7 +490,7 @@ public class GameListener implements Listener {
 
 			if (Config.breakblocks && playerManager.hasPlayerData(p)) {
                 Game g = playerManager.getPlayerData(p).getGame();
-				if (g.getStatus() == Status.RUNNING || !Config.protectCooldown) {
+				if (g.getGameArenaData().getStatus() == Status.RUNNING || !Config.protectCooldown) {
 					if (!Config.blocks.contains(b.getType().toString()) && !Config.blocks.contains("ALL")) {
 						Util.scm(p, lang.listener_no_edit_block);
 						event.setCancelled(true);
@@ -507,7 +509,7 @@ public class GameListener implements Listener {
 			} else {
                 if (!playerManager.hasPlayerData(p) && p.hasPermission("hg.create")) {
                     Game g = gameManager.getGame(b.getLocation());
-                    Status status = g.getStatus();
+                    Status status = g.getGameArenaData().getStatus();
                     switch (status) {
                         case BEGINNING:
                         case RUNNING:
@@ -546,7 +548,7 @@ public class GameListener implements Listener {
             if (Config.breakblocks && playerManager.hasPlayerData(player)) {
                 Game game = playerManager.getPlayerData(player).getGame();
                 GameBlockData gameBlockData = game.getGameBlockData();
-                if (game.getStatus() == Status.RUNNING || !Config.protectCooldown) {
+                if (game.getGameArenaData().getStatus() == Status.RUNNING || !Config.protectCooldown) {
                     if (fill && (Config.blocks.contains(block.getType().toString()) || Config.blocks.contains("ALL"))) {
                         gameBlockData.recordBlockBreak(block);
                     } else if (!fill && (WATER || LAVA || Config.blocks.contains("ALL"))) {
@@ -579,7 +581,8 @@ public class GameListener implements Listener {
 		Block block = event.getBlock();
 		if (Config.breakblocks && gameManager.isInRegion(block.getLocation())) {
 			Game game = gameManager.getGame(block.getLocation());
-			if (game.getStatus() == Status.RUNNING || game.getStatus() == Status.BEGINNING) {
+			Status status = game.getGameArenaData().getStatus();
+			if (status == Status.RUNNING || status == Status.BEGINNING) {
 				game.getGameBlockData().recordBlockBreak(block);
 			}
 		}
@@ -591,7 +594,8 @@ public class GameListener implements Listener {
 		if (block.getType() == Material.AIR || block.getType() == Material.WATER || block.getType() == Material.LAVA) {
 			if (Config.breakblocks && gameManager.isInRegion(event.getEntity().getLocation())) {
 				Game game = gameManager.getGame(event.getEntity().getLocation());
-				if (game.getStatus() == Status.RUNNING || game.getStatus() == Status.BEGINNING) {
+				Status status = game.getGameArenaData().getStatus();
+				if (status == Status.RUNNING || status == Status.BEGINNING) {
 					game.getGameBlockData().recordBlockPlace(block.getState());
 				}
 			}
@@ -627,7 +631,7 @@ public class GameListener implements Listener {
 		if (gameManager.isInRegion(b.getLocation())) {
 			if (Config.breakblocks) {
 				Game g = gameManager.getGame(b.getLocation());
-				if (g.getStatus() == Status.RUNNING) {
+				if (g.getGameArenaData().getStatus() == Status.RUNNING) {
 					g.getGameBlockData().recordBlockBreak(b);
 				}
 			}
@@ -657,7 +661,7 @@ public class GameListener implements Listener {
 		Player p = event.getPlayer();
 		PlayerData pd = playerManager.getPlayerData(p);
 		if (pd != null) {
-		    if (pd.getGame().getStatus() == Status.WAITING) {
+		    if (pd.getGame().getGameArenaData().getStatus() == Status.WAITING) {
                 event.setCancelled(true);
             }
 		}
@@ -676,7 +680,7 @@ public class GameListener implements Listener {
             if (gameManager.isInRegion(event.getLocation())) {
                 Game g = gameManager.getGame(event.getLocation());
                 if (entity instanceof LivingEntity) {
-                    if (g.getStatus() != Status.RUNNING) {
+                    if (g.getGameArenaData().getStatus() != Status.RUNNING) {
                         event.setCancelled(true);
                         return;
                     }
@@ -691,7 +695,7 @@ public class GameListener implements Listener {
                     }
                 }
                 entity.setPersistent(false);
-                g.getBound().addEntity(entity);
+                g.getGameArenaData().getBound().addEntity(entity);
             }
         }
     }
@@ -748,7 +752,8 @@ public class GameListener implements Listener {
 		Player player = event.getPlayer();
 		Location location = event.getTo();
 		for (Game game : plugin.getGames()) {
-			if (game.isInRegion(location) && game.getStatus() == Status.RUNNING) {
+			GameArenaData gameArenaData = game.getGameArenaData();
+			if (gameArenaData.isInRegion(location) && gameArenaData.getStatus() == Status.RUNNING) {
 				if (event.getCause() == PlayerTeleportEvent.TeleportCause.ENDER_PEARL && !game.getGamePlayerData().getPlayers().contains(player.getUniqueId()) && !game.getGamePlayerData().getSpectators().contains(player.getUniqueId())) {
 					event.setCancelled(true);
 				}

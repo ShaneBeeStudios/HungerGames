@@ -19,7 +19,7 @@ public class StopCmd extends BaseCmd {
 	public boolean run() {
 		if (args[1].equalsIgnoreCase("all")) {
 			for (Game game : plugin.getGames()) {
-			    Status status = game.getStatus();
+			    Status status = game.getGameArenaData().getStatus();
 				if (status == Status.RUNNING || status == Status.WAITING || status == Status.BEGINNING || status == Status.COUNTDOWN) {
 					game.stop(false);
 				}

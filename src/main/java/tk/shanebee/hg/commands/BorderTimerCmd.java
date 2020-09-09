@@ -18,7 +18,7 @@ public class BorderTimerCmd extends BaseCmd {
 	public boolean run() {
 		Game game = gameManager.getGame(args[1]);
 		if (game != null) {
-			String name = game.getName();
+			String name = game.getGameArenaData().getName();
 			int start;
 			int end;
 			try {

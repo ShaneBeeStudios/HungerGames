@@ -13,12 +13,12 @@ import java.util.UUID;
 /**
  * Data holder for {@link BossBar BossBars}
  */
-public class GameBar extends Data {
+public class GameBarData extends Data {
 
     private BossBar bar;
     private final String title;
 
-    protected GameBar(Game game) {
+    protected GameBarData(Game game) {
         super(game);
         this.title = HG.getPlugin().getLang().bossbar;
     }
@@ -52,7 +52,7 @@ public class GameBar extends Data {
      * @param remaining Remaining time to show on bar
      */
     public void bossbarUpdate(int remaining) {
-        double remain = ((double) remaining) / ((double) getGame().time);
+        double remain = ((double) remaining) / ((double) getGame().gameArenaData.timer);
         int min = (remaining / 60);
         int sec = (remaining % 60);
         String title = this.title.replace("<min>", String.valueOf(min)).replace("<sec>", String.valueOf(sec));

@@ -2,6 +2,7 @@ package tk.shanebee.hg.commands;
 
 import tk.shanebee.hg.game.Game;
 import tk.shanebee.hg.HG;
+import tk.shanebee.hg.game.GameArenaData;
 import tk.shanebee.hg.util.Util;
 
 public class ListGamesCmd extends BaseCmd {
@@ -16,8 +17,9 @@ public class ListGamesCmd extends BaseCmd {
 	@Override
 	public boolean run() {
 		Util.scm(sender, "&6&l Games:");
-		for (Game g : plugin.getGames()) {
-			Util.scm(sender, " &4 - &6" + g.getName() + "&4:&6" + g.getStatus().getName());
+		for (Game game : plugin.getGames()) {
+			GameArenaData gameArenaData = game.getGameArenaData();
+			Util.scm(sender, " &4 - &6" + gameArenaData.getName() + "&4:&6" + gameArenaData.getStatus().getName());
 		}
 		return true;
 	}

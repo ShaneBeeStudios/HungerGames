@@ -26,8 +26,8 @@ public class SpectatorGUI implements InventoryHolder, Listener {
 
     public SpectatorGUI(Game game) {
         this.game = game;
-        int size = (game.getMaxPlayers() / 9) + 1;
-        inv = Bukkit.createInventory(this, 9 * Math.min(size, 6), game.getName());
+        int size = (game.getGameArenaData().getMaxPlayers() / 9) + 1;
+        inv = Bukkit.createInventory(this, 9 * Math.min(size, 6), game.getGameArenaData().getName());
         Bukkit.getPluginManager().registerEvents(this, HG.getPlugin());
     }
 

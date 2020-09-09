@@ -20,7 +20,7 @@ public class GameBorderData extends Data {
     }
 
     private double getBorderSize(Location center) {
-        Bound bound = game.getBound();
+        Bound bound = game.gameArenaData.getBound();
         double x1 = Math.abs(bound.getGreaterCorner().getX() - center.getX());
         double x2 = Math.abs(bound.getLesserCorner().getX() - center.getX());
         double z1 = Math.abs(bound.getGreaterCorner().getZ() - center.getZ());
@@ -63,11 +63,11 @@ public class GameBorderData extends Data {
     public void setBorder(int time) {
         Location center;
         if (Config.centerSpawn && borderCenter == null) {
-            center = game.spawns.get(0);
+            center = game.gameArenaData.spawns.get(0);
         } else if (borderCenter != null) {
             center = borderCenter;
         } else {
-            center = game.bound.getCenter();
+            center = game.gameArenaData.bound.getCenter();
         }
         World world = center.getWorld();
         assert world != null;
@@ -82,7 +82,7 @@ public class GameBorderData extends Data {
     }
 
     void resetBorder() {
-        World world = game.getRegion().getWorld();
+        World world = game.gameArenaData.getBound().getWorld();
         assert world != null;
         world.getWorldBorder().reset();
     }

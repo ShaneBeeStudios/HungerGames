@@ -15,10 +15,10 @@ import java.util.UUID;
 
 public class SpawnerTask implements Runnable {
 
-	private Game game;
-	private int id;
-	private Random rg = new Random();
-	private MobManager mobManager;
+	private final Game game;
+	private final int id;
+	private final Random rg = new Random();
+	private final MobManager mobManager;
 
 	public SpawnerTask(Game game, int i) {
 		this.game = game;
@@ -45,7 +45,7 @@ public class SpawnerTask implements Runnable {
 
 				location = getSafeLoc(world, x, y, z);
 
-				if (location != null && game.isInRegion(location)) {
+				if (location != null && game.getGameArenaData().isInRegion(location)) {
 					MobEntry mobEntry;
 					assert world != null;
 					if (isDay(world)) {

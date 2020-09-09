@@ -38,7 +38,7 @@ public class WandListener implements Listener {
 			Location l = event.getClickedBlock().getLocation();
 			event.setCancelled(true);
 			for (Game game : HG.getPlugin().getGames()) {
-				if (game.getRegion().isInRegion(l)) {
+				if (game.getGameArenaData().getBound().isInRegion(l)) {
 					Util.scm(player, "&cThis location is already within an arena");
 					return;
 				}
@@ -55,7 +55,7 @@ public class WandListener implements Listener {
 			Location l = event.getClickedBlock().getLocation();
 			event.setCancelled(true);
 			for (Game game : HG.getPlugin().getGames()) {
-				if (game.getRegion().isInRegion(l)) {
+				if (game.getGameArenaData().getBound().isInRegion(l)) {
 					Util.scm(player, "&cThis location is already within an arena");
 					return;
 				}

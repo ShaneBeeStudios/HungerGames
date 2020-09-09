@@ -15,6 +15,7 @@ import tk.shanebee.hg.Status;
 import tk.shanebee.hg.data.Config;
 import tk.shanebee.hg.game.Bound;
 import tk.shanebee.hg.game.Game;
+import tk.shanebee.hg.game.GameArenaData;
 import tk.shanebee.hg.game.GameItemData;
 import tk.shanebee.hg.util.Util;
 
@@ -141,17 +142,18 @@ public class Manager {
      * @param player Player issuing the check
      */
 	public void checkGame(Game game, Player player) {
-		if (game.getSpawns().size() <  game.getMaxPlayers()) {
-			Util.scm(player, "&cYou still need &7" + (game.getMaxPlayers() - game.getSpawns().size()) + " &c more spawns!");
-		} else if (game.getStatus() == Status.BROKEN) {
+		GameArenaData gameArenaData = game.getGameArenaData();
+		if (gameArenaData.getSpawns().size() <  gameArenaData.getMaxPlayers()) {
+			Util.scm(player, "&cYou still need &7" + (gameArenaData.getMaxPlayers() - gameArenaData.getSpawns().size()) + " &c more spawns!");
+		} else if (gameArenaData.getStatus() == Status.BROKEN) {
 			Util.scm(player, "&cYour arena is marked as broken! use &7/hg debug &c to check for errors!");
-			Util.scm(player, "&cIf no errors are found, please use &7/hg toggle " + game.getName() + "&c!");
+			Util.scm(player, "&cIf no errors are found, please use &7/hg toggle " + gameArenaData.getName() + "&c!");
 		} else if (!game.getGameBlockData().isLobbyValid()) {
 			Util.scm(player, "&cYour LobbyWall is invalid! Please reset them!");
-			Util.scm(player, "&cSet lobbywall: &7/hg setlobbywall " + game.getName());
+			Util.scm(player, "&cSet lobbywall: &7/hg setlobbywall " + gameArenaData.getName());
 		} else {
 			Util.scm(player, "&aYour HungerGames arena is ready to run!");
-			game.setStatus(Status.WAITING);
+			gameArenaData.setStatus(Status.WAITING);
 		}
 	}
 
@@ -212,7 +214,7 @@ public class Manager {
 	 */
 	public boolean isInRegion(Location location) {
 		for (Game g : plugin.getGames()) {
-			if (g.isInRegion(location))
+			if (g.getGameArenaData().isInRegion(location))
 				return true;
 		}
 		return false;
@@ -224,7 +226,7 @@ public class Manager {
 	 */
 	public Game getGame(Location location) {
 		for (Game g : plugin.getGames()) {
-			if (g.isInRegion(location))
+			if (g.getGameArenaData().isInRegion(location))
 				return g;
 		}
 		return null;
@@ -236,7 +238,7 @@ public class Manager {
 	 */
 	public Game getGame(String name) {
 		for (Game g : plugin.getGames()) {
-			if (g.getName().equalsIgnoreCase(name)) {
+			if (g.getGameArenaData().getName().equalsIgnoreCase(name)) {
 				return g;
 			}
 		}
@@ -249,7 +251,7 @@ public class Manager {
     public int gamesRunning() {
         int i = 0;
         for (Game game : plugin.getGames()) {
-            switch (game.getStatus()) {
+            switch (game.getGameArenaData().getStatus()) {
                 case RUNNING:
                 case COUNTDOWN:
                 case BEGINNING:

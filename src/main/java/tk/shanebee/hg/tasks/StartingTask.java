@@ -15,10 +15,11 @@ public class StartingTask implements Runnable {
 	public StartingTask(Game g) {
 		this.timer = 30;
 		this.game = g;
+		String name = g.getGameArenaData().getName();
 		Util.broadcast(HG.getPlugin().getLang().game_started
-				.replace("<arena>", g.getName())
+				.replace("<arena>", name)
 				.replace("<seconds>", "" + timer));
-		Util.broadcast(HG.getPlugin().getLang().game_join.replace("<arena>", g.getName()));
+		Util.broadcast(HG.getPlugin().getLang().game_join.replace("<arena>", name));
 
 		this.id = Bukkit.getScheduler().scheduleSyncRepeatingTask(HG.getPlugin(), this, 5 * 20L, 5 * 20L);
 	}

@@ -23,10 +23,10 @@ import java.util.List;
 @SuppressWarnings("unused")
 public class MobManager {
 
-	private List<MobEntry> dayMobs = new ArrayList<>();
-	private List<MobEntry> nightMobs = new ArrayList<>();
-	private FileConfiguration config;
-	private Game game;
+	private final List<MobEntry> dayMobs = new ArrayList<>();
+	private final List<MobEntry> nightMobs = new ArrayList<>();
+	private final FileConfiguration config;
+	private final Game game;
 
 	public MobManager(Game game) {
 		this.game = game;
@@ -37,8 +37,8 @@ public class MobManager {
 	private void loadMobs() {
 		String gameName = "default";
 		for (String time : Arrays.asList("day", "night")) {
-			if (config.getConfigurationSection("mobs." + time + "." + game.getName()) != null) {
-				gameName = game.getName();
+			if (config.getConfigurationSection("mobs." + time + "." + game.getGameArenaData().getName()) != null) {
+				gameName = game.getGameArenaData().getName();
 			}
 			for (String key : config.getConfigurationSection("mobs." + time + "." + gameName).getKeys(false)) {
 				key = "mobs." + time + "." + gameName + "." + key;

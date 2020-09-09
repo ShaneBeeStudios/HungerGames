@@ -109,9 +109,10 @@ public class CommandListener implements CommandExecutor, TabCompleter {
 					if (args[0].equalsIgnoreCase("setexit") && StringUtil.startsWithIgnoreCase("all", args[1])) {
 						matchesDelete.add("all");
 					}
-					for (Game name : plugin.getGames()) {
-						if (StringUtil.startsWithIgnoreCase(name.getName(), args[1])) {
-							matchesDelete.add(name.getName());
+					for (Game game : plugin.getGames()) {
+						String name = game.getGameArenaData().getName();
+						if (StringUtil.startsWithIgnoreCase(name, args[1])) {
+							matchesDelete.add(name);
 						}
 					}
 					return matchesDelete;
@@ -119,9 +120,10 @@ public class CommandListener implements CommandExecutor, TabCompleter {
 			} else if (args[0].equalsIgnoreCase("chestrefill")) {
 				ArrayList<String> matchesDelete = new ArrayList<>();
 				if (args.length == 2) {
-					for (Game name : plugin.getGames()) {
-						if (StringUtil.startsWithIgnoreCase(name.getName(), args[1])) {
-							matchesDelete.add(name.getName());
+					for (Game game : plugin.getGames()) {
+						String name = game.getGameArenaData().getName();
+						if (StringUtil.startsWithIgnoreCase(name, args[1])) {
+							matchesDelete.add(name);
 						}
 					}
 					return matchesDelete;
@@ -141,9 +143,10 @@ public class CommandListener implements CommandExecutor, TabCompleter {
 			} else if (args[0].equalsIgnoreCase("bordersize")) {
 				ArrayList<String> matchesDelete = new ArrayList<>();
 				if (args.length == 2) {
-					for (Game name : plugin.getGames()) {
-						if (StringUtil.startsWithIgnoreCase(name.getName(), args[1])) {
-							matchesDelete.add(name.getName());
+					for (Game game : plugin.getGames()) {
+						String name = game.getGameArenaData().getName();
+						if (StringUtil.startsWithIgnoreCase(name, args[1])) {
+							matchesDelete.add(name);
 						}
 					}
 					return matchesDelete;
@@ -154,9 +157,10 @@ public class CommandListener implements CommandExecutor, TabCompleter {
 			} else if (args[0].equalsIgnoreCase("bordertimer")) {
 				ArrayList<String> matchesDelete = new ArrayList<>();
 				if (args.length == 2) {
-					for (Game name : plugin.getGames()) {
-						if (StringUtil.startsWithIgnoreCase(name.getName(), args[1])) {
-							matchesDelete.add(name.getName());
+					for (Game game : plugin.getGames()) {
+						String name = game.getGameArenaData().getName();
+						if (StringUtil.startsWithIgnoreCase(name, args[1])) {
+							matchesDelete.add(name);
 						}
 					}
 					return matchesDelete;

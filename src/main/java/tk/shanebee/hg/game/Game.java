@@ -39,24 +39,13 @@ public class Game {
 
     final HG plugin;
     final Language lang;
-    final String name;
-    final List<Location> spawns;
-    final Bound bound;
 
-    KitManager kit;
-
+    // Managers
+    KitManager kitManager;
     private final MobManager mobManager;
     private final PlayerManager playerManager;
-    Location exit;
-    Status status;
-    final int minPlayers;
-    final int maxPlayers;
-    final int time;
-    int cost;
 
-    private final int roamTime;
     final SBDisplay sb;
-    private int chestRefillTime = 0;
 
     // Task ID's here!
     private SpawnerTask spawner;
@@ -66,15 +55,13 @@ public class Game {
     private ChestDropTask chestDrop;
 
     // Data Objects
-    private final GameBar bar;
-    private final GamePlayerData gamePlayerData;
-    private final GameBlockData gameBlockData;
-    private final GameItemData gameItemData;
-    private final GameCommandData gameCommandData;
-    private final GameBorderData gameBorderData;
-
-    final boolean spectate = Config.spectateEnabled;
-    final boolean spectateOnDeath = Config.spectateOnDeath;
+    final GameArenaData gameArenaData;
+    final GameBarData bar;
+    final GamePlayerData gamePlayerData;
+    final GameBlockData gameBlockData;
+    final GameItemData gameItemData;
+    final GameCommandData gameCommandData;
+    final GameBorderData gameBorderData;
 
     /**
      * Create a new game
@@ -93,15 +80,13 @@ public class Game {
      */
     public Game(String name, Bound bound, List<Location> spawns, Sign lobbySign, int timer, int minPlayers, int maxPlayers, int roam, boolean isReady, int cost) {
         this(name, bound, timer, minPlayers, maxPlayers, roam, cost);
-        this.spawns.addAll(spawns);
+        gameArenaData.spawns.addAll(spawns);
         this.gameBlockData.sign1 = lobbySign;
-        if (isReady) this.status = Status.READY;
-        else this.status = Status.BROKEN;
-        this.cost = cost;
+        gameArenaData.setStatus(isReady ? Status.READY : Status.BROKEN);
 
         this.gameBlockData.setLobbyBlock(lobbySign);
 
-        this.kit = plugin.getKitManager();
+        this.kitManager = plugin.getKitManager();
     }
 
     /**
@@ -117,22 +102,15 @@ public class Game {
      * @param cost       Cost of this game
      */
     public Game(String name, Bound bound, int timer, int minPlayers, int maxPlayers, int roam, int cost) {
+        this.gameArenaData = new GameArenaData(this, name, bound, timer, minPlayers, maxPlayers, roam, cost);
+        this.gameArenaData.status = Status.NOTREADY;
         this.plugin = HG.getPlugin();
         this.playerManager = HG.getPlugin().getPlayerManager();
         this.lang = plugin.getLang();
-        this.name = name;
-        this.time = timer;
-        this.minPlayers = minPlayers;
-        this.maxPlayers = maxPlayers;
-        this.roamTime = roam;
-        this.spawns = new ArrayList<>();
-        this.bound = bound;
-        this.status = Status.NOTREADY;
         this.sb = new SBDisplay(this);
-        this.kit = plugin.getKitManager();
+        this.kitManager = plugin.getKitManager();
         this.mobManager = new MobManager(this);
-        this.cost = cost;
-        this.bar = new GameBar(this);
+        this.bar = new GameBarData(this);
         this.gamePlayerData = new GamePlayerData(this);
         this.gameBlockData = new GameBlockData(this);
         this.gameItemData = new GameItemData(this);
@@ -143,11 +121,20 @@ public class Game {
     }
 
     /**
-     * Get an instance of the GameBar
+     * Get an instance of the GameArenaData
      *
-     * @return Instance of GameBar
+     * @return Instance of GameArenaData
      */
-    public GameBar getGameBar() {
+    public GameArenaData getGameArenaData() {
+        return gameArenaData;
+    }
+
+    /**
+     * Get an instance of the GameBarData
+     *
+     * @return Instance of GameBarData
+     */
+    public GameBarData getGameBar() {
         return bar;
     }
 
@@ -196,119 +183,8 @@ public class Game {
         return gameBorderData;
     }
 
-    /**
-     * Get the bounding region of this game
-     *
-     * @return Region of this game
-     */
-    public Bound getRegion() {
-        return bound;
-    }
-
     public StartingTask getStartingTask() {
         return this.starting;
-    }
-
-    /**
-     * Set the chest refill time for this game
-     *
-     * @param refill Remaining time in game (seconds : 30 second intervals)
-     */
-    public void setChestRefill(int refill) {
-        this.chestRefillTime = refill;
-    }
-
-    /**
-     * Set the status of the game
-     *
-     * @param status Status to set
-     */
-    public void setStatus(Status status) {
-        this.status = status;
-        gameBlockData.updateLobbyBlock();
-    }
-
-    /**
-     * Set the chest refill time
-     *
-     * @param time The remaining time in the game for the chests to refill
-     */
-    public void setChestRefillTime(int time) {
-        this.chestRefillTime = time;
-    }
-
-    /**
-     * Get the chest refill time
-     *
-     * @return The remaining time in the game which the chests will refill
-     */
-    public int getChestRefillTime() {
-        return this.chestRefillTime;
-    }
-
-
-    /**
-     * Get the status of the game
-     *
-     * @return Status of the game
-     */
-    public Status getStatus() {
-        return this.status;
-    }
-
-    /**
-     * Get the bounding box of this game
-     *
-     * @return Bound of this game
-     */
-    public Bound getBound() {
-        return this.bound;
-    }
-
-    /**
-     * Get the name of this game
-     *
-     * @return Name of this game
-     */
-    public String getName() {
-        return this.name;
-    }
-
-    /**
-     * Check if a location is within the games arena
-     *
-     * @param location Location to be checked
-     * @return True if location is within the arena bounds
-     */
-    public boolean isInRegion(Location location) {
-        return bound.isInRegion(location);
-    }
-
-    /**
-     * Get a list of all spawn locations
-     *
-     * @return All spawn locations
-     */
-    public List<Location> getSpawns() {
-        return spawns;
-    }
-
-    /**
-     * Get the roam time of the game
-     *
-     * @return The roam time
-     */
-    public int getRoamTime() {
-        return this.roamTime;
-    }
-
-    /**
-     * Get the exit location associated with this game
-     *
-     * @return Exit location
-     */
-    public Location getExit() {
-        return this.exit;
     }
 
     /**
@@ -321,38 +197,12 @@ public class Game {
     }
 
     /**
-     * Get max players for this game
-     *
-     * @return Max amount of players for this game
-     */
-    public int getMaxPlayers() {
-        return maxPlayers;
-    }
-
-    /**
-     * Get min players for this game
-     *
-     * @return Min amount of players for this game
-     */
-    public int getMinPlayers() {
-        return minPlayers;
-    }
-
-    public int getCost() {
-        return this.cost;
-    }
-
-    public void setCost(int cost) {
-        this.cost = cost;
-    }
-
-    /**
      * Get the kits for this game
      *
      * @return The KitManager kit for this game
      */
     public KitManager getKitManager() {
-        return this.kit;
+        return this.kitManager;
     }
 
     /**
@@ -362,7 +212,7 @@ public class Game {
      */
     @SuppressWarnings("unused")
     public void setKitManager(KitManager kit) {
-        this.kit = kit;
+        this.kitManager = kit;
     }
 
     /**
@@ -382,7 +232,7 @@ public class Game {
         GameStartEvent event = new GameStartEvent(this);
         Bukkit.getPluginManager().callEvent(event);
 
-        status = Status.COUNTDOWN;
+        gameArenaData.status = Status.COUNTDOWN;
         starting = new StartingTask(this);
         gameBlockData.updateLobbyBlock();
     }
@@ -391,9 +241,9 @@ public class Game {
      * Start the free roam state of the game
      */
     public void startFreeRoam() {
-        status = Status.BEGINNING;
+        gameArenaData.status = Status.BEGINNING;
         gameBlockData.updateLobbyBlock();
-        bound.removeEntities();
+        gameArenaData.bound.removeEntities();
         freeRoam = new FreeRoamTask(this);
         gameCommandData.runCommands(CommandType.START, null);
     }
@@ -402,35 +252,17 @@ public class Game {
      * Start the game
      */
     public void startGame() {
-        status = Status.RUNNING;
+        gameArenaData.status = Status.RUNNING;
         if (Config.spawnmobs) spawner = new SpawnerTask(this, Config.spawnmobsinterval);
         if (Config.randomChest) chestDrop = new ChestDropTask(this);
-        timer = new TimerTask(this, time);
+        timer = new TimerTask(this, gameArenaData.timer);
         gameBlockData.updateLobbyBlock();
         if (Config.bossbar) {
-            bar.createBossbar(time);
+            bar.createBossbar(gameArenaData.timer);
         }
         if (Config.borderEnabled && Config.borderOnStart) {
-            gameBorderData.setBorder(time);
+            gameBorderData.setBorder(gameArenaData.timer);
         }
-    }
-
-    /**
-     * Add a spawn location to the game
-     *
-     * @param location The location to add
-     */
-    public void addSpawn(Location location) {
-        this.spawns.add(location);
-    }
-
-    /**
-     * Set exit location for this game
-     *
-     * @param location Location where players will exit
-     */
-    public void setExit(Location location) {
-        this.exit = location;
     }
 
     public void cancelTasks() {
@@ -457,7 +289,7 @@ public class Game {
         if (Config.borderEnabled) {
             gameBorderData.resetBorder();
         }
-        bound.removeEntities();
+        gameArenaData.bound.removeEntities();
         List<UUID> win = new ArrayList<>();
         cancelTasks();
         for (UUID uuid : gamePlayerData.players) {
@@ -492,7 +324,7 @@ public class Game {
         }
         gamePlayerData.clearSpectators();
 
-        if (this.getStatus() == Status.RUNNING) {
+        if (gameArenaData.status == Status.RUNNING) {
             bar.clearBar();
         }
 
@@ -527,11 +359,11 @@ public class Game {
         String winner = Util.translateStop(Util.convertUUIDListToStringList(win));
         // prevent not death winners from gaining a prize
         if (death)
-            Util.broadcast(HG.getPlugin().getLang().player_won.replace("<arena>", name).replace("<winner>", winner));
+            Util.broadcast(HG.getPlugin().getLang().player_won.replace("<arena>", gameArenaData.name).replace("<winner>", winner));
         if (gameBlockData.requiresRollback()) {
             new Rollback(this);
         } else {
-            status = Status.READY;
+            gameArenaData.status = Status.READY;
             gameBlockData.updateLobbyBlock();
         }
         sb.resetAlive();
@@ -546,6 +378,7 @@ public class Game {
     }
 
     void updateAfterDeath(Player player, boolean death) {
+        Status status = gameArenaData.status;
         if (status == Status.RUNNING || status == Status.BEGINNING || status == Status.COUNTDOWN) {
             if (isGameOver()) {
                 if (!death) {
@@ -565,8 +398,8 @@ public class Game {
             }
         } else if (status == Status.WAITING) {
             gamePlayerData.msgAll(HG.getPlugin().getLang().player_left_game.replace("<player>", player.getName()) +
-                    (minPlayers - gamePlayerData.players.size() <= 0 ? "!" : ":" + HG.getPlugin().getLang().players_to_start
-                            .replace("<amount>", String.valueOf((minPlayers - gamePlayerData.players.size())))));
+                    (gameArenaData.minPlayers - gamePlayerData.players.size() <= 0 ? "!" : ":" + HG.getPlugin().getLang().players_to_start
+                            .replace("<amount>", String.valueOf((gameArenaData.minPlayers - gamePlayerData.players.size())))));
         }
         gameBlockData.updateLobbyBlock();
         sb.setAlive();
@@ -592,8 +425,8 @@ public class Game {
     @Override
     public String toString() {
         return "Game{" +
-                "name='" + name + '\'' +
-                ", bound=" + bound +
+                "name='" + gameArenaData.name + '\'' +
+                ", bound=" + gameArenaData.bound +
                 '}';
     }
 

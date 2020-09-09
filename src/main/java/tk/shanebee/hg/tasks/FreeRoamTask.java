@@ -17,7 +17,7 @@ public class FreeRoamTask implements Runnable {
 
     public FreeRoamTask(Game game) {
         this.game = game;
-        this.roamTime = game.getRoamTime();
+        this.roamTime = game.getGameArenaData().getRoamTime();
 
         Language lang = HG.getPlugin().getLang();
         String gameStarted = lang.roam_game_started;

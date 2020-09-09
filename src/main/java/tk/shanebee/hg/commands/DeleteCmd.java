@@ -3,6 +3,7 @@ package tk.shanebee.hg.commands;
 import tk.shanebee.hg.game.Game;
 import tk.shanebee.hg.HG;
 import tk.shanebee.hg.Status;
+import tk.shanebee.hg.game.GameArenaData;
 import tk.shanebee.hg.game.GamePlayerData;
 import tk.shanebee.hg.util.Util;
 
@@ -26,10 +27,11 @@ public class DeleteCmd extends BaseCmd {
 		Game g = gameManager.getGame(args[1]);
 		if (g != null) {
 			GamePlayerData gamePlayerData = g.getGamePlayerData();
+			GameArenaData gameArenaData = g.getGameArenaData();
 			try {
-				Util.scm(sender, lang.cmd_delete_attempt.replace("<arena>", g.getName()));
+				Util.scm(sender, lang.cmd_delete_attempt.replace("<arena>", gameArenaData.getName()));
 
-				if (g.getStatus() == Status.BEGINNING || g.getStatus() == Status.RUNNING) {
+				if (gameArenaData.getStatus() == Status.BEGINNING || gameArenaData.getStatus() == Status.RUNNING) {
 					Util.scm(sender, "  &7- &cGame running! &aStopping..");
 					g.getGameBlockData().forceRollback();
 					g.stop(false);
@@ -45,7 +47,7 @@ public class DeleteCmd extends BaseCmd {
 				}
 				arenaConfig.getCustomConfig().set("arenas." + args[1], null);
 				arenaConfig.saveCustomConfig();
-				Util.scm(sender, lang.cmd_delete_deleted.replace("<arena>", g.getName()));
+				Util.scm(sender, lang.cmd_delete_deleted.replace("<arena>", gameArenaData.getName()));
 				plugin.getGames().remove(g);
 			} catch (Exception e) {
 				Util.scm(sender, lang.cmd_delete_failed);

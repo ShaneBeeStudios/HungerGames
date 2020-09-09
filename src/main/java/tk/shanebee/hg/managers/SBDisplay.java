@@ -23,15 +23,15 @@ public class SBDisplay {
 	private Scoreboard board;
 	private Objective ob;
 	private HashMap<String, Scoreboard> score = new HashMap<>();
-	private Game g;
+	private final Game game;
 
-	public SBDisplay(Game g) {
+	public SBDisplay(Game game) {
 		this.manager = Bukkit.getScoreboardManager();
 		this.board = manager.getNewScoreboard();
-		this.ob = board.registerNewObjective(ChatColor.translateAlternateColorCodes('&', HG.getPlugin().getLang().players_alive), "dummy", "arena" + g.getName());
+		this.ob = board.registerNewObjective(ChatColor.translateAlternateColorCodes('&', HG.getPlugin().getLang().players_alive), "dummy", "arena" + game.getGameArenaData().getName());
 		this.ob.setDisplaySlot(DisplaySlot.SIDEBAR);
 		this.ob.setDisplayName(ChatColor.translateAlternateColorCodes('&', HG.getPlugin().getLang().scoreboard_title));
-		this.g = g;
+		this.game = game;
 	}
 
 	public void setAlive() {
@@ -44,16 +44,16 @@ public class SBDisplay {
 
 		 */
 		ob.unregister();
-		this.ob = board.registerNewObjective(ChatColor.translateAlternateColorCodes('&', HG.getPlugin().getLang().players_alive), "dummy", "arena" + g.getName());
+		this.ob = board.registerNewObjective(ChatColor.translateAlternateColorCodes('&', HG.getPlugin().getLang().players_alive), "dummy", "arena" + game.getGameArenaData().getName());
 		this.ob.setDisplaySlot(DisplaySlot.SIDEBAR);
 		this.ob.setDisplayName(ChatColor.translateAlternateColorCodes('&', HG.getPlugin().getLang().scoreboard_title));
-		String alive = "  " + HG.getPlugin().getLang().players_alive_num.replace("<num>", String.valueOf(g.getGamePlayerData().getPlayers().size()));
+		String alive = "  " + HG.getPlugin().getLang().players_alive_num.replace("<num>", String.valueOf(game.getGamePlayerData().getPlayers().size()));
 
 		Score space1 = ob.getScore(" ");
 		Score space2 = ob.getScore("  ");
 		Score space3 = ob.getScore("   ");
 		Score arena1 = ob.getScore(Util.getColString(HG.getPlugin().getLang().scoreboard_arena));
-		Score arena2 = ob.getScore(Util.getColString("  &e" + g.getName()));
+		Score arena2 = ob.getScore(Util.getColString("  &e" + game.getGameArenaData().getName()));
 
 		Score alive1 = ob.getScore(Util.getColString(HG.getPlugin().getLang().players_alive));
 		Score alive2 = ob.getScore(Util.getColString(alive));

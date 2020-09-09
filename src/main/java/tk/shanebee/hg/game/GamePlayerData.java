@@ -89,11 +89,11 @@ public class GamePlayerData extends Data {
         // Clear the chat a little bit, making this message easier to see
         for (int i = 0; i < 20; ++i)
             Util.scm(player, " ");
-        String kit = game.kit.getKitListString();
+        String kit = game.kitManager.getKitListString();
         Util.scm(player, " ");
         Util.scm(player, lang.kit_join_header);
         Util.scm(player, " ");
-        if (player.hasPermission("hg.kit") && game.kit.hasKits()) {
+        if (player.hasPermission("hg.kit") && game.kitManager.hasKits()) {
             Util.scm(player, lang.kit_join_msg);
             Util.scm(player, " ");
             Util.scm(player, lang.kit_join_avail + kit);
@@ -169,16 +169,17 @@ public class GamePlayerData extends Data {
     }
 
     Location pickSpawn() {
-        double spawn = getRandomIntegerBetweenRange(game.maxPlayers - 1);
-        if (containsPlayer(game.spawns.get(((int) spawn)))) {
-            Collections.shuffle(game.spawns);
-            for (Location l : game.spawns) {
+        GameArenaData gameArenaData = game.getGameArenaData();
+        double spawn = getRandomIntegerBetweenRange(gameArenaData.maxPlayers - 1);
+        if (containsPlayer(gameArenaData.spawns.get(((int) spawn)))) {
+            Collections.shuffle(gameArenaData.spawns);
+            for (Location l : gameArenaData.spawns) {
                 if (!containsPlayer(l)) {
                     return l;
                 }
             }
         }
-        return game.spawns.get((int) spawn);
+        return gameArenaData.spawns.get((int) spawn);
     }
 
     boolean containsPlayer(Location location) {
@@ -194,7 +195,7 @@ public class GamePlayerData extends Data {
 
     boolean vaultCheck(Player player) {
         if (Config.economy) {
-            int cost = game.cost;
+            int cost = game.gameArenaData.cost;
             if (Vault.economy.getBalance(player) >= cost) {
                 Vault.economy.withdrawPlayer(player, cost);
                 return true;
@@ -223,16 +224,16 @@ public class GamePlayerData extends Data {
      * @param player Player to join the game
      */
     public void join(Player player) {
-        UUID uuid = player.getUniqueId();
-        AtomicReference<Status> status = new AtomicReference<>(game.getStatus());
+        GameArenaData gameArenaData = game.getGameArenaData();
+        AtomicReference<Status> status = new AtomicReference<>(gameArenaData.getStatus());
         if (status.get() != Status.WAITING && status.get() != Status.STOPPED && status.get() != Status.COUNTDOWN && status.get() != Status.READY) {
             Util.scm(player, lang.arena_not_ready);
             if ((status.get() == Status.RUNNING || status.get() == Status.BEGINNING) && Config.spectateEnabled) {
-                Util.scm(player, lang.arena_spectate.replace("<arena>", game.getName()));
+                Util.scm(player, lang.arena_spectate.replace("<arena>", game.gameArenaData.getName()));
             }
-        } else if (game.maxPlayers <= players.size()) {
-            player.sendMessage(ChatColor.RED + game.getName() + " is currently full!");
-            Util.scm(player, "&c" + game.getName() + " " + lang.game_full);
+        } else if (gameArenaData.maxPlayers <= players.size()) {
+            player.sendMessage(ChatColor.RED + gameArenaData.getName() + " is currently full!");
+            Util.scm(player, "&c" + gameArenaData.getName() + " " + lang.game_full);
         } else if (!players.contains(player.getUniqueId())) {
             if (!vaultCheck(player)) {
                 return;
@@ -265,12 +266,12 @@ public class GamePlayerData extends Data {
 
                 if (players.size() == 1 && status.get() == Status.READY)
                     status.set(Status.WAITING);
-                if (players.size() >= game.minPlayers && (status.get() == Status.WAITING || status.get() == Status.READY)) {
+                if (players.size() >= game.gameArenaData.minPlayers && (status.get() == Status.WAITING || status.get() == Status.READY)) {
                     game.startPreGame();
                 } else if (status.get() == Status.WAITING) {
                     Util.broadcast(lang.player_joined_game.replace("<player>",
-                            player.getName()) + (game.minPlayers - players.size() <= 0 ? "!" : ":" +
-                            lang.players_to_start.replace("<amount>", String.valueOf((game.minPlayers - players.size())))));
+                            player.getName()) + (gameArenaData.minPlayers - players.size() <= 0 ? "!" : ":" +
+                            lang.players_to_start.replace("<amount>", String.valueOf((gameArenaData.minPlayers - players.size())))));
                 }
                 kitHelp(player);
 
@@ -294,7 +295,7 @@ public class GamePlayerData extends Data {
         UUID uuid = player.getUniqueId();
         unFreeze(player);
         if (death) {
-            if (game.getStatus() == Status.RUNNING)
+            if (game.gameArenaData.getStatus() == Status.RUNNING)
                 game.getGameBar().removePlayer(player);
             heal(player);
             playerManager.getPlayerData(uuid).restore(player);
@@ -302,9 +303,9 @@ public class GamePlayerData extends Data {
             exit(player);
             game.sb.restoreSB(player);
             player.playSound(player.getLocation(), Sound.UI_TOAST_CHALLENGE_COMPLETE, 5, 1);
-            if (game.spectate && game.spectateOnDeath && !game.isGameOver()) {
+            if (Config.spectateEnabled && Config.spectateOnDeath && !game.isGameOver()) {
                 spectate(player);
-                player.sendTitle(game.getName(), "You are now spectating!", 10, 100, 10); //TODO this a temp test
+                player.sendTitle(game.gameArenaData.getName(), "You are now spectating!", 10, 100, 10); //TODO this a temp test
             }
         } else {
             heal(player);
@@ -317,11 +318,12 @@ public class GamePlayerData extends Data {
     }
 
     void exit(Player player) {
+        GameArenaData gameArenaData = game.getGameArenaData();
         player.setInvulnerable(false);
-        if (game.getStatus() == Status.RUNNING)
+        if (gameArenaData.getStatus() == Status.RUNNING)
             game.getGameBar().removePlayer(player);
-        if (game.exit != null && game.exit.getWorld() != null) {
-            player.teleport(game.exit);
+        if (gameArenaData.exit != null && gameArenaData.exit.getWorld() != null) {
+            player.teleport(gameArenaData.exit);
         } else {
             player.teleport(Bukkit.getWorlds().get(0).getSpawnLocation());
         }
@@ -340,7 +342,7 @@ public class GamePlayerData extends Data {
             playerManager.addSpectatorData(new PlayerData(spectator, game));
         }
         this.spectators.add(uuid);
-        spectator.teleport(game.getSpawns().get(0));
+        spectator.teleport(game.gameArenaData.getSpawns().get(0));
         spectator.setGameMode(GameMode.SURVIVAL);
         spectator.setCollidable(false);
         if (Config.spectateFly)

@@ -5,6 +5,7 @@ import tk.shanebee.hg.data.Config;
 import tk.shanebee.hg.game.Game;
 import tk.shanebee.hg.HG;
 import tk.shanebee.hg.Status;
+import tk.shanebee.hg.game.GameArenaData;
 
 import java.util.Objects;
 
@@ -30,7 +31,8 @@ public class TimerTask implements Runnable {
 	
 	@Override
 	public void run() {
-		if (game == null || game.getStatus() != Status.RUNNING) stop(); //A quick null check!
+		GameArenaData gameArenaData = game.getGameArenaData();
+		if (game == null || gameArenaData.getStatus() != Status.RUNNING) stop(); //A quick null check!
 		
 
 		if (Config.bossbar) game.getGameBar().bossbarUpdate(remainingtime);
@@ -41,7 +43,7 @@ public class TimerTask implements Runnable {
 			game.getGamePlayerData().msgAll(HG.getPlugin().getLang().game_border_closing.replace("<seconds>", String.valueOf(closingIn)));
 		}
 
-		if (game.getChestRefillTime() > 0 && remainingtime == game.getChestRefillTime()) {
+		if (gameArenaData.getChestRefillTime() > 0 && remainingtime == gameArenaData.getChestRefillTime()) {
 			game.getGameBlockData().refillChests();
 			game.getGamePlayerData().msgAll(HG.getPlugin().getLang().game_chest_refill);
 		}
