@@ -296,7 +296,7 @@ public class GamePlayerData extends Data {
         unFreeze(player);
         if (death) {
             if (game.gameArenaData.getStatus() == Status.RUNNING)
-                game.getGameBar().removePlayer(player);
+                game.getGameBarData().removePlayer(player);
             heal(player);
             playerManager.getPlayerData(uuid).restore(player);
             playerManager.removePlayerData(player);
@@ -321,7 +321,7 @@ public class GamePlayerData extends Data {
         GameArenaData gameArenaData = game.getGameArenaData();
         player.setInvulnerable(false);
         if (gameArenaData.getStatus() == Status.RUNNING)
-            game.getGameBar().removePlayer(player);
+            game.getGameBarData().removePlayer(player);
         if (gameArenaData.exit != null && gameArenaData.exit.getWorld() != null) {
             player.teleport(gameArenaData.exit);
         } else {
@@ -360,7 +360,7 @@ public class GamePlayerData extends Data {
                 player.hidePlayer(plugin, spectator);
             }
         }
-        game.getGameBar().addPlayer(spectator);
+        game.getGameBarData().addPlayer(spectator);
         spectator.getInventory().setItem(0, plugin.getItemStackManager().getSpectatorCompass());
     }
 

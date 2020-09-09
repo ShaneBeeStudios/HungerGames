@@ -134,7 +134,7 @@ public class Game {
      *
      * @return Instance of GameBarData
      */
-    public GameBarData getGameBar() {
+    public GameBarData getGameBarData() {
         return bar;
     }
 
