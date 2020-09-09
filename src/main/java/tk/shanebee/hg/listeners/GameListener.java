@@ -50,6 +50,7 @@ import tk.shanebee.hg.data.Language;
 import tk.shanebee.hg.data.Leaderboard;
 import tk.shanebee.hg.data.PlayerData;
 import tk.shanebee.hg.events.ChestOpenEvent;
+import tk.shanebee.hg.events.PlayerDeathGameEvent;
 import tk.shanebee.hg.game.Game;
 import tk.shanebee.hg.game.GameArenaData;
 import tk.shanebee.hg.game.GameBlockData;
@@ -241,6 +242,14 @@ public class GameListener implements Listener {
 
 			game.getGamePlayerData().leave(player, true);
 			game.getGameCommandData().runCommands(CommandType.DEATH, player);
+
+			String bukkitDeathMessage = lang.death_in_game
+					.replace("<player>", player.getName())
+					.replace("<arena>", game.getGameArenaData().getName());
+
+			// Call our death event so other plugins can pick up the fake death
+			PlayerDeathGameEvent event = new PlayerDeathGameEvent(player, bukkitDeathMessage, game);
+			Bukkit.getPluginManager().callEvent(event);
 
 			Bukkit.getScheduler().scheduleSyncDelayedTask(plugin, () -> checkStick(game), 40L);
 		}, 1);

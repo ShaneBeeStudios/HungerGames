@@ -93,6 +93,7 @@ status-beginning: '&a&lRunning'
 status-countdown: '&b&lStarting...'
 
 #  DEATH MESSAGES
+death-in-game: '<player> died in HungerGames arena <arena>'
 death-fallen: '&7&l[&3&lHungerGames Fallen&7&l]'
 death-explosion: '<player> Was blown to bits!'
 death-custom: '<player> Was killed by an unknown cause!'

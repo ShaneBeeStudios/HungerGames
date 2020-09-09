@@ -68,6 +68,7 @@ public class Language {
     public String status_beginning;
     public String status_countdown;
 
+    public String death_in_game;
     public String death_fallen;
     public String death_explosion;
     public String death_custom;
@@ -263,6 +264,7 @@ public class Language {
         roam_time = lang.getString("roam-time");
         roam_finished = lang.getString("roam-finished");
 
+        death_in_game = lang.getString("death-in-game");
         death_fallen = lang.getString("death-fallen");
         death_explosion = lang.getString("death-explosion");
         death_custom = lang.getString("death-custom");
