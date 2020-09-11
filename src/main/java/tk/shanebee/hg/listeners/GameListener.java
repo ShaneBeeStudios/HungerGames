@@ -94,9 +94,9 @@ public class GameListener implements Listener {
 	}
 
 	@SuppressWarnings("deprecation") // setPersistent() is DRAFT API
-    private void dropInv(Player p) {
-		PlayerInventory inv = p.getInventory();
-		Location l = p.getLocation();
+    private void dropInv(Player player) {
+		PlayerInventory inv = player.getInventory();
+		Location l = player.getLocation();
 		for (ItemStack i : inv.getContents()) {
 			if (i != null && i.getType() != Material.AIR) {
 				assert l.getWorld() != null;
@@ -114,13 +114,13 @@ public class GameListener implements Listener {
 	private void checkStick(Game g) {
 		if (Config.playersfortrackingstick == g.getGamePlayerData().getPlayers().size()) {
 			for (UUID u : g.getGamePlayerData().getPlayers()) {
-				Player p = Bukkit.getPlayer(u);
-				if (p != null) {
-					Util.scm(p, lang.track_bar);
-					Util.scm(p, lang.track_new1);
-					Util.scm(p, lang.track_new2);
-					Util.scm(p, lang.track_bar);
-					p.getInventory().addItem(trackingStick);
+				Player player = Bukkit.getPlayer(u);
+				if (player != null) {
+					Util.scm(player, lang.track_bar);
+					Util.scm(player, lang.track_new1);
+					Util.scm(player, lang.track_new2);
+					Util.scm(player, lang.track_bar);
+					player.getInventory().addItem(trackingStick);
 				}
 			}
 		}
@@ -139,14 +139,14 @@ public class GameListener implements Listener {
 		}
 		if (defender instanceof Player) {
 			Player player = (Player) defender;
-			PlayerData pd = playerManager.getPlayerData(player);
+			PlayerData playerData = playerManager.getPlayerData(player);
 
-			if (pd != null) {
-				Game game = pd.getGame();
+			if (playerData != null) {
+				Game game = playerData.getGame();
 
 				if (game.getGameArenaData().getStatus() != Status.RUNNING) {
 					event.setCancelled(true);
-				} else if (pd.isOnTeam(player.getUniqueId()) && damager instanceof Player && pd.getTeam().isOnTeam(damager.getUniqueId())) {
+				} else if (playerData.isOnTeam(player.getUniqueId()) && damager instanceof Player && playerData.getTeam().isOnTeam(damager.getUniqueId())) {
 					Util.scm(damager, "&c" + player.getName() + " is on your team!");
 					event.setCancelled(true);
 				} else if (event.getFinalDamage() >= player.getHealth()) {
@@ -216,9 +216,10 @@ public class GameListener implements Listener {
 		dropInv(player);
 		player.setHealth(20);
 		Bukkit.getScheduler().runTaskLater(plugin, () -> {
+			GamePlayerData gamePlayerData = game.getGamePlayerData();
 			String deathString;
 			if (damager instanceof Player) {
-				game.getGamePlayerData().addKill(((Player) damager));
+				gamePlayerData.addKill(((Player) damager));
 				leaderboard.addStat(((Player) damager), Leaderboard.Stats.KILLS);
 				deathString = killManager.getKillString(player.getName(), damager);
 			} else if (cause == DamageCause.ENTITY_ATTACK) {
@@ -226,7 +227,7 @@ public class GameListener implements Listener {
 			} else if (cause == DamageCause.PROJECTILE) {
 				deathString = killManager.getKillString(player.getName(), damager);
 				if (killManager.isShotByPlayer(damager) && killManager.getShooter(damager) != player) {
-				    game.getGamePlayerData().addKill(killManager.getShooter(damager));
+					gamePlayerData.addKill(killManager.getShooter(damager));
                     leaderboard.addStat(killManager.getShooter(damager), Leaderboard.Stats.KILLS);
                 }
 			} else {
@@ -234,7 +235,7 @@ public class GameListener implements Listener {
 			}
 
 			// Send death message to all players in game
-			game.getGamePlayerData().msgAll(lang.death_fallen + " &d" + deathString);
+			gamePlayerData.msgAll(lang.death_fallen + " &d" + deathString);
 
 			leaderboard.addStat(player, Leaderboard.Stats.DEATHS);
 			leaderboard.addStat(player, Leaderboard.Stats.GAMES);
@@ -246,7 +247,7 @@ public class GameListener implements Listener {
 				}
 			}
 
-			game.getGamePlayerData().leave(player, true);
+			gamePlayerData.leave(player, true);
 			game.getGameCommandData().runCommands(CommandType.DEATH, player);
 
 			// Call our death event so other plugins can pick up the fake death
@@ -263,17 +264,17 @@ public class GameListener implements Listener {
 
 	@EventHandler
 	private void onSprint(FoodLevelChangeEvent event) {
-		Player p = (Player) event.getEntity();
-		if (playerManager.hasPlayerData(p)) {
-			Status st = playerManager.getPlayerData(p).getGame().getGameArenaData().getStatus();
-			if (st == Status.WAITING || st == Status.COUNTDOWN) {
-				p.setFoodLevel(1);
+		Player player = (Player) event.getEntity();
+		if (playerManager.hasPlayerData(player)) {
+			Status status = playerManager.getPlayerData(player).getGame().getGameArenaData().getStatus();
+			if (status == Status.WAITING || status == Status.COUNTDOWN) {
+				player.setFoodLevel(1);
 				event.setCancelled(true);
 			}
 		}
 		// Prevent spectators from losing food level
-		if (playerManager.hasSpectatorData(p)) {
-            p.setFoodLevel(20);
+		if (playerManager.hasSpectatorData(player)) {
+            player.setFoodLevel(20);
 		    event.setCancelled(true);
         }
 	}
@@ -357,21 +358,22 @@ public class GameListener implements Listener {
 
 	@EventHandler
 	private void onChestOpen(ChestOpenEvent event) {
-		Block b = event.getChest();
-		Game g = event.getGame();
-		if (!g.getGameBlockData().isLoggedChest(b.getLocation())) {
-			HG.getPlugin().getManager().fillChests(b, g, event.isBonus());
-			g.getGameBlockData().addGameChest(b.getLocation());
+		Block block = event.getChest();
+		Game game = event.getGame();
+		GameBlockData gameBlockData = game.getGameBlockData();
+		if (!gameBlockData.isLoggedChest(block.getLocation())) {
+			HG.getPlugin().getManager().fillChests(block, game, event.isBonus());
+			gameBlockData.addGameChest(block.getLocation());
 		}
 	}
 
 	@EventHandler
 	private void onChestUse(PlayerInteractEvent event) {
-		Player p = event.getPlayer();
-		if (event.getAction() == Action.RIGHT_CLICK_BLOCK && playerManager.hasPlayerData(p)) {
+		Player player = event.getPlayer();
+		if (event.getAction() == Action.RIGHT_CLICK_BLOCK && playerManager.hasPlayerData(player)) {
 			Block block = event.getClickedBlock();
 			assert block != null;
-			PlayerData pd = playerManager.getPlayerData(p);
+			PlayerData pd = playerManager.getPlayerData(player);
 			if (block.getType() == Material.CHEST) {
 				Bukkit.getServer().getPluginManager().callEvent(new ChestOpenEvent(pd.getGame(), block, false));
 			}
@@ -386,19 +388,19 @@ public class GameListener implements Listener {
 
 	@EventHandler
 	private void onItemUseAttempt(PlayerInteractEvent event) {
-		Player p = event.getPlayer();
-		if (playerManager.hasSpectatorData(p)) {
+		Player player = event.getPlayer();
+		if (playerManager.hasSpectatorData(player)) {
 			event.setCancelled(true);
             if (isSpectatorCompass(event)) {
-                handleSpectatorCompass(p);
+                handleSpectatorCompass(player);
                 return;
             }
 		}
-		if (event.getAction() != Action.PHYSICAL && playerManager.hasPlayerData(p)) {
-			Status st = playerManager.getPlayerData(p).getGame().getGameArenaData().getStatus();
-			if (st == Status.WAITING || st == Status.COUNTDOWN) {
+		if (event.getAction() != Action.PHYSICAL && playerManager.hasPlayerData(player)) {
+			Status status = playerManager.getPlayerData(player).getGame().getGameArenaData().getStatus();
+			if (status == Status.WAITING || status == Status.COUNTDOWN) {
 				event.setCancelled(true);
-				Util.scm(p, lang.listener_no_interact);
+				Util.scm(player, lang.listener_no_interact);
 			}
 		}
 	}
@@ -422,67 +424,68 @@ public class GameListener implements Listener {
 
 	@EventHandler
 	private void onPlayerClickLobby(PlayerInteractEvent event) {
-		Player p = event.getPlayer();
+		Player player = event.getPlayer();
 		if (event.getAction().equals(Action.RIGHT_CLICK_BLOCK)) {
-			Block b = event.getClickedBlock();
-			assert b != null;
-			if (Util.isWallSign(b.getType())) {
-				Sign sign = (Sign) b.getState();
+			Block block = event.getClickedBlock();
+			assert block != null;
+			if (Util.isWallSign(block.getType())) {
+				Sign sign = (Sign) block.getState();
 				if (sign.getLine(0).equals(Util.getColString(lang.lobby_sign_1_1))) {
 					Game game = gameManager.getGame(sign.getLine(1).substring(2));
 					if (game == null) {
-						Util.scm(p, lang.cmd_delete_noexist);
+						Util.scm(player, lang.cmd_delete_noexist);
 					} else {
-						if (p.getInventory().getItemInMainHand().getType() == Material.AIR) {
-							game.getGamePlayerData().join(p);
+						if (player.getInventory().getItemInMainHand().getType() == Material.AIR) {
+							game.getGamePlayerData().join(player);
 						} else {
-							Util.scm(p, lang.listener_sign_click_hand);
+							Util.scm(player, lang.listener_sign_click_hand);
 						}
 					}
 				}
 			}
 		} else if (event.getAction().equals(Action.LEFT_CLICK_AIR)) {
-			if (p.getInventory().getItemInMainHand().getType().equals(Material.STICK) && playerManager.hasPlayerData(p)) {
-				useTrackStick(p);
+			if (player.getInventory().getItemInMainHand().getType().equals(Material.STICK) && playerManager.hasPlayerData(player)) {
+				useTrackStick(player);
 			}
 		}
 	}
 
 	@EventHandler
 	private void blockPlace(BlockPlaceEvent event) {
-		Player p = event.getPlayer();
-		Block b = event.getBlock();
+		Player player = event.getPlayer();
+		Block block = event.getBlock();
 
-		if (playerManager.hasSpectatorData(p)) {
+		if (playerManager.hasSpectatorData(player)) {
 			event.setCancelled(true);
 		}
-		if (gameManager.isInRegion(b.getLocation())) {
+		if (gameManager.isInRegion(block.getLocation())) {
 
-			if (Config.breakblocks && playerManager.hasPlayerData(p)) {
-                Game g = playerManager.getPlayerData(p).getGame();
-                Status status = g.getGameArenaData().getStatus();
+			if (Config.breakblocks && playerManager.hasPlayerData(player)) {
+                Game game = playerManager.getPlayerData(player).getGame();
+                GameBlockData gameBlockData = game.getGameBlockData();
+                Status status = game.getGameArenaData().getStatus();
 				if (status == Status.RUNNING || status == Status.BEGINNING) {
-					if (!Config.blocks.contains(b.getType().toString()) && !Config.blocks.contains("ALL")) {
-						Util.scm(p, lang.listener_no_edit_block);
+					if (!Config.blocks.contains(block.getType().toString()) && !Config.blocks.contains("ALL")) {
+						Util.scm(player, lang.listener_no_edit_block);
 						event.setCancelled(true);
 					} else {
-						g.getGameBlockData().recordBlockPlace(event.getBlockReplacedState());
-						if (isChest(b)) {
-                            g.getGameBlockData().addPlayerChest(b.getLocation());
+						gameBlockData.recordBlockPlace(event.getBlockReplacedState());
+						if (isChest(block)) {
+							gameBlockData.addPlayerChest(block.getLocation());
                         }
 					}
 				} else {
-					Util.scm(p, lang.listener_not_running);
+					Util.scm(player, lang.listener_not_running);
 					event.setCancelled(true);
 				}
 			} else {
-				if (p.hasPermission("hg.create")) {
-				    Game g = plugin.getManager().getGame(b.getLocation());
-				    Status status = g.getGameArenaData().getStatus();
+				if (player.hasPermission("hg.create")) {
+				    Game game = plugin.getManager().getGame(block.getLocation());
+				    Status status = game.getGameArenaData().getStatus();
 				    switch (status) {
                         case BEGINNING:
                         case RUNNING:
-                            g.getGameBlockData().recordBlockPlace(event.getBlockReplacedState());
+                            game.getGameBlockData().recordBlockPlace(event.getBlockReplacedState());
                         default:
                             return;
                     }
@@ -494,40 +497,40 @@ public class GameListener implements Listener {
 
 	@EventHandler
 	private void blockBreak(BlockBreakEvent event) {
-		Player p = event.getPlayer();
-		Block b = event.getBlock();
+		Player player = event.getPlayer();
+		Block block = event.getBlock();
 
-		if (playerManager.hasSpectatorData(p)) {
+		if (playerManager.hasSpectatorData(player)) {
 			event.setCancelled(true);
 		}
-		if (gameManager.isInRegion(b.getLocation())) {
+		if (gameManager.isInRegion(block.getLocation())) {
 
-			if (Config.breakblocks && playerManager.hasPlayerData(p)) {
-                Game g = playerManager.getPlayerData(p).getGame();
-				if (g.getGameArenaData().getStatus() == Status.RUNNING || !Config.protectCooldown) {
-					if (!Config.blocks.contains(b.getType().toString()) && !Config.blocks.contains("ALL")) {
-						Util.scm(p, lang.listener_no_edit_block);
+			if (Config.breakblocks && playerManager.hasPlayerData(player)) {
+                Game game = playerManager.getPlayerData(player).getGame();
+				if (game.getGameArenaData().getStatus() == Status.RUNNING || !Config.protectCooldown) {
+					if (!Config.blocks.contains(block.getType().toString()) && !Config.blocks.contains("ALL")) {
+						Util.scm(player, lang.listener_no_edit_block);
 						event.setCancelled(true);
 					} else {
-						GameBlockData gameBlockData = g.getGameBlockData();
-						gameBlockData.recordBlockBreak(b);
-						if (isChest(b)) {
-                            gameBlockData.removeGameChest(b.getLocation());
-                            gameBlockData.removePlayerChest(b.getLocation());
+						GameBlockData gameBlockData = game.getGameBlockData();
+						gameBlockData.recordBlockBreak(block);
+						if (isChest(block)) {
+                            gameBlockData.removeGameChest(block.getLocation());
+                            gameBlockData.removePlayerChest(block.getLocation());
                         }
 					}
 				} else {
-					Util.scm(p, lang.listener_not_running);
+					Util.scm(player, lang.listener_not_running);
 					event.setCancelled(true);
 				}
 			} else {
-                if (!playerManager.hasPlayerData(p) && p.hasPermission("hg.create")) {
-                    Game g = gameManager.getGame(b.getLocation());
-                    Status status = g.getGameArenaData().getStatus();
+                if (!playerManager.hasPlayerData(player) && player.hasPermission("hg.create")) {
+                    Game game = gameManager.getGame(block.getLocation());
+                    Status status = game.getGameArenaData().getStatus();
                     switch (status) {
                         case BEGINNING:
                         case RUNNING:
-							g.getGameBlockData().removeGameChest(b.getLocation());
+							game.getGameBlockData().removeGameChest(block.getLocation());
                         default:
                             return;
                     }
@@ -619,9 +622,9 @@ public class GameListener implements Listener {
 	@EventHandler
 	private void onEntityExplode(EntityExplodeEvent event) {
 		if (gameManager.isInRegion(event.getLocation())) {
-			Game g = gameManager.getGame(event.getLocation());
+			Game game = gameManager.getGame(event.getLocation());
 			for (Block block : event.blockList()) {
-				g.getGameBlockData().recordBlockBreak(block);
+				game.getGameBlockData().recordBlockBreak(block);
 			}
 			event.setYield(0);
 		}
@@ -630,9 +633,9 @@ public class GameListener implements Listener {
 	@EventHandler
 	private void onBlockExplode(BlockExplodeEvent event) {
 		if (gameManager.isInRegion(event.getBlock().getLocation())) {
-			Game g = gameManager.getGame(event.getBlock().getLocation());
+			GameBlockData gameBlockData = gameManager.getGame(event.getBlock().getLocation()).getGameBlockData();
 			for (Block block : event.blockList()) {
-				g.getGameBlockData().recordBlockBreak(block);
+				gameBlockData.recordBlockBreak(block);
 			}
 			event.setYield(0);
 		}
@@ -641,12 +644,12 @@ public class GameListener implements Listener {
 	@EventHandler
 	private void onLeafDecay(LeavesDecayEvent event) {
 		if (!Config.fixleaves) return;
-		Block b = event.getBlock();
-		if (gameManager.isInRegion(b.getLocation())) {
+		Block block = event.getBlock();
+		if (gameManager.isInRegion(block.getLocation())) {
 			if (Config.breakblocks) {
-				Game g = gameManager.getGame(b.getLocation());
-				if (g.getGameArenaData().getStatus() == Status.RUNNING) {
-					g.getGameBlockData().recordBlockBreak(b);
+				Game game = gameManager.getGame(block.getLocation());
+				if (game.getGameArenaData().getStatus() == Status.RUNNING) {
+					game.getGameBlockData().recordBlockBreak(block);
 				}
 			}
 		}
@@ -655,11 +658,11 @@ public class GameListener implements Listener {
 	@EventHandler
 	private void onTrample(PlayerInteractEvent event) {
 		if (!Config.preventtrample) return;
-		Player p = event.getPlayer();
-		if (playerManager.hasSpectatorData(p)) {
+		Player player = event.getPlayer();
+		if (playerManager.hasSpectatorData(player)) {
 			event.setCancelled(true);
 		}
-		if (gameManager.isInRegion(p.getLocation())) {
+		if (gameManager.isInRegion(player.getLocation())) {
 			if (event.getAction() == Action.PHYSICAL) {
 				assert event.getClickedBlock() != null;
 				Material block = event.getClickedBlock().getType();
@@ -672,15 +675,15 @@ public class GameListener implements Listener {
 
 	@EventHandler
 	private void onDrop(PlayerDropItemEvent event) {
-		Player p = event.getPlayer();
-		PlayerData pd = playerManager.getPlayerData(p);
-		if (pd != null) {
-		    if (pd.getGame().getGameArenaData().getStatus() == Status.WAITING) {
+		Player player = event.getPlayer();
+		PlayerData playerData = playerManager.getPlayerData(player);
+		if (playerData != null) {
+		    if (playerData.getGame().getGameArenaData().getStatus() == Status.WAITING) {
                 event.setCancelled(true);
             }
 		}
 		// Prevent spectators from dropping items
-		if (playerManager.hasSpectatorData(p)) {
+		if (playerManager.hasSpectatorData(player)) {
 		    event.setCancelled(true);
         }
 	}
@@ -692,9 +695,9 @@ public class GameListener implements Listener {
         if (entity instanceof ItemFrame || entity instanceof ArmorStand) return;
         if (!(entity instanceof Player)) {
             if (gameManager.isInRegion(event.getLocation())) {
-                Game g = gameManager.getGame(event.getLocation());
+                Game game = gameManager.getGame(event.getLocation());
                 if (entity instanceof LivingEntity) {
-                    if (g.getGameArenaData().getStatus() != Status.RUNNING) {
+                    if (game.getGameArenaData().getStatus() != Status.RUNNING) {
                         event.setCancelled(true);
                         return;
                     }
@@ -709,7 +712,7 @@ public class GameListener implements Listener {
                     }
                 }
                 entity.setPersistent(false);
-                g.getGameArenaData().getBound().addEntity(entity);
+                game.getGameArenaData().getBound().addEntity(entity);
             }
         }
     }
