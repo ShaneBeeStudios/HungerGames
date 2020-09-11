@@ -61,6 +61,7 @@ import tk.shanebee.hg.managers.Manager;
 import tk.shanebee.hg.managers.PlayerManager;
 import tk.shanebee.hg.util.Util;
 
+import java.util.Collections;
 import java.util.UUID;
 
 /**
@@ -215,21 +216,26 @@ public class GameListener implements Listener {
 		dropInv(player);
 		player.setHealth(20);
 		Bukkit.getScheduler().runTaskLater(plugin, () -> {
+			String deathString;
 			if (damager instanceof Player) {
 				game.getGamePlayerData().addKill(((Player) damager));
 				leaderboard.addStat(((Player) damager), Leaderboard.Stats.KILLS);
-				game.getGamePlayerData().msgAll(lang.death_fallen + " &d" + killManager.getKillString(player.getName(), damager));
+				deathString = killManager.getKillString(player.getName(), damager);
 			} else if (cause == DamageCause.ENTITY_ATTACK) {
-				game.getGamePlayerData().msgAll(lang.death_fallen + " &d" + killManager.getKillString(player.getName(), damager));
+				deathString = killManager.getKillString(player.getName(), damager);
 			} else if (cause == DamageCause.PROJECTILE) {
-				game.getGamePlayerData().msgAll(lang.death_fallen + " &d" + killManager.getKillString(player.getName(), damager));
+				deathString = killManager.getKillString(player.getName(), damager);
 				if (killManager.isShotByPlayer(damager) && killManager.getShooter(damager) != player) {
 				    game.getGamePlayerData().addKill(killManager.getShooter(damager));
                     leaderboard.addStat(killManager.getShooter(damager), Leaderboard.Stats.KILLS);
                 }
 			} else {
-				game.getGamePlayerData().msgAll(lang.death_fallen + " &d" + killManager.getDeathString(cause, player.getName()));
+				deathString = killManager.getDeathString(cause, player.getName());
 			}
+
+			// Send death message to all players in game
+			game.getGamePlayerData().msgAll(lang.death_fallen + " &d" + deathString);
+
 			leaderboard.addStat(player, Leaderboard.Stats.DEATHS);
 			leaderboard.addStat(player, Leaderboard.Stats.GAMES);
 
@@ -243,13 +249,12 @@ public class GameListener implements Listener {
 			game.getGamePlayerData().leave(player, true);
 			game.getGameCommandData().runCommands(CommandType.DEATH, player);
 
-			String bukkitDeathMessage = lang.death_in_game
-					.replace("<player>", player.getName())
-					.replace("<arena>", game.getGameArenaData().getName());
-
 			// Call our death event so other plugins can pick up the fake death
-			PlayerDeathGameEvent event = new PlayerDeathGameEvent(player, bukkitDeathMessage, game);
+			PlayerDeathGameEvent event = new PlayerDeathGameEvent(player, deathString, game);
 			Bukkit.getPluginManager().callEvent(event);
+			// Call bukkit player death event so other plugins can pick up on that too
+			PlayerDeathEvent playerDeathEvent = new PlayerDeathEvent(player, Collections.emptyList(), 0, deathString);
+			Bukkit.getPluginManager().callEvent(playerDeathEvent);
 
 			Bukkit.getScheduler().scheduleSyncDelayedTask(plugin, () -> checkStick(game), 40L);
 		}, 1);
