@@ -678,7 +678,8 @@ public class GameListener implements Listener {
 		Player player = event.getPlayer();
 		PlayerData playerData = playerManager.getPlayerData(player);
 		if (playerData != null) {
-		    if (playerData.getGame().getGameArenaData().getStatus() == Status.WAITING) {
+			Status status = playerData.getGame().getGameArenaData().getStatus();
+		    if (status != Status.BEGINNING && status != Status.RUNNING) {
                 event.setCancelled(true);
             }
 		}
