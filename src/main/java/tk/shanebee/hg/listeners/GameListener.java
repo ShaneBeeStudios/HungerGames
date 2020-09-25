@@ -377,10 +377,10 @@ public class GameListener implements Listener {
 			if (block.getType() == Material.CHEST) {
 				Bukkit.getServer().getPluginManager().callEvent(new ChestOpenEvent(pd.getGame(), block, false));
 			}
-			if (block.getType() == Material.TRAPPED_CHEST || block.getState() instanceof ShulkerBox) {
+			if ((Config.trappedChestIsBonusChest && block.getType() == Material.TRAPPED_CHEST) || (Config.shulkerBoxIsBonusChest && block.getState() instanceof ShulkerBox)) {
 				Bukkit.getServer().getPluginManager().callEvent(new ChestOpenEvent(pd.getGame(), block, true));
 			}
-			if (Util.isRunningMinecraft(1, 14) && block.getType() == Material.BARREL) {
+			if (Config.barrelIsBonusChest && Util.isRunningMinecraft(1, 14) && block.getType() == Material.BARREL) {
 					Bukkit.getServer().getPluginManager().callEvent(new ChestOpenEvent(pd.getGame(), block, true));
 			}
 		}

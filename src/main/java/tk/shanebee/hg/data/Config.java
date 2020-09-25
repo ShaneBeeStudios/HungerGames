@@ -29,6 +29,9 @@ public class Config {
     public static int minchestcontent;
     public static int maxbonuscontent;
     public static int minbonuscontent;
+    public static boolean shulkerBoxIsBonusChest;
+    public static boolean trappedChestIsBonusChest;
+    public static boolean barrelIsBonusChest;
     public static int maxTeam;
     public static boolean teleportEnd;
     public static int teleportEndTime;
@@ -106,6 +109,9 @@ public class Config {
         minchestcontent = config.getInt("settings.min-chestcontent");
         maxbonuscontent = config.getInt("settings.max-bonus-chestcontent");
         minbonuscontent = config.getInt("settings.min-bonus-chestcontent");
+        shulkerBoxIsBonusChest = config.getBoolean("settings.use-shulkerbox-for-bonuschest");
+        trappedChestIsBonusChest = config.getBoolean("settings.use-trappedchest-for-bonuschest");
+        barrelIsBonusChest = config.getBoolean("settings.use-barrel-for-bonuschest");
         maxTeam = config.getInt("settings.max-team-size");
         giveReward = config.getBoolean("reward.enabled");
         cash = config.getInt("reward.cash");

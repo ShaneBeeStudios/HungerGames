@@ -24,6 +24,12 @@ settings:
     # Maximum/Minimum amount of items that will spawn in bonus chests
     max-bonus-chestcontent: 5
     min-bonus-chestcontent: 1
+    # If shulker boxes wil be treated as bonus chests
+    use-shulkerbox-for-bonuschest: true
+    # If trapped chests wil be treated as bonus chests
+    use-trappedchest-for-bonuschest: true
+    # If barrels wil be treated as bonus chests
+    use-barrel-for-bonuschest: true
     # When the game has x seconds left, teleport the players back to their starting point
     teleport-at-end: false
     # The time in seconds to teleport players back to their starting point
