@@ -1,12 +1,12 @@
 package tk.shanebee.hg.listeners;
 
+import com.google.common.collect.ImmutableSet;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.Sound;
 import org.bukkit.block.Block;
-import org.bukkit.block.ShulkerBox;
 import org.bukkit.block.Sign;
 import org.bukkit.entity.ArmorStand;
 import org.bukkit.entity.Entity;
@@ -91,6 +91,7 @@ public class GameListener implements Listener {
 		it.setItemMeta(im);
 		trackingStick = it;
         killManager = plugin.getKillManager();
+        setupBuilder();
 	}
 
 	@SuppressWarnings("deprecation") // setPersistent() is DRAFT API
@@ -376,12 +377,8 @@ public class GameListener implements Listener {
 			PlayerData pd = playerManager.getPlayerData(player);
 			if (block.getType() == Material.CHEST) {
 				Bukkit.getServer().getPluginManager().callEvent(new ChestOpenEvent(pd.getGame(), block, false));
-			}
-			if (block.getType() == Material.TRAPPED_CHEST || block.getState() instanceof ShulkerBox) {
+			} else if (isBonusBlock(block)) {
 				Bukkit.getServer().getPluginManager().callEvent(new ChestOpenEvent(pd.getGame(), block, true));
-			}
-			if (Util.isRunningMinecraft(1, 14) && block.getType() == Material.BARREL) {
-					Bukkit.getServer().getPluginManager().callEvent(new ChestOpenEvent(pd.getGame(), block, true));
 			}
 		}
 	}
@@ -777,6 +774,27 @@ public class GameListener implements Listener {
 				}
 			}
 		}
+	}
+
+	private static ImmutableSet<Material> BONUS_BLOCK_MATERIALS;
+
+	private void setupBuilder() {
+		ImmutableSet.Builder<Material> materialBuilder = ImmutableSet.builder();
+
+		for (String bonusBlockType : Config.bonusBlockTypes) {
+			for (Material material : Material.values()) {
+				if (material.toString().equalsIgnoreCase(bonusBlockType)) {
+					materialBuilder.add(material);
+				} else if (bonusBlockType.equalsIgnoreCase("SHULKER_BOX") && material.toString().contains("SHULKER_BOX")) {
+					materialBuilder.add(material);
+				}
+			}
+		}
+		BONUS_BLOCK_MATERIALS = materialBuilder.build();
+	}
+
+	private boolean isBonusBlock(Block block) {
+		return BONUS_BLOCK_MATERIALS.contains(block.getType());
 	}
 
 }

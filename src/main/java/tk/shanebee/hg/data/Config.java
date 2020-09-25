@@ -32,6 +32,7 @@ public class Config {
     public static int maxTeam;
     public static boolean teleportEnd;
     public static int teleportEndTime;
+    public static List<String> bonusBlockTypes;
 
     //Reward info
     public static boolean giveReward;
@@ -127,6 +128,7 @@ public class Config {
         randomChestMaxContent = config.getInt("random-chest.max-chestcontent");
         teleportEnd = config.getBoolean("settings.teleport-at-end");
         teleportEndTime = config.getInt("settings.teleport-at-end-time");
+        bonusBlockTypes = config.getStringList("settings.bonus-block-types");
 
         borderEnabled = config.getBoolean("world-border.enabled");
         borderOnStart = config.getBoolean("world-border.initiate-on-start");
