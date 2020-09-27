@@ -146,9 +146,6 @@ public class GameListener implements Listener {
 
 				if (game.getGameArenaData().getStatus() != Status.RUNNING) {
 					event.setCancelled(true);
-				} else if (playerData.isOnTeam(player.getUniqueId()) && damager instanceof Player && playerData.getTeam().isOnTeam(damager.getUniqueId())) {
-					Util.scm(damager, "&c" + player.getName() + " is on your team!");
-					event.setCancelled(true);
 				} else if (event.getFinalDamage() >= player.getHealth()) {
 					if (hasTotem(player)) return;
 					event.setCancelled(true);

@@ -61,6 +61,7 @@ public class CommandListener implements CommandExecutor, TabCompleter {
 					List<String> listTeam = new ArrayList<>();
 					listTeam.add("invite");
 					listTeam.add("accept");
+					listTeam.add("create");
 					if (sender.hasPermission("hg.team.tp")) {
 					    listTeam.add("tp");
 					}

@@ -29,8 +29,18 @@ settings:
     # The time in seconds to teleport players back to their starting point
     # (note: increments of 30, ex: 30, 60, 90, 120, etc)
     teleport-at-end-time: 30
+    # When enabled, name tags will be hidden from all players in the game
+    hide-nametags: true
+team:
+    # When enabled, players will see nametags of other players on their team
+    # if 'hide-nametags' is disabled, this option is ignored and names will show regardless
+    show-team-nametags: true
     # Maximum amount of players allowed on a team
     max-team-size: 3
+    # When enabled, teammates can hurt each other
+    allow-friendly-fire: false
+    # When enabled, teammates can see each other if using invisibility potion
+    can-see-friendly-invisibles: true
 reward:
     # Whether players get a reward when the game is done!
     enabled: true

@@ -65,6 +65,13 @@ team-invite-2: '| &f<inviter> &3just invited you to a &fTeam&3!'
 team-invite-3: '| &3Type &f/hg team accept &3To join!'
 team-invite-4: '&6*&b&m                                                                             &6*'
 joined-team: '&3You successfully joined this team!'
+# <name> will be replaced with team name
+team-prefix: "&7[&aTeam-<name>&7]"
+team-suffix: ""
+team-created: "&aCreated team: &b<name>"
+team-already-exists: "&cTeam &b<name> &calready exists."
+team-already-have: "&cYou have already created a team: &b<name>"
+team-none: "&cYou do not have a team, create one first with command &b'/hg team create <name>'"
 
 #  CHEST DROPS
 chest-drop-1: '&6*&b&m                                                                                   &6*'
@@ -167,14 +174,14 @@ cmd-lobbywall-set: '&aThe lobbyWallSign has been set!'
 cmd-lobbywall-notcorrect: '&cThese signs are not in correct format!'
 cmd-lobbywall-format: '&cformat: &6[sign] &c[sign] [sign]'
 lobby-signs:
-  sign-1:
-    line-1: '&1&lHunger Games'
-    line-3: '&0&lClick To Join'
-    line-4: 'Cost $&b<cost>'
-  sign-2:
-    line-1: '&1&lGame Status'
-  sign-3:
-    line-1: '&1&lAlive'
+    sign-1:
+        line-1: '&1&lHunger Games'
+        line-3: '&0&lClick To Join'
+        line-4: 'Cost $&b<cost>'
+    sign-2:
+        line-1: '&1&lGame Status'
+    sign-3:
+        line-1: '&1&lAlive'
 
 ## Start
 cmd-start-starting: '&b<arena>&6 is now starting!'

@@ -51,7 +51,13 @@ public class Language {
     public String team_invite_2;
     public String team_invite_3;
     public String team_invite_4;
+    public String team_prefix;
+    public String team_suffix;
     public String joined_team;
+    public String team_created;
+    public String team_already_exists;
+    public String team_already_have;
+    public String team_none;
     public String chest_drop_1;
     public String chest_drop_2;
     public String compass_nearest_player;
@@ -252,7 +258,13 @@ public class Language {
         team_invite_2 = lang.getString("team-invite-2");
         team_invite_3 = lang.getString("team-invite-3");
         team_invite_4 = lang.getString("team-invite-4");
+        team_prefix = lang.getString("team-prefix");
+        team_suffix = lang.getString("team-suffix");
         joined_team = lang.getString("joined-team");
+        team_created = lang.getString("team-created");
+        team_already_exists = lang.getString("team-already-exists");
+        team_already_have = lang.getString("team-already-have");
+        team_none = lang.getString("team-none");
 
         chest_drop_1 = lang.getString("chest-drop-1");
         chest_drop_2 = lang.getString("chest-drop-2");
