@@ -31,6 +31,7 @@ public class Config {
     public static int minbonuscontent;
     public static boolean teleportEnd;
     public static int teleportEndTime;
+    public static List<String> bonusBlockTypes;
     public static boolean hideNametags;
 
     //Team info
@@ -113,6 +114,7 @@ public class Config {
         maxbonuscontent = config.getInt("settings.max-bonus-chestcontent");
         minbonuscontent = config.getInt("settings.min-bonus-chestcontent");
         hideNametags = config.getBoolean("settings.hide-nametags");
+        bonusBlockTypes = config.getStringList("settings.bonus-block-types");
 
         // Team
         team_maxTeamSize = config.getInt("team.max-team-size");

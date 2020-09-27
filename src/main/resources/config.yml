@@ -29,6 +29,13 @@ settings:
     # The time in seconds to teleport players back to their starting point
     # (note: increments of 30, ex: 30, 60, 90, 120, etc)
     teleport-at-end-time: 30
+    # Blocks that will be represented as bonus chests
+    # Supports Bukkit material enums
+    # Also "SHULKER_BOX" will cover all shulker box types
+    bonus-block-types:
+        - TRAPPED_CHEST
+        - BARREL
+        - SHULKER_BOX
     # When enabled, name tags will be hidden from all players in the game
     hide-nametags: true
 team:
