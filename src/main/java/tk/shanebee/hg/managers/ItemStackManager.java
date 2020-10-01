@@ -6,6 +6,7 @@ import org.bukkit.DyeColor;
 import org.bukkit.Material;
 import org.bukkit.configuration.Configuration;
 import org.bukkit.enchantments.Enchantment;
+import org.bukkit.inventory.ItemFlag;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.inventory.meta.LeatherArmorMeta;
@@ -135,12 +136,15 @@ public class ItemStackManager {
                 }
                 for (Enchantment e : Enchantment.values()) {
                     if (e.getKey().getKey().equalsIgnoreCase(d[0]) || e.getName().equalsIgnoreCase(d[0])) {
-                        item.addUnsafeEnchantment(e, level);
+                        itemMeta.addEnchant(e, level, true);
                     }
                 }
             } else if (s.startsWith("color:")) {
                 if (itemMeta instanceof LeatherArmorMeta) {
                     ((LeatherArmorMeta) itemMeta).setColor(getColor(s));
+                    try {
+                        itemMeta.addItemFlags(ItemFlag.HIDE_DYE);
+                    } catch (Exception ignore) {}
                 } else if (itemMeta instanceof PotionMeta) {
                     ((PotionMeta) itemMeta).setColor(getColor(s));
                 }
