@@ -85,6 +85,7 @@ public class ArenaConfig {
 
 	@SuppressWarnings("ConstantConditions")
 	public void load() {
+		Util.log("Loading arenas...");
 		Configuration pluginConfig = plugin.getHGConfig().getConfig();
 		int freeroam = pluginConfig.getInt("settings.free-roam");
 
@@ -165,7 +166,7 @@ public class ArenaConfig {
 							HG.getPlugin().getRandomItems().loadItems(itemString, items);
 						}
 						game.getGameItemData().setItems(items);
-						Util.log(items.size() + " Random items have been loaded for arena: " + s);
+						Util.log(items.size() + " Random items have been loaded for arena: &b" + s);
 					}
 					if (!arenadat.getStringList(path + ".bonus").isEmpty()) {
 						HashMap<Integer, ItemStack> bonusItems = new HashMap<>();
@@ -173,7 +174,7 @@ public class ArenaConfig {
 							HG.getPlugin().getRandomItems().loadItems(itemString, bonusItems);
 						}
 						game.getGameItemData().setBonusItems(bonusItems);
-						Util.log(bonusItems.size() + " Random bonus items have been loaded for arena: " + s);
+						Util.log(bonusItems.size() + " Random bonus items have been loaded for arena: &b" + s);
 					}
 
 					if (arenadat.isSet(path + ".border.center")) {
@@ -217,10 +218,11 @@ public class ArenaConfig {
 					} catch (Exception ignore) {
 						gameArenaData.setExit(game.getLobbyLocation().getWorld().getSpawnLocation());
 					}
+					Util.log("Arena &b" + s + "&7 has been &aloaded!");
 
 				}
 			} else {
-				Util.log("No Arenas to load.");
+				Util.log("&cNo Arenas to load.");
 			}
 		}
 	}

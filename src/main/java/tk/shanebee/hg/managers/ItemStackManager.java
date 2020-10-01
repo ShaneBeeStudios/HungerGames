@@ -38,8 +38,9 @@ public class ItemStackManager {
     }
 
     public void setKits() {
+        Util.log("Loading kits...");
         kitCreator(plugin.getHGConfig().getConfig(), plugin.getKitManager(), null);
-        Util.log("Loaded kits");
+        Util.log("Kits have been &aloaded!");
     }
 
     /**
@@ -54,7 +55,7 @@ public class ItemStackManager {
         KitManager kit = new KitManager();
         if (config.getConfigurationSection(gamePath + "kits") == null) return null;
         kitCreator(config, kit, gamePath);
-        Util.log("Loaded custom kits for arena: " + gameName);
+        Util.log("Loaded custom kits for arena: &b" + gameName);
         return kit;
     }
 
