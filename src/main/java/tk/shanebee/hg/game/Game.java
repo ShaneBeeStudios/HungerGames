@@ -16,7 +16,6 @@ import tk.shanebee.hg.game.GameCommandData.CommandType;
 import tk.shanebee.hg.managers.KitManager;
 import tk.shanebee.hg.managers.MobManager;
 import tk.shanebee.hg.managers.PlayerManager;
-import tk.shanebee.hg.managers.SBDisplay;
 import tk.shanebee.hg.tasks.ChestDropTask;
 import tk.shanebee.hg.tasks.FreeRoamTask;
 import tk.shanebee.hg.tasks.Rollback;
@@ -44,8 +43,6 @@ public class Game {
     KitManager kitManager;
     private final MobManager mobManager;
     private final PlayerManager playerManager;
-
-    final SBDisplay sb;
 
     // Task ID's here!
     private SpawnerTask spawner;
@@ -102,12 +99,11 @@ public class Game {
      * @param cost       Cost of this game
      */
     public Game(String name, Bound bound, int timer, int minPlayers, int maxPlayers, int roam, int cost) {
+        this.plugin = HG.getPlugin();
         this.gameArenaData = new GameArenaData(this, name, bound, timer, minPlayers, maxPlayers, roam, cost);
         this.gameArenaData.status = Status.NOTREADY;
-        this.plugin = HG.getPlugin();
         this.playerManager = HG.getPlugin().getPlayerManager();
         this.lang = plugin.getLang();
-        this.sb = new SBDisplay(this);
         this.kitManager = plugin.getKitManager();
         this.mobManager = new MobManager(this);
         this.bar = new GameBarData(this);
@@ -299,7 +295,6 @@ public class Game {
                 playerManager.getPlayerData(uuid).restore(player);
                 playerManager.removePlayerData(uuid);
                 win.add(uuid);
-                sb.restoreSB(player);
                 gamePlayerData.exit(player);
             }
         }
@@ -319,10 +314,10 @@ public class Game {
                 gamePlayerData.exit(spectator);
                 playerManager.getSpectatorData(uuid).restore(spectator);
                 playerManager.removeSpectatorData(uuid);
-                sb.restoreSB(spectator);
             }
         }
         gamePlayerData.clearSpectators();
+        gamePlayerData.clearTeams();
 
         if (gameArenaData.status == Status.RUNNING) {
             bar.clearBar();
@@ -366,7 +361,7 @@ public class Game {
             gameArenaData.status = Status.READY;
             gameBlockData.updateLobbyBlock();
         }
-        sb.resetAlive();
+        gameArenaData.updateBoards();
         gameCommandData.runCommands(CommandType.STOP, null);
 
         // Call GameEndEvent
@@ -392,7 +387,7 @@ public class Game {
                 Bukkit.getScheduler().runTaskLater(plugin, () -> {
                     stop(finalDeath);
                     gameBlockData.updateLobbyBlock();
-                    sb.setAlive();
+                    gameArenaData.updateBoards();
                 }, 20);
 
             }
@@ -402,7 +397,7 @@ public class Game {
                             .replace("<amount>", String.valueOf((gameArenaData.minPlayers - gamePlayerData.players.size())))));
         }
         gameBlockData.updateLobbyBlock();
-        sb.setAlive();
+        gameArenaData.updateBoards();
     }
 
     boolean isGameOver() {
@@ -424,10 +419,7 @@ public class Game {
 
     @Override
     public String toString() {
-        return "Game{" +
-                "name='" + gameArenaData.name + '\'' +
-                ", bound=" + gameArenaData.bound +
-                '}';
+        return "Game{name='" + gameArenaData.name + '\'' + ", bound=" + gameArenaData.bound + '}';
     }
 
 }

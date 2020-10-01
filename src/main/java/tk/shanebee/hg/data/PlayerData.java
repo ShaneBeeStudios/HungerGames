@@ -5,6 +5,7 @@ import org.bukkit.GameMode;
 import org.bukkit.attribute.Attribute;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.scoreboard.Scoreboard;
 import tk.shanebee.hg.HG;
 import tk.shanebee.hg.game.Game;
 import tk.shanebee.hg.game.Team;
@@ -29,6 +30,7 @@ public class PlayerData implements Cloneable {
 	private final float saturation;
 	private final GameMode mode;
 	private final UUID uuid;
+	private final Scoreboard scoreboard;
 	
 	//InGame data
 	private Team team;
@@ -53,6 +55,7 @@ public class PlayerData implements Cloneable {
 		Util.clearInv(player);
 		player.setLevel(0);
 		player.setExp(0);
+		scoreboard = player.getScoreboard();
 	}
 
 	/** Restore a player's saved data
@@ -72,6 +75,7 @@ public class PlayerData implements Cloneable {
 		player.updateInventory();
 		player.setInvulnerable(false);
 		restoreHealth(player);
+		player.setScoreboard(scoreboard);
 	}
 
 	// Restores later if player has an item in their inventory which changes their max health value

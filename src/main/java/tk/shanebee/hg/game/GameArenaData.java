@@ -22,6 +22,7 @@ public class GameArenaData extends Data {
     Location exit;
     Status status;
     int chestRefillTime = 0;
+    final Board board;
 
     public GameArenaData(Game game, String name, Bound bound, int timer, int minPlayers, int maxPlayers, int roamTime, int cost) {
         super(game);
@@ -33,6 +34,16 @@ public class GameArenaData extends Data {
         this.roamTime = roamTime;
         this.cost = cost;
         this.spawns = new ArrayList<>();
+        this.board = new Board(game);
+    }
+
+    /**
+     * Get the board of this game
+     *
+     * @return Board of game
+     */
+    public Board getBoard() {
+        return board;
     }
 
     /**
@@ -181,6 +192,13 @@ public class GameArenaData extends Data {
      */
     public int getChestRefillTime() {
         return this.chestRefillTime;
+    }
+
+    /**
+     * Update scoreboards for players (including team scoreboards)
+     */
+    public void updateBoards() {
+        game.gameArenaData.board.updateBoard();
     }
 
 }

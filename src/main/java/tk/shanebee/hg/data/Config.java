@@ -29,10 +29,16 @@ public class Config {
     public static int minchestcontent;
     public static int maxbonuscontent;
     public static int minbonuscontent;
-    public static int maxTeam;
     public static boolean teleportEnd;
     public static int teleportEndTime;
     public static List<String> bonusBlockTypes;
+    public static boolean hideNametags;
+
+    //Team info
+    public static boolean team_showTeamNames;
+    public static int team_maxTeamSize;
+    public static boolean team_friendly_fire;
+    public static boolean team_see_invis;
 
     //Reward info
     public static boolean giveReward;
@@ -107,12 +113,19 @@ public class Config {
         minchestcontent = config.getInt("settings.min-chestcontent");
         maxbonuscontent = config.getInt("settings.max-bonus-chestcontent");
         minbonuscontent = config.getInt("settings.min-bonus-chestcontent");
-        maxTeam = config.getInt("settings.max-team-size");
+        hideNametags = config.getBoolean("settings.hide-nametags");
+        bonusBlockTypes = config.getStringList("settings.bonus-block-types");
+
+        // Team
+        team_maxTeamSize = config.getInt("team.max-team-size");
+        team_showTeamNames = config.getBoolean("team.show-team-nametags");
+        team_friendly_fire = config.getBoolean("team.allow-friendly-fire");
+        team_see_invis = config.getBoolean("team.can-see-friendly-invisibles");
+
         giveReward = config.getBoolean("reward.enabled");
         cash = config.getInt("reward.cash");
         rewardCommands = config.getStringList("reward.commands");
         rewardMessages = config.getStringList("reward.messages");
-        maxTeam = config.getInt("settings.max-team-size");
         giveReward = config.getBoolean("reward.enabled");
         cash = config.getInt("reward.cash");
         breakblocks = config.getBoolean("rollback.allow-block-break");
@@ -128,7 +141,6 @@ public class Config {
         randomChestMaxContent = config.getInt("random-chest.max-chestcontent");
         teleportEnd = config.getBoolean("settings.teleport-at-end");
         teleportEndTime = config.getInt("settings.teleport-at-end-time");
-        bonusBlockTypes = config.getStringList("settings.bonus-block-types");
 
         borderEnabled = config.getBoolean("world-border.enabled");
         borderOnStart = config.getBoolean("world-border.initiate-on-start");

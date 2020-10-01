@@ -29,8 +29,6 @@ settings:
     # The time in seconds to teleport players back to their starting point
     # (note: increments of 30, ex: 30, 60, 90, 120, etc)
     teleport-at-end-time: 30
-    # Maximum amount of players allowed on a team
-    max-team-size: 3
     # Blocks that will be represented as bonus chests
     # Supports Bukkit material enums
     # Also "SHULKER_BOX" will cover all shulker box types
@@ -38,6 +36,18 @@ settings:
         - TRAPPED_CHEST
         - BARREL
         - SHULKER_BOX
+    # When enabled, name tags will be hidden from all players in the game
+    hide-nametags: true
+team:
+    # When enabled, players will see nametags of other players on their team
+    # if 'hide-nametags' is disabled, this option is ignored and names will show regardless
+    show-team-nametags: true
+    # Maximum amount of players allowed on a team
+    max-team-size: 3
+    # When enabled, teammates can hurt each other
+    allow-friendly-fire: false
+    # When enabled, teammates can see each other if using invisibility potion
+    can-see-friendly-invisibles: true
 reward:
     # Whether players get a reward when the game is done!
     enabled: true
@@ -144,11 +154,12 @@ kits:
         leggings: LEATHER_LEGGINGS color:red
         boots: LEATHER_BOOTS color:red
         # Items player's will receive in the kit, supports amount, name, lore and enchantments
+        # In MC 1.16+ HEX color codes are supported in names/lore, ex: <#08BA6C>
         items:
             - BOW name:&2Lucky_Bow
             - ARROW 64 name:&aLucky_Arrow
-            - POTION:HEAL:60:0 2 name:&bHealing
-            - POTION:HEAL:80:1;LUCK:100;1 name:&3Lucky_Healing
+            - POTION potion:HEAL:60:0 2 name:&bHealing
+            - POTION potion:HEAL:80:1;LUCK:100:1 name:&3Lucky_Healing
         # Potion effects to be applied to the player, supports timed and "forever"
         potion-effects:
             - FIRE_RESISTANCE:2:forever

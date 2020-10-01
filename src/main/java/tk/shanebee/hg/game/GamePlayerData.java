@@ -44,6 +44,7 @@ public class GamePlayerData extends Data {
 
     // Data lists
     final Map<Player, Integer> kills = new HashMap<>();
+    final Map<String, Team> teams = new HashMap<>();
 
     protected GamePlayerData(Game game) {
         super(game);
@@ -259,6 +260,7 @@ public class GamePlayerData extends Data {
                     }
                 }
                 playerManager.addPlayerData(new PlayerData(player, game));
+                gameArenaData.board.setBoard(player);
 
                 heal(player);
                 freeze(player);
@@ -276,8 +278,7 @@ public class GamePlayerData extends Data {
                 kitHelp(player);
 
                 game.getGameBlockData().updateLobbyBlock();
-                game.sb.setSB(player);
-                game.sb.setAlive();
+                game.gameArenaData.updateBoards();
                 game.getGameCommandData().runCommands(CommandType.JOIN, player);
             }, 5);
         }
@@ -301,7 +302,6 @@ public class GamePlayerData extends Data {
             playerManager.getPlayerData(uuid).restore(player);
             playerManager.removePlayerData(player);
             exit(player);
-            game.sb.restoreSB(player);
             player.playSound(player.getLocation(), Sound.UI_TOAST_CHALLENGE_COMPLETE, 5, 1);
             if (Config.spectateEnabled && Config.spectateOnDeath && !game.isGameOver()) {
                 spectate(player);
@@ -312,7 +312,6 @@ public class GamePlayerData extends Data {
             playerManager.getPlayerData(uuid).restore(player);
             playerManager.removePlayerData(player);
             exit(player);
-            game.sb.restoreSB(player);
         }
         game.updateAfterDeath(player, death);
     }
@@ -361,6 +360,7 @@ public class GamePlayerData extends Data {
             }
         }
         game.getGameBarData().addPlayer(spectator);
+        game.gameArenaData.board.setBoard(spectator);
         spectator.getInventory().setItem(0, plugin.getItemStackManager().getSpectatorCompass());
     }
 
@@ -389,6 +389,18 @@ public class GamePlayerData extends Data {
         for (Player player : Bukkit.getOnlinePlayers()) {
             player.showPlayer(plugin, hidden);
         }
+    }
+
+    public void addTeam(Team team) {
+        teams.put(team.getName(), team);
+    }
+
+    public void clearTeams() {
+        teams.clear();
+    }
+
+    public boolean hasTeam(String name) {
+        return teams.containsKey(name);
     }
 
     // UTIL
