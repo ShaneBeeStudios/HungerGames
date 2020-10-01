@@ -1,0 +1,41 @@
+# This file stores items which will appear in chests/bonus chests in your arenas
+# For info on setup, check the wiki https://github.com/ShaneBeeStudios/HungerGames/wiki/Items.yml
+items:
+    - STONE_SWORD 1 x:5
+    - GOLDEN_SWORD 1
+    - MUSHROOM_STEW 1 x:2
+    - STONE_HOE 1
+    - LEATHER_HELMET 1 x:2
+    - LEATHER_CHESTPLATE 1 x:2
+    - LEATHER_LEGGINGS 1 x:2
+    - IRON_HELMET 1 x:2
+    - IRON_CHESTPLATE 1 x:2
+    - IRON_LEGGINGS 1 x:2
+    - IRON_BOOTS 1 x:2
+    - BOW 1 x:3
+    - ARROW 20 x:2
+    - MILK_BUCKET 1 x:2
+    - FISHING_ROD 1
+    - COMPASS 1
+    - STICK 1 name:&6TrackingStick_&aUses:_5 lore:&7Left_click_in_the_air:&7To_find_nearby_players
+    - GOLDEN_HELMET 1
+    - GOLDEN_CHESTPLATE 1
+    - BONE 1 x:2
+    - GOLDEN_LEGGINGS 1
+    - GOLDEN_BOOTS 1
+    - DIAMOND_SWORD 1 enchant:sharpness:1 name:&6Death_Dealer
+    - GOLDEN_APPLE 1
+    - CHAINMAIL_CHESTPLATE 1 x:1
+    - CHAINMAIL_LEGGINGS 1 x:1
+    - COOKIE 2 x:3
+    - MELON_SLICE 1 x:4
+    - COOKED_BEEF 1 x:2
+    - ENDER_PEARL 1 x:2
+    - POTION potion:SPEED:3600:1 1 x:2 name:&rPotion_of_Swiftness
+    - POTION potion:HEAL:1:1 1 x:2 name:&rPotion_of_Healing
+    - SPLASH_POTION potion:POISON:320:2 1 color:green name:&rSplash_Potion_of_Poison
+    - SPLASH_POTION potion:REGENERATION:660:1 1 x:2 name:&rSplash_Potion_of_Regeneration
+    - APPLE 2 x:5
+bonus:
+    - DIAMOND_SWORD 1 enchant:sharpness:5 name:&3Power_Sword
+    - DIAMOND_CHESTPLATE 1 enchant:protection:3 name:&aLife_Saver
