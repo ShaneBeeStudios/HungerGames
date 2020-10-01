@@ -180,13 +180,11 @@ public class ItemStackManager {
     }
 
     private ItemStack itemStringToStack(String item, int amount) {
-        String[] itemArr = item.split(":");
-        String materialString = itemArr[0].toUpperCase();
         Material material;
         try {
-            material = Material.valueOf(materialString);
+            material = Material.valueOf(item);
         } catch (IllegalArgumentException ex) {
-            Util.warning("Invalid Material: &7" + materialString);
+            Util.warning("Invalid Material: &7" + item);
             return null;
         }
         return new ItemStack(material, amount);
