@@ -154,11 +154,12 @@ kits:
         leggings: LEATHER_LEGGINGS color:red
         boots: LEATHER_BOOTS color:red
         # Items player's will receive in the kit, supports amount, name, lore and enchantments
+        # In MC 1.16+ HEX color codes are supported in names/lore, ex: <#08BA6C>
         items:
             - BOW name:&2Lucky_Bow
             - ARROW 64 name:&aLucky_Arrow
-            - POTION:HEAL:60:0 2 name:&bHealing
-            - POTION:HEAL:80:1;LUCK:100;1 name:&3Lucky_Healing
+            - POTION potion:HEAL:60:0 2 name:&bHealing
+            - POTION potion:HEAL:80:1;LUCK:100:1 name:&3Lucky_Healing
         # Potion effects to be applied to the player, supports timed and "forever"
         potion-effects:
             - FIRE_RESISTANCE:2:forever
