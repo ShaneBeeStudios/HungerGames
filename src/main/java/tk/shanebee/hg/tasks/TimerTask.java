@@ -11,6 +11,7 @@ import java.util.Objects;
 
 public class TimerTask implements Runnable {
 
+	private int timer = 0;
 	private int remainingtime;
 	private int teleportTimer;
 	private int borderCountdownStart;
@@ -48,6 +49,12 @@ public class TimerTask implements Runnable {
 			game.getGamePlayerData().msgAll(HG.getPlugin().getLang().game_chest_refill);
 		}
 
+		int refillRepeat = gameArenaData.getChestRefillRepeat();
+		if (refillRepeat > 0 && timer % refillRepeat == 0) {
+			game.getGameBlockData().refillChests();
+			game.getGamePlayerData().msgAll(HG.getPlugin().getLang().game_chest_refill);
+		}
+
 		if (remainingtime == teleportTimer && Config.teleportEnd) {
 			game.getGamePlayerData().msgAll(HG.getPlugin().getLang().game_almost_over);
 			game.getGamePlayerData().respawnAll();
@@ -68,6 +75,7 @@ public class TimerTask implements Runnable {
 			}
 		}
 		remainingtime = (remainingtime - 30);
+		timer += 30;
 	}
 	
 	public void stop() {

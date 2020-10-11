@@ -204,6 +204,10 @@ public class ArenaConfig {
 						int chestRefill = arenadat.getInt(path + ".chest-refill");
 						gameArenaData.setChestRefillTime(chestRefill);
 					}
+					if (arenadat.isSet(path + ".chest-refill-repeat")) {
+						int chestRefillRepeat = arenadat.getInt(path + ".chest-refill-repeat");
+						gameArenaData.setChestRefillRepeat(chestRefillRepeat);
+					}
 					try {
 						String exitPath = "arenas." + gameArenaData.getName() + ".exit-location";
 						String[] locString;

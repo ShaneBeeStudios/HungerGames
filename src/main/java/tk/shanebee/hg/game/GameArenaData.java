@@ -22,6 +22,7 @@ public class GameArenaData extends Data {
     Location exit;
     Status status;
     int chestRefillTime = 0;
+    int chestRefillRepeat = 0;
     final Board board;
 
     public GameArenaData(Game game, String name, Bound bound, int timer, int minPlayers, int maxPlayers, int roamTime, int cost) {
@@ -192,6 +193,25 @@ public class GameArenaData extends Data {
      */
     public int getChestRefillTime() {
         return this.chestRefillTime;
+    }
+
+    /**
+     * Set the chest refill repeat time
+     * <p>NOTE: in 30 second increments</p>
+     *
+     * @param chestRefillRepeat The increment for chest refills
+     */
+    public void setChestRefillRepeat(int chestRefillRepeat) {
+        this.chestRefillRepeat = chestRefillRepeat;
+    }
+
+    /**
+     * Get the chest refill repeat time
+     *
+     * @return The increment for chest refills
+     */
+    public int getChestRefillRepeat() {
+        return chestRefillRepeat;
     }
 
     /**
