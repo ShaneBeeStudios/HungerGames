@@ -305,7 +305,7 @@ public class GamePlayerData extends Data {
             player.playSound(player.getLocation(), Sound.UI_TOAST_CHALLENGE_COMPLETE, 5, 1);
             if (Config.spectateEnabled && Config.spectateOnDeath && !game.isGameOver()) {
                 spectate(player);
-                player.sendTitle(game.gameArenaData.getName(), "You are now spectating!", 10, 100, 10); //TODO this a temp test
+                player.sendTitle(game.gameArenaData.getName(), Util.getColString(lang.spectator_start_title), 10, 100, 10);
             }
         } else {
             heal(player);

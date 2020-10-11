@@ -171,6 +171,7 @@ public class Language {
     public String lobby_sign_3_1;
     public String spectator_compass;
     public String spectator_compass_head_lore;
+    public String spectator_start_title;
 
 
     public Language(HG plugin) {
@@ -378,6 +379,7 @@ public class Language {
 
         spectator_compass = lang.getString("spectator-compass");
         spectator_compass_head_lore = lang.getString("spectator-head-lore");
+        spectator_start_title = lang.getString("spectator-start-title");
 
         status_running = lang.getString("status-running");
         status_stopped = lang.getString("status-stopped");
