@@ -59,6 +59,11 @@ public enum PotionEffectUtils {
         for (PotionEffectUtils p : values()) {
             BY_NAME.put(p.name(), p.bukkit);
         }
+        for (PotionEffectType value : PotionEffectType.values()) {
+            if (!BY_NAME.containsValue(value.getName())) {
+                Util.warning("Missing PotionEffectType for '&7" + value + "&e' please let dev know.");
+            }
+        }
     }
 
     /**
@@ -106,7 +111,15 @@ public enum PotionEffectUtils {
         return bukkit;
     }
 
-    // Verify if the potion effects are valid (including parameters)
+    /**
+     * Get a PotionEffect from string
+     * <p><b>Format:</b>
+     * <br>POTION_EFFECT_TYPE:int(duration):int(amplifier)</p>
+     *
+     * @param data Data string for potion effect
+     * @return New PotionEffect if checks passed
+     */
+    @Nullable
     public static PotionEffect getPotionEffect(String data) {
         String[] potionData = data.split(":");
         if (potionData.length == 3) {

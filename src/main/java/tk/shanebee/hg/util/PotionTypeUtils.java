@@ -8,6 +8,9 @@ import java.util.HashMap;
 import java.util.Locale;
 import java.util.Map;
 
+/**
+ * Util for getting {@link PotionData}
+ */
 public enum PotionTypeUtils {
 
     EMPTY("UNCRAFTABLE"),
@@ -42,6 +45,11 @@ public enum PotionTypeUtils {
     static {
         for (PotionTypeUtils p : values()) {
             BY_NAME.put(p.name(), p.bukkit);
+        }
+        for (PotionType value : PotionType.values()) {
+            if (!BY_NAME.containsValue(value.toString())) {
+                Util.warning("Missing PotionType for '&7" + value + "&e' please let dev know.");
+            }
         }
     }
 
@@ -92,6 +100,16 @@ public enum PotionTypeUtils {
         return bukkit;
     }
 
+    /**
+     * Get PotionData from a String
+     * <p><b>Formats:</b>
+     * <br>POTION-TYPE (optional start with 'LONG_' or 'STRONG_')
+     * <br>POTION-TYPE:boolean(strong):boolean(extended)</p>
+     *
+     * @param data data string of potion type
+     * @return New PotionData if checks passed
+     */
+    @Nullable
     public static PotionData getPotionData(String data) {
         String[] potionData = data.split(":");
         if (potionData.length == 1) {
