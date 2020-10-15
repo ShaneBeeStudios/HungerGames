@@ -12,6 +12,7 @@ import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.inventory.meta.LeatherArmorMeta;
 import org.bukkit.inventory.meta.PotionMeta;
 import org.bukkit.inventory.meta.SkullMeta;
+import org.bukkit.potion.PotionData;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 import org.jetbrains.annotations.Nullable;
@@ -19,6 +20,7 @@ import tk.shanebee.hg.HG;
 import tk.shanebee.hg.data.KitEntry;
 import tk.shanebee.hg.util.NBTApi;
 import tk.shanebee.hg.util.PotionEffectUtils;
+import tk.shanebee.hg.util.PotionTypeUtils;
 import tk.shanebee.hg.util.Util;
 
 import java.util.ArrayList;
@@ -34,8 +36,8 @@ public class ItemStackManager {
 
     public ItemStackManager(HG p) {
         this.plugin = p;
-        setKits();
         this.nbtApi = p.getNbtApi();
+        setKits();
     }
 
     public void setKits() {
@@ -157,24 +159,27 @@ public class ItemStackManager {
                 s = Util.getColString(s);
                 ArrayList<String> lore = new ArrayList<>(Arrays.asList(s.split(":")));
                 itemMeta.setLore(lore);
-            } else if (s.startsWith("potion:") && itemMeta instanceof PotionMeta) {
+            } else if ((s.startsWith("potion:") || s.startsWith("potion-type:")) && itemMeta instanceof PotionMeta) {
+                PotionEffectUtils.deprecationWarning(s);
                 s = s.replace("potion:", "");
+                s = s.replace("potion-type:", "");
                 String[] effects = s.split(";");
                 for (String effect : effects) {
-                    if (verifyPotionEffects(effect)) {
-                        String[] data = effect.split(":");
-                        PotionEffectType potType = PotionEffectUtils.get(data[0]);
-                        int duration = Integer.parseInt(data[1]);
-                        int amplifier = Integer.parseInt(data[2]);
-                        assert potType != null;
-                        PotionEffect potionEffect = new PotionEffect(potType, duration, amplifier);
+                    PotionEffect potionEffect = PotionEffectUtils.getPotionEffect(effect);
+                    if (potionEffect != null) {
                         ((PotionMeta) itemMeta).addCustomEffect(potionEffect, true);
                     }
+                }
+            } else if (s.startsWith("potion-base:") && itemMeta instanceof PotionMeta) {
+                s = s.replace("potion-base:", "");
+                PotionData potionData = PotionTypeUtils.getPotionData(s);
+                if (potionData != null) {
+                    ((PotionMeta) itemMeta).setBasePotionData(potionData);
                 }
             } else if (s.startsWith("data:")) {
                 s = s.replace("data:", "").replace("~", " ");
                 if (nbtApi != null)
-                    item = nbtApi.getItemWithNBT(item, s);
+                    itemMeta = nbtApi.getItemWithNBT(item, s).getItemMeta();
             } else if (s.startsWith("ownerName:") && itemMeta instanceof SkullMeta) {
                 s = s.replace("ownerName:", "");
                 ((SkullMeta) itemMeta).setOwningPlayer(Bukkit.getOfflinePlayer(s));
@@ -193,39 +198,6 @@ public class ItemStackManager {
             return null;
         }
         return new ItemStack(material, amount);
-    }
-
-    // Verify if the potion effects are valid (including parameters)
-    private boolean verifyPotionEffects(String data) {
-        String[] potionData = data.split(":");
-        if (potionData.length == 3 || potionData.length == 4) {
-            int i = potionData.length == 3 ? 0 : 1;
-            if (PotionEffectUtils.get(potionData[i]) == null) {
-                Util.warning("Potion effect type not found: &c" + potionData[i].toUpperCase() + " &ein: &b" + data);
-                potionWarning();
-                return false;
-            } else if (!Util.isInt(potionData[i + 1])) {
-                Util.warning("Potion duration incorrect format: &c" + potionData[i + 1] + " &ein: &b" + data);
-                potionWarning();
-                return false;
-            } else if (!Util.isInt(potionData[i + 2])) {
-                Util.warning("Potion amplifier incorrect format: &c" + potionData[i + 2] + " &ein: &b" + data);
-                potionWarning();
-                return false;
-            }
-        } else {
-            Util.warning("Improper setup of potion: &c" + data);
-            potionWarning();
-            return false;
-        }
-        return true;
-    }
-
-    private void potionWarning() {
-        Util.warning("&r  - Check your configs");
-        Util.warning("&r  - Proper example:");
-        Util.warning("      &bpotion:POTION_TYPE:DURATION_IN_TICKS:LEVEL");
-        Util.warning("      &bpotion:HEAL:200:1");
     }
 
     private Color getColor(String colorString) {

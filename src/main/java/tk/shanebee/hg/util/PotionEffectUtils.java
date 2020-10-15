@@ -1,6 +1,8 @@
 package tk.shanebee.hg.util;
 
+import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -72,7 +74,6 @@ public enum PotionEffectUtils {
         } else if (BY_NAME.containsValue(upper)) {
             return getByBukkit(upper);
         }
-        Util.warning("Invalid potion effect type: &7" + upper);
         return null;
     }
 
@@ -103,6 +104,44 @@ public enum PotionEffectUtils {
      */
     public String getBukkitKey() {
         return bukkit;
+    }
+
+    // Verify if the potion effects are valid (including parameters)
+    public static PotionEffect getPotionEffect(String data) {
+        String[] potionData = data.split(":");
+        if (potionData.length == 3) {
+            PotionEffectType type = get(potionData[0]);
+            if (type == null) {
+                potionWarning("Potion effect type not found: &c" + potionData[0].toUpperCase() + " &ein: &b" + data);
+                return null;
+            } else if (!Util.isInt(potionData[1])) {
+                potionWarning("Potion duration incorrect format: &c" + potionData[1] + " &ein: &b" + data);
+                return null;
+            } else if (!Util.isInt(potionData[2])) {
+                potionWarning("Potion amplifier incorrect format: &c" + potionData[2] + " &ein: &b" + data);
+                return null;
+            }
+            int duration = Integer.parseInt(potionData[1]);
+            int amplifier = Integer.parseInt(potionData[2]);
+            return new PotionEffect(type, duration, amplifier);
+        } else {
+            potionWarning("Improper setup of potion: &c" + data);
+            return null;
+        }
+    }
+
+    private static void potionWarning(@Nullable String warning) {
+        if (warning != null) Util.warning(warning);
+        Util.warning("&r  - Check your configs");
+        Util.warning("&r  - Proper example:");
+        Util.warning("      &bpotion:POTION_EFFECT_TYPE:DURATION_IN_TICKS:LEVEL");
+        Util.warning("      &bpotion:HEAL:200:1");
+    }
+
+    public static void deprecationWarning(String data) {
+        if (data.contains("potion:")) {
+            Util.warning("&c'potion:'&e has been changed to &a'potion-type:'&e please update your configs. Found: &7" + data);
+        }
     }
 
 }

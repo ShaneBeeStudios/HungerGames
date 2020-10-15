@@ -158,8 +158,10 @@ kits:
         items:
             - BOW name:&2Lucky_Bow
             - ARROW 64 name:&aLucky_Arrow
-            - POTION potion:HEAL:60:0 2 name:&bHealing
-            - POTION potion:HEAL:80:1;LUCK:100:1 name:&3Lucky_Healing
+            - POTION potion-type:HEAL:60:0 2 name:&bHealing
+            - POTION potion-type:HEAL:80:1;LUCK:100:1 name:&3Lucky_Healing
+            - POTION potion-base:LONG_STRENGTH
+            - TIPPED_ARROW potion-base:HARMING:true:false
         # Potion effects to be applied to the player, supports timed and "forever"
         potion-effects:
             - FIRE_RESISTANCE:2:forever
@@ -172,7 +174,7 @@ kits:
         items:
             - STONE_SWORD 1 name:&7Survival_Sword
             - BREAD 4 name:&6Peasant's_Bread
-            - POTION potion:HEAL:60:0 2 name:&bHealing
+            - POTION potion-type:HEAL:60:0 2 name:&bHealing
         potion-effects:
     pro:
         permission: none
@@ -183,7 +185,7 @@ kits:
         items:
             - IRON_SWORD 1
             - BREAD 4 name:&8Pro_Bread
-            - POTION potion:HEAL:60:1 2 name:&bSuper_Healing
+            - POTION potion-type:HEAL:60:1 2 name:&bSuper_Healing
         potion-effects:
     ninja:
         permission: none
@@ -192,7 +194,7 @@ kits:
         leggings: LEATHER_LEGGINGS color:black
         boots: LEATHER_BOOTS color:black enchant:feather_falling
         items:
-            - POTION potion:HEAL:60:1 2 name:&bSuper_Healing
+            - POTION potion-type:HEAL:60:1 2 name:&bSuper_Healing
         potion-effects:
             - SPEED:1:forever
     stupidclass:
@@ -204,6 +206,7 @@ kits:
         items:
             - IRON_SWORD 1 enchant:sharpness:2 enchant:smite:2 name:&bOP_&6Sword?
             - BREAD 4
-            - POTION potion:HEAL:60:2 2 name:&bSuper_Duper_Healing
+            - POTION potion-type:HEAL:60:2 2 name:&bSuper_Duper_Healing
+            - POTION potion-base:STRONG_TURTLE_MASTER
         potion-effects:
             - FIRE_RESISTANCE:2:forever

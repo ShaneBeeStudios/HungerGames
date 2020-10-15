@@ -31,10 +31,13 @@ items:
     - MELON_SLICE 1 x:4
     - COOKED_BEEF 1 x:2
     - ENDER_PEARL 1 x:2
-    - POTION potion:SPEED:3600:1 1 x:2 name:&rPotion_of_Swiftness
-    - POTION potion:HEAL:1:1 1 x:2 name:&rPotion_of_Healing
-    - SPLASH_POTION potion:POISON:320:2 1 color:green name:&rSplash_Potion_of_Poison
-    - SPLASH_POTION potion:REGENERATION:660:1 1 x:2 name:&rSplash_Potion_of_Regeneration
+    - POTION potion-type:SPEED:3600:1 1 x:2 name:&rPotion_of_Swiftness
+    - POTION potion-type:HEAL:1:1 1 x:2 name:&rPotion_of_Healing
+    - SPLASH_POTION potion-type:POISON:320:2 1 color:green name:&rSplash_Potion_of_Poison
+    - SPLASH_POTION potion-type:REGENERATION:660:1 1 x:2 name:&rSplash_Potion_of_Regeneration
+    - TIPPED_ARROW potion-base:long_poison
+    - TIPPED_ARROW potion-base:strong_slowness
+    - LINGERING_POTION potion-base:harming:false:false
     - APPLE 2 x:5
 bonus:
     - DIAMOND_SWORD 1 enchant:sharpness:5 name:&3Power_Sword

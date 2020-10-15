@@ -105,6 +105,10 @@ public class Util {
         return true;
     }
 
+    public static boolean isBool(String string) {
+        return string.equalsIgnoreCase("true") || string.equalsIgnoreCase("false");
+    }
+
     public static BlockFace getSignFace(BlockFace face) {
         switch (face) {
             case WEST:
