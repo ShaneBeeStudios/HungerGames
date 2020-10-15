@@ -100,8 +100,9 @@ public class ItemStackManager {
                 kit.addKit(path, new KitEntry(stack.toArray(new ItemStack[0]), helm, boot, ches, leg, perm, potions));
             } catch (Exception e) {
                 Util.log("-------------------------------------------");
-                Util.warning("Unable to load kit " + gameName + path + "!");
+                Util.warning("Unable to load kit " + gameName + path + "! (for a more detailed message enable 'debug' in config and reload)");
                 Util.log("-------------------------------------------");
+                Util.debug(e);
             }
         }
     }

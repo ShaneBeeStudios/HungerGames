@@ -18,6 +18,8 @@ import java.util.List;
  */
 public class Config {
 
+    public static boolean debug;
+
     //Basic settings
     public static boolean economy = true;
     public static boolean spawnmobs;
@@ -104,6 +106,7 @@ public class Config {
 
 
     private void loadConfig() {
+        debug = config.getBoolean("settings.debug");
         spawnmobs = config.getBoolean("settings.spawn-mobs");
         spawnmobsinterval = config.getInt("settings.spawn-mobs-interval") * 20;
         bossbar = config.getBoolean("settings.bossbar-countdown");

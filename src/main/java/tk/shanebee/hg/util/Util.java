@@ -15,12 +15,16 @@ import org.bukkit.entity.Player;
 import org.bukkit.inventory.meta.FireworkMeta;
 import org.bukkit.material.Attachable;
 import org.bukkit.material.MaterialData;
+import org.jetbrains.annotations.NotNull;
 import tk.shanebee.hg.HG;
+import tk.shanebee.hg.data.Config;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 import java.util.UUID;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -30,6 +34,7 @@ import java.util.regex.Pattern;
 @SuppressWarnings("WeakerAccess")
 public class Util {
 
+    private static final Logger LOGGER = Bukkit.getLogger();
     public static final BlockFace[] faces = new BlockFace[]{BlockFace.EAST, BlockFace.WEST, BlockFace.NORTH, BlockFace.SOUTH};
     private static final Pattern HEX_PATTERN = Pattern.compile("<#([A-Fa-f0-9]){6}>");
 
@@ -49,6 +54,34 @@ public class Util {
      */
     public static void warning(String s) {
         scm(Bukkit.getConsoleSender(), "&7[&e&lHungerGames&7] &eWARNING: " + s);
+    }
+
+    /**
+     * Send a debug message to console
+     * <p>This will only send if 'debug' is enabled in config.yml</p>
+     *
+     * @param debug Debug message to log
+     */
+    public static void debug(String debug) {
+        if (Config.debug) {
+            log(debug);
+        }
+    }
+
+    /**
+     * Send a debug exception to console
+     * <p>This will only send if 'debug' is enabled in config.yml</p>
+     *
+     * @param exception Exception to log
+     */
+    public static void debug(@NotNull Exception exception) {
+        if (Config.debug) {
+            LOGGER.log(Level.SEVERE, getColString("&7[&e&lHungerGames&7] &cERROR: (please report to dev):"));
+            LOGGER.log(Level.SEVERE, exception.toString());
+            for (StackTraceElement element : exception.getStackTrace()) {
+                LOGGER.log(Level.SEVERE, getColString("  &7at &c" + element));
+            }
+        }
     }
 
     /**

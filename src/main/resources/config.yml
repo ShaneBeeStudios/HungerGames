@@ -7,6 +7,8 @@
 # More Info: See the wiki for more info on this config @ https://github.com/ShaneBeeStudios/HungerGames/wiki/Config.yml
 
 settings:
+    # When enabled, more informative debug messages will be sent when errors occur
+    debug: false
     # If mobs will spawn in the arena, and their interval
     spawn-mobs: true
     spawn-mobs-interval: 35
