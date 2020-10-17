@@ -52,6 +52,7 @@ public class GameBarData extends Data {
      * @param remaining Remaining time to show on bar
      */
     public void bossbarUpdate(int remaining) {
+        if (bar == null) return;
         double remain = ((double) remaining) / ((double) getGame().gameArenaData.timer);
         int min = (remaining / 60);
         int sec = (remaining % 60);

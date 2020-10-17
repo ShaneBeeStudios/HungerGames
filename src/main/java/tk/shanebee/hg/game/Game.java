@@ -251,7 +251,6 @@ public class Game {
         gameArenaData.status = Status.RUNNING;
         if (Config.spawnmobs) spawner = new SpawnerTask(this, Config.spawnmobsinterval);
         if (Config.randomChest) chestDrop = new ChestDropTask(this);
-        timer = new TimerTask(this, gameArenaData.timer);
         gameBlockData.updateLobbyBlock();
         if (Config.bossbar) {
             bar.createBossbar(gameArenaData.timer);
@@ -259,6 +258,7 @@ public class Game {
         if (Config.borderEnabled && Config.borderOnStart) {
             gameBorderData.setBorder(gameArenaData.timer);
         }
+        timer = new TimerTask(this, gameArenaData.timer);
     }
 
     public void cancelTasks() {
