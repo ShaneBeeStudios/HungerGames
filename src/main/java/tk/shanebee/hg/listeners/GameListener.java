@@ -94,7 +94,6 @@ public class GameListener implements Listener {
         setupBuilder();
 	}
 
-	@SuppressWarnings("deprecation") // setPersistent() is DRAFT API
     private void dropInv(Player player) {
 		PlayerInventory inv = player.getInventory();
 		Location l = player.getLocation();
@@ -683,7 +682,6 @@ public class GameListener implements Listener {
         }
 	}
 
-	@SuppressWarnings("deprecation")
     @EventHandler
 	private void onSpawn(EntitySpawnEvent event) {
         Entity entity = event.getEntity();

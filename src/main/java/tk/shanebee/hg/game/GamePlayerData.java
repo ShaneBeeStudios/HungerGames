@@ -73,7 +73,7 @@ public class GamePlayerData extends Data {
      * @return List of spectators
      */
     public List<UUID> getSpectators() {
-        return this.spectators;
+        return new ArrayList<>(this.spectators);
     }
 
     void clearSpectators() {
@@ -296,22 +296,21 @@ public class GamePlayerData extends Data {
         UUID uuid = player.getUniqueId();
         unFreeze(player);
         if (death) {
-            if (game.gameArenaData.getStatus() == Status.RUNNING)
-                game.getGameBarData().removePlayer(player);
-            heal(player);
-            playerManager.getPlayerData(uuid).restore(player);
-            playerManager.removePlayerData(player);
-            exit(player);
-            player.playSound(player.getLocation(), Sound.UI_TOAST_CHALLENGE_COMPLETE, 5, 1);
             if (Config.spectateEnabled && Config.spectateOnDeath && !game.isGameOver()) {
                 spectate(player);
+                player.playSound(player.getLocation(), Sound.UI_TOAST_CHALLENGE_COMPLETE, 5, 1);
                 player.sendTitle(game.gameArenaData.getName(), Util.getColString(lang.spectator_start_title), 10, 100, 10);
-            }
-        } else {
-            heal(player);
-            playerManager.getPlayerData(uuid).restore(player);
-            playerManager.removePlayerData(player);
-            exit(player);
+                game.updateAfterDeath(player, true);
+                return;
+            } else if (game.gameArenaData.getStatus() == Status.RUNNING)
+                game.getGameBarData().removePlayer(player);
+        }
+        heal(player);
+        playerManager.getPlayerData(uuid).restore(player);
+        playerManager.removePlayerData(player);
+        exit(player);
+        if (death) {
+            player.playSound(player.getLocation(), Sound.UI_TOAST_CHALLENGE_COMPLETE, 5, 1);
         }
         game.updateAfterDeath(player, death);
     }
@@ -337,13 +336,13 @@ public class GamePlayerData extends Data {
      */
     public void spectate(Player spectator) {
         UUID uuid = spectator.getUniqueId();
+        spectator.teleport(game.gameArenaData.getSpawns().get(0));
         if (playerManager.hasPlayerData(uuid)) {
             playerManager.transferPlayerDataToSpectator(uuid);
         } else {
             playerManager.addSpectatorData(new PlayerData(spectator, game));
         }
         this.spectators.add(uuid);
-        spectator.teleport(game.gameArenaData.getSpawns().get(0));
         spectator.setGameMode(GameMode.SURVIVAL);
         spectator.setCollidable(false);
         if (Config.spectateFly)
@@ -372,19 +371,19 @@ public class GamePlayerData extends Data {
      * @param spectator The player to remove
      */
     public void leaveSpectate(Player spectator) {
-        exit(spectator);
-        spectator.setCollidable(true);
         UUID uuid = spectator.getUniqueId();
+        playerManager.getSpectatorData(uuid).restore(spectator);
+        playerManager.removeSpectatorData(uuid);
+        spectators.remove(spectator.getUniqueId());
+        spectator.setCollidable(true);
         if (Config.spectateFly) {
-            GameMode mode = playerManager.getSpectatorData(uuid).getGameMode();
+            GameMode mode = spectator.getGameMode();
             if (mode == GameMode.SURVIVAL || mode == GameMode.ADVENTURE)
                 spectator.setAllowFlight(false);
         }
         if (Config.spectateHide)
             revealPlayer(spectator);
-        playerManager.getSpectatorData(uuid).restore(spectator);
-        playerManager.removeSpectatorData(uuid);
-        spectators.remove(spectator.getUniqueId());
+        exit(spectator);
     }
 
     void revealPlayer(Player hidden) {

@@ -1,7 +1,6 @@
 package tk.shanebee.hg.game;
 
 import org.bukkit.Bukkit;
-import org.bukkit.GameMode;
 import org.bukkit.Location;
 import org.bukkit.block.Sign;
 import org.bukkit.entity.Player;
@@ -300,20 +299,10 @@ public class Game {
         }
         gamePlayerData.clearPlayers();
 
-        for (UUID uuid : gamePlayerData.spectators) {
+        for (UUID uuid : gamePlayerData.getSpectators()) {
             Player spectator = Bukkit.getPlayer(uuid);
             if (spectator != null) {
-                spectator.setCollidable(true);
-                if (Config.spectateHide)
-                    gamePlayerData.revealPlayer(spectator);
-                if (Config.spectateFly) {
-                    GameMode mode = playerManager.getSpectatorData(uuid).getGameMode();
-                    if (mode == GameMode.SURVIVAL || mode == GameMode.ADVENTURE)
-                        spectator.setAllowFlight(false);
-                }
-                gamePlayerData.exit(spectator);
-                playerManager.getSpectatorData(uuid).restore(spectator);
-                playerManager.removeSpectatorData(uuid);
+                gamePlayerData.leaveSpectate(spectator);
             }
         }
         gamePlayerData.clearSpectators();
@@ -392,8 +381,8 @@ public class Game {
 
             }
         } else if (status == Status.WAITING) {
-            gamePlayerData.msgAll(HG.getPlugin().getLang().player_left_game.replace("<player>", player.getName()) +
-                    (gameArenaData.minPlayers - gamePlayerData.players.size() <= 0 ? "!" : ":" + HG.getPlugin().getLang().players_to_start
+            gamePlayerData.msgAll(lang.player_left_game.replace("<player>", player.getName()) +
+                    (gameArenaData.minPlayers - gamePlayerData.players.size() <= 0 ? "!" : ": " + lang.players_to_start
                             .replace("<amount>", String.valueOf((gameArenaData.minPlayers - gamePlayerData.players.size())))));
         }
         gameBlockData.updateLobbyBlock();
