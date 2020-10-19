@@ -67,6 +67,7 @@ public class HG extends JavaPlugin {
         loadPlugin(true);
     }
     public void loadPlugin(boolean load) {
+		long start = System.currentTimeMillis();
 	    plugin = this;
 
         if (load) {
@@ -138,7 +139,7 @@ public class HG extends JavaPlugin {
 			Util.log("&eReport any issues to: &bhttps://github.com/ShaneBeeStudios/HungerGames/issues");
 		}
 
-		Util.log("HungerGames has been &benabled!");
+		Util.log("HungerGames has been &aenabled&7 in &b%.2f seconds&7!", (float)(System.currentTimeMillis() - start) / 1000);
 	}
 
 	public void reloadPlugin() {
