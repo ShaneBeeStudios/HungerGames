@@ -48,6 +48,16 @@ public class Util {
     }
 
     /**
+     * Log a formatted message to console prefixed with the plugin's name
+     *
+     * @param f String format
+     * @param objects Objects to go into format
+     */
+    public static void log(String f, Object... objects) {
+        log(String.format(f, objects));
+    }
+
+    /**
      * Send a warning to console prefixed with the plugin's name
      *
      * @param s Message to log to console
