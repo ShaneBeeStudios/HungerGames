@@ -345,7 +345,12 @@ public class Game {
         if (death)
             Util.broadcast(HG.getPlugin().getLang().player_won.replace("<arena>", gameArenaData.name).replace("<winner>", winner));
         if (gameBlockData.requiresRollback()) {
-            new Rollback(this);
+            if (plugin.isEnabled()) {
+                new Rollback(this);
+            } else {
+                // Force restart if server is stopping
+                gameBlockData.forceRollback();
+            }
         } else {
             gameArenaData.status = Status.READY;
             gameBlockData.updateLobbyBlock();
@@ -373,11 +378,15 @@ public class Game {
                     }
                 }
                 boolean finalDeath = death;
-                Bukkit.getScheduler().runTaskLater(plugin, () -> {
+                if (plugin.isEnabled()) {
+                    Bukkit.getScheduler().runTaskLater(plugin, () -> {
+                        stop(finalDeath);
+                        gameBlockData.updateLobbyBlock();
+                        gameArenaData.updateBoards();
+                    }, 20);
+                } else {
                     stop(finalDeath);
-                    gameBlockData.updateLobbyBlock();
-                    gameArenaData.updateBoards();
-                }, 20);
+                }
 
             }
         } else if (status == Status.WAITING) {
