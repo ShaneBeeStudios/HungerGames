@@ -366,6 +366,8 @@ public class GameListener implements Listener {
 
 	@EventHandler
 	private void onChestUse(PlayerInteractEvent event) {
+		//noinspection deprecation
+		if (event.isCancelled()) return;
 		Player player = event.getPlayer();
 		if (event.getAction() == Action.RIGHT_CLICK_BLOCK && playerManager.hasPlayerData(player)) {
 			Block block = event.getClickedBlock();
@@ -391,7 +393,7 @@ public class GameListener implements Listener {
 		}
 		if (event.getAction() != Action.PHYSICAL && playerManager.hasPlayerData(player)) {
 			Status status = playerManager.getPlayerData(player).getGame().getGameArenaData().getStatus();
-			if (status == Status.WAITING || status == Status.COUNTDOWN) {
+			if (status != Status.RUNNING && status != Status.BEGINNING) {
 				event.setCancelled(true);
 				Util.scm(player, lang.listener_no_interact);
 			}
