@@ -279,6 +279,7 @@ public class GamePlayerData extends Data {
 
                 game.getGameBlockData().updateLobbyBlock();
                 game.gameArenaData.updateBoards();
+                gameArenaData.setStatus(status.get());
                 game.getGameCommandData().runCommands(CommandType.JOIN, player);
             }, 5);
         }
