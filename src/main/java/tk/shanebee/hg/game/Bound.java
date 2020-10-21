@@ -129,14 +129,14 @@ public class Bound {
 	 * @return Location of greater corner
 	 */
 	public Location getGreaterCorner() {
-		return new Location(Bukkit.getWorld(world), x, y, z);
+		return new Location(Bukkit.getWorld(world), x2, y2, z2);
 	}
 
 	/** Get the lesser corner of this bound
 	 * @return Location of lesser corner
 	 */
 	public Location getLesserCorner() {
-		return new Location(Bukkit.getWorld(world), x2, y2, z2);
+		return new Location(Bukkit.getWorld(world), x, y, z);
 	}
 
 	/** Get the center location of this bound
