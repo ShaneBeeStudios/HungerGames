@@ -24,11 +24,11 @@ public class CreateCmd extends BaseCmd {
 	@Override
 	public boolean run() {
 		if (!plugin.getPlayerSessions().containsKey(player.getUniqueId())) {
-			Util.scm(player, lang.cmd_create_need_selection);
+			Util.sendPrefixedMessage(player, lang.cmd_create_need_selection);
 		} else {
 			PlayerSession session = plugin.getPlayerSessions().get(player.getUniqueId());
 			if (!session.hasValidSelection()) {
-				Util.scm(player, lang.cmd_create_need_selection);
+				Util.sendPrefixedMessage(player, lang.cmd_create_need_selection);
 			} else {
 				if (args[1].equalsIgnoreCase("all")) {
 					Util.scm(player, "&cYou can not name an arena '&ball&c'");
@@ -37,11 +37,11 @@ public class CreateCmd extends BaseCmd {
 				if (!Util.isInt(args[2]) || !Util.isInt(args[3]) || !Util.isInt(args[4])) {
 					player.sendMessage(lang.cmd_base_wrongusage + " " + sendHelpLine());
 				} else if (Integer.parseInt(args[4]) % 30 != 0) {
-					Util.scm(player, lang.cmd_create_divisible_1);
-					Util.scm(player, lang.cmd_create_divisible_2);
+					Util.sendPrefixedMessage(player, lang.cmd_create_divisible_1);
+					Util.sendPrefixedMessage(player, lang.cmd_create_divisible_2);
 					return true;
 				} else if (Integer.parseInt(args[2]) > Integer.parseInt(args[3])) {
-					Util.scm(player, lang.cmd_create_minmax);
+					Util.sendPrefixedMessage(player, lang.cmd_create_minmax);
 					sendHelpLine();
 				} else {
 					boolean less = session.getLoc1().getBlockY() < session.getLoc2().getBlockY();
@@ -67,7 +67,8 @@ public class CreateCmd extends BaseCmd {
 
 					Bound b = new Bound(player.getWorld().getName(), lesser.getBlockX(), lesser.getBlockY(), lesser.getBlockZ(), greater.getBlockX(), greater.getBlockY(), greater.getBlockZ());
 					plugin.getGames().add(new Game(args[1], b, Integer.parseInt(args[4]), Integer.parseInt(args[2]), Integer.parseInt(args[3]), freeroam, cost));
-					Util.scm(player, lang.cmd_create_created.replace("<arena>", args[1]));
+					Util.sendPrefixedMessage(player, lang.cmd_create_created.replace("<arena>", args[1]));
+					Util.sendPrefixedMessage(player, "&6You're now ready to set some spawns with '&a/hg addspawn&6'");
 					return true;
 				}
 			}
