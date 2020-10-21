@@ -27,7 +27,7 @@ public class AddSpawnCmd extends BaseCmd {
 		Location l = player.getLocation();
 		for (Location lb : gameArenaData.getSpawns()) {
 			if (lb.getBlock().equals(l.getBlock())) {
-				Util.scm(player, lang.cmd_spawn_same);
+				Util.sendPrefixedMessage(player, lang.cmd_spawn_same);
 				return true;
 			}
 		}
@@ -35,7 +35,7 @@ public class AddSpawnCmd extends BaseCmd {
 		c.set("arenas." + gameArenaData.getName() + ".spawns", d);
 		gameArenaData.addSpawn(l);
 		arenaConfig.saveCustomConfig();
-		Util.scm(player, lang.cmd_spawn_set.replace("<number>", String.valueOf(num)));
+		Util.sendPrefixedMessage(player, lang.cmd_spawn_set.replace("<number>", String.valueOf(num)));
 
 		gameManager.checkGame(game, player);
 		return true;

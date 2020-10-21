@@ -124,7 +124,7 @@ death-other-entity: '<player> Spontaneously died!'
 #  COMMANDS
 ## Spawn
 cmd-spawn-same: '&cYou cannot have two spawns in the same location!'
-cmd-spawn-set: 'You set HungerGames spawn #<number>!'
+cmd-spawn-set: '&aYou set HungerGames spawn &7#<number>&a!'
 
 ## Base
 cmd-base-noperm: '&cYou do not have permission to use: /hg <command>'
@@ -138,6 +138,7 @@ cmd-create-divisible-1: '&cTime-in-seconds must be divisible by 30!'
 cmd-create-divisible-2: '&cEx: 90 is divisible by 30'
 cmd-create-minmax: '&cmin-players cannot be more then max-players!'
 cmd-create-created: '&aYou created HungerGames arena &b<arena>&a!'
+cmd-create-add-spawns: "&6You're now ready to set some spawns with '&a/hg addspawn&6'"
 
 ## Delete
 cmd-delete-attempt: '&aAttempting to delete <arena>!'
@@ -229,6 +230,18 @@ listener-not-running: '&cThe game is not running!'
 listener-no-edit-block: '&cYou cannot edit this block type!'
 listener-no-interact: '&cYou cannot interact until the game has started!'
 listener-sign-click-hand: '&cClick the sign with your hand!'
+
+#  WAND LISTENER
+listener-wand-create-arena: "&6You're now ready to create your arena with '&a/hg create&6'"
+listener-wand-set-pos-2: '&6Now you need to set position 2!'
+
+#  ARENA CHECK
+check-need-more-spawns: '&cYou still need &7<number> &c more spawns!'
+check-broken-debug: '&cYour arena is marked as broken! use &7/hg debug <arena> &cto check for errors!'
+check-broken-debug-2: '&cIf no errors are found, please use &7/hg toggle <arena>&c!'
+check-invalid-lobby: '&cYour LobbyWall is invalid! Please reset them!'
+check-set-lobby: '&6Set lobbywall: &7/hg setlobbywall <arena>'
+check-ready-run: '&aYour HungerGames arena &7<arena>&a is ready to run!'
 
 #  TRACK STICK
 track-nearest: '"&b<player> &eis &b<range> &eblocks away from you: &b<location>"'

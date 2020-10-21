@@ -10,6 +10,7 @@ import org.bukkit.event.block.Action;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.EquipmentSlot;
 import tk.shanebee.hg.HG;
+import tk.shanebee.hg.data.Language;
 import tk.shanebee.hg.data.PlayerSession;
 import tk.shanebee.hg.game.Game;
 import tk.shanebee.hg.util.Util;
@@ -20,9 +21,11 @@ import tk.shanebee.hg.util.Util;
 public class WandListener implements Listener {
 
     private final HG plugin;
+    private final Language lang;
 
     public WandListener(HG instance) {
         plugin = instance;
+        lang = plugin.getLang();
     }
 
     @EventHandler
@@ -57,9 +60,9 @@ public class WandListener implements Listener {
             }
             Util.sendPrefixedMessage(player, "&b%s: &r%s, %s, %s", pos, location.getX(), location.getY(), location.getZ());
             if (!session.hasValidSelection()) {
-                Util.sendPrefixedMessage(player, "&6Now you need to set position 2!");
+                Util.sendPrefixedMessage(player, lang.listener_wand_set_pos_2);
             } else {
-                Util.sendPrefixedMessage(player, "&6You're now ready to create your arena with '&a/hg create&6'");
+                Util.sendPrefixedMessage(player, lang.listener_wand_create_arena);
             }
         }
     }

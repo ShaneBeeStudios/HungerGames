@@ -103,6 +103,7 @@ public class Language {
     public String cmd_create_divisible_1;
     public String cmd_create_divisible_2;
     public String cmd_create_minmax;
+    public String cmd_create_add_spawn;
     public String cmd_create_created;
     public String cmd_delete_attempt;
     public String cmd_delete_kicking;
@@ -154,6 +155,8 @@ public class Language {
     public String listener_not_running;
     public String listener_no_edit_block;
     public String listener_no_interact;
+    public String listener_wand_create_arena;
+    public String listener_wand_set_pos_2;
     public String track_nearest;
     public String track_no_near;
     public String track_empty;
@@ -172,6 +175,12 @@ public class Language {
     public String spectator_compass;
     public String spectator_compass_head_lore;
     public String spectator_start_title;
+    public String check_need_more_spawns;
+    public String check_broken_debug;
+    public String check_broken_debug_2;
+    public String check_invalid_lobby;
+    public String check_set_lobby;
+    public String check_ready_run;
 
 
     public Language(HG plugin) {
@@ -307,6 +316,7 @@ public class Language {
         cmd_create_divisible_2 = lang.getString("cmd-create-divisible-2");
         cmd_create_minmax = lang.getString("cmd-create-minmax");
         cmd_create_created = lang.getString("cmd-create-created");
+        cmd_create_add_spawn = lang.getString("cmd-create-add-spawns");
         cmd_delete_attempt = lang.getString("cmd-delete-attempt");
         cmd_delete_kicking = lang.getString("cmd-delete-kicking");
         cmd_delete_deleted = lang.getString("cmd-delete-deleted");
@@ -359,6 +369,8 @@ public class Language {
         track_new1 = lang.getString("track-new1");
         track_new2 = lang.getString("track-new2");
         listener_sign_click_hand = lang.getString("listener-sign-click-hand");
+        listener_wand_create_arena = lang.getString("listener-wand-create-arena");
+        listener_wand_set_pos_2 = lang.getString("listener-wand-set-pos-2");
         bossbar = lang.getString("game-bossbar");
 
         game_chest_refill = lang.getString("game-chests-refill");
@@ -390,6 +402,13 @@ public class Language {
         status_not_ready = lang.getString("status-notready");
         status_beginning = lang.getString("status-beginning");
         status_countdown = lang.getString("status-countdown");
+
+        check_need_more_spawns = lang.getString("check-need-more-spawns");
+        check_broken_debug = lang.getString("check-broken-debug");
+        check_broken_debug_2 = lang.getString("check-broken-debug-2");
+        check_invalid_lobby = lang.getString("check-invalid-lobby");
+        check_set_lobby = lang.getString("check-set-lobby");
+        check_ready_run = lang.getString("check-ready-run");
     }
 
 }

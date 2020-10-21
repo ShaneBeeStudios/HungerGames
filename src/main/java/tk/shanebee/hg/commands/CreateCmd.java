@@ -68,7 +68,7 @@ public class CreateCmd extends BaseCmd {
 					Bound b = new Bound(player.getWorld().getName(), lesser.getBlockX(), lesser.getBlockY(), lesser.getBlockZ(), greater.getBlockX(), greater.getBlockY(), greater.getBlockZ());
 					plugin.getGames().add(new Game(args[1], b, Integer.parseInt(args[4]), Integer.parseInt(args[2]), Integer.parseInt(args[3]), freeroam, cost));
 					Util.sendPrefixedMessage(player, lang.cmd_create_created.replace("<arena>", args[1]));
-					Util.sendPrefixedMessage(player, "&6You're now ready to set some spawns with '&a/hg addspawn&6'");
+					Util.sendPrefixedMessage(player, lang.cmd_create_add_spawn);
 					return true;
 				}
 			}

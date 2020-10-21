@@ -13,6 +13,7 @@ import org.bukkit.inventory.ItemStack;
 import tk.shanebee.hg.HG;
 import tk.shanebee.hg.Status;
 import tk.shanebee.hg.data.Config;
+import tk.shanebee.hg.data.Language;
 import tk.shanebee.hg.game.Bound;
 import tk.shanebee.hg.game.Game;
 import tk.shanebee.hg.game.GameArenaData;
@@ -30,10 +31,12 @@ import java.util.Random;
 public class Manager {
 
 	private final HG plugin;
+	private final Language lang;
 	private final Random rg = new Random();
 	
 	public Manager(HG plugin) {
 		this.plugin = plugin;
+		this.lang = plugin.getLang();
 	}
 
     /** Run arena debugger
@@ -143,17 +146,19 @@ public class Manager {
      */
 	public void checkGame(Game game, Player player) {
 		GameArenaData gameArenaData = game.getGameArenaData();
+		String name = gameArenaData.getName();
 		if (gameArenaData.getSpawns().size() <  gameArenaData.getMaxPlayers()) {
-			Util.scm(player, "&cYou still need &7" + (gameArenaData.getMaxPlayers() - gameArenaData.getSpawns().size()) + " &c more spawns!");
+			Util.sendPrefixedMessage(player, lang.check_need_more_spawns.replace("<number>",
+					"" + (gameArenaData.getMaxPlayers() - gameArenaData.getSpawns().size())));
 		} else if (gameArenaData.getStatus() == Status.BROKEN) {
-			Util.scm(player, "&cYour arena is marked as broken! use &7/hg debug &c to check for errors!");
-			Util.scm(player, "&cIf no errors are found, please use &7/hg toggle " + gameArenaData.getName() + "&c!");
+			Util.sendPrefixedMessage(player, lang.check_broken_debug.replace("<arena>", name));
+			Util.sendPrefixedMessage(player, lang.check_broken_debug_2.replace("<arena>", name));
 		} else if (!game.getGameBlockData().isLobbyValid()) {
-			Util.scm(player, "&cYour LobbyWall is invalid! Please reset them!");
-			Util.scm(player, "&cSet lobbywall: &7/hg setlobbywall " + gameArenaData.getName());
+			Util.sendPrefixedMessage(player, lang.check_invalid_lobby);
+			Util.sendPrefixedMessage(player, lang.check_set_lobby.replace("<arena>", name));
 		} else {
-			Util.scm(player, "&aYour HungerGames arena is ready to run!");
-			gameArenaData.setStatus(Status.WAITING);
+			Util.sendPrefixedMessage(player, lang.check_ready_run.replace("<arena>", name));
+			gameArenaData.setStatus(Status.READY);
 		}
 	}
 
