@@ -348,7 +348,7 @@ public class Game {
             if (plugin.isEnabled()) {
                 new Rollback(this);
             } else {
-                // Force restart if server is stopping
+                // Force rollback if server is stopping
                 gameBlockData.forceRollback();
             }
         } else {
