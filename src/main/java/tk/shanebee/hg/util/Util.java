@@ -50,11 +50,11 @@ public class Util {
     /**
      * Log a formatted message to console prefixed with the plugin's name
      *
-     * @param f String format
+     * @param format  String format
      * @param objects Objects to go into format
      */
-    public static void log(String f, Object... objects) {
-        log(String.format(f, objects));
+    public static void log(String format, Object... objects) {
+        log(String.format(format, objects));
     }
 
     /**
@@ -102,6 +102,17 @@ public class Util {
      */
     public static void scm(CommandSender sender, String s) {
         sender.sendMessage(getColString(s) + ChatColor.RESET);
+    }
+
+    /**
+     * Send a colored, formatted message to a player or console
+     *
+     * @param sender  Receiver of message
+     * @param format  Formatted message to send
+     * @param objects Objects in format
+     */
+    public static void scm(CommandSender sender, String format, Object... objects) {
+        scm(sender, String.format(format, objects));
     }
 
     /**
