@@ -116,6 +116,27 @@ public class Util {
     }
 
     /**
+     * Send a colored, prefixed message to a player or console
+     *
+     * @param sender Receiver of message
+     * @param message Message to send
+     */
+    public static void sendPrefixedMessage(CommandSender sender, String message) {
+        scm(sender, HG.getPlugin().getLang().prefix + message);
+    }
+
+    /**
+     * Send a colored, prefixed, formatted message to a player or console
+     *
+     * @param sender Receiver of message
+     * @param format Formatted message to send
+     * @param objects Objects in format
+     */
+    public static void sendPrefixedMessage(CommandSender sender, String format, Object... objects) {
+        sendPrefixedMessage(sender, String.format(format, objects));
+    }
+
+    /**
      * Broadcast a message prefixed with plugin name
      *
      * @param s Message to send
