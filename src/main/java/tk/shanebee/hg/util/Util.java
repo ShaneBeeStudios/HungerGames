@@ -7,6 +7,7 @@ import org.bukkit.FireworkEffect;
 import org.bukkit.FireworkEffect.Type;
 import org.bukkit.Location;
 import org.bukkit.Material;
+import org.bukkit.Tag;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
 import org.bukkit.command.CommandSender;
@@ -314,19 +315,10 @@ public class Util {
      */
     public static boolean isWallSign(Material item) {
         if (isRunningMinecraft(1, 14)) {
-            switch (item) {
-                case ACACIA_WALL_SIGN:
-                case BIRCH_WALL_SIGN:
-                case DARK_OAK_WALL_SIGN:
-                case JUNGLE_WALL_SIGN:
-                case OAK_WALL_SIGN:
-                case SPRUCE_WALL_SIGN:
-                    return true;
-            }
+            return Tag.WALL_SIGNS.isTagged(item);
         } else {
             return item == Material.getMaterial("WALL_SIGN");
         }
-        return false;
     }
 
     /**
