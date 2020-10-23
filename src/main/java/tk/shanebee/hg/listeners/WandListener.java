@@ -61,6 +61,8 @@ public class WandListener implements Listener {
             Util.sendPrefixedMessage(player, "&b%s: &r%s, %s, %s", pos, location.getX(), location.getY(), location.getZ());
             if (!session.hasValidSelection()) {
                 Util.sendPrefixedMessage(player, lang.listener_wand_set_pos_2);
+            } else if (!session.isBigEnough()) {
+                Util.sendPrefixedMessage(player, lang.listener_wand_big_enough);
             } else {
                 Util.sendPrefixedMessage(player, lang.listener_wand_create_arena);
             }
