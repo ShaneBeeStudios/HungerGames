@@ -61,10 +61,20 @@ public class Util {
     /**
      * Send a warning to console prefixed with the plugin's name
      *
-     * @param s Message to log to console
+     * @param warning Message to log to console
      */
-    public static void warning(String s) {
-        scm(Bukkit.getConsoleSender(), "&7[&e&lHungerGames&7] &eWARNING: " + s);
+    public static void warning(String warning) {
+        Bukkit.getLogger().warning(getColString("&7[&e&lHungerGames&7] &eWARNING: " + warning));
+    }
+
+    /**
+     * Send a formatted warning to console prefixed with the plugin's name
+     *
+     * @param format  Message format to log to console
+     * @param objects Objects to go in format
+     */
+    public static void warning(String format, Object... objects) {
+        warning(String.format(format, objects));
     }
 
     /**
@@ -119,7 +129,7 @@ public class Util {
     /**
      * Send a colored, prefixed message to a player or console
      *
-     * @param sender Receiver of message
+     * @param sender  Receiver of message
      * @param message Message to send
      */
     public static void sendPrefixedMessage(CommandSender sender, String message) {
@@ -129,8 +139,8 @@ public class Util {
     /**
      * Send a colored, prefixed, formatted message to a player or console
      *
-     * @param sender Receiver of message
-     * @param format Formatted message to send
+     * @param sender  Receiver of message
+     * @param format  Formatted message to send
      * @param objects Objects in format
      */
     public static void sendPrefixedMessage(CommandSender sender, String format, Object... objects) {
