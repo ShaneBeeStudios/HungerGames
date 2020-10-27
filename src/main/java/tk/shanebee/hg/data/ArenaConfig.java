@@ -1,7 +1,9 @@
 package tk.shanebee.hg.data;
 
 import org.bukkit.Bukkit;
+import org.bukkit.Difficulty;
 import org.bukkit.Location;
+import org.bukkit.World;
 import org.bukkit.block.Sign;
 import org.bukkit.configuration.Configuration;
 import org.bukkit.configuration.ConfigurationSection;
@@ -157,6 +159,12 @@ public class ArenaConfig {
 
 					Game game = new Game(arenaName, bound, spawns, lobbysign, timer, minplayers, maxplayers, freeroam, isReady, cost);
 					plugin.getGames().add(game);
+
+					World world = bound.getWorld();
+					if (world.getDifficulty() == Difficulty.PEACEFUL) {
+						Util.warning("Difficulty in world '%s' for arena '%s' is set to PEACEFUL...", world.getName(), arenaName);
+						Util.warning("This can have negative effects on the game, please consider raising the difficulty.");
+					}
 
 					KitManager kit = plugin.getItemStackManager().setGameKits(arenaName, arenadat);
 					if (kit != null)
