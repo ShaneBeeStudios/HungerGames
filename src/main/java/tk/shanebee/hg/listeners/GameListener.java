@@ -6,8 +6,10 @@ import org.bukkit.ChatColor;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.Sound;
+import org.bukkit.World;
 import org.bukkit.block.Block;
 import org.bukkit.block.Sign;
+import org.bukkit.enchantments.Enchantment;
 import org.bukkit.entity.ArmorStand;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Hanging;
@@ -96,19 +98,25 @@ public class GameListener implements Listener {
 
     private void dropInv(Player player) {
 		PlayerInventory inv = player.getInventory();
-		Location l = player.getLocation();
+		Location loc = player.getLocation();
+		World world = loc.getWorld();
+		if (world == null) return;
+
 		for (ItemStack i : inv.getContents()) {
-			if (i != null && i.getType() != Material.AIR) {
-				assert l.getWorld() != null;
-				l.getWorld().dropItemNaturally(l, i).setPersistent(false);
+			if (i != null && i.getType() != Material.AIR && !isCursed(i)) {
+				world.dropItemNaturally(loc, i).setPersistent(false);
 			}
 		}
 		for (ItemStack i : inv.getArmorContents()) {
-			if (i != null && i.getType() != Material.AIR) {
-				assert l.getWorld() != null;
-				l.getWorld().dropItemNaturally(l, i).setPersistent(false);
+			if (i != null && i.getType() != Material.AIR && !isCursed(i)) {
+				world.dropItemNaturally(loc, i).setPersistent(false);
 			}
 		}
+	}
+
+	@SuppressWarnings("BooleanMethodIsAlwaysInverted")
+	private boolean isCursed(ItemStack itemStack) {
+		return itemStack.containsEnchantment(Enchantment.BINDING_CURSE) || itemStack.containsEnchantment(Enchantment.VANISHING_CURSE);
 	}
 
 	private void checkStick(Game g) {
