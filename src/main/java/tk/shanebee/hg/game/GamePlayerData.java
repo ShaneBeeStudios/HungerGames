@@ -233,7 +233,6 @@ public class GamePlayerData extends Data {
                 Util.scm(player, lang.arena_spectate.replace("<arena>", game.gameArenaData.getName()));
             }
         } else if (gameArenaData.maxPlayers <= players.size()) {
-            player.sendMessage(ChatColor.RED + gameArenaData.getName() + " is currently full!");
             Util.scm(player, "&c" + gameArenaData.getName() + " " + lang.game_full);
         } else if (!players.contains(player.getUniqueId())) {
             if (!vaultCheck(player)) {
