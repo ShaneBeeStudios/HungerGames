@@ -251,14 +251,14 @@ public class GamePlayerData extends Data {
 
             players.add(player.getUniqueId());
             Bukkit.getScheduler().scheduleSyncDelayedTask(plugin, () -> {
-                Location loc = pickSpawn();
-                player.teleport(loc);
 
+                Location loc = pickSpawn();
                 if (loc.getBlock().getRelative(BlockFace.DOWN).getType() == Material.AIR) {
                     while (loc.getBlock().getRelative(BlockFace.DOWN).getType() == Material.AIR) {
                         loc.setY(loc.getY() - 1);
                     }
                 }
+                player.teleport(loc);
                 playerManager.addPlayerData(new PlayerData(player, game));
                 gameArenaData.board.setBoard(player);
 
