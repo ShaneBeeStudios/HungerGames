@@ -2,6 +2,7 @@ package tk.shanebee.hg.tasks;
 
 import org.bukkit.Bukkit;
 import tk.shanebee.hg.data.Config;
+import tk.shanebee.hg.data.Language;
 import tk.shanebee.hg.game.Game;
 import tk.shanebee.hg.HG;
 import tk.shanebee.hg.Status;
@@ -13,21 +14,31 @@ public class TimerTask implements Runnable {
 
 	private int timer = 0;
 	private int remainingtime;
-	private int teleportTimer;
-	private int borderCountdownStart;
-	private int borderCountdownEnd;
-	private int id;
-	private Game game;
+	private final int teleportTimer;
+	private final int borderCountdownStart;
+	private final int borderCountdownEnd;
+	private final int id;
+	private final Game game;
+	private final Language lang;
+    private final String end_min;
+    private final String end_minsec;
+    private final String end_sec;
 
 	public TimerTask(Game g, int time) {
 		this.remainingtime = time;
 		this.game = g;
+		HG plugin = game.getGameArenaData().getPlugin();
+		this.lang = plugin.getLang();
 		this.teleportTimer = Config.teleportEndTime;
 		this.borderCountdownStart = g.getGameBorderData().getBorderTimer().get(0);
 		this.borderCountdownEnd = g.getGameBorderData().getBorderTimer().get(1);
 		g.getGamePlayerData().getPlayers().forEach(uuid -> Objects.requireNonNull(Bukkit.getPlayer(uuid)).setInvulnerable(false));
-		
-		this.id = Bukkit.getScheduler().scheduleSyncRepeatingTask(HG.getPlugin(), this, 0, 30 * 20L);
+
+		this.end_min = lang.game_ending_min;
+		this.end_minsec = lang.game_ending_minsec;
+		this.end_sec = lang.game_ending_sec;
+
+		this.id = Bukkit.getScheduler().scheduleSyncRepeatingTask(plugin, this, 0, 30 * 20L);
 	}
 	
 	@Override
@@ -41,22 +52,22 @@ public class TimerTask implements Runnable {
 		if (Config.borderEnabled && remainingtime == borderCountdownStart) {
 			int closingIn = remainingtime - borderCountdownEnd;
 			game.getGameBorderData().setBorder(closingIn);
-			game.getGamePlayerData().msgAll(HG.getPlugin().getLang().game_border_closing.replace("<seconds>", String.valueOf(closingIn)));
+			game.getGamePlayerData().msgAll(lang.game_border_closing.replace("<seconds>", String.valueOf(closingIn)));
 		}
 
 		if (gameArenaData.getChestRefillTime() > 0 && remainingtime == gameArenaData.getChestRefillTime()) {
 			game.getGameBlockData().refillChests();
-			game.getGamePlayerData().msgAll(HG.getPlugin().getLang().game_chest_refill);
+			game.getGamePlayerData().msgAll(lang.game_chest_refill);
 		}
 
 		int refillRepeat = gameArenaData.getChestRefillRepeat();
 		if (refillRepeat > 0 && timer % refillRepeat == 0) {
 			game.getGameBlockData().refillChests();
-			game.getGamePlayerData().msgAll(HG.getPlugin().getLang().game_chest_refill);
+			game.getGamePlayerData().msgAll(lang.game_chest_refill);
 		}
 
 		if (remainingtime == teleportTimer && Config.teleportEnd) {
-			game.getGamePlayerData().msgAll(HG.getPlugin().getLang().game_almost_over);
+			game.getGamePlayerData().msgAll(lang.game_almost_over);
 			game.getGamePlayerData().respawnAll();
 		} else if (this.remainingtime < 10) {
 			stop();
@@ -66,12 +77,17 @@ public class TimerTask implements Runnable {
 				int minutes = this.remainingtime / 60;
 				int asd = this.remainingtime % 60;
 				if (minutes != 0) {
-					if (asd == 0)
-						game.getGamePlayerData().msgAll(HG.getPlugin().getLang().game_ending_min.replace("<minutes>", String.valueOf(minutes)));
-					else
-
-						game.getGamePlayerData().msgAll(HG.getPlugin().getLang().game_ending_minsec.replace("<minutes>", String.valueOf(minutes)).replace("<seconds>", String.valueOf(asd)));
-				} else game.getGamePlayerData().msgAll(HG.getPlugin().getLang().game_ending_sec.replace("<seconds>", String.valueOf(this.remainingtime)));
+					if (asd == 0) {
+					    if (end_min.length() < 1) return;
+                        game.getGamePlayerData().msgAll(end_min.replace("<minutes>", "" + minutes));
+                    } else {
+					    if (end_minsec.length() < 1) return;
+                        game.getGamePlayerData().msgAll(end_minsec.replace("<minutes>", "" + minutes).replace("<seconds>", "" + asd));
+                    }
+				} else {
+				    if (end_sec.length() < 1) return;
+				    game.getGamePlayerData().msgAll(end_sec.replace("<seconds>", "" + this.remainingtime));
+                }
 			}
 		}
 		remainingtime = (remainingtime - 30);
