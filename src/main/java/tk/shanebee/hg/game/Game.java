@@ -390,7 +390,9 @@ public class Game {
 
             }
         } else if (status == Status.WAITING) {
-            gamePlayerData.msgAll(lang.player_left_game.replace("<player>", player.getName()) +
+            gamePlayerData.msgAll(lang.player_left_game
+                    .replace("<arena>", gameArenaData.getName())
+                    .replace("<player>", player.getName()) +
                     (gameArenaData.minPlayers - gamePlayerData.players.size() <= 0 ? "!" : ": " + lang.players_to_start
                             .replace("<amount>", String.valueOf((gameArenaData.minPlayers - gamePlayerData.players.size())))));
         }

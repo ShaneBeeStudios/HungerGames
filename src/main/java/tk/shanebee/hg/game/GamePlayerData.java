@@ -269,8 +269,9 @@ public class GamePlayerData extends Data {
             if (players.size() >= game.gameArenaData.minPlayers && (status == Status.WAITING || status == Status.READY)) {
                 game.startPreGame();
             } else if (status == Status.WAITING) {
-                Util.broadcast(lang.player_joined_game.replace("<player>",
-                        player.getName()) + (gameArenaData.minPlayers - players.size() <= 0 ? "!" : ":" +
+                Util.broadcast(lang.player_joined_game
+                        .replace("<arena>", gameArenaData.getName())
+                        .replace("<player>", player.getName()) + (gameArenaData.minPlayers - players.size() <= 0 ? "!" : ":" +
                         lang.players_to_start.replace("<amount>", String.valueOf((gameArenaData.minPlayers - players.size())))));
             }
             kitHelp(player);
