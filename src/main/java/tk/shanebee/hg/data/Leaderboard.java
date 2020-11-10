@@ -17,25 +17,27 @@ import java.util.*;
 @SuppressWarnings({"WeakerAccess", "unused"})
 public class Leaderboard {
 
-    private HG plugin;
+    private final HG plugin;
+    private final Language lang;
     private FileConfiguration leaderboardConfig;
     private File config_file;
-    private Map<String, Integer> wins;
-    private Map<String, Integer> kills;
-    private Map<String, Integer> deaths;
-    private Map<String, Integer> gamesPlayed;
+    private final Map<String, Integer> wins;
+    private final Map<String, Integer> kills;
+    private final Map<String, Integer> deaths;
+    private final Map<String, Integer> gamesPlayed;
 
-    private List<String> sorted_players_wins;
-    private List<String> sorted_scores_wins;
-    private List<String> sorted_players_kills;
-    private List<String> sorted_scores_kills;
-    private List<String> sorted_players_deaths;
-    private List<String> sorted_scores_deaths;
-    private List<String> sorted_players_gamesPlayed;
-    private List<String> sorted_scores_gamesPlayed;
+    private final List<String> sorted_players_wins;
+    private final List<String> sorted_scores_wins;
+    private final List<String> sorted_players_kills;
+    private final List<String> sorted_scores_kills;
+    private final List<String> sorted_players_deaths;
+    private final List<String> sorted_scores_deaths;
+    private final List<String> sorted_players_gamesPlayed;
+    private final List<String> sorted_scores_gamesPlayed;
 
     public Leaderboard(HG plugin) {
         this.plugin = plugin;
+        this.lang = plugin.getLang();
         wins = new TreeMap<>();
         kills = new TreeMap<>();
         deaths = new TreeMap<>();
@@ -260,7 +262,7 @@ public class Leaderboard {
             String player = Bukkit.getOfflinePlayer(UUID.fromString(sortingMap.getKey())).getName();
             int score = sortingMap.getValue();
             scores.add(String.valueOf(score));
-            players.add(player);
+            players.add(player != null ? player : lang.lb_missing_player);
         }
     }
 
@@ -298,7 +300,7 @@ public class Leaderboard {
          */
         GAMES("games");
 
-        private String stat;
+        private final String stat;
 
         Stats(String stat) {
             this.stat = stat;

@@ -255,3 +255,4 @@ track-new2: '&a&l |&6&l   Swing the stick to track players!                &a&l 
 #  LEADERBOARD
 lb-blank-space: ''
 lb-combined-separator: ' : '
+lb-missing-player: '<none>'

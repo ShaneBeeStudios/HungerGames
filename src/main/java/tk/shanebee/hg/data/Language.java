@@ -168,6 +168,7 @@ public class Language {
     public String bossbar;
     public String lb_blank_space;
     public String lb_combined_separator;
+    public String lb_missing_player;
     public String lobby_sign_cost;
     public String lobby_sign_1_1;
     public String lobby_sign_1_3;
@@ -384,6 +385,7 @@ public class Language {
 
         lb_blank_space = lang.getString("lb-blank-space");
         lb_combined_separator = lang.getString("lb-combined-separator");
+        lb_missing_player = lang.getString("lb-missing-player");
 
         lobby_sign_1_1 = lang.getString("lobby-signs.sign-1.line-1");
         lobby_sign_1_3 = lang.getString("lobby-signs.sign-1.line-3");
