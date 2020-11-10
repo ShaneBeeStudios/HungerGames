@@ -389,25 +389,6 @@ public class GameListener implements Listener {
 		}
 	}
 
-	@EventHandler
-	private void onItemUseAttempt(PlayerInteractEvent event) {
-		Player player = event.getPlayer();
-		if (playerManager.hasSpectatorData(player)) {
-			event.setCancelled(true);
-            if (isSpectatorCompass(event)) {
-                handleSpectatorCompass(player);
-                return;
-            }
-		}
-		if (event.getAction() != Action.PHYSICAL && playerManager.hasPlayerData(player)) {
-			Status status = playerManager.getPlayerData(player).getGame().getGameArenaData().getStatus();
-			if (status != Status.RUNNING && status != Status.BEGINNING) {
-				event.setCancelled(true);
-				Util.scm(player, lang.listener_no_interact);
-			}
-		}
-	}
-
     private boolean isSpectatorCompass(PlayerInteractEvent event) {
         Action action = event.getAction();
         Player player = event.getPlayer();
@@ -426,9 +407,22 @@ public class GameListener implements Listener {
     }
 
 	@EventHandler
-	private void onPlayerClickLobby(PlayerInteractEvent event) {
+	private void onInteract(PlayerInteractEvent event) {
 		Player player = event.getPlayer();
-		if (event.getAction().equals(Action.RIGHT_CLICK_BLOCK)) {
+		Action action = event.getAction();
+        if (playerManager.hasSpectatorData(player)) {
+            event.setCancelled(true);
+            if (isSpectatorCompass(event)) {
+                handleSpectatorCompass(player);
+                return;
+            }
+        } else if (action != Action.PHYSICAL && playerManager.hasPlayerData(player)) {
+            Status status = playerManager.getPlayerData(player).getGame().getGameArenaData().getStatus();
+            if (status != Status.RUNNING && status != Status.BEGINNING) {
+                event.setCancelled(true);
+                Util.scm(player, lang.listener_no_interact);
+            }
+        } else if (action == Action.RIGHT_CLICK_BLOCK) {
 			Block block = event.getClickedBlock();
 			assert block != null;
 			if (Util.isWallSign(block.getType())) {
@@ -439,14 +433,15 @@ public class GameListener implements Listener {
 						Util.scm(player, lang.cmd_delete_noexist);
 					} else {
 						if (player.getInventory().getItemInMainHand().getType() == Material.AIR) {
-							game.getGamePlayerData().join(player);
+						    // Process this after event has finished running to prevent double click issues
+                            Bukkit.getScheduler().scheduleSyncDelayedTask(plugin, () -> game.getGamePlayerData().join(player), 2);
 						} else {
 							Util.scm(player, lang.listener_sign_click_hand);
 						}
 					}
 				}
 			}
-		} else if (event.getAction().equals(Action.LEFT_CLICK_AIR)) {
+		} else if (action == Action.LEFT_CLICK_AIR) {
 			if (player.getInventory().getItemInMainHand().getType().equals(Material.STICK) && playerManager.hasPlayerData(player)) {
 				useTrackStick(player);
 			}

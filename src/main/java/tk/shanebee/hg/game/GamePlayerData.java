@@ -226,10 +226,10 @@ public class GamePlayerData extends Data {
      */
     public void join(Player player) {
         GameArenaData gameArenaData = game.getGameArenaData();
-        AtomicReference<Status> status = new AtomicReference<>(gameArenaData.getStatus());
-        if (status.get() != Status.WAITING && status.get() != Status.STOPPED && status.get() != Status.COUNTDOWN && status.get() != Status.READY) {
+        Status status = gameArenaData.getStatus();
+        if (status != Status.WAITING && status != Status.STOPPED && status != Status.COUNTDOWN && status != Status.READY) {
             Util.scm(player, lang.arena_not_ready);
-            if ((status.get() == Status.RUNNING || status.get() == Status.BEGINNING) && Config.spectateEnabled) {
+            if ((status == Status.RUNNING || status == Status.BEGINNING) && Config.spectateEnabled) {
                 Util.scm(player, lang.arena_spectate.replace("<arena>", game.gameArenaData.getName()));
             }
         } else if (gameArenaData.maxPlayers <= players.size()) {
@@ -249,38 +249,35 @@ public class GamePlayerData extends Data {
             }
 
             players.add(player.getUniqueId());
-            Bukkit.getScheduler().scheduleSyncDelayedTask(plugin, () -> {
 
-                Location loc = pickSpawn();
-                if (loc.getBlock().getRelative(BlockFace.DOWN).getType() == Material.AIR) {
-                    while (loc.getBlock().getRelative(BlockFace.DOWN).getType() == Material.AIR) {
-                        loc.setY(loc.getY() - 1);
-                    }
+            Location loc = pickSpawn();
+            if (loc.getBlock().getRelative(BlockFace.DOWN).getType() == Material.AIR) {
+                while (loc.getBlock().getRelative(BlockFace.DOWN).getType() == Material.AIR) {
+                    loc.setY(loc.getY() - 1);
                 }
-                player.teleport(loc);
-                playerManager.addPlayerData(new PlayerData(player, game));
-                gameArenaData.board.setBoard(player);
+            }
+            player.teleport(loc);
+            playerManager.addPlayerData(new PlayerData(player, game));
+            gameArenaData.board.setBoard(player);
 
-                heal(player);
-                freeze(player);
-                kills.put(player, 0);
+            heal(player);
+            freeze(player);
+            kills.put(player, 0);
 
-                if (players.size() == 1 && status.get() == Status.READY)
-                    status.set(Status.WAITING);
-                if (players.size() >= game.gameArenaData.minPlayers && (status.get() == Status.WAITING || status.get() == Status.READY)) {
-                    game.startPreGame();
-                } else if (status.get() == Status.WAITING) {
-                    Util.broadcast(lang.player_joined_game.replace("<player>",
-                            player.getName()) + (gameArenaData.minPlayers - players.size() <= 0 ? "!" : ":" +
-                            lang.players_to_start.replace("<amount>", String.valueOf((gameArenaData.minPlayers - players.size())))));
-                }
-                kitHelp(player);
+            if (players.size() == 1 && status == Status.READY)
+                gameArenaData.setStatus(Status.WAITING);
+            if (players.size() >= game.gameArenaData.minPlayers && (status == Status.WAITING || status == Status.READY)) {
+                game.startPreGame();
+            } else if (status == Status.WAITING) {
+                Util.broadcast(lang.player_joined_game.replace("<player>",
+                        player.getName()) + (gameArenaData.minPlayers - players.size() <= 0 ? "!" : ":" +
+                        lang.players_to_start.replace("<amount>", String.valueOf((gameArenaData.minPlayers - players.size())))));
+            }
+            kitHelp(player);
 
-                game.getGameBlockData().updateLobbyBlock();
-                game.gameArenaData.updateBoards();
-                gameArenaData.setStatus(status.get());
-                game.getGameCommandData().runCommands(CommandType.JOIN, player);
-            }, 5);
+            game.getGameBlockData().updateLobbyBlock();
+            game.gameArenaData.updateBoards();
+            game.getGameCommandData().runCommands(CommandType.JOIN, player);
         }
     }
 
