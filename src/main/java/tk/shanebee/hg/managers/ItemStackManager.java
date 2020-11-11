@@ -147,7 +147,7 @@ public class ItemStackManager {
                     ((LeatherArmorMeta) itemMeta).setColor(getColor(s));
                     try {
                         itemMeta.addItemFlags(ItemFlag.HIDE_DYE);
-                    } catch (Exception ignore) {}
+                    } catch (NoSuchFieldError ignore) {}
                 } else if (itemMeta instanceof PotionMeta) {
                     ((PotionMeta) itemMeta).setColor(getColor(s));
                 }
