@@ -6,6 +6,10 @@
 
 # More Info: See the wiki for more info on this config @ https://github.com/ShaneBeeStudios/HungerGames/wiki/Config.yml
 
+# Helpful Links:
+# Bukkit Material Enums: https://hub.spigotmc.org/javadocs/spigot/org/bukkit/Material.html
+# Bukkit Tags: https://hub.spigotmc.org/javadocs/spigot/org/bukkit/Tag.html
+
 settings:
     # When enabled, more informative debug messages will be sent when errors occur
     debug: false
@@ -32,12 +36,12 @@ settings:
     # (note: increments of 30, ex: 30, 60, 90, 120, etc)
     teleport-at-end-time: 30
     # Blocks that will be represented as bonus chests
-    # Supports Bukkit material enums
-    # Also "SHULKER_BOX" will cover all shulker box types
+    # Supports Bukkit material enums and block tags
+    # `tag:shulker_boxes` was added in 1.15, for versions below this use `SHULKER_BOX` instead (which will cover all shulker boxes)
     bonus-block-types:
         - TRAPPED_CHEST
         - BARREL
-        - SHULKER_BOX
+        - tag:shulker_boxes
     # When enabled, name tags will be hidden from all players in the game
     hide-nametags: true
 team:

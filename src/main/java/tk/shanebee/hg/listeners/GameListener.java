@@ -1,6 +1,5 @@
 package tk.shanebee.hg.listeners;
 
-import com.google.common.collect.ImmutableSet;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
@@ -61,6 +60,7 @@ import tk.shanebee.hg.game.GamePlayerData;
 import tk.shanebee.hg.managers.KillManager;
 import tk.shanebee.hg.managers.Manager;
 import tk.shanebee.hg.managers.PlayerManager;
+import tk.shanebee.hg.util.BlockUtils;
 import tk.shanebee.hg.util.Util;
 
 import java.util.Collections;
@@ -93,7 +93,7 @@ public class GameListener implements Listener {
 		it.setItemMeta(im);
 		trackingStick = it;
         killManager = plugin.getKillManager();
-        setupBuilder();
+        BlockUtils.setupBuilder();
 	}
 
     private void dropInv(Player player) {
@@ -383,7 +383,7 @@ public class GameListener implements Listener {
 			PlayerData pd = playerManager.getPlayerData(player);
 			if (block.getType() == Material.CHEST) {
 				Bukkit.getServer().getPluginManager().callEvent(new ChestOpenEvent(pd.getGame(), block, false));
-			} else if (isBonusBlock(block)) {
+			} else if (BlockUtils.isBonusBlock(block)) {
 				Bukkit.getServer().getPluginManager().callEvent(new ChestOpenEvent(pd.getGame(), block, true));
 			}
 		}
@@ -414,7 +414,6 @@ public class GameListener implements Listener {
             event.setCancelled(true);
             if (isSpectatorCompass(event)) {
                 handleSpectatorCompass(player);
-                return;
             }
         } else if (action != Action.PHYSICAL && playerManager.hasPlayerData(player)) {
             Status status = playerManager.getPlayerData(player).getGame().getGameArenaData().getStatus();
@@ -463,7 +462,7 @@ public class GameListener implements Listener {
                 GameBlockData gameBlockData = game.getGameBlockData();
                 Status status = game.getGameArenaData().getStatus();
 				if (status == Status.RUNNING || status == Status.BEGINNING) {
-					if (!Config.blocks.contains(block.getType().toString()) && !Config.blocks.contains("ALL")) {
+					if (!BlockUtils.isBreakableBlock(block)) {
 						Util.scm(player, lang.listener_no_edit_block);
 						event.setCancelled(true);
 					} else {
@@ -506,7 +505,7 @@ public class GameListener implements Listener {
 			if (Config.breakblocks && playerManager.hasPlayerData(player)) {
                 Game game = playerManager.getPlayerData(player).getGame();
 				if (game.getGameArenaData().getStatus() == Status.RUNNING || !Config.protectCooldown) {
-					if (!Config.blocks.contains(block.getType().toString()) && !Config.blocks.contains("ALL")) {
+					if (!BlockUtils.isBreakableBlock(block)) {
 						Util.scm(player, lang.listener_no_edit_block);
 						event.setCancelled(true);
 					} else {
@@ -556,17 +555,17 @@ public class GameListener implements Listener {
 	        block = event.getBlockClicked().getRelative(event.getBlockFace());
         }
 	    Player player = event.getPlayer();
-	    final boolean WATER = event.getBucket() == Material.WATER_BUCKET && Config.blocks.contains("WATER");
-	    final boolean LAVA = event.getBucket() == Material.LAVA_BUCKET && Config.blocks.contains("LAVA");
+	    final boolean WATER = event.getBucket() == Material.WATER_BUCKET && (Config.blocks.contains("WATER") || Config.blocks.contains("ALL"));
+	    final boolean LAVA = event.getBucket() == Material.LAVA_BUCKET && (Config.blocks.contains("LAVA") || Config.blocks.contains("ALL"));
 
         if (plugin.getManager().isInRegion(block.getLocation())) {
             if (Config.breakblocks && playerManager.hasPlayerData(player)) {
                 Game game = playerManager.getPlayerData(player).getGame();
                 GameBlockData gameBlockData = game.getGameBlockData();
                 if (game.getGameArenaData().getStatus() == Status.RUNNING || !Config.protectCooldown) {
-                    if (fill && (Config.blocks.contains(block.getType().toString()) || Config.blocks.contains("ALL"))) {
+                    if (fill && BlockUtils.isBreakableBlock(block)) {
                         gameBlockData.recordBlockBreak(block);
-                    } else if (!fill && (WATER || LAVA || Config.blocks.contains("ALL"))) {
+                    } else if (!fill && (WATER || LAVA)) {
                         gameBlockData.recordBlockPlace(block.getState());
                     } else {
                         Util.scm(player, plugin.getLang().listener_no_edit_block);
@@ -774,27 +773,6 @@ public class GameListener implements Listener {
 				}
 			}
 		}
-	}
-
-	private static ImmutableSet<Material> BONUS_BLOCK_MATERIALS;
-
-	private void setupBuilder() {
-		ImmutableSet.Builder<Material> materialBuilder = ImmutableSet.builder();
-
-		for (String bonusBlockType : Config.bonusBlockTypes) {
-			for (Material material : Material.values()) {
-				if (material.toString().equalsIgnoreCase(bonusBlockType)) {
-					materialBuilder.add(material);
-				} else if (bonusBlockType.equalsIgnoreCase("SHULKER_BOX") && material.toString().contains("SHULKER_BOX")) {
-					materialBuilder.add(material);
-				}
-			}
-		}
-		BONUS_BLOCK_MATERIALS = materialBuilder.build();
-	}
-
-	private boolean isBonusBlock(Block block) {
-		return BONUS_BLOCK_MATERIALS.contains(block.getType());
 	}
 
 }
