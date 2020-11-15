@@ -102,7 +102,7 @@ public class GameListener implements Listener {
 		World world = loc.getWorld();
 		if (world == null) return;
 
-		for (ItemStack i : inv.getContents()) {
+		for (ItemStack i : inv.getStorageContents()) {
 			if (i != null && i.getType() != Material.AIR && !isCursed(i)) {
 				world.dropItemNaturally(loc, i).setPersistent(false);
 			}

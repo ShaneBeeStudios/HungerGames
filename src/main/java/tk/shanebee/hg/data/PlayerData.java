@@ -46,7 +46,7 @@ public class PlayerData implements Cloneable {
     public PlayerData(Player player, Game game) {
         this.game = game;
         this.uuid = player.getUniqueId();
-        inv = player.getInventory().getContents();
+        inv = player.getInventory().getStorageContents();
         equip = player.getInventory().getArmorContents();
         expL = player.getLevel();
         expP = player.getExp();
@@ -73,7 +73,7 @@ public class PlayerData implements Cloneable {
         player.setExp(expP);
         player.setFoodLevel(food);
         player.setSaturation(saturation);
-        player.getInventory().setContents(inv);
+        player.getInventory().setStorageContents(inv);
         player.getInventory().setArmorContents(equip);
         player.setGameMode(mode);
         player.updateInventory();
