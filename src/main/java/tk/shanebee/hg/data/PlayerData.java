@@ -2,6 +2,7 @@ package tk.shanebee.hg.data;
 
 import org.bukkit.Bukkit;
 import org.bukkit.GameMode;
+import org.bukkit.Location;
 import org.bukkit.attribute.Attribute;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
@@ -31,6 +32,7 @@ public class PlayerData implements Cloneable {
     private final GameMode mode;
     private final UUID uuid;
     private final Scoreboard scoreboard;
+    private final Location previousLocation;
 
     //InGame data
     private Team team;
@@ -39,11 +41,11 @@ public class PlayerData implements Cloneable {
 
     /**
      * New player pre-game data file
-     *
-     * @param player Player to save
+     *  @param player Player to save
      * @param game   Game they will be entering
+     * @param oldLoc
      */
-    public PlayerData(Player player, Game game) {
+    public PlayerData(Player player, Game game, Location oldLoc) {
         this.game = game;
         this.uuid = player.getUniqueId();
         inv = player.getInventory().getStorageContents();
@@ -58,6 +60,7 @@ public class PlayerData implements Cloneable {
         player.setLevel(0);
         player.setExp(0);
         scoreboard = player.getScoreboard();
+        previousLocation = oldLoc;
     }
 
     /**
@@ -164,6 +167,15 @@ public class PlayerData implements Cloneable {
      */
     public UUID getUuid() {
         return this.uuid;
+    }
+
+    /**
+     * Get previous location of this player data
+     *
+     * @return previous location of this player data
+     */
+    public Location getPreviousLocation() {
+        return this.previousLocation;
     }
 
     /**

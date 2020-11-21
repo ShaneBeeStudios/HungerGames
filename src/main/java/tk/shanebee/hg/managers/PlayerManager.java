@@ -8,6 +8,7 @@ import tk.shanebee.hg.game.Game;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
+import java.util.concurrent.atomic.AtomicBoolean;
 
 /**
  * General player manager

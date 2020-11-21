@@ -1,7 +1,6 @@
 package tk.shanebee.hg.game;
 
 import org.bukkit.Bukkit;
-import org.bukkit.ChatColor;
 import org.bukkit.GameMode;
 import org.bukkit.Location;
 import org.bukkit.Material;
@@ -28,7 +27,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
-import java.util.concurrent.atomic.AtomicReference;
 
 /**
  * Data class for holding a {@link Game Game's} players
@@ -256,8 +254,9 @@ public class GamePlayerData extends Data {
                     loc.setY(loc.getY() - 1);
                 }
             }
+            Location oldLoc = player.getLocation();
             player.teleport(loc);
-            playerManager.addPlayerData(new PlayerData(player, game));
+            playerManager.addPlayerData(new PlayerData(player, game, oldLoc));
             gameArenaData.board.setBoard(player);
 
             heal(player);
@@ -305,8 +304,8 @@ public class GamePlayerData extends Data {
         }
         heal(player);
         playerManager.getPlayerData(uuid).restore(player);
-        playerManager.removePlayerData(player);
         exit(player);
+        playerManager.removePlayerData(player);
         if (death) {
             player.playSound(player.getLocation(), Sound.UI_TOAST_CHALLENGE_COMPLETE, 5, 1);
         }
@@ -318,13 +317,22 @@ public class GamePlayerData extends Data {
         player.setInvulnerable(false);
         if (gameArenaData.getStatus() == Status.RUNNING)
             game.getGameBarData().removePlayer(player);
-        if (gameArenaData.exit != null && gameArenaData.exit.getWorld() != null) {
-            player.teleport(gameArenaData.exit);
-        } else {
-            Location worldSpawn = Bukkit.getWorlds().get(0).getSpawnLocation();
-            Location bedLocation = player.getBedSpawnLocation();
-            player.teleport(bedLocation != null ? bedLocation : worldSpawn);
+        Location oldLocation = gameArenaData.exit;
+        if(playerManager.getPlayerData(player) != null){
+            oldLocation = playerManager.getPlayerData(player).getPreviousLocation();
+        }else if(playerManager.getSpectatorData(player) != null){
+            oldLocation = playerManager.getSpectatorData(player).getPreviousLocation();
         }
+        if(Config.tpBack && oldLocation.getWorld() != null) {
+            player.teleport(oldLocation);
+        }else if (gameArenaData.exit != null && gameArenaData.exit.getWorld() != null) {
+                player.teleport(gameArenaData.exit);
+        } else {
+                Location worldSpawn = Bukkit.getWorlds().get(0).getSpawnLocation();
+                Location bedLocation = player.getBedSpawnLocation();
+                player.teleport(bedLocation != null ? bedLocation : worldSpawn);
+        }
+
     }
 
     /**
@@ -334,11 +342,12 @@ public class GamePlayerData extends Data {
      */
     public void spectate(Player spectator) {
         UUID uuid = spectator.getUniqueId();
+        Location oldLoc = spectator.getLocation();
         spectator.teleport(game.gameArenaData.getSpawns().get(0));
         if (playerManager.hasPlayerData(uuid)) {
             playerManager.transferPlayerDataToSpectator(uuid);
         } else {
-            playerManager.addSpectatorData(new PlayerData(spectator, game));
+            playerManager.addSpectatorData(new PlayerData(spectator, game, oldLoc));
         }
         this.spectators.add(uuid);
         spectator.setGameMode(GameMode.SURVIVAL);
@@ -371,7 +380,6 @@ public class GamePlayerData extends Data {
     public void leaveSpectate(Player spectator) {
         UUID uuid = spectator.getUniqueId();
         playerManager.getSpectatorData(uuid).restore(spectator);
-        playerManager.removeSpectatorData(uuid);
         spectators.remove(spectator.getUniqueId());
         spectator.setCollidable(true);
         if (Config.spectateFly) {
@@ -382,6 +390,7 @@ public class GamePlayerData extends Data {
         if (Config.spectateHide)
             revealPlayer(spectator);
         exit(spectator);
+        playerManager.removeSpectatorData(uuid);
     }
 
     void revealPlayer(Player hidden) {
