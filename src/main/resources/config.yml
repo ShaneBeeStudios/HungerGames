@@ -16,6 +16,8 @@ settings:
     # If mobs will spawn in the arena, and their interval
     spawn-mobs: true
     spawn-mobs-interval: 35
+    # The time before the game starts
+    game-start: 120
     # The time once the game starts, how long they are safe from PvP (In seconds)
     free-roam: 25
     # Whether or not to show a countdown bossbar in game

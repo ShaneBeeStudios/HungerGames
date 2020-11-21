@@ -1,7 +1,6 @@
 package tk.shanebee.hg.game;
 
 import org.bukkit.Bukkit;
-import org.bukkit.ChatColor;
 import org.bukkit.GameMode;
 import org.bukkit.Location;
 import org.bukkit.Material;
@@ -11,6 +10,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.plugin.IllegalPluginAccessException;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
+import tk.shanebee.hg.HG;
 import tk.shanebee.hg.Status;
 import tk.shanebee.hg.data.Config;
 import tk.shanebee.hg.data.PlayerData;
@@ -28,7 +28,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
-import java.util.concurrent.atomic.AtomicReference;
 
 /**
  * Data class for holding a {@link Game Game's} players
@@ -88,7 +87,7 @@ public class GamePlayerData extends Data {
 
     private void kitHelp(Player player) {
         // Clear the chat a little bit, making this message easier to see
-        for (int i = 0; i < 20; ++i)
+        for (int i = 0; i < 5; ++i)
             Util.scm(player, " ");
         String kit = game.kitManager.getKitListString();
         Util.scm(player, " ");
@@ -100,8 +99,15 @@ public class GamePlayerData extends Data {
             Util.scm(player, lang.kit_join_avail + kit);
             Util.scm(player, " ");
         }
-        Util.scm(player, lang.kit_join_footer);
-        Util.scm(player, " ");
+        if (player.hasPermission("hg.rdy")) {
+            Util.scm(player, lang.kit_join_rdy);
+            Util.scm(player, " ");
+        }
+        if (player.hasPermission("hg.leave")) {
+            Util.scm(player, lang.kit_join_leave);
+            Util.scm(player, " ");
+        }
+
     }
 
     /**
@@ -264,8 +270,13 @@ public class GamePlayerData extends Data {
             freeze(player);
             kills.put(player, 0);
 
-            if (players.size() == 1 && status == Status.READY)
+
+            Util.broadcast(lang.player_joined_game.replace("<player>", player.getName()) + "!" );
+            if (players.size() == 1 && status == Status.READY) {
                 gameArenaData.setStatus(Status.WAITING);
+                Util.broadcast(HG.getPlugin().getLang().game_join.replace("<arena>", gameArenaData.getName()));
+            }
+
             if (players.size() >= game.gameArenaData.minPlayers && (status == Status.WAITING || status == Status.READY)) {
                 game.startPreGame();
             } else if (status == Status.WAITING) {
@@ -319,12 +330,13 @@ public class GamePlayerData extends Data {
         if (gameArenaData.getStatus() == Status.RUNNING)
             game.getGameBarData().removePlayer(player);
         if (gameArenaData.exit != null && gameArenaData.exit.getWorld() != null) {
-            player.teleport(gameArenaData.exit);
+                player.teleport(gameArenaData.exit);
         } else {
-            Location worldSpawn = Bukkit.getWorlds().get(0).getSpawnLocation();
-            Location bedLocation = player.getBedSpawnLocation();
-            player.teleport(bedLocation != null ? bedLocation : worldSpawn);
+                Location worldSpawn = Bukkit.getWorlds().get(0).getSpawnLocation();
+                Location bedLocation = player.getBedSpawnLocation();
+                player.teleport(bedLocation != null ? bedLocation : worldSpawn);
         }
+
     }
 
     /**

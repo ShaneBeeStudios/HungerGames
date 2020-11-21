@@ -292,9 +292,9 @@ public class Game {
             if (player != null) {
                 gamePlayerData.heal(player);
                 playerManager.getPlayerData(uuid).restore(player);
-                playerManager.removePlayerData(uuid);
                 win.add(uuid);
                 gamePlayerData.exit(player);
+                playerManager.removePlayerData(uuid);
             }
         }
         gamePlayerData.clearPlayers();

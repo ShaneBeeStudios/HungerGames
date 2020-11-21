@@ -24,6 +24,7 @@ public class Language {
     public String game_started;
     public String game_join;
     public String game_countdown;
+    public String game_rdy_players;
     public String game_almost_over;
     public String game_ending_minsec;
     public String game_ending_min;
@@ -40,6 +41,8 @@ public class Language {
     public String kit_join_footer;
     public String kit_join_msg;
     public String kit_join_avail;
+    public String kit_join_rdy;
+    public String kit_join_leave;
     public String kit_no_perm;
     public String kit_doesnt_exist;
     public String kit_disabled;
@@ -113,6 +116,8 @@ public class Language {
     public String cmd_join_in_game;
     public String cmd_join_no_money;
     public String cmd_kit_no_change;
+    public String cmd_rdy_for_game_to_start;
+    public String cmd_not_rdy_for_game_to_start;
     public String cmd_leave_left;
     public String cmd_leave_refund;
     public String cmd_reload_attempt;
@@ -241,6 +246,7 @@ public class Language {
         game_started = lang.getString("game-started");
         game_join = lang.getString("game-join");
         game_countdown = lang.getString("game-countdown");
+        game_rdy_players = lang.getString("game-rdy-players");
         game_almost_over = lang.getString("game-almost-over");
         game_ending_minsec = lang.getString("game-ending-minsec");
         game_ending_min = lang.getString("game-ending-min");
@@ -257,6 +263,8 @@ public class Language {
         kit_join_footer = lang.getString("kit-join-footer");
         kit_join_msg = lang.getString("kit-join-msg");
         kit_join_avail = lang.getString("kit-join-available");
+        kit_join_rdy = lang.getString("kit-join-rdy");
+        kit_join_leave = lang.getString("kit-join-leave");
         kit_no_perm = lang.getString("kit-no-perm");
         kit_doesnt_exist = lang.getString("kit-doesnt-exist");
         kit_disabled = lang.getString("kit-disabled");
@@ -327,6 +335,8 @@ public class Language {
         cmd_join_in_game = lang.getString("cmd-join-in-game");
         cmd_join_no_money = lang.getString("cmd-join-no-money");
         cmd_kit_no_change = lang.getString("cmd-kit-no-change");
+        cmd_rdy_for_game_to_start = lang.getString("cmd-rdy-for-game-to-start");
+        cmd_not_rdy_for_game_to_start = lang.getString("cmd-not-rdy-for-game-to-start");
         cmd_leave_left = lang.getString("cmd-leave-left");
         cmd_leave_refund = lang.getString("cmd-leave-refund");
         cmd_reload_attempt = lang.getString("cmd-reload-attempt");

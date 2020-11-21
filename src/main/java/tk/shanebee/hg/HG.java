@@ -193,6 +193,7 @@ public class HG extends JavaPlugin {
 		cmds.put("setlobbywall", new SetLobbyWallCmd());
 		cmds.put("wand", new WandCmd());
 		cmds.put("kit", new KitCmd());
+		cmds.put("rdy", new RdyCmd());
 		cmds.put("debug", new DebugCmd());
 		cmds.put("list", new ListCmd());
 		cmds.put("listgames", new ListGamesCmd());

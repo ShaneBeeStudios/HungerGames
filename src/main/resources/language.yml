@@ -13,9 +13,10 @@ prefix: '&7&l[&3&lHungerGames&7&l] '
 player-joined-game: '&b&l<player> &7Has joined the game'
 player-left-game: '&b&l<player> &cHas left the game'
 #  <arena> will be replaced with the name of the arena
-game-started: '&6&l Arena &c&l<arena> &6&lwill begin in 30 seconds!'
+game-started: '&6&l Arena &c&l<arena> &6&lwill begin in <seconds> seconds!'
 game-join: '&6&l Use:&c&l /hg join <arena>&6&l to join!'
-game-countdown: 'The game will start in <timer> seconds..'
+game-countdown: '&6The game will start in <timer> seconds..'
+game-rdy-players: '&6Players ready: <rdy> / <players> (use /hg rdy)'
 game-almost-over: '&l&cThe game is almost over, fight to the death!'
 game-ending-minsec: '&aThe game is ending in <minutes> minute(s), and <seconds> second(s)!'
 game-ending-min: '&aThe game is ending in <minutes> minute(s)!'
@@ -48,6 +49,8 @@ spectator-start-title: 'You are now spectating!'
 kit-join-header: '&c&l>&7&l----------[&f&lWelcome to Hunger&f&lGames&7&l]&7&l----------&c&l<'
 kit-join-msg: '&7&l           - &3Pick a kit using &b/hg kit &7<&rkit-name&7>'
 kit-join-available: '&3&l  Available Kits:&b'
+kit-join-rdy: '&7&l           - &3Use &b/hg rdy&3 when ready'
+kit-join-leave: '&7&l           - &3Use &b/hg leave&3 to quit'
 kit-join-footer: '&c&l>&7&l------------------------------------------&c&l<'
 kit-no-perm: '&cYou do not have permission to use this kit!'
 kit-doesnt-exist: '&cDoes not exist'
@@ -125,6 +128,10 @@ death-other-entity: '<player> Spontaneously died!'
 ## Spawn
 cmd-spawn-same: '&cYou cannot have two spawns in the same location!'
 cmd-spawn-set: '&aYou set HungerGames spawn &7#<number>&a!'
+
+## Rdy
+cmd-rdy-for-game-to-start: "&aYou are ready for the game to start."
+cmd-not-rdy-for-game-to-start: "&cYou are not ready for the game to start."
 
 ## Base
 cmd-base-noperm: '&cYou do not have permission to use: /hg <command>'

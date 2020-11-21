@@ -8,6 +8,8 @@ import tk.shanebee.hg.game.Game;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
+import java.util.concurrent.atomic.AtomicBoolean;
+import java.util.concurrent.atomic.AtomicInteger;
 
 /**
  * General player manager
@@ -123,6 +125,24 @@ public class PlayerManager {
 
     public boolean hasData(UUID uuid) {
         return hasPlayerData(uuid) || hasSpectatorData(uuid);
+    }
+
+    public boolean areAllPlayersRdy() {
+        AtomicBoolean allRdy = new AtomicBoolean(true);
+        this.playerMap.forEach((k, v) -> allRdy.set(allRdy.get() && v.getRdy()));
+        return allRdy.get();
+    }
+
+    public int getRdyPlayerCount() {
+        AtomicInteger count = new AtomicInteger();
+        this.playerMap.forEach((k, v) ->  count.addAndGet(v.getRdy() ? 1 : 0));
+        return count.get();
+    }
+
+    public int getPlayerCount() {
+        AtomicInteger count = new AtomicInteger();
+        this.playerMap.forEach((k, v) -> count.getAndIncrement());
+        return count.get();
     }
 
     /** Add a PlayerData to the stored PlayerData map

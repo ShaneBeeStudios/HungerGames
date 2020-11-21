@@ -31,6 +31,7 @@ public class PlayerData implements Cloneable {
     private final GameMode mode;
     private final UUID uuid;
     private final Scoreboard scoreboard;
+    private boolean rdy = false;
 
     //InGame data
     private Team team;
@@ -39,9 +40,9 @@ public class PlayerData implements Cloneable {
 
     /**
      * New player pre-game data file
-     *
-     * @param player Player to save
+     *  @param player Player to save
      * @param game   Game they will be entering
+     * @param oldLoc
      */
     public PlayerData(Player player, Game game) {
         this.game = game;
@@ -164,6 +165,24 @@ public class PlayerData implements Cloneable {
      */
     public UUID getUuid() {
         return this.uuid;
+    }
+
+    /**
+     * Get rdy status of this player data
+     *
+     * @return rdy status of this player data
+     */
+    public boolean getRdy() {
+        return this.rdy;
+    }
+
+    /**
+     * Set rdy status of this player data
+     *
+     * @param r rdy status of this player data
+     */
+    public void setRdy(boolean r) {
+        this.rdy = r;
     }
 
     /**
