@@ -169,10 +169,20 @@ public class PlayerData implements Cloneable {
         return this.uuid;
     }
 
+    /**
+     * Set the previous location of the player
+     *
+     * @param previousLocation Location player was at before entering arena
+     */
     public void setPreviousLocation(Location previousLocation) {
         this.previousLocation = previousLocation;
     }
 
+    /**
+     * Get the previous location of the player
+     *
+     * @return Location player was at before entering arena
+     */
     @Nullable
     public Location getPreviousLocation() {
         if (previousLocation != null) {
