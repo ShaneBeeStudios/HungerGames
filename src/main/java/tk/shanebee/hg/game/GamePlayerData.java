@@ -330,11 +330,11 @@ public class GamePlayerData extends Data {
         if (gameArenaData.getStatus() == Status.RUNNING)
             game.getGameBarData().removePlayer(player);
         if (gameArenaData.exit != null && gameArenaData.exit.getWorld() != null) {
-                player.teleport(gameArenaData.exit);
+            player.teleport(gameArenaData.exit);
         } else {
-                Location worldSpawn = Bukkit.getWorlds().get(0).getSpawnLocation();
-                Location bedLocation = player.getBedSpawnLocation();
-                player.teleport(bedLocation != null ? bedLocation : worldSpawn);
+            Location worldSpawn = Bukkit.getWorlds().get(0).getSpawnLocation();
+            Location bedLocation = player.getBedSpawnLocation();
+            player.teleport(bedLocation != null ? bedLocation : worldSpawn);
         }
 
     }

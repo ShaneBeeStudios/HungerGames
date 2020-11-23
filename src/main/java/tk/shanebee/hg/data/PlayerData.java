@@ -42,7 +42,6 @@ public class PlayerData implements Cloneable {
      * New player pre-game data file
      *  @param player Player to save
      * @param game   Game they will be entering
-     * @param oldLoc
      */
     public PlayerData(Player player, Game game) {
         this.game = game;
