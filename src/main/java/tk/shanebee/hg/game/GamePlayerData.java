@@ -270,10 +270,9 @@ public class GamePlayerData extends Data {
             freeze(player);
             kills.put(player, 0);
 
-
-            Util.broadcast(lang.player_joined_game.replace("<player>", player.getName()) + "!" );
             if (players.size() == 1 && status == Status.READY) {
                 gameArenaData.setStatus(Status.WAITING);
+                Util.broadcast(lang.player_joined_game.replace("<player>", player.getName()) + "!" );
                 Util.broadcast(HG.getPlugin().getLang().game_join.replace("<arena>", gameArenaData.getName()));
             }
 
@@ -281,7 +280,6 @@ public class GamePlayerData extends Data {
                 game.startPreGame();
             } else if (status == Status.WAITING) {
                 Util.broadcast(lang.player_joined_game
-                        .replace("<arena>", gameArenaData.getName())
                         .replace("<player>", player.getName()) + (gameArenaData.minPlayers - players.size() <= 0 ? "!" : ":" +
                         lang.players_to_start.replace("<amount>", String.valueOf((gameArenaData.minPlayers - players.size())))));
             }
