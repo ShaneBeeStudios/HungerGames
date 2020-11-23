@@ -35,6 +35,10 @@ settings:
     # The time in seconds to teleport players back to their starting point
     # (note: increments of 30, ex: 30, 60, 90, 120, etc)
     teleport-at-end-time: 30
+    # When enabled, if a player joins a game via command, when they leave they will
+    # be teleported back to their previous location (ie: where they ran the command)
+    # This value will be ignored when clicking lobby signs
+    save-previous-location: true
     # Blocks that will be represented as bonus chests
     # Supports Bukkit material enums and block tags
     # `tag:shulker_boxes` was added in 1.15, for versions below this use `SHULKER_BOX` instead (which will cover all shulker boxes)

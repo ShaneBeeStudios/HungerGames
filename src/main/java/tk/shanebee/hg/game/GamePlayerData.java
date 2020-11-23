@@ -1,7 +1,6 @@
 package tk.shanebee.hg.game;
 
 import org.bukkit.Bukkit;
-import org.bukkit.ChatColor;
 import org.bukkit.GameMode;
 import org.bukkit.Location;
 import org.bukkit.Material;
@@ -11,6 +10,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.plugin.IllegalPluginAccessException;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
+import org.jetbrains.annotations.Nullable;
 import tk.shanebee.hg.Status;
 import tk.shanebee.hg.data.Config;
 import tk.shanebee.hg.data.PlayerData;
@@ -28,7 +28,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.UUID;
-import java.util.concurrent.atomic.AtomicReference;
 
 /**
  * Data class for holding a {@link Game Game's} players
@@ -225,6 +224,16 @@ public class GamePlayerData extends Data {
      * @param player Player to join the game
      */
     public void join(Player player) {
+        join(player, false);
+    }
+
+    /**
+     * Join a player to the game
+     *
+     * @param player  Player to join the game
+     * @param command Whether joined using by using a command
+     */
+    public void join(Player player, boolean command) {
         GameArenaData gameArenaData = game.getGameArenaData();
         Status status = gameArenaData.getStatus();
         if (status != Status.WAITING && status != Status.STOPPED && status != Status.COUNTDOWN && status != Status.READY) {
@@ -256,8 +265,15 @@ public class GamePlayerData extends Data {
                     loc.setY(loc.getY() - 1);
                 }
             }
+            Location previousLocation = player.getLocation();
+
             player.teleport(loc);
-            playerManager.addPlayerData(new PlayerData(player, game));
+
+            PlayerData playerData = new PlayerData(player, game);
+            if (command && Config.savePreviousLocation) {
+                playerData.setPreviousLocation(previousLocation);
+            }
+            playerManager.addPlayerData(playerData);
             gameArenaData.board.setBoard(player);
 
             heal(player);
@@ -304,21 +320,26 @@ public class GamePlayerData extends Data {
                 game.getGameBarData().removePlayer(player);
         }
         heal(player);
-        playerManager.getPlayerData(uuid).restore(player);
+        PlayerData playerData = playerManager.getPlayerData(uuid);
+        Location previousLocation = playerData.getPreviousLocation();
+
+        playerData.restore(player);
         playerManager.removePlayerData(player);
-        exit(player);
+        exit(player, previousLocation);
         if (death) {
             player.playSound(player.getLocation(), Sound.UI_TOAST_CHALLENGE_COMPLETE, 5, 1);
         }
         game.updateAfterDeath(player, death);
     }
 
-    void exit(Player player) {
+    void exit(Player player, @Nullable Location exitLocation) {
         GameArenaData gameArenaData = game.getGameArenaData();
         player.setInvulnerable(false);
         if (gameArenaData.getStatus() == Status.RUNNING)
             game.getGameBarData().removePlayer(player);
-        if (gameArenaData.exit != null && gameArenaData.exit.getWorld() != null) {
+        if (exitLocation != null) {
+            player.teleport(exitLocation);
+        } else if (gameArenaData.exit != null && gameArenaData.exit.getWorld() != null) {
             player.teleport(gameArenaData.exit);
         } else {
             Location worldSpawn = Bukkit.getWorlds().get(0).getSpawnLocation();
@@ -370,7 +391,10 @@ public class GamePlayerData extends Data {
      */
     public void leaveSpectate(Player spectator) {
         UUID uuid = spectator.getUniqueId();
-        playerManager.getSpectatorData(uuid).restore(spectator);
+        PlayerData playerData = playerManager.getSpectatorData(uuid);
+        Location previousLocation = playerData.getPreviousLocation();
+
+        playerData.restore(spectator);
         playerManager.removeSpectatorData(uuid);
         spectators.remove(spectator.getUniqueId());
         spectator.setCollidable(true);
@@ -381,7 +405,7 @@ public class GamePlayerData extends Data {
         }
         if (Config.spectateHide)
             revealPlayer(spectator);
-        exit(spectator);
+        exit(spectator, previousLocation);
     }
 
     void revealPlayer(Player hidden) {

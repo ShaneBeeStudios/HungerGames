@@ -2,10 +2,12 @@ package tk.shanebee.hg.data;
 
 import org.bukkit.Bukkit;
 import org.bukkit.GameMode;
+import org.bukkit.Location;
 import org.bukkit.attribute.Attribute;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.scoreboard.Scoreboard;
+import org.jetbrains.annotations.Nullable;
 import tk.shanebee.hg.HG;
 import tk.shanebee.hg.game.Game;
 import tk.shanebee.hg.game.Team;
@@ -31,6 +33,7 @@ public class PlayerData implements Cloneable {
     private final GameMode mode;
     private final UUID uuid;
     private final Scoreboard scoreboard;
+    private Location previousLocation = null;
 
     //InGame data
     private Team team;
@@ -164,6 +167,19 @@ public class PlayerData implements Cloneable {
      */
     public UUID getUuid() {
         return this.uuid;
+    }
+
+    public void setPreviousLocation(Location previousLocation) {
+        this.previousLocation = previousLocation;
+    }
+
+    @Nullable
+    public Location getPreviousLocation() {
+        if (previousLocation != null) {
+            return previousLocation.clone();
+        } else {
+            return null;
+        }
     }
 
     /**

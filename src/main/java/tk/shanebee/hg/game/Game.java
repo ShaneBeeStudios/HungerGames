@@ -9,6 +9,7 @@ import tk.shanebee.hg.Status;
 import tk.shanebee.hg.data.Config;
 import tk.shanebee.hg.data.Language;
 import tk.shanebee.hg.data.Leaderboard;
+import tk.shanebee.hg.data.PlayerData;
 import tk.shanebee.hg.events.GameEndEvent;
 import tk.shanebee.hg.events.GameStartEvent;
 import tk.shanebee.hg.game.GameCommandData.CommandType;
@@ -290,11 +291,14 @@ public class Game {
         for (UUID uuid : gamePlayerData.players) {
             Player player = Bukkit.getPlayer(uuid);
             if (player != null) {
+                PlayerData playerData = playerManager.getPlayerData(uuid);
+                Location previousLocation = playerData.getPreviousLocation();
+
                 gamePlayerData.heal(player);
-                playerManager.getPlayerData(uuid).restore(player);
+                playerData.restore(player);
                 playerManager.removePlayerData(uuid);
                 win.add(uuid);
-                gamePlayerData.exit(player);
+                gamePlayerData.exit(player, previousLocation);
             }
         }
         gamePlayerData.clearPlayers();
