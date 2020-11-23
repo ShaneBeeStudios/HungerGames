@@ -40,7 +40,9 @@ public class StartingTask implements Runnable {
 			this.oldRdyPlayerCount = rdy;
 			Integer count = this.playerManager.getPlayerCount();
 			game.getGamePlayerData().msgAll(HG.getPlugin().getLang().game_countdown.replace("<timer>", String.valueOf(timer)));
-			game.getGamePlayerData().msgAll(HG.getPlugin().getLang().game_rdy_players.replace("<rdy>", rdy.toString()).replace("<players>", count.toString()));
+			if(timer >= 30) {
+				game.getGamePlayerData().msgAll(HG.getPlugin().getLang().game_rdy_players.replace("<rdy>", rdy.toString()).replace("<players>", count.toString()));
+			}
 		}
 	}
 
