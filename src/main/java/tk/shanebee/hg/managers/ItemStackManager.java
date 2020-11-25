@@ -131,17 +131,7 @@ public class ItemStackManager {
             ItemMeta itemMeta = item.getItemMeta();
             assert itemMeta != null;
             if (s.startsWith("enchant:")) {
-                s = s.replace("enchant:", "").toUpperCase();
-                String[] d = s.split(":");
-                int level = 1;
-                if (d.length != 1 && Util.isInt(d[1])) {
-                    level = Integer.parseInt(d[1]);
-                }
-                for (Enchantment e : Enchantment.values()) {
-                    if (e.getKey().getKey().equalsIgnoreCase(d[0]) || e.getName().equalsIgnoreCase(d[0])) {
-                        itemMeta.addEnchant(e, level, true);
-                    }
-                }
+                enchant(itemMeta, args, s);
             } else if (s.startsWith("color:")) {
                 if (itemMeta instanceof LeatherArmorMeta) {
                     ((LeatherArmorMeta) itemMeta).setColor(getColor(s));
@@ -150,6 +140,8 @@ public class ItemStackManager {
                     } catch (NoSuchFieldError ignore) {}
                 } else if (itemMeta instanceof PotionMeta) {
                     ((PotionMeta) itemMeta).setColor(getColor(s));
+                } else {
+                    Util.warning("Item cannot be colored: &c%s &eline: &b%s", split[0], args);
                 }
             } else if (s.startsWith("name:")) {
                 s = s.replace("name:", "").replace("_", " ");
@@ -188,6 +180,23 @@ public class ItemStackManager {
             item.setItemMeta(itemMeta);
         }
         return item;
+    }
+
+    @SuppressWarnings("deprecation") //Enchantment#getName
+    private void enchant(ItemMeta itemMeta, String line, String enchantString) {
+        enchantString = enchantString.replace("enchant:", "").toUpperCase();
+        String[] d = enchantString.split(":");
+        int level = 1;
+        if (d.length != 1 && Util.isInt(d[1])) {
+            level = Integer.parseInt(d[1]);
+        }
+        for (Enchantment e : Enchantment.values()) {
+            if (e.getKey().getKey().equalsIgnoreCase(d[0]) || e.getName().equalsIgnoreCase(d[0])) {
+                itemMeta.addEnchant(e, level, true);
+                return;
+            }
+        }
+        Util.warning("Invalid enchantment: &c%s &eline: &b%s", enchantString, line);
     }
 
     private ItemStack itemStringToStack(String item, int amount) {
