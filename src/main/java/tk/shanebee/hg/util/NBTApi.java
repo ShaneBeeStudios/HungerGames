@@ -16,7 +16,7 @@ public class NBTApi {
     private boolean enabled = true;
 
     public NBTApi() {
-        MinecraftVersion.logger = HgLogger.getLogger();
+        MinecraftVersion.replaceLogger(HgLogger.getLogger());
         if (!isEnabled()) {
             warning();
         }
