@@ -64,7 +64,9 @@ public class Util {
      * @param warning Message to log to console
      */
     public static void warning(String warning) {
-        Bukkit.getLogger().warning(getColString("&7[&e&lHungerGames&7] &eWARNING: " + warning));
+        if (warning.length() > 0) { // only send messages if its actually a message
+            LOGGER.warning(getColString("&7[&e&lHungerGames&7] &eWARNING: " + warning));
+        }
     }
 
     /**
@@ -112,7 +114,9 @@ public class Util {
      * @param s      Message to send
      */
     public static void scm(CommandSender sender, String s) {
-        sender.sendMessage(getColString(s) + ChatColor.RESET);
+        if (s.length() > 0) { // only send messages if its actually a message
+            sender.sendMessage(getColString(s) + ChatColor.RESET);
+        }
     }
 
     /**
@@ -133,7 +137,9 @@ public class Util {
      * @param message Message to send
      */
     public static void sendPrefixedMessage(CommandSender sender, String message) {
-        scm(sender, HG.getPlugin().getLang().prefix + message);
+        if (message.length() > 0) { // only send messages if its actually a message
+            scm(sender, HG.getPlugin().getLang().prefix + message);
+        }
     }
 
     /**
@@ -153,7 +159,9 @@ public class Util {
      * @param s Message to send
      */
     public static void broadcast(String s) {
-        Bukkit.broadcastMessage(getColString(HG.getPlugin().getLang().prefix + " " + s));
+        if (s.length() > 0) { // only send messages if its actually a message
+            Bukkit.broadcastMessage(getColString(HG.getPlugin().getLang().prefix + " " + s));
+        }
     }
 
     /**
@@ -191,6 +199,7 @@ public class Util {
         return true;
     }
 
+    @SuppressWarnings("BooleanMethodIsAlwaysInverted")
     public static boolean isBool(String string) {
         return string.equalsIgnoreCase("true") || string.equalsIgnoreCase("false");
     }
