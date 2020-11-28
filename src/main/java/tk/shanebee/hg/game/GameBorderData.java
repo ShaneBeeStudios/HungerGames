@@ -81,7 +81,7 @@ public class GameBorderData extends Data {
         border.setSize(((int) size));
         border.setWarningTime(5);
         border.setDamageBuffer(2);
-        border.setSize(borderSize, time);
+        border.setSize(Math.min(size, borderSize), time);
     }
 
     void resetBorder() {
