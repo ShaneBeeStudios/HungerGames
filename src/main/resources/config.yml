@@ -13,6 +13,10 @@
 settings:
     # When enabled, more informative debug messages will be sent when errors occur
     debug: false
+    # When enabled, if a player joins an arena, a message will broadcast to all players on the server that a game is available to
+    # join and how many players til it can start. Also a message will broadcast that a game has started, and that you can still join.
+    # If disabled, this will only broadcast to players in that specific game
+    broadcast-join-messages: true
     # If mobs will spawn in the arena, and their interval
     spawn-mobs: true
     spawn-mobs-interval: 35
