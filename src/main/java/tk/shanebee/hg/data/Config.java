@@ -22,6 +22,7 @@ public class Config {
 
     //Basic settings
     public static boolean broadcastJoinMessages;
+    public static boolean broadcastWinMessages;
     public static boolean economy = true;
     public static boolean spawnmobs;
     public static int spawnmobsinterval;
@@ -110,6 +111,7 @@ public class Config {
     private void loadConfig() {
         debug = config.getBoolean("settings.debug");
         broadcastJoinMessages = config.getBoolean("settings.broadcast-join-messages");
+        broadcastWinMessages = config.getBoolean("settings.broadcast-win-messages");
         spawnmobs = config.getBoolean("settings.spawn-mobs");
         spawnmobsinterval = config.getInt("settings.spawn-mobs-interval") * 20;
         bossbar = config.getBoolean("settings.bossbar-countdown");

@@ -40,6 +40,9 @@ public class GamePlayerData extends Data {
     // Player Lists
     final List<UUID> players = new ArrayList<>();
     final List<UUID> spectators = new ArrayList<>();
+    // This list contains all players who have joined the arena
+    // Will be used to broadcast messages even if a player is no longer in the game
+    final List<UUID> allPlayers = new ArrayList<>();
 
     // Data lists
     final Map<Player, Integer> kills = new HashMap<>();
@@ -64,6 +67,7 @@ public class GamePlayerData extends Data {
 
     void clearPlayers() {
         players.clear();
+        allPlayers.clear();
     }
 
     /**
@@ -168,6 +172,23 @@ public class GamePlayerData extends Data {
         }
     }
 
+    /**
+     * Sends a message to all players/spectators
+     * <b>Includes players who have died and left the game.
+     * Used for broadcasting win messages</b>
+     *
+     * @param message Message to send
+     */
+    public void msgAllPlayers(String message) {
+        List<UUID> allPlayers = new ArrayList<>(this.allPlayers);
+        allPlayers.addAll(this.spectators);
+        for (UUID u : allPlayers) {
+            Player p = Bukkit.getPlayer(u);
+            if (p != null)
+                Util.scm(p, lang.prefix + message);
+        }
+    }
+
     Location pickSpawn() {
         GameArenaData gameArenaData = game.getGameArenaData();
         double spawn = getRandomIntegerBetweenRange(gameArenaData.maxPlayers - 1);
@@ -257,7 +278,9 @@ public class GamePlayerData extends Data {
                 player.leaveVehicle();
             }
 
-            players.add(player.getUniqueId());
+            UUID uuid = player.getUniqueId();
+            players.add(uuid);
+            allPlayers.add(uuid);
 
             Location loc = pickSpawn();
             if (loc.getBlock().getRelative(BlockFace.DOWN).getType() == Material.AIR) {
@@ -311,8 +334,9 @@ public class GamePlayerData extends Data {
      */
     public void leave(Player player, Boolean death) {
         Bukkit.getPluginManager().callEvent(new PlayerLeaveGameEvent(game, player, death));
-        players.remove(player.getUniqueId());
         UUID uuid = player.getUniqueId();
+        players.remove(uuid);
+        if (!death) allPlayers.remove(uuid); // Only remove the player if they voluntarily left the game
         unFreeze(player);
         if (death) {
             if (Config.spectateEnabled && Config.spectateOnDeath && !game.isGameOver()) {

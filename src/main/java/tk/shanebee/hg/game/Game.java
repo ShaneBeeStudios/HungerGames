@@ -301,7 +301,6 @@ public class Game {
                 gamePlayerData.exit(player, previousLocation);
             }
         }
-        gamePlayerData.clearPlayers();
 
         for (UUID uuid : gamePlayerData.getSpectators()) {
             Player spectator = Bukkit.getPlayer(uuid);
@@ -309,8 +308,6 @@ public class Game {
                 gamePlayerData.leaveSpectate(spectator);
             }
         }
-        gamePlayerData.clearSpectators();
-        gamePlayerData.clearTeams();
 
         if (gameArenaData.status == Status.RUNNING) {
             bar.clearBar();
@@ -336,7 +333,7 @@ public class Game {
                     }
                     if (Config.cash != 0) {
                         Vault.economy.depositPlayer(Bukkit.getServer().getOfflinePlayer(u), db);
-                        Util.scm(p, HG.getPlugin().getLang().winning_amount.replace("<amount>", String.valueOf(db)));
+                        Util.scm(p, lang.winning_amount.replace("<amount>", String.valueOf(db)));
                     }
                 }
                 plugin.getLeaderboard().addStat(u, Leaderboard.Stats.WINS);
@@ -345,9 +342,16 @@ public class Game {
         }
         gameBlockData.clearChests();
         String winner = Util.translateStop(Util.convertUUIDListToStringList(win));
-        // prevent not death winners from gaining a prize
-        if (death)
-            Util.broadcast(HG.getPlugin().getLang().player_won.replace("<arena>", gameArenaData.name).replace("<winner>", winner));
+
+        // Broadcast wins
+        if (death) {
+            String broadcast = lang.player_won.replace("<arena>", gameArenaData.name).replace("<winner>", winner);
+            if (Config.broadcastWinMessages) {
+                Util.broadcast(broadcast);
+            } else {
+                gamePlayerData.msgAllPlayers(broadcast);
+            }
+        }
         if (gameBlockData.requiresRollback()) {
             if (plugin.isEnabled()) {
                 new Rollback(this);
@@ -367,6 +371,11 @@ public class Game {
         for (UUID uuid : win) {
             winners.add(Bukkit.getPlayer(uuid));
         }
+
+        // Game has ended, we can clear all players now
+        gamePlayerData.clearPlayers();
+        gamePlayerData.clearSpectators();
+        gamePlayerData.clearTeams();
         Bukkit.getPluginManager().callEvent(new GameEndEvent(this, winners, death));
     }
 
