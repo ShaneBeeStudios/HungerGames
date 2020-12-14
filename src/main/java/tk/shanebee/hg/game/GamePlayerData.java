@@ -1,5 +1,6 @@
 package tk.shanebee.hg.game;
 
+import io.papermc.lib.PaperLib;
 import org.bukkit.Bukkit;
 import org.bukkit.GameMode;
 import org.bukkit.Location;
@@ -290,39 +291,41 @@ public class GamePlayerData extends Data {
             }
             Location previousLocation = player.getLocation();
 
-            player.teleport(loc);
+            // Teleport async into the arena so it loads a little more smoothly
+            PaperLib.teleportAsync(player, loc).thenAccept(a -> {
 
-            PlayerData playerData = new PlayerData(player, game);
-            if (command && Config.savePreviousLocation) {
-                playerData.setPreviousLocation(previousLocation);
-            }
-            playerManager.addPlayerData(playerData);
-            gameArenaData.board.setBoard(player);
-
-            heal(player);
-            freeze(player);
-            kills.put(player, 0);
-
-            if (players.size() == 1 && status == Status.READY)
-                gameArenaData.setStatus(Status.WAITING);
-            if (players.size() >= game.gameArenaData.minPlayers && (status == Status.WAITING || status == Status.READY)) {
-                game.startPreGame();
-            } else if (status == Status.WAITING) {
-                String broadcast = lang.player_joined_game
-                        .replace("<arena>", gameArenaData.getName())
-                        .replace("<player>", player.getName()) + (gameArenaData.minPlayers - players.size() <= 0 ? "!" : ":" +
-                        lang.players_to_start.replace("<amount>", String.valueOf((gameArenaData.minPlayers - players.size()))));
-                if (Config.broadcastJoinMessages) {
-                    Util.broadcast(broadcast);
-                } else {
-                    msgAll(broadcast);
+                PlayerData playerData = new PlayerData(player, game);
+                if (command && Config.savePreviousLocation) {
+                    playerData.setPreviousLocation(previousLocation);
                 }
-            }
-            kitHelp(player);
+                playerManager.addPlayerData(playerData);
+                gameArenaData.board.setBoard(player);
 
-            game.getGameBlockData().updateLobbyBlock();
-            game.gameArenaData.updateBoards();
-            game.getGameCommandData().runCommands(CommandType.JOIN, player);
+                heal(player);
+                freeze(player);
+                kills.put(player, 0);
+
+                if (players.size() == 1 && status == Status.READY)
+                    gameArenaData.setStatus(Status.WAITING);
+                if (players.size() >= game.gameArenaData.minPlayers && (status == Status.WAITING || status == Status.READY)) {
+                    game.startPreGame();
+                } else if (status == Status.WAITING) {
+                    String broadcast = lang.player_joined_game
+                            .replace("<arena>", gameArenaData.getName())
+                            .replace("<player>", player.getName()) + (gameArenaData.minPlayers - players.size() <= 0 ? "!" : ":" +
+                            lang.players_to_start.replace("<amount>", String.valueOf((gameArenaData.minPlayers - players.size()))));
+                    if (Config.broadcastJoinMessages) {
+                        Util.broadcast(broadcast);
+                    } else {
+                        msgAll(broadcast);
+                    }
+                }
+                kitHelp(player);
+
+                game.gameBlockData.updateLobbyBlock();
+                game.gameArenaData.updateBoards();
+                game.gameCommandData.runCommands(CommandType.JOIN, player);
+            });
         }
     }
 
@@ -366,15 +369,17 @@ public class GamePlayerData extends Data {
         player.setInvulnerable(false);
         if (gameArenaData.getStatus() == Status.RUNNING)
             game.getGameBarData().removePlayer(player);
+        Location loc;
         if (exitLocation != null) {
-            player.teleport(exitLocation);
+            loc = exitLocation;
         } else if (gameArenaData.exit != null && gameArenaData.exit.getWorld() != null) {
-            player.teleport(gameArenaData.exit);
+            loc = gameArenaData.exit;
         } else {
             Location worldSpawn = Bukkit.getWorlds().get(0).getSpawnLocation();
             Location bedLocation = player.getBedSpawnLocation();
-            player.teleport(bedLocation != null ? bedLocation : worldSpawn);
+            loc = bedLocation != null ? bedLocation : worldSpawn;
         }
+        PaperLib.teleportAsync(player, loc);
     }
 
     /**
