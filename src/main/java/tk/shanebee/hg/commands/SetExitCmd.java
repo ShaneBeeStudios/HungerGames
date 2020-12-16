@@ -26,11 +26,11 @@ public class SetExitCmd extends BaseCmd {
                 game.getGameArenaData().setExit(loc);
         } else {
             Game game = gameManager.getGame(args[1]);
-            GameArenaData gameArenaData = game.getGameArenaData();
             if (game == null) {
                 Util.scm(player, lang.cmd_delete_noexist);
                 return true;
             }
+            GameArenaData gameArenaData = game.getGameArenaData();
             plugin.getArenaConfig().getConfig().set("arenas." + gameArenaData.getName() + ".exit-location", stringLoc);
             String msg = lang.cmd_exit_set_arena.replace("<arena>", gameArenaData.getName());
             Util.scm(player, msg + " " + stringLoc.replace(":", "&6,&c "));
