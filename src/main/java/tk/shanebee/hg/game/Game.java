@@ -79,9 +79,12 @@ public class Game {
         this(name, bound, timer, minPlayers, maxPlayers, roam, cost);
         gameArenaData.spawns.addAll(spawns);
         this.gameBlockData.sign1 = lobbySign;
-        gameArenaData.setStatus(isReady ? Status.READY : Status.BROKEN);
 
-        this.gameBlockData.setLobbyBlock(lobbySign);
+        // If lobby signs are not properly setup, game is not ready
+        if (!this.gameBlockData.setLobbyBlock(lobbySign)) {
+            isReady = false;
+        }
+        gameArenaData.setStatus(isReady ? Status.READY : Status.BROKEN);
 
         this.kitManager = plugin.getKitManager();
     }
