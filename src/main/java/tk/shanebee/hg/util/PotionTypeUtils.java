@@ -145,18 +145,20 @@ public enum PotionTypeUtils {
             } else if (!Util.isBool(potionData[2])) {
                 potionTypeWarning("Not a valid boolean: &c" + potionData[2].toUpperCase(Locale.ROOT) + " &ein: &b" + data);
                 return null;
-            } else if (Boolean.parseBoolean(potionData[1]) && !potionType.isUpgradeable()) {
-                Util.warning("Potion can not be upgraded: &b" + data);
-                return null;
-            } else if (Boolean.parseBoolean(potionData[2]) && !potionType.isExtendable()) {
-                Util.warning("Potion can not be extended: &b" + data);
-                return null;
-            } else if (Boolean.parseBoolean(potionData[1]) && Boolean.parseBoolean(potionData[2])) {
-                Util.warning("Potion can not be both upgraded and extended in: &b" + data);
-                return null;
             }
             boolean upgraded = Boolean.parseBoolean(potionData[1]);
             boolean extended = Boolean.parseBoolean(potionData[2]);
+            if (upgraded && !potionType.isUpgradeable()) {
+                Util.warning("Potion can not be upgraded: &b" + data);
+                return null;
+            } else if (extended && !potionType.isExtendable()) {
+                Util.warning("Potion can not be extended: &b" + data);
+                return null;
+            } else if (upgraded && extended) {
+                Util.warning("Potion can not be both upgraded and extended in: &b" + data);
+                return null;
+            }
+
             return new PotionData(potionType, extended, upgraded);
         } else {
             potionTypeWarning("Improper setup of potion-data: &c");
