@@ -19,7 +19,7 @@ public class ListGamesCmd extends BaseCmd {
 		Util.scm(sender, "&6&l Games:");
 		for (Game game : plugin.getGames()) {
 			GameArenaData gameArenaData = game.getGameArenaData();
-			Util.scm(sender, " &4 - &6" + gameArenaData.getName() + "&4:&6" + gameArenaData.getStatus().getName());
+			Util.sendPrefixedMessage(sender, " &4 - &6" + gameArenaData.getName() + "&4:&6" + gameArenaData.getStatus().getName());
 		}
 		return true;
 	}
