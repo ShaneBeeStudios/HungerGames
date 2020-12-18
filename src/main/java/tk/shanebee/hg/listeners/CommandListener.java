@@ -172,24 +172,6 @@ public class CommandListener implements CommandExecutor, TabCompleter {
 				if (args.length == 4 && args[0].equalsIgnoreCase("bordertimer")) {
 					return Collections.singletonList("<end=remaining seconds>");
 				}
-			} else if (args[0].equalsIgnoreCase("kit")) {
-				if (args.length == 2) {
-					ArrayList<String> matchesKit = new ArrayList<>();
-					Game game = null;
-					if (playerManager.hasPlayerData(((Player) sender).getUniqueId())) {
-						game = playerManager.getPlayerData(((Player) sender).getUniqueId()).getGame();
-					}
-					if (game != null) {
-						for (String name : game.getKitManager().getKits().keySet()) {
-							if (StringUtil.startsWithIgnoreCase(name, args[1])) {
-								matchesKit.add(name);
-							}
-						}
-						return matchesKit;
-					} else {
-						return Collections.singletonList("<not-in-game>");
-					}
-				}
 			} else if (args[0].equalsIgnoreCase("create")) {
 				ArrayList<String> matchesCreate = new ArrayList<>();
 				switch (args.length) {

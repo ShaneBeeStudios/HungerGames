@@ -241,6 +241,7 @@ public class Game {
      */
     public void startFreeRoam() {
         gameArenaData.status = Status.BEGINNING;
+        gamePlayerData.applyKits();
         gameBlockData.updateLobbyBlock();
         gameArenaData.bound.removeEntities();
         freeRoam = new FreeRoamTask(this);

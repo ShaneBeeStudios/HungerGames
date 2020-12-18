@@ -46,7 +46,7 @@ spectator-start-title: 'You are now spectating!'
 
 #  KIT MESSAGES
 kit-join-header: '&c&l>&7&l----------[&f&lWelcome to Hunger&f&lGames&7&l]&7&l----------&c&l<'
-kit-join-msg: '&7&l           - &3Pick a kit using &b/hg kit &7<&rkit-name&7>'
+kit-join-message: '&7&l           - &3Pick a kit using &b/hg kit'
 kit-join-available: '&3&l  Available Kits:&b'
 kit-join-footer: '&c&l>&7&l------------------------------------------&c&l<'
 kit-no-perm: '&cYou do not have permission to use this kit!'
@@ -256,3 +256,26 @@ track-new2: '&a&l |&6&l   Swing the stick to track players!                &a&l 
 lb-blank-space: ''
 lb-combined-separator: ' : '
 lb-missing-player: '<none>'
+
+# KITS
+kits-gui-title: '<#0499DF>Kits: <#63BFEA><arena>'
+kit-gui-title: '<#0499DF>Kit: <#63BFEA><name>'
+kit-name: '&3Kit: &b<name>'
+kit-armor-title: '&bArmor Items & Effects'
+kit-armor-lore:
+  - '&7These armor items and potion effects'
+  - '&7will be applied to you when the game starts'
+kit-effects-title: 'Applied Effects'
+kit-effects-none: '&c&lNONE'
+kit-effects-lore:
+  - ' '
+  - '&a&lApplied when game starts'
+  - ' '
+kit-accept-name: '&a&lACCEPT'
+kit-accept-lore:
+  - '&bClick to select this kit'
+  - '&7Will be applied when the game starts'
+kit-cancel-name: '&c&lCANCEL'
+kit-cancel-lore:
+  - '&bClick to go back to kit selection'
+kit-selected: "&7You have selected kit &r'&b<name>&r'"
