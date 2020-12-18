@@ -419,7 +419,10 @@ public class GameListener implements Listener {
             Status status = playerManager.getPlayerData(player).getGame().getGameArenaData().getStatus();
             if (status != Status.RUNNING && status != Status.BEGINNING) {
                 event.setCancelled(true);
-                Util.scm(player, lang.listener_no_interact);
+                Block block = event.getClickedBlock();
+                if (block != null && block.getType() != Material.AIR) {
+                    Util.scm(player, lang.listener_no_interact);
+                }
             }
         } else if (action == Action.RIGHT_CLICK_BLOCK) {
 			Block block = event.getClickedBlock();
