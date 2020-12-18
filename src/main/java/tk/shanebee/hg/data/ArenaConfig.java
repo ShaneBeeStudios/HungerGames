@@ -228,7 +228,10 @@ public class ArenaConfig {
 						}
 						gameArenaData.setExit(location);
 					} catch (Exception exception) {
-						gameArenaData.setExit(game.getLobbyLocation().getWorld().getSpawnLocation());
+					    World mainWorld = Bukkit.getWorlds().get(0);
+						gameArenaData.setExit(mainWorld.getSpawnLocation());
+						Util.warning("Failed to setup exit location for arena '%s', defaulting to spawn location of world '%s'",
+                                arenaName, world.getName());
 						Util.debug(exception);
 					}
 					Util.log("Arena &b" + arenaName + "&7 has been &aloaded!");

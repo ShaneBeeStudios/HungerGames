@@ -226,6 +226,7 @@ public class GameBlockData extends Data {
             sign2.update(true);
             sign3.update(true);
         } catch (Exception e) {
+            Util.warning("Failed to setup lobby wall for arena '%s'", game.gameArenaData.name);
             return false;
         }
         return true;
