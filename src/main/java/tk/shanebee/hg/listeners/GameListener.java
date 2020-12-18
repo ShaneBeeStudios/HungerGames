@@ -727,10 +727,14 @@ public class GameListener implements Listener {
 	private void onLogout(PlayerQuitEvent event) {
 		Player player = event.getPlayer();
 		if (playerManager.hasPlayerData(player)) {
-			playerManager.getPlayerData(player).getGame().getGamePlayerData().leave(player, false);
+		    PlayerData playerData = playerManager.getPlayerData(player);
+		    playerData.setOnline(false);
+			playerData.getGame().getGamePlayerData().leave(player, false);
 		}
 		if (playerManager.hasSpectatorData(player)) {
-			playerManager.getSpectatorData(player).getGame().getGamePlayerData().leaveSpectate(player);
+		    PlayerData playerData = playerManager.getSpectatorData(player);
+            playerData.setOnline(false);
+			playerData.getGame().getGamePlayerData().leaveSpectate(player);
 		}
 	}
 

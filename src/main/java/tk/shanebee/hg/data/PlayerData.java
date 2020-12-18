@@ -34,6 +34,7 @@ public class PlayerData implements Cloneable {
     private final UUID uuid;
     private final Scoreboard scoreboard;
     private Location previousLocation = null;
+    private boolean online;
 
     //InGame data
     private Team team;
@@ -61,6 +62,7 @@ public class PlayerData implements Cloneable {
         player.setLevel(0);
         player.setExp(0);
         scoreboard = player.getScoreboard();
+        online = true;
     }
 
     /**
@@ -190,6 +192,14 @@ public class PlayerData implements Cloneable {
         } else {
             return null;
         }
+    }
+
+    public boolean isOnline() {
+        return online;
+    }
+
+    public void setOnline(boolean online) {
+        this.online = online;
     }
 
     /**
