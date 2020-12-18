@@ -40,7 +40,10 @@ public abstract class BaseCmd {
 		this.lang = plugin.getLang();
 
 		if (forcePlayer) {
-			if (!(sender instanceof Player)) return false;
+			if (!(sender instanceof Player)) {
+			    Util.sendPrefixedMessage(sender, "&cThe command &7&l<&rhg %s&7&l> &ccan only be run in game!", cmdName);
+			    return false;
+            }
 			else player = (Player) sender;
 		}
 		if (!sender.hasPermission("hg." + cmdName))
