@@ -44,13 +44,13 @@ public abstract class BaseCmd {
 			else player = (Player) sender;
 		}
 		if (!sender.hasPermission("hg." + cmdName))
-			Util.scm(this.sender, lang.cmd_base_noperm.replace("<command>", cmdName));
+			Util.sendPrefixedMessage(this.sender, lang.cmd_base_noperm.replace("<command>", cmdName));
 		else if (forceInGame && !playerManager.hasPlayerData(player) && !playerManager.hasSpectatorData(player))
-			Util.scm(this.sender, lang.cmd_base_nogame);
+			Util.sendPrefixedMessage(this.sender, lang.cmd_base_nogame);
 		else if (forceInRegion && !gameManager.isInRegion(player.getLocation()))
-			Util.scm(this.sender, lang.cmd_base_noregion);
+			Util.sendPrefixedMessage(this.sender, lang.cmd_base_noregion);
 		else if (argLength > args.length)
-			Util.scm(sender, lang.cmd_base_wrongusage + " " + sendHelpLine());
+			Util.sendPrefixedMessage(sender, lang.cmd_base_wrongusage + " " + sendHelpLine());
 		else return run();
 		return true;
 	}
