@@ -372,8 +372,8 @@ public class GamePlayerData extends Data {
         Location previousLocation = playerData.getPreviousLocation();
 
         playerData.restore(player);
-        playerManager.removePlayerData(player);
         exit(player, previousLocation);
+        playerManager.removePlayerData(player);
         if (death) {
             player.playSound(player.getLocation(), Sound.UI_TOAST_CHALLENGE_COMPLETE, 5, 1);
         }
@@ -395,7 +395,11 @@ public class GamePlayerData extends Data {
             Location bedLocation = player.getBedSpawnLocation();
             loc = bedLocation != null ? bedLocation : worldSpawn;
         }
-        PaperLib.teleportAsync(player, loc);
+        if (playerManager.getData(player).isOnline()) {
+            PaperLib.teleportAsync(player, loc);
+        } else {
+            player.teleport(loc);
+        }
     }
 
     /**
@@ -445,7 +449,6 @@ public class GamePlayerData extends Data {
         Location previousLocation = playerData.getPreviousLocation();
 
         playerData.restore(spectator);
-        playerManager.removeSpectatorData(uuid);
         spectators.remove(spectator.getUniqueId());
         spectator.setCollidable(true);
         if (Config.spectateFly) {
@@ -456,6 +459,7 @@ public class GamePlayerData extends Data {
         if (Config.spectateHide)
             revealPlayer(spectator);
         exit(spectator, previousLocation);
+        playerManager.removeSpectatorData(uuid);
     }
 
     void revealPlayer(Player hidden) {
