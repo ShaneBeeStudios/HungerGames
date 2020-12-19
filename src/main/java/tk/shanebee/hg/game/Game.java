@@ -300,9 +300,9 @@ public class Game {
 
                 gamePlayerData.heal(player);
                 playerData.restore(player);
-                playerManager.removePlayerData(uuid);
                 win.add(uuid);
                 gamePlayerData.exit(player, previousLocation);
+                playerManager.removePlayerData(uuid);
             }
         }
 

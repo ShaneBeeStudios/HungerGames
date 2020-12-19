@@ -1,6 +1,7 @@
 package tk.shanebee.hg.managers;
 
 import org.bukkit.entity.Player;
+import org.jetbrains.annotations.Nullable;
 import tk.shanebee.hg.HG;
 import tk.shanebee.hg.data.PlayerData;
 import tk.shanebee.hg.game.Game;
@@ -16,8 +17,8 @@ import java.util.UUID;
 @SuppressWarnings({"WeakerAccess", "unused"})
 public class PlayerManager {
 
-    private Map<UUID, PlayerData> playerMap;
-    private Map<UUID, PlayerData> spectatorMap;
+    private final Map<UUID, PlayerData> playerMap;
+    private final Map<UUID, PlayerData> spectatorMap;
 
     public PlayerManager() {
         this.playerMap = new HashMap<>();
@@ -60,6 +61,7 @@ public class PlayerManager {
      * @param player Player to get data for
      * @return PlayerData from player, null if player is not in a game
      */
+    @Nullable
     public PlayerData getPlayerData(Player player) {
         return getPlayerData(player.getUniqueId());
     }
@@ -68,6 +70,7 @@ public class PlayerManager {
      * @param uuid UUID of player to get data for
      * @return PlayerData from player, null if player is not in a game
      */
+    @Nullable
     public PlayerData getPlayerData(UUID uuid) {
         if (hasPlayerData(uuid)) {
             return playerMap.get(uuid);
@@ -79,6 +82,7 @@ public class PlayerManager {
      * @param player Player to get data for
      * @return PlayerData from player, null if player is not spectating a game
      */
+    @Nullable
     public PlayerData getSpectatorData(Player player) {
         return getSpectatorData(player.getUniqueId());
     }
@@ -87,6 +91,7 @@ public class PlayerManager {
      * @param uuid UUID of player to get data for
      * @return PlayerData from player, null if player is not spectating a game
      */
+    @Nullable
     public PlayerData getSpectatorData(UUID uuid) {
         if (hasSpectatorData(uuid))
             return spectatorMap.get(uuid);
@@ -99,6 +104,7 @@ public class PlayerManager {
      * @param player Player to get data for
      * @return PlayerData from player, null if player is not in a game
      */
+    @Nullable
     public PlayerData getData(Player player) {
         return getData(player.getUniqueId());
     }
@@ -109,6 +115,7 @@ public class PlayerManager {
      * @param uuid UUID of player to get data for
      * @return PlayerData from player, null if player is not in a game
      */
+    @Nullable
     public PlayerData getData(UUID uuid) {
         if (hasPlayerData(uuid))
             return getPlayerData(uuid);
@@ -197,6 +204,8 @@ public class PlayerManager {
      * @param uuid UUID of player to get game
      * @return Game of player, null if player is not in a game
      */
+    @SuppressWarnings("ConstantConditions")
+    @Nullable
     public Game getGame(UUID uuid) {
         if (hasPlayerData(uuid))
             return getPlayerData(uuid).getGame();

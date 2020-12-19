@@ -395,7 +395,9 @@ public class GamePlayerData extends Data {
             Location bedLocation = player.getBedSpawnLocation();
             loc = bedLocation != null ? bedLocation : worldSpawn;
         }
-        if (playerManager.getData(player).isOnline()) {
+
+        PlayerData playerData = playerManager.getData(player);
+        if (playerData == null || playerData.isOnline()) {
             PaperLib.teleportAsync(player, loc);
         } else {
             player.teleport(loc);
