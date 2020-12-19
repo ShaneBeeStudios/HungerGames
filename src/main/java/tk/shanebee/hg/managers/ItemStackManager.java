@@ -97,7 +97,7 @@ public class ItemStackManager {
                         && !config.getString(gameName + "kits." + path + ".permission").equals("none"))
                     perm = config.getString(gameName + "kits." + path + ".permission");
 
-                kit.addKit(path, new KitEntry(stack.toArray(new ItemStack[0]), helm, boot, ches, leg, perm, potions));
+                kit.addKit(path, new KitEntry(path, stack.toArray(new ItemStack[0]), helm, boot, ches, leg, perm, potions));
             } catch (Exception e) {
                 Util.log("-------------------------------------------");
                 Util.warning("Unable to load kit " + gameName + path + "! (for a more detailed message enable 'debug' in config and reload)");

@@ -25,9 +25,9 @@ public class BorderCenterCmd extends BaseCmd {
 			arenaConfig.getCustomConfig().set("arenas." + name + ".border.center", loc);
 			game.getGameBorderData().setBorderCenter(l);
 			arenaConfig.saveCustomConfig();
-			Util.scm(player, lang.cmd_border_center.replace("<arena>", name));
+			Util.sendPrefixedMessage(player, lang.cmd_border_center.replace("<arena>", name));
 		} else {
-			Util.scm(player, lang.cmd_delete_noexist);
+			Util.sendPrefixedMessage(player, lang.cmd_delete_noexist);
 		}
 		return true;
 	}

@@ -20,7 +20,7 @@ public class ListCmd extends BaseCmd {
 			p.append("&6, &c").append(s);
 		}
 		p = new StringBuilder(p.substring(3));
-		Util.scm(player, "&6Players:" + p);
+		Util.sendPrefixedMessage(player, "&6Players:" + p);
 		return true;
 	}
 
