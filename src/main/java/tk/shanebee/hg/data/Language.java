@@ -8,6 +8,7 @@ import tk.shanebee.hg.util.Util;
 import java.io.File;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.util.List;
 
 /**
  * Language handler for plugin messages
@@ -184,6 +185,20 @@ public class Language {
     public String check_set_lobby;
     public String check_ready_run;
 
+    public String kits_gui_title;
+    public String kit_gui_title;
+    public String kit_name;
+    public String kit_armor_title;
+    public List<String> kit_armor_lore;
+    public String kit_effects_title;
+    public String kit_effects_none;
+    public List<String> kit_effects_lore;
+    public String kit_accept_name;
+    public List<String> kit_accept_lore;
+    public String kit_cancel_name;
+    public List<String> kit_cancel_lore;
+    public String kit_selected;
+
 
     public Language(HG plugin) {
         this.plugin = plugin;
@@ -255,7 +270,7 @@ public class Language {
 
         kit_join_header = lang.getString("kit-join-header");
         kit_join_footer = lang.getString("kit-join-footer");
-        kit_join_msg = lang.getString("kit-join-msg");
+        kit_join_msg = lang.getString("kit-join-message");
         kit_join_avail = lang.getString("kit-join-available");
         kit_no_perm = lang.getString("kit-no-perm");
         kit_doesnt_exist = lang.getString("kit-doesnt-exist");
@@ -413,6 +428,20 @@ public class Language {
         check_invalid_lobby = lang.getString("check-invalid-lobby");
         check_set_lobby = lang.getString("check-set-lobby");
         check_ready_run = lang.getString("check-ready-run");
+
+        kits_gui_title = lang.getString("kits-gui-title");
+        kit_gui_title = lang.getString("kit-gui-title");
+        kit_name = lang.getString("kit-name");
+        kit_armor_title = lang.getString("kit-armor-title");
+        kit_armor_lore = lang.getStringList("kit-armor-lore");
+        kit_effects_title = lang.getString("kit-effects-title");
+        kit_effects_none = lang.getString("kit-effects-none");
+        kit_effects_lore = lang.getStringList("kit-effects-lore");
+        kit_accept_name = lang.getString("kit-accept-name");
+        kit_accept_lore = lang.getStringList("kit-accept-lore");
+        kit_cancel_name = lang.getString("kit-cancel-name");
+        kit_cancel_lore = lang.getStringList("kit-cancel-lore");
+        kit_selected = lang.getString("kit-selected");
     }
 
 }

@@ -22,9 +22,9 @@ public class ReloadCmd extends BaseCmd {
             Util.scm(sender, prefix + "&cReload cancelled");
         } else if ((args.length == 2 && args[1].equalsIgnoreCase("confirm")) || gamesNotRunning()) {
             long start = System.currentTimeMillis();
-            Util.scm(sender, prefix + "&6Reloading plugin... observe console for errors!");
+            Util.sendPrefixedMessage(sender, "&6Reloading plugin... observe console for errors!");
             HG.getPlugin().reloadPlugin();
-            Util.scm(sender, prefix + "&7Reloaded &asuccessfully &7in &b" +
+            Util.sendPrefixedMessage(sender, "&7Reloaded &asuccessfully &7in &b" +
                     (System.currentTimeMillis() - start) + "&7 milliseconds");
         }
         return true;

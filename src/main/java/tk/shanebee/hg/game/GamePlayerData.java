@@ -19,6 +19,7 @@ import tk.shanebee.hg.events.PlayerJoinGameEvent;
 import tk.shanebee.hg.events.PlayerLeaveGameEvent;
 import tk.shanebee.hg.game.GameCommandData.CommandType;
 import tk.shanebee.hg.gui.SpectatorGUI;
+import tk.shanebee.hg.managers.KitManager;
 import tk.shanebee.hg.managers.PlayerManager;
 import tk.shanebee.hg.util.Util;
 import tk.shanebee.hg.util.Vault;
@@ -106,6 +107,21 @@ public class GamePlayerData extends Data {
         }
         Util.scm(player, lang.kit_join_footer);
         Util.scm(player, " ");
+    }
+
+    /**
+     * Apply kits to players in game
+     */
+    public void applyKits() {
+        KitManager kitManager = game.kitManager;
+        players.forEach(uuid -> {
+            Player player = Bukkit.getPlayer(uuid);
+            if (player != null) {
+                kitManager.applyKit(player);
+            }
+        });
+        // Clean up kits now that they're all applied
+        kitManager.resetPlayerKits();
     }
 
     /**

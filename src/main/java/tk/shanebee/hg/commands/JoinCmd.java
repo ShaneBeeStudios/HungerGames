@@ -18,13 +18,13 @@ public class JoinCmd extends BaseCmd {
 	public boolean run() {
 
 		if (playerManager.hasPlayerData(player) || playerManager.hasSpectatorData(player)) {
-			Util.scm(player, HG.getPlugin().getLang().cmd_join_in_game);
+			Util.sendPrefixedMessage(player, HG.getPlugin().getLang().cmd_join_in_game);
 		} else {
 			Game g = gameManager.getGame(args[1]);
 			if (g != null && !g.getGamePlayerData().getPlayers().contains(player.getUniqueId())) {
 				g.getGamePlayerData().join(player, true);
 			} else {
-				Util.scm(player, lang.cmd_delete_noexist);
+				Util.sendPrefixedMessage(player, lang.cmd_delete_noexist);
 			}
 		}
 		return true;

@@ -23,14 +23,14 @@ public class ToggleCmd extends BaseCmd {
 		if (game != null) {
 			if (gameArenaData.getStatus() == Status.NOTREADY || gameArenaData.getStatus() == Status.BROKEN) {
 				gameArenaData.setStatus(Status.READY);
-				Util.scm(sender, lang.cmd_toggle_unlocked.replace("<arena>", gameArenaData.getName()));
+				Util.sendPrefixedMessage(sender, lang.cmd_toggle_unlocked.replace("<arena>", gameArenaData.getName()));
 			} else {
 				game.stop(false);
 				gameArenaData.setStatus(Status.NOTREADY);
-				Util.scm(sender, lang.cmd_toggle_locked.replace("<arena>", gameArenaData.getName()));
+				Util.sendPrefixedMessage(sender, lang.cmd_toggle_locked.replace("<arena>", gameArenaData.getName()));
 			}
 		} else {
-			Util.scm(sender, lang.cmd_delete_noexist);
+			Util.sendPrefixedMessage(sender, lang.cmd_delete_noexist);
 		}
 		return true;
 	}

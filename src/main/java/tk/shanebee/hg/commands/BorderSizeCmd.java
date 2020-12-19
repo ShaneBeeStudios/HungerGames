@@ -28,9 +28,9 @@ public class BorderSizeCmd extends BaseCmd {
 			arenaConfig.getCustomConfig().set("arenas." + name + ".border.size", radius);
 			game.getGameBorderData().setBorderSize(radius);
 			arenaConfig.saveCustomConfig();
-			Util.scm(player, lang.cmd_border_size.replace("<arena>", name).replace("<size>", String.valueOf(radius)));
+			Util.sendPrefixedMessage(player, lang.cmd_border_size.replace("<arena>", name).replace("<size>", String.valueOf(radius)));
 		} else {
-			Util.scm(player, lang.cmd_delete_noexist);
+			Util.sendPrefixedMessage(player, lang.cmd_delete_noexist);
 		}
 		return true;
 	}
