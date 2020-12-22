@@ -53,10 +53,20 @@ public class KitsGUI implements InventoryHolder, Listener {
         });
     }
 
+    /**
+     * Open this GUI to a player
+     *
+     * @param player Player to open for
+     */
     public void open(Player player) {
         player.openInventory(inv);
     }
 
+    /**
+     * Get the inventory of this GUI
+     *
+     * @return Inventory of this GUI
+     */
     @NotNull
     @Override
     public Inventory getInventory() {
