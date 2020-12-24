@@ -151,7 +151,15 @@ public class ArenaConfig {
 					}
 
 					try {
-						bound = new Bound(arenadat.getString(path + ".bound.world"), BC(arenaName, "x"), BC(arenaName, "y"), BC(arenaName, "z"), BC(arenaName, "x2"), BC(arenaName, "y2"), BC(arenaName, "z2"));
+                        String worldName = arenadat.getString(path + ".bound.world");
+					    World world = Bukkit.getWorld(worldName);
+					    if (world == null) {
+					        // Can't load an arena if the world ain't there
+					        Util.warning("Arena &r'&b%s&r'&e tried to load in an invalid world: &r'&c%s&r'", arenaName, worldName);
+					        Util.log("Arena &b%s &7has &cfailed to load!", arenaName);
+					        continue;
+                        }
+						bound = new Bound(worldName, BC(arenaName, "x"), BC(arenaName, "y"), BC(arenaName, "z"), BC(arenaName, "x2"), BC(arenaName, "y2"), BC(arenaName, "z2"));
 					} catch (Exception e) { 
 						Util.warning("Unable to load region bounds for arena " + arenaName + "!");
 						isReady = false;
