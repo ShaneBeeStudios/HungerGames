@@ -76,7 +76,6 @@ public class KitsGUI implements InventoryHolder, Listener {
     @EventHandler
     private void onClick(InventoryClickEvent event) {
         if (event.getInventory().getHolder() != this) return;
-        if (event.getClickedInventory() != this.inv) return;
         event.setCancelled(true);
 
         int clickedSlot = event.getSlot();
