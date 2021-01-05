@@ -171,8 +171,9 @@ public class Util {
      * @return Formatted string
      */
     public static String getColString(String string) {
+        Matcher matcher = HEX_PATTERN.matcher(string);
         if (isRunningMinecraft(1, 16)) {
-            Matcher matcher = HEX_PATTERN.matcher(string);
+
             while (matcher.find()) {
                 final ChatColor hexColor = ChatColor.of(matcher.group().substring(1, matcher.group().length() - 1));
                 final String before = string.substring(0, matcher.start());
@@ -180,6 +181,8 @@ public class Util {
                 string = before + hexColor + after;
                 matcher = HEX_PATTERN.matcher(string);
             }
+        } else {
+            string = HEX_PATTERN.matcher(string).replaceAll("");
         }
         return ChatColor.translateAlternateColorCodes('&', string);
     }
