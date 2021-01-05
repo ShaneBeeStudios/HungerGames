@@ -47,6 +47,7 @@ public class CreateCmd extends BaseCmd {
 					boolean less = session.getLoc1().getBlockY() < session.getLoc2().getBlockY();
 					Location lesser = less ? session.getLoc1() : session.getLoc2();
 					Location greater = less ? session.getLoc2() : session.getLoc1();
+					int countdown = 30;
 					int freeroam = plugin.getConfig().getInt("settings.free-roam");
 					int cost = Integer.parseInt(args[5]);
 					Configuration config = arenaConfig.getCustomConfig();
@@ -59,6 +60,7 @@ public class CreateCmd extends BaseCmd {
 					config.set("arenas." + args[1] + ".bound.z2", greater.getBlockZ());
 					config.set("arenas." + args[1] + ".info.cost", cost);
 					config.set("arenas." + args[1] + ".info.timer", Integer.parseInt(args[4]));
+					config.set("arenas." + args[1] + ".info.countdown-timer", countdown);
 					config.set("arenas." + args[1] + ".info.min-players", Integer.parseInt(args[2]));
 					config.set("arenas." + args[1] + ".info.max-players", Integer.parseInt(args[3]));
 					config.set("arenas." + args[1] + ".commands", Collections.singletonList("none"));
@@ -66,7 +68,7 @@ public class CreateCmd extends BaseCmd {
 					arenaConfig.reloadCustomConfig();
 
 					Bound b = new Bound(player.getWorld().getName(), lesser.getBlockX(), lesser.getBlockY(), lesser.getBlockZ(), greater.getBlockX(), greater.getBlockY(), greater.getBlockZ());
-					plugin.getGames().add(new Game(args[1], b, Integer.parseInt(args[4]), Integer.parseInt(args[2]), Integer.parseInt(args[3]), freeroam, cost));
+					plugin.getGames().add(new Game(args[1], b, Integer.parseInt(args[4]), Integer.parseInt(args[2]), Integer.parseInt(args[3]), countdown, freeroam, cost));
 					Util.sendPrefixedMessage(player, lang.cmd_create_created.replace("<arena>", args[1]));
 					Util.sendPrefixedMessage(player, lang.cmd_create_add_spawn);
 					return true;

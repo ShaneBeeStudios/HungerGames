@@ -112,6 +112,7 @@ public class ArenaConfig {
 					boolean isReady = true;
 					List<Location> spawns = new ArrayList<>();
 					Sign lobbysign = null;
+					int countDownTimer = 30;
 					int timer = 0;
 					int cost = 0;
 					int minplayers = 0;
@@ -132,6 +133,14 @@ public class ArenaConfig {
 						cost = arenadat.getInt(path + ".info.cost");
 					} catch (Exception ignore) {
 					}
+
+					// Newly added so we need to make sure it exists, if not, add it
+					if (arenadat.contains(path + ".info.countdown-timer")) {
+					    countDownTimer = arenadat.getInt(path + ".info.countdown-timer");
+                    } else {
+					    arenadat.set(path + ".info.countdown-timer", countDownTimer);
+					    saveCustomConfig();
+                    }
 
 					try {
 						lobbysign = (Sign) getSLoc(arenadat.getString(path + ".lobbysign")).getBlock().getState();
@@ -165,7 +174,7 @@ public class ArenaConfig {
 						isReady = false;
 					}
 
-					Game game = new Game(arenaName, bound, spawns, lobbysign, timer, minplayers, maxplayers, freeroam, isReady, cost);
+					Game game = new Game(arenaName, bound, spawns, lobbysign, timer, minplayers, maxplayers, countDownTimer, freeroam, isReady, cost);
 					plugin.getGames().add(game);
 
 					World world = bound.getWorld();

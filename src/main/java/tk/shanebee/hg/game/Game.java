@@ -75,8 +75,8 @@ public class Game {
      * @param isReady    If the game is ready to start
      * @param cost       Cost of this game
      */
-    public Game(String name, Bound bound, List<Location> spawns, Sign lobbySign, int timer, int minPlayers, int maxPlayers, int roam, boolean isReady, int cost) {
-        this(name, bound, timer, minPlayers, maxPlayers, roam, cost);
+    public Game(String name, Bound bound, List<Location> spawns, Sign lobbySign, int timer, int minPlayers, int maxPlayers, int countDownTime, int roam, boolean isReady, int cost) {
+        this(name, bound, timer, minPlayers, maxPlayers, countDownTime, roam, cost);
         gameArenaData.spawns.addAll(spawns);
         this.gameBlockData.sign1 = lobbySign;
 
@@ -98,12 +98,13 @@ public class Game {
      * @param timer      Length of the game (in seconds)
      * @param minPlayers Minimum players to be able to start the game
      * @param maxPlayers Maximum players that can join this game
+     * @param countDownTime Time before game starts once all players join
      * @param roam       Roam time for this game
      * @param cost       Cost of this game
      */
-    public Game(String name, Bound bound, int timer, int minPlayers, int maxPlayers, int roam, int cost) {
+    public Game(String name, Bound bound, int timer, int minPlayers, int maxPlayers, int countDownTime, int roam, int cost) {
         this.plugin = HG.getPlugin();
-        this.gameArenaData = new GameArenaData(this, name, bound, timer, minPlayers, maxPlayers, roam, cost);
+        this.gameArenaData = new GameArenaData(this, name, bound, timer, minPlayers, maxPlayers, countDownTime, roam, cost);
         this.gameArenaData.status = Status.NOTREADY;
         this.playerManager = HG.getPlugin().getPlayerManager();
         this.lang = plugin.getLang();

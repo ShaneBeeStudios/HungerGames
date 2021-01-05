@@ -175,17 +175,29 @@ public class GamePlayerData extends Data {
 
     /**
      * Send a message to all players/spectators in the game
+     * <p>Prefix will be included</p>
      *
      * @param message Message to send
      */
     public void msgAll(String message) {
+        msgAll(message, true);
+    }
+
+    /**
+     * Send a message to all players/spectators in the game
+     *
+     * @param message Message to send
+     * @param prefix If prefix should be included in message
+     */
+    public void msgAll(String message, boolean prefix) {
+        String pre = prefix ? lang.prefix : "";
         List<UUID> allPlayers = new ArrayList<>();
         allPlayers.addAll(players);
         allPlayers.addAll(spectators);
         for (UUID u : allPlayers) {
             Player p = Bukkit.getPlayer(u);
             if (p != null)
-                Util.scm(p, message);
+                Util.scm(p, pre + message);
         }
     }
 

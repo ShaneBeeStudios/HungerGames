@@ -5,6 +5,7 @@ import tk.shanebee.hg.HG;
 import tk.shanebee.hg.data.Config;
 import tk.shanebee.hg.data.Language;
 import tk.shanebee.hg.game.Game;
+import tk.shanebee.hg.game.GameArenaData;
 import tk.shanebee.hg.util.Util;
 
 public class StartingTask implements Runnable {
@@ -14,11 +15,13 @@ public class StartingTask implements Runnable {
     private final Game game;
     private final Language lang;
 
-    public StartingTask(Game g) {
-        this.timer = 30;
-        this.game = g;
-        this.lang = HG.getPlugin().getLang();
-        String name = g.getGameArenaData().getName();
+    public StartingTask(Game game) {
+        HG plugin = HG.getPlugin();
+        GameArenaData arenaData = game.getGameArenaData();
+        this.timer = arenaData.getCountDownTime();
+        this.game = game;
+        this.lang = plugin.getLang();
+        String name = arenaData.getName();
         String broadcast = lang.game_started
                 .replace("<arena>", name)
                 .replace("<seconds>", "" + timer);
@@ -26,20 +29,20 @@ public class StartingTask implements Runnable {
             Util.broadcast(broadcast);
             Util.broadcast(lang.game_join.replace("<arena>", name));
         } else {
-            game.getGamePlayerData().msgAll(broadcast);
+            this.game.getGamePlayerData().msgAll(broadcast);
         }
-        this.id = Bukkit.getScheduler().scheduleSyncRepeatingTask(HG.getPlugin(), this, 5 * 20L, 5 * 20L);
+        this.id = Bukkit.getScheduler().scheduleSyncRepeatingTask(plugin, this, 5 * 20L, 20L);
     }
 
     @Override
     public void run() {
-        timer = (timer - 5);
+        timer -= 1;
 
         if (timer <= 0) {
             stop();
             game.startFreeRoam();
-        } else {
-            game.getGamePlayerData().msgAll(lang.game_countdown.replace("<timer>", String.valueOf(timer)));
+        } else if (timer % 10 == 0) {
+            game.getGamePlayerData().msgAll(lang.game_countdown.replace("<timer>", "" + timer));
         }
     }
 

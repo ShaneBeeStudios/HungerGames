@@ -13,7 +13,7 @@ prefix: '&7&l[&3&lHungerGames&7&l] '
 player-joined-game: '&b&l<player> &7Has joined the game'
 player-left-game: '&b&l<player> &cHas left the game'
 #  <arena> will be replaced with the name of the arena
-game-started: '&6&l Arena &c&l<arena> &6&lwill begin in 30 seconds!'
+game-started: '&6&l Arena &c&l<arena> &6&lwill begin in <seconds> seconds!'
 game-join: '&6&l Use:&c&l /hg join <arena>&6&l to join!'
 game-countdown: 'The game will start in <timer> seconds..'
 game-almost-over: '&l&cThe game is almost over, fight to the death!'

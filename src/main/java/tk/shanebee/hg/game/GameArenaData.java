@@ -16,6 +16,7 @@ public class GameArenaData extends Data {
     final int timer;
     final int minPlayers;
     final int maxPlayers;
+    private final int countDownTime;
     private final int roamTime;
     int cost;
     final List<Location> spawns;
@@ -25,13 +26,14 @@ public class GameArenaData extends Data {
     int chestRefillRepeat = 0;
     final Board board;
 
-    public GameArenaData(Game game, String name, Bound bound, int timer, int minPlayers, int maxPlayers, int roamTime, int cost) {
+    public GameArenaData(Game game, String name, Bound bound, int timer, int minPlayers, int maxPlayers, int countDownTime, int roamTime, int cost) {
         super(game);
         this.name = name;
         this.bound = bound;
         this.timer = timer;
         this.minPlayers = minPlayers;
         this.maxPlayers = maxPlayers;
+        this.countDownTime = countDownTime;
         this.roamTime = roamTime;
         this.cost = cost;
         this.spawns = new ArrayList<>();
@@ -82,6 +84,15 @@ public class GameArenaData extends Data {
      */
     public int getRoamTime() {
         return this.roamTime;
+    }
+
+    /**
+     * Get the countdown time of the game
+     *
+     * @return The countdown time
+     */
+    public int getCountDownTime() {
+        return countDownTime;
     }
 
     /**
