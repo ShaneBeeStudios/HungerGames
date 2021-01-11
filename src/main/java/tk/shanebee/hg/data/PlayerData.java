@@ -6,6 +6,7 @@ import org.bukkit.Location;
 import org.bukkit.attribute.Attribute;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.PlayerInventory;
 import org.bukkit.scoreboard.Scoreboard;
 import org.jetbrains.annotations.Nullable;
 import tk.shanebee.hg.HG;
@@ -25,6 +26,7 @@ public class PlayerData implements Cloneable {
     //Pregame data
     private final ItemStack[] inv;
     private final ItemStack[] equip;
+    private final ItemStack[] extra;
     private final int expL;
     private final float expP;
     private final double health;
@@ -52,6 +54,7 @@ public class PlayerData implements Cloneable {
         this.uuid = player.getUniqueId();
         inv = player.getInventory().getStorageContents();
         equip = player.getInventory().getArmorContents();
+        extra = player.getInventory().getExtraContents();
         expL = player.getLevel();
         expP = player.getExp();
         mode = player.getGameMode();
@@ -78,8 +81,10 @@ public class PlayerData implements Cloneable {
         player.setExp(expP);
         player.setFoodLevel(food);
         player.setSaturation(saturation);
-        player.getInventory().setStorageContents(inv);
-        player.getInventory().setArmorContents(equip);
+        PlayerInventory inventory = player.getInventory();
+        inventory.setStorageContents(inv);
+        inventory.setArmorContents(equip);
+        inventory.setExtraContents(extra);
         player.setGameMode(mode);
         player.updateInventory();
         player.setInvulnerable(false);
