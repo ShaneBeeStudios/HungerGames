@@ -9,6 +9,7 @@ import org.bukkit.event.HandlerList;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.permissions.Permission;
 import org.bukkit.permissions.PermissionDefault;
+import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.java.JavaPlugin;
 import tk.shanebee.hg.commands.*;
 import tk.shanebee.hg.data.*;
@@ -67,7 +68,8 @@ public class HG extends JavaPlugin {
         }
         loadPlugin(true);
     }
-    public void loadPlugin(boolean load) {
+
+    private void loadPlugin(boolean load) {
 		long start = System.currentTimeMillis();
 	    plugin = this;
 
@@ -89,8 +91,10 @@ public class HG extends JavaPlugin {
 			Util.log("&7Metrics have been &cdisabled");
 		nbtApi = new NBTApi();
 
-		//MythicMob check
-		if (Bukkit.getPluginManager().getPlugin("MythicMobs") != null) {
+        PluginManager pluginManager = Bukkit.getPluginManager();
+
+        //MythicMob check
+		if (pluginManager.getPlugin("MythicMobs") != null) {
 			mmMobManager = MythicMobs.inst().getMobManager();
 			Util.log("&7MythicMobs found, MythicMobs hook &aenabled");
 		} else {
@@ -108,14 +112,14 @@ public class HG extends JavaPlugin {
 		leaderboard = new Leaderboard(this);
 
 		//PAPI check
-		if (Bukkit.getPluginManager().getPlugin("PlaceholderAPI") != null) {
+		if (pluginManager.getPlugin("PlaceholderAPI") != null) {
 			new Placeholders(this).register();
 			Util.log("&7PAPI found, Placeholders have been &aenabled");
 		} else {
 			Util.log("&7PAPI not found, Placeholders have been &cdisabled");
 		}
 		//mcMMO check
-		if (Bukkit.getPluginManager().getPlugin("mcMMO") != null) {
+		if (pluginManager.getPlugin("mcMMO") != null) {
 		    if (Util.classExists("com.gmail.nossr50.events.skills.secondaryabilities.SubSkillEvent")) {
                 getServer().getPluginManager().registerEvents(new McmmoListeners(this), this);
                 Util.log("&7mcMMO found, mcMMO event hooks &aenabled");
@@ -131,9 +135,9 @@ public class HG extends JavaPlugin {
 		if (load) {
             loadCmds();
         }
-		getServer().getPluginManager().registerEvents(new WandListener(this), this);
-		getServer().getPluginManager().registerEvents(new CancelListener(this), this);
-		getServer().getPluginManager().registerEvents(new GameListener(this), this);
+		pluginManager.registerEvents(new WandListener(this), this);
+		pluginManager.registerEvents(new CancelListener(this), this);
+		pluginManager.registerEvents(new GameListener(this), this);
 
 		if (this.getDescription().getVersion().contains("Beta")) {
 			Util.log("&eYOU ARE RUNNING A BETA VERSION, please use with caution");
