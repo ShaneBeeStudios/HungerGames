@@ -5,7 +5,6 @@ import org.bukkit.Color;
 import org.bukkit.DyeColor;
 import org.bukkit.Material;
 import org.bukkit.configuration.Configuration;
-import org.bukkit.enchantments.Enchantment;
 import org.bukkit.inventory.ItemFlag;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
@@ -18,6 +17,7 @@ import org.bukkit.potion.PotionEffectType;
 import org.jetbrains.annotations.Nullable;
 import tk.shanebee.hg.HG;
 import tk.shanebee.hg.data.KitEntry;
+import tk.shanebee.hg.util.EnchantmentUtils;
 import tk.shanebee.hg.util.NBTApi;
 import tk.shanebee.hg.util.PotionEffectUtils;
 import tk.shanebee.hg.util.PotionTypeUtils;
@@ -124,7 +124,7 @@ public class ItemStackManager {
                 amount = Integer.parseInt(split[1]);
             }
         }
-        ItemStack item = itemStringToStack(split[0], amount);
+        ItemStack item = itemStringToStack(split[0], args, amount);
         if (item == null) return null;
 
         for (String s : split) {
@@ -182,29 +182,19 @@ public class ItemStackManager {
         return item;
     }
 
-    @SuppressWarnings("deprecation") //Enchantment#getName
-    private void enchant(ItemMeta itemMeta, String line, String enchantString) {
-        enchantString = enchantString.replace("enchant:", "").toUpperCase();
-        String[] d = enchantString.split(":");
-        int level = 1;
-        if (d.length != 1 && Util.isInt(d[1])) {
-            level = Integer.parseInt(d[1]);
+    private void enchant(ItemMeta itemMeta, String line, String enchString) {
+        String enchName = enchString.replace("enchant:", "").toUpperCase();
+        if (!EnchantmentUtils.addEnchant(itemMeta, enchName)) {
+            Util.warning("Invalid enchantment: &c%s &eline: &b%s", enchName, line);
         }
-        for (Enchantment e : Enchantment.values()) {
-            if (e.getKey().getKey().equalsIgnoreCase(d[0]) || e.getName().equalsIgnoreCase(d[0])) {
-                itemMeta.addEnchant(e, level, true);
-                return;
-            }
-        }
-        Util.warning("Invalid enchantment: &c%s &eline: &b%s", enchantString, line);
     }
 
-    private ItemStack itemStringToStack(String item, int amount) {
+    private ItemStack itemStringToStack(String item, String line, int amount) {
         Material material;
         try {
             material = Material.valueOf(item);
         } catch (IllegalArgumentException ex) {
-            Util.warning("Invalid Material: &7" + item);
+            Util.warning("Invalid material: &c%s &eline: &b%s", item, line);
             return null;
         }
         return new ItemStack(material, amount);
