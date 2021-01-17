@@ -17,7 +17,6 @@ public class EnchantmentUtils {
     private static final Map<String, Enchantment> ENCHANTMENT_MAP = new HashMap<>();
 
     static {
-        Util.log("&aEnchantments Registered:");
         for (Enchantment enchantment : Enchantment.values()) {
             String name = enchantment.getName();
             // Some plugins add custom enchants and dont include a name
