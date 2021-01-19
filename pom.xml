@@ -35,6 +35,11 @@
             <id>jitpack.io</id>
             <url>https://jitpack.io</url>
         </repository>
+        <repository>
+            <id>nexus</id>
+            <name>Lumine Releases</name>
+            <url>https://mvn.lumine.io/repository/maven-public/</url>
+        </repository>
     </repositories>
 
     <dependencies>
@@ -111,9 +116,8 @@
         <dependency>
             <groupId>io.lumine.xikage</groupId>
             <artifactId>MythicMobs</artifactId>
-            <version>4.6.5</version>
-            <scope>system</scope>
-            <systemPath>${project.basedir}/libs/MythicMobs-4.6.5.jar</systemPath>
+            <version>4.9.1</version>  
+            <scope>provided</scope>
         </dependency>
     </dependencies>
 
