@@ -8,6 +8,7 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.command.TabCompleter;
 import org.bukkit.entity.Player;
 import org.bukkit.util.StringUtil;
+import tk.shanebee.hg.commands.CommandHandler;
 import tk.shanebee.hg.data.Config;
 import tk.shanebee.hg.data.PlayerData;
 import tk.shanebee.hg.game.Game;
@@ -27,20 +28,22 @@ public class CommandListener implements CommandExecutor, TabCompleter {
 
 	private final HG plugin;
 	private final PlayerManager playerManager;
+	private final CommandHandler cmdHandler;
 
-	public CommandListener(HG plugin) {
+	public CommandListener(HG plugin, CommandHandler cmdHandler) {
 		this.plugin = plugin;
 		this.playerManager = plugin.getPlayerManager();
+		this.cmdHandler = cmdHandler;
 	}
 
-	public boolean onCommand(CommandSender s, Command command, String label, String[] args) {
-		if (args.length == 0 || !plugin.getCommands().containsKey(args[0])) {
-			Util.scm(s, "&4*&c&m                         &7*( &3&lHungerGames &7)*&c&m                          &4*");
-			for (BaseCmd cmd : plugin.getCommands().values().toArray(new BaseCmd[0])) {
-				if (s.hasPermission("hg." + cmd.cmdName)) Util.scm(s, "  &7&l- " + cmd.sendHelpLine());
-			}
-			Util.scm(s, "&4*&c&m                                                                             &4*");
-		} else plugin.getCommands().get(args[0]).processCmd(plugin, s, args);
+	// Handle sub-commands
+	public boolean onCommand(CommandSender sender, Command cmd, String label, String[] args) {
+		if (args.length == 0 || !cmdHandler.commandExists(args[0])) {
+			sendCommands(sender);
+		} else {
+            BaseCmd command = cmdHandler.getCommand(args[0]);
+            command.processCmd(plugin, sender, args);
+        }
 		return true;
 	}
 
@@ -48,7 +51,8 @@ public class CommandListener implements CommandExecutor, TabCompleter {
 	public List<String> onTabComplete(CommandSender sender, Command command, String s, String[] args) {
 		if (args.length == 1) {
 			ArrayList<String> matches = new ArrayList<>();
-			for (String name : plugin.getCommands().keySet()) {
+			for (BaseCmd cmd : cmdHandler.getCommands()) {
+			    String name = cmd.cmdName;
 				if (StringUtil.startsWithIgnoreCase(name, args[0])) {
 					if (sender.hasPermission("hg." + name))
 						matches.add(name);
@@ -201,5 +205,16 @@ public class CommandListener implements CommandExecutor, TabCompleter {
 		}
 		return Collections.emptyList();
 	}
+
+	// Send a list of all available commands for the sender
+	private void sendCommands(CommandSender sender) {
+        Util.scm(sender, "&4*&c&m                         &7*( &3&lHungerGames &7)*&c&m                          &4*");
+        cmdHandler.getCommands().forEach(command -> {
+            if (command.hasPermission(sender)) {
+                Util.scm(sender, "  &7&l- " + command.sendHelpLine());
+            }
+        });
+        Util.scm(sender, "&4*&c&m                                                                             &4*");
+    }
 
 }

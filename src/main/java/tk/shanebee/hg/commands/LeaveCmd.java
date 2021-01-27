@@ -1,5 +1,6 @@
 package tk.shanebee.hg.commands;
 
+import org.bukkit.permissions.PermissionDefault;
 import tk.shanebee.hg.*;
 import tk.shanebee.hg.data.Config;
 import tk.shanebee.hg.game.Game;
@@ -14,6 +15,7 @@ public class LeaveCmd extends BaseCmd {
 		cmdName = "leave";
 		forceInGame = true;
 		argLength = 1;
+		permissionDefault = PermissionDefault.TRUE;
 	}
 
 	@Override

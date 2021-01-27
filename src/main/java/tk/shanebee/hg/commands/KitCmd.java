@@ -1,5 +1,6 @@
 package tk.shanebee.hg.commands;
 
+import org.bukkit.permissions.PermissionDefault;
 import tk.shanebee.hg.Status;
 import tk.shanebee.hg.game.Game;
 import tk.shanebee.hg.gui.KitsGUI;
@@ -14,6 +15,7 @@ public class KitCmd extends BaseCmd {
         cmdName = "kit";
         forceInGame = true;
         argLength = 1;
+        permissionDefault = PermissionDefault.TRUE;
     }
 
     @Override

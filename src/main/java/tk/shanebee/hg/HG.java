@@ -7,21 +7,37 @@ import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.event.HandlerList;
 import org.bukkit.inventory.ItemStack;
-import org.bukkit.permissions.Permission;
-import org.bukkit.permissions.PermissionDefault;
 import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.java.JavaPlugin;
-import tk.shanebee.hg.commands.*;
-import tk.shanebee.hg.data.*;
+import tk.shanebee.hg.commands.CommandHandler;
+import tk.shanebee.hg.data.ArenaConfig;
+import tk.shanebee.hg.data.Config;
+import tk.shanebee.hg.data.Language;
+import tk.shanebee.hg.data.Leaderboard;
+import tk.shanebee.hg.data.MobConfig;
+import tk.shanebee.hg.data.PlayerSession;
+import tk.shanebee.hg.data.RandomItems;
 import tk.shanebee.hg.game.Game;
-import tk.shanebee.hg.listeners.*;
-import tk.shanebee.hg.managers.*;
+import tk.shanebee.hg.listeners.CancelListener;
+import tk.shanebee.hg.listeners.GameListener;
+import tk.shanebee.hg.listeners.McmmoListeners;
+import tk.shanebee.hg.listeners.WandListener;
+import tk.shanebee.hg.managers.ItemStackManager;
+import tk.shanebee.hg.managers.KillManager;
+import tk.shanebee.hg.managers.KitManager;
+import tk.shanebee.hg.managers.Manager;
+import tk.shanebee.hg.managers.Placeholders;
+import tk.shanebee.hg.managers.PlayerManager;
 import tk.shanebee.hg.metrics.Metrics;
 import tk.shanebee.hg.metrics.MetricsHandler;
 import tk.shanebee.hg.util.NBTApi;
 import tk.shanebee.hg.util.Util;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.UUID;
 
 /**
  * <b>Main class for HungerGames</b>
@@ -29,7 +45,6 @@ import java.util.*;
 public class HG extends JavaPlugin {
 
 	//Maps
-	private Map<String, BaseCmd> cmds;
 	private Map<UUID, PlayerSession> playerSession;
 	private Map<Integer, ItemStack> items;
 	private Map<Integer, ItemStack> bonusItems;
@@ -66,16 +81,12 @@ public class HG extends JavaPlugin {
             Bukkit.getPluginManager().disablePlugin(this);
             return;
         }
-        loadPlugin(true);
+        loadPlugin();
     }
 
-    private void loadPlugin(boolean load) {
+    private void loadPlugin() {
 		long start = System.currentTimeMillis();
 	    plugin = this;
-
-        if (load) {
-            cmds = new HashMap<>();
-        }
 	    games = new ArrayList<>();
         playerSession = new HashMap<>();
         items = new HashMap<>();
@@ -86,8 +97,7 @@ public class HG extends JavaPlugin {
 		if (metrics.isEnabled()) {
 			Util.log("&7Metrics have been &aenabled");
 			new MetricsHandler(false);
-		}
-		else
+		} else
 			Util.log("&7Metrics have been &cdisabled");
 		nbtApi = new NBTApi();
 
@@ -130,11 +140,10 @@ public class HG extends JavaPlugin {
 			Util.log("&7mcMMO not found, mcMMO event hooks have been &cdisabled");
 		}
 
-        //noinspection ConstantConditions
-        getCommand("hg").setExecutor(new CommandListener(this));
-		if (load) {
-            loadCmds();
-        }
+		// Load commands
+        new CommandHandler(this);
+
+		// Register event listeners
 		pluginManager.registerEvents(new WandListener(this), this);
 		pluginManager.registerEvents(new CancelListener(this), this);
 		pluginManager.registerEvents(new GameListener(this), this);
@@ -150,10 +159,11 @@ public class HG extends JavaPlugin {
 	}
 
 	public void reloadPlugin() {
-	    unloadPlugin(true);
+	    unloadPlugin();
+	    loadPlugin();
     }
 
-    private void unloadPlugin(boolean reload) {
+    private void unloadPlugin() {
         stopAll();
         games = null;
         playerSession = null;
@@ -175,71 +185,21 @@ public class HG extends JavaPlugin {
         manager = null;
         leaderboard = null;
         HandlerList.unregisterAll(this);
-        if (reload) {
-            loadPlugin(false);
-        } else {
-            cmds = null;
-        }
     }
 
     @Override
     public void onDisable() {
         // I know this seems odd, but this method just
         // nulls everything to prevent memory leaks
-        unloadPlugin(false);
+        unloadPlugin();
         Util.log("HungerGames has been disabled!");
     }
-
-	private void loadCmds() {
-		cmds.put("team", new TeamCmd());
-		cmds.put("addspawn", new AddSpawnCmd());
-		cmds.put("create", new CreateCmd());
-		cmds.put("join", new JoinCmd());
-		cmds.put("leave", new LeaveCmd());
-		cmds.put("reload", new ReloadCmd());
-		cmds.put("setlobbywall", new SetLobbyWallCmd());
-		cmds.put("wand", new WandCmd());
-		cmds.put("kit", new KitCmd());
-		cmds.put("debug", new DebugCmd());
-		cmds.put("list", new ListCmd());
-		cmds.put("listgames", new ListGamesCmd());
-		cmds.put("forcestart", new StartCmd());
-		cmds.put("stop", new StopCmd());
-		cmds.put("toggle", new ToggleCmd());
-		cmds.put("setexit", new SetExitCmd());
-		cmds.put("delete", new DeleteCmd());
-		cmds.put("chestrefill", new ChestRefillCmd());
-		cmds.put("chestrefillnow", new ChestRefillNowCmd());
-		cmds.put("bordersize", new BorderSizeCmd());
-		cmds.put("bordercenter", new BorderCenterCmd());
-		cmds.put("bordertimer", new BorderTimerCmd());
-		if (Config.spectateEnabled) {
-			cmds.put("spectate", new SpectateCmd());
-		}
-		if (nbtApi != null) {
-			cmds.put("nbt", new NBTCmd());
-		}
-
-		ArrayList<String> cArray = new ArrayList<>();
-		cArray.add("join");
-		cArray.add("leave");
-		cArray.add("kit");
-		cArray.add("listgames");
-		cArray.add("list");
-
-		for (String bc : cmds.keySet()) {
-			getServer().getPluginManager().addPermission(new Permission("hg." + bc));
-			if (cArray.contains(bc))
-				//noinspection ConstantConditions
-				getServer().getPluginManager().getPermission("hg." + bc).setDefault(PermissionDefault.TRUE);
-
-		}
-	}
 
 	/**
 	 * Stop all games
 	 */
-	public void stopAll() {
+	@SuppressWarnings("ConstantConditions")
+    public void stopAll() {
 		ArrayList<UUID> ps = new ArrayList<>();
 		for (Game g : games) {
 			g.cancelTasks();
@@ -355,14 +315,7 @@ public class HG extends JavaPlugin {
 		return this.bonusItems;
 	}
 
-	/** Get a map of commands
-	 * @return Map of commands
-	 */
-	public Map<String, BaseCmd> getCommands() {
-		return this.cmds;
-	}
-
-	/** Get an instance of the language file
+    /** Get an instance of the language file
 	 * @return Language file
 	 */
 	public Language getLang() {
