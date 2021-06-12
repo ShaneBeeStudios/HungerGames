@@ -140,8 +140,6 @@ public class HG extends JavaPlugin {
 			Util.log("&eReport any issues to: &bhttps://github.com/ShaneBeeStudios/HungerGames/issues");
 		}
 
-		// Paper message
-        PaperLib.suggestPaper(this);
 		Util.log("HungerGames has been &aenabled&7 in &b%.2f seconds&7!", (float)(System.currentTimeMillis() - start) / 1000);
 	}
 
