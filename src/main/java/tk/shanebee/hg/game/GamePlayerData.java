@@ -138,7 +138,9 @@ public class GamePlayerData extends Data {
      * @param player Player to freeze
      */
     public void freeze(Player player) {
-        player.setGameMode(GameMode.ADVENTURE); //Change to Adventure mode instead of Survival, to prevent moving by breaking blocks which get cancelled breaking before the game starts.
+        // Change to Adventure mode instead of Survival, to prevent moving by breaking blocks which get cancelled breaking before the game starts.
+        // In order to make the gamemode switch work with Multiverse as well, only change it 2 ticks later.
+        Bukkit.getServer().getScheduler().scheduleSyncDelayedTask(plugin, () -> player.setGameMode(GameMode.ADVENTURE), 2l);
         player.addPotionEffect(new PotionEffect(PotionEffectType.JUMP, 23423525, -10, false, false));
         player.setWalkSpeed(0.0001F);
         player.setFoodLevel(1);
