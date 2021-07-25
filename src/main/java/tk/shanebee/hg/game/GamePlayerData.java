@@ -138,7 +138,7 @@ public class GamePlayerData extends Data {
      * @param player Player to freeze
      */
     public void freeze(Player player) {
-        player.setGameMode(GameMode.SURVIVAL);
+        player.setGameMode(GameMode.ADVENTURE); //Change to Adventure mode instead of Survival, to prevent moving by breaking blocks which get cancelled breaking before the game starts.
         player.addPotionEffect(new PotionEffect(PotionEffectType.JUMP, 23423525, -10, false, false));
         player.setWalkSpeed(0.0001F);
         player.setFoodLevel(1);
@@ -153,6 +153,7 @@ public class GamePlayerData extends Data {
      * @param player Player to unfreeze
      */
     public void unFreeze(Player player) {
+        player.setGameMode(GameMode.SURVIVAL); //Change back to Survival Mode.
         player.removePotionEffect(PotionEffectType.JUMP);
         player.setWalkSpeed(0.2F);
     }
@@ -304,6 +305,16 @@ public class GamePlayerData extends Data {
                 heal(player);
                 freeze(player);
                 kills.put(player, 0);
+
+                // Sometimes, when joining from a different world or unloaded chunks using e.g. Multiverse plugins,
+                // after the first teleportation you are still able to make 1 last jump at the spawnpoint when joining via
+                // a Sign, from the velocity you have at the moment just before joining. This can happen because of server lag for example.
+                // You are then able to get closer to the middle while the game did not yet start and you are not placed
+                // properly on the spawn point. Therefore, I included an extra teleport to make sure everyone for sure is at the beginning before game start.
+                // I could not think of a smarter way to resolve this issue and I really needed it to be able to player HungerGames
+                // without any problems. There must however be smarter ways to resolve this issue. (Resetting player velocity did not work :c.)
+                // I might as well not fully understand the issue, I only know it occurs and how to reproduce it.
+                PaperLib.teleportAsync(player, loc);
 
                 if (players.size() == 1 && status == Status.READY)
                     gameArenaData.setStatus(Status.WAITING);
