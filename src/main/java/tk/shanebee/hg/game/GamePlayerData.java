@@ -407,7 +407,11 @@ public class GamePlayerData extends Data {
      */
     public void spectate(Player spectator) {
         UUID uuid = spectator.getUniqueId();
-        spectator.teleport(game.gameArenaData.getSpawns().get(0));
+        Location spectatorSpawn = game.gameArenaData.getSpawns().get(0);
+        //Make players join as flying in spectator mode, such that they directly see they can fly.
+        Location newSpectatorSpawn = spectatorSpawn.clone().add(0, 5, 0);
+        spectator.teleport(newSpectatorSpawn);
+        Bukkit.getServer().getScheduler().scheduleSyncDelayedTask(plugin, () -> spectator.setFlying(true), 5l);
         if (playerManager.hasPlayerData(uuid)) {
             playerManager.transferPlayerDataToSpectator(uuid);
         } else {
