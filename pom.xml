@@ -20,7 +20,7 @@
             <url>https://papermc.io/repo/repository/maven-public/</url>
         </repository>
         <repository>
-            <id>placeholderapi</id>
+            <id>placeholderapi-repo</id>
             <url>http://repo.extendedclip.com/content/repositories/placeholderapi/</url>
         </repository>
         <repository>
