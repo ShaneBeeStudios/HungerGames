@@ -1,6 +1,10 @@
 package tk.shanebee.hg.tasks;
 
 import org.bukkit.Bukkit;
+import org.bukkit.Material;
+import org.bukkit.entity.Player;
+import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.meta.ItemMeta;
 import tk.shanebee.hg.HG;
 import tk.shanebee.hg.data.Config;
 import tk.shanebee.hg.data.Language;
@@ -15,6 +19,7 @@ public class StartingTask implements Runnable {
     private final Language lang;
 
     public StartingTask(Game g) {
+
         this.timer = 30;
         this.game = g;
         this.lang = HG.getPlugin().getLang();
@@ -36,6 +41,11 @@ public class StartingTask implements Runnable {
         timer = (timer - 5);
 
         if (timer <= 0) {
+            //clear inventory on game start
+            for (int i = 0; i < game.getGamePlayerData().getPlayers().size(); i++){
+                Player player = Bukkit.getPlayer(game.getGamePlayerData().getPlayers().get(i));
+                player.getInventory().clear();
+            }
             stop();
             game.startFreeRoam();
         } else {

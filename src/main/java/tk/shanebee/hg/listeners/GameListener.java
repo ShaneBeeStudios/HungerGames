@@ -31,6 +31,8 @@ import org.bukkit.event.entity.*;
 import org.bukkit.event.entity.EntityDamageEvent.DamageCause;
 import org.bukkit.event.entity.CreatureSpawnEvent.SpawnReason;
 import org.bukkit.event.hanging.HangingBreakByEntityEvent;
+import org.bukkit.event.inventory.InventoryAction;
+import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.player.AsyncPlayerChatEvent;
 import org.bukkit.event.player.PlayerBucketEmptyEvent;
 import org.bukkit.event.player.PlayerBucketEvent;
@@ -418,8 +420,15 @@ public class GameListener implements Listener {
         } else if (action != Action.PHYSICAL && playerManager.hasPlayerData(player)) {
             Status status = playerManager.getPlayerData(player).getGame().getGameArenaData().getStatus();
             if (status != Status.RUNNING && status != Status.BEGINNING) {
-                event.setCancelled(true);
-                Util.scm(player, lang.listener_no_interact);
+				if(event.getItem().getType() == Material.RED_BED){
+					//Bukkit.dispatchCommand(event.getPlayer(), "hg leave");
+					playerManager.getPlayerData(player).getGame().getGamePlayerData().leave(player, false);
+				} else if (event.getItem().getType() == Material.NETHER_STAR){
+					playerManager.getPlayerData(player).getGame().startFreeRoam();
+				} else {
+					event.setCancelled(true);
+					Util.scm(player, lang.listener_no_interact);
+				}
             }
         } else if (action == Action.RIGHT_CLICK_BLOCK) {
 			Block block = event.getClickedBlock();
@@ -445,6 +454,29 @@ public class GameListener implements Listener {
 				useTrackStick(player);
 			}
 		}
+	}
+
+	@EventHandler
+	private void onInventoryClick(InventoryClickEvent e){
+		if (e.getWhoClicked() instanceof Player){
+			Player player = (Player) e.getWhoClicked();
+			InventoryAction action = e.getAction(); //might not be needed
+			Game g1 = playerManager.getPlayerData(player).getGame();
+			Status status = g1.getGameArenaData().getStatus();
+			if (status != Status.RUNNING && status != Status.BEGINNING){
+				if (e.getClickedInventory().contains(Material.RED_BED)){
+					//Bukkit.dispatchCommand(player, "hg leave");
+					g1.getGamePlayerData().leave(player,false);
+				}
+				else if (e.getClickedInventory().contains(Material.NETHER_STAR)){
+					g1.startFreeRoam();
+				}
+			}
+			else
+				e.setCancelled(true);
+			return;
+		}
+		e.setCancelled(true);
 	}
 
 	@EventHandler

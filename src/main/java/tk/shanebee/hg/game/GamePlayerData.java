@@ -8,6 +8,8 @@ import org.bukkit.Material;
 import org.bukkit.Sound;
 import org.bukkit.block.BlockFace;
 import org.bukkit.entity.Player;
+import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.plugin.IllegalPluginAccessException;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
@@ -304,6 +306,20 @@ public class GamePlayerData extends Data {
                 heal(player);
                 freeze(player);
                 kills.put(player, 0);
+
+                ItemStack bed = new ItemStack(Material.RED_BED, 1);
+                ItemMeta commeta = bed.getItemMeta();
+                commeta.setDisplayName("Leave");
+                bed.setItemMeta(commeta);
+                player.getInventory().setItem(8, bed);
+
+                if (player.isOp()){
+                    ItemStack start = new ItemStack(Material.NETHER_STAR, 1);
+                    ItemMeta meta = start.getItemMeta();
+                    meta.setDisplayName("Force start game");
+                    start.setItemMeta(meta);
+                    player.getInventory().setItem(0, start);
+                }
 
                 if (players.size() == 1 && status == Status.READY)
                     gameArenaData.setStatus(Status.WAITING);
