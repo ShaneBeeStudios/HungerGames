@@ -471,9 +471,9 @@ public class GameListener implements Listener {
 				else if (e.getClickedInventory().contains(Material.NETHER_STAR)){
 					g1.startFreeRoam();
 				}
-			}
-			else
+			} else {
 				e.setCancelled(true);
+			}
 			return;
 		}
 		e.setCancelled(true);
