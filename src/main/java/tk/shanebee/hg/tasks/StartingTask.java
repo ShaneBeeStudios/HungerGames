@@ -16,7 +16,6 @@ public class StartingTask implements Runnable {
     private final Language lang;
 
     public StartingTask(Game g) {
-
         this.timer = 30;
         this.game = g;
         this.lang = HG.getPlugin().getLang();

@@ -461,13 +461,13 @@ public class GameListener implements Listener {
 		if (e.getWhoClicked() instanceof Player){
 			Player player = (Player) e.getWhoClicked();
 			InventoryAction action = e.getAction(); //might not be needed
-			Game g1 = playerManager.getPlayerData(player).getGame();
-			Status status = g1.getGameArenaData().getStatus();
+			Game game = playerManager.getPlayerData(player).getGame();
+			Status status = game.getGameArenaData().getStatus();
 			if (status != Status.RUNNING && status != Status.BEGINNING) {
 				if (e.getClickedInventory().contains(Material.RED_BED)) {
-					g1.getGamePlayerData().leave(player,false);
+					game.getGamePlayerData().leave(player,false);
 				} else if (e.getClickedInventory().contains(Material.NETHER_STAR)) {
-					g1.startFreeRoam();
+					game.startFreeRoam();
 				}
 			} else {
 				e.setCancelled(true);
