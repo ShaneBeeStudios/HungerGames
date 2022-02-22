@@ -415,6 +415,7 @@ public class Language {
         check_invalid_lobby = lang.getString("check-invalid-lobby");
         check_set_lobby = lang.getString("check-set-lobby");
         check_ready_run = lang.getString("check-ready-run");
+
         leave_game = lang.getString("leave-game");
         force_start = lang.getString("force-start");
     }

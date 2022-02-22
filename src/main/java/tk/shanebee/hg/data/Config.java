@@ -134,7 +134,6 @@ public class Config {
         leaveitemtype = config.getString("settings.leave-item-type");
         forcestartitem = config.getString("settings.force-start-item-type");
 
-
         // Team
         team_maxTeamSize = config.getInt("team.max-team-size");
         team_showTeamNames = config.getBoolean("team.show-team-nametags");
