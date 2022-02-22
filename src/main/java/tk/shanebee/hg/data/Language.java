@@ -183,6 +183,8 @@ public class Language {
     public String check_invalid_lobby;
     public String check_set_lobby;
     public String check_ready_run;
+    public String leave_game;
+    public String force_start;
 
 
     public Language(HG plugin) {
@@ -413,6 +415,8 @@ public class Language {
         check_invalid_lobby = lang.getString("check-invalid-lobby");
         check_set_lobby = lang.getString("check-set-lobby");
         check_ready_run = lang.getString("check-ready-run");
+        leave_game = lang.getString("leave-game");
+        force_start = lang.getString("force-start");
     }
 
 }

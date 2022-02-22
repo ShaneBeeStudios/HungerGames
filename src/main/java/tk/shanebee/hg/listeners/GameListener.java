@@ -464,9 +464,9 @@ public class GameListener implements Listener {
 			Game game = playerManager.getPlayerData(player).getGame();
 			Status status = game.getGameArenaData().getStatus();
 			if (status != Status.RUNNING && status != Status.BEGINNING) {
-				if (e.getClickedInventory().contains(Material.RED_BED)) {
+				if (e.getClickedInventory().contains(Material.getMaterial(Config.leaveitemtype))) {
 					game.getGamePlayerData().leave(player,false);
-				} else if (e.getClickedInventory().contains(Material.NETHER_STAR)) {
+				} else if (e.getClickedInventory().contains(Material.getMaterial(Config.forcestartitem))) {
 					game.startFreeRoam();
 				}
 			} else {

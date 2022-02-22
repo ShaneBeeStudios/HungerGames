@@ -10,3 +10,22 @@ softdepend: [Multiverse-Core, MultiWorld, Vault, My_Worlds, GoldenEnchants, mcMM
 commands:
   hg:
     description: HungerGames Base command
+permissions:
+  hg.join:
+    description: Permission to join the game using /hg join
+    default: true
+  hg.leave:
+    description: Permission to leave the game using /hg leave
+    default: true
+  hg.kit:
+    description: Permission to get kits using /hg kit <kitname>
+    default: true
+  hg.listgames:
+    description: Permission to see all the available games
+    default: true
+  hg.list:
+    description: Permission to see a list of players in a game
+    default: true
+  hg.forcestart:
+    description: Permission to give forcestart item
+    default: false

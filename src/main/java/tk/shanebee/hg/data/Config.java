@@ -1,5 +1,6 @@
 package tk.shanebee.hg.data;
 
+import org.bukkit.Material;
 import org.bukkit.configuration.Configuration;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
@@ -38,6 +39,10 @@ public class Config {
     public static List<String> bonusBlockTypes;
     public static boolean hideNametags;
     public static boolean savePreviousLocation;
+    public static boolean enableleaveitem;
+    public static boolean enableforcestartitem;
+    public static String leaveitemtype;
+    public static String forcestartitem;
 
     //Team info
     public static boolean team_showTeamNames;
@@ -124,6 +129,11 @@ public class Config {
         hideNametags = config.getBoolean("settings.hide-nametags");
         savePreviousLocation = config.getBoolean("settings.save-previous-location");
         bonusBlockTypes = config.getStringList("settings.bonus-block-types");
+        enableleaveitem = config.getBoolean("settings.enable-leave-item");
+        enableforcestartitem = config.getBoolean("settings.enable-force-start-item");
+        leaveitemtype = config.getString("settings.leave-item-type");
+        forcestartitem = config.getString("settings.force-start-item-type");
+
 
         // Team
         team_maxTeamSize = config.getInt("team.max-team-size");

@@ -1,6 +1,7 @@
 package tk.shanebee.hg.game;
 
 import io.papermc.lib.PaperLib;
+import org.apache.commons.codec.language.bm.Lang;
 import org.bukkit.Bukkit;
 import org.bukkit.GameMode;
 import org.bukkit.Location;
@@ -16,6 +17,7 @@ import org.bukkit.potion.PotionEffectType;
 import org.jetbrains.annotations.Nullable;
 import tk.shanebee.hg.Status;
 import tk.shanebee.hg.data.Config;
+import tk.shanebee.hg.data.Language;
 import tk.shanebee.hg.data.PlayerData;
 import tk.shanebee.hg.events.PlayerJoinGameEvent;
 import tk.shanebee.hg.events.PlayerLeaveGameEvent;
@@ -307,18 +309,22 @@ public class GamePlayerData extends Data {
                 freeze(player);
                 kills.put(player, 0);
 
-                ItemStack bed = new ItemStack(Material.RED_BED, 1);
-                ItemMeta commeta = bed.getItemMeta();
-                commeta.setDisplayName("Leave");
-                bed.setItemMeta(commeta);
-                player.getInventory().setItem(8, bed);
+                if (Config.enableleaveitem){
+                    ItemStack bed = new ItemStack(Material.getMaterial(Config.leaveitemtype), 1);
+                    ItemMeta commeta = bed.getItemMeta();
+                    commeta.setDisplayName(lang.leave_game);
+                    bed.setItemMeta(commeta);
+                    player.getInventory().setItem(8, bed);
+                }
 
-                if (player.isOp()){
-                    ItemStack start = new ItemStack(Material.NETHER_STAR, 1);
-                    ItemMeta meta = start.getItemMeta();
-                    meta.setDisplayName("Force start game");
-                    start.setItemMeta(meta);
-                    player.getInventory().setItem(0, start);
+                if (Config.enableforcestartitem){
+                    if (player.hasPermission("hg.forcestart")){
+                        ItemStack start = new ItemStack(Material.getMaterial(Config.forcestartitem), 1);
+                        ItemMeta meta = start.getItemMeta();
+                        meta.setDisplayName(lang.force_start);
+                        start.setItemMeta(meta);
+                        player.getInventory().setItem(0, start);
+                    }
                 }
 
                 if (players.size() == 1 && status == Status.READY)
