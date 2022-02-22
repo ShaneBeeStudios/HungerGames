@@ -1,10 +1,7 @@
 package tk.shanebee.hg.tasks;
 
 import org.bukkit.Bukkit;
-import org.bukkit.Material;
 import org.bukkit.entity.Player;
-import org.bukkit.inventory.ItemStack;
-import org.bukkit.inventory.meta.ItemMeta;
 import tk.shanebee.hg.HG;
 import tk.shanebee.hg.data.Config;
 import tk.shanebee.hg.data.Language;
