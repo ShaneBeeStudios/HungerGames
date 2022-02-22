@@ -463,12 +463,10 @@ public class GameListener implements Listener {
 			InventoryAction action = e.getAction(); //might not be needed
 			Game g1 = playerManager.getPlayerData(player).getGame();
 			Status status = g1.getGameArenaData().getStatus();
-			if (status != Status.RUNNING && status != Status.BEGINNING){
-				if (e.getClickedInventory().contains(Material.RED_BED)){
-					//Bukkit.dispatchCommand(player, "hg leave");
+			if (status != Status.RUNNING && status != Status.BEGINNING) {
+				if (e.getClickedInventory().contains(Material.RED_BED)) {
 					g1.getGamePlayerData().leave(player,false);
-				}
-				else if (e.getClickedInventory().contains(Material.NETHER_STAR)){
+				} else if (e.getClickedInventory().contains(Material.NETHER_STAR)) {
 					g1.startFreeRoam();
 				}
 			} else {
