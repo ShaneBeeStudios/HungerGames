@@ -457,8 +457,8 @@ public class GameListener implements Listener {
 	}
 
 	@EventHandler
-	private void onInventoryClick(InventoryClickEvent e){
-		if (e.getWhoClicked() instanceof Player){
+	private void onInventoryClick(InventoryClickEvent e) {
+		if (e.getWhoClicked() instanceof Player) {
 			Player player = (Player) e.getWhoClicked();
 			InventoryAction action = e.getAction(); //might not be needed
 			Game game = playerManager.getPlayerData(player).getGame();
