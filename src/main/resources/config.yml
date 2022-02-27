@@ -55,13 +55,13 @@ settings:
         - tag:shulker_boxes
     # When enabled, name tags will be hidden from all players in the game
     hide-nametags: true
-    #enables an item to click to leave game while waiting
+    # Enables an item to click to leave game while waiting
     enable-leave-item: true
-    #enables a item to force start game for people with hg.forcestart perm
+    # Enables a item to force start game for people with "hg.forcestart" perm
     enable-force-start-item: true
-    #item that is shown for leave
+    # Item that is shown for leave
     leave-item-type: RED_BED
-    #item that is shown to force start game
+    # Item that is shown to force start game
     force-start-item-type: NETHER_STAR
 team:
     # When enabled, players will see nametags of other players on their team
