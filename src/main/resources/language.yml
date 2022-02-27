@@ -257,8 +257,6 @@ lb-blank-space: ''
 lb-combined-separator: ' : '
 lb-missing-player: '<none>'
 
-#leavegame item name
-leave_game: 'Leave Game'
-
-#Force start item name
-force-start: 'force start game'
+# LEAVE/START GAME ITEMS
+leave-game-item-name: 'Leave Game'
+force-start-item-name: 'Force Start Game'
