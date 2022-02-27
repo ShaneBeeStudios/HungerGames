@@ -316,14 +316,12 @@ public class GamePlayerData extends Data {
                     player.getInventory().setItem(8, bed);
                 }
 
-                if (Config.enableforcestartitem){
-                    if (player.hasPermission("hg.forcestart")){
-                        ItemStack start = new ItemStack(Material.getMaterial(Config.forcestartitem), 1);
-                        ItemMeta meta = start.getItemMeta();
-                        meta.setDisplayName(lang.force_start);
-                        start.setItemMeta(meta);
-                        player.getInventory().setItem(0, start);
-                    }
+                if (Config.enableforcestartitem && player.hasPermission("hg.forcestart") {
+                    ItemStack start = new ItemStack(Material.getMaterial(Config.forcestartitem), 1);
+                    ItemMeta meta = start.getItemMeta();
+                    meta.setDisplayName(lang.force_start);
+                    start.setItemMeta(meta);
+                    player.getInventory().setItem(0, start);
                 }
 
                 if (players.size() == 1 && status == Status.READY)
