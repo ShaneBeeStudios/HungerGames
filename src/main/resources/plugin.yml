@@ -10,3 +10,4 @@ softdepend: [Multiverse-Core, MultiWorld, Vault, My_Worlds, GoldenEnchants, mcMM
 commands:
   hg:
     description: HungerGames Base command
+    
