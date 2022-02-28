@@ -316,7 +316,7 @@ public class GamePlayerData extends Data {
                     player.getInventory().setItem(8, bed);
                 }
 
-                if (Config.enableforcestartitem && player.hasPermission("hg.forcestart") {
+                if (Config.enableforcestartitem && player.hasPermission("hg.forcestart")) {
                     ItemStack start = new ItemStack(Material.getMaterial(Config.forcestartitem), 1);
                     ItemMeta meta = start.getItemMeta();
                     meta.setDisplayName(lang.force_start);
