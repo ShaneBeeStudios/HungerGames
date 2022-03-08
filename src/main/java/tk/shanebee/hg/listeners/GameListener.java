@@ -1,5 +1,8 @@
 package tk.shanebee.hg.listeners;
 
+import io.lumine.xikage.mythicmobs.utils.adventure.audience.Audience;
+import io.papermc.paper.event.player.AsyncChatEvent;
+import net.kyori.adventure.text.Component;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
@@ -66,6 +69,7 @@ import tk.shanebee.hg.util.BlockUtils;
 import tk.shanebee.hg.util.Util;
 
 import java.util.Collections;
+import java.util.List;
 import java.util.UUID;
 
 /**
@@ -91,8 +95,7 @@ public class GameListener implements Listener {
 		ItemStack it = new ItemStack(Material.STICK, 1);
 		ItemMeta im = it.getItemMeta();
 		assert im != null;
-		im.setDisplayName(tsn + Config.trackingstickuses);
-		it.setItemMeta(im);
+		im.displayName(Component.text(tsn + Config.trackingstickuses));
 		trackingStick = it;
         killManager = plugin.getKillManager();
         BlockUtils.setupBuilder();
@@ -290,32 +293,35 @@ public class GameListener implements Listener {
 		ItemStack i = p.getInventory().getItemInMainHand();
 		ItemMeta im = i.getItemMeta();
 		assert im != null;
-		im.getDisplayName();
-		if (im.getDisplayName().startsWith(tsn)) {
-			int uses = Integer.parseInt(im.getDisplayName().replace(tsn, ""));
-			if (uses == 0) {
-				Util.scm(p, lang.track_empty);
-			} else {
-				PlayerData pd = playerManager.getPlayerData(p);
-				final Game g = pd.getGame();
-				for (Entity e : p.getNearbyEntities(120, 50, 120)) {
-					if (e instanceof Player) {
-						if (!g.getGamePlayerData().getPlayers().contains(e.getUniqueId())) continue;
-						im.setDisplayName(tsn + (uses - 1));
-						Location l = e.getLocation();
-						int range = (int) p.getLocation().distance(l);
-						Util.scm(p, lang.track_nearest
-								.replace("<player>", e.getName())
-								.replace("<range>", String.valueOf(range))
-								.replace("<location>", getDirection(p.getLocation().getBlock(), l.getBlock())));
-						i.setItemMeta(im);
-						p.updateInventory();
-						return;
+		if (im.hasDisplayName())
+		{
+			if (im.displayName().contains(Component.text(tsn))) {
+				int uses = Integer.parseInt(im.displayName().toString().replace(tsn, ""));
+				if (uses == 0) {
+					Util.scm(p, lang.track_empty);
+				} else {
+					PlayerData pd = playerManager.getPlayerData(p);
+					final Game g = pd.getGame();
+					for (Entity e : p.getNearbyEntities(120, 50, 120)) {
+						if (e instanceof Player) {
+							if (!g.getGamePlayerData().getPlayers().contains(e.getUniqueId())) continue;
+							im.displayName(Component.text(tsn + (uses - 1)));
+							Location l = e.getLocation();
+							int range = (int) p.getLocation().distance(l);
+							Util.scm(p, lang.track_nearest
+									.replace("<player>", e.getName())
+									.replace("<range>", String.valueOf(range))
+									.replace("<location>", getDirection(p.getLocation().getBlock(), l.getBlock())));
+							i.setItemMeta(im);
+							p.updateInventory();
+							return;
+						}
 					}
+					Util.scm(p, lang.track_no_near);
 				}
-				Util.scm(p, lang.track_no_near);
 			}
 		}
+
 	}
 
 	private String getDirection(Block block, Block block1) {
@@ -399,7 +405,7 @@ public class GameListener implements Listener {
 
         ItemStack item = event.getItem();
         if (item == null || item.getType() != Material.COMPASS) return false;
-        return item.getItemMeta() != null && item.getItemMeta().getDisplayName().equalsIgnoreCase(Util.getColString(lang.spectator_compass));
+        return item.getItemMeta() != null && item.getItemMeta().displayName().toString().equalsIgnoreCase(Util.getColString(lang.spectator_compass));
 
     }
 
@@ -421,7 +427,6 @@ public class GameListener implements Listener {
             Status status = playerManager.getPlayerData(player).getGame().getGameArenaData().getStatus();
             if (status != Status.RUNNING && status != Status.BEGINNING) {
 				if(event.getItem().getType() == Material.RED_BED){
-					//Bukkit.dispatchCommand(event.getPlayer(), "hg leave");
 					playerManager.getPlayerData(player).getGame().getGamePlayerData().leave(player, false);
 				} else if (event.getItem().getType() == Material.NETHER_STAR){
 					playerManager.getPlayerData(player).getGame().startFreeRoam();
