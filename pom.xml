@@ -111,9 +111,9 @@
         <dependency>
             <groupId>io.lumine.xikage</groupId>
             <artifactId>MythicMobs</artifactId>
-            <version>5.0.2</version>
+            <version>4.14.2</version>
             <scope>system</scope>
-            <systemPath>${project.basedir}/libs/MythicMobs-5.0.2.jar</systemPath>
+            <systemPath>${project.basedir}/libs/MythicMobs-4.14.2.jar</systemPath>
         </dependency>
     </dependencies>
 
