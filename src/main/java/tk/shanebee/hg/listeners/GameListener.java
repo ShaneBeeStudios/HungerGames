@@ -463,23 +463,21 @@ public class GameListener implements Listener {
 
 	@EventHandler
 	private void onInventoryClick(InventoryClickEvent e) {
-		if (e.getWhoClicked() instanceof Player) {
-			Player player = (Player) e.getWhoClicked();
-			InventoryAction action = e.getAction(); //might not be needed
-			Game game = playerManager.getPlayerData(player).getGame();
-			Status status = game.getGameArenaData().getStatus();
-			if (status != Status.RUNNING && status != Status.BEGINNING) {
-				if (e.getClickedInventory().contains(Material.getMaterial(Config.leaveitemtype))) {
-					game.getGamePlayerData().leave(player,false);
-				} else if (e.getClickedInventory().contains(Material.getMaterial(Config.forcestartitem))) {
-					game.startFreeRoam();
-				}
-			} else {
-				e.setCancelled(true);
+		if (!(e.getWhoClicked() instanceof Player)) return;
+		Player player = (Player) e.getWhoClicked();
+		if (playerManager.getPlayerData(player) == null) return;
+
+		Game game = playerManager.getPlayerData(player).getGame();
+		Status status = game.getGameArenaData().getStatus();
+		if (status != Status.RUNNING && status != Status.BEGINNING) {
+			if (e.getClickedInventory().contains(Material.getMaterial(Config.leaveitemtype))) {
+				game.getGamePlayerData().leave(player,false);
+			} else if (e.getClickedInventory().contains(Material.getMaterial(Config.forcestartitem))) {
+				game.startFreeRoam();
 			}
-			return;
+		} else {
+			e.setCancelled(true);
 		}
-		e.setCancelled(true);
 	}
 
 	@EventHandler
