@@ -69,10 +69,10 @@
             </exclusions>
         </dependency>
         <dependency>
-            <groupId>com.github.tr7zw.Item-NBT-API</groupId>
-            <artifactId>item-nbt-api</artifactId>
+            <groupId>de.tr7zw</groupId>
+            <artifactId>item-nbt-api-plugin</artifactId>
             <!--suppress MavenModelInspection -->
-            <version>2.8.0</version>
+            <version>2.9.2</version>
             <exclusions>
                 <exclusion>
                     <groupId>*</groupId>
@@ -125,7 +125,7 @@
                     <plugin>
                         <groupId>org.apache.maven.plugins</groupId>
                         <artifactId>maven-jar-plugin</artifactId>
-                        <version>3.2.0</version>
+                        <version>3.2.2</version>
                         <configuration>
                             <!-- Put here wherever you would like the plugin to build -->
                             <outputDirectory>/Users/ShaneBee/Desktop/Server/1-16-HG-TEST/plugins</outputDirectory>
@@ -147,12 +147,12 @@
                     <source>8</source>
                     <target>8</target>
                 </configuration>
-                <version>3.9.0</version>
+                <version>3.10.1</version>
             </plugin>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-shade-plugin</artifactId>
-                <version>3.2.1</version>
+                <version>3.3.1-SNAPSHOT</version>
                 <executions>
                     <execution>
                         <id>shade</id>
@@ -178,7 +178,7 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-javadoc-plugin</artifactId>
-                <version>3.1.1</version>
+                <version>3.3.2</version>
                 <configuration>
                     <links>
                         <link>https://hub.spigotmc.org/javadocs/spigot/</link>
