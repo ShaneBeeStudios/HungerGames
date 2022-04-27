@@ -1,5 +1,6 @@
 package tk.shanebee.hg.commands;
 
+import org.bukkit.entity.Player;
 import tk.shanebee.hg.HG;
 import tk.shanebee.hg.game.Game;
 import tk.shanebee.hg.util.Util;
@@ -22,7 +23,16 @@ public class JoinCmd extends BaseCmd {
 		} else {
 			Game g = gameManager.getGame(args[1]);
 			if (g != null && !g.getGamePlayerData().getPlayers().contains(player.getUniqueId())) {
-				g.getGamePlayerData().join(player, true);
+				if (!HG.getParty().hasParty(player))  //no party
+					g.getGamePlayerData().join(player, true);
+				else if ((g.getGamePlayerData().getPlayers().size() + HG.getParty().partySize(player)) <= g.getGameArenaData().getMaxPlayers())
+				{
+					for (Player p:HG.getParty().getMembers(player)) {  //join all party members
+						g.getGamePlayerData().join(p, true);
+					}
+				} else {
+					player.sendMessage("Party is too Large to join this arena");
+				}
 			} else {
 				Util.scm(player, lang.cmd_delete_noexist);
 			}

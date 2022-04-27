@@ -84,6 +84,8 @@ public class Config {
     public static boolean spectateFly;
     public static boolean spectateChat;
 
+    public static boolean allowParty;
+
     //mcMMO
     public static boolean mcmmoUseSkills;
     public static boolean mcmmoGainExp;
@@ -174,6 +176,9 @@ public class Config {
 
         mcmmoUseSkills = config.getBoolean("mcmmo.use-skills");
         mcmmoGainExp = config.getBoolean("mcmmo.gain-experience");
+
+        //party
+        allowParty = config.getBoolean("party.allow-party");
 
         try {
             Vault.setupEconomy();

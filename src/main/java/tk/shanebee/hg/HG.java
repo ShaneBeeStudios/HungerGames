@@ -16,8 +16,7 @@ import tk.shanebee.hg.listeners.*;
 import tk.shanebee.hg.managers.*;
 import tk.shanebee.hg.metrics.Metrics;
 import tk.shanebee.hg.metrics.MetricsHandler;
-import tk.shanebee.hg.util.NBTApi;
-import tk.shanebee.hg.util.Util;
+import tk.shanebee.hg.util.*;
 
 import java.util.*;
 
@@ -49,6 +48,8 @@ public class HG extends JavaPlugin {
 	private Leaderboard leaderboard;
 	private Metrics metrics;
 	private MobManager mmMobManager;
+
+	private static Party party = new NoParty();
 
 	//Mobs
 	private MobConfig mobConfig;
@@ -125,7 +126,20 @@ public class HG extends JavaPlugin {
 			Util.log("&7mcMMO not found, mcMMO event hooks have been &cdisabled");
 		}
 
-        //noinspection ConstantConditions
+		//Party support
+		if (Config.allowParty)
+			if (getServer().getPluginManager().isPluginEnabled("Spigot-Party-API-PAF")){
+				getLogger().info("Hook into Spigot Party API for Party and Friends Extended (by Simonsator) support!");
+				party = new PAFBungee();
+			} else if (getServer().getPluginManager().isPluginEnabled("PartyAndFriends")) {
+				getLogger().info("Hook into Party and Friends for Spigot (by Simonsator) support!");
+				party = new PAFSpigot();
+			} else if (getServer().getPluginManager().isPluginEnabled("Parties")) {
+				getLogger().info("Hook into Parties (by AlessioDP) support!");
+				party = new Parties();
+			}
+
+		//noinspection ConstantConditions
         getCommand("hg").setExecutor(new CommandListener(this));
 		if (load) {
             loadCmds();
@@ -388,6 +402,8 @@ public class HG extends JavaPlugin {
 	public Metrics getMetrics() {
 		return this.metrics;
 	}
+
+	public static Party getParty(){return party;}
 
 	/** Get an instance of the MythicMobs MobManager
 	 * @return MythicMobs MobManager
