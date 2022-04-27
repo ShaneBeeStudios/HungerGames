@@ -84,6 +84,7 @@ public class Config {
     public static boolean spectateFly;
     public static boolean spectateChat;
 
+    //Party
     public static boolean allowParty;
 
     //mcMMO

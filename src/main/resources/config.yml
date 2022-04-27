@@ -165,6 +165,10 @@ mcmmo:
     # If players can gain mcMMO experience ing ame
     gain-experience: false
 
+party:
+    #If we should hook into Party plugins
+    allow-party: true
+
 ## KITS
 # Create new ones, rename the current ones, delete them, go nuts
 # See KITS section in wiki for more info (https://github.com/ShaneBeeStudios/HungerGames/wiki/Config.yml#kits)
