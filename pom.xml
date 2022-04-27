@@ -43,6 +43,12 @@
             <id>alessioDP-releases</id>
             <url>https://repo.alessiodp.com/releases/</url>
         </repository>
+        <repository>
+            <id>nexus</id>
+            <name>Lumine Releases</name>
+            <url>https://mvn.lumine.io/repository/maven-public/</url>
+        </repository>
+
     </repositories>
 
     <dependencies>
@@ -86,6 +92,12 @@
             <groupId>com.alessiodp.parties</groupId>
             <artifactId>parties-api</artifactId>
             <version>3.2.4</version>
+            <scope>provided</scope>
+        </dependency>
+        <dependency>
+            <groupId>io.lumine</groupId>
+            <artifactId>Mythic-Dist</artifactId>
+            <version>4.14.2</version>
             <scope>provided</scope>
         </dependency>
         <dependency>
@@ -139,13 +151,6 @@
                     <artifactId>maven-scm-provider-gitexe</artifactId>
                 </exclusion>
             </exclusions>
-        </dependency>
-        <dependency>
-            <groupId>io.lumine.xikage</groupId>
-            <artifactId>MythicMobs</artifactId>
-            <version>4.14.2</version>
-            <scope>system</scope>
-            <systemPath>${project.basedir}/libs/MythicMobs-4.14.2.jar</systemPath>
         </dependency>
     </dependencies>
 
