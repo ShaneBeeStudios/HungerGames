@@ -426,14 +426,15 @@ public class GameListener implements Listener {
         } else if (action != Action.PHYSICAL && playerManager.hasPlayerData(player)) {
             Status status = playerManager.getPlayerData(player).getGame().getGameArenaData().getStatus();
             if (status != Status.RUNNING && status != Status.BEGINNING) {
-				if(event.getItem().getType() == Material.RED_BED){
-					playerManager.getPlayerData(player).getGame().getGamePlayerData().leave(player, false);
-				} else if (event.getItem().getType() == Material.NETHER_STAR){
-					playerManager.getPlayerData(player).getGame().startFreeRoam();
-				} else {
-					event.setCancelled(true);
-					Util.scm(player, lang.listener_no_interact);
-				}
+				if (event.getItem() != null)
+					if(event.getItem().getType().equals(Material.getMaterial(Config.leaveitemtype))){
+						playerManager.getPlayerData(player).getGame().getGamePlayerData().leave(player, false);
+					} else if (event.getItem().getType().equals(Material.getMaterial(Config.forcestartitem))){
+						playerManager.getPlayerData(player).getGame().startFreeRoam();
+					} else {
+						event.setCancelled(true);
+						Util.scm(player, lang.listener_no_interact);
+					}
             }
         } else if (action == Action.RIGHT_CLICK_BLOCK) {
 			Block block = event.getClickedBlock();
