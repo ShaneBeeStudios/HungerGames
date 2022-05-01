@@ -2,7 +2,6 @@ package tk.shanebee.hg.commands;
 
 import tk.shanebee.hg.game.Bound;
 import tk.shanebee.hg.game.Game;
-import tk.shanebee.hg.HG;
 import tk.shanebee.hg.data.PlayerSession;
 import tk.shanebee.hg.util.Util;
 

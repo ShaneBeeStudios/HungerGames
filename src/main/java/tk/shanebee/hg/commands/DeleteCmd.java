@@ -1,7 +1,6 @@
 package tk.shanebee.hg.commands;
 
 import tk.shanebee.hg.game.Game;
-import tk.shanebee.hg.HG;
 import tk.shanebee.hg.Status;
 import tk.shanebee.hg.game.GameArenaData;
 import tk.shanebee.hg.game.GamePlayerData;

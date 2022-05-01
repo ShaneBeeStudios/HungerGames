@@ -5,7 +5,6 @@ import org.bukkit.block.Block;
 import org.bukkit.block.Sign;
 
 import tk.shanebee.hg.game.Game;
-import tk.shanebee.hg.HG;
 import tk.shanebee.hg.util.Util;
 
 public class SetLobbyWallCmd extends BaseCmd {
