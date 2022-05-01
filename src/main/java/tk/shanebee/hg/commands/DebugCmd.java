@@ -1,7 +1,5 @@
 package tk.shanebee.hg.commands;
 
-import tk.shanebee.hg.HG;
-
 public class DebugCmd extends BaseCmd {
 
 	public DebugCmd() {

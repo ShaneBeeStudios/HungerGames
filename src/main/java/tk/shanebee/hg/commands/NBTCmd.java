@@ -5,7 +5,6 @@ import org.bukkit.Material;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
-import tk.shanebee.hg.HG;
 import tk.shanebee.hg.util.Util;
 import tk.shanebee.hg.util.NBTApi;
 
