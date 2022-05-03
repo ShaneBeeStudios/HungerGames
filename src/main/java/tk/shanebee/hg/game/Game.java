@@ -228,9 +228,7 @@ public class Game {
      */
     public void startPreGame() {
         // Call the GameStartEvent
-        GameStartEvent event = new GameStartEvent(this);
-        Bukkit.getPluginManager().callEvent(event);
-
+        Bukkit.getPluginManager().callEvent(new GameStartEvent(this));
         gameArenaData.status = Status.COUNTDOWN;
         starting = new StartingTask(this);
         gameBlockData.updateLobbyBlock();
@@ -240,8 +238,8 @@ public class Game {
      * Start the free roam state of the game
      */
     public void startFreeRoam() {
-        for (int i = 0; i < gamePlayerData.getPlayers().size(); i++){
-            Bukkit.getPlayer(gamePlayerData.getPlayers().get(i)).getInventory().clear();
+        for (UUID p : gamePlayerData.getPlayers()) {
+            Bukkit.getPlayer(p).getInventory().clear();
         }
         gameArenaData.status = Status.BEGINNING;
         gameBlockData.updateLobbyBlock();

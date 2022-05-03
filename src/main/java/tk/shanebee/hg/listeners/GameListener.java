@@ -1,49 +1,19 @@
 package tk.shanebee.hg.listeners;
 
-import io.lumine.xikage.mythicmobs.utils.adventure.audience.Audience;
-import io.papermc.paper.event.player.AsyncChatEvent;
 import net.kyori.adventure.text.Component;
-import org.bukkit.Bukkit;
-import org.bukkit.ChatColor;
-import org.bukkit.Location;
-import org.bukkit.Material;
-import org.bukkit.Sound;
-import org.bukkit.World;
+import org.bukkit.*;
 import org.bukkit.block.Block;
 import org.bukkit.block.Sign;
 import org.bukkit.enchantments.Enchantment;
-import org.bukkit.entity.ArmorStand;
-import org.bukkit.entity.Entity;
-import org.bukkit.entity.Hanging;
-import org.bukkit.entity.ItemFrame;
-import org.bukkit.entity.LivingEntity;
-import org.bukkit.entity.Player;
-import org.bukkit.entity.Shulker;
-import org.bukkit.event.Cancellable;
-import org.bukkit.event.Event;
-import org.bukkit.event.EventHandler;
-import org.bukkit.event.EventPriority;
-import org.bukkit.event.Listener;
-import org.bukkit.event.block.Action;
-import org.bukkit.event.block.BlockBreakEvent;
-import org.bukkit.event.block.BlockExplodeEvent;
-import org.bukkit.event.block.BlockPhysicsEvent;
-import org.bukkit.event.block.BlockPlaceEvent;
-import org.bukkit.event.block.LeavesDecayEvent;
+import org.bukkit.entity.*;
+import org.bukkit.event.*;
+import org.bukkit.event.block.*;
 import org.bukkit.event.entity.*;
-import org.bukkit.event.entity.EntityDamageEvent.DamageCause;
 import org.bukkit.event.entity.CreatureSpawnEvent.SpawnReason;
+import org.bukkit.event.entity.EntityDamageEvent.DamageCause;
 import org.bukkit.event.hanging.HangingBreakByEntityEvent;
-import org.bukkit.event.inventory.InventoryAction;
 import org.bukkit.event.inventory.InventoryClickEvent;
-import org.bukkit.event.player.AsyncPlayerChatEvent;
-import org.bukkit.event.player.PlayerBucketEmptyEvent;
-import org.bukkit.event.player.PlayerBucketEvent;
-import org.bukkit.event.player.PlayerBucketFillEvent;
-import org.bukkit.event.player.PlayerDropItemEvent;
-import org.bukkit.event.player.PlayerInteractEvent;
-import org.bukkit.event.player.PlayerQuitEvent;
-import org.bukkit.event.player.PlayerTeleportEvent;
+import org.bukkit.event.player.*;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.PlayerInventory;
 import org.bukkit.inventory.meta.ItemMeta;
@@ -56,6 +26,7 @@ import tk.shanebee.hg.data.Language;
 import tk.shanebee.hg.data.Leaderboard;
 import tk.shanebee.hg.data.PlayerData;
 import tk.shanebee.hg.events.ChestOpenEvent;
+import tk.shanebee.hg.events.GameStartEvent;
 import tk.shanebee.hg.events.PlayerDeathGameEvent;
 import tk.shanebee.hg.game.Game;
 import tk.shanebee.hg.game.GameArenaData;
@@ -69,7 +40,7 @@ import tk.shanebee.hg.util.BlockUtils;
 import tk.shanebee.hg.util.Util;
 
 import java.util.Collections;
-import java.util.List;
+import java.util.Objects;
 import java.util.UUID;
 
 /**
@@ -276,7 +247,7 @@ public class GameListener implements Listener {
 	private void onSprint(FoodLevelChangeEvent event) {
 		Player player = (Player) event.getEntity();
 		if (playerManager.hasPlayerData(player)) {
-			Status status = playerManager.getPlayerData(player).getGame().getGameArenaData().getStatus();
+			Status status = Objects.requireNonNull(playerManager.getPlayerData(player)).getGame().getGameArenaData().getStatus();
 			if (status == Status.WAITING || status == Status.COUNTDOWN) {
 				player.setFoodLevel(1);
 				event.setCancelled(true);
@@ -295,8 +266,8 @@ public class GameListener implements Listener {
 		assert im != null;
 		if (im.hasDisplayName())
 		{
-			if (im.displayName().contains(Component.text(tsn))) {
-				int uses = Integer.parseInt(im.displayName().toString().replace(tsn, ""));
+			if (Objects.requireNonNull(im.displayName()).contains(Component.text(tsn))) {
+				int uses = Integer.parseInt(Objects.requireNonNull(im.displayName()).toString().replace(tsn, ""));
 				if (uses == 0) {
 					Util.scm(p, lang.track_empty);
 				} else {
@@ -448,7 +419,19 @@ public class GameListener implements Listener {
 					} else {
 						if (player.getInventory().getItemInMainHand().getType() == Material.AIR) {
 						    // Process this after event has finished running to prevent double click issues
-                            Bukkit.getScheduler().scheduleSyncDelayedTask(plugin, () -> game.getGamePlayerData().join(player), 2);
+							if (HG.getParty().hasParty(player)) {
+								//player is in party
+								if (HG.getParty().isOwner(player)  && ((game.getGamePlayerData().getPlayers().size() + HG.getParty().partySize(player)) <= game.getGameArenaData().getMaxPlayers())){  //player is owner join party
+									Bukkit.getScheduler().scheduleSyncDelayedTask(plugin, () -> {
+										for (Player p : HG.getParty().getMembers(player)) {
+											game.getGamePlayerData().join(p);
+										}
+									});
+								}else if (!HG.getParty().isOwner(player)) {
+									player.sendMessage("You are in a party but not the leader, unable to join game");
+								}
+							}else
+								Bukkit.getScheduler().scheduleSyncDelayedTask(plugin, () -> game.getGamePlayerData().join(player), 2);
 						} else {
 							Util.scm(player, lang.listener_sign_click_hand);
 						}
@@ -467,17 +450,18 @@ public class GameListener implements Listener {
 		if (!(e.getWhoClicked() instanceof Player)) return;
 		Player player = (Player) e.getWhoClicked();
 		if (playerManager.getPlayerData(player) == null) return;
+		if (e.getClickedInventory() == null) return;
+		if (e.getClickedInventory().getItem(e.getSlot()) == null)
+			return;
 
 		Game game = playerManager.getPlayerData(player).getGame();
 		Status status = game.getGameArenaData().getStatus();
 		if (status != Status.RUNNING && status != Status.BEGINNING) {
-			if (e.getClickedInventory().contains(Material.getMaterial(Config.leaveitemtype))) {
+			if (e.getClickedInventory().getItem(e.getSlot()).equals(Material.getMaterial(Config.leaveitemtype))) {
 				game.getGamePlayerData().leave(player,false);
-			} else if (e.getClickedInventory().contains(Material.getMaterial(Config.forcestartitem))) {
-				game.startFreeRoam();
+			} else if (e.getClickedInventory().getItem(e.getSlot()).equals(Material.getMaterial(Config.forcestartitem))) {
+				game.startGame();
 			}
-		} else {
-			e.setCancelled(true);
 		}
 	}
 
@@ -789,11 +773,8 @@ public class GameListener implements Listener {
 		if (!Config.spectateChat) {
 			Player spectator = event.getPlayer();
 			if (playerManager.hasSpectatorData(spectator)) {
-				PlayerData data = playerManager.getSpectatorData(spectator);
-				Game game = data.getGame();
-				for (UUID uuid : game.getGamePlayerData().getPlayers()) {
-					Player player = Bukkit.getPlayer(uuid);
-					event.getRecipients().remove(player);
+				for (UUID uuid : playerManager.getSpectatorData(spectator).getGame().getGamePlayerData().getPlayers()) {
+					event.getRecipients().remove(Bukkit.getPlayer(uuid));
 				}
 			}
 		}

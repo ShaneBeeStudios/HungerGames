@@ -25,11 +25,13 @@ public class JoinCmd extends BaseCmd {
 			if (g != null && !g.getGamePlayerData().getPlayers().contains(player.getUniqueId())) {
 				if (!HG.getParty().hasParty(player))  //no party
 					g.getGamePlayerData().join(player, true);
-				else if ((g.getGamePlayerData().getPlayers().size() + HG.getParty().partySize(player)) <= g.getGameArenaData().getMaxPlayers())
+				else if ((HG.getParty().isOwner(player)) &&  (g.getGamePlayerData().getPlayers().size() + HG.getParty().partySize(player)) <= g.getGameArenaData().getMaxPlayers())
 				{
 					for (Player p:HG.getParty().getMembers(player)) {  //join all party members
 						g.getGamePlayerData().join(p, true);
 					}
+				} else if (!HG.getParty().isOwner(player)) {
+					player.sendMessage("You are in a party but not the leader, unable to join game");
 				} else {
 					player.sendMessage("Party is too Large to join this arena");
 				}

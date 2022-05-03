@@ -2,6 +2,8 @@ package tk.shanebee.hg;
 
 import io.lumine.xikage.mythicmobs.MythicMobs;
 import io.lumine.xikage.mythicmobs.mobs.MobManager;
+import org.bstats.bukkit.Metrics;
+import org.bstats.charts.SimplePie;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.event.HandlerList;
@@ -14,8 +16,6 @@ import tk.shanebee.hg.data.*;
 import tk.shanebee.hg.game.Game;
 import tk.shanebee.hg.listeners.*;
 import tk.shanebee.hg.managers.*;
-import tk.shanebee.hg.metrics.Metrics;
-import tk.shanebee.hg.metrics.MetricsHandler;
 import tk.shanebee.hg.util.*;
 
 import java.util.*;
@@ -46,7 +46,6 @@ public class HG extends JavaPlugin {
 	private KitManager kitManager;
 	private ItemStackManager itemStackManager;
 	private Leaderboard leaderboard;
-	private Metrics metrics;
 	private MobManager mmMobManager;
 
 	private static Party party = new NoParty();
@@ -65,6 +64,8 @@ public class HG extends JavaPlugin {
             Bukkit.getPluginManager().disablePlugin(this);
             return;
         }
+		Metrics metrics1 = new org.bstats.bukkit.Metrics(this, 15119);
+		metrics1.addCustomChart(new SimplePie("partyplugin", () -> party.getClass().getName()));
         loadPlugin(true);
     }
     public void loadPlugin(boolean load) {
@@ -80,15 +81,7 @@ public class HG extends JavaPlugin {
         bonusItems = new HashMap<>();
 
 		config = new Config(this);
-		metrics = new Metrics(this);
-		if (metrics.isEnabled()) {
-			Util.log("&7Metrics have been &aenabled");
-			new MetricsHandler(false);
-		}
-		else
-			Util.log("&7Metrics have been &cdisabled");
-		nbtApi = new NBTApi();
-
+		Bukkit.getLogger().info("Loading HungerGames by JT122406");
 		//MythicMob check
 		if (Bukkit.getPluginManager().getPlugin("MythicMobs") != null) {
 			mmMobManager = MythicMobs.inst().getMobManager();
@@ -168,7 +161,6 @@ public class HG extends JavaPlugin {
         bonusItems = null;
         plugin = null;
         config = null;
-        metrics = null;
         nbtApi = null;
         mmMobManager = null;
         lang = null;
@@ -259,11 +251,11 @@ public class HG extends JavaPlugin {
 			if (p != null) {
 			    p.closeInventory();
 				if (playerManager.hasPlayerData(u)) {
-                    playerManager.getPlayerData(u).getGame().getGamePlayerData().leave(p, false);
+                    Objects.requireNonNull(playerManager.getPlayerData(u)).getGame().getGamePlayerData().leave(p, false);
                     playerManager.removePlayerData(u);
                 }
 				if (playerManager.hasSpectatorData(u)) {
-                    playerManager.getSpectatorData(u).getGame().getGamePlayerData().leaveSpectate(p);
+                    Objects.requireNonNull(playerManager.getSpectatorData(u)).getGame().getGamePlayerData().leaveSpectate(p);
                     playerManager.removePlayerData(u);
                 }
 			}
@@ -399,9 +391,6 @@ public class HG extends JavaPlugin {
 		return this.nbtApi;
 	}
 
-	public Metrics getMetrics() {
-		return this.metrics;
-	}
 
 	public static Party getParty(){return party;}
 

@@ -1,6 +1,7 @@
 package tk.shanebee.hg.game;
 
 import io.papermc.lib.PaperLib;
+import net.kyori.adventure.text.Component;
 import org.bukkit.Bukkit;
 import org.bukkit.GameMode;
 import org.bukkit.Location;
@@ -311,7 +312,7 @@ public class GamePlayerData extends Data {
                 if (Config.enableleaveitem){
                     ItemStack bed = new ItemStack(Material.getMaterial(Config.leaveitemtype), 1);
                     ItemMeta commeta = bed.getItemMeta();
-                    commeta.setDisplayName(lang.leave_game);
+                    commeta.displayName(Component.text(lang.leave_game));
                     bed.setItemMeta(commeta);
                     player.getInventory().setItem(8, bed);
                 }
@@ -319,7 +320,7 @@ public class GamePlayerData extends Data {
                 if (Config.enableforcestartitem && player.hasPermission("hg.forcestart")) {
                     ItemStack start = new ItemStack(Material.getMaterial(Config.forcestartitem), 1);
                     ItemMeta meta = start.getItemMeta();
-                    meta.setDisplayName(lang.force_start);
+                    meta.displayName(Component.text(lang.force_start));
                     start.setItemMeta(meta);
                     player.getInventory().setItem(0, start);
                 }
