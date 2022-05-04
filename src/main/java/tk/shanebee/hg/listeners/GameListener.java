@@ -26,7 +26,6 @@ import tk.shanebee.hg.data.Language;
 import tk.shanebee.hg.data.Leaderboard;
 import tk.shanebee.hg.data.PlayerData;
 import tk.shanebee.hg.events.ChestOpenEvent;
-import tk.shanebee.hg.events.GameStartEvent;
 import tk.shanebee.hg.events.PlayerDeathGameEvent;
 import tk.shanebee.hg.game.Game;
 import tk.shanebee.hg.game.GameArenaData;
@@ -360,6 +359,7 @@ public class GameListener implements Listener {
 			Block block = event.getClickedBlock();
 			assert block != null;
 			PlayerData pd = playerManager.getPlayerData(player);
+			if (gameManager.getGame(player.getLocation()).getGameArenaData().getStatus()  == Status.COUNTDOWN  || gameManager.getGame(player.getLocation()).getGameArenaData().getStatus()  == Status.WAITING) event.setCancelled(true);
 			if (block.getType() == Material.CHEST) {
 				Bukkit.getServer().getPluginManager().callEvent(new ChestOpenEvent(pd.getGame(), block, false));
 			} else if (BlockUtils.isBonusBlock(block)) {
