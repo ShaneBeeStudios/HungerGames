@@ -52,7 +52,6 @@ import org.bstats.bukkit.Metrics;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.event.HandlerList;
-import org.bukkit.inventory.ItemStack;
 import org.bukkit.permissions.Permission;
 import org.bukkit.permissions.PermissionDefault;
 import org.bukkit.plugin.java.JavaPlugin;
@@ -71,8 +70,6 @@ public class HungerGames extends JavaPlugin {
     //Maps
     private Map<String, BaseCmd> cmds;
     private Map<UUID, PlayerSession> playerSession;
-    private Map<Integer, ItemStack> items;
-    private Map<Integer, ItemStack> bonusItems;
 
     //Lists
     private List<Game> games;
@@ -118,8 +115,6 @@ public class HungerGames extends JavaPlugin {
         }
         games = new ArrayList<>();
         playerSession = new HashMap<>();
-        items = new HashMap<>();
-        bonusItems = new HashMap<>();
 
         config = new Config(this);
         metrics = new Metrics(this, 25144);
@@ -187,8 +182,6 @@ public class HungerGames extends JavaPlugin {
         stopAll();
         games = null;
         playerSession = null;
-        items = null;
-        bonusItems = null;
         plugin = null;
         config = null;
         metrics = null;
@@ -391,24 +384,6 @@ public class HungerGames extends JavaPlugin {
      */
     public Map<UUID, PlayerSession> getPlayerSessions() {
         return this.playerSession;
-    }
-
-    /**
-     * Get general items map
-     *
-     * @return Items map
-     */
-    public Map<Integer, ItemStack> getItems() {
-        return this.items;
-    }
-
-    /**
-     * Get general bonus items map
-     *
-     * @return Bonus items map
-     */
-    public Map<Integer, ItemStack> getBonusItems() {
-        return this.bonusItems;
     }
 
     /**

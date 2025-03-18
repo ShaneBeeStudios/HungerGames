@@ -1,9 +1,9 @@
 package com.shanebeestudios.hg.data;
 
-import org.bukkit.configuration.file.FileConfiguration;
-import org.bukkit.configuration.file.YamlConfiguration;
 import com.shanebeestudios.hg.HungerGames;
 import com.shanebeestudios.hg.util.Util;
+import org.bukkit.configuration.file.FileConfiguration;
+import org.bukkit.configuration.file.YamlConfiguration;
 
 import java.io.File;
 
@@ -12,33 +12,24 @@ import java.io.File;
  */
 public class MobConfig {
 
-	private HungerGames plugin;
-	private FileConfiguration mobs = null;
-	private File mobFile = null;
+    private final FileConfiguration mobsConfig;
 
-	public MobConfig(HungerGames plugin) {
-		this.plugin = plugin;
-		loadMobFile();
-	}
+    public MobConfig(HungerGames plugin) {
+        File mobFile = new File(plugin.getDataFolder(), "mobs.yml");
+        if (!mobFile.exists()) {
+            plugin.saveResource("mobs.yml", false);
+            Util.logMini("New mobs.yml created");
+        }
+        this.mobsConfig = YamlConfiguration.loadConfiguration(mobFile);
+    }
 
-	private void loadMobFile() {
-		if (mobFile == null) {
-			mobFile = new File(plugin.getDataFolder(), "mobs.yml");
-		}
-		if (!mobFile.exists()) {
-			plugin.saveResource("mobs.yml", false);
-			mobs = YamlConfiguration.loadConfiguration(mobFile);
-			Util.log("&7New mobs.yml created");
-		} else {
-			mobs = YamlConfiguration.loadConfiguration(mobFile);
-		}
-	}
-
-    /** Get the mob config
-     * @return Mob config
+    /**
+     * Get the mobs config
+     *
+     * @return Mobs config
      */
-	public FileConfiguration getMobs() {
-		return this.mobs;
-	}
+    public FileConfiguration getMobsConfig() {
+        return this.mobsConfig;
+    }
 
 }

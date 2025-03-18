@@ -1,12 +1,14 @@
 package com.shanebeestudios.hg.data;
 
+import com.shanebeestudios.hg.HungerGames;
+import com.shanebeestudios.hg.managers.ItemStackManager;
+import com.shanebeestudios.hg.util.Util;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.inventory.ItemStack;
-import com.shanebeestudios.hg.HungerGames;
-import com.shanebeestudios.hg.util.Util;
 
 import java.io.File;
+import java.util.HashMap;
 import java.util.Map;
 
 /**
@@ -14,61 +16,49 @@ import java.util.Map;
  */
 public class RandomItems {
 
-    private FileConfiguration item = null;
-    private File customConfigFile = null;
-    public int size = 0;
+    private FileConfiguration itemsConfig = null;
+    private File itemsConfigFile = null;
     private final HungerGames plugin;
+    private final ItemStackManager itemStackManager;
+    private final Map<Integer, ItemStack> items = new HashMap<>();
+    private final Map<Integer, ItemStack> bonusItems = new HashMap<>();
 
     public RandomItems(HungerGames plugin) {
         this.plugin = plugin;
-        reloadCustomConfig();
-        Util.log("Loading random items...");
-        load();
+        this.itemStackManager = plugin.getItemStackManager();
+        loadItemsConfig();
+        Util.logMini("Loading random items:");
+        loadItems();
     }
 
-    private void reloadCustomConfig() {
-        if (customConfigFile == null) {
-            customConfigFile = new File(plugin.getDataFolder(), "items.yml");
+    private void loadItemsConfig() {
+        if (this.itemsConfigFile == null) {
+            this.itemsConfigFile = new File(this.plugin.getDataFolder(), "items.yml");
         }
-        if (!customConfigFile.exists()) {
-            plugin.saveResource("items.yml", false);
-            Util.log("New items.yml file has been &asuccessfully generated!");
+        if (!itemsConfigFile.exists()) {
+            this.plugin.saveResource("items.yml", false);
+            Util.logMini("- New items.yml file has been <green>successfully generated!");
         }
-        item = YamlConfiguration.loadConfiguration(customConfigFile);
+        this.itemsConfig = YamlConfiguration.loadConfiguration(this.itemsConfigFile);
     }
 
-    public void load() {
+    public void loadItems() {
         // Regular items
-        for (String s : item.getStringList("items")) {
-            loadItems(s, plugin.getItems());
-        }
+        this.itemStackManager.loadItems(this.itemsConfig.getMapList("items"), this.items);
+
         // Bonus items
-        for (String s : item.getStringList("bonus")) {
-            loadItems(s, plugin.getBonusItems());
-        }
-        Util.log(plugin.getItems().size() + " Random items have been &aloaded!");
-        Util.log(plugin.getBonusItems().size() + " Random bonus items have been &aloaded!");
+        this.itemStackManager.loadItems(this.itemsConfig.getMapList("bonus"), this.bonusItems);
+
+        Util.logMini("- Loaded <green>%s <grey>random items!", this.items.size());
+        Util.logMini("- Loaded <green>%s <grey>bonus items!", this.bonusItems.size());
     }
 
-    void loadItems(String itemString, Map<Integer, ItemStack> map) {
-        String[] amount = itemString.split(" ");
-        if (itemString.contains("x:")) {
-            for (String p : amount) {
-                if (p.startsWith("x:")) {
-                    int c = Integer.parseInt(p.replace("x:", ""));
-                    ItemStack stack = plugin.getItemStackManager().getItem(itemString.replace("x:", ""), true);
-                    if (stack == null) {
-                        continue;
-                    }
-                    while (c != 0) {
-                        c--;
-                        map.put(map.size() + 1, stack.clone());
-                    }
-                }
-            }
-        } else {
-            map.put(map.size() + 1, plugin.getItemStackManager().getItem(itemString, true));
-        }
+    public Map<Integer, ItemStack> getItems() {
+        return this.items;
+    }
+
+    public Map<Integer, ItemStack> getBonusItems() {
+        return this.bonusItems;
     }
 
 }

@@ -1,7 +1,7 @@
 package com.shanebeestudios.hg.game;
 
+import com.shanebeestudios.hg.data.RandomItems;
 import org.bukkit.inventory.ItemStack;
-import com.shanebeestudios.hg.HungerGames;
 
 import java.util.Map;
 
@@ -11,14 +11,16 @@ import java.util.Map;
 @SuppressWarnings("unused")
 public class GameItemData extends Data {
 
+    private final RandomItems randomItems;
     private Map<Integer, ItemStack> items;
     private Map<Integer, ItemStack> bonusItems;
 
     protected GameItemData(Game game) {
         super(game);
+        this.randomItems = getPlugin().getRandomItems();
         // Set default items from items.yml (if arenas.yml has items it will override this)
-        this.items = plugin.getItems();
-        this.bonusItems = plugin.getBonusItems();
+        resetItemsDefault();
+        resetBonusItemsDefault();
     }
 
     /**
@@ -59,7 +61,7 @@ public class GameItemData extends Data {
      * Reset the items for this game to the plugin's default items list
      */
     public void resetItemsDefault() {
-        this.items = HungerGames.getPlugin().getItems();
+        this.items = this.randomItems.getItems();
     }
 
     /**
@@ -100,7 +102,7 @@ public class GameItemData extends Data {
      * Reset the bonus items for this game to the plugin's default bonus items list
      */
     public void resetBonusItemsDefault() {
-        this.bonusItems = HungerGames.getPlugin().getBonusItems();
+        this.bonusItems = this.randomItems.getBonusItems();
     }
 
 }

@@ -1,86 +1,23 @@
 package com.shanebeestudios.hg.util;
 
+import io.papermc.paper.registry.RegistryAccess;
+import io.papermc.paper.registry.RegistryKey;
+import org.bukkit.NamespacedKey;
+import org.bukkit.Registry;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 import org.jetbrains.annotations.Nullable;
 
-import java.util.HashMap;
-import java.util.Map;
+import java.util.Locale;
 
 /**
  * Util for getting {@link PotionEffectType}
  */
 @SuppressWarnings("unused")
-public enum PotionEffectUtils {
+public class PotionEffectUtils {
 
-    SPEED("SPEED"),
-    SLOWNESS("SLOW"),
-    HASTE("FAST_DIGGING"),
-    MINING_FATIGUE("SLOW_DIGGING"),
-    STRENGTH("INCREASE_DAMAGE"),
-    INSTANT_HEALTH("HEAL"),
-    INSTANT_DAMAGE("HARM"),
-    JUMP_BOOST("JUMP"),
-    NAUSEA("CONFUSION"),
-    REGENERATION("REGENERATION"),
-    RESISTANCE("DAMAGE_RESISTANCE"),
-    FIRE_RESISTANCE("FIRE_RESISTANCE"),
-    WATER_BREATHING("WATER_BREATHING"),
-    INVISIBILITY("INVISIBILITY"),
-    BLINDNESS("BLINDNESS"),
-    NIGHT_VISION("NIGHT_VISION"),
-    HUNGER("HUNGER"),
-    WEAKNESS("WEAKNESS"),
-    POISON("POISON"),
-    WITHER("WITHER"),
-    HEALTH_BOOST("HEALTH_BOOST"),
-    ABSORPTION("ABSORPTION"),
-    SATURATION("SATURATION"),
-    GLOWING("GLOWING"),
-    LEVITATION("LEVITATION"),
-    LUCK("LUCK"),
-    UNLUCK("UNLUCK"),
-    // 1.13
-    SLOW_FALLING("SLOW_FALLING"),
-    CONDUIT_POWER("CONDUIT_POWER"),
-    DOLPHINS_GRACE("DOLPHINS_GRACE"),
-    // 1.14
-    BAD_OMEN("BAD_OMEN"),
-    HERO_OF_THE_VILLAGE("HERO_OF_THE_VILLAGE");
-
-    private final String bukkit;
-    private static final Map<String, String> BY_NAME = new HashMap<>();
-
-    PotionEffectUtils(String bukkit) {
-        this.bukkit = bukkit;
-    }
-
-    static {
-        for (PotionEffectUtils p : values()) {
-            BY_NAME.put(p.name(), p.bukkit);
-        }
-        for (PotionEffectType value : PotionEffectType.values()) {
-            if (!BY_NAME.containsValue(value.getName())) {
-                Util.warning("Missing PotionEffectType for '&7" + value + "&e' please let dev know.");
-            }
-        }
-    }
-
-    /**
-     * Get a PotionEffectType based on a Minecraft namespace with Bukkit key fallback
-     *
-     * @param key Key for PotionEffectType (can be Minecraft namespace or Bukkit key)
-     * @return PotionEffectType (null if MC or Bukkit key does not exist)
-     */
-    public static PotionEffectType get(String key) {
-        String upper = key.toUpperCase();
-        if (BY_NAME.containsKey(upper)) {
-            return getByKey(upper);
-        } else if (BY_NAME.containsValue(upper)) {
-            return getByBukkit(upper);
-        }
-        return null;
-    }
+    @SuppressWarnings("NullableProblems")
+    private static final Registry<PotionEffectType> POTION_EFFECT_TYPES = RegistryAccess.registryAccess().getRegistry(RegistryKey.MOB_EFFECT);
 
     /**
      * Get a PotionEffectType based on a Minecraft namespace
@@ -89,26 +26,9 @@ public enum PotionEffectUtils {
      * @return PotionEffectType
      */
     public static PotionEffectType getByKey(String key) {
-        return getByBukkit(valueOf(key).bukkit);
-    }
-
-    /**
-     * Get a PotionEffectType based on a Bukkit key
-     *
-     * @param bukkit Key for PotionEffectType
-     * @return PotionEffectType
-     */
-    public static PotionEffectType getByBukkit(String bukkit) {
-        return PotionEffectType.getByName(bukkit.toUpperCase());
-    }
-
-    /**
-     * Get Bukkit key for PotionEffectType
-     *
-     * @return Bukkit key
-     */
-    public String getBukkitKey() {
-        return bukkit;
+        NamespacedKey namespacedKey = NamespacedKey.fromString(key.toLowerCase(Locale.ROOT));
+        if (namespacedKey != null) return POTION_EFFECT_TYPES.get(namespacedKey);
+        return null;
     }
 
     /**
@@ -123,7 +43,7 @@ public enum PotionEffectUtils {
     public static PotionEffect getPotionEffect(String data) {
         String[] potionData = data.split(":");
         if (potionData.length == 3) {
-            PotionEffectType type = get(potionData[0]);
+            PotionEffectType type = getByKey(potionData[0]);
             if (type == null) {
                 potionWarning("Potion effect type not found: &c" + potionData[0].toUpperCase() + " &ein: &b" + data);
                 return null;
@@ -147,14 +67,8 @@ public enum PotionEffectUtils {
         if (warning != null) Util.warning(warning);
         Util.warning("&r  - Check your configs");
         Util.warning("&r  - Proper example:");
-        Util.warning("      &bpotion:POTION_EFFECT_TYPE:DURATION_IN_TICKS:LEVEL");
-        Util.warning("      &bpotion:HEAL:200:1");
-    }
-
-    public static void deprecationWarning(String data) {
-        if (data.contains("potion:")) {
-            Util.warning("&c'potion:'&e has been changed to &a'potion-type:'&e please update your configs. Found: &7" + data);
-        }
+        Util.warning("      &bpotion:POTION_EFFECT_TYPE:DURATION_IN_TICKS:AMPLIFIER");
+        Util.warning("      &bpotion:instant_health:200:1");
     }
 
 }

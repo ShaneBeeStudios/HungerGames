@@ -1,5 +1,9 @@
 package com.shanebeestudios.hg.util;
 
+import com.shanebeestudios.hg.HungerGames;
+import com.shanebeestudios.hg.data.Config;
+import net.kyori.adventure.text.Component;
+import net.kyori.adventure.text.minimessage.MiniMessage;
 import net.md_5.bungee.api.ChatColor;
 import org.bukkit.Bukkit;
 import org.bukkit.Color;
@@ -17,8 +21,6 @@ import org.bukkit.inventory.meta.FireworkMeta;
 import org.bukkit.material.Attachable;
 import org.bukkit.material.MaterialData;
 import org.jetbrains.annotations.NotNull;
-import com.shanebeestudios.hg.HungerGames;
-import com.shanebeestudios.hg.data.Config;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -38,6 +40,8 @@ public class Util {
     private static final Logger LOGGER = Bukkit.getLogger();
     public static final BlockFace[] faces = new BlockFace[]{BlockFace.EAST, BlockFace.WEST, BlockFace.NORTH, BlockFace.SOUTH};
     private static final Pattern HEX_PATTERN = Pattern.compile("<#([A-Fa-f0-9]){6}>");
+    private static final CommandSender CONSOLE = Bukkit.getConsoleSender();
+    private static final MiniMessage MINI_MESSAGE = MiniMessage.miniMessage();
 
     /**
      * Log a message to console prefixed with the plugin's name
@@ -46,6 +50,18 @@ public class Util {
      */
     public static void log(String s) {
         scm(Bukkit.getConsoleSender(), "&7[&3&lHungerGames&7] " + s);
+    }
+
+    /**
+     * Log a mini-message to console prefixed with the plugin's name
+     *
+     * @param format Message format
+     * @param args   Arguments for message format
+     */
+    public static void logMini(String format, Object... args) {
+        String s = String.format(format, args);
+        Component mini = getMini("<grey>[<bold><aqua>Hunger<dark_aqua>Games<grey></bold>] " + s);
+        CONSOLE.sendMessage(mini);
     }
 
     /**
@@ -65,7 +81,7 @@ public class Util {
      */
     public static void warning(String warning) {
         if (warning.length() > 0) { // only send messages if its actually a message
-            LOGGER.warning(getColString("&7[&e&lHungerGames&7] &eWARNING: " + warning));
+            scm(Bukkit.getConsoleSender(), getColString("&7[&e&lHungerGames&7] &eWARNING: " + warning));
         }
     }
 
@@ -182,6 +198,26 @@ public class Util {
             }
         }
         return ChatColor.translateAlternateColorCodes('&', string);
+    }
+
+    /**
+     * Convert text to MiniMessage
+     *
+     * @param text Text to convert
+     * @return Component from text
+     */
+    public static Component getMini(String text) {
+        return MINI_MESSAGE.deserialize(text);
+    }
+
+    /**
+     * Convert a MiniMessage/Component to text
+     *
+     * @param component Component to convert
+     * @return Text from component
+     */
+    public static String unMini(Component component) {
+        return MINI_MESSAGE.serialize(component);
     }
 
     /**

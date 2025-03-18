@@ -4,6 +4,7 @@ import com.shanebeestudios.hg.HungerGames;
 import com.shanebeestudios.hg.game.Bound;
 import com.shanebeestudios.hg.game.Game;
 import com.shanebeestudios.hg.game.GameArenaData;
+import com.shanebeestudios.hg.managers.ItemStackManager;
 import com.shanebeestudios.hg.managers.KitManager;
 import com.shanebeestudios.hg.tasks.CompassTask;
 import com.shanebeestudios.hg.util.Util;
@@ -33,9 +34,11 @@ public class ArenaConfig {
 	private FileConfiguration arenadat = null;
 	private File customConfigFile = null;
 	private final HungerGames plugin;
+    private final ItemStackManager itemStackManager;
 
 	public ArenaConfig(HungerGames plugin) {
 		this.plugin = plugin;
+        this.itemStackManager = plugin.getItemStackManager();
 		reloadCustomConfig();
 		load();
 	}
@@ -172,18 +175,15 @@ public class ArenaConfig {
 
 					if (!arenadat.getStringList(path + ".items").isEmpty()) {
 						HashMap<Integer, ItemStack> items = new HashMap<>();
-						for (String itemString : arenadat.getStringList(path + ".items")) {
-							plugin.getRandomItems().loadItems(itemString, items);
-						}
+                        this.itemStackManager.loadItems(this.arenadat.getMapList(path + ".items"), items);
 						game.getGameItemData().setItems(items);
 						Util.log(items.size() + " Random items have been loaded for arena: &b" + arenaName);
 					}
 					if (!arenadat.getStringList(path + ".bonus").isEmpty()) {
 						HashMap<Integer, ItemStack> bonusItems = new HashMap<>();
-						for (String itemString : arenadat.getStringList(path + ".bonus")) {
-							plugin.getRandomItems().loadItems(itemString, bonusItems);
-						}
-						game.getGameItemData().setBonusItems(bonusItems);
+                        this.itemStackManager.loadItems(this.arenadat.getMapList(path + ".bonus"), bonusItems);
+
+                        game.getGameItemData().setBonusItems(bonusItems);
 						Util.log(bonusItems.size() + " Random bonus items have been loaded for arena: &b" + arenaName);
 					}
 

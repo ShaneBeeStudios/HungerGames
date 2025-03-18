@@ -1,10 +1,19 @@
 package com.shanebeestudios.hg.managers;
 
+import com.shanebeestudios.hg.HungerGames;
+import com.shanebeestudios.hg.data.KitEntry;
+import com.shanebeestudios.hg.api.parsers.ItemParser;
+import com.shanebeestudios.hg.util.NBTApi;
+import com.shanebeestudios.hg.util.PotionEffectUtils;
+import com.shanebeestudios.hg.util.PotionTypeUtils;
+import com.shanebeestudios.hg.util.Util;
 import org.bukkit.Bukkit;
 import org.bukkit.Color;
 import org.bukkit.DyeColor;
 import org.bukkit.Material;
 import org.bukkit.configuration.Configuration;
+import org.bukkit.configuration.ConfigurationSection;
+import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.inventory.ItemFlag;
 import org.bukkit.inventory.ItemStack;
@@ -12,19 +21,16 @@ import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.inventory.meta.LeatherArmorMeta;
 import org.bukkit.inventory.meta.PotionMeta;
 import org.bukkit.inventory.meta.SkullMeta;
-import org.bukkit.potion.PotionData;
 import org.bukkit.potion.PotionEffect;
-import org.bukkit.potion.PotionEffectType;
+import org.bukkit.potion.PotionType;
 import org.jetbrains.annotations.Nullable;
-import com.shanebeestudios.hg.HungerGames;
-import com.shanebeestudios.hg.data.KitEntry;
-import com.shanebeestudios.hg.util.NBTApi;
-import com.shanebeestudios.hg.util.PotionEffectUtils;
-import com.shanebeestudios.hg.util.PotionTypeUtils;
-import com.shanebeestudios.hg.util.Util;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 /**
  * Manage item stacks for kits and chests
@@ -34,16 +40,23 @@ public class ItemStackManager {
     private final HungerGames plugin;
     private final NBTApi nbtApi;
 
-    public ItemStackManager(HungerGames p) {
-        this.plugin = p;
-        this.nbtApi = p.getNbtApi();
-        setKits();
+    public ItemStackManager(HungerGames plugin) {
+        this.plugin = plugin;
+        this.nbtApi = plugin.getNbtApi();
+        loadGeneralKits();
     }
 
-    public void setKits() {
-        Util.log("Loading kits...");
-        kitCreator(plugin.getHGConfig().getConfig(), plugin.getKitManager(), null);
-        Util.log("Kits have been &aloaded!");
+    public void loadGeneralKits() {
+        File kitFile = new File(this.plugin.getDataFolder(), "kits.yml");
+
+        if (!kitFile.exists()) {
+            this.plugin.saveResource("kits.yml", false);
+            Util.logMini("- New kits.yml file has been <green>successfully generated!");
+        }
+        YamlConfiguration kitConfig = YamlConfiguration.loadConfiguration(kitFile);
+        Util.logMini("Loading kits:");
+        kitCreator(kitConfig, plugin.getKitManager(), null);
+        Util.logMini("- Kits have been <green>successfully loaded!");
     }
 
     /**
@@ -58,51 +71,56 @@ public class ItemStackManager {
         KitManager kit = new KitManager();
         if (config.getConfigurationSection(gamePath + "kits") == null) return null;
         kitCreator(config, kit, gamePath);
-        Util.log("Loaded custom kits for arena: &b" + gameName);
+        Util.logMini("- Loaded custom kits for arena: <aqua>" + gameName);
         return kit;
     }
 
-    @SuppressWarnings("ConstantConditions")
+    @SuppressWarnings({"ConstantConditions", "unchecked"})
     private void kitCreator(Configuration config, KitManager kit, @Nullable String gameName) {
         if (gameName == null) gameName = "";
         if (config.getConfigurationSection(gameName + "kits") == null) return;
+
         for (String path : config.getConfigurationSection(gameName + "kits").getKeys(false)) {
+            ConfigurationSection section = config.getConfigurationSection(gameName + "kits." + path);
+
             try {
-                ArrayList<ItemStack> stack = new ArrayList<>();
-                ArrayList<PotionEffect> potions = new ArrayList<>();
-                String perm = null;
+                Map<Integer, ItemStack> items = new HashMap<>();
+                loadItems(section.getMapList("items"), items);
 
-                for (String item : config.getStringList(gameName + "kits." + path + ".items"))
-                    stack.add(getItem(item, true));
+                ItemStack helmet = ItemParser.parseItem(section.getConfigurationSection("helmet"));
+                ItemStack chestplate = ItemParser.parseItem(section.getConfigurationSection("chestplate"));
+                ItemStack leggings = ItemParser.parseItem(section.getConfigurationSection("leggings"));
+                ItemStack boots = ItemParser.parseItem(section.getConfigurationSection("boots"));
 
-                for (String pot : config.getStringList(gameName + "kits." + path + ".potion-effects")) {
-                    String[] poti = pot.split(":");
-                    PotionEffectType type = PotionEffectUtils.get(poti[0]);
-                    if (poti[2].equalsIgnoreCase("forever")) {
-                        assert type != null;
-                        potions.add(type.createEffect(2147483647, Integer.parseInt(poti[1])));
-                    } else {
-                        int dur = Integer.parseInt(poti[2]) * 20;
-                        assert type != null;
-                        potions.add(type.createEffect(dur, Integer.parseInt(poti[1])));
-                    }
-                }
+                List<PotionEffect> potionEffects = new ArrayList<>();
+                List<Map<?, ?>> mapList = section.getMapList("potion-effects");
+                mapList.forEach(map -> potionEffects.add(ItemParser.parsePotionEffect((Map<String, Object>) map)));
 
-                ItemStack helm = getItem(config.getString(gameName + "kits." + path + ".helmet"), false);
-                ItemStack ches = getItem(config.getString(gameName + "kits." + path + ".chestplate"), false);
-                ItemStack leg = getItem(config.getString(gameName + "kits." + path + ".leggings"), false);
-                ItemStack boot = getItem(config.getString(gameName + "kits." + path + ".boots"), false);
+                String permission = null;
+                if (section.contains("permission") && !section.getString("permission").equalsIgnoreCase("none"))
+                    permission = section.getString("permission");
 
-                if (config.getString(gameName + "kits." + path + ".permission") != null
-                        && !config.getString(gameName + "kits." + path + ".permission").equals("none"))
-                    perm = config.getString(gameName + "kits." + path + ".permission");
-
-                kit.addKit(path, new KitEntry(stack.toArray(new ItemStack[0]), helm, boot, ches, leg, perm, potions));
+                KitEntry kitEntry = new KitEntry(items.values().toArray(new ItemStack[0]), helmet, boots, chestplate, leggings, permission, potionEffects);
+                kit.addKit(path, kitEntry);
+                Util.logMini("- Loaded kit <white>'<aqua>%s<white>'", gameName + path);
             } catch (Exception e) {
-                Util.log("-------------------------------------------");
-                Util.warning("Unable to load kit " + gameName + path + "! (for a more detailed message enable 'debug' in config and reload)");
-                Util.log("-------------------------------------------");
+                Util.logMini("-------------------------------------------");
+                Util.logMini("<yellow>Unable to load kit " + gameName + path + "! (for a more detailed message enable 'debug' in config and reload)");
+                Util.logMini("-------------------------------------------");
                 Util.debug(e);
+            }
+        }
+    }
+
+    @SuppressWarnings("unchecked")
+    public void loadItems(List<Map<?, ?>> configListMap, Map<Integer, ItemStack> map) {
+        for (Map<?, ?> itemMapUnchecked : configListMap) {
+            Map<String, Object> itemMap = (Map<String, Object>) itemMapUnchecked;
+
+            ItemStack itemStack = ItemParser.parseItem(itemMap);
+            int chance = (int) itemMap.getOrDefault("chance", 1);
+            for (int i = 0; i < chance; i++) {
+                map.put(map.size() + 1, itemStack);
             }
         }
     }
@@ -137,11 +155,12 @@ public class ItemStackManager {
                     ((LeatherArmorMeta) itemMeta).setColor(getColor(s));
                     try {
                         itemMeta.addItemFlags(ItemFlag.HIDE_DYE);
-                    } catch (NoSuchFieldError ignore) {}
+                    } catch (NoSuchFieldError ignore) {
+                    }
                 } else if (itemMeta instanceof PotionMeta) {
                     ((PotionMeta) itemMeta).setColor(getColor(s));
                 } else {
-                    Util.warning("Item cannot be colored: &c%s &eline: &b%s", split[0], args);
+                    Util.log("<yellow>Item cannot be colored: <red>%s <yellow>line: <aqua>%s", split[0], args);
                 }
             } else if (s.startsWith("name:")) {
                 s = s.replace("name:", "").replace("_", " ");
@@ -153,7 +172,6 @@ public class ItemStackManager {
                 ArrayList<String> lore = new ArrayList<>(Arrays.asList(s.split(":")));
                 itemMeta.setLore(lore);
             } else if ((s.startsWith("potion:") || s.startsWith("potion-type:")) && itemMeta instanceof PotionMeta) {
-                PotionEffectUtils.deprecationWarning(s);
                 s = s.replace("potion:", "");
                 s = s.replace("potion-type:", "");
                 String[] effects = s.split(";");
@@ -165,9 +183,9 @@ public class ItemStackManager {
                 }
             } else if (s.startsWith("potion-base:") && itemMeta instanceof PotionMeta) {
                 s = s.replace("potion-base:", "");
-                PotionData potionData = PotionTypeUtils.getPotionData(s);
+                PotionType potionData = PotionTypeUtils.getPotionData(s);
                 if (potionData != null) {
-                    ((PotionMeta) itemMeta).setBasePotionData(potionData);
+                    ((PotionMeta) itemMeta).setBasePotionType(potionData);
                 }
             } else if (s.startsWith("data:")) {
                 s = s.replace("data:", "").replace("~", " ");
@@ -196,7 +214,7 @@ public class ItemStackManager {
                 return;
             }
         }
-        Util.warning("Invalid enchantment: &c%s &eline: &b%s", enchantString, line);
+        Util.logMini("<yellow>Invalid enchantment: <red>%s <yellow>line: <aqua>%s", enchantString, line);
     }
 
     private ItemStack itemStringToStack(String item, int amount) {
@@ -204,7 +222,7 @@ public class ItemStackManager {
         try {
             material = Material.valueOf(item);
         } catch (IllegalArgumentException ex) {
-            Util.warning("Invalid Material: &7" + item);
+            Util.logMini("<yellow>Invalid Material: <grey>" + item);
             return null;
         }
         return new ItemStack(material, amount);
@@ -229,7 +247,7 @@ public class ItemStackManager {
         ItemStack compass = new ItemStack(Material.COMPASS);
         ItemMeta meta = compass.getItemMeta();
         assert meta != null;
-        meta.setDisplayName(Util.getColString(plugin.getLang().spectator_compass));
+        meta.displayName(Util.getMini(plugin.getLang().spectator_compass));
         compass.setItemMeta(meta);
         return compass;
     }
