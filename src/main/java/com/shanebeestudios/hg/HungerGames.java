@@ -100,9 +100,9 @@ public class HungerGames extends JavaPlugin {
 
     @Override
     public void onEnable() {
-        if (!Util.isRunningMinecraft(1, 13)) {
-            Util.warning("HungerGames does not support your version!");
-            Util.warning("Only versions 1.13+ are supported");
+        if (!Util.isRunningMinecraft(1, 21, 4)) {
+            Util.warning("HungerGames does not support your server version!");
+            Util.warning("Only versions 1.21.4+ are supported");
             Bukkit.getPluginManager().disablePlugin(this);
             return;
         }
@@ -122,7 +122,7 @@ public class HungerGames extends JavaPlugin {
         bonusItems = new HashMap<>();
 
         config = new Config(this);
-        metrics = new Metrics(this, 0000); // TODO gotta register this
+        metrics = new Metrics(this, 25144);
         nbtApi = new NBTApi();
 
         //MythicMob check
