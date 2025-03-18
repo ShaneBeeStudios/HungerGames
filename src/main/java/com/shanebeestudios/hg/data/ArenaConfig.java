@@ -1,6 +1,12 @@
 package com.shanebeestudios.hg.data;
 
 import com.shanebeestudios.hg.HG;
+import com.shanebeestudios.hg.game.Bound;
+import com.shanebeestudios.hg.game.Game;
+import com.shanebeestudios.hg.game.GameArenaData;
+import com.shanebeestudios.hg.managers.KitManager;
+import com.shanebeestudios.hg.tasks.CompassTask;
+import com.shanebeestudios.hg.util.Util;
 import org.bukkit.Bukkit;
 import org.bukkit.Difficulty;
 import org.bukkit.Location;
@@ -11,13 +17,6 @@ import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.inventory.ItemStack;
-import tk.shanebee.hg.*;
-import com.shanebeestudios.hg.game.Bound;
-import com.shanebeestudios.hg.game.Game;
-import com.shanebeestudios.hg.game.GameArenaData;
-import com.shanebeestudios.hg.managers.KitManager;
-import com.shanebeestudios.hg.tasks.CompassTask;
-import com.shanebeestudios.hg.util.Util;
 
 import java.io.File;
 import java.io.IOException;

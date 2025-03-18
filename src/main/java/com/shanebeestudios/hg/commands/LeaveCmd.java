@@ -1,7 +1,6 @@
 package com.shanebeestudios.hg.commands;
 
 import com.shanebeestudios.hg.Status;
-import tk.shanebee.hg.*;
 import com.shanebeestudios.hg.data.Config;
 import com.shanebeestudios.hg.game.Game;
 import com.shanebeestudios.hg.game.GameArenaData;
