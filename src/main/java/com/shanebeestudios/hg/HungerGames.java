@@ -44,12 +44,11 @@ import com.shanebeestudios.hg.managers.KitManager;
 import com.shanebeestudios.hg.managers.Manager;
 import com.shanebeestudios.hg.managers.Placeholders;
 import com.shanebeestudios.hg.managers.PlayerManager;
-import com.shanebeestudios.hg.metrics.Metrics;
-import com.shanebeestudios.hg.metrics.MetricsHandler;
 import com.shanebeestudios.hg.util.NBTApi;
 import com.shanebeestudios.hg.util.Util;
 import io.lumine.mythic.api.MythicProvider;
 import io.lumine.mythic.api.mobs.MobManager;
+import org.bstats.bukkit.Metrics;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.event.HandlerList;
@@ -123,12 +122,7 @@ public class HungerGames extends JavaPlugin {
         bonusItems = new HashMap<>();
 
         config = new Config(this);
-        metrics = new Metrics(this);
-        if (metrics.isEnabled()) {
-            Util.log("&7Metrics have been &aenabled");
-            new MetricsHandler(false);
-        } else
-            Util.log("&7Metrics have been &cdisabled");
+        metrics = new Metrics(this, 0000); // TODO gotta register this
         nbtApi = new NBTApi();
 
         //MythicMob check
