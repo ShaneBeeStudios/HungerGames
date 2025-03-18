@@ -6,7 +6,7 @@ import org.bukkit.Material;
 import org.bukkit.World;
 import org.bukkit.entity.FallingBlock;
 import org.bukkit.entity.Player;
-import com.shanebeestudios.hg.HG;
+import com.shanebeestudios.hg.HungerGames;
 import com.shanebeestudios.hg.data.Config;
 import com.shanebeestudios.hg.game.Bound;
 import com.shanebeestudios.hg.game.Game;
@@ -25,7 +25,7 @@ public class ChestDropTask implements Runnable {
 
     public ChestDropTask(Game game) {
         this.game = game;
-        timerID = Bukkit.getServer().getScheduler().scheduleSyncRepeatingTask(HG.getPlugin(), this, Config.randomChestInterval, Config.randomChestInterval);
+        timerID = Bukkit.getServer().getScheduler().scheduleSyncRepeatingTask(HungerGames.getPlugin(), this, Config.randomChestInterval, Config.randomChestInterval);
     }
 
     public void run() {
@@ -60,12 +60,12 @@ public class ChestDropTask implements Runnable {
         for (UUID u : game.getGamePlayerData().getPlayers()) {
             Player p = Bukkit.getPlayer(u);
             if (p != null) {
-                Util.scm(p, HG.getPlugin().getLang().chest_drop_1);
-                Util.scm(p, HG.getPlugin().getLang().chest_drop_2
+                Util.scm(p, HungerGames.getPlugin().getLang().chest_drop_1);
+                Util.scm(p, HungerGames.getPlugin().getLang().chest_drop_2
                         .replace("<x>", String.valueOf(x))
                         .replace("<y>", String.valueOf(y))
                         .replace("<z>", String.valueOf(z)));
-                Util.scm(p, HG.getPlugin().getLang().chest_drop_1);
+                Util.scm(p, HungerGames.getPlugin().getLang().chest_drop_1);
             }
         }
     }

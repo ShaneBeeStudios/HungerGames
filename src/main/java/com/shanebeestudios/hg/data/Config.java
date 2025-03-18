@@ -3,7 +3,7 @@ package com.shanebeestudios.hg.data;
 import org.bukkit.configuration.Configuration;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
-import com.shanebeestudios.hg.HG;
+import com.shanebeestudios.hg.HungerGames;
 import com.shanebeestudios.hg.util.Util;
 import com.shanebeestudios.hg.util.Vault;
 
@@ -84,11 +84,11 @@ public class Config {
     public static boolean mcmmoUseSkills;
     public static boolean mcmmoGainExp;
 
-    private final HG plugin;
+    private final HungerGames plugin;
     private File configFile;
     private FileConfiguration config;
 
-    public Config(HG plugin) {
+    public Config(HungerGames plugin) {
         this.plugin = plugin;
         loadConfigFile();
     }

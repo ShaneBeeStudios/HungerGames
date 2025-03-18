@@ -45,7 +45,7 @@ public enum Status {
 	 */
 	COUNTDOWN;
 
-	Language lang = HG.getPlugin().getLang();
+	Language lang = HungerGames.getPlugin().getLang();
 
 	public String getName() {
         switch (this) {

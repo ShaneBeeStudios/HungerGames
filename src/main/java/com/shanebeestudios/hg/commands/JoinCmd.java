@@ -1,6 +1,6 @@
 package com.shanebeestudios.hg.commands;
 
-import com.shanebeestudios.hg.HG;
+import com.shanebeestudios.hg.HungerGames;
 import com.shanebeestudios.hg.game.Game;
 import com.shanebeestudios.hg.util.Util;
 
@@ -18,7 +18,7 @@ public class JoinCmd extends BaseCmd {
 	public boolean run() {
 
 		if (playerManager.hasPlayerData(player) || playerManager.hasSpectatorData(player)) {
-			Util.scm(player, HG.getPlugin().getLang().cmd_join_in_game);
+			Util.scm(player, HungerGames.getPlugin().getLang().cmd_join_in_game);
 		} else {
 			Game g = gameManager.getGame(args[1]);
 			if (g != null && !g.getGamePlayerData().getPlayers().contains(player.getUniqueId())) {

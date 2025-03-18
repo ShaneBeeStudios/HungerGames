@@ -4,7 +4,7 @@ import org.bukkit.Bukkit;
 import com.shanebeestudios.hg.data.Config;
 import com.shanebeestudios.hg.data.Language;
 import com.shanebeestudios.hg.game.Game;
-import com.shanebeestudios.hg.HG;
+import com.shanebeestudios.hg.HungerGames;
 import com.shanebeestudios.hg.Status;
 import com.shanebeestudios.hg.game.GameArenaData;
 
@@ -27,7 +27,7 @@ public class TimerTask implements Runnable {
 	public TimerTask(Game g, int time) {
 		this.remainingtime = time;
 		this.game = g;
-		HG plugin = game.getGameArenaData().getPlugin();
+		HungerGames plugin = game.getGameArenaData().getPlugin();
 		this.lang = plugin.getLang();
 		this.teleportTimer = Config.teleportEndTime;
 		this.borderCountdownStart = g.getGameBorderData().getBorderTimer().get(0);

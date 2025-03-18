@@ -10,7 +10,7 @@ import org.bukkit.block.Sign;
 import org.bukkit.block.data.Directional;
 import org.bukkit.entity.ItemFrame;
 import org.bukkit.inventory.InventoryHolder;
-import com.shanebeestudios.hg.HG;
+import com.shanebeestudios.hg.HungerGames;
 import com.shanebeestudios.hg.data.ItemFrameData;
 import com.shanebeestudios.hg.util.Util;
 
@@ -217,7 +217,7 @@ public class GameBlockData extends Data {
             sign1.setLine(1, Util.getColString("&l" + game.gameArenaData.name));
             sign1.setLine(2, Util.getColString(lang.lobby_sign_1_3));
             if (game.gameArenaData.cost > 0)
-                sign1.setLine(3, Util.getColString(HG.getPlugin().getLang().lobby_sign_cost.replace("<cost>", String.valueOf(game.gameArenaData.cost))));
+                sign1.setLine(3, Util.getColString(HungerGames.getPlugin().getLang().lobby_sign_cost.replace("<cost>", String.valueOf(game.gameArenaData.cost))));
             sign2.setLine(0, Util.getColString(lang.lobby_sign_2_1));
             sign2.setLine(1, Util.getColString(game.gameArenaData.status.getName()));
             sign3.setLine(0, Util.getColString(lang.lobby_sign_3_1));

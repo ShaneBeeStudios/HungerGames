@@ -4,7 +4,7 @@ import java.util.Iterator;
 
 import org.bukkit.Bukkit;
 import org.bukkit.block.BlockState;
-import com.shanebeestudios.hg.HG;
+import com.shanebeestudios.hg.HungerGames;
 import com.shanebeestudios.hg.data.Config;
 import com.shanebeestudios.hg.data.ItemFrameData;
 import com.shanebeestudios.hg.game.Game;
@@ -30,7 +30,7 @@ public class Rollback implements Runnable {
 		game.getGameArenaData().setStatus(Status.ROLLBACK);
 		this.session = gameBlockData.getBlocks().iterator();
 		this.itemFrameDataIterator = gameBlockData.getItemFrameData().iterator();
-		timerID = Bukkit.getServer().getScheduler().scheduleSyncDelayedTask(HG.getPlugin(), this, 2);
+		timerID = Bukkit.getServer().getScheduler().scheduleSyncDelayedTask(HungerGames.getPlugin(), this, 2);
 	}
 
 	public void run() {
@@ -44,7 +44,7 @@ public class Rollback implements Runnable {
 			i++;
 		}
 		if (session.hasNext()) {
-			timerID = Bukkit.getServer().getScheduler().scheduleSyncDelayedTask(HG.getPlugin(), this, 2);
+			timerID = Bukkit.getServer().getScheduler().scheduleSyncDelayedTask(HungerGames.getPlugin(), this, 2);
 			return;
 		}
 

@@ -2,7 +2,7 @@ package com.shanebeestudios.hg.game;
 
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
-import com.shanebeestudios.hg.HG;
+import com.shanebeestudios.hg.HungerGames;
 import com.shanebeestudios.hg.data.PlayerData;
 import com.shanebeestudios.hg.util.Util;
 
@@ -22,7 +22,7 @@ public class Team {
     private final org.bukkit.scoreboard.Team bukkitTeam;
 
     public Team(Player leader, String name, Game game) {
-        HG plugin = HG.getPlugin();
+        HungerGames plugin = HungerGames.getPlugin();
         this.name = name;
         this.leader = leader.getUniqueId();
         PlayerData playerData = plugin.getPlayerManager().getPlayerData(leader);
@@ -44,12 +44,12 @@ public class Team {
     public void invite(Player player) {
         Player leader = Bukkit.getPlayer(this.leader);
         assert leader != null;
-        Util.scm(player, HG.getPlugin().getLang().team_invite_1);
-        Util.scm(player, HG.getPlugin().getLang().team_invite_2.replace("<inviter>", leader.getName()));
-        Util.scm(player, HG.getPlugin().getLang().team_invite_3);
-        Util.scm(player, HG.getPlugin().getLang().team_invite_4);
+        Util.scm(player, HungerGames.getPlugin().getLang().team_invite_1);
+        Util.scm(player, HungerGames.getPlugin().getLang().team_invite_2.replace("<inviter>", leader.getName()));
+        Util.scm(player, HungerGames.getPlugin().getLang().team_invite_3);
+        Util.scm(player, HungerGames.getPlugin().getLang().team_invite_4);
         pending.add(player.getUniqueId());
-        HG.getPlugin().getPlayerManager().getData(player).setPendingTeam(this);
+        HungerGames.getPlugin().getPlayerManager().getData(player).setPendingTeam(this);
     }
 
     /**
@@ -58,12 +58,12 @@ public class Team {
      * @param player Player to force to accept the invite
      */
     public void acceptInvite(Player player) {
-        PlayerData playerData = HG.getPlugin().getPlayerManager().getPlayerData(player);
+        PlayerData playerData = HungerGames.getPlugin().getPlayerManager().getPlayerData(player);
         playerData.setPendingTeam(null);
         playerData.setTeam(this);
         pending.remove(player.getUniqueId());
         players.add(player.getUniqueId());
-        Util.scm(player, HG.getPlugin().getLang().joined_team);
+        Util.scm(player, HungerGames.getPlugin().getLang().joined_team);
         bukkitTeam.addEntry(player.getName());
     }
 

@@ -44,7 +44,7 @@ import org.bukkit.inventory.PlayerInventory;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.metadata.FixedMetadataValue;
 import org.bukkit.util.Vector;
-import com.shanebeestudios.hg.HG;
+import com.shanebeestudios.hg.HungerGames;
 import com.shanebeestudios.hg.Status;
 import com.shanebeestudios.hg.data.Config;
 import com.shanebeestudios.hg.data.Language;
@@ -70,7 +70,7 @@ import java.util.UUID;
  */
 public class GameListener implements Listener {
 
-	private final HG plugin;
+	private final HungerGames plugin;
 	private final Language lang;
 	private final String tsn = ChatColor.GOLD + "TrackingStick " + ChatColor.GREEN + "Uses: ";
 	private final ItemStack trackingStick;
@@ -79,7 +79,7 @@ public class GameListener implements Listener {
     private final PlayerManager playerManager;
     private final Leaderboard leaderboard;
 
-	public GameListener(HG plugin) {
+	public GameListener(HungerGames plugin) {
 		this.plugin = plugin;
 		this.lang = plugin.getLang();
 		this.gameManager = plugin.getManager();
@@ -367,7 +367,7 @@ public class GameListener implements Listener {
 		Game game = event.getGame();
 		GameBlockData gameBlockData = game.getGameBlockData();
 		if (!gameBlockData.isLoggedChest(block.getLocation())) {
-			HG.getPlugin().getManager().fillChests(block, game, event.isBonus());
+			HungerGames.getPlugin().getManager().fillChests(block, game, event.isBonus());
 			gameBlockData.addGameChest(block.getLocation());
 		}
 	}

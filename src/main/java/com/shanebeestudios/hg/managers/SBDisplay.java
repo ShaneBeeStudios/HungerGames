@@ -10,7 +10,7 @@ import org.bukkit.scoreboard.Objective;
 import org.bukkit.scoreboard.Score;
 import org.bukkit.scoreboard.Scoreboard;
 import org.bukkit.scoreboard.ScoreboardManager;
-import com.shanebeestudios.hg.HG;
+import com.shanebeestudios.hg.HungerGames;
 import com.shanebeestudios.hg.game.Game;
 import com.shanebeestudios.hg.util.Util;
 
@@ -28,9 +28,9 @@ public class SBDisplay {
 	public SBDisplay(Game game) {
 		this.manager = Bukkit.getScoreboardManager();
 		this.board = manager.getNewScoreboard();
-		this.ob = board.registerNewObjective(ChatColor.translateAlternateColorCodes('&', HG.getPlugin().getLang().players_alive), "dummy", "arena" + game.getGameArenaData().getName());
+		this.ob = board.registerNewObjective(ChatColor.translateAlternateColorCodes('&', HungerGames.getPlugin().getLang().players_alive), "dummy", "arena" + game.getGameArenaData().getName());
 		this.ob.setDisplaySlot(DisplaySlot.SIDEBAR);
-		this.ob.setDisplayName(ChatColor.translateAlternateColorCodes('&', HG.getPlugin().getLang().scoreboard_title));
+		this.ob.setDisplayName(ChatColor.translateAlternateColorCodes('&', HungerGames.getPlugin().getLang().scoreboard_title));
 		this.game = game;
 	}
 
@@ -44,18 +44,18 @@ public class SBDisplay {
 
 		 */
 		ob.unregister();
-		this.ob = board.registerNewObjective(ChatColor.translateAlternateColorCodes('&', HG.getPlugin().getLang().players_alive), "dummy", "arena" + game.getGameArenaData().getName());
+		this.ob = board.registerNewObjective(ChatColor.translateAlternateColorCodes('&', HungerGames.getPlugin().getLang().players_alive), "dummy", "arena" + game.getGameArenaData().getName());
 		this.ob.setDisplaySlot(DisplaySlot.SIDEBAR);
-		this.ob.setDisplayName(ChatColor.translateAlternateColorCodes('&', HG.getPlugin().getLang().scoreboard_title));
-		String alive = "  " + HG.getPlugin().getLang().players_alive_num.replace("<num>", String.valueOf(game.getGamePlayerData().getPlayers().size()));
+		this.ob.setDisplayName(ChatColor.translateAlternateColorCodes('&', HungerGames.getPlugin().getLang().scoreboard_title));
+		String alive = "  " + HungerGames.getPlugin().getLang().players_alive_num.replace("<num>", String.valueOf(game.getGamePlayerData().getPlayers().size()));
 
 		Score space1 = ob.getScore(" ");
 		Score space2 = ob.getScore("  ");
 		Score space3 = ob.getScore("   ");
-		Score arena1 = ob.getScore(Util.getColString(HG.getPlugin().getLang().scoreboard_arena));
+		Score arena1 = ob.getScore(Util.getColString(HungerGames.getPlugin().getLang().scoreboard_arena));
 		Score arena2 = ob.getScore(Util.getColString("  &e" + game.getGameArenaData().getName()));
 
-		Score alive1 = ob.getScore(Util.getColString(HG.getPlugin().getLang().players_alive));
+		Score alive1 = ob.getScore(Util.getColString(HungerGames.getPlugin().getLang().players_alive));
 		Score alive2 = ob.getScore(Util.getColString(alive));
 
 		space1.setScore(6);
@@ -70,7 +70,7 @@ public class SBDisplay {
 	}
 
 	public void resetAlive() {
-		board.resetScores(ChatColor.translateAlternateColorCodes('&', HG.getPlugin().getLang().players_alive));
+		board.resetScores(ChatColor.translateAlternateColorCodes('&', HungerGames.getPlugin().getLang().players_alive));
 		score.clear();
 	}
 

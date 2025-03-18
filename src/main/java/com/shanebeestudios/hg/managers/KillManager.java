@@ -6,7 +6,7 @@ import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 import org.bukkit.entity.Projectile;
 import org.bukkit.event.entity.EntityDamageEvent.DamageCause;
-import com.shanebeestudios.hg.HG;
+import com.shanebeestudios.hg.HungerGames;
 import com.shanebeestudios.hg.data.Language;
 
 /**
@@ -14,7 +14,7 @@ import com.shanebeestudios.hg.data.Language;
  */
 public class KillManager {
 
-    private Language lang = HG.getPlugin().getLang();
+    private Language lang = HungerGames.getPlugin().getLang();
 
     /** Get the death message when a player dies of natural causes (non-entity involved deaths)
      * @param dc Cause of the damage

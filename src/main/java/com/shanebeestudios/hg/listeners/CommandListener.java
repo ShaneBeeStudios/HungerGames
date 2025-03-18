@@ -11,7 +11,7 @@ import org.bukkit.util.StringUtil;
 import com.shanebeestudios.hg.data.Config;
 import com.shanebeestudios.hg.data.PlayerData;
 import com.shanebeestudios.hg.game.Game;
-import com.shanebeestudios.hg.HG;
+import com.shanebeestudios.hg.HungerGames;
 import com.shanebeestudios.hg.game.Team;
 import com.shanebeestudios.hg.managers.PlayerManager;
 import com.shanebeestudios.hg.util.Util;
@@ -25,10 +25,10 @@ import java.util.*;
 @SuppressWarnings("NullableProblems")
 public class CommandListener implements CommandExecutor, TabCompleter {
 
-	private final HG plugin;
+	private final HungerGames plugin;
 	private final PlayerManager playerManager;
 
-	public CommandListener(HG plugin) {
+	public CommandListener(HungerGames plugin) {
 		this.plugin = plugin;
 		this.playerManager = plugin.getPlayerManager();
 	}

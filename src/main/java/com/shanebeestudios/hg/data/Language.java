@@ -2,7 +2,7 @@ package com.shanebeestudios.hg.data;
 
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
-import com.shanebeestudios.hg.HG;
+import com.shanebeestudios.hg.HungerGames;
 import com.shanebeestudios.hg.util.Util;
 
 import java.io.File;
@@ -16,7 +16,7 @@ public class Language {
 
     private FileConfiguration lang = null;
     private File customLangFile = null;
-    private final HG plugin;
+    private final HungerGames plugin;
 
     public String prefix;
     public String player_joined_game;
@@ -185,7 +185,7 @@ public class Language {
     public String check_ready_run;
 
 
-    public Language(HG plugin) {
+    public Language(HungerGames plugin) {
         this.plugin = plugin;
         loadLangFile();
     }

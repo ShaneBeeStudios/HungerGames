@@ -2,7 +2,7 @@ package com.shanebeestudios.hg.commands;
 
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
-import com.shanebeestudios.hg.HG;
+import com.shanebeestudios.hg.HungerGames;
 import com.shanebeestudios.hg.data.ArenaConfig;
 import com.shanebeestudios.hg.data.Language;
 import com.shanebeestudios.hg.managers.Manager;
@@ -11,14 +11,14 @@ import com.shanebeestudios.hg.util.Util;
 
 public abstract class BaseCmd {
 
-    HG plugin;
+    HungerGames plugin;
     Language lang;
     PlayerManager playerManager;
     Manager gameManager;
     ArenaConfig arenaConfig;
 
     public BaseCmd() {
-        this.plugin = HG.getPlugin();
+        this.plugin = HungerGames.getPlugin();
     }
 
 	public CommandSender sender;
@@ -31,7 +31,7 @@ public abstract class BaseCmd {
 	public String usage = "";
 	public Player player;
 
-	public boolean processCmd(HG plugin, CommandSender sender, String[] args) {
+	public boolean processCmd(HungerGames plugin, CommandSender sender, String[] args) {
 		this.sender = sender;
 		this.args = args;
 		this.playerManager = plugin.getPlayerManager();

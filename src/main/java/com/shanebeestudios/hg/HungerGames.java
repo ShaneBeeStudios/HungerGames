@@ -44,16 +44,14 @@ import com.shanebeestudios.hg.managers.KitManager;
 import com.shanebeestudios.hg.managers.Manager;
 import com.shanebeestudios.hg.managers.Placeholders;
 import com.shanebeestudios.hg.managers.PlayerManager;
-import com.shanebeestudios.hg.metrics.Metrics;
-import com.shanebeestudios.hg.metrics.MetricsHandler;
 import com.shanebeestudios.hg.util.NBTApi;
 import com.shanebeestudios.hg.util.Util;
 import io.lumine.mythic.api.MythicProvider;
 import io.lumine.mythic.api.mobs.MobManager;
+import org.bstats.bukkit.Metrics;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.event.HandlerList;
-import org.bukkit.inventory.ItemStack;
 import org.bukkit.permissions.Permission;
 import org.bukkit.permissions.PermissionDefault;
 import org.bukkit.plugin.java.JavaPlugin;
@@ -67,19 +65,17 @@ import java.util.UUID;
 /**
  * <b>Main class for HungerGames</b>
  */
-public class HG extends JavaPlugin {
+public class HungerGames extends JavaPlugin {
 
     //Maps
     private Map<String, BaseCmd> cmds;
     private Map<UUID, PlayerSession> playerSession;
-    private Map<Integer, ItemStack> items;
-    private Map<Integer, ItemStack> bonusItems;
 
     //Lists
     private List<Game> games;
 
     //Instances
-    private static HG plugin;
+    private static HungerGames plugin;
     private Config config;
     private Manager manager;
     private PlayerManager playerManager;
@@ -101,9 +97,9 @@ public class HG extends JavaPlugin {
 
     @Override
     public void onEnable() {
-        if (!Util.isRunningMinecraft(1, 13)) {
-            Util.warning("HungerGames does not support your version!");
-            Util.warning("Only versions 1.13+ are supported");
+        if (!Util.isRunningMinecraft(1, 21, 4)) {
+            Util.warning("HungerGames does not support your server version!");
+            Util.warning("Only versions 1.21.4+ are supported");
             Bukkit.getPluginManager().disablePlugin(this);
             return;
         }
@@ -119,16 +115,9 @@ public class HG extends JavaPlugin {
         }
         games = new ArrayList<>();
         playerSession = new HashMap<>();
-        items = new HashMap<>();
-        bonusItems = new HashMap<>();
 
         config = new Config(this);
-        metrics = new Metrics(this);
-        if (metrics.isEnabled()) {
-            Util.log("&7Metrics have been &aenabled");
-            new MetricsHandler(false);
-        } else
-            Util.log("&7Metrics have been &cdisabled");
+        metrics = new Metrics(this, 25144);
         nbtApi = new NBTApi();
 
         //MythicMob check
@@ -193,8 +182,6 @@ public class HG extends JavaPlugin {
         stopAll();
         games = null;
         playerSession = null;
-        items = null;
-        bonusItems = null;
         plugin = null;
         config = null;
         metrics = null;
@@ -305,7 +292,7 @@ public class HG extends JavaPlugin {
      *
      * @return This plugin
      */
-    public static HG getPlugin() {
+    public static HungerGames getPlugin() {
         return plugin;
     }
 
@@ -397,24 +384,6 @@ public class HG extends JavaPlugin {
      */
     public Map<UUID, PlayerSession> getPlayerSessions() {
         return this.playerSession;
-    }
-
-    /**
-     * Get general items map
-     *
-     * @return Items map
-     */
-    public Map<Integer, ItemStack> getItems() {
-        return this.items;
-    }
-
-    /**
-     * Get general bonus items map
-     *
-     * @return Bonus items map
-     */
-    public Map<Integer, ItemStack> getBonusItems() {
-        return this.bonusItems;
     }
 
     /**

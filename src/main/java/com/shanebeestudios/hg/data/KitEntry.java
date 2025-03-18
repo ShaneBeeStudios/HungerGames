@@ -2,8 +2,9 @@ package com.shanebeestudios.hg.data;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
 
-import com.shanebeestudios.hg.HG;
+import com.shanebeestudios.hg.HungerGames;
 import com.shanebeestudios.hg.util.Util;
 
 import org.bukkit.entity.Player;
@@ -22,7 +23,7 @@ public class KitEntry {
 	private ItemStack chestplate = null;
 	private ItemStack leggings = null;
 	private ItemStack[] inventoryContents = null;
-	private ArrayList<PotionEffect> potions = null;
+	private List<PotionEffect> potions = null;
 
 	/**
 	 * Create a new, empty kit entry
@@ -39,7 +40,7 @@ public class KitEntry {
 	 * @param potions Potion effects to add
 	 */
 	public KitEntry(ItemStack[] ic, ItemStack helmet, ItemStack boots, ItemStack chestplate, ItemStack leggings,
-					String permission, ArrayList<PotionEffect> potions) {
+					String permission, List<PotionEffect> potions) {
 		this.inventoryContents = ic;
 		this.helm = helmet;
 		this.boots = boots;
@@ -130,7 +131,7 @@ public class KitEntry {
 	/** Get the potion effects for this kit entry
 	 * @return List of potion effects
 	 */
-	public ArrayList<PotionEffect> getPotions() {
+	public List<PotionEffect> getPotions() {
 		return this.potions;
 	}
 
@@ -144,7 +145,7 @@ public class KitEntry {
 	/** Get the permission for this kit entry
 	 * @return The permission
 	 */
-	public String getPemission() {
+	public String getPermission() {
 		return this.perm;
 	}
 
@@ -177,7 +178,7 @@ public class KitEntry {
 			player.removePotionEffect(effect.getType());
 		}
 		player.addPotionEffects(potions);
-		HG.getPlugin().getPlayerManager().getPlayerData(player.getUniqueId()).getGame().getGamePlayerData().freeze(player);
+		HungerGames.getPlugin().getPlayerManager().getPlayerData(player.getUniqueId()).getGame().getGamePlayerData().freeze(player);
 		player.updateInventory();
 	}
 

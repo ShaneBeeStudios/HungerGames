@@ -10,7 +10,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.InventoryHolder;
 import org.bukkit.inventory.ItemStack;
-import com.shanebeestudios.hg.HG;
+import com.shanebeestudios.hg.HungerGames;
 import com.shanebeestudios.hg.Status;
 import com.shanebeestudios.hg.data.Config;
 import com.shanebeestudios.hg.data.Language;
@@ -30,11 +30,11 @@ import java.util.Random;
  */
 public class Manager {
 
-	private final HG plugin;
+	private final HungerGames plugin;
 	private final Language lang;
 	private final Random rg = new Random();
 
-	public Manager(HG plugin) {
+	public Manager(HungerGames plugin) {
 		this.plugin = plugin;
 		this.lang = plugin.getLang();
 	}
@@ -44,7 +44,7 @@ public class Manager {
      * @param gameName Name of the game to debug
      */
 	public void runDebugger(CommandSender sender, String gameName) {
-		Configuration arenadat = HG.getPlugin().getArenaConfig().getCustomConfig();
+		Configuration arenadat = HungerGames.getPlugin().getArenaConfig().getCustomConfig();
 		boolean isReady = true;
 		List<Location> spawns = new ArrayList<>();
 		Sign lobbysign = null;
@@ -64,7 +64,7 @@ public class Manager {
 			maxplayers = arenadat.getInt("arenas." + gameName + ".info." + "max-players");
 
 			if (arenadat.isSet("arenas." + gameName + ".border.center")) {
-				borderCenter = HG.getPlugin().getArenaConfig().getSLoc(arenadat.getString("arenas." + gameName + ".border.center"));
+				borderCenter = HungerGames.getPlugin().getArenaConfig().getSLoc(arenadat.getString("arenas." + gameName + ".border.center"));
 			}
 			if (arenadat.isSet("arenas." + gameName + ".border.size")) {
 				borderSize = arenadat.getInt("arenas." + gameName + ".border.size");
@@ -88,7 +88,7 @@ public class Manager {
 		}
 
 		try {
-			lobbysign = (Sign) HG.getPlugin().getArenaConfig().getSLoc(arenadat.getString("arenas." + gameName + "." + "lobbysign")).getBlock().getState();
+			lobbysign = (Sign) HungerGames.getPlugin().getArenaConfig().getSLoc(arenadat.getString("arenas." + gameName + "." + "lobbysign")).getBlock().getState();
 		} catch (Exception e) {
 			Util.scm(sender, "&cUnable to load lobbysign for arena " + gameName + "!");
 			isReady = false;
@@ -96,7 +96,7 @@ public class Manager {
 
 		try {
 			for (String l : arenadat.getStringList("arenas." + gameName + "." + "spawns")) {
-				spawns.add(HG.getPlugin().getArenaConfig().getLocFromString(l));
+				spawns.add(HungerGames.getPlugin().getArenaConfig().getLocFromString(l));
 			}
 			int count = arenadat.getStringList("arenas." + gameName + "." + "spawns").size();
 			if (count < maxplayers) {
@@ -110,7 +110,7 @@ public class Manager {
 
 		try {
 			@SuppressWarnings("unused")
-            Bound b = new Bound(arenadat.getString("arenas." + gameName + ".bound." + "world"), HG.getPlugin().getArenaConfig().BC(gameName, "x"), HG.getPlugin().getArenaConfig().BC(gameName, "y"), HG.getPlugin().getArenaConfig().BC(gameName, "z"), HG.getPlugin().getArenaConfig().BC(gameName, "x2"), HG.getPlugin().getArenaConfig().BC(gameName, "y2"), HG.getPlugin().getArenaConfig().BC(gameName, "z2"));
+            Bound b = new Bound(arenadat.getString("arenas." + gameName + ".bound." + "world"), HungerGames.getPlugin().getArenaConfig().BC(gameName, "x"), HungerGames.getPlugin().getArenaConfig().BC(gameName, "y"), HungerGames.getPlugin().getArenaConfig().BC(gameName, "z"), HungerGames.getPlugin().getArenaConfig().BC(gameName, "x2"), HungerGames.getPlugin().getArenaConfig().BC(gameName, "y2"), HungerGames.getPlugin().getArenaConfig().BC(gameName, "z2"));
 		} catch (Exception e) {
 			Util.scm(sender, "&cUnable to load region bounds for arena " + gameName + "!");
 			isReady = false;

@@ -4,7 +4,7 @@ import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.block.Sign;
 import org.bukkit.entity.Player;
-import com.shanebeestudios.hg.HG;
+import com.shanebeestudios.hg.HungerGames;
 import com.shanebeestudios.hg.Status;
 import com.shanebeestudios.hg.data.Config;
 import com.shanebeestudios.hg.data.Language;
@@ -36,7 +36,7 @@ import java.util.UUID;
 @SuppressWarnings("unused")
 public class Game {
 
-    final HG plugin;
+    final HungerGames plugin;
     final Language lang;
 
     // Managers
@@ -102,10 +102,10 @@ public class Game {
      * @param cost       Cost of this game
      */
     public Game(String name, Bound bound, int timer, int minPlayers, int maxPlayers, int roam, int cost) {
-        this.plugin = HG.getPlugin();
+        this.plugin = HungerGames.getPlugin();
         this.gameArenaData = new GameArenaData(this, name, bound, timer, minPlayers, maxPlayers, roam, cost);
         this.gameArenaData.status = Status.NOTREADY;
-        this.playerManager = HG.getPlugin().getPlayerManager();
+        this.playerManager = HungerGames.getPlugin().getPlayerManager();
         this.lang = plugin.getLang();
         this.kitManager = plugin.getKitManager();
         this.mobManager = new MobManager(this);

@@ -12,7 +12,7 @@ import org.bukkit.inventory.InventoryHolder;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.SkullMeta;
 import org.jetbrains.annotations.NotNull;
-import com.shanebeestudios.hg.HG;
+import com.shanebeestudios.hg.HungerGames;
 import com.shanebeestudios.hg.game.Game;
 import com.shanebeestudios.hg.util.Util;
 
@@ -28,7 +28,7 @@ public class SpectatorGUI implements InventoryHolder, Listener {
         this.game = game;
         int size = (game.getGameArenaData().getMaxPlayers() / 9) + 1;
         inv = Bukkit.createInventory(this, 9 * Math.min(size, 6), game.getGameArenaData().getName());
-        Bukkit.getPluginManager().registerEvents(this, HG.getPlugin());
+        Bukkit.getPluginManager().registerEvents(this, HungerGames.getPlugin());
     }
 
     @NotNull
@@ -54,7 +54,7 @@ public class SpectatorGUI implements InventoryHolder, Listener {
         assert meta != null;
         meta.setOwningPlayer(player);
         meta.setDisplayName(player.getName());
-        String[] lore = Util.getColString(HG.getPlugin().getLang().spectator_compass_head_lore).split(";");
+        String[] lore = Util.getColString(HungerGames.getPlugin().getLang().spectator_compass_head_lore).split(";");
         meta.setLore(Arrays.asList(lore));
         head.setItemMeta(meta);
         return head;

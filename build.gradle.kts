@@ -71,8 +71,10 @@ tasks {
 
     }
     processResources {
-        exclude("language.yml")
-        expand("version" to projectVersion)
+        val prop = ("version" to projectVersion)
+        filesMatching("plugin.yml") {
+            expand(prop)
+        }
     }
     compileJava {
         options.release = 21
