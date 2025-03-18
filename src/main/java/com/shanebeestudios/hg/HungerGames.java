@@ -67,7 +67,7 @@ import java.util.UUID;
 /**
  * <b>Main class for HungerGames</b>
  */
-public class HG extends JavaPlugin {
+public class HungerGames extends JavaPlugin {
 
     //Maps
     private Map<String, BaseCmd> cmds;
@@ -79,7 +79,7 @@ public class HG extends JavaPlugin {
     private List<Game> games;
 
     //Instances
-    private static HG plugin;
+    private static HungerGames plugin;
     private Config config;
     private Manager manager;
     private PlayerManager playerManager;
@@ -305,7 +305,7 @@ public class HG extends JavaPlugin {
      *
      * @return This plugin
      */
-    public static HG getPlugin() {
+    public static HungerGames getPlugin() {
         return plugin;
     }
 

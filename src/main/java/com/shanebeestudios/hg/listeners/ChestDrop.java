@@ -17,7 +17,7 @@ import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.event.world.ChunkUnloadEvent;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
-import com.shanebeestudios.hg.HG;
+import com.shanebeestudios.hg.HungerGames;
 import com.shanebeestudios.hg.data.Config;
 import com.shanebeestudios.hg.game.Game;
 import com.shanebeestudios.hg.managers.PlayerManager;
@@ -41,8 +41,8 @@ public class ChestDrop implements Listener {
         this.fb = fb;
         this.c = fb.getLocation().getChunk();
         c.load();
-        Bukkit.getPluginManager().registerEvents(this, HG.getPlugin());
-        this.playerManager = HG.getPlugin().getPlayerManager();
+        Bukkit.getPluginManager().registerEvents(this, HungerGames.getPlugin());
+        this.playerManager = HungerGames.getPlugin().getPlayerManager();
     }
 
     @EventHandler
@@ -110,7 +110,7 @@ public class ChestDrop implements Listener {
             i.clear();
             int c = rg.nextInt(Config.randomChestMaxContent) + 1;
             while (c != 0) {
-                ItemStack it = HG.getPlugin().getManager().randomItem(game,false);
+                ItemStack it = HungerGames.getPlugin().getManager().randomItem(game,false);
                 if (it != null) {
                     i.addItem(it);
                 }

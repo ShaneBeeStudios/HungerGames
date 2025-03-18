@@ -7,7 +7,7 @@ import org.bukkit.inventory.EquipmentSlot;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
-import com.shanebeestudios.hg.HG;
+import com.shanebeestudios.hg.HungerGames;
 import com.shanebeestudios.hg.data.MobEntry;
 import com.shanebeestudios.hg.game.Game;
 import com.shanebeestudios.hg.util.PotionEffectUtils;
@@ -30,7 +30,7 @@ public class MobManager {
 
     public MobManager(Game game) {
         this.game = game;
-        this.config = HG.getPlugin().getMobConfig().getMobs();
+        this.config = HungerGames.getPlugin().getMobConfig().getMobs();
         loadMobs();
     }
 
@@ -50,7 +50,7 @@ public class MobManager {
                 if (getSection(key) != null) {
                     MobEntry entry;
                     // MYTHIC MOB
-                    if (getString(key, "type").startsWith("MM:") && HG.getPlugin().getMmMobManager() != null) {
+                    if (getString(key, "type").startsWith("MM:") && HungerGames.getPlugin().getMmMobManager() != null) {
                         String mythicMob = getString(key, "type").replace("MM:", "");
                         entry = new MobEntry(mythicMob, getInt(key, "level"));
                     }
@@ -112,7 +112,7 @@ public class MobManager {
     }
 
     private ItemStack getItemStack(String key, String section) {
-        return HG.getPlugin().getItemStackManager().getItem(getString(key, section), false);
+        return HungerGames.getPlugin().getItemStackManager().getItem(getString(key, section), false);
     }
 
     /**

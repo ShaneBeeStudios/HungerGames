@@ -9,7 +9,7 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.block.Action;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.EquipmentSlot;
-import com.shanebeestudios.hg.HG;
+import com.shanebeestudios.hg.HungerGames;
 import com.shanebeestudios.hg.data.Language;
 import com.shanebeestudios.hg.data.PlayerSession;
 import com.shanebeestudios.hg.game.Game;
@@ -20,10 +20,10 @@ import com.shanebeestudios.hg.util.Util;
  */
 public class WandListener implements Listener {
 
-    private final HG plugin;
+    private final HungerGames plugin;
     private final Language lang;
 
-    public WandListener(HG instance) {
+    public WandListener(HungerGames instance) {
         plugin = instance;
         lang = plugin.getLang();
     }

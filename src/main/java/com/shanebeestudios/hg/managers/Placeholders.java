@@ -2,7 +2,7 @@ package com.shanebeestudios.hg.managers;
 
 import me.clip.placeholderapi.expansion.PlaceholderExpansion;
 import org.bukkit.OfflinePlayer;
-import com.shanebeestudios.hg.HG;
+import com.shanebeestudios.hg.HungerGames;
 import com.shanebeestudios.hg.data.Language;
 import com.shanebeestudios.hg.data.Leaderboard;
 
@@ -11,11 +11,11 @@ import com.shanebeestudios.hg.data.Leaderboard;
  */
 public class Placeholders extends PlaceholderExpansion {
 
-    private HG plugin;
+    private HungerGames plugin;
     private Leaderboard leaderboard;
     private Language lang;
 
-    public Placeholders(HG plugin) {
+    public Placeholders(HungerGames plugin) {
         this.plugin = plugin;
         this.leaderboard = plugin.getLeaderboard();
         this.lang = plugin.getLang();
@@ -92,15 +92,15 @@ public class Placeholders extends PlaceholderExpansion {
                             return getStatsPlayer(identifier, player);
                 }
             case "status":
-                return HG.getPlugin().getManager().getGame(id[1]).getGameArenaData().getStatus().getName();
+                return HungerGames.getPlugin().getManager().getGame(id[1]).getGameArenaData().getStatus().getName();
             case "cost":
-                return String.valueOf(HG.getPlugin().getManager().getGame(id[1]).getGameArenaData().getCost());
+                return String.valueOf(HungerGames.getPlugin().getManager().getGame(id[1]).getGameArenaData().getCost());
             case "playerscurrent":
-                return String.valueOf(HG.getPlugin().getManager().getGame(id[1]).getGamePlayerData().getPlayers().size());
+                return String.valueOf(HungerGames.getPlugin().getManager().getGame(id[1]).getGamePlayerData().getPlayers().size());
             case "playersmax":
-                return String.valueOf(HG.getPlugin().getManager().getGame(id[1]).getGameArenaData().getMaxPlayers());
+                return String.valueOf(HungerGames.getPlugin().getManager().getGame(id[1]).getGameArenaData().getMaxPlayers());
             case "playersmin":
-                return String.valueOf(HG.getPlugin().getManager().getGame(id[1]).getGameArenaData().getMinPlayers());
+                return String.valueOf(HungerGames.getPlugin().getManager().getGame(id[1]).getGameArenaData().getMinPlayers());
         }
         return null;
     }

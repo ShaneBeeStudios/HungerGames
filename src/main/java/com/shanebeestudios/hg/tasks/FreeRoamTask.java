@@ -2,7 +2,7 @@ package com.shanebeestudios.hg.tasks;
 
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
-import com.shanebeestudios.hg.HG;
+import com.shanebeestudios.hg.HungerGames;
 import com.shanebeestudios.hg.data.Language;
 import com.shanebeestudios.hg.game.Game;
 import com.shanebeestudios.hg.util.Util;
@@ -19,7 +19,7 @@ public class FreeRoamTask implements Runnable {
         this.game = game;
         this.roamTime = game.getGameArenaData().getRoamTime();
 
-        Language lang = HG.getPlugin().getLang();
+        Language lang = HungerGames.getPlugin().getLang();
         String gameStarted = lang.roam_game_started;
         String roamTimeString = lang.roam_time.replace("<roam>", "" + roamTime);
 
@@ -35,13 +35,13 @@ public class FreeRoamTask implements Runnable {
                 game.getGamePlayerData().unFreeze(player);
             }
         }
-        this.id = Bukkit.getScheduler().scheduleSyncDelayedTask(HG.getPlugin(), this, roamTime * 20L);
+        this.id = Bukkit.getScheduler().scheduleSyncDelayedTask(HungerGames.getPlugin(), this, roamTime * 20L);
     }
 
     @Override
     public void run() {
         if (roamTime > 0) {
-            game.getGamePlayerData().msgAll(HG.getPlugin().getLang().roam_finished);
+            game.getGamePlayerData().msgAll(HungerGames.getPlugin().getLang().roam_finished);
         }
         game.startGame();
     }

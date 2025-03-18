@@ -1,7 +1,7 @@
 package com.shanebeestudios.hg.listeners;
 
 import org.bukkit.event.Listener;
-import com.shanebeestudios.hg.HG;
+import com.shanebeestudios.hg.HungerGames;
 import com.shanebeestudios.hg.managers.PlayerManager;
 
 /**
@@ -9,10 +9,10 @@ import com.shanebeestudios.hg.managers.PlayerManager;
  */
 public class McmmoListeners implements Listener {
 
-	private HG plugin;
+	private HungerGames plugin;
 	private final PlayerManager playerManager;
 
-	public McmmoListeners(HG plugin) {
+	public McmmoListeners(HungerGames plugin) {
 		this.plugin = plugin;
 		this.playerManager = plugin.getPlayerManager();
 	}

@@ -2,7 +2,7 @@ package com.shanebeestudios.hg.data;
 
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
-import com.shanebeestudios.hg.HG;
+import com.shanebeestudios.hg.HungerGames;
 import com.shanebeestudios.hg.util.Util;
 
 import java.io.File;
@@ -12,11 +12,11 @@ import java.io.File;
  */
 public class MobConfig {
 
-	private HG plugin;
+	private HungerGames plugin;
 	private FileConfiguration mobs = null;
 	private File mobFile = null;
 
-	public MobConfig(HG plugin) {
+	public MobConfig(HungerGames plugin) {
 		this.plugin = plugin;
 		loadMobFile();
 	}

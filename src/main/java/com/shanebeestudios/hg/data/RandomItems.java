@@ -3,7 +3,7 @@ package com.shanebeestudios.hg.data;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.inventory.ItemStack;
-import com.shanebeestudios.hg.HG;
+import com.shanebeestudios.hg.HungerGames;
 import com.shanebeestudios.hg.util.Util;
 
 import java.io.File;
@@ -17,9 +17,9 @@ public class RandomItems {
     private FileConfiguration item = null;
     private File customConfigFile = null;
     public int size = 0;
-    private final HG plugin;
+    private final HungerGames plugin;
 
-    public RandomItems(HG plugin) {
+    public RandomItems(HungerGames plugin) {
         this.plugin = plugin;
         reloadCustomConfig();
         Util.log("Loading random items...");

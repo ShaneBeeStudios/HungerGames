@@ -8,7 +8,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.scoreboard.Scoreboard;
 import org.jetbrains.annotations.Nullable;
-import com.shanebeestudios.hg.HG;
+import com.shanebeestudios.hg.HungerGames;
 import com.shanebeestudios.hg.game.Game;
 import com.shanebeestudios.hg.game.Team;
 import com.shanebeestudios.hg.util.Util;
@@ -92,7 +92,7 @@ public class PlayerData implements Cloneable {
     private void restoreHealth(Player player) {
         double att = player.getAttribute(Attribute.MAX_HEALTH).getValue();
         if (health > att) {
-            Bukkit.getScheduler().runTaskLater(HG.getPlugin(), () -> player.setHealth(health), 10);
+            Bukkit.getScheduler().runTaskLater(HungerGames.getPlugin(), () -> player.setHealth(health), 10);
         } else {
             player.setHealth(health);
         }

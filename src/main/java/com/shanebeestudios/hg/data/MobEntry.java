@@ -12,7 +12,7 @@ import org.bukkit.inventory.EquipmentSlot;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.metadata.FixedMetadataValue;
 import org.bukkit.potion.PotionEffect;
-import com.shanebeestudios.hg.HG;
+import com.shanebeestudios.hg.HungerGames;
 import com.shanebeestudios.hg.util.Util;
 
 import java.util.ArrayList;
@@ -235,14 +235,14 @@ public class MobEntry {
                         }
                     }
                     if (deathMessage != null)
-                        mob.setMetadata("death-message", new FixedMetadataValue(HG.getPlugin(), deathMessage));
+                        mob.setMetadata("death-message", new FixedMetadataValue(HungerGames.getPlugin(), deathMessage));
                 }
             });
 		} else {
-			MythicMob mob = HG.getPlugin().getMmMobManager().getMythicMob(mythicMob).get(); // TODO check in on this
+			MythicMob mob = HungerGames.getPlugin().getMmMobManager().getMythicMob(mythicMob).get(); // TODO check in on this
 			ActiveMob activeMob = mob.spawn(BukkitAdapter.adapt(location), mythicLevel);
 			if (deathMessage != null) {
-				activeMob.getEntity().getBukkitEntity().setMetadata("death-message", new FixedMetadataValue(HG.getPlugin(), deathMessage));
+				activeMob.getEntity().getBukkitEntity().setMetadata("death-message", new FixedMetadataValue(HungerGames.getPlugin(), deathMessage));
 			}
 		}
 	}

@@ -1,13 +1,13 @@
 package com.shanebeestudios.hg.metrics;
 
-import com.shanebeestudios.hg.HG;
+import com.shanebeestudios.hg.HungerGames;
 
 public class MetricsHandler {
 
 	private Metrics metrics;
 
 	public MetricsHandler(boolean isPremium) {
-		this.metrics = HG.getPlugin().getMetrics();
+		this.metrics = HungerGames.getPlugin().getMetrics();
 		addSimplePie("premium", isPremium);
 	}
 

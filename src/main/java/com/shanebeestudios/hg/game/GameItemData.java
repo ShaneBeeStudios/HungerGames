@@ -1,7 +1,7 @@
 package com.shanebeestudios.hg.game;
 
 import org.bukkit.inventory.ItemStack;
-import com.shanebeestudios.hg.HG;
+import com.shanebeestudios.hg.HungerGames;
 
 import java.util.Map;
 
@@ -59,7 +59,7 @@ public class GameItemData extends Data {
      * Reset the items for this game to the plugin's default items list
      */
     public void resetItemsDefault() {
-        this.items = HG.getPlugin().getItems();
+        this.items = HungerGames.getPlugin().getItems();
     }
 
     /**
@@ -100,7 +100,7 @@ public class GameItemData extends Data {
      * Reset the bonus items for this game to the plugin's default bonus items list
      */
     public void resetBonusItemsDefault() {
-        this.bonusItems = HG.getPlugin().getBonusItems();
+        this.bonusItems = HungerGames.getPlugin().getBonusItems();
     }
 
 }

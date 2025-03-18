@@ -9,7 +9,7 @@ import org.bukkit.scoreboard.Scoreboard;
 import org.bukkit.scoreboard.Team;
 import org.bukkit.scoreboard.Team.Option;
 import org.bukkit.scoreboard.Team.OptionStatus;
-import com.shanebeestudios.hg.HG;
+import com.shanebeestudios.hg.HungerGames;
 import com.shanebeestudios.hg.data.Config;
 import com.shanebeestudios.hg.data.Language;
 import com.shanebeestudios.hg.util.Util;
@@ -27,7 +27,7 @@ public class Board {
     }
 
     private final Game game;
-    private final HG plugin;
+    private final HungerGames plugin;
     private final Scoreboard scoreboard;
     private final Objective board;
     private final Team[] lines = new Team[15];

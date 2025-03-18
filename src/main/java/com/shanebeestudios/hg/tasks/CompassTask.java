@@ -8,7 +8,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
 import com.shanebeestudios.hg.game.Game;
-import com.shanebeestudios.hg.HG;
+import com.shanebeestudios.hg.HungerGames;
 import com.shanebeestudios.hg.data.PlayerData;
 import com.shanebeestudios.hg.managers.PlayerManager;
 
@@ -18,9 +18,9 @@ public class CompassTask implements Runnable {
 
 	private final PlayerManager playerManager;
 
-	public CompassTask(HG plugin) {
+	public CompassTask(HungerGames plugin) {
 		this.playerManager = plugin.getPlayerManager();
-		Bukkit.getScheduler().scheduleSyncRepeatingTask(HG.getPlugin(), this, 25L, 25L);
+		Bukkit.getScheduler().scheduleSyncRepeatingTask(HungerGames.getPlugin(), this, 25L, 25L);
 	}
 
 	@Override
@@ -34,7 +34,7 @@ public class CompassTask implements Runnable {
 
 					String[] st = getNearestPlayer(p, pd);
 					String info = ChatColor.translateAlternateColorCodes('&',
-							HG.getPlugin().getLang().compass_nearest_player.replace("<player>", st[0]).replace("<distance>", st[1]));
+							HungerGames.getPlugin().getLang().compass_nearest_player.replace("<player>", st[0]).replace("<distance>", st[1]));
 
 					for (ItemStack it : p.getInventory()) {
 						if (it != null && it.getType() == Material.COMPASS) {

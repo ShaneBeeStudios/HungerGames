@@ -2,7 +2,7 @@ package com.shanebeestudios.hg.commands;
 
 import net.md_5.bungee.api.chat.TextComponent;
 import org.bukkit.entity.Player;
-import com.shanebeestudios.hg.HG;
+import com.shanebeestudios.hg.HungerGames;
 import com.shanebeestudios.hg.util.Text;
 import com.shanebeestudios.hg.util.Util;
 
@@ -23,7 +23,7 @@ public class ReloadCmd extends BaseCmd {
         } else if ((args.length == 2 && args[1].equalsIgnoreCase("confirm")) || gamesNotRunning()) {
             long start = System.currentTimeMillis();
             Util.scm(sender, prefix + "&6Reloading plugin... observe console for errors!");
-            HG.getPlugin().reloadPlugin();
+            HungerGames.getPlugin().reloadPlugin();
             Util.scm(sender, prefix + "&7Reloaded &asuccessfully &7in &b" +
                     (System.currentTimeMillis() - start) + "&7 milliseconds");
         }

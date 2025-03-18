@@ -17,7 +17,7 @@ import org.bukkit.inventory.meta.FireworkMeta;
 import org.bukkit.material.Attachable;
 import org.bukkit.material.MaterialData;
 import org.jetbrains.annotations.NotNull;
-import com.shanebeestudios.hg.HG;
+import com.shanebeestudios.hg.HungerGames;
 import com.shanebeestudios.hg.data.Config;
 
 import java.util.ArrayList;
@@ -138,7 +138,7 @@ public class Util {
      */
     public static void sendPrefixedMessage(CommandSender sender, String message) {
         if (message.length() > 0) { // only send messages if its actually a message
-            scm(sender, HG.getPlugin().getLang().prefix + message);
+            scm(sender, HungerGames.getPlugin().getLang().prefix + message);
         }
     }
 
@@ -160,7 +160,7 @@ public class Util {
      */
     public static void broadcast(String s) {
         if (s.length() > 0) { // only send messages if its actually a message
-            Bukkit.broadcastMessage(getColString(HG.getPlugin().getLang().prefix + " " + s));
+            Bukkit.broadcastMessage(getColString(HungerGames.getPlugin().getLang().prefix + " " + s));
         }
     }
 

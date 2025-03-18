@@ -1,6 +1,6 @@
 package com.shanebeestudios.hg.data;
 
-import com.shanebeestudios.hg.HG;
+import com.shanebeestudios.hg.HungerGames;
 import com.shanebeestudios.hg.game.Bound;
 import com.shanebeestudios.hg.game.Game;
 import com.shanebeestudios.hg.game.GameArenaData;
@@ -32,9 +32,9 @@ public class ArenaConfig {
 
 	private FileConfiguration arenadat = null;
 	private File customConfigFile = null;
-	private final HG plugin;
+	private final HungerGames plugin;
 
-	public ArenaConfig(HG plugin) {
+	public ArenaConfig(HungerGames plugin) {
 		this.plugin = plugin;
 		reloadCustomConfig();
 		load();

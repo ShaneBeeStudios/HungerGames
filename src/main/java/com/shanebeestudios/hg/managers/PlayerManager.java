@@ -2,7 +2,7 @@ package com.shanebeestudios.hg.managers;
 
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.Nullable;
-import com.shanebeestudios.hg.HG;
+import com.shanebeestudios.hg.HungerGames;
 import com.shanebeestudios.hg.data.PlayerData;
 import com.shanebeestudios.hg.game.Game;
 
@@ -12,7 +12,7 @@ import java.util.UUID;
 
 /**
  * General player manager
- * <p>You can get an instance of this from <b>{@link HG#getPlayerManager()}</b></p>
+ * <p>You can get an instance of this from <b>{@link HungerGames#getPlayerManager()}</b></p>
  */
 @SuppressWarnings({"WeakerAccess", "unused"})
 public class PlayerManager {

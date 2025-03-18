@@ -3,7 +3,7 @@ package com.shanebeestudios.hg.data;
 import java.util.ArrayList;
 import java.util.Arrays;
 
-import com.shanebeestudios.hg.HG;
+import com.shanebeestudios.hg.HungerGames;
 import com.shanebeestudios.hg.util.Util;
 
 import org.bukkit.entity.Player;
@@ -177,7 +177,7 @@ public class KitEntry {
 			player.removePotionEffect(effect.getType());
 		}
 		player.addPotionEffects(potions);
-		HG.getPlugin().getPlayerManager().getPlayerData(player.getUniqueId()).getGame().getGamePlayerData().freeze(player);
+		HungerGames.getPlugin().getPlayerManager().getPlayerData(player.getUniqueId()).getGame().getGamePlayerData().freeze(player);
 		player.updateInventory();
 	}
 
