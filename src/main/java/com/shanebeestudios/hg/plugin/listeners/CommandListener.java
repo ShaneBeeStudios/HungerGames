@@ -1,18 +1,10 @@
-package com.shanebeestudios.hg.listeners;
+package com.shanebeestudios.hg.plugin.listeners;
 
-import com.google.common.collect.ImmutableList;
-import org.bukkit.Bukkit;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.command.TabCompleter;
-import org.bukkit.entity.Player;
-import org.bukkit.util.StringUtil;
-import com.shanebeestudios.hg.data.Config;
-import com.shanebeestudios.hg.data.PlayerData;
-import com.shanebeestudios.hg.game.Game;
 import com.shanebeestudios.hg.HungerGames;
-import com.shanebeestudios.hg.game.Team;
 import com.shanebeestudios.hg.managers.PlayerManager;
 import com.shanebeestudios.hg.util.Util;
 import com.shanebeestudios.hg.old_commands.BaseCmd;

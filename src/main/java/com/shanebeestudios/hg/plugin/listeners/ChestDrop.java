@@ -1,4 +1,4 @@
-package com.shanebeestudios.hg.listeners;
+package com.shanebeestudios.hg.plugin.listeners;
 
 import org.bukkit.*;
 import org.bukkit.block.Block;

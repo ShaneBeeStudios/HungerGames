@@ -1,4 +1,4 @@
-package com.shanebeestudios.hg.listeners;
+package com.shanebeestudios.hg.plugin.listeners;
 
 import com.shanebeestudios.hg.HungerGames;
 import com.shanebeestudios.hg.data.Language;
