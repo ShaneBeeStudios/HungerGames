@@ -1,5 +1,6 @@
 package com.shanebeestudios.hg.gui;
 
+import net.kyori.adventure.text.Component;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.OfflinePlayer;
@@ -16,7 +17,10 @@ import com.shanebeestudios.hg.HungerGames;
 import com.shanebeestudios.hg.game.Game;
 import com.shanebeestudios.hg.api.util.Util;
 
+import java.awt.*;
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
 import java.util.UUID;
 
 public class SpectatorGUI implements InventoryHolder, Listener {
@@ -51,9 +55,12 @@ public class SpectatorGUI implements InventoryHolder, Listener {
         SkullMeta meta = ((SkullMeta) head.getItemMeta());
         assert meta != null;
         meta.setOwningPlayer(player);
-        meta.setDisplayName(player.getName());
-        String[] lore = Util.getColString(HungerGames.getPlugin().getLang().spectator_compass_head_lore).split(";");
-        meta.setLore(Arrays.asList(lore));
+        meta.displayName(Util.getMini(player.getName()));
+        List<Component> lores = new ArrayList<>();
+        for (String s : HungerGames.getPlugin().getLang().spectator_compass_head_lore.split(";")) {
+            lores.add(Util.getMini(s));
+        }
+        meta.lore(lores);
         head.setItemMeta(meta);
         return head;
     }

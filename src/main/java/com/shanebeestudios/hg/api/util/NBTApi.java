@@ -34,7 +34,7 @@ public class NBTApi {
         }
         NBTItem nbtItem = new NBTItem(item);
         try {
-            nbtItem.mergeCompound(new NBTContainer(Util.getColString(value)));
+            nbtItem.mergeCompound(new NBTContainer(value));
         } catch (Exception ignore) {
         }
         return nbtItem.getItem();

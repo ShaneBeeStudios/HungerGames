@@ -2,6 +2,7 @@ package com.shanebeestudios.hg;
 
 import com.shanebeestudios.hg.data.Language;
 import com.shanebeestudios.hg.api.util.Util;
+import net.kyori.adventure.text.Component;
 
 /**
  * Game status types
@@ -46,31 +47,20 @@ public enum Status {
 	NOT_READY
     ;
 
-	Language lang = HungerGames.getPlugin().getLang();
+	final Language lang = HungerGames.getPlugin().getLang();
 
-	public String getName() {
-        switch (this) {
-            case RUNNING:
-                return Util.getColString(lang.status_running);
-            case STOPPED:
-                return Util.getColString(lang.status_stopped);
-            case READY:
-                return Util.getColString(lang.status_ready);
-            case WAITING:
-                return Util.getColString(lang.status_waiting);
-            case BROKEN:
-                return Util.getColString(lang.status_broken);
-            case ROLLBACK:
-                return Util.getColString(lang.status_rollback);
-            case NOT_READY:
-                return Util.getColString(lang.status_not_ready);
-            case FREE_ROAM:
-                return Util.getColString(lang.status_beginning);
-            case COUNTDOWN:
-                return Util.getColString(lang.status_countdown);
-            default:
-                return Util.getColString("&cERROR!");
-        }
+	public Component getName() {
+        return switch (this) {
+            case RUNNING -> Util.getMini(this.lang.status_running);
+            case STOPPED -> Util.getMini(this.lang.status_stopped);
+            case READY -> Util.getMini(this.lang.status_ready);
+            case WAITING -> Util.getMini(this.lang.status_waiting);
+            case BROKEN -> Util.getMini(this.lang.status_broken);
+            case ROLLBACK -> Util.getMini(this.lang.status_rollback);
+            case NOT_READY -> Util.getMini(this.lang.status_not_ready);
+            case FREE_ROAM -> Util.getMini(this.lang.status_beginning);
+            case COUNTDOWN -> Util.getMini(this.lang.status_countdown);
+        };
 	}
 
 }

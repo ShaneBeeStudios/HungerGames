@@ -152,7 +152,7 @@ public class GameBlockData extends Data {
             addState(block.getRelative(BlockFace.UP).getState());
         }
 
-        for (BlockFace bf : Util.faces) {
+        for (BlockFace bf : Util.BLOCK_FACES) {
             Block rel = block.getRelative(bf);
 
             if (Util.isAttached(block, rel)) {
@@ -211,7 +211,7 @@ public class GameBlockData extends Data {
     void updateLobbyBlock() {
         if (sign2 == null || sign3 == null) return;
         GameArenaData gameArenaData = this.game.getGameArenaData();
-        this.sign2.getSide(Side.FRONT).line(1, Util.getMini(gameArenaData.getStatus().getName()));
+        this.sign2.getSide(Side.FRONT).line(1, gameArenaData.getStatus().getName());
         this.sign3.getSide(Side.FRONT).line(1, Util.getMini("<bold>" + this.game.getGamePlayerData().getPlayers().size() + "/" + gameArenaData.getMaxPlayers()));
         this.sign2.update(true);
         this.sign3.update(true);
@@ -239,7 +239,7 @@ public class GameBlockData extends Data {
             if (gameArenaData.cost > 0)
                 this.sign1.getSide(Side.FRONT).line(3, Util.getMini(HungerGames.getPlugin().getLang().lobby_sign_cost.replace("<cost>", String.valueOf(gameArenaData.cost))));
             this.sign2.getSide(Side.FRONT).line(0, Util.getMini(this.lang.lobby_sign_2_1));
-            this.sign2.getSide(Side.FRONT).line(1, Util.getMini(gameArenaData.getStatus().getName()));
+            this.sign2.getSide(Side.FRONT).line(1, gameArenaData.getStatus().getName());
             this.sign3.getSide(Side.FRONT).line(0, Util.getMini(this.lang.lobby_sign_3_1));
             this.sign3.getSide(Side.FRONT).line(1, Util.getMini("<bold>" + 0 + "/" + gameArenaData.getMaxPlayers()));
             this.sign1.setWaxed(true);

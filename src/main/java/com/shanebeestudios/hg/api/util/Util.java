@@ -11,8 +11,6 @@ import org.bukkit.Color;
 import org.bukkit.FireworkEffect;
 import org.bukkit.FireworkEffect.Type;
 import org.bukkit.Location;
-import org.bukkit.Material;
-import org.bukkit.Tag;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
 import org.bukkit.command.CommandSender;
@@ -25,8 +23,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 import java.util.UUID;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -36,8 +32,7 @@ import java.util.regex.Pattern;
 @SuppressWarnings("WeakerAccess")
 public class Util {
 
-    private static final Logger LOGGER = Bukkit.getLogger();
-    public static final BlockFace[] faces = new BlockFace[]{BlockFace.EAST, BlockFace.WEST, BlockFace.NORTH, BlockFace.SOUTH};
+    public static final BlockFace[] BLOCK_FACES = new BlockFace[]{BlockFace.EAST, BlockFace.WEST, BlockFace.NORTH, BlockFace.SOUTH};
     private static final Pattern HEX_PATTERN = Pattern.compile("<#([A-Fa-f0-9]){6}>");
     private static final CommandSender CONSOLE = Bukkit.getConsoleSender();
     private static final MiniMessage MINI_MESSAGE = MiniMessage.miniMessage();
@@ -102,7 +97,7 @@ public class Util {
      */
     public static void warning(String format, Object... objects) {
         if (!format.isEmpty()) { // only send messages if it's actually a message
-            sendMessage(CONSOLE, getColString("<grey>[<yellow><bold>HungerGames<grey>] <yellow>WARNING: " + format), objects);
+            sendMessage(CONSOLE, "<grey>[<yellow><bold>HungerGames<grey>] <yellow>WARNING: " + format, objects);
         }
     }
 
@@ -126,10 +121,10 @@ public class Util {
      */
     public static void debug(@NotNull Exception exception) {
         if (Config.debug) {
-            LOGGER.log(Level.SEVERE, getColString("<grey>[<yellow><bold>HungerGames<grey>] <red>ERROR: (please report to dev):"));
-            LOGGER.log(Level.SEVERE, exception.toString());
+            log("<red>ERROR: (please report to dev):");
+            CONSOLE.sendMessage(getMini("<yellow>%s", exception.getMessage()));
             for (StackTraceElement element : exception.getStackTrace()) {
-                LOGGER.log(Level.SEVERE, getColString("  <grey>at <red>" + element));
+                CONSOLE.sendMessage(getMini("  <grey>at <red>%s", element));
             }
         }
     }
@@ -169,11 +164,12 @@ public class Util {
     /**
      * Convert text to MiniMessage
      *
-     * @param text Text to convert
+     * @param format  Text to format
+     * @param objects Objects for format
      * @return Component from text
      */
-    public static Component getMini(String text) {
-        return MINI_MESSAGE.deserialize(text);
+    public static Component getMini(String format, Object... objects) {
+        return MINI_MESSAGE.deserialize(String.format(format, objects));
     }
 
     /**
@@ -201,22 +197,13 @@ public class Util {
         return true;
     }
 
-    @SuppressWarnings("BooleanMethodIsAlwaysInverted")
-    public static boolean isBool(String string) {
-        return string.equalsIgnoreCase("true") || string.equalsIgnoreCase("false");
-    }
-
     public static BlockFace getSignFace(BlockFace face) {
-        switch (face) {
-            case WEST:
-                return BlockFace.SOUTH;
-            case SOUTH:
-                return BlockFace.EAST;
-            case EAST:
-                return BlockFace.NORTH;
-            default:
-                return BlockFace.WEST;
-        }
+        return switch (face) {
+            case WEST -> BlockFace.SOUTH;
+            case SOUTH -> BlockFace.EAST;
+            case EAST -> BlockFace.NORTH;
+            default -> BlockFace.WEST;
+        };
     }
 
     /**
@@ -237,7 +224,7 @@ public class Util {
      * Convert a list of UUIDs to a string of player names
      *
      * @param uuid UUID list to convert
-     * @return String of player names
+     * @return List of player names
      */
     public static List<String> convertUUIDListToStringList(List<UUID> uuid) {
         List<String> winners = new ArrayList<>();
@@ -248,21 +235,19 @@ public class Util {
     }
 
     public static String translateStop(List<String> win) {
-        StringBuilder bc = null;
+        StringBuilder builder = null;
         int count = 0;
         for (String s : win) {
             count++;
-            if (count == 1) bc = new StringBuilder(s);
+            if (count == 1) builder = new StringBuilder(s);
             else if (count == win.size()) {
-                assert bc != null;
-                bc.append(", and ").append(s);
+                builder.append(", and ").append(s);
             } else {
-                assert bc != null;
-                bc.append(", ").append(s);
+                builder.append(", ").append(s);
             }
         }
-        if (bc != null)
-            return bc.toString();
+        if (builder != null)
+            return builder.toString();
         else
             return "No one";
     }
@@ -280,7 +265,6 @@ public class Util {
         fw.setFireworkMeta(fm);
     }
 
-    @SuppressWarnings("deprecation")
     public static boolean isAttached(Block base, Block attached) {
 //        if (attached.getType() == Material.AIR) return false;
 //
@@ -330,21 +314,6 @@ public class Util {
     }
 
     /**
-     * Check if a material is a wall sign
-     * <p>Due to sign material changes in 1.14 this method checks for both 1.13 and 1.14+</p>
-     *
-     * @param item Material to check
-     * @return True if material is a wall sign
-     */
-    public static boolean isWallSign(Material item) {
-        if (isRunningMinecraft(1, 14)) {
-            return Tag.WALL_SIGNS.isTagged(item);
-        } else {
-            return item == Material.getMaterial("WALL_SIGN");
-        }
-    }
-
-    /**
      * Check if a method exists
      *
      * @param c              Class that contains this method
@@ -352,6 +321,7 @@ public class Util {
      * @param parameterTypes Parameter types if the method contains any
      * @return True if this method exists
      */
+    @SuppressWarnings("unused")
     public static boolean methodExists(final Class<?> c, final String methodName, final Class<?>... parameterTypes) {
         try {
             c.getDeclaredMethod(methodName, parameterTypes);

@@ -362,6 +362,7 @@ public class Game {
             this.gameBorderData.resetBorder();
         }
         this.gameArenaData.bound.removeEntities();
+        // TODO win list should be players
         List<UUID> win = new ArrayList<>();
         cancelTasks();
         for (Player player : this.gamePlayerData.getPlayers()) {

@@ -25,6 +25,7 @@ import org.bukkit.ChatColor;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.Sound;
+import org.bukkit.Tag;
 import org.bukkit.World;
 import org.bukkit.block.Block;
 import org.bukkit.block.Sign;
@@ -424,8 +425,9 @@ public class GameListener implements Listener {
         } else if (action == Action.RIGHT_CLICK_BLOCK) {
             Block block = event.getClickedBlock();
             assert block != null;
-            if (Util.isWallSign(block.getType())) {
+            if (Tag.WALL_SIGNS.isTagged(block.getType())) {
                 Sign sign = (Sign) block.getState();
+                // TODO PDC for the sign
                 if (sign.getLine(0).equals(Util.getColString(lang.lobby_sign_1_1))) {
                     Game game = gameManager.getGame(sign.getLine(1).substring(2));
                     if (game == null) {

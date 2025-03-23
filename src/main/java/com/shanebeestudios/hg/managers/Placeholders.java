@@ -1,19 +1,23 @@
 package com.shanebeestudios.hg.managers;
 
+import com.shanebeestudios.hg.api.util.Util;
 import me.clip.placeholderapi.expansion.PlaceholderExpansion;
+import net.kyori.adventure.text.Component;
 import org.bukkit.OfflinePlayer;
 import com.shanebeestudios.hg.HungerGames;
 import com.shanebeestudios.hg.data.Language;
 import com.shanebeestudios.hg.data.Leaderboard;
+import org.jetbrains.annotations.NotNull;
 
 /**
  * Internal placeholder class
  */
+@SuppressWarnings("UnstableApiUsage")
 public class Placeholders extends PlaceholderExpansion {
 
-    private HungerGames plugin;
-    private Leaderboard leaderboard;
-    private Language lang;
+    private final HungerGames plugin;
+    private final Leaderboard leaderboard;
+    private final Language lang;
 
     public Placeholders(HungerGames plugin) {
         this.plugin = plugin;
@@ -31,19 +35,22 @@ public class Placeholders extends PlaceholderExpansion {
         return true;
     }
 
+    @NotNull
     @Override
     public String getIdentifier() {
         return "hungergames";
     }
 
+    @NotNull
     @Override
     public String getAuthor() {
-        return plugin.getDescription().getAuthors().toString();
+        return this.plugin.getPluginMeta().getAuthors().toString();
     }
 
+    @NotNull
     @Override
     public String getVersion() {
-        return plugin.getDescription().getVersion();
+        return this.plugin.getPluginMeta().getVersion();
     }
 
     @Override
@@ -92,15 +99,16 @@ public class Placeholders extends PlaceholderExpansion {
                             return getStatsPlayer(identifier, player);
                 }
             case "status":
-                return HungerGames.getPlugin().getGameManager().getGame(id[1]).getGameArenaData().getStatus().getName();
+                Component name = this.plugin.getGameManager().getGame(id[1]).getGameArenaData().getStatus().getName();
+                return Util.unMini(name);
             case "cost":
-                return String.valueOf(HungerGames.getPlugin().getGameManager().getGame(id[1]).getGameArenaData().getCost());
+                return String.valueOf(this.plugin.getGameManager().getGame(id[1]).getGameArenaData().getCost());
             case "playerscurrent":
-                return String.valueOf(HungerGames.getPlugin().getGameManager().getGame(id[1]).getGamePlayerData().getPlayers().size());
+                return String.valueOf(this.plugin.getGameManager().getGame(id[1]).getGamePlayerData().getPlayers().size());
             case "playersmax":
-                return String.valueOf(HungerGames.getPlugin().getGameManager().getGame(id[1]).getGameArenaData().getMaxPlayers());
+                return String.valueOf(this.plugin.getGameManager().getGame(id[1]).getGameArenaData().getMaxPlayers());
             case "playersmin":
-                return String.valueOf(HungerGames.getPlugin().getGameManager().getGame(id[1]).getGameArenaData().getMinPlayers());
+                return String.valueOf(this.plugin.getGameManager().getGame(id[1]).getGameArenaData().getMinPlayers());
         }
         return null;
     }
