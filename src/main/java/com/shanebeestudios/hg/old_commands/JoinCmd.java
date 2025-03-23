@@ -2,7 +2,7 @@ package com.shanebeestudios.hg.old_commands;
 
 import com.shanebeestudios.hg.HungerGames;
 import com.shanebeestudios.hg.game.Game;
-import com.shanebeestudios.hg.util.Util;
+import com.shanebeestudios.hg.api.util.Util;
 
 public class JoinCmd extends BaseCmd {
 

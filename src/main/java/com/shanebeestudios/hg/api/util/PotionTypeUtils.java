@@ -1,4 +1,4 @@
-package com.shanebeestudios.hg.util;
+package com.shanebeestudios.hg.api.util;
 
 import io.papermc.paper.registry.RegistryAccess;
 import io.papermc.paper.registry.RegistryKey;

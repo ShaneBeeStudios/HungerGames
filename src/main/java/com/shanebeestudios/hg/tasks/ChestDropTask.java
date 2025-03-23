@@ -11,7 +11,7 @@ import com.shanebeestudios.hg.data.Config;
 import com.shanebeestudios.hg.game.Bound;
 import com.shanebeestudios.hg.game.Game;
 import com.shanebeestudios.hg.plugin.listeners.ChestDrop;
-import com.shanebeestudios.hg.util.Util;
+import com.shanebeestudios.hg.api.util.Util;
 
 import java.util.ArrayList;
 import java.util.List;

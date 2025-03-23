@@ -7,7 +7,7 @@ import com.shanebeestudios.hg.data.ArenaConfig;
 import com.shanebeestudios.hg.data.Language;
 import com.shanebeestudios.hg.managers.GameManager;
 import com.shanebeestudios.hg.managers.PlayerManager;
-import com.shanebeestudios.hg.util.Util;
+import com.shanebeestudios.hg.api.util.Util;
 
 public abstract class BaseCmd {
 

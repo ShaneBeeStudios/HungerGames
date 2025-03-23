@@ -3,8 +3,8 @@ package com.shanebeestudios.hg.old_commands;
 import net.md_5.bungee.api.chat.TextComponent;
 import org.bukkit.entity.Player;
 import com.shanebeestudios.hg.HungerGames;
-import com.shanebeestudios.hg.util.Text;
-import com.shanebeestudios.hg.util.Util;
+import com.shanebeestudios.hg.api.util.Text;
+import com.shanebeestudios.hg.api.util.Util;
 
 public class ReloadCmd extends BaseCmd {
 

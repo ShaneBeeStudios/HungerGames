@@ -1,4 +1,4 @@
-package com.shanebeestudios.hg.util;
+package com.shanebeestudios.hg.api.util;
 
 import org.bukkit.Bukkit;
 import org.bukkit.plugin.RegisteredServiceProvider;

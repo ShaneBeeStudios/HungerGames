@@ -4,7 +4,7 @@ import org.bukkit.Location;
 import org.bukkit.configuration.Configuration;
 import com.shanebeestudios.hg.game.Game;
 import com.shanebeestudios.hg.game.GameArenaData;
-import com.shanebeestudios.hg.util.Util;
+import com.shanebeestudios.hg.api.util.Util;
 
 import java.util.List;
 

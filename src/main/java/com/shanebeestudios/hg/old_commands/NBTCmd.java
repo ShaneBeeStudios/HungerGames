@@ -5,8 +5,8 @@ import org.bukkit.Material;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
-import com.shanebeestudios.hg.util.Util;
-import com.shanebeestudios.hg.util.NBTApi;
+import com.shanebeestudios.hg.api.util.Util;
+import com.shanebeestudios.hg.api.util.NBTApi;
 
 public class NBTCmd extends BaseCmd {
 

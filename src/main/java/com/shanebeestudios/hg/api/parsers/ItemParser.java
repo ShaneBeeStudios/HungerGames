@@ -1,7 +1,7 @@
 package com.shanebeestudios.hg.api.parsers;
 
 import com.shanebeestudios.hg.api.registry.Registries;
-import com.shanebeestudios.hg.util.Util;
+import com.shanebeestudios.hg.api.util.Util;
 import io.papermc.paper.datacomponent.DataComponentTypes;
 import io.papermc.paper.datacomponent.item.DyedItemColor;
 import io.papermc.paper.datacomponent.item.ItemEnchantments;

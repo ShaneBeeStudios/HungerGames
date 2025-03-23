@@ -5,7 +5,7 @@ import org.bukkit.block.Block;
 import org.bukkit.block.Sign;
 
 import com.shanebeestudios.hg.game.Game;
-import com.shanebeestudios.hg.util.Util;
+import com.shanebeestudios.hg.api.util.Util;
 
 public class SetLobbyWallCmd extends BaseCmd {
 

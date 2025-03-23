@@ -3,7 +3,7 @@ package com.shanebeestudios.hg.old_commands;
 import com.shanebeestudios.hg.game.Game;
 import com.shanebeestudios.hg.Status;
 import com.shanebeestudios.hg.game.GameArenaData;
-import com.shanebeestudios.hg.util.Util;
+import com.shanebeestudios.hg.api.util.Util;
 
 public class ToggleCmd extends BaseCmd {
 

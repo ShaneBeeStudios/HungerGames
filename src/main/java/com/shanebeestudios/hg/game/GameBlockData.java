@@ -12,7 +12,7 @@ import org.bukkit.entity.ItemFrame;
 import org.bukkit.inventory.InventoryHolder;
 import com.shanebeestudios.hg.HungerGames;
 import com.shanebeestudios.hg.data.ItemFrameData;
-import com.shanebeestudios.hg.util.Util;
+import com.shanebeestudios.hg.api.util.Util;
 
 import java.util.ArrayList;
 import java.util.Collections;

@@ -7,7 +7,7 @@ import com.shanebeestudios.hg.data.PlayerData;
 import com.shanebeestudios.hg.game.Game;
 import com.shanebeestudios.hg.game.GamePlayerData;
 import com.shanebeestudios.hg.game.Team;
-import com.shanebeestudios.hg.util.Util;
+import com.shanebeestudios.hg.api.util.Util;
 
 public class TeamCmd extends BaseCmd {
 

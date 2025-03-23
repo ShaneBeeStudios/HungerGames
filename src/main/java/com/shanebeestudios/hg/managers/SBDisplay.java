@@ -12,7 +12,7 @@ import org.bukkit.scoreboard.Scoreboard;
 import org.bukkit.scoreboard.ScoreboardManager;
 import com.shanebeestudios.hg.HungerGames;
 import com.shanebeestudios.hg.game.Game;
-import com.shanebeestudios.hg.util.Util;
+import com.shanebeestudios.hg.api.util.Util;
 
 /**
  * General scoreboard manager

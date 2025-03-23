@@ -1,7 +1,7 @@
 package com.shanebeestudios.hg.data;
 
 import com.shanebeestudios.hg.HungerGames;
-import com.shanebeestudios.hg.util.Util;
+import com.shanebeestudios.hg.api.util.Util;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
 

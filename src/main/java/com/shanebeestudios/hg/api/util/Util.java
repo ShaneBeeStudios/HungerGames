@@ -1,4 +1,4 @@
-package com.shanebeestudios.hg.util;
+package com.shanebeestudios.hg.api.util;
 
 import com.shanebeestudios.hg.HungerGames;
 import com.shanebeestudios.hg.data.Config;
@@ -18,8 +18,6 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Firework;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.meta.FireworkMeta;
-import org.bukkit.material.Attachable;
-import org.bukkit.material.MaterialData;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;

@@ -1,4 +1,4 @@
-package com.shanebeestudios.hg.util;
+package com.shanebeestudios.hg.api.util;
 
 import net.md_5.bungee.api.chat.BaseComponent;
 import net.md_5.bungee.api.chat.ClickEvent;

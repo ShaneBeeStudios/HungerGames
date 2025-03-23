@@ -12,8 +12,8 @@ import org.bukkit.scoreboard.Team.OptionStatus;
 import com.shanebeestudios.hg.HungerGames;
 import com.shanebeestudios.hg.data.Config;
 import com.shanebeestudios.hg.data.Language;
-import com.shanebeestudios.hg.util.Util;
-import com.shanebeestudios.hg.util.Validate;
+import com.shanebeestudios.hg.api.util.Util;
+import com.shanebeestudios.hg.api.util.Validate;
 
 /**
  * Represents a team based scoreboard for a game

@@ -3,7 +3,7 @@ package com.shanebeestudios.hg.managers;
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
 import com.shanebeestudios.hg.HungerGames;
-import com.shanebeestudios.hg.util.Util;
+import com.shanebeestudios.hg.api.util.Util;
 import com.shanebeestudios.hg.data.KitEntry;
 
 import java.util.ArrayList;

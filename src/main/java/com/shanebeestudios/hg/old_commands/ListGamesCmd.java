@@ -1,9 +1,5 @@
 package com.shanebeestudios.hg.old_commands;
 
-import com.shanebeestudios.hg.game.Game;
-import com.shanebeestudios.hg.game.GameArenaData;
-import com.shanebeestudios.hg.util.Util;
-
 public class ListGamesCmd extends BaseCmd {
 
 	public ListGamesCmd() {

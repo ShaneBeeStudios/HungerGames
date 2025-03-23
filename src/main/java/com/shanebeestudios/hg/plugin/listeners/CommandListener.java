@@ -6,7 +6,7 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.command.TabCompleter;
 import com.shanebeestudios.hg.HungerGames;
 import com.shanebeestudios.hg.managers.PlayerManager;
-import com.shanebeestudios.hg.util.Util;
+import com.shanebeestudios.hg.api.util.Util;
 import com.shanebeestudios.hg.old_commands.BaseCmd;
 
 import java.util.*;

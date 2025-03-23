@@ -1,7 +1,7 @@
 package com.shanebeestudios.hg;
 
 import com.shanebeestudios.hg.data.Language;
-import com.shanebeestudios.hg.util.Util;
+import com.shanebeestudios.hg.api.util.Util;
 
 /**
  * Game status types

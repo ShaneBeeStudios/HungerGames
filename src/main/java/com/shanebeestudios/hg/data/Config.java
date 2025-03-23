@@ -4,8 +4,8 @@ import org.bukkit.configuration.Configuration;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
 import com.shanebeestudios.hg.HungerGames;
-import com.shanebeestudios.hg.util.Util;
-import com.shanebeestudios.hg.util.Vault;
+import com.shanebeestudios.hg.api.util.Util;
+import com.shanebeestudios.hg.api.util.Vault;
 
 import java.io.File;
 import java.io.IOException;

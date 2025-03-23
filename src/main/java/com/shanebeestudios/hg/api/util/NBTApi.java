@@ -1,4 +1,4 @@
-package com.shanebeestudios.hg.util;
+package com.shanebeestudios.hg.api.util;
 
 import de.tr7zw.changeme.nbtapi.NBTContainer;
 import de.tr7zw.changeme.nbtapi.NBTItem;

@@ -11,7 +11,7 @@ import org.jetbrains.annotations.Nullable;
 import com.shanebeestudios.hg.HungerGames;
 import com.shanebeestudios.hg.game.Game;
 import com.shanebeestudios.hg.game.Team;
-import com.shanebeestudios.hg.util.Util;
+import com.shanebeestudios.hg.api.util.Util;
 
 import java.util.Arrays;
 import java.util.UUID;

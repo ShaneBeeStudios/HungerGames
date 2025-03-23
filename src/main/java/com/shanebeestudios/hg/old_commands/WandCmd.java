@@ -1,14 +1,5 @@
 package com.shanebeestudios.hg.old_commands;
 
-import org.bukkit.Material;
-import org.bukkit.inventory.ItemStack;
-import org.bukkit.inventory.meta.ItemMeta;
-import com.shanebeestudios.hg.data.PlayerSession;
-import com.shanebeestudios.hg.util.Util;
-
-import java.util.ArrayList;
-import java.util.Arrays;
-
 public class WandCmd {
 
 //    private final ItemStack WAND;

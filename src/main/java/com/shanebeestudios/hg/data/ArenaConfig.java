@@ -7,7 +7,7 @@ import com.shanebeestudios.hg.game.GameArenaData;
 import com.shanebeestudios.hg.managers.ItemStackManager;
 import com.shanebeestudios.hg.managers.KitManager;
 import com.shanebeestudios.hg.tasks.CompassTask;
-import com.shanebeestudios.hg.util.Util;
+import com.shanebeestudios.hg.api.util.Util;
 import org.bukkit.Bukkit;
 import org.bukkit.Difficulty;
 import org.bukkit.Location;

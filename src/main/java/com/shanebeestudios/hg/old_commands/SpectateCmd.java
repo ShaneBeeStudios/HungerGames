@@ -3,7 +3,7 @@ package com.shanebeestudios.hg.old_commands;
 import com.shanebeestudios.hg.game.Game;
 import com.shanebeestudios.hg.Status;
 import com.shanebeestudios.hg.game.GamePlayerData;
-import com.shanebeestudios.hg.util.Util;
+import com.shanebeestudios.hg.api.util.Util;
 
 public class SpectateCmd extends BaseCmd {
 

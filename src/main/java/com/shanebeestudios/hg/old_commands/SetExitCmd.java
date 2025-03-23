@@ -1,10 +1,5 @@
 package com.shanebeestudios.hg.old_commands;
 
-import org.bukkit.Location;
-import com.shanebeestudios.hg.game.Game;
-import com.shanebeestudios.hg.game.GameArenaData;
-import com.shanebeestudios.hg.util.Util;
-
 public class SetExitCmd extends BaseCmd {
 
     public SetExitCmd() {

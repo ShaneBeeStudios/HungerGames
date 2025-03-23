@@ -6,7 +6,7 @@ import com.shanebeestudios.hg.data.PlayerData;
 import com.shanebeestudios.hg.events.PlayerLeaveGameEvent;
 import com.shanebeestudios.hg.gui.SpectatorGUI;
 import com.shanebeestudios.hg.managers.PlayerManager;
-import com.shanebeestudios.hg.util.Util;
+import com.shanebeestudios.hg.api.util.Util;
 import org.bukkit.Bukkit;
 import org.bukkit.GameMode;
 import org.bukkit.Location;
