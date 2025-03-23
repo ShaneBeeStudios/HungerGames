@@ -123,8 +123,9 @@ public class Language {
     public String cmd_reload_reloaded_items;
     public String cmd_reload_reloaded_config;
     public String cmd_reload_reloaded_success;
-    public String cmd_exit_set;
-    public String cmd_exit_set_arena;
+    public String command_exit_set_global;
+    public String command_exit_set_all;
+    public String command_exit_set_arena;
     public String cmd_lobbywall_set;
     public String cmd_lobbywall_notcorrect;
     public String cmd_lobbywall_format;
@@ -339,8 +340,9 @@ public class Language {
         cmd_reload_reloaded_items = lang.getString("cmd-reload-reloaded-items");
         cmd_reload_reloaded_kit = lang.getString("cmd-reload-reloaded-kit");
         cmd_reload_reloaded_success = lang.getString("cmd-reload-reloaded-success");
-        cmd_exit_set = lang.getString("cmd-exit-set");
-        cmd_exit_set_arena = lang.getString("cmd-exit-set-arena");
+        command_exit_set_global = lang.getString("command.exit-set-global");
+        command_exit_set_all = lang.getString("command.exit-set-all");
+        command_exit_set_arena = lang.getString("command.exit-set-arena");
         cmd_lobbywall_set = lang.getString("cmd-lobbywall-set");
         cmd_lobbywall_notcorrect = lang.getString("cmd-lobbywall-notcorrect");
         cmd_lobbywall_format = lang.getString("cmd-lobbywall-format");

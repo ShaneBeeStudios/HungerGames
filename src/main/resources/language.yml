@@ -147,7 +147,7 @@ cmd-delete-stopping: '<grey>- <red>Game running! <green>Stopping..'
 cmd-delete-kicking: '<grey>- <red><red>Players detected! <green>Kicking..'
 cmd-delete-deleted: '<green>Successfully deleted HungerGames arena <aqua><arena>!'
 cmd-delete-failed: '<red>Failed to delete arena!'
-cmd-delete-noexist: '<red>This arena does not exist!'
+cmd-delete-noexist: "<red>The arena <white>'<yellow><arena><white>'<red> does not exist!"
 
 ## Join
 cmd-join-already-in-game: '<red>You are already in a game!'
@@ -170,8 +170,10 @@ cmd-reload-reloaded-config: '<gold> - <yellow>Config values have been reloaded!'
 cmd-reload-reloaded-success: '<green>- Successfully reloaded HungerGames'
 
 ## Exit
-cmd-exit-set: '<gold>Global Exit Spawn Set:'
-cmd-exit-set-arena: '<gold><arena> Exit Spawn Set:'
+command:
+  exit-set-global: '<gold>Global exit has been set to your location!'
+  exit-set-all: 'Exit for all arenas has been set to your location!'
+  exit-set-arena: '<gold>Exit for arena <arena> has been set to your location!'
 
 ## LobbyWall
 cmd-lobbywall-set: '<green>The lobbyWallSign has been set!'

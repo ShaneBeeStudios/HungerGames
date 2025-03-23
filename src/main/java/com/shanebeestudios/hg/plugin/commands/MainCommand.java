@@ -15,6 +15,7 @@ public class MainCommand {
         this.command.then(new CreateCommand(plugin).register());
         this.command.then(new JoinCommand(plugin).register());
         this.command.then(new KitCommand().register());
+        this.command.then(new SetExitCommand(plugin).register());
         this.command.then(new StopCommand().register());
         this.command.then(new StopAllCommand().register());
 

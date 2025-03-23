@@ -264,6 +264,12 @@ public class ArenaConfig {
         }
     }
 
+    public void setGlobalExit(Location location) {
+        String locString = locToString(location);
+        this.arenaConfig.set("global_exit_location", locString);
+        saveArenaConfig();
+    }
+
     public void saveGameToConfig(String arenaName, Game game) {
         ConfigurationSection gameSection = this.arenaConfig.createSection("arenas." + arenaName);
         GameArenaData gameArenaData = game.getGameArenaData();
