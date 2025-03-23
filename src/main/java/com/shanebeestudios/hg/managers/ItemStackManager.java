@@ -50,12 +50,12 @@ public class ItemStackManager {
 
         if (!kitFile.exists()) {
             this.plugin.saveResource("kits.yml", false);
-            Util.logMini("- New kits.yml file has been <green>successfully generated!");
+            Util.log("- New kits.yml file has been <green>successfully generated!");
         }
         YamlConfiguration kitConfig = YamlConfiguration.loadConfiguration(kitFile);
-        Util.logMini("Loading kits:");
+        Util.log("Loading kits:");
         kitCreator(kitConfig, plugin.getKitManager(), null);
-        Util.logMini("- Kits have been <green>successfully loaded!");
+        Util.log("- Kits have been <green>successfully loaded!");
     }
 
     /**
@@ -70,7 +70,7 @@ public class ItemStackManager {
         if (arenaSection.getConfigurationSection("kits") == null) return null;
 
         kitCreator(arenaSection, kit, null);
-        Util.logMini("- Loaded custom kits for arena: <aqua>" + gameName);
+        Util.log("- Loaded custom kits for arena: <aqua>" + gameName);
         return kit;
     }
 
@@ -101,11 +101,11 @@ public class ItemStackManager {
 
                 KitEntry kitEntry = new KitEntry(items.values().toArray(new ItemStack[0]), helmet, boots, chestplate, leggings, permission, potionEffects);
                 kit.addKit(path, kitEntry);
-                Util.logMini("- Loaded kit <white>'<aqua>%s<white>'", gameName + path);
+                Util.log("- Loaded kit <white>'<aqua>%s<white>'", gameName + path);
             } catch (Exception e) {
-                Util.logMini("-------------------------------------------");
-                Util.logMini("<yellow>Unable to load kit " + gameName + path + "! (for a more detailed message enable 'debug' in config and reload)");
-                Util.logMini("-------------------------------------------");
+                Util.log("-------------------------------------------");
+                Util.log("<yellow>Unable to load kit " + gameName + path + "! (for a more detailed message enable 'debug' in config and reload)");
+                Util.log("-------------------------------------------");
                 Util.debug(e);
             }
         }
@@ -213,7 +213,7 @@ public class ItemStackManager {
                 return;
             }
         }
-        Util.logMini("<yellow>Invalid enchantment: <red>%s <yellow>line: <aqua>%s", enchantString, line);
+        Util.log("<yellow>Invalid enchantment: <red>%s <yellow>line: <aqua>%s", enchantString, line);
     }
 
     private ItemStack itemStringToStack(String item, int amount) {
@@ -221,7 +221,7 @@ public class ItemStackManager {
         try {
             material = Material.valueOf(item);
         } catch (IllegalArgumentException ex) {
-            Util.logMini("<yellow>Invalid Material: <grey>" + item);
+            Util.log("<yellow>Invalid Material: <grey>" + item);
             return null;
         }
         return new ItemStack(material, amount);

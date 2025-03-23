@@ -27,7 +27,7 @@ public class RandomItems {
         this.plugin = plugin;
         this.itemStackManager = plugin.getItemStackManager();
         loadItemsConfig();
-        Util.logMini("Loading random items:");
+        Util.log("Loading random items:");
         loadItems();
     }
 
@@ -37,7 +37,7 @@ public class RandomItems {
         }
         if (!itemsConfigFile.exists()) {
             this.plugin.saveResource("items.yml", false);
-            Util.logMini("- New items.yml file has been <green>successfully generated!");
+            Util.log("- New items.yml file has been <green>successfully generated!");
         }
         this.itemsConfig = YamlConfiguration.loadConfiguration(this.itemsConfigFile);
     }
@@ -49,8 +49,8 @@ public class RandomItems {
         // Bonus items
         this.itemStackManager.loadItems(this.itemsConfig.getMapList("bonus"), this.bonusItems);
 
-        Util.logMini("- Loaded <green>%s <grey>random items!", this.items.size());
-        Util.logMini("- Loaded <green>%s <grey>bonus items!", this.bonusItems.size());
+        Util.log("- Loaded <green>%s <grey>random items!", this.items.size());
+        Util.log("- Loaded <green>%s <grey>bonus items!", this.bonusItems.size());
     }
 
     public Map<Integer, ItemStack> getItems() {

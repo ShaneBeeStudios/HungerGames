@@ -251,15 +251,15 @@ public class ArenaConfig {
                     } catch (Exception exception) {
                         World mainWorld = Bukkit.getWorlds().getFirst();
                         gameArenaData.setExit(mainWorld.getSpawnLocation(), false);
-                        Util.logMini("- <yellow>Failed to setup exit location for arena '%s', defaulting to spawn location of world '%s'",
+                        Util.log("- <yellow>Failed to setup exit location for arena '%s', defaulting to spawn location of world '%s'",
                             arenaName, world.getName());
                         Util.debug(exception);
                     }
-                    Util.logMini("Arena <white>'<aqua>%s<white>'<grey> has been <green>loaded!", arenaName);
+                    Util.log("Arena <white>'<aqua>%s<white>'<grey> has been <green>loaded!", arenaName);
 
                 }
             } else {
-                Util.logMini("<red>No Arenas to load.");
+                Util.log("<red>No Arenas to load.");
             }
         }
     }

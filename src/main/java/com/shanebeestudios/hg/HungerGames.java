@@ -78,7 +78,7 @@ public class HungerGames extends JavaPlugin {
                 .silentLogs(true)
                 .skipReloadDatapacks(true));
         } catch (UnsupportedVersionException ignore) {
-            Util.logMini("CommandAPI does not support this version of Minecraft, will update soon.");
+            Util.log("CommandAPI does not support this version of Minecraft, will update soon.");
         }
     }
 
@@ -108,9 +108,9 @@ public class HungerGames extends JavaPlugin {
         //MythicMob check
         if (Bukkit.getPluginManager().getPlugin("MythicMobs") != null) {
             mmMobManager = MythicProvider.get().getMobManager();
-            Util.log("&7MythicMobs found, MythicMobs hook &aenabled");
+            Util.log("<grey>MythicMobs found, MythicMobs hook <green>enabled");
         } else {
-            Util.log("&7MythicMobs not found, MythicMobs hooks have been &cdisabled");
+            Util.log("<grey>MythicMobs not found, MythicMobs hooks have been <red>disabled");
         }
         lang = new Language(this);
         kitManager = new KitManager();
@@ -126,20 +126,20 @@ public class HungerGames extends JavaPlugin {
         //PAPI check
         if (Bukkit.getPluginManager().getPlugin("PlaceholderAPI") != null) {
             new Placeholders(this).register();
-            Util.log("&7PAPI found, Placeholders have been &aenabled");
+            Util.log("<grey>PAPI found, Placeholders have been <green>enabled");
         } else {
-            Util.log("&7PAPI not found, Placeholders have been &cdisabled");
+            Util.log("<grey>PAPI not found, Placeholders have been <red>disabled");
         }
         //mcMMO check
         if (Bukkit.getPluginManager().getPlugin("mcMMO") != null) {
             if (Util.classExists("com.gmail.nossr50.events.skills.secondaryabilities.SubSkillEvent")) {
                 getServer().getPluginManager().registerEvents(new McmmoListeners(this), this);
-                Util.log("&7mcMMO found, mcMMO event hooks &aenabled");
+                Util.log("<grey>mcMMO found, mcMMO event hooks <green>enabled");
             } else {
-                Util.log("&7mcMMO classic found. HungerGames does not support mcMMO classic, mcMMO hooks &cdisabled");
+                Util.log("<grey>mcMMO classic found. HungerGames does not support mcMMO classic, mcMMO hooks <red>disabled");
             }
         } else {
-            Util.log("&7mcMMO not found, mcMMO event hooks have been &cdisabled");
+            Util.log("<grey>mcMMO not found, mcMMO event hooks have been <red>disabled");
         }
 
         //noinspection ConstantConditions
@@ -153,11 +153,11 @@ public class HungerGames extends JavaPlugin {
         getServer().getPluginManager().registerEvents(new GameListener(this), this);
 
         if (this.getDescription().getVersion().contains("Beta")) {
-            Util.log("&eYOU ARE RUNNING A BETA VERSION, please use with caution");
-            Util.log("&eReport any issues to: &bhttps://github.com/ShaneBeeStudios/HungerGames/issues");
+            Util.log("<yellow>YOU ARE RUNNING A BETA VERSION, please use with caution");
+            Util.log("<yellow>Report any issues to: <aqua>https://github.com/ShaneBeeStudios/HungerGames/issues");
         }
 
-        Util.log("HungerGames has been &aenabled&7 in &b%.2f seconds&7!", (float) (System.currentTimeMillis() - start) / 1000);
+        Util.log("HungerGames has been <green>enabled<grey> in <aqua>%.2f seconds<grey>!", (float) (System.currentTimeMillis() - start) / 1000);
     }
 
     public void reloadPlugin() {

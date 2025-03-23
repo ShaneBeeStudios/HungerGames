@@ -72,12 +72,12 @@ public class MobManager {
                 else {
                     NamespacedKey namespacedKey = NamespacedKey.fromString(typeString);
                     if (namespacedKey == null) {
-                        Util.logMini("<red>Invalid entity type <white>'<yellow>%s<white>'", typeString);
+                        Util.log("<red>Invalid entity type <white>'<yellow>%s<white>'", typeString);
                         continue;
                     }
                     EntityType entityType = Registries.ENTITY_TYPE_REGISTRY.get(namespacedKey);
                     if (entityType == null) {
-                        Util.logMini("<red>Invalid entity type <white>'<yellow>%s<white>'", namespacedKey);
+                        Util.log("<red>Invalid entity type <white>'<yellow>%s<white>'", namespacedKey);
                         continue;
                     }
 

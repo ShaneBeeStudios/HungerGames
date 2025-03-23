@@ -42,21 +42,12 @@ public class Util {
     private static final MiniMessage MINI_MESSAGE = MiniMessage.miniMessage();
 
     /**
-     * Log a message to console prefixed with the plugin's name
-     *
-     * @param s Message to log to console
-     */
-    public static void log(String s) {
-        scm(Bukkit.getConsoleSender(), "&7[&3&lHungerGames&7] " + s);
-    }
-
-    /**
      * Log a mini-message to console prefixed with the plugin's name
      *
      * @param format Message format
      * @param args   Arguments for message format
      */
-    public static void logMini(String format, Object... args) {
+    public static void log(String format, Object... args) {
         String s = String.format(format, args);
         Component mini = getMini("<grey>[<aqua>Hunger<dark_aqua>Games<grey>] " + s);
         CONSOLE.sendMessage(mini);
@@ -76,23 +67,13 @@ public class Util {
     }
 
     /**
-     * Log a formatted message to console prefixed with the plugin's name
-     *
-     * @param format  String format
-     * @param objects Objects to go into format
-     */
-    public static void log(String format, Object... objects) {
-        log(String.format(format, objects));
-    }
-
-    /**
      * Send a warning to console prefixed with the plugin's name
      *
      * @param warning Message to log to console
      */
     public static void warning(String warning) {
         if (warning.length() > 0) { // only send messages if its actually a message
-            scm(Bukkit.getConsoleSender(), getColString("&7[&e&lHungerGames&7] &eWARNING: " + warning));
+            scm(Bukkit.getConsoleSender(), getColString("<grey>[<yellow><bold>HungerGames<grey>] <yellow>WARNING: " + warning));
         }
     }
 
@@ -126,10 +107,10 @@ public class Util {
      */
     public static void debug(@NotNull Exception exception) {
         if (Config.debug) {
-            LOGGER.log(Level.SEVERE, getColString("&7[&e&lHungerGames&7] &cERROR: (please report to dev):"));
+            LOGGER.log(Level.SEVERE, getColString("<grey>[<yellow><bold>HungerGames<grey>] <red>ERROR: (please report to dev):"));
             LOGGER.log(Level.SEVERE, exception.toString());
             for (StackTraceElement element : exception.getStackTrace()) {
-                LOGGER.log(Level.SEVERE, getColString("  &7at &c" + element));
+                LOGGER.log(Level.SEVERE, getColString("  <grey>at <red>" + element));
             }
         }
     }
@@ -195,6 +176,7 @@ public class Util {
      * @param string String including color codes
      * @return Formatted string
      */
+    @Deprecated(forRemoval = true)
     public static String getColString(String string) {
         if (isRunningMinecraft(1, 16)) {
             Matcher matcher = HEX_PATTERN.matcher(string);

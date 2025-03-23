@@ -18,7 +18,7 @@ public class MobConfig {
         File mobFile = new File(plugin.getDataFolder(), "mobs.yml");
         if (!mobFile.exists()) {
             plugin.saveResource("mobs.yml", false);
-            Util.logMini("New mobs.yml created");
+            Util.log("New mobs.yml created");
         }
         this.mobsConfig = YamlConfiguration.loadConfiguration(mobFile);
     }

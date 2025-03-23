@@ -38,16 +38,16 @@ public class Permissions {
     }
 
     public static void debug() {
-        Util.logMini("Permissions:");
+        Util.log("Permissions:");
         for (Map.Entry<String, org.bukkit.permissions.Permission> entry : PERMISSIONS.entrySet()) {
             String color = switch (entry.getValue().getDefault()) {
                 case OP -> "yellow";
                 case TRUE, NOT_OP -> "green";
                 case FALSE -> "red";
             };
-            Util.logMini("  <white>'<#F09616>%s<white>':", entry.getKey());
-            Util.logMini("    <grey> Description: <aqua>%s", entry.getValue().getDescription());
-            Util.logMini("    <grey> Default: <%s>%s", color, entry.getValue().getDefault().toString());
+            Util.log("  <white>'<#F09616>%s<white>':", entry.getKey());
+            Util.log("    <grey> Description: <aqua>%s", entry.getValue().getDescription());
+            Util.log("    <grey> Default: <%s>%s", color, entry.getValue().getDefault().toString());
         }
     }
 
