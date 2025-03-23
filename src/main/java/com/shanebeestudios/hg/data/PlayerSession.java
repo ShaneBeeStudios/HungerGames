@@ -67,7 +67,9 @@ public class PlayerSession {
                 Util.sendPrefixedMini(player, "Congrats all locations set, now select your sign!");
             } else {
                 double height = block.getBoundingBox().getHeight();
-                this.spawnLocations.add(block.getLocation().add(0.5, height, 0.5));
+                Location location = block.getLocation().add(0.5, height, 0.5);
+                location.setYaw(player.getLocation().getYaw());
+                this.spawnLocations.add(location);
                 // TODO count/next location
                 if (this.spawnLocations.size() >= this.maxPlayers) {
                     this.stage = Stage.SIGN;
@@ -83,6 +85,7 @@ public class PlayerSession {
             if (block.getState() instanceof Sign sign) {
                 this.signLocation = sign;
                 // TODO all done message
+                Util.sendPrefixedMini(player, "Sign selected, you're dont, good job you!!");
                 finalizeGame();
             } else {
                 // TODO not a sign message

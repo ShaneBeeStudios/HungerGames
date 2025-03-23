@@ -1,13 +1,13 @@
 package com.shanebeestudios.hg.data;
 
 import com.shanebeestudios.hg.HungerGames;
+import com.shanebeestudios.hg.api.util.Util;
 import com.shanebeestudios.hg.game.Bound;
 import com.shanebeestudios.hg.game.Game;
 import com.shanebeestudios.hg.game.GameArenaData;
 import com.shanebeestudios.hg.managers.ItemStackManager;
 import com.shanebeestudios.hg.managers.KitManager;
 import com.shanebeestudios.hg.tasks.CompassTask;
-import com.shanebeestudios.hg.api.util.Util;
 import org.bukkit.Bukkit;
 import org.bukkit.Difficulty;
 import org.bukkit.Location;
@@ -307,12 +307,26 @@ public class ArenaConfig {
     }
 
     public String locToString(Location location) {
-        return location.getWorld().getName() + ":" + location.getX() + ":" + location.getY() + ":" + location.getZ();
+        float yaw = (float)Math.floor(location.getYaw());
+        float pitch = (float)Math.floor(location.getPitch());
+        return location.getWorld().getName() + ":" + location.getX() + ":" + location.getY() + ":" + location.getZ() + ":" + yaw + ":" + pitch;
     }
 
     public Location getLocFromString(String stringLocation) {
         String[] split = stringLocation.split(":");
-        return new Location(Bukkit.getServer().getWorld(split[0]), Double.parseDouble(split[1]), Double.parseDouble(split[2]), Double.parseDouble(split[3]));
+        World world = Bukkit.getWorld(split[0]);
+        double x = Double.parseDouble(split[1]);
+        double y = Double.parseDouble(split[2]);
+        double z = Double.parseDouble(split[3]);
+        float yaw = 0;
+        float pitch = 0;
+        if (split.length >= 5) {
+            yaw = Float.parseFloat(split[4]);
+        }
+        if (split.length == 6) {
+            pitch = Float.parseFloat(split[5]);
+        }
+        return new Location(world, x, y, z, yaw, pitch);
     }
 
     public Location getBlockLocFromString(String stringLocation) {
