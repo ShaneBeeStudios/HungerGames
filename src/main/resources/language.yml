@@ -1,108 +1,108 @@
 #  This is the language file
 #  Change the messages to your liking
-#  Supports '&' color codes
+#  Mini message formatting is accepted, see https://docs.advntr.dev/minimessage/format
 #  Messages that contain <> indicate things that the plugin replaces, such as <player> or <distance>
 #  Comments in this file will be removed if we update messages during a plugin update
 #  To restore these messages, backup this file, delete it, and restart your server, this will create a new lang file with all the notes
 
 #  GENERAL PLUGIN MESSAGES
-prefix: '&7&l[&3&lHungerGames&7&l] '
+prefix: '<grey>[<aqua>Hunger<dark_aqua>Games<grey>] '
 
 #  GAME MESSAGES
 #  <player> will be replaced with name of player
-player-joined-game: '&b&l<player> &7Has joined the game'
-player-left-game: '&b&l<player> &cHas left the game'
+player-joined-game: '<aqua><player> <grey>Has joined the game'
+player-left-game: '<aqua><player> <red>Has left the game'
 #  <arena> will be replaced with the name of the arena
-game-started: '&6&l Arena &c&l<arena> &6&lwill begin in 30 seconds!'
+game-started: '<gold> Arena <red><arena> <gold>will begin in 30 seconds!'
 game-running: 'The game <arena> is already running and cannot be joined!'
-game-join: '&6&l Use:&c&l /hg join <arena>&6&l to join!'
+game-join: '<gold> Use:<red> /hg join <arena><gold> to join!'
 game-countdown: 'The game will start in <timer> seconds..'
-game-almost-over: '&l&cThe game is almost over, fight to the death!'
-game-ending-minsec: '&aThe game is ending in <minutes> minute(s), and <seconds> second(s)!'
-game-ending-min: '&aThe game is ending in <minutes> minute(s)!'
-game-ending-sec: '&athe game is ending in <seconds> second(s)!'
-game-border-closing: '&6The border is coming, you have <seconds> seconds to get to the center of the arena!'
-game-chests-refill: '&6Chests have been refilled'
+game-almost-over: '<red>The game is almost over, fight to the death!'
+game-ending-minsec: '<green>The game is ending in <minutes> minute(s), and <seconds> second(s)!'
+game-ending-min: '<green>The game is ending in <minutes> minute(s)!'
+game-ending-sec: '<green>the game is ending in <seconds> second(s)!'
+game-border-closing: '<gold>The border is coming, you have <seconds> seconds to get to the center of the arena!'
+game-chests-refill: '<gold>Chests have been refilled'
 
 # <min>/<sec> will be replaced with the remaining minutes and seconds in a game
-game-bossbar: '&6&lGame Ends In: &b&l<min> &7min &b&l<sec> &7sec'
+game-bossbar: '<gold>Game Ends In: <aqua><min> <grey>min <aqua><sec> <grey>sec'
 
 #  <amount> will be replaced with amount of players left to start a game
-players-to-start: '&b&l<amount> &6players to start!'
-arena-not-ready: '&cThis arena is not ready! Please wait before joining!'
-arena-spectate: '&6You can spectate this arena by running &3/hg spectate <arena>'
-game-full: '&cis currently full!'
+players-to-start: '<aqua><amount> <gold>players to start!'
+arena-not-ready: '<red>This arena is not ready! Please wait before joining!'
+arena-spectate: '<gold>You can spectate this arena by running <dark_aqua>/hg spectate <arena>'
+game-full: '<red>is currently full!'
 
 #  <arena> will be replaced with name of arena the player won in
 #  <winner> will be replaced with name of winner
-player-won: '&b&l<winner> &6won HungerGames at arena &b&l<arena>&7!'
+player-won: '<aqua><winner> <gold>won HungerGames at arena <aqua><arena><grey>!'
 
 #  <amount> will be replaced with the amount the player will receive on win
-winning-amount: '&7You received &b$<amount> &7for winning &3&lHunger&b&lGames!'
+winning-amount: '<grey>You received <aqua>$<amount> <grey>for winning <dark_aqua>Hunger<aqua>Games!'
 
 #  SPECTATOR
-spectator-compass: '&3Spectator Compass'
-spectator-head-lore: '&7Click to TP to player'
+spectator-compass: '<dark_aqua>Spectator Compass'
+spectator-head-lore: '<grey>Click to TP to player'
 spectator-start-title: 'You are now spectating!'
 
 #  KIT MESSAGES
-kit-join-header: '&c&l>&7&l----------[&f&lWelcome to Hunger&f&lGames&7&l]&7&l----------&c&l<'
-kit-join-msg: '&7&l           - &3Pick a kit using &b/hg kit &7<&rkit-name&7>'
-kit-join-available: '&3&l  Available Kits:&b'
-kit-join-footer: '&c&l>&7&l------------------------------------------&c&l<'
-kit-no-perm: '&cYou do not have permission to use this kit!'
-kit-doesnt-exist: '&cDoes not exist'
-kit-disabled: '&cKits disabled in this game.'
+kit-join-header: '<red>><grey>----------[<white>Welcome to Hunger<white>Games<grey>]<grey>----------<red><'
+kit-join-msg: '<grey>           - <dark_aqua>Pick a kit using <aqua>/hg kit <grey><<reset>kit-name<grey>>'
+kit-join-available: '<dark_aqua>  Available Kits:<aqua>'
+kit-join-footer: '<red>><grey>------------------------------------------<red><'
+kit-no-perm: '<red>You do not have permission to use this kit!'
+kit-doesnt-exist: '<red>Does not exist'
+kit-disabled: '<red>Kits disabled in this game.'
 
 #  SCOREBOARD
-scoreboard-title: '&6&lHungerGames'
-players-alive: '&d&lTributes:'
+scoreboard-title: '<gold>HungerGames'
+players-alive: '<light_purple>Tributes:'
 # <num> will be replaced by the number of remaining players in the game
-players-alive-num: '&e<num> alive'
-scoreboard-arena: "&a&lArena: &b"
+players-alive-num: '<yellow><num> alive'
+scoreboard-arena: "<green>Arena: <aqua>"
 
 #  TEAMS
-team-invite-1: '&6*&b&m                                                                             &6*'
-team-invite-2: '| &f<inviter> &3just invited you to a &fTeam&3!'
-team-invite-3: '| &3Type &f/hg team accept &3To join!'
-team-invite-4: '&6*&b&m                                                                             &6*'
-joined-team: '&3You successfully joined this team!'
+team-invite-1: '<gold>*<aqua><strikethrough>                                                                             <gold>*'
+team-invite-2: '| <white><inviter> <dark_aqua>just invited you to a <white>Team<dark_aqua>!'
+team-invite-3: '| <dark_aqua>Type <white>/hg team accept <dark_aqua>To join!'
+team-invite-4: '<gold>*<aqua><strikethrough>                                                                             <gold>*'
+joined-team: '<dark_aqua>You successfully joined this team!'
 # <name> will be replaced with team name
-team-prefix: "&7[&aTeam-<name>&7]"
+team-prefix: "<grey>[<green>Team-<name><grey>]"
 team-suffix: ""
-team-created: "&aCreated team: &b<name>"
-team-already-exists: "&cTeam &b<name> &calready exists."
-team-already-have: "&cYou have already created a team: &b<name>"
-team-none: "&cYou do not have a team, create one first with command &b'/hg team create <name>'"
+team-created: "<green>Created team: <aqua><name>"
+team-already-exists: "<red>Team <aqua><name> <red>already exists."
+team-already-have: "<red>You have already created a team: <aqua><name>"
+team-none: "<red>You do not have a team, create one first with command <aqua>'/hg team create <name>'"
 
 #  CHEST DROPS
-chest-drop-1: '&6*&b&m                                                                                   &6*'
-chest-drop-2: '"&b| &3A Care-Package was just dropped near: &f<x>&3, &f<y>&3, &f<z>'
+chest-drop-1: '<gold>*<aqua><strikethrough>                                                                                   <gold>*'
+chest-drop-2: '"<aqua>| <dark_aqua>A Care-Package was just dropped near: <white><x><dark_aqua>, <white><y><dark_aqua>, <white><z>'
 
 #  COMPASS
 #  <player> will be replaced with the name of the nearest player
 #  <distance> will be replaced with the distance of the nearest player
-compass-nearest-player: '&f&lNearest Player: &r<player>    &7&lDistance: &c<distance>'
+compass-nearest-player: '<white>Nearest Player: <reset><player>    <grey>Distance: <red><distance>'
 
 #  FREE ROAM
-roam-game-started: '&4[]---------[ &6&lThe game has started! &4]---------[]'
+roam-game-started: '<dark_red>[]---------[ <gold>The game has started! <dark_red>]---------[]'
 #  <roam> will be replaced with the time the players can roam for
-roam-time: ' &e You have <roam> seconds to roam without taking damage!'
-roam-finished: '&c&lFree-Roam is over, PVP is now enabled!'
+roam-time: ' <yellow> You have <roam> seconds to roam without taking damage!'
+roam-finished: '<red>Free-Roam is over, PVP is now enabled!'
 
 #  GAME STATUSES
-status-running: '&a&lRunning'
-status-stopped: '&4&lStopped'
-status-ready: '&5&lReady'
-status-waiting: '&b&lWaiting...'
-status-broken: '&4&lBROKEN'
-status-rollback: '&c&lRestoring...'
-status-notready: '&1&lNotReady'
-status-beginning: '&a&lRunning'
-status-countdown: '&b&lStarting...'
+status-running: '<green>Running'
+status-stopped: '<dark_red>Stopped'
+status-ready: '<dark_purple>Ready'
+status-waiting: '<aqua>Waiting...'
+status-broken: '<dark_red>BROKEN'
+status-rollback: '<red>Restoring...'
+status-notready: '<dark_blue>NotReady'
+status-beginning: '<green>Running'
+status-countdown: '<aqua>Starting...'
 
 #  DEATH MESSAGES
-death-fallen: '&7&l[&3&lHungerGames Fallen&7&l]'
+death-fallen: '<grey>[<dark_aqua>HungerGames Fallen<grey>]'
 death-explosion: '<player> Was blown to bits!'
 death-custom: '<player> Was killed by an unknown cause!'
 death-fall: '<player> Fell to their death!'
@@ -113,7 +113,7 @@ death-lava: '<player> Fell into a pit of lava!'
 death-magic: '<player> Was destroyed by magic!'
 death-suicide: '<player> Could not handle HungerGames!'
 death-other-cause: '<player> Was killed by <cause>'
-death-player: '&6<player> &c&lWas killed by &6<killer> &cusing a(n) &6<weapon> &c!'
+death-player: '<gold><player> <red>Was killed by <gold><killer> <red>using a(n) <gold><weapon> <red>!'
 death-zombie: '<player> Was ripped to bits by a Zombie!'
 death-skeleton: '<player> Was shot in the face by a Skeleton'
 death-spider: '<player> Was eaten alive by a Spider!'
@@ -124,134 +124,134 @@ death-other-entity: '<player> Spontaneously died!'
 
 #  COMMANDS
 ## Spawn
-cmd-spawn-same: '&cYou cannot have two spawns in the same location!'
-cmd-spawn-set: '&aYou set HungerGames spawn &7#<number>&a!'
+cmd-spawn-same: '<red>You cannot have two spawns in the same location!'
+cmd-spawn-set: '<green>You set HungerGames spawn <grey>#<number><green>!'
 
 ## Base
-cmd-base-noperm: '&cYou do not have permission to use: /hg <command>'
-cmd-base-nogame: '&cYou are not in a valid game!'
-cmd-base-noregion: '&cYou are not in a valid HungerGames region!'
-cmd-base-wrongusage: '&cWrong usage:'
+cmd-base-noperm: '<red>You do not have permission to use: /hg <command>'
+cmd-base-nogame: '<red>You are not in a valid game!'
+cmd-base-noregion: '<red>You are not in a valid HungerGames region!'
+cmd-base-wrongusage: '<red>Wrong usage:'
 
 ## Create
-cmd-create-need-selection: '&cYou need to make a selection before making an arena!'
-cmd-create-divisible-1: '&cTime-in-seconds must be divisible by 30!'
-cmd-create-divisible-2: '&cEx: 90 is divisible by 30'
-cmd-create-minmax: '&cmin-players cannot be more then max-players!'
-cmd-create-created: '&aYou created HungerGames arena &b<arena>&a!'
-cmd-create-add-spawns: "&6You're now ready to set some spawns with '&a/hg addspawn&6'"
+cmd-create-need-selection: '<red>You need to make a selection before making an arena!'
+cmd-create-divisible-1: '<red>Time-in-seconds must be divisible by 30!'
+cmd-create-divisible-2: '<red>Ex: 90 is divisible by 30'
+cmd-create-minmax: '<red>min-players cannot be more then max-players!'
+cmd-create-created: '<green>You created HungerGames arena <aqua><arena><green>!'
+cmd-create-add-spawns: "<gold>You're now ready to set some spawns with '<green>/hg addspawn<gold>'"
 
 ## Delete
-cmd-delete-attempt: '&aAttempting to delete <arena>!'
-cmd-delete-stopping: '&7- &cGame running! &aStopping..'
-cmd-delete-kicking: '&7- &c&cPlayers detected! &aKicking..'
-cmd-delete-deleted: '&aSuccessfully deleted HungerGames arena &b<arena>!'
-cmd-delete-failed: '&cFailed to delete arena!'
-cmd-delete-noexist: '&cThis arena does not exist!'
+cmd-delete-attempt: '<green>Attempting to delete <arena>!'
+cmd-delete-stopping: '<grey>- <red>Game running! <green>Stopping..'
+cmd-delete-kicking: '<grey>- <red><red>Players detected! <green>Kicking..'
+cmd-delete-deleted: '<green>Successfully deleted HungerGames arena <aqua><arena>!'
+cmd-delete-failed: '<red>Failed to delete arena!'
+cmd-delete-noexist: '<red>This arena does not exist!'
 
 ## Join
-cmd-join-in-game: '&cYou are already in a game!'
-cmd-join-no-money: '&cYou do not have enough money to join this game. Cost: &b$<cost>'
+cmd-join-in-game: '<red>You are already in a game!'
+cmd-join-no-money: '<red>You do not have enough money to join this game. Cost: <aqua>$<cost>'
 
 ## Kit
-cmd-kit-no-change: '&cYou can not change your kit while the game is running!'
+cmd-kit-no-change: '<red>You can not change your kit while the game is running!'
 
 ## Leave
-cmd-leave-left: '&6You left &b&l<arena>&c!'
-cmd-leave-refund: '&6You got a refund of &b$<cost> &6for leaving the game before it started'
+cmd-leave-left: '<gold>You left <aqua><arena><red>!'
+cmd-leave-refund: '<gold>You got a refund of <aqua>$<cost> <gold>for leaving the game before it started'
 
 ## Reload
-cmd-reload-attempt: '&a&lAttempting to reload HungerGames!'
-cmd-reload-reloaded-arena: '&6 - &eArenas have been reloaded!'
-cmd-reload-reloaded-kit: '&6 - &eKits have been reloaded!'
-cmd-reload-reloaded-items: '&6 - &eRandomItems have been reloaded!'
-cmd-reload-reloaded-config: '&6 - &eConfig values have been reloaded!'
-cmd-reload-reloaded-success: '&l&a- Successfully reloaded HungerGames'
+cmd-reload-attempt: '<green>Attempting to reload HungerGames!'
+cmd-reload-reloaded-arena: '<gold> - <yellow>Arenas have been reloaded!'
+cmd-reload-reloaded-kit: '<gold> - <yellow>Kits have been reloaded!'
+cmd-reload-reloaded-items: '<gold> - <yellow>RandomItems have been reloaded!'
+cmd-reload-reloaded-config: '<gold> - <yellow>Config values have been reloaded!'
+cmd-reload-reloaded-success: '<green>- Successfully reloaded HungerGames'
 
 ## Exit
-cmd-exit-set: '&6Global Exit Spawn Set:'
-cmd-exit-set-arena: '&6<arena> Exit Spawn Set:'
+cmd-exit-set: '<gold>Global Exit Spawn Set:'
+cmd-exit-set-arena: '<gold><arena> Exit Spawn Set:'
 
 ## LobbyWall
-cmd-lobbywall-set: '&aThe lobbyWallSign has been set!'
-cmd-lobbywall-notcorrect: '&cThese signs are not in correct format!'
-cmd-lobbywall-format: '&cformat: &6[sign] &c[sign] [sign]'
+cmd-lobbywall-set: '<green>The lobbyWallSign has been set!'
+cmd-lobbywall-notcorrect: '<red>These signs are not in correct format!'
+cmd-lobbywall-format: '<red>format: <gold>[sign] <red>[sign] [sign]'
 lobby-signs:
-    sign-1:
-        line-1: '&1&lHunger Games'
-        line-3: '&0&lClick To Join'
-        line-4: 'Cost $&b<cost>'
-    sign-2:
-        line-1: '&1&lGame Status'
-    sign-3:
-        line-1: '&1&lAlive'
+  sign-1:
+    line-1: '<dark_blue>Hunger Games'
+    line-3: '<black>Click To Join'
+    line-4: 'Cost $<aqua><cost>'
+  sign-2:
+    line-1: '<dark_blue>Game Status'
+  sign-3:
+    line-1: '<dark_blue>Alive'
 
 ## Start
-cmd-start-starting: '&b<arena>&6 is now starting!'
+cmd-start-starting: '<aqua><arena><gold> is now starting!'
 
 ## Stop
-cmd-stop-all: '&aStopped all games'
-cmd-stop-arena: '&b<arena>&c Has been stopped!'
-cmd-stop-noexist: '&cThe game &b<arena>&c does not exist!'
+cmd-stop-all: '<green>Stopped all games'
+cmd-stop-arena: '<aqua><arena><red> Has been stopped!'
+cmd-stop-noexist: '<red>The game <aqua><arena><red> does not exist!'
 
 ## Team
-cmd-team-not-avail: '&b<player> &cIs not available!'
-cmd-team-only-leader: '&cOnly the leader can invite other players!'
-cmd-team-on-team: '&b<player> &6is already on a team!'
-cmd-team-max: '&cYou have hit the max team limit!'
-cmd-team-invited: '&b<player> &6Has been invited!'
-cmd-team-wrong: '&cWrong Usage: &6/hg team invite &b<name>'
-cmd-team-no-pending: '&cYou have no pending invites...'
-cmd-team-joined: '&b<player> &6Just joined your team!'
-cmd-team-no-team: '&cYou are not on a team!'
-cmd-team-not-on-team: '&b<player> &cis not on your team!'
-cmd-team-tp: '&6Teleporting to &b<player>'
-cmd-team-self: '&cYou can not invite yourself to your own team.'
+cmd-team-not-avail: '<aqua><player> <red>Is not available!'
+cmd-team-only-leader: '<red>Only the leader can invite other players!'
+cmd-team-on-team: '<aqua><player> <gold>is already on a team!'
+cmd-team-max: '<red>You have hit the max team limit!'
+cmd-team-invited: '<aqua><player> <gold>Has been invited!'
+cmd-team-wrong: '<red>Wrong Usage: <gold>/hg team invite <aqua><name>'
+cmd-team-no-pending: '<red>You have no pending invites...'
+cmd-team-joined: '<aqua><player> <gold>Just joined your team!'
+cmd-team-no-team: '<red>You are not on a team!'
+cmd-team-not-on-team: '<aqua><player> <red>is not on your team!'
+cmd-team-tp: '<gold>Teleporting to <aqua><player>'
+cmd-team-self: '<red>You can not invite yourself to your own team.'
 
 ## Toggle
-cmd-toggle-unlocked: '&b<arena>&6 is now &aUNLOCKED!'
-cmd-toggle-locked: '&3<arena>&b is now &4LOCKED&b!'
+cmd-toggle-unlocked: '<aqua><arena><gold> is now <green>UNLOCKED!'
+cmd-toggle-locked: '<dark_aqua><arena><aqua> is now <dark_red>LOCKED<aqua>!'
 
 ## Handler
-cmd-handler-nokit: '&cYou can not choose a kit while the game is running!'
-cmd-handler-nocmd: '&cYou can not use non-HungerGames commands while in-game!'
-cmd-handler-playing: '&cThis player is currently playing &3HungerGames!'
+cmd-handler-nokit: '<red>You can not choose a kit while the game is running!'
+cmd-handler-nocmd: '<red>You can not use non-HungerGames commands while in-game!'
+cmd-handler-playing: '<red>This player is currently playing <dark_aqua>HungerGames!'
 
 ## Chest Refill
-cmd-chestrefill-set: '&6Chest refill for &b<arena> &6has been set to &b<sec> seconds'
-cmd-chestrefill-now: '&6Chests have now been refilled in &b<arena>'
+cmd-chestrefill-set: '<gold>Chest refill for <aqua><arena> <gold>has been set to <aqua><sec> seconds'
+cmd-chestrefill-now: '<gold>Chests have now been refilled in <aqua><arena>'
 
 ## Border
-cmd-border-size: '&6Border size for &b<arena> &6has been set to &b<size>'
-cmd-border-center: '&6Border center for &b<arena> &6has been set at your location'
-cmd-border-timer: '&6Border time for &b<arena> &6has been set to start at remaining &b<start> seconds &6and stop at &b<end> seconds'
+cmd-border-size: '<gold>Border size for <aqua><arena> <gold>has been set to <aqua><size>'
+cmd-border-center: '<gold>Border center for <aqua><arena> <gold>has been set at your location'
+cmd-border-timer: '<gold>Border time for <aqua><arena> <gold>has been set to start at remaining <aqua><start> seconds <gold>and stop at <aqua><end> seconds'
 
 #  LISTENER
-listener-not-running: '&cThe game is not running!'
-listener-no-edit-block: '&cYou cannot edit this block type!'
-listener-no-interact: '&cYou cannot interact until the game has started!'
-listener-sign-click-hand: '&cClick the sign with your hand!'
+listener-not-running: '<red>The game is not running!'
+listener-no-edit-block: '<red>You cannot edit this block type!'
+listener-no-interact: '<red>You cannot interact until the game has started!'
+listener-sign-click-hand: '<red>Click the sign with your hand!'
 
 #  WAND LISTENER
-listener-wand-create-arena: "&6You're now ready to create your arena with '&a/hg create&6'"
-listener-wand-set-pos-2: '&6Now you need to set position 2!'
-listener-wand-big-enough: '&cAn arena needs to be a cuboid of at least 5x5x5 in size.'
+listener-wand-create-arena: "<gold>You're now ready to create your arena with '<green>/hg create<gold>'"
+listener-wand-set-pos-2: '<gold>Now you need to set position 2!'
+listener-wand-big-enough: '<red>An arena needs to be a cuboid of at least 5x5x5 in size.'
 
 #  ARENA CHECK
-check-need-more-spawns: '&cYou still need &7<number> &c more spawns!'
-check-broken-debug: '&cYour arena is marked as broken! use &7/hg debug <arena> &cto check for errors!'
-check-broken-debug-2: '&cIf no errors are found, please use &7/hg toggle <arena>&c!'
-check-invalid-lobby: '&cYour LobbyWall is invalid! Please reset them!'
-check-set-lobby: '&6Set lobbywall: &7/hg setlobbywall <arena>'
-check-ready-run: '&aYour HungerGames arena &7<arena>&a is ready to run!'
+check-need-more-spawns: '<red>You still need <grey><number> <red> more spawns!'
+check-broken-debug: '<red>Your arena is marked as broken! use <grey>/hg debug <arena> <red>to check for errors!'
+check-broken-debug-2: '<red>If no errors are found, please use <grey>/hg toggle <arena><red>!'
+check-invalid-lobby: '<red>Your LobbyWall is invalid! Please reset them!'
+check-set-lobby: '<gold>Set lobbywall: <grey>/hg setlobbywall <arena>'
+check-ready-run: '<green>Your HungerGames arena <grey><arena><green> is ready to run!'
 
 #  TRACK STICK
-track-nearest: '"&b<player> &eis &b<range> &eblocks away from you: &b<location>"'
-track-no-near: '&cCould not locate any nearby players!'
-track-empty: '&cThis tracking stick is out of uses!'
-track-bar: '&a&l[]------------------------------------------[]'
-track-new1: '&a&l |&6&l   You have been given a player-tracking stick! &a&l |'
-track-new2: '&a&l |&6&l   Swing the stick to track players!                &a&l |'
+track-nearest: '"<aqua><player> <yellow>is <aqua><range> <yellow>blocks away from you: <aqua><location>"'
+track-no-near: '<red>Could not locate any nearby players!'
+track-empty: '<red>This tracking stick is out of uses!'
+track-bar: '<green>[]------------------------------------------[]'
+track-new1: '<green> |<gold>   You have been given a player-tracking stick! <green> |'
+track-new2: '<green> |<gold>   Swing the stick to track players!                <green> |'
 
 #  LEADERBOARD
 lb-blank-space: ''
