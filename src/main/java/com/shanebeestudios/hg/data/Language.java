@@ -111,7 +111,8 @@ public class Language {
     public String cmd_delete_deleted;
     public String cmd_delete_failed;
     public String cmd_delete_noexist;
-    public String cmd_join_in_game;
+    public String cmd_join_already_in_game;
+    public String cmd_join_already_in_game_other;
     public String cmd_join_no_money;
     public String cmd_kit_no_change;
     public String cmd_leave_left;
@@ -326,7 +327,8 @@ public class Language {
         cmd_delete_deleted = lang.getString("cmd-delete-deleted");
         cmd_delete_failed = lang.getString("cmd-delete-failed");
         cmd_delete_noexist = lang.getString("cmd-delete-noexist");
-        cmd_join_in_game = lang.getString("cmd-join-in-game");
+        cmd_join_already_in_game = lang.getString("cmd-join-already-in-game");
+        cmd_join_already_in_game_other = lang.getString("cmd-join-already-in-game-other");
         cmd_join_no_money = lang.getString("cmd-join-no-money");
         cmd_kit_no_change = lang.getString("cmd-kit-no-change");
         cmd_leave_left = lang.getString("cmd-leave-left");

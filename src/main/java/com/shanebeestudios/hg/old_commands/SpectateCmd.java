@@ -18,7 +18,7 @@ public class SpectateCmd extends BaseCmd {
 	@Override
 	public boolean run() {
 		if (playerManager.hasPlayerData(player) || playerManager.hasSpectatorData(player)) {
-			Util.scm(player, lang.cmd_join_in_game);
+			Util.scm(player, lang.cmd_join_already_in_game);
 		} else {
 			Game game = gameManager.getGame(args[1]);
 			GamePlayerData gamePlayerData = game.getGamePlayerData();

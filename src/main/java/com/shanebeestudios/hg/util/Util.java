@@ -60,17 +60,18 @@ public class Util {
      */
     public static void logMini(String format, Object... args) {
         String s = String.format(format, args);
-        Component mini = getMini("<grey>[<bold><aqua>Hunger<dark_aqua>Games<grey></bold>] " + s);
+        Component mini = getMini("<grey>[<aqua>Hunger<dark_aqua>Games<grey>] " + s);
         CONSOLE.sendMessage(mini);
     }
 
     public static void sendPrefixedMini(CommandSender sender, String format, Object... args) {
         String s = String.format(format, args);
-        Component mini = getMini("<grey>[<bold><aqua>Hunger<dark_aqua>Games<grey></bold>] " + s);
+        Component mini = getMini("<grey>[<aqua>Hunger<dark_aqua>Games<grey>] " + s);
         sender.sendMessage(mini);
     }
 
     public static void sendMini(CommandSender sender, String format, Object... args) {
+        if (format.isEmpty()) return;
         String s = String.format(format, args);
         Component mini = getMini(s);
         sender.sendMessage(mini);
@@ -142,9 +143,7 @@ public class Util {
      * @param s      Message to send
      */
     public static void scm(CommandSender sender, String s) {
-        if (s.length() > 0) { // only send messages if its actually a message
-            sender.sendMessage(getColString(s) + ChatColor.RESET);
-        }
+        sendMini(sender, s);
     }
 
     /**

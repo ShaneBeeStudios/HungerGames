@@ -150,7 +150,8 @@ cmd-delete-failed: '<red>Failed to delete arena!'
 cmd-delete-noexist: '<red>This arena does not exist!'
 
 ## Join
-cmd-join-in-game: '<red>You are already in a game!'
+cmd-join-already-in-game: '<red>You are already in a game!'
+cmd-join-already-in-game-other: '<red><player> is already in a game!'
 cmd-join-no-money: '<red>You do not have enough money to join this game. Cost: <aqua>$<cost>'
 
 ## Kit

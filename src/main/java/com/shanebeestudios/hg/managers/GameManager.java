@@ -137,8 +137,8 @@ public class GameManager {
         c = Math.max(c, min);
         while (c != 0) {
             ItemStack it = randomItem(game, bonus);
-            int slot = slots.get(0);
-            slots.remove(0);
+            int slot = slots.getFirst();
+            slots.removeFirst();
             i.setItem(slot, it);
             c--;
         }

@@ -18,7 +18,7 @@ public class JoinCmd extends BaseCmd {
 	public boolean run() {
 
 		if (playerManager.hasPlayerData(player) || playerManager.hasSpectatorData(player)) {
-			Util.scm(player, HungerGames.getPlugin().getLang().cmd_join_in_game);
+			Util.scm(player, HungerGames.getPlugin().getLang().cmd_join_already_in_game);
 		} else {
 			Game g = gameManager.getGame(args[1]);
 			if (g != null && !g.getGamePlayerData().getPlayers().contains(player.getUniqueId())) {

@@ -299,8 +299,8 @@ public class Game {
      * @param savePreviousLocation Whether to save the player's previous location
      */
     public boolean joinGame(Player player, boolean savePreviousLocation) {
-        if (this.gamePlayerData.getPlayers().contains(player.getUniqueId())) {
-            // TODO message already in game
+        if (this.playerManager.isInGame(player)) {
+            Util.sendPrefixedMini(player, this.lang.cmd_join_already_in_game);
             return false;
         }
         // Call PlayerJoinGameEvent
