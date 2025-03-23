@@ -1,31 +1,34 @@
 package com.shanebeestudios.hg.tasks;
 
+import com.shanebeestudios.hg.HungerGames;
+import com.shanebeestudios.hg.api.util.Util;
+import com.shanebeestudios.hg.data.Config;
+import com.shanebeestudios.hg.data.Language;
+import com.shanebeestudios.hg.game.Bound;
+import com.shanebeestudios.hg.game.Game;
+import com.shanebeestudios.hg.plugin.listeners.ChestDrop;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.World;
 import org.bukkit.entity.FallingBlock;
 import org.bukkit.entity.Player;
-import com.shanebeestudios.hg.HungerGames;
-import com.shanebeestudios.hg.data.Config;
-import com.shanebeestudios.hg.game.Bound;
-import com.shanebeestudios.hg.game.Game;
-import com.shanebeestudios.hg.plugin.listeners.ChestDrop;
-import com.shanebeestudios.hg.api.util.Util;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.UUID;
 
 public class ChestDropTask implements Runnable {
 
     private final Game game;
-    private final int timerID;
+    private final Language lang;
+    private final int taskId;
     private final List<ChestDrop> chests = new ArrayList<>();
 
     public ChestDropTask(Game game) {
         this.game = game;
-        timerID = Bukkit.getServer().getScheduler().scheduleSyncRepeatingTask(HungerGames.getPlugin(), this, Config.randomChestInterval, Config.randomChestInterval);
+        HungerGames plugin = HungerGames.getPlugin();
+        this.lang = plugin.getLang();
+        this.taskId = Bukkit.getServer().getScheduler().scheduleSyncRepeatingTask(plugin, this, Config.randomChestInterval, Config.randomChestInterval);
     }
 
     public void run() {
@@ -55,24 +58,21 @@ public class ChestDropTask implements Runnable {
 
         FallingBlock fb = w.spawnFallingBlock(l, Bukkit.getServer().createBlockData(Material.STRIPPED_SPRUCE_WOOD));
 
-        chests.add(new ChestDrop(fb));
+        this.chests.add(new ChestDrop(fb));
 
-        for (UUID u : game.getGamePlayerData().getPlayers()) {
-            Player p = Bukkit.getPlayer(u);
-            if (p != null) {
-                Util.scm(p, HungerGames.getPlugin().getLang().chest_drop_1);
-                Util.scm(p, HungerGames.getPlugin().getLang().chest_drop_2
-                        .replace("<x>", String.valueOf(x))
-                        .replace("<y>", String.valueOf(y))
-                        .replace("<z>", String.valueOf(z)));
-                Util.scm(p, HungerGames.getPlugin().getLang().chest_drop_1);
-            }
+        for (Player player : this.game.getGamePlayerData().getPlayers()) {
+            Util.scm(player, this.lang.chest_drop_1);
+            Util.scm(player, this.lang.chest_drop_2
+                .replace("<x>", String.valueOf(x))
+                .replace("<y>", String.valueOf(y))
+                .replace("<z>", String.valueOf(z)));
+            Util.scm(player, this.lang.chest_drop_1);
         }
     }
 
     public void shutdown() {
-        Bukkit.getScheduler().cancelTask(timerID);
-        for (ChestDrop cd : chests) {
+        Bukkit.getScheduler().cancelTask(taskId);
+        for (ChestDrop cd : this.chests) {
             if (cd != null) cd.remove();
         }
     }

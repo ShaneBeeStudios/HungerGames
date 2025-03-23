@@ -1,12 +1,12 @@
 package com.shanebeestudios.hg.game;
 
 import com.shanebeestudios.hg.Status;
+import com.shanebeestudios.hg.api.util.Util;
 import com.shanebeestudios.hg.data.Config;
 import com.shanebeestudios.hg.data.PlayerData;
 import com.shanebeestudios.hg.events.PlayerLeaveGameEvent;
 import com.shanebeestudios.hg.gui.SpectatorGUI;
 import com.shanebeestudios.hg.managers.PlayerManager;
-import com.shanebeestudios.hg.api.util.Util;
 import org.bukkit.Bukkit;
 import org.bukkit.GameMode;
 import org.bukkit.Location;
@@ -43,11 +43,11 @@ public class GamePlayerData extends Data {
     private final SpectatorGUI spectatorGUI;
 
     // Player Lists
-    final List<UUID> players = new ArrayList<>();
-    final List<UUID> spectators = new ArrayList<>();
+    final List<Player> players = new ArrayList<>();
+    final List<Player> spectators = new ArrayList<>();
     // This list contains all players who have joined the arena
     // Will be used to broadcast messages even if a player is no longer in the game
-    final List<UUID> allPlayers = new ArrayList<>();
+    final List<Player> allPlayers = new ArrayList<>();
 
     // Data lists
     final Map<Player, Integer> kills = new HashMap<>();
@@ -66,7 +66,7 @@ public class GamePlayerData extends Data {
      *
      * @return UUID list of all players in game
      */
-    public List<UUID> getPlayers() {
+    public List<Player> getPlayers() {
         return this.players;
     }
 
@@ -80,7 +80,7 @@ public class GamePlayerData extends Data {
      *
      * @return List of spectators
      */
-    public List<UUID> getSpectators() {
+    public List<Player> getSpectators() {
         return new ArrayList<>(this.spectators);
     }
 
@@ -116,10 +116,8 @@ public class GamePlayerData extends Data {
      * Respawn all players in the game back to spawn points
      */
     public void respawnAll() {
-        for (UUID uuid : this.players) {
-            Player player = Bukkit.getPlayer(uuid);
-            if (player != null)
-                player.teleport(pickSpawn());
+        for (Player player : this.players) {
+            player.teleport(pickSpawn());
         }
     }
 
@@ -173,13 +171,11 @@ public class GamePlayerData extends Data {
      * @param message Message to send
      */
     public void msgAll(String message) {
-        List<UUID> allPlayers = new ArrayList<>();
+        List<Player> allPlayers = new ArrayList<>();
         allPlayers.addAll(this.players);
         allPlayers.addAll(this.spectators);
-        for (UUID uuid : allPlayers) {
-            Player player = Bukkit.getPlayer(uuid);
-            if (player != null)
-                Util.scm(player, message);
+        for (Player player : allPlayers) {
+            Util.scm(player, message);
         }
     }
 
@@ -191,12 +187,10 @@ public class GamePlayerData extends Data {
      * @param message Message to send
      */
     public void msgAllPlayers(String message) {
-        List<UUID> allPlayers = new ArrayList<>(this.allPlayers);
+        List<Player> allPlayers = new ArrayList<>(this.allPlayers);
         allPlayers.addAll(this.spectators);
-        for (UUID u : allPlayers) {
-            Player p = Bukkit.getPlayer(u);
-            if (p != null)
-                Util.scm(p, lang.prefix + message);
+        for (Player player : allPlayers) {
+            Util.sendPrefixedMini(player, message);
         }
     }
 
@@ -219,9 +213,8 @@ public class GamePlayerData extends Data {
     boolean containsPlayer(Location location) {
         if (location == null) return false;
 
-        for (UUID u : this.getGame().getGamePlayerData().getPlayers()) {
-            Player p = Bukkit.getPlayer(u);
-            if (p != null && p.getLocation().getBlock().equals(location.getBlock()))
+        for (Player p : this.players) {
+            if (p.getLocation().getBlock().equals(location.getBlock()))
                 return true;
         }
         return false;
@@ -233,9 +226,8 @@ public class GamePlayerData extends Data {
     }
 
     void addPlayerData(Player player) {
-        UUID uuid = player.getUniqueId();
-        this.players.add(uuid);
-        this.allPlayers.add(uuid);
+        this.players.add(player);
+        this.allPlayers.add(player);
     }
 
     void putPlayerIntoArena(Player player, boolean savePreviousLocation) {
@@ -290,30 +282,32 @@ public class GamePlayerData extends Data {
     public void leave(Player player, boolean death) {
         new PlayerLeaveGameEvent(this.game, player, death).callEvent();
         UUID uuid = player.getUniqueId();
-        players.remove(uuid);
-        if (!death) allPlayers.remove(uuid); // Only remove the player if they voluntarily left the game
+        this.players.remove(player);
+        if (!death) this.allPlayers.remove(player); // Only remove the player if they voluntarily left the game
         unFreeze(player);
         if (death) {
             if (Config.spectateEnabled && Config.spectateOnDeath && !game.isGameOver()) {
                 spectate(player);
                 player.playSound(player.getLocation(), Sound.UI_TOAST_CHALLENGE_COMPLETE, 5, 1);
-                player.sendTitle(game.gameArenaData.getName(), Util.getColString(lang.spectator_start_title), 10, 100, 10);
+                player.sendTitle(this.game.getGameArenaData().getName(), Util.getColString(lang.spectator_start_title), 10, 100, 10);
                 game.updateAfterDeath(player, true);
                 return;
-            } else if (game.gameArenaData.getStatus() == Status.RUNNING)
-                game.getGameBarData().removePlayer(player);
+            } else if (this.game.getGameArenaData().getStatus() == Status.RUNNING) {
+                this.game.getGameBarData().removePlayer(player);
+            }
         }
         heal(player);
-        PlayerData playerData = playerManager.getPlayerData(uuid);
+        PlayerData playerData = this.playerManager.getPlayerData(uuid);
+        assert playerData != null;
         Location previousLocation = playerData.getPreviousLocation();
 
         playerData.restore(player);
         exit(player, previousLocation);
-        playerManager.removePlayerData(player);
+        this.playerManager.removePlayerData(player);
         if (death) {
             player.playSound(player.getLocation(), Sound.UI_TOAST_CHALLENGE_COMPLETE, 5, 1);
         }
-        game.updateAfterDeath(player, death);
+        this.game.updateAfterDeath(player, death);
     }
 
     void exit(Player player, @Nullable Location exitLocation) {
@@ -347,27 +341,23 @@ public class GamePlayerData extends Data {
      */
     public void spectate(Player spectator) {
         UUID uuid = spectator.getUniqueId();
-        spectator.teleport(game.gameArenaData.getSpawns().get(0));
+        spectator.teleport(game.gameArenaData.getSpawns().getFirst());
         if (playerManager.hasPlayerData(uuid)) {
             playerManager.transferPlayerDataToSpectator(uuid);
         } else {
             playerManager.addSpectatorData(new PlayerData(spectator, game));
         }
-        this.spectators.add(uuid);
+        this.spectators.add(spectator);
         spectator.setGameMode(GameMode.SURVIVAL);
         spectator.setCollidable(false);
         if (Config.spectateFly)
             spectator.setAllowFlight(true);
 
         if (Config.spectateHide) {
-            for (UUID u : players) {
-                Player player = Bukkit.getPlayer(u);
-                if (player == null) continue;
+            for (Player player : this.players) {
                 player.hidePlayer(plugin, spectator);
             }
-            for (UUID u : spectators) {
-                Player player = Bukkit.getPlayer(u);
-                if (player == null) continue;
+            for (Player player : this.spectators) {
                 player.hidePlayer(plugin, spectator);
             }
         }
@@ -384,10 +374,12 @@ public class GamePlayerData extends Data {
     public void leaveSpectate(Player spectator) {
         UUID uuid = spectator.getUniqueId();
         PlayerData playerData = playerManager.getSpectatorData(uuid);
+        if (playerData == null) return;
+
         Location previousLocation = playerData.getPreviousLocation();
 
         playerData.restore(spectator);
-        spectators.remove(spectator.getUniqueId());
+        spectators.remove(spectator);
         spectator.setCollidable(true);
         if (Config.spectateFly) {
             GameMode mode = spectator.getGameMode();

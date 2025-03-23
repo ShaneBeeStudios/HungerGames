@@ -58,14 +58,14 @@ public class GameCommandData extends Data {
             if (!type.equals(commandType.getType())) continue;
             if (command.equalsIgnoreCase("none")) continue;
             command = command.split(":")[1]
-                    .replace("<world>", game.gameArenaData.bound.getWorld().getName())
-                    .replace("<arena>", game.gameArenaData.getName());
+                    .replace("<world>", this.game.gameArenaData.bound.getWorld().getName())
+                    .replace("<arena>", this.game.gameArenaData.getName());
             if (player != null) {
                 command = command.replace("<player>", player.getName());
             }
             if (commandType == CommandType.START && command.contains("<player>")) {
-                for (UUID uuid : game.getGamePlayerData().players) {
-                    String newCommand = command.replace("<player>", Bukkit.getPlayer(uuid).getName());
+                for (Player player1 : this.game.getGamePlayerData().getPlayers()) {
+                    String newCommand = command.replace("<player>", player1.getName());
                     Bukkit.dispatchCommand(Bukkit.getConsoleSender(), newCommand);
                 }
             } else

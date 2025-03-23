@@ -2,6 +2,8 @@ package com.shanebeestudios.hg.plugin.listeners;
 
 import com.shanebeestudios.hg.HungerGames;
 import com.shanebeestudios.hg.Status;
+import com.shanebeestudios.hg.api.util.BlockUtils;
+import com.shanebeestudios.hg.api.util.Util;
 import com.shanebeestudios.hg.data.Config;
 import com.shanebeestudios.hg.data.Language;
 import com.shanebeestudios.hg.data.Leaderboard;
@@ -18,8 +20,6 @@ import com.shanebeestudios.hg.managers.GameManager;
 import com.shanebeestudios.hg.managers.KillManager;
 import com.shanebeestudios.hg.managers.PlayerManager;
 import com.shanebeestudios.hg.plugin.permission.Permissions;
-import com.shanebeestudios.hg.api.util.BlockUtils;
-import com.shanebeestudios.hg.api.util.Util;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
@@ -134,15 +134,12 @@ public class GameListener implements Listener {
 
     private void checkStick(Game g) {
         if (Config.playersfortrackingstick == g.getGamePlayerData().getPlayers().size()) {
-            for (UUID u : g.getGamePlayerData().getPlayers()) {
-                Player player = Bukkit.getPlayer(u);
-                if (player != null) {
-                    Util.scm(player, lang.track_bar);
-                    Util.scm(player, lang.track_new1);
-                    Util.scm(player, lang.track_new2);
-                    Util.scm(player, lang.track_bar);
-                    player.getInventory().addItem(trackingStick);
-                }
+            for (Player player : g.getGamePlayerData().getPlayers()) {
+                Util.scm(player, lang.track_bar);
+                Util.scm(player, lang.track_new1);
+                Util.scm(player, lang.track_new2);
+                Util.scm(player, lang.track_bar);
+                player.getInventory().addItem(trackingStick);
             }
         }
     }
@@ -257,8 +254,7 @@ public class GameListener implements Listener {
             leaderboard.addStat(player, Leaderboard.Stats.DEATHS);
             leaderboard.addStat(player, Leaderboard.Stats.GAMES);
 
-            for (UUID uuid : game.getGamePlayerData().getPlayers()) {
-                Player alive = Bukkit.getPlayer(uuid);
+            for (Player alive : game.getGamePlayerData().getPlayers()) {
                 if (alive != null && player != alive) {
                     alive.playSound(alive.getLocation(), Sound.UI_TOAST_CHALLENGE_COMPLETE, 5, 1);
                 }
@@ -759,8 +755,7 @@ public class GameListener implements Listener {
             if (playerManager.hasSpectatorData(spectator)) {
                 PlayerData data = playerManager.getSpectatorData(spectator);
                 Game game = data.getGame();
-                for (UUID uuid : game.getGamePlayerData().getPlayers()) {
-                    Player player = Bukkit.getPlayer(uuid);
+                for (Player player : game.getGamePlayerData().getPlayers()) {
                     event.getRecipients().remove(player);
                 }
             }

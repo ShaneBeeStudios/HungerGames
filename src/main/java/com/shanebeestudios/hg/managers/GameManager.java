@@ -3,14 +3,13 @@ package com.shanebeestudios.hg.managers;
 import com.google.common.collect.ImmutableList;
 import com.shanebeestudios.hg.HungerGames;
 import com.shanebeestudios.hg.Status;
+import com.shanebeestudios.hg.api.util.Util;
 import com.shanebeestudios.hg.data.Config;
 import com.shanebeestudios.hg.data.Language;
 import com.shanebeestudios.hg.game.Bound;
 import com.shanebeestudios.hg.game.Game;
 import com.shanebeestudios.hg.game.GameArenaData;
 import com.shanebeestudios.hg.game.GameItemData;
-import com.shanebeestudios.hg.api.util.Util;
-import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
@@ -34,7 +33,7 @@ import java.util.UUID;
 public class GameManager {
 
     private final HungerGames plugin;
-    private final Map<String,Game> games = new HashMap<>();
+    private final Map<String, Game> games = new HashMap<>();
     private final Language lang;
     private final Random rg = new Random();
 
@@ -52,25 +51,23 @@ public class GameManager {
      */
     public void stopAllGames() {
         PlayerManager playerManager = this.plugin.getPlayerManager();
-        List<UUID> players = new ArrayList<>();
+        List<Player> players = new ArrayList<>();
         for (Game game : this.games.values()) {
             game.cancelTasks();
             game.getGameBlockData().forceRollback();
             players.addAll(game.getGamePlayerData().getPlayers());
             players.addAll(game.getGamePlayerData().getSpectators());
         }
-        for (UUID uuid : players) {
-            Player player = Bukkit.getPlayer(uuid);
-            if (player != null) {
-                player.closeInventory();
-                if (playerManager.hasPlayerData(uuid)) {
-                    playerManager.getPlayerData(uuid).getGame().getGamePlayerData().leave(player, false);
-                    playerManager.removePlayerData(uuid);
-                }
-                if (playerManager.hasSpectatorData(uuid)) {
-                    playerManager.getSpectatorData(uuid).getGame().getGamePlayerData().leaveSpectate(player);
-                    playerManager.removePlayerData(uuid);
-                }
+        for (Player player : players) {
+            UUID uuid = player.getUniqueId();
+            player.closeInventory();
+            if (playerManager.hasPlayerData(uuid)) {
+                playerManager.getPlayerData(uuid).getGame().getGamePlayerData().leave(player, false);
+                playerManager.removePlayerData(uuid);
+            }
+            if (playerManager.hasSpectatorData(uuid)) {
+                playerManager.getSpectatorData(uuid).getGame().getGamePlayerData().leaveSpectate(player);
+                playerManager.removePlayerData(uuid);
             }
         }
         this.games.clear();

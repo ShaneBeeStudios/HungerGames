@@ -1,14 +1,12 @@
 package com.shanebeestudios.hg.game;
 
+import com.shanebeestudios.hg.HungerGames;
+import com.shanebeestudios.hg.api.util.Util;
 import org.bukkit.Bukkit;
 import org.bukkit.boss.BarColor;
 import org.bukkit.boss.BarStyle;
 import org.bukkit.boss.BossBar;
 import org.bukkit.entity.Player;
-import com.shanebeestudios.hg.HungerGames;
-import com.shanebeestudios.hg.api.util.Util;
-
-import java.util.UUID;
 
 /**
  * Data holder for {@link BossBar BossBars}
@@ -33,14 +31,10 @@ public class GameBarData extends Data {
         int sec = (time % 60);
         String title = this.title.replace("<min>", String.valueOf(min)).replace("<sec>", String.valueOf(sec));
         bar = Bukkit.createBossBar(Util.getColString(title), BarColor.GREEN, BarStyle.SEGMENTED_20);
-        for (UUID uuid : getGame().getGamePlayerData().getPlayers()) {
-            Player player = Bukkit.getPlayer(uuid);
-            assert player != null;
+        for (Player player : getGame().getGamePlayerData().getPlayers()) {
             bar.addPlayer(player);
         }
-        for (UUID uuid : getGame().getGamePlayerData().getSpectators()) {
-            Player player = Bukkit.getPlayer(uuid);
-            assert player != null;
+        for (Player player : getGame().getGamePlayerData().getSpectators()) {
             bar.addPlayer(player);
         }
     }

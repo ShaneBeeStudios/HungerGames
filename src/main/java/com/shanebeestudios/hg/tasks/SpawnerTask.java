@@ -16,7 +16,6 @@ import org.bukkit.entity.Player;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.Random;
-import java.util.UUID;
 
 public class SpawnerTask implements Runnable {
 
@@ -45,26 +44,23 @@ public class SpawnerTask implements Runnable {
         // Prevent spawning if cap already reached
         if (entityCount > playerCap) return;
 
-        for (UUID uuid : this.gamePlayerData.getPlayers()) {
+        for (Player player : this.gamePlayerData.getPlayers()) {
             // Keep checking cap as we spawn more
             if (entityCount > playerCap) return;
 
-            Player player = Bukkit.getPlayer(uuid);
-            if (player != null) {
-                Location spawnLocation = getSafeSpawnLocation(this.world, player.getLocation().clone());
+            Location spawnLocation = getSafeSpawnLocation(this.world, player.getLocation().clone());
 
-                if (spawnLocation != null && this.gameArenaData.isInRegion(spawnLocation)) {
-                    MobEntry mobEntry;
-                    if (isDayTime()) {
-                        mobEntry = this.mobManager.getRandomDayMob();
-                    } else {
-                        mobEntry = this.mobManager.getRandomNightMob();
-                    }
-                    Entity spawn = mobEntry.spawn(spawnLocation);
-                    if (spawn != null) {
-                        this.bound.addEntity(spawn);
-                        entityCount++;
-                    }
+            if (spawnLocation != null && this.gameArenaData.isInRegion(spawnLocation)) {
+                MobEntry mobEntry;
+                if (isDayTime()) {
+                    mobEntry = this.mobManager.getRandomDayMob();
+                } else {
+                    mobEntry = this.mobManager.getRandomNightMob();
+                }
+                Entity spawn = mobEntry.spawn(spawnLocation);
+                if (spawn != null) {
+                    this.bound.addEntity(spawn);
+                    entityCount++;
                 }
             }
         }

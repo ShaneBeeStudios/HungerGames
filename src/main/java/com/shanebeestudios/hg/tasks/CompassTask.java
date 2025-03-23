@@ -68,11 +68,9 @@ public class CompassTask implements Runnable {
 
 		Player player = null;
 
-		for (UUID u: g.getGamePlayerData().getPlayers()) {
+		for (Player p2: g.getGamePlayerData().getPlayers()) {
 
-			Player p2 = Bukkit.getPlayer(u);
-
-			if (p2 != null && !p2.equals(p) && !pd.isOnTeam(u)) {
+			if (p2 != null && !p2.equals(p) && !pd.isOnTeam(p2.getUniqueId())) {
 
 				Location l = p2.getLocation();
 

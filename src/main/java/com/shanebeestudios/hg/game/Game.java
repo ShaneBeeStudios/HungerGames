@@ -2,6 +2,8 @@ package com.shanebeestudios.hg.game;
 
 import com.shanebeestudios.hg.HungerGames;
 import com.shanebeestudios.hg.Status;
+import com.shanebeestudios.hg.api.util.Util;
+import com.shanebeestudios.hg.api.util.Vault;
 import com.shanebeestudios.hg.data.Config;
 import com.shanebeestudios.hg.data.Language;
 import com.shanebeestudios.hg.data.Leaderboard;
@@ -19,8 +21,6 @@ import com.shanebeestudios.hg.tasks.Rollback;
 import com.shanebeestudios.hg.tasks.SpawnerTask;
 import com.shanebeestudios.hg.tasks.StartingTask;
 import com.shanebeestudios.hg.tasks.TimerTask;
-import com.shanebeestudios.hg.api.util.Util;
-import com.shanebeestudios.hg.api.util.Vault;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.block.Sign;
@@ -364,25 +364,20 @@ public class Game {
         this.gameArenaData.bound.removeEntities();
         List<UUID> win = new ArrayList<>();
         cancelTasks();
-        for (UUID uuid : this.gamePlayerData.players) {
-            Player player = Bukkit.getPlayer(uuid);
-            if (player != null) {
-                PlayerData playerData = playerManager.getPlayerData(uuid);
-                Location previousLocation = playerData.getPreviousLocation();
+        for (Player player : this.gamePlayerData.getPlayers()) {
+            UUID uuid = player.getUniqueId();
+            PlayerData playerData = this.playerManager.getPlayerData(uuid);
+            Location previousLocation = playerData.getPreviousLocation();
 
-                gamePlayerData.heal(player);
-                playerData.restore(player);
-                win.add(uuid);
-                gamePlayerData.exit(player, previousLocation);
-                playerManager.removePlayerData(uuid);
-            }
+            this.gamePlayerData.heal(player);
+            playerData.restore(player);
+            win.add(uuid);
+            this.gamePlayerData.exit(player, previousLocation);
+            this.playerManager.removePlayerData(uuid);
         }
 
-        for (UUID uuid : gamePlayerData.getSpectators()) {
-            Player spectator = Bukkit.getPlayer(uuid);
-            if (spectator != null) {
-                gamePlayerData.leaveSpectate(spectator);
-            }
+        for (Player spectator : this.gamePlayerData.getSpectators()) {
+            this.gamePlayerData.leaveSpectate(spectator);
         }
 
         if (gameArenaData.status == Status.RUNNING) {
@@ -460,8 +455,8 @@ public class Game {
         if (status == Status.RUNNING || status == Status.FREE_ROAM || status == Status.COUNTDOWN) {
             if (isGameOver()) {
                 if (!death) {
-                    for (UUID uuid : gamePlayerData.players) {
-                        if (gamePlayerData.kills.get(Bukkit.getPlayer(uuid)) >= 1) {
+                    for (Player player1 : this.gamePlayerData.getPlayers()) {
+                        if (this.gamePlayerData.kills.get(player1) >= 1) {
                             death = true;
                         }
                     }
@@ -490,13 +485,14 @@ public class Game {
     }
 
     boolean isGameOver() {
-        if (gamePlayerData.players.size() <= 1) return true;
-        for (UUID uuid : gamePlayerData.players) {
-            Team team = playerManager.getPlayerData(uuid).getTeam();
+        if (this.gamePlayerData.getPlayers().size() <= 1) return true;
+        for (Player player : this.gamePlayerData.getPlayers()) {
+            PlayerData playerData = this.playerManager.getPlayerData(player);
+            Team team = playerData.getTeam();
 
             if (team != null && (team.getPlayers().size() >= gamePlayerData.players.size())) {
-                for (UUID u : gamePlayerData.players) {
-                    if (!team.getPlayers().contains(u)) {
+                for (Player player1 : this.gamePlayerData.getPlayers()) {
+                    if (!team.getPlayers().contains(player1.getUniqueId())) {
                         return false;
                     }
                 }
