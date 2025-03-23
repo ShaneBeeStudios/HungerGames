@@ -1,6 +1,8 @@
 package com.shanebeestudios.hg.game;
 
-import org.bukkit.ChatColor;
+import com.shanebeestudios.hg.HungerGames;
+import com.shanebeestudios.hg.api.util.Util;
+import com.shanebeestudios.hg.data.ItemFrameData;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
@@ -8,11 +10,9 @@ import org.bukkit.block.BlockFace;
 import org.bukkit.block.BlockState;
 import org.bukkit.block.Sign;
 import org.bukkit.block.data.Directional;
+import org.bukkit.block.sign.Side;
 import org.bukkit.entity.ItemFrame;
 import org.bukkit.inventory.InventoryHolder;
-import com.shanebeestudios.hg.HungerGames;
-import com.shanebeestudios.hg.data.ItemFrameData;
-import com.shanebeestudios.hg.api.util.Util;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -29,12 +29,30 @@ public class GameBlockData extends Data {
     private final List<ItemFrameData> itemFrameData = new ArrayList<>();
 
     // LobbySign
-    Sign sign1;
+    private Sign sign1;
     private Sign sign2;
     private Sign sign3;
 
     protected GameBlockData(Game game) {
         super(game);
+    }
+
+    /**
+     * Get the main lobby sign
+     *
+     * @return Main lobby sign
+     */
+    public Sign getSign() {
+        return this.sign1;
+    }
+
+    /**
+     * Set the main lobby sign
+     *
+     * @param sign Sign to set
+     */
+    public void setSign(Sign sign) {
+        this.sign1 = sign;
     }
 
     /**
@@ -192,10 +210,11 @@ public class GameBlockData extends Data {
 
     void updateLobbyBlock() {
         if (sign2 == null || sign3 == null) return;
-        sign2.setLine(1, game.gameArenaData.status.getName());
-        sign3.setLine(1, ChatColor.BOLD + "" + game.getGamePlayerData().players.size() + "/" + game.gameArenaData.maxPlayers);
-        sign2.update(true);
-        sign3.update(true);
+        GameArenaData gameArenaData = this.game.getGameArenaData();
+        this.sign2.getSide(Side.FRONT).line(1, Util.getMini(gameArenaData.getStatus().getName()));
+        this.sign3.getSide(Side.FRONT).line(1, Util.getMini("<bold>" + this.game.getGamePlayerData().getPlayers().size() + "/" + gameArenaData.getMaxPlayers()));
+        this.sign2.update(true);
+        this.sign3.update(true);
     }
 
     /**
@@ -206,30 +225,31 @@ public class GameBlockData extends Data {
      */
     @SuppressWarnings("ConstantConditions")
     public boolean setLobbyBlock(Sign sign) {
+        GameArenaData gameArenaData = this.game.getGameArenaData();
         try {
             this.sign1 = sign;
-            Block c = sign1.getBlock();
-            BlockFace face = Util.getSignFace(((Directional) sign1.getBlockData()).getFacing());
+            Block c = this.sign1.getBlock();
+            BlockFace face = Util.getSignFace(((Directional) this.sign1.getBlockData()).getFacing());
             this.sign2 = (Sign) c.getRelative(face).getState();
-            this.sign3 = (Sign) sign2.getBlock().getRelative(face).getState();
+            this.sign3 = (Sign) this.sign2.getBlock().getRelative(face).getState();
 
-            sign1.setLine(0, Util.getColString(lang.lobby_sign_1_1));
-            sign1.setLine(1, Util.getColString("&l" + game.gameArenaData.name));
-            sign1.setLine(2, Util.getColString(lang.lobby_sign_1_3));
-            if (game.gameArenaData.cost > 0)
-                sign1.setLine(3, Util.getColString(HungerGames.getPlugin().getLang().lobby_sign_cost.replace("<cost>", String.valueOf(game.gameArenaData.cost))));
-            sign2.setLine(0, Util.getColString(lang.lobby_sign_2_1));
-            sign2.setLine(1, Util.getColString(game.gameArenaData.status.getName()));
-            sign3.setLine(0, Util.getColString(lang.lobby_sign_3_1));
-            sign3.setLine(1, Util.getColString("&l" + 0 + "/" + game.gameArenaData.maxPlayers));
-            sign1.setWaxed(true);
-            sign2.setWaxed(true);
-            sign3.setWaxed(true);
-            sign1.update(true);
-            sign2.update(true);
-            sign3.update(true);
+            this.sign1.getSide(Side.FRONT).line(0, Util.getMini(this.lang.lobby_sign_1_1));
+            this.sign1.getSide(Side.FRONT).line(1, Util.getMini("<bold>" + gameArenaData.getName()));
+            this.sign1.getSide(Side.FRONT).line(2, Util.getMini(this.lang.lobby_sign_1_3));
+            if (gameArenaData.cost > 0)
+                this.sign1.getSide(Side.FRONT).line(3, Util.getMini(HungerGames.getPlugin().getLang().lobby_sign_cost.replace("<cost>", String.valueOf(gameArenaData.cost))));
+            this.sign2.getSide(Side.FRONT).line(0, Util.getMini(this.lang.lobby_sign_2_1));
+            this.sign2.getSide(Side.FRONT).line(1, Util.getMini(gameArenaData.getStatus().getName()));
+            this.sign3.getSide(Side.FRONT).line(0, Util.getMini(this.lang.lobby_sign_3_1));
+            this.sign3.getSide(Side.FRONT).line(1, Util.getMini("<bold>" + 0 + "/" + gameArenaData.getMaxPlayers()));
+            this.sign1.setWaxed(true);
+            this.sign2.setWaxed(true);
+            this.sign3.setWaxed(true);
+            this.sign1.update(true);
+            this.sign2.update(true);
+            this.sign3.update(true);
         } catch (Exception e) {
-            Util.warning("Failed to setup lobby wall for arena '%s'", game.gameArenaData.name);
+            Util.warning("Failed to setup lobby wall for arena '%s'", gameArenaData.getName());
             return false;
         }
         return true;
@@ -237,7 +257,7 @@ public class GameBlockData extends Data {
 
     public boolean isLobbyValid() {
         try {
-            return sign1 != null && sign2 != null && sign3 != null;
+            return this.sign1 != null && this.sign2 != null && this.sign3 != null;
         } catch (Exception e) {
             return false;
         }
