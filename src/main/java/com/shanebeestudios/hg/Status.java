@@ -1,13 +1,30 @@
 package com.shanebeestudios.hg;
 
 import com.shanebeestudios.hg.data.Language;
-import com.shanebeestudios.hg.util.Util;
+import com.shanebeestudios.hg.api.util.Util;
+import net.kyori.adventure.text.Component;
 
 /**
  * Game status types
  */
 public enum Status {
 
+    /**
+     * Game is ready to run
+     */
+    READY,
+    /**
+     * Game is waiting for players to join
+     */
+    WAITING,
+    /**
+     * Game is counting down to start
+     */
+    COUNTDOWN,
+    /**
+     * Game is starting to run in the free roam state
+     */
+    FREE_ROAM,
 	/**
 	 * Game is running
 	 */
@@ -16,60 +33,34 @@ public enum Status {
 	 * Game has stopped
 	 */
 	STOPPED,
-	/**
-	 * Game is ready to run
-	 */
-	READY,
-	/**
-	 * Game is waiting
-	 */
-	WAITING,
+    /**
+     * Game is currently rolling back blocks
+     */
+    ROLLBACK,
 	/**
 	 * Game is broken
 	 */
 	BROKEN,
 	/**
-	 * Game is currently rolling back blocks
-	 */
-	ROLLBACK,
-	/**
 	 * Game is not ready
 	 */
-	NOTREADY,
-	/**
-	 * Game is starting to run
-	 */
-	BEGINNING,
-	/**
-	 * Game is counting down to start
-	 */
-	COUNTDOWN;
+	NOT_READY
+    ;
 
-	Language lang = HG.getPlugin().getLang();
+	final Language lang = HungerGames.getPlugin().getLang();
 
-	public String getName() {
-        switch (this) {
-            case RUNNING:
-                return Util.getColString(lang.status_running);
-            case STOPPED:
-                return Util.getColString(lang.status_stopped);
-            case READY:
-                return Util.getColString(lang.status_ready);
-            case WAITING:
-                return Util.getColString(lang.status_waiting);
-            case BROKEN:
-                return Util.getColString(lang.status_broken);
-            case ROLLBACK:
-                return Util.getColString(lang.status_rollback);
-            case NOTREADY:
-                return Util.getColString(lang.status_not_ready);
-            case BEGINNING:
-                return Util.getColString(lang.status_beginning);
-            case COUNTDOWN:
-                return Util.getColString(lang.status_countdown);
-            default:
-                return Util.getColString("&cERROR!");
-        }
+	public Component getName() {
+        return switch (this) {
+            case RUNNING -> Util.getMini(this.lang.status_running);
+            case STOPPED -> Util.getMini(this.lang.status_stopped);
+            case READY -> Util.getMini(this.lang.status_ready);
+            case WAITING -> Util.getMini(this.lang.status_waiting);
+            case BROKEN -> Util.getMini(this.lang.status_broken);
+            case ROLLBACK -> Util.getMini(this.lang.status_rollback);
+            case NOT_READY -> Util.getMini(this.lang.status_not_ready);
+            case FREE_ROAM -> Util.getMini(this.lang.status_beginning);
+            case COUNTDOWN -> Util.getMini(this.lang.status_countdown);
+        };
 	}
 
 }

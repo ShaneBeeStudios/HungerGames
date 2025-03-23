@@ -2,8 +2,8 @@ package com.shanebeestudios.hg.data;
 
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
-import com.shanebeestudios.hg.HG;
-import com.shanebeestudios.hg.util.Util;
+import com.shanebeestudios.hg.HungerGames;
+import com.shanebeestudios.hg.api.util.Util;
 
 import java.io.File;
 import java.io.InputStream;
@@ -16,7 +16,7 @@ public class Language {
 
     private FileConfiguration lang = null;
     private File customLangFile = null;
-    private final HG plugin;
+    private final HungerGames plugin;
 
     public String prefix;
     public String player_joined_game;
@@ -30,6 +30,7 @@ public class Language {
     public String game_ending_sec;
     public String game_border_closing;
     public String game_chest_refill;
+    public String game_running;
     public String players_to_start;
     public String arena_not_ready;
     public String arena_spectate;
@@ -110,7 +111,8 @@ public class Language {
     public String cmd_delete_deleted;
     public String cmd_delete_failed;
     public String cmd_delete_noexist;
-    public String cmd_join_in_game;
+    public String cmd_join_already_in_game;
+    public String cmd_join_already_in_game_other;
     public String cmd_join_no_money;
     public String cmd_kit_no_change;
     public String cmd_leave_left;
@@ -121,8 +123,9 @@ public class Language {
     public String cmd_reload_reloaded_items;
     public String cmd_reload_reloaded_config;
     public String cmd_reload_reloaded_success;
-    public String cmd_exit_set;
-    public String cmd_exit_set_arena;
+    public String command_exit_set_global;
+    public String command_exit_set_all;
+    public String command_exit_set_arena;
     public String cmd_lobbywall_set;
     public String cmd_lobbywall_notcorrect;
     public String cmd_lobbywall_format;
@@ -185,7 +188,7 @@ public class Language {
     public String check_ready_run;
 
 
-    public Language(HG plugin) {
+    public Language(HungerGames plugin) {
         this.plugin = plugin;
         loadLangFile();
     }
@@ -197,13 +200,13 @@ public class Language {
         if (!customLangFile.exists()) {
             plugin.saveResource("language.yml", false);
             lang = YamlConfiguration.loadConfiguration(customLangFile);
-            Util.log("&7New language.yml created");
+            Util.log("New language.yml <green>created");
         } else {
             lang = YamlConfiguration.loadConfiguration(customLangFile);
         }
         matchConfig(lang, customLangFile);
 		loadLang();
-        Util.log("&7language.yml loaded");
+        Util.log("language.yml <green>successfully loaded");
     }
 
     // Used to update config
@@ -246,6 +249,7 @@ public class Language {
         game_ending_min = lang.getString("game-ending-min");
         game_ending_sec = lang.getString("game-ending-sec");
         game_border_closing = lang.getString("game-border-closing");
+        game_running = lang.getString("game-running");
 
         players_to_start = lang.getString("players-to-start");
         arena_not_ready = lang.getString("arena-not-ready");
@@ -324,7 +328,8 @@ public class Language {
         cmd_delete_deleted = lang.getString("cmd-delete-deleted");
         cmd_delete_failed = lang.getString("cmd-delete-failed");
         cmd_delete_noexist = lang.getString("cmd-delete-noexist");
-        cmd_join_in_game = lang.getString("cmd-join-in-game");
+        cmd_join_already_in_game = lang.getString("cmd-join-already-in-game");
+        cmd_join_already_in_game_other = lang.getString("cmd-join-already-in-game-other");
         cmd_join_no_money = lang.getString("cmd-join-no-money");
         cmd_kit_no_change = lang.getString("cmd-kit-no-change");
         cmd_leave_left = lang.getString("cmd-leave-left");
@@ -335,8 +340,9 @@ public class Language {
         cmd_reload_reloaded_items = lang.getString("cmd-reload-reloaded-items");
         cmd_reload_reloaded_kit = lang.getString("cmd-reload-reloaded-kit");
         cmd_reload_reloaded_success = lang.getString("cmd-reload-reloaded-success");
-        cmd_exit_set = lang.getString("cmd-exit-set");
-        cmd_exit_set_arena = lang.getString("cmd-exit-set-arena");
+        command_exit_set_global = lang.getString("command.exit-set-global");
+        command_exit_set_all = lang.getString("command.exit-set-all");
+        command_exit_set_arena = lang.getString("command.exit-set-arena");
         cmd_lobbywall_set = lang.getString("cmd-lobbywall-set");
         cmd_lobbywall_notcorrect = lang.getString("cmd-lobbywall-notcorrect");
         cmd_lobbywall_format = lang.getString("cmd-lobbywall-format");

@@ -1,17 +1,16 @@
 package com.shanebeestudios.hg.game;
 
-import org.bukkit.Bukkit;
-import org.bukkit.Location;
-import org.bukkit.block.Sign;
-import org.bukkit.entity.Player;
-import com.shanebeestudios.hg.HG;
+import com.shanebeestudios.hg.HungerGames;
 import com.shanebeestudios.hg.Status;
+import com.shanebeestudios.hg.api.util.Util;
+import com.shanebeestudios.hg.api.util.Vault;
 import com.shanebeestudios.hg.data.Config;
 import com.shanebeestudios.hg.data.Language;
 import com.shanebeestudios.hg.data.Leaderboard;
 import com.shanebeestudios.hg.data.PlayerData;
 import com.shanebeestudios.hg.events.GameEndEvent;
 import com.shanebeestudios.hg.events.GameStartEvent;
+import com.shanebeestudios.hg.events.PlayerJoinGameEvent;
 import com.shanebeestudios.hg.game.GameCommandData.CommandType;
 import com.shanebeestudios.hg.managers.KitManager;
 import com.shanebeestudios.hg.managers.MobManager;
@@ -22,8 +21,10 @@ import com.shanebeestudios.hg.tasks.Rollback;
 import com.shanebeestudios.hg.tasks.SpawnerTask;
 import com.shanebeestudios.hg.tasks.StartingTask;
 import com.shanebeestudios.hg.tasks.TimerTask;
-import com.shanebeestudios.hg.util.Util;
-import com.shanebeestudios.hg.util.Vault;
+import org.bukkit.Bukkit;
+import org.bukkit.Location;
+import org.bukkit.block.Sign;
+import org.bukkit.entity.Player;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -36,7 +37,7 @@ import java.util.UUID;
 @SuppressWarnings("unused")
 public class Game {
 
-    final HG plugin;
+    final HungerGames plugin;
     final Language lang;
 
     // Managers
@@ -46,8 +47,8 @@ public class Game {
 
     // Task ID's here!
     private SpawnerTask spawner;
-    private FreeRoamTask freeRoam;
-    private StartingTask starting;
+    private FreeRoamTask freeRoamTask;
+    private StartingTask startingTask;
     private TimerTask timer;
     private ChestDropTask chestDrop;
 
@@ -78,7 +79,7 @@ public class Game {
     public Game(String name, Bound bound, List<Location> spawns, Sign lobbySign, int timer, int minPlayers, int maxPlayers, int roam, boolean isReady, int cost) {
         this(name, bound, timer, minPlayers, maxPlayers, roam, cost);
         gameArenaData.spawns.addAll(spawns);
-        this.gameBlockData.sign1 = lobbySign;
+        this.gameBlockData.setSign(lobbySign);
 
         // If lobby signs are not properly setup, game is not ready
         if (!this.gameBlockData.setLobbyBlock(lobbySign)) {
@@ -102,10 +103,10 @@ public class Game {
      * @param cost       Cost of this game
      */
     public Game(String name, Bound bound, int timer, int minPlayers, int maxPlayers, int roam, int cost) {
-        this.plugin = HG.getPlugin();
+        this.plugin = HungerGames.getPlugin();
         this.gameArenaData = new GameArenaData(this, name, bound, timer, minPlayers, maxPlayers, roam, cost);
-        this.gameArenaData.status = Status.NOTREADY;
-        this.playerManager = HG.getPlugin().getPlayerManager();
+        this.gameArenaData.status = Status.NOT_READY;
+        this.playerManager = HungerGames.getPlugin().getPlayerManager();
         this.lang = plugin.getLang();
         this.kitManager = plugin.getKitManager();
         this.mobManager = new MobManager(this);
@@ -183,7 +184,7 @@ public class Game {
     }
 
     public StartingTask getStartingTask() {
-        return this.starting;
+        return this.startingTask;
     }
 
     /**
@@ -192,7 +193,7 @@ public class Game {
      * @return Location of the lobby sign
      */
     public Location getLobbyLocation() {
-        return gameBlockData.sign1.getLocation();
+        return this.gameBlockData.getSign().getLocation();
     }
 
     /**
@@ -224,35 +225,45 @@ public class Game {
     }
 
     /**
+     * Initialize the waiting period of the game
+     * <p>This will be called when a player first joins</p>
+     */
+    public void startWaitingPeriod() {
+        this.gameArenaData.setStatus(Status.WAITING);
+        this.gameBlockData.updateLobbyBlock();
+        // TODO Broadcast?!?!?
+    }
+
+    /**
      * Start the pregame countdown
      */
-    public void startPreGame() {
+    public void startPreGameCountdown() {
         // Call the GameStartEvent
         GameStartEvent event = new GameStartEvent(this);
         Bukkit.getPluginManager().callEvent(event);
 
-        gameArenaData.status = Status.COUNTDOWN;
-        starting = new StartingTask(this);
-        gameBlockData.updateLobbyBlock();
+        this.gameArenaData.status = Status.COUNTDOWN;
+        this.startingTask = new StartingTask(this);
+        this.gameBlockData.updateLobbyBlock();
     }
 
     /**
      * Start the free roam state of the game
      */
     public void startFreeRoam() {
-        gameArenaData.status = Status.BEGINNING;
-        gameBlockData.updateLobbyBlock();
-        gameArenaData.bound.removeEntities();
-        freeRoam = new FreeRoamTask(this);
-        gameCommandData.runCommands(CommandType.START, null);
+        this.gameArenaData.status = Status.FREE_ROAM;
+        this.gameBlockData.updateLobbyBlock();
+        this.gameArenaData.bound.removeEntities();
+        this.freeRoamTask = new FreeRoamTask(this);
+        this.gameCommandData.runCommands(CommandType.START, null);
     }
 
     /**
-     * Start the game
+     * Start running the game
      */
-    public void startGame() {
-        gameArenaData.status = Status.RUNNING;
-        if (Config.spawnmobs) spawner = new SpawnerTask(this, Config.spawnmobsinterval);
+    public void startRunningGame() {
+        this.gameArenaData.status = Status.RUNNING;
+        if (Config.MOBS_SPAWN_ENABLED) spawner = new SpawnerTask(this);
         if (Config.randomChest) chestDrop = new ChestDropTask(this);
         gameBlockData.updateLobbyBlock();
         if (Config.bossbar) {
@@ -267,9 +278,71 @@ public class Game {
     public void cancelTasks() {
         if (spawner != null) spawner.stop();
         if (timer != null) timer.stop();
-        if (starting != null) starting.stop();
-        if (freeRoam != null) freeRoam.stop();
+        if (startingTask != null) startingTask.stop();
+        if (freeRoamTask != null) freeRoamTask.stop();
         if (chestDrop != null) chestDrop.shutdown();
+    }
+
+    /**
+     * Join a player to the game
+     *
+     * @param player Player to join the game
+     */
+    public boolean joinGame(Player player) {
+        return joinGame(player, false);
+    }
+
+    /**
+     * Join a player to the game
+     *
+     * @param player               Player to join the game
+     * @param savePreviousLocation Whether to save the player's previous location
+     */
+    public boolean joinGame(Player player, boolean savePreviousLocation) {
+        if (this.playerManager.isInGame(player)) {
+            Util.sendPrefixedMessage(player, this.lang.cmd_join_already_in_game);
+            return false;
+        }
+        // Call PlayerJoinGameEvent
+        PlayerJoinGameEvent event = new PlayerJoinGameEvent(this, player);
+        // If cancelled, stop the player from joining the game
+        if (!event.callEvent()) return false;
+
+        String arenaName = this.gameArenaData.getName();
+
+        Status status = gameArenaData.getStatus();
+        switch (status) {
+            case NOT_READY, ROLLBACK, STOPPED, BROKEN -> {
+                Util.sendPrefixedMessage(player, this.lang.arena_not_ready);
+                return false;
+            }
+            case RUNNING, FREE_ROAM -> {
+                Util.sendPrefixedMessage(player, this.lang.game_running.replace("<arena>", arenaName), arenaName);
+                if (Config.spectateEnabled) {
+                    Util.sendPrefixedMessage(player, this.lang.arena_spectate.replace("<arena>", arenaName));
+                }
+                return false;
+            }
+            case READY -> {
+                if (!canJoin(player)) return false;
+                this.gamePlayerData.addPlayerData(player);
+                startWaitingPeriod();
+            }
+            case WAITING -> {
+                if (!canJoin(player)) return false;
+                this.gamePlayerData.addPlayerData(player);
+                if (this.gamePlayerData.getPlayers().size() >= this.gameArenaData.getMinPlayers()) {
+                    startPreGameCountdown();
+                }
+            }
+            case COUNTDOWN -> {
+                if (!canJoin(player)) return false;
+                this.gamePlayerData.addPlayerData(player);
+            }
+        }
+
+        this.gamePlayerData.putPlayerIntoArena(player, savePreviousLocation);
+        return true;
     }
 
     /**
@@ -286,30 +359,26 @@ public class Game {
      */
     public void stop(Boolean death) {
         if (Config.borderEnabled) {
-            gameBorderData.resetBorder();
+            this.gameBorderData.resetBorder();
         }
-        gameArenaData.bound.removeEntities();
+        this.gameArenaData.bound.removeEntities();
+        // TODO win list should be players
         List<UUID> win = new ArrayList<>();
         cancelTasks();
-        for (UUID uuid : gamePlayerData.players) {
-            Player player = Bukkit.getPlayer(uuid);
-            if (player != null) {
-                PlayerData playerData = playerManager.getPlayerData(uuid);
-                Location previousLocation = playerData.getPreviousLocation();
+        for (Player player : this.gamePlayerData.getPlayers()) {
+            UUID uuid = player.getUniqueId();
+            PlayerData playerData = this.playerManager.getPlayerData(uuid);
+            Location previousLocation = playerData.getPreviousLocation();
 
-                gamePlayerData.heal(player);
-                playerData.restore(player);
-                win.add(uuid);
-                gamePlayerData.exit(player, previousLocation);
-                playerManager.removePlayerData(uuid);
-            }
+            this.gamePlayerData.heal(player);
+            playerData.restore(player);
+            win.add(uuid);
+            this.gamePlayerData.exit(player, previousLocation);
+            this.playerManager.removePlayerData(uuid);
         }
 
-        for (UUID uuid : gamePlayerData.getSpectators()) {
-            Player spectator = Bukkit.getPlayer(uuid);
-            if (spectator != null) {
-                gamePlayerData.leaveSpectate(spectator);
-            }
+        for (Player spectator : this.gamePlayerData.getSpectators()) {
+            this.gamePlayerData.leaveSpectate(spectator);
         }
 
         if (gameArenaData.status == Status.RUNNING) {
@@ -331,12 +400,12 @@ public class Game {
                     if (!Config.rewardMessages.isEmpty()) {
                         for (String msg : Config.rewardMessages) {
                             if (!msg.equalsIgnoreCase("none"))
-                                Util.scm(p, msg.replace("<player>", p.getName()));
+                                Util.sendMessage(p, msg.replace("<player>", p.getName()));
                         }
                     }
                     if (Config.cash != 0) {
                         Vault.economy.depositPlayer(Bukkit.getServer().getOfflinePlayer(u), db);
-                        Util.scm(p, lang.winning_amount.replace("<amount>", String.valueOf(db)));
+                        Util.sendMessage(p, lang.winning_amount.replace("<amount>", String.valueOf(db)));
                     }
                 }
                 plugin.getLeaderboard().addStat(u, Leaderboard.Stats.WINS);
@@ -384,11 +453,11 @@ public class Game {
 
     void updateAfterDeath(Player player, boolean death) {
         Status status = gameArenaData.status;
-        if (status == Status.RUNNING || status == Status.BEGINNING || status == Status.COUNTDOWN) {
+        if (status == Status.RUNNING || status == Status.FREE_ROAM || status == Status.COUNTDOWN) {
             if (isGameOver()) {
                 if (!death) {
-                    for (UUID uuid : gamePlayerData.players) {
-                        if (gamePlayerData.kills.get(Bukkit.getPlayer(uuid)) >= 1) {
+                    for (Player player1 : this.gamePlayerData.getPlayers()) {
+                        if (this.gamePlayerData.kills.get(player1) >= 1) {
                             death = true;
                         }
                     }
@@ -407,23 +476,24 @@ public class Game {
             }
         } else if (status == Status.WAITING) {
             gamePlayerData.msgAll(lang.player_left_game
-                    .replace("<arena>", gameArenaData.getName())
-                    .replace("<player>", player.getName()) +
-                    (gameArenaData.minPlayers - gamePlayerData.players.size() <= 0 ? "!" : ": " + lang.players_to_start
-                            .replace("<amount>", String.valueOf((gameArenaData.minPlayers - gamePlayerData.players.size())))));
+                .replace("<arena>", gameArenaData.getName())
+                .replace("<player>", player.getName()) +
+                (gameArenaData.minPlayers - gamePlayerData.players.size() <= 0 ? "!" : ": " + lang.players_to_start
+                    .replace("<amount>", String.valueOf((gameArenaData.minPlayers - gamePlayerData.players.size())))));
         }
         gameBlockData.updateLobbyBlock();
         gameArenaData.updateBoards();
     }
 
     boolean isGameOver() {
-        if (gamePlayerData.players.size() <= 1) return true;
-        for (UUID uuid : gamePlayerData.players) {
-            Team team = playerManager.getPlayerData(uuid).getTeam();
+        if (this.gamePlayerData.getPlayers().size() <= 1) return true;
+        for (Player player : this.gamePlayerData.getPlayers()) {
+            PlayerData playerData = this.playerManager.getPlayerData(player);
+            Team team = playerData.getTeam();
 
             if (team != null && (team.getPlayers().size() >= gamePlayerData.players.size())) {
-                for (UUID u : gamePlayerData.players) {
-                    if (!team.getPlayers().contains(u)) {
+                for (Player player1 : this.gamePlayerData.getPlayers()) {
+                    if (!team.getPlayers().contains(player1.getUniqueId())) {
                         return false;
                     }
                 }
@@ -433,9 +503,31 @@ public class Game {
         return false;
     }
 
+    boolean canJoin(Player player) {
+        if (this.gamePlayerData.getPlayers().size() >= this.getGameArenaData().getMaxPlayers()) {
+            Util.sendPrefixedMessage(player, this.lang.game_full);
+            return false;
+        }
+        return vaultCheck(player);
+    }
+
+    boolean vaultCheck(Player player) {
+        if (Config.economy) {
+            int cost = this.getGameArenaData().getCost();
+            if (Vault.economy.getBalance(player) >= cost) {
+                Vault.economy.withdrawPlayer(player, cost);
+                return true;
+            } else {
+                Util.sendMessage(player, lang.prefix + lang.cmd_join_no_money.replace("<cost>", String.valueOf(cost)));
+                return false;
+            }
+        }
+        return true;
+    }
+
     @Override
     public String toString() {
-        return "Game{name='" + gameArenaData.name + '\'' + ", bound=" + gameArenaData.bound + '}';
+        return "Game{name='" + this.gameArenaData.getName() + '\'' + ", bound=" + this.gameArenaData.getBound() + '}';
     }
 
 }

@@ -1,5 +1,6 @@
 package com.shanebeestudios.hg.gui;
 
+import net.kyori.adventure.text.Component;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.OfflinePlayer;
@@ -12,11 +13,14 @@ import org.bukkit.inventory.InventoryHolder;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.SkullMeta;
 import org.jetbrains.annotations.NotNull;
-import com.shanebeestudios.hg.HG;
+import com.shanebeestudios.hg.HungerGames;
 import com.shanebeestudios.hg.game.Game;
-import com.shanebeestudios.hg.util.Util;
+import com.shanebeestudios.hg.api.util.Util;
 
+import java.awt.*;
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
 import java.util.UUID;
 
 public class SpectatorGUI implements InventoryHolder, Listener {
@@ -28,7 +32,7 @@ public class SpectatorGUI implements InventoryHolder, Listener {
         this.game = game;
         int size = (game.getGameArenaData().getMaxPlayers() / 9) + 1;
         inv = Bukkit.createInventory(this, 9 * Math.min(size, 6), game.getGameArenaData().getName());
-        Bukkit.getPluginManager().registerEvents(this, HG.getPlugin());
+        Bukkit.getPluginManager().registerEvents(this, HungerGames.getPlugin());
     }
 
     @NotNull
@@ -40,9 +44,7 @@ public class SpectatorGUI implements InventoryHolder, Listener {
     private void initializeItems() {
         inv.clear();
         int i = 0;
-        for (UUID uuid : game.getGamePlayerData().getPlayers()) {
-            Player player = Bukkit.getPlayer(uuid);
-            if (player == null) continue;
+        for (Player player : game.getGamePlayerData().getPlayers()) {
             inv.setItem(i, getHead(player));
             i++;
         }
@@ -53,9 +55,12 @@ public class SpectatorGUI implements InventoryHolder, Listener {
         SkullMeta meta = ((SkullMeta) head.getItemMeta());
         assert meta != null;
         meta.setOwningPlayer(player);
-        meta.setDisplayName(player.getName());
-        String[] lore = Util.getColString(HG.getPlugin().getLang().spectator_compass_head_lore).split(";");
-        meta.setLore(Arrays.asList(lore));
+        meta.displayName(Util.getMini(player.getName()));
+        List<Component> lores = new ArrayList<>();
+        for (String s : HungerGames.getPlugin().getLang().spectator_compass_head_lore.split(";")) {
+            lores.add(Util.getMini(s));
+        }
+        meta.lore(lores);
         head.setItemMeta(meta);
         return head;
     }

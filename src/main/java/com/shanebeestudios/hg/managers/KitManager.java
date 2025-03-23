@@ -2,8 +2,8 @@ package com.shanebeestudios.hg.managers;
 
 import org.bukkit.ChatColor;
 import org.bukkit.entity.Player;
-import com.shanebeestudios.hg.HG;
-import com.shanebeestudios.hg.util.Util;
+import com.shanebeestudios.hg.HungerGames;
+import com.shanebeestudios.hg.api.util.Util;
 import com.shanebeestudios.hg.data.KitEntry;
 
 import java.util.ArrayList;
@@ -24,10 +24,10 @@ public class KitManager {
 	 */
 	public void setKit(Player player, String kitName) {
 		if (!kititems.containsKey(kitName)) {
-			Util.scm(player, ChatColor.RED + kitName + HG.getPlugin().getLang().kit_doesnt_exist);
-			Util.scm(player, "&9&lKits:&b" + getKitListString());
+			Util.sendMessage(player, ChatColor.RED + kitName + HungerGames.getPlugin().getLang().kit_doesnt_exist);
+			Util.sendMessage(player, "&9&lKits:&b" + getKitListString());
 		} else if (!kititems.get(kitName).hasKitPermission(player))
-			Util.scm(player, HG.getPlugin().getLang().kit_no_perm);
+			Util.sendMessage(player, HungerGames.getPlugin().getLang().kit_no_perm);
 		else {
 			kititems.get(kitName).setInventoryContent(player);
 		}
@@ -38,7 +38,7 @@ public class KitManager {
 	 */
 	public String getKitListString() {
 		StringBuilder kits = new StringBuilder();
-		if (kititems.size() > 0) {
+		if (!kititems.isEmpty()) {
             for (String s : kititems.keySet()) {
                 kits.append(", ").append(s);
             }

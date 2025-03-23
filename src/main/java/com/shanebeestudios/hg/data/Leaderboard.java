@@ -4,7 +4,7 @@ import org.bukkit.Bukkit;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.Player;
-import com.shanebeestudios.hg.HG;
+import com.shanebeestudios.hg.HungerGames;
 
 import java.io.File;
 import java.io.IOException;
@@ -17,7 +17,7 @@ import java.util.*;
 @SuppressWarnings({"WeakerAccess", "unused"})
 public class Leaderboard {
 
-    private final HG plugin;
+    private final HungerGames plugin;
     private final Language lang;
     private FileConfiguration leaderboardConfig;
     private File config_file;
@@ -35,7 +35,7 @@ public class Leaderboard {
     private final List<String> sorted_players_gamesPlayed;
     private final List<String> sorted_scores_gamesPlayed;
 
-    public Leaderboard(HG plugin) {
+    public Leaderboard(HungerGames plugin) {
         this.plugin = plugin;
         this.lang = plugin.getLang();
         wins = new TreeMap<>();

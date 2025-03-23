@@ -3,9 +3,9 @@ package com.shanebeestudios.hg.data;
 import org.bukkit.configuration.Configuration;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
-import com.shanebeestudios.hg.HG;
-import com.shanebeestudios.hg.util.Util;
-import com.shanebeestudios.hg.util.Vault;
+import com.shanebeestudios.hg.HungerGames;
+import com.shanebeestudios.hg.api.util.Util;
+import com.shanebeestudios.hg.api.util.Vault;
 
 import java.io.File;
 import java.io.IOException;
@@ -24,8 +24,6 @@ public class Config {
     public static boolean broadcastJoinMessages;
     public static boolean broadcastWinMessages;
     public static boolean economy = true;
-    public static boolean spawnmobs;
-    public static int spawnmobsinterval;
     public static boolean bossbar;
     public static int trackingstickuses;
     public static int playersfortrackingstick;
@@ -38,6 +36,11 @@ public class Config {
     public static List<String> bonusBlockTypes;
     public static boolean hideNametags;
     public static boolean savePreviousLocation;
+
+    // Mobs
+    public static boolean MOBS_SPAWN_ENABLED;
+    public static int MOBS_SPAWN_INTERVAL;
+    public static int MOBS_SPAWN_CAP_PER_PLAYER;
 
     //Team info
     public static boolean team_showTeamNames;
@@ -84,11 +87,11 @@ public class Config {
     public static boolean mcmmoUseSkills;
     public static boolean mcmmoGainExp;
 
-    private final HG plugin;
+    private final HungerGames plugin;
     private File configFile;
     private FileConfiguration config;
 
-    public Config(HG plugin) {
+    public Config(HungerGames plugin) {
         this.plugin = plugin;
         loadConfigFile();
     }
@@ -99,12 +102,12 @@ public class Config {
         }
         if (!configFile.exists()) {
             plugin.saveResource("config.yml", false);
-            Util.log("&7New config.yml created");
+            Util.log("New config.yml <green>created");
         }
         config = YamlConfiguration.loadConfiguration(configFile);
         matchConfig(config, configFile);
         loadConfig();
-        Util.log("&7config.yml loaded");
+        Util.log("config.yml <green>successfully loaded");
     }
 
 
@@ -112,8 +115,6 @@ public class Config {
         debug = config.getBoolean("settings.debug");
         broadcastJoinMessages = config.getBoolean("settings.broadcast-join-messages");
         broadcastWinMessages = config.getBoolean("settings.broadcast-win-messages");
-        spawnmobs = config.getBoolean("settings.spawn-mobs");
-        spawnmobsinterval = config.getInt("settings.spawn-mobs-interval") * 20;
         bossbar = config.getBoolean("settings.bossbar-countdown");
         trackingstickuses = config.getInt("settings.trackingstick-uses");
         playersfortrackingstick = config.getInt("settings.players-for-trackingstick");
@@ -124,6 +125,11 @@ public class Config {
         hideNametags = config.getBoolean("settings.hide-nametags");
         savePreviousLocation = config.getBoolean("settings.save-previous-location");
         bonusBlockTypes = config.getStringList("settings.bonus-block-types");
+
+        // Mobs
+        MOBS_SPAWN_ENABLED = config.getBoolean("mob-spawning.enabled");
+        MOBS_SPAWN_INTERVAL = config.getInt("mob-spawning.interval") * 20;
+        MOBS_SPAWN_CAP_PER_PLAYER = config.getInt("mob-spawning.cap-per-player");
 
         // Team
         team_maxTeamSize = config.getInt("team.max-team-size");
@@ -170,15 +176,15 @@ public class Config {
         try {
             Vault.setupEconomy();
             if (Vault.economy == null) {
-                Util.log("&cUnable to setup vault!");
-                Util.log(" - &cEconomy provider is missing.");
-                Util.log(" - Cash rewards will not be given out..");
+                Util.log("<red>Unable to setup vault!");
+                Util.log(" - <red>Economy provider is missing.");
+                Util.log(" - <yellow>Cash rewards will not be given out..");
                 giveReward = false;
                 economy = false;
             }
         } catch (NoClassDefFoundError e) {
-            Util.log("&cUnable to setup vault!");
-            Util.log("  - Cash rewards will not be given out..");
+            Util.log("<red>Unable to setup vault!");
+            Util.log("  - <yellow>Cash rewards will not be given out..");
             giveReward = false;
             economy = false;
         }

@@ -1,44 +1,144 @@
 # This file stores items which will appear in chests/bonus chests in your arenas
 # For info on setup, check the wiki https://github.com/ShaneBeeStudios/HungerGames/wiki/Items.yml
 items:
-    - STONE_SWORD 1 x:5
-    - GOLDEN_SWORD 1
-    - MUSHROOM_STEW 1 x:2
-    - STONE_HOE 1
-    - LEATHER_HELMET 1 x:2
-    - LEATHER_CHESTPLATE 1 x:2
-    - LEATHER_LEGGINGS 1 x:2
-    - IRON_HELMET 1 x:2
-    - IRON_CHESTPLATE 1 x:2
-    - IRON_LEGGINGS 1 x:2
-    - IRON_BOOTS 1 x:2
-    - BOW 1 x:3
-    - ARROW 20 x:2
-    - MILK_BUCKET 1 x:2
-    - FISHING_ROD 1
-    - COMPASS 1
-    - STICK 1 name:&6TrackingStick_&aUses:_5 lore:&7Left_click_in_the_air:&7To_find_nearby_players
-    - GOLDEN_HELMET 1
-    - GOLDEN_CHESTPLATE 1
-    - BONE 1 x:2
-    - GOLDEN_LEGGINGS 1
-    - GOLDEN_BOOTS 1
-    - DIAMOND_SWORD 1 enchant:sharpness:1 name:&6Death_Dealer
-    - GOLDEN_APPLE 1
-    - CHAINMAIL_CHESTPLATE 1 x:1
-    - CHAINMAIL_LEGGINGS 1 x:1
-    - COOKIE 2 x:3
-    - MELON_SLICE 1 x:4
-    - COOKED_BEEF 1 x:2
-    - ENDER_PEARL 1 x:2
-    - POTION potion-type:SPEED:3600:1 1 x:2 name:&rPotion_of_Swiftness
-    - POTION potion-type:HEAL:1:1 1 x:2 name:&rPotion_of_Healing
-    - SPLASH_POTION potion-type:POISON:320:2 1 color:green name:&rSplash_Potion_of_Poison
-    - SPLASH_POTION potion-type:REGENERATION:660:1 1 x:2 name:&rSplash_Potion_of_Regeneration
-    - TIPPED_ARROW potion-base:long_poison
-    - TIPPED_ARROW potion-base:strong_slowness
-    - LINGERING_POTION potion-base:harming:false:false
-    - APPLE 2 x:5
+  - id: minecraft:stone_sword
+    count: 1
+    chance: 5
+  - id: minecraft:golden_sword
+    count: 1
+  - id: minecraft:mushroom_stew
+    count: 1
+    chance: 2
+  - id: minecraft:stone_hoe
+    count: 1
+  - id: minecraft:leather_helmet
+    count: 1
+    chance: 2
+  - id: minecraft:leather_chestplate
+    count: 1
+    chance: 2
+  - id: minecraft:leather_leggings
+    count: 1
+    chance: 2
+  - id: minecraft:iron_helmet
+    count: 1
+    chance: 2
+  - id: minecraft:iron_chestplate
+    count: 1
+    chance: 2
+  - id: minecraft:iron_leggings
+    count: 1
+    chance: 2
+  - id: minecraft:iron_boots
+    count: 1
+    chance: 2
+  - id: minecraft:bow
+    count: 1
+    chance: 3
+  - id: minecraft:arrow
+    count: 20
+    chance: 2
+  - id: minecraft:milk_bucket
+    count: 1
+    chance: 2
+  - id: minecraft:fishing_rod
+    count: 1
+  - id: minecraft:compass
+    count: 1
+  - id: minecraft:stick
+    count: 1
+    custom_name: '<gold>TrackingStick'
+    lore:
+      - '<green>Uses: 5'
+      - '<gray>Left click in the air'
+      - '<gray>To find nearby players'
+  - id: minecraft:golden_helmet
+    count: 1
+  - id: minecraft:golden_chestplate
+    count: 1
+  - id: minecraft:bone
+    count: 1
+    chance: 2
+  - id: minecraft:golden_leggings
+    count: 1
+  - id: minecraft:golden_boots
+    count: 1
+  - id: minecraft:diamond_sword
+    count: 1
+    custom_name: <gold>Death Dealer
+    enchantments:
+      - sharpness=1
+  - id: minecraft:golden_apple
+    count: 1
+  - id: minecraft:chainmail_chestplate
+    count: 1
+    chance: 1
+  - id: minecraft:chainmail_leggings
+    count: 1
+    chance: 1
+  - id: minecraft:cookie
+    count: 2
+    chance: 3
+  - id: minecraft:melon_slice
+    count: 1
+    chance: 4
+  - id: minecraft:cooked_beef
+    count: 1
+    chance: 2
+  - id: minecraft:ender_pearl
+    count: 1
+    chance: 2
+  - id: minecraft:potion
+    count: 1
+    custom_name: Potion of Swiftness
+    potion_effects:
+      - type: minecraft:speed
+        duration: 3600
+        amplifier: 1
+    chance: 2
+  - id: minecraft:potion
+    count: 1
+    custom_name: Potion of Healing
+    potion_effects:
+      - type: minecraft:instant_health
+        duration: 1
+        amplifier: 1
+    chance: 2
+  - id: minecraft:splash_potion
+    count: 1
+    custom_name: Splash Potion of Poison
+    potion_effects:
+      - type: minecraft:poison
+        duration: 320
+        amplifier: 2
+  - id: minecraft:splash_potion
+    count: 1
+    custom_name: Splash Potion of Regeneration
+    potion_effects:
+      - type: minecraft:regeneration
+        duration: 660
+        amplifier: 1
+    chance: 2
+  - id: minecraft:tipped_arrow
+    count: 1
+    potion: minecraft:long_poison
+  - id: minecraft:tipped_arrow
+    count: 1
+    potion: minecraft:strong_slowness
+  - id: minecraft:lingering_potion
+    count: 1
+    potion: minecraft:harming
+  - id: minecraft:apple
+    count: 2
+    chance: 5
 bonus:
-    - DIAMOND_SWORD 1 enchant:sharpness:5 name:&3Power_Sword
-    - DIAMOND_CHESTPLATE 1 enchant:protection:3 name:&aLife_Saver
+  - id: minecraft:diamond_sword
+    count: 1
+    custom_name: <dark_aqua>Power Sword
+    enchantments:
+      - sharpness=5
+  - id: minecraft:diamond_chestplate
+    count: 1
+    custom_name: <green>Life Saver
+    enchantments:
+      - protection=3
