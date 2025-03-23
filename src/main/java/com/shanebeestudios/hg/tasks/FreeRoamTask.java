@@ -23,9 +23,9 @@ public class FreeRoamTask implements Runnable {
         String roamTimeString = this.lang.roam_time.replace("<roam>", "" + this.roamTime);
 
         for (Player player : game.getGamePlayerData().getPlayers()) {
-            Util.sendMini(player, gameStarted);
+            Util.sendMessage(player, gameStarted);
             if (this.roamTime > 0) {
-                Util.scm(player, roamTimeString);
+                Util.sendMessage(player, roamTimeString);
             }
             player.setHealth(20);
             player.setFoodLevel(20);

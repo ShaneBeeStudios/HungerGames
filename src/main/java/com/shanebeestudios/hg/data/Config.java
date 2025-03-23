@@ -102,12 +102,12 @@ public class Config {
         }
         if (!configFile.exists()) {
             plugin.saveResource("config.yml", false);
-            Util.log("&7New config.yml created");
+            Util.log("New config.yml <green>created");
         }
         config = YamlConfiguration.loadConfiguration(configFile);
         matchConfig(config, configFile);
         loadConfig();
-        Util.log("&7config.yml loaded");
+        Util.log("config.yml <green>successfully loaded");
     }
 
 
@@ -176,15 +176,15 @@ public class Config {
         try {
             Vault.setupEconomy();
             if (Vault.economy == null) {
-                Util.log("&cUnable to setup vault!");
-                Util.log(" - &cEconomy provider is missing.");
-                Util.log(" - Cash rewards will not be given out..");
+                Util.log("<red>Unable to setup vault!");
+                Util.log(" - <red>Economy provider is missing.");
+                Util.log(" - <yellow>Cash rewards will not be given out..");
                 giveReward = false;
                 economy = false;
             }
         } catch (NoClassDefFoundError e) {
-            Util.log("&cUnable to setup vault!");
-            Util.log("  - Cash rewards will not be given out..");
+            Util.log("<red>Unable to setup vault!");
+            Util.log("  - <yellow>Cash rewards will not be given out..");
             giveReward = false;
             economy = false;
         }

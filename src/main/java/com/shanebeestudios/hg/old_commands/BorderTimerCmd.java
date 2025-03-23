@@ -24,26 +24,26 @@ public class BorderTimerCmd extends BaseCmd {
 				start = Integer.parseInt(args[2]);
 				end = Integer.parseInt(args[3]);
 				if (start % 30 != 0) {
-					Util.scm(player, sendHelpLine());
-					Util.scm(player, "&7<&rstart&7> &cneeds to be an increment of 30");
+					Util.sendMessage(player, sendHelpLine());
+					Util.sendMessage(player, "&7<&rstart&7> &cneeds to be an increment of 30");
 					return false;
 				}
 				if (start <= end) {
-					Util.scm(player, sendHelpLine());
-					Util.scm(player, "&7<&rstart&7> &cneeds to be greater than &7<&rend&7>");
+					Util.sendMessage(player, sendHelpLine());
+					Util.sendMessage(player, "&7<&rstart&7> &cneeds to be greater than &7<&rend&7>");
 					return false;
 				}
 			} catch (NumberFormatException e) {
-				Util.scm(player, sendHelpLine());
+				Util.sendMessage(player, sendHelpLine());
 				return false;
 			}
 			arenaConfig.getCustomConfig().set("arenas." + name + ".border.countdown-start", start);
 			arenaConfig.getCustomConfig().set("arenas." + name + ".border.countdown-end", end);
 			arenaConfig.saveArenaConfig();
 			game.getGameBorderData().setBorderTimer(start, end);
-			Util.scm(player, lang.cmd_border_timer.replace("<arena>", name).replace("<start>", args[2]).replace("<end>", args[3]));
+			Util.sendMessage(player, lang.cmd_border_timer.replace("<arena>", name).replace("<start>", args[2]).replace("<end>", args[3]));
 		} else {
-			Util.scm(player, lang.cmd_delete_noexist);
+			Util.sendMessage(player, lang.cmd_delete_noexist);
 		}
 		return true;
 	}

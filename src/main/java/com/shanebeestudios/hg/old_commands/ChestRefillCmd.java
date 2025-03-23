@@ -20,15 +20,15 @@ public class ChestRefillCmd extends BaseCmd {
 			String name = game.getGameArenaData().getName();
 			int time = Integer.parseInt(args[2]);
 			if (time % 30 != 0) {
-				Util.scm(player, "&c<time> must be in increments of 30");
+				Util.sendMessage(player, "&c<time> must be in increments of 30");
 				return true;
 			}
 			arenaConfig.getCustomConfig().set("arenas." + name + ".chest-refill", time);
 			arenaConfig.saveArenaConfig();
 			game.getGameArenaData().setChestRefillTime(time);
-			Util.scm(player, lang.cmd_chest_refill.replace("<arena>", name).replace("<sec>", String.valueOf(time)));
+			Util.sendMessage(player, lang.cmd_chest_refill.replace("<arena>", name).replace("<sec>", String.valueOf(time)));
 		} else {
-			Util.scm(player, lang.cmd_delete_noexist);
+			Util.sendMessage(player, lang.cmd_delete_noexist);
 		}
 		return true;
 	}

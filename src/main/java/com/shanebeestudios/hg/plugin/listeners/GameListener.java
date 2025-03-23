@@ -74,8 +74,6 @@ import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.metadata.FixedMetadataValue;
 import org.bukkit.util.Vector;
 
-import java.util.UUID;
-
 /**
  * Internal event listener
  */
@@ -135,10 +133,10 @@ public class GameListener implements Listener {
     private void checkStick(Game g) {
         if (Config.playersfortrackingstick == g.getGamePlayerData().getPlayers().size()) {
             for (Player player : g.getGamePlayerData().getPlayers()) {
-                Util.scm(player, lang.track_bar);
-                Util.scm(player, lang.track_new1);
-                Util.scm(player, lang.track_new2);
-                Util.scm(player, lang.track_bar);
+                Util.sendMessage(player, lang.track_bar);
+                Util.sendMessage(player, lang.track_new1);
+                Util.sendMessage(player, lang.track_new2);
+                Util.sendMessage(player, lang.track_bar);
                 player.getInventory().addItem(trackingStick);
             }
         }
@@ -294,7 +292,7 @@ public class GameListener implements Listener {
         if (im.getDisplayName().startsWith(tsn)) {
             int uses = Integer.parseInt(im.getDisplayName().replace(tsn, ""));
             if (uses == 0) {
-                Util.scm(p, lang.track_empty);
+                Util.sendMessage(p, lang.track_empty);
             } else {
                 PlayerData pd = playerManager.getPlayerData(p);
                 final Game g = pd.getGame();
@@ -304,7 +302,7 @@ public class GameListener implements Listener {
                         im.setDisplayName(tsn + (uses - 1));
                         Location l = e.getLocation();
                         int range = (int) p.getLocation().distance(l);
-                        Util.scm(p, lang.track_nearest
+                        Util.sendMessage(p, lang.track_nearest
                             .replace("<player>", e.getName())
                             .replace("<range>", String.valueOf(range))
                             .replace("<location>", getDirection(p.getLocation().getBlock(), l.getBlock())));
@@ -313,7 +311,7 @@ public class GameListener implements Listener {
                         return;
                     }
                 }
-                Util.scm(p, lang.track_no_near);
+                Util.sendMessage(p, lang.track_no_near);
             }
         }
     }
@@ -421,7 +419,7 @@ public class GameListener implements Listener {
             Status status = this.playerManager.getPlayerData(player).getGame().getGameArenaData().getStatus();
             if (status != Status.RUNNING && status != Status.FREE_ROAM) {
                 event.setCancelled(true);
-                Util.scm(player, lang.listener_no_interact);
+                Util.sendMessage(player, lang.listener_no_interact);
             }
         } else if (action == Action.RIGHT_CLICK_BLOCK) {
             Block block = event.getClickedBlock();
@@ -431,13 +429,13 @@ public class GameListener implements Listener {
                 if (sign.getLine(0).equals(Util.getColString(lang.lobby_sign_1_1))) {
                     Game game = gameManager.getGame(sign.getLine(1).substring(2));
                     if (game == null) {
-                        Util.scm(player, lang.cmd_delete_noexist);
+                        Util.sendMessage(player, lang.cmd_delete_noexist);
                     } else {
                         if (player.getInventory().getItemInMainHand().getType() == Material.AIR) {
                             // Process this after event has finished running to prevent double click issues
                             Bukkit.getScheduler().scheduleSyncDelayedTask(plugin, () -> game.joinGame(player), 2);
                         } else {
-                            Util.scm(player, lang.listener_sign_click_hand);
+                            Util.sendMessage(player, lang.listener_sign_click_hand);
                         }
                     }
                 }
@@ -466,7 +464,7 @@ public class GameListener implements Listener {
                 Status status = game.getGameArenaData().getStatus();
                 if (status == Status.RUNNING || status == Status.FREE_ROAM) {
                     if (!BlockUtils.isBreakableBlock(block)) {
-                        Util.sendMini(player, this.lang.listener_no_edit_block);
+                        Util.sendMessage(player, this.lang.listener_no_edit_block);
                         event.setCancelled(true);
                     } else {
                         gameBlockData.recordBlockPlace(event.getBlockReplacedState());
@@ -475,7 +473,7 @@ public class GameListener implements Listener {
                         }
                     }
                 } else {
-                    Util.sendMini(player, this.lang.listener_not_running);
+                    Util.sendMessage(player, this.lang.listener_not_running);
                     event.setCancelled(true);
                 }
             } else {
@@ -510,7 +508,7 @@ public class GameListener implements Listener {
                 Game game = this.playerManager.getPlayerData(player).getGame();
                 if (game.getGameArenaData().getStatus() == Status.RUNNING || !Config.protectCooldown) {
                     if (!BlockUtils.isBreakableBlock(block)) {
-                        Util.sendMini(player, this.lang.listener_no_edit_block);
+                        Util.sendMessage(player, this.lang.listener_no_edit_block);
                         event.setCancelled(true);
                     } else {
                         GameBlockData gameBlockData = game.getGameBlockData();
@@ -521,7 +519,7 @@ public class GameListener implements Listener {
                         }
                     }
                 } else {
-                    Util.sendMini(player, this.lang.listener_not_running);
+                    Util.sendMessage(player, this.lang.listener_not_running);
                     event.setCancelled(true);
                 }
             } else {
@@ -567,11 +565,11 @@ public class GameListener implements Listener {
                     } else if (!fill && (WATER || LAVA)) {
                         gameBlockData.recordBlockPlace(block.getState());
                     } else {
-                        Util.sendMini(player, this.lang.listener_no_edit_block);
+                        Util.sendMessage(player, this.lang.listener_no_edit_block);
                         event.setCancelled(true);
                     }
                 } else {
-                    Util.sendMini(player, this.lang.listener_not_running);
+                    Util.sendMessage(player, this.lang.listener_not_running);
                     event.setCancelled(true);
                 }
             } else {

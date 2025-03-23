@@ -18,7 +18,7 @@ public class SpectateCmd extends BaseCmd {
 	@Override
 	public boolean run() {
 		if (playerManager.hasPlayerData(player) || playerManager.hasSpectatorData(player)) {
-			Util.scm(player, lang.cmd_join_already_in_game);
+			Util.sendMessage(player, lang.cmd_join_already_in_game);
 		} else {
 			Game game = gameManager.getGame(args[1]);
 			GamePlayerData gamePlayerData = game.getGamePlayerData();
@@ -27,10 +27,10 @@ public class SpectateCmd extends BaseCmd {
 				if (status == Status.RUNNING || status == Status.FREE_ROAM) {
 					gamePlayerData.spectate(player);
 				} else {
-					Util.scm(player, "This game is not running, status: " + status);
+					Util.sendMessage(player, "This game is not running, status: " + status);
 				}
 			} else {
-				Util.scm(player, lang.cmd_delete_noexist);
+				Util.sendMessage(player, lang.cmd_delete_noexist);
 			}
 		}
 		return true;

@@ -23,13 +23,13 @@ public class WandCmd {
 //    public boolean run() {
 //        if (plugin.getPlayerSessions().containsKey(player.getUniqueId())) {
 //            plugin.getPlayerSessions().remove(player.getUniqueId());
-//            Util.sendPrefixedMessage(player, "&cWand disabled!");
+//            Util.sendPrefixedMini(player, "&cWand disabled!");
 //        } else {
 //            if (!player.getInventory().getItemInMainHand().isSimilar(WAND)) {
 //                player.getInventory().addItem(WAND);
 //            }
 //            plugin.getPlayerSessions().put(player.getUniqueId(), new PlayerSession());
-//            Util.sendPrefixedMessage(player, "&aWand enabled!");
+//            Util.sendPrefixedMini(player, "&aWand enabled!");
 //        }
 //        return true;
 //    }

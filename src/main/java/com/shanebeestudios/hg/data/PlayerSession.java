@@ -41,7 +41,7 @@ public class PlayerSession {
 
     public void start(Player player) {
         this.stage = Stage.CORNER_1;
-        Util.sendPrefixedMini(player, "Click your first corner");
+        Util.sendPrefixedMessage(player, "Click your first corner");
     }
 
     public void click(Player player, Block block) {
@@ -49,22 +49,22 @@ public class PlayerSession {
             this.corner1 = block;
             this.stage = Stage.CORNER_2;
             // TODO message set sign 2
-            Util.sendPrefixedMini(player, "First corner selected, now select second corner.");
+            Util.sendPrefixedMessage(player, "First corner selected, now select second corner.");
         } else if (this.stage == Stage.CORNER_2) {
             this.corner2 = block;
             if (isBigEnough()) {
                 this.stage = Stage.SPAWN_LOCATIONS;
                 // TODO message start spawn locations
-                Util.sendPrefixedMini(player, "Second corner selected, now start selecting spawn locations.");
+                Util.sendPrefixedMessage(player, "Second corner selected, now start selecting spawn locations.");
             } else {
                 // TODO message not big enough
-                Util.sendPrefixedMini(player, "Too small, arena must be at least 5x5x5, please re-select second corner.");
+                Util.sendPrefixedMessage(player, "Too small, arena must be at least 5x5x5, please re-select second corner.");
             }
         } else if (this.stage == Stage.SPAWN_LOCATIONS) {
             if (this.spawnLocations.size() >= this.maxPlayers) {
                 this.stage = Stage.SIGN;
                 // TODO message
-                Util.sendPrefixedMini(player, "Congrats all locations set, now select your sign!");
+                Util.sendPrefixedMessage(player, "Congrats all locations set, now select your sign!");
             } else {
                 double height = block.getBoundingBox().getHeight();
                 Location location = block.getLocation().add(0.5, height, 0.5);
@@ -74,10 +74,10 @@ public class PlayerSession {
                 if (this.spawnLocations.size() >= this.maxPlayers) {
                     this.stage = Stage.SIGN;
                     // TODO message
-                    Util.sendPrefixedMini(player, "Congrats all locations set, now select your sign!");
+                    Util.sendPrefixedMessage(player, "Congrats all locations set, now select your sign!");
                 } else {
                     int left = this.maxPlayers - this.spawnLocations.size();
-                    Util.sendPrefixedMini(player, "Selected %s, only %s more to go.", this.spawnLocations.size(), left);
+                    Util.sendPrefixedMessage(player, "Selected %s, only %s more to go.", this.spawnLocations.size(), left);
                 }
             }
         } else if (this.stage == Stage.SIGN) {
@@ -85,11 +85,11 @@ public class PlayerSession {
             if (block.getState() instanceof Sign sign) {
                 this.signLocation = sign;
                 // TODO all done message
-                Util.sendPrefixedMini(player, "Sign selected, you're dont, good job you!!");
+                Util.sendPrefixedMessage(player, "Sign selected, you're dont, good job you!!");
                 finalizeGame();
             } else {
                 // TODO not a sign message
-                Util.sendPrefixedMini(player, "That's not a sign silly!");
+                Util.sendPrefixedMessage(player, "That's not a sign silly!");
             }
         }
     }

@@ -19,12 +19,12 @@ public class ReloadCmd extends BaseCmd {
     public boolean run() {
         String prefix = lang.prefix;
         if (args.length == 2 && args[1].equalsIgnoreCase("cancel")) {
-            Util.scm(sender, prefix + "&cReload cancelled");
+            Util.sendMessage(sender, prefix + "&cReload cancelled");
         } else if ((args.length == 2 && args[1].equalsIgnoreCase("confirm")) || gamesNotRunning()) {
             long start = System.currentTimeMillis();
-            Util.scm(sender, prefix + "&6Reloading plugin... observe console for errors!");
+            Util.sendMessage(sender, prefix + "&6Reloading plugin... observe console for errors!");
             HungerGames.getPlugin().reloadPlugin();
-            Util.scm(sender, prefix + "&7Reloaded &asuccessfully &7in &b" +
+            Util.sendMessage(sender, prefix + "&7Reloaded &asuccessfully &7in &b" +
                     (System.currentTimeMillis() - start) + "&7 milliseconds");
         }
         return true;

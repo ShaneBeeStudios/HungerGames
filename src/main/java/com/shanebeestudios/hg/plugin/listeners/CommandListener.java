@@ -27,11 +27,11 @@ public class CommandListener implements CommandExecutor, TabCompleter {
 
 	public boolean onCommand(CommandSender s, Command command, String label, String[] args) {
 		if (args.length == 0 || !plugin.getCommands().containsKey(args[0])) {
-			Util.scm(s, "&4*&c&m                         &7*( &3&lHungerGames &7)*&c&m                          &4*");
+			Util.sendMessage(s, "&4*&c&m                         &7*( &3&lHungerGames &7)*&c&m                          &4*");
 			for (BaseCmd cmd : plugin.getCommands().values().toArray(new BaseCmd[0])) {
-				if (s.hasPermission("hg." + cmd.cmdName)) Util.scm(s, "  &7&l- " + cmd.sendHelpLine());
+				if (s.hasPermission("hg." + cmd.cmdName)) Util.sendMessage(s, "  &7&l- " + cmd.sendHelpLine());
 			}
-			Util.scm(s, "&4*&c&m                                                                             &4*");
+			Util.sendMessage(s, "&4*&c&m                                                                             &4*");
 		} else plugin.getCommands().get(args[0]).processCmd(plugin, s, args);
 		return true;
 	}

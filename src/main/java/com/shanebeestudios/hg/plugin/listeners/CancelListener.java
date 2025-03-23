@@ -35,18 +35,18 @@ public class CancelListener implements Listener {
 				if (st.length >= 2 && st[1].equalsIgnoreCase("kit") && playerManager.getData(uuid).getGame().getGameArenaData().getStatus() == Status.RUNNING) {
 					event.setMessage("/");
 					event.setCancelled(true);
-					Util.scm(player, HungerGames.getPlugin().getLang().cmd_handler_nokit);
+					Util.sendMessage(player, HungerGames.getPlugin().getLang().cmd_handler_nokit);
 				}
 				return;
 			}
 			event.setMessage("/");
 			event.setCancelled(true);
-			Util.scm(player, HungerGames.getPlugin().getLang().cmd_handler_nocmd);
+			Util.sendMessage(player, HungerGames.getPlugin().getLang().cmd_handler_nocmd);
 		} else if ("/tp".equalsIgnoreCase(st[0]) && st.length >= 2) {
 			Player p = Bukkit.getServer().getPlayer(st[1]);
 			if (p != null) {
 				if (playerManager.hasPlayerData(uuid)) {
-					Util.scm(player, HungerGames.getPlugin().getLang().cmd_handler_playing);
+					Util.sendMessage(player, HungerGames.getPlugin().getLang().cmd_handler_playing);
 					event.setMessage("/");
 					event.setCancelled(true);
 				}

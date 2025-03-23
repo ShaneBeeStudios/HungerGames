@@ -4,8 +4,6 @@ import com.shanebeestudios.hg.game.Game;
 import com.shanebeestudios.hg.api.util.Util;
 import org.bukkit.entity.Player;
 
-import java.util.List;
-
 public class ListCmd extends BaseCmd {
 
 	public ListCmd() {
@@ -25,7 +23,7 @@ public class ListCmd extends BaseCmd {
 			builder.append("&6, &c").append(player.getName());
 		}
 		builder = new StringBuilder(builder.substring(3));
-		Util.scm(this.player, "&6Players:" + builder);
+		Util.sendMessage(this.player, "&6Players:" + builder);
 		return true;
 	}
 

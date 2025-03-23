@@ -31,14 +31,14 @@ public class SetExitCommand extends SubCommand {
                     Player player = info.sender();
                     this.plugin.getGameManager().getGames().forEach(game ->
                         setExit(game, player, false));
-                    Util.sendPrefixedMini(player, this.lang.command_exit_set_all);
+                    Util.sendPrefixedMessage(player, this.lang.command_exit_set_all);
                 }))
             .then(LiteralArgument.literal("global")
                 .executesPlayer(info -> {
                     Player player = info.sender();
                     this.plugin.getGameManager().getGames().forEach(game ->
                         setExit(game, player, true));
-                    Util.sendPrefixedMini(player, this.lang.command_exit_set_global);
+                    Util.sendPrefixedMessage(player, this.lang.command_exit_set_global);
                 }))
             .then(CustomArg.GAME.get("game")
                 .executesPlayer(info -> {
@@ -46,10 +46,10 @@ public class SetExitCommand extends SubCommand {
                     Game game = info.args().getByClass("game", Game.class);
                     if (game == null) {
                         String raw = info.args().getOrDefaultRaw("game", "huh?");
-                        Util.sendPrefixedMini(player, this.lang.cmd_delete_noexist.replace("<arena>", raw));
+                        Util.sendPrefixedMessage(player, this.lang.cmd_delete_noexist.replace("<arena>", raw));
                     } else {
                         setExit(game, player, false);
-                        Util.sendPrefixedMini(player, this.lang.command_exit_set_arena.replace("<arena>", game.getGameArenaData().getName()));
+                        Util.sendPrefixedMessage(player, this.lang.command_exit_set_arena.replace("<arena>", game.getGameArenaData().getName()));
                     }
 
                 }));

@@ -61,12 +61,12 @@ public class ChestDropTask implements Runnable {
         this.chests.add(new ChestDrop(fb));
 
         for (Player player : this.game.getGamePlayerData().getPlayers()) {
-            Util.scm(player, this.lang.chest_drop_1);
-            Util.scm(player, this.lang.chest_drop_2
+            Util.sendMessage(player, this.lang.chest_drop_1);
+            Util.sendMessage(player, this.lang.chest_drop_2
                 .replace("<x>", String.valueOf(x))
                 .replace("<y>", String.valueOf(y))
                 .replace("<z>", String.valueOf(z)));
-            Util.scm(player, this.lang.chest_drop_1);
+            Util.sendMessage(player, this.lang.chest_drop_1);
         }
     }
 

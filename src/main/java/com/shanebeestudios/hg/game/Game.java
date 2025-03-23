@@ -300,7 +300,7 @@ public class Game {
      */
     public boolean joinGame(Player player, boolean savePreviousLocation) {
         if (this.playerManager.isInGame(player)) {
-            Util.sendPrefixedMini(player, this.lang.cmd_join_already_in_game);
+            Util.sendPrefixedMessage(player, this.lang.cmd_join_already_in_game);
             return false;
         }
         // Call PlayerJoinGameEvent
@@ -313,13 +313,13 @@ public class Game {
         Status status = gameArenaData.getStatus();
         switch (status) {
             case NOT_READY, ROLLBACK, STOPPED, BROKEN -> {
-                Util.sendPrefixedMini(player, this.lang.arena_not_ready);
+                Util.sendPrefixedMessage(player, this.lang.arena_not_ready);
                 return false;
             }
             case RUNNING, FREE_ROAM -> {
-                Util.sendPrefixedMini(player, this.lang.game_running.replace("<arena>", arenaName), arenaName);
+                Util.sendPrefixedMessage(player, this.lang.game_running.replace("<arena>", arenaName), arenaName);
                 if (Config.spectateEnabled) {
-                    Util.sendPrefixedMini(player, this.lang.arena_spectate.replace("<arena>", arenaName));
+                    Util.sendPrefixedMessage(player, this.lang.arena_spectate.replace("<arena>", arenaName));
                 }
                 return false;
             }
@@ -399,12 +399,12 @@ public class Game {
                     if (!Config.rewardMessages.isEmpty()) {
                         for (String msg : Config.rewardMessages) {
                             if (!msg.equalsIgnoreCase("none"))
-                                Util.scm(p, msg.replace("<player>", p.getName()));
+                                Util.sendMessage(p, msg.replace("<player>", p.getName()));
                         }
                     }
                     if (Config.cash != 0) {
                         Vault.economy.depositPlayer(Bukkit.getServer().getOfflinePlayer(u), db);
-                        Util.scm(p, lang.winning_amount.replace("<amount>", String.valueOf(db)));
+                        Util.sendMessage(p, lang.winning_amount.replace("<amount>", String.valueOf(db)));
                     }
                 }
                 plugin.getLeaderboard().addStat(u, Leaderboard.Stats.WINS);
@@ -504,7 +504,7 @@ public class Game {
 
     boolean canJoin(Player player) {
         if (this.gamePlayerData.getPlayers().size() >= this.getGameArenaData().getMaxPlayers()) {
-            Util.sendPrefixedMini(player, this.lang.game_full);
+            Util.sendPrefixedMessage(player, this.lang.game_full);
             return false;
         }
         return vaultCheck(player);
@@ -517,7 +517,7 @@ public class Game {
                 Vault.economy.withdrawPlayer(player, cost);
                 return true;
             } else {
-                Util.scm(player, lang.prefix + lang.cmd_join_no_money.replace("<cost>", String.valueOf(cost)));
+                Util.sendMessage(player, lang.prefix + lang.cmd_join_no_money.replace("<cost>", String.valueOf(cost)));
                 return false;
             }
         }

@@ -47,7 +47,7 @@ public class JoinCommand extends SubCommand {
                                 joinGame(sender, sender, game);
                             }
                         } else {
-                            Util.sendPrefixedMini(sender, "Invalid game: %s", args.getRaw("game"));
+                            Util.sendPrefixedMessage(sender, "Invalid game: %s", args.getRaw("game"));
                         }
                     })));
     }
@@ -55,9 +55,9 @@ public class JoinCommand extends SubCommand {
     private void joinGame(CommandSender sender, Player player, Game game) {
         if (this.playerManager.isInGame(player)) {
             if (sender == player) {
-                Util.sendPrefixedMini(sender, this.lang.cmd_join_already_in_game);
+                Util.sendPrefixedMessage(sender, this.lang.cmd_join_already_in_game);
             } else {
-                Util.sendPrefixedMini(sender, this.lang.cmd_join_already_in_game_other.replace("<player>", player.getName()));
+                Util.sendPrefixedMessage(sender, this.lang.cmd_join_already_in_game_other.replace("<player>", player.getName()));
             }
             return;
         }

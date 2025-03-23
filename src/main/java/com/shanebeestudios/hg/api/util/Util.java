@@ -2,6 +2,7 @@ package com.shanebeestudios.hg.api.util;
 
 import com.shanebeestudios.hg.HungerGames;
 import com.shanebeestudios.hg.data.Config;
+import com.shanebeestudios.hg.data.Language;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.minimessage.MiniMessage;
 import net.md_5.bungee.api.ChatColor;
@@ -40,9 +41,22 @@ public class Util {
     private static final Pattern HEX_PATTERN = Pattern.compile("<#([A-Fa-f0-9]){6}>");
     private static final CommandSender CONSOLE = Bukkit.getConsoleSender();
     private static final MiniMessage MINI_MESSAGE = MiniMessage.miniMessage();
+    private static String PREFIX;
+
+    private static String getPrefix() {
+        if (PREFIX == null) {
+            Language lang = HungerGames.getPlugin().getLang();
+            if (lang != null) {
+                PREFIX = lang.prefix + " ";
+            } else {
+                return "<grey>[<aqua>Hunger<dark_aqua>Games<grey>] ";
+            }
+        }
+        return PREFIX;
+    }
 
     /**
-     * Log a mini-message to console prefixed with the plugin's name
+     * Log a message to console prefixed with the plugin's name
      *
      * @param format Message format
      * @param args   Arguments for message format
@@ -53,28 +67,31 @@ public class Util {
         CONSOLE.sendMessage(mini);
     }
 
-    public static void sendPrefixedMini(CommandSender sender, String format, Object... args) {
+    /**
+     * Send a prefixed message to a command sender
+     *
+     * @param sender Receiver of message
+     * @param format Message format
+     * @param args   Objects to replace in format
+     */
+    public static void sendPrefixedMessage(CommandSender sender, String format, Object... args) {
         String s = String.format(format, args);
-        Component mini = getMini("<grey>[<aqua>Hunger<dark_aqua>Games<grey>] " + s);
-        sender.sendMessage(mini);
-    }
-
-    public static void sendMini(CommandSender sender, String format, Object... args) {
-        if (format.isEmpty()) return;
-        String s = String.format(format, args);
-        Component mini = getMini(s);
+        Component mini = getMini(getPrefix() + s);
         sender.sendMessage(mini);
     }
 
     /**
-     * Send a warning to console prefixed with the plugin's name
+     * Send a message to a command sender
      *
-     * @param warning Message to log to console
+     * @param sender Receiver of message
+     * @param format Message format
+     * @param args   Objects to replace in format
      */
-    public static void warning(String warning) {
-        if (warning.length() > 0) { // only send messages if its actually a message
-            scm(Bukkit.getConsoleSender(), getColString("<grey>[<yellow><bold>HungerGames<grey>] <yellow>WARNING: " + warning));
-        }
+    public static void sendMessage(CommandSender sender, String format, Object... args) {
+        if (format.isEmpty()) return;
+        String s = String.format(format, args);
+        Component mini = getMini(s);
+        sender.sendMessage(mini);
     }
 
     /**
@@ -84,7 +101,9 @@ public class Util {
      * @param objects Objects to go in format
      */
     public static void warning(String format, Object... objects) {
-        warning(String.format(format, objects));
+        if (!format.isEmpty()) { // only send messages if it's actually a message
+            sendMessage(CONSOLE, getColString("<grey>[<yellow><bold>HungerGames<grey>] <yellow>WARNING: " + format), objects);
+        }
     }
 
     /**
@@ -116,57 +135,13 @@ public class Util {
     }
 
     /**
-     * Send a colored message to a player or console
-     *
-     * @param sender Receiver of message
-     * @param s      Message to send
-     */
-    public static void scm(CommandSender sender, String s) {
-        sendMini(sender, s);
-    }
-
-    /**
-     * Send a colored, formatted message to a player or console
-     *
-     * @param sender  Receiver of message
-     * @param format  Formatted message to send
-     * @param objects Objects in format
-     */
-    public static void scm(CommandSender sender, String format, Object... objects) {
-        scm(sender, String.format(format, objects));
-    }
-
-    /**
-     * Send a colored, prefixed message to a player or console
-     *
-     * @param sender  Receiver of message
-     * @param message Message to send
-     */
-    public static void sendPrefixedMessage(CommandSender sender, String message) {
-        if (message.length() > 0) { // only send messages if its actually a message
-            scm(sender, HungerGames.getPlugin().getLang().prefix + message);
-        }
-    }
-
-    /**
-     * Send a colored, prefixed, formatted message to a player or console
-     *
-     * @param sender  Receiver of message
-     * @param format  Formatted message to send
-     * @param objects Objects in format
-     */
-    public static void sendPrefixedMessage(CommandSender sender, String format, Object... objects) {
-        sendPrefixedMessage(sender, String.format(format, objects));
-    }
-
-    /**
      * Broadcast a message prefixed with plugin name
      *
      * @param s Message to send
      */
     public static void broadcast(String s) {
-        if (s.length() > 0) { // only send messages if its actually a message
-            Bukkit.broadcastMessage(getColString(HungerGames.getPlugin().getLang().prefix + " " + s));
+        if (!s.isEmpty()) { // only send messages if it's actually a message
+            Bukkit.broadcast(getMini(getPrefix() + " " + s));
         }
     }
 

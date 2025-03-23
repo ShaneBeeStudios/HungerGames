@@ -200,13 +200,13 @@ public class Language {
         if (!customLangFile.exists()) {
             plugin.saveResource("language.yml", false);
             lang = YamlConfiguration.loadConfiguration(customLangFile);
-            Util.log("&7New language.yml created");
+            Util.log("New language.yml <green>created");
         } else {
             lang = YamlConfiguration.loadConfiguration(customLangFile);
         }
         matchConfig(lang, customLangFile);
 		loadLang();
-        Util.log("&7language.yml loaded");
+        Util.log("language.yml <green>successfully loaded");
     }
 
     // Used to update config

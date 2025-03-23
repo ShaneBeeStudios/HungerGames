@@ -29,14 +29,14 @@ public class NBTCmd extends BaseCmd {
 		if (player.getInventory().getItemInMainHand().getType() != Material.AIR) {
 			ItemStack item = player.getInventory().getItemInMainHand();
 			Material type = item.getType();
-			Util.scm(player, "&3NBT:");
+			Util.sendMessage(player, "&3NBT:");
 			String nbtString = api.getNBT(item);
 			if (nbtString == null) {
-				Util.scm(player, "&cNO NBT FOUND!");
+				Util.sendMessage(player, "&cNO NBT FOUND!");
 			} else {
-				Util.scm(player, type.toString() + " " + item.getAmount() + " data:" + nbtString.replace(" ", "~"));
-				Util.scm(player, "&6NBT String also sent to console for easy copy/pasting");
-				Util.scm(console, "&3NBT string from &b" + player.getName() + "&3:");
+				Util.sendMessage(player, type.toString() + " " + item.getAmount() + " data:" + nbtString.replace(" ", "~"));
+				Util.sendMessage(player, "&6NBT String also sent to console for easy copy/pasting");
+				Util.sendMessage(console, "&3NBT string from &b" + player.getName() + "&3:");
                 System.out.println(type.toString() + " " + item.getAmount() + " data:" + nbtString.replace(" ", "~"));
 			}
 

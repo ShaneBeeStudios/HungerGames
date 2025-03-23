@@ -26,7 +26,7 @@ public class LeaveCmd extends BaseCmd {
 				Status status = gameArenaData.getStatus();
 				if ((status == Status.WAITING || status == Status.COUNTDOWN) && gameArenaData.getCost() > 0) {
 					Vault.economy.depositPlayer(player, gameArenaData.getCost());
-					Util.scm(player, lang.prefix +
+					Util.sendMessage(player, lang.prefix +
 							lang.cmd_leave_refund.replace("<cost>", String.valueOf(gameArenaData.getCost())));
 				}
 			}
@@ -35,7 +35,7 @@ public class LeaveCmd extends BaseCmd {
 			game = playerManager.getSpectatorData(player).getGame();
 			game.getGamePlayerData().leaveSpectate(player);
 		}
-		Util.scm(player, lang.prefix + lang.cmd_leave_left.replace("<arena>", game.getGameArenaData().getName()));
+		Util.sendMessage(player, lang.prefix + lang.cmd_leave_left.replace("<arena>", game.getGameArenaData().getName()));
 		return true;
 	}
 }

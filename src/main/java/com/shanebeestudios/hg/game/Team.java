@@ -44,10 +44,10 @@ public class Team {
     public void invite(Player player) {
         Player leader = Bukkit.getPlayer(this.leader);
         assert leader != null;
-        Util.scm(player, HungerGames.getPlugin().getLang().team_invite_1);
-        Util.scm(player, HungerGames.getPlugin().getLang().team_invite_2.replace("<inviter>", leader.getName()));
-        Util.scm(player, HungerGames.getPlugin().getLang().team_invite_3);
-        Util.scm(player, HungerGames.getPlugin().getLang().team_invite_4);
+        Util.sendMessage(player, HungerGames.getPlugin().getLang().team_invite_1);
+        Util.sendMessage(player, HungerGames.getPlugin().getLang().team_invite_2.replace("<inviter>", leader.getName()));
+        Util.sendMessage(player, HungerGames.getPlugin().getLang().team_invite_3);
+        Util.sendMessage(player, HungerGames.getPlugin().getLang().team_invite_4);
         pending.add(player.getUniqueId());
         HungerGames.getPlugin().getPlayerManager().getData(player).setPendingTeam(this);
     }
@@ -63,7 +63,7 @@ public class Team {
         playerData.setTeam(this);
         pending.remove(player.getUniqueId());
         players.add(player.getUniqueId());
-        Util.scm(player, HungerGames.getPlugin().getLang().joined_team);
+        Util.sendMessage(player, HungerGames.getPlugin().getLang().joined_team);
         bukkitTeam.addEntry(player.getName());
     }
 
@@ -132,7 +132,7 @@ public class Team {
         for (UUID uuid : this.players) {
             Player player = Bukkit.getPlayer(uuid);
             if (player != null) {
-                Util.scm(player, message);
+                Util.sendMessage(player, message);
             }
         }
     }

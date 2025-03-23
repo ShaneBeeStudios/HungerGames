@@ -22,15 +22,15 @@ public class BorderSizeCmd extends BaseCmd {
 			try {
 				radius = Integer.parseInt(args[2]);
 			} catch (NumberFormatException e) {
-				Util.scm(player, sendHelpLine());
+				Util.sendMessage(player, sendHelpLine());
 				return false;
 			}
 			arenaConfig.getCustomConfig().set("arenas." + name + ".border.size", radius);
 			game.getGameBorderData().setBorderSize(radius);
 			arenaConfig.saveArenaConfig();
-			Util.scm(player, lang.cmd_border_size.replace("<arena>", name).replace("<size>", String.valueOf(radius)));
+			Util.sendMessage(player, lang.cmd_border_size.replace("<arena>", name).replace("<size>", String.valueOf(radius)));
 		} else {
-			Util.scm(player, lang.cmd_delete_noexist);
+			Util.sendMessage(player, lang.cmd_delete_noexist);
 		}
 		return true;
 	}

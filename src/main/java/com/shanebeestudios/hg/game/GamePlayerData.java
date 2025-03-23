@@ -97,19 +97,19 @@ public class GamePlayerData extends Data {
     private void kitHelp(Player player) {
         // Clear the chat a little bit, making this message easier to see
         for (int i = 0; i < 20; ++i)
-            Util.scm(player, " ");
+            Util.sendMessage(player, " ");
         String kit = game.kitManager.getKitListString();
-        Util.scm(player, " ");
-        Util.scm(player, lang.kit_join_header);
-        Util.scm(player, " ");
+        Util.sendMessage(player, " ");
+        Util.sendMessage(player, lang.kit_join_header);
+        Util.sendMessage(player, " ");
         if (player.hasPermission("hg.kit") && game.kitManager.hasKits()) {
-            Util.scm(player, lang.kit_join_msg);
-            Util.scm(player, " ");
-            Util.scm(player, lang.kit_join_avail + kit);
-            Util.scm(player, " ");
+            Util.sendMessage(player, lang.kit_join_msg);
+            Util.sendMessage(player, " ");
+            Util.sendMessage(player, lang.kit_join_avail + kit);
+            Util.sendMessage(player, " ");
         }
-        Util.scm(player, lang.kit_join_footer);
-        Util.scm(player, " ");
+        Util.sendMessage(player, lang.kit_join_footer);
+        Util.sendMessage(player, " ");
     }
 
     /**
@@ -175,7 +175,7 @@ public class GamePlayerData extends Data {
         allPlayers.addAll(this.players);
         allPlayers.addAll(this.spectators);
         for (Player player : allPlayers) {
-            Util.scm(player, message);
+            Util.sendMessage(player, message);
         }
     }
 
@@ -190,7 +190,7 @@ public class GamePlayerData extends Data {
         List<Player> allPlayers = new ArrayList<>(this.allPlayers);
         allPlayers.addAll(this.spectators);
         for (Player player : allPlayers) {
-            Util.sendPrefixedMini(player, message);
+            Util.sendPrefixedMessage(player, message);
         }
     }
 

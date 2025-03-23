@@ -93,7 +93,7 @@ public class ArenaConfig {
 
     @SuppressWarnings("ConstantConditions")
     public void loadArenas() {
-        Util.log("Loading arenas...");
+        Util.log("Loading arenas:");
         Configuration pluginConfig = plugin.getHGConfig().getConfig();
         int freeRoamTime = pluginConfig.getInt("settings.free-roam");
 
@@ -255,11 +255,12 @@ public class ArenaConfig {
                             arenaName, world.getName());
                         Util.debug(exception);
                     }
-                    Util.log("Arena <white>'<aqua>%s<white>'<grey> has been <green>loaded!", arenaName);
+                    Util.log("- Loaded arena <white>'<aqua>%s<white>'<grey>", arenaName);
 
                 }
+                Util.log("- Arenas have been <green>successfully loaded!");
             } else {
-                Util.log("<red>No Arenas to load.");
+                Util.log("- <red>No Arenas found. <grey>Time to create some!");
             }
         }
     }
