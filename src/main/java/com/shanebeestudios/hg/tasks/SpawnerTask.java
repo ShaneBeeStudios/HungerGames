@@ -1,81 +1,99 @@
 package com.shanebeestudios.hg.tasks;
 
+import com.shanebeestudios.hg.data.Config;
+import com.shanebeestudios.hg.data.MobEntry;
+import com.shanebeestudios.hg.game.Bound;
+import com.shanebeestudios.hg.game.Game;
+import com.shanebeestudios.hg.game.GameArenaData;
+import com.shanebeestudios.hg.game.GamePlayerData;
+import com.shanebeestudios.hg.managers.MobManager;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.World;
+import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
-import com.shanebeestudios.hg.data.MobEntry;
-import com.shanebeestudios.hg.game.Game;
-import com.shanebeestudios.hg.managers.MobManager;
+import org.jetbrains.annotations.Nullable;
 
-import java.util.List;
 import java.util.Random;
 import java.util.UUID;
 
 public class SpawnerTask implements Runnable {
 
-    private final Game game;
-    private final int id;
+    private final GamePlayerData gamePlayerData;
+    private final GameArenaData gameArenaData;
+    private final Bound bound;
+    private final int taskId;
     private final Random random = new Random();
     private final World world;
-    private final List<MobEntry> dayMobs;
-    private final List<MobEntry> nightMobs;
+    private final MobManager mobManager;
+    private final int cap = Config.MOBS_SPAWN_CAP_PER_PLAYER;
 
-    public SpawnerTask(Game game, int i) {
-        this.game = game;
-        this.id = Bukkit.getScheduler().scheduleSyncRepeatingTask(game.getGameArenaData().getPlugin(), this, i, i);
+    public SpawnerTask(Game game) {
+        this.gamePlayerData = game.getGamePlayerData();
+        this.gameArenaData = game.getGameArenaData();
+        this.bound = game.getGameArenaData().getBound();
+        this.taskId = Bukkit.getScheduler().scheduleSyncRepeatingTask(game.getGameArenaData().getPlugin(), this, Config.MOBS_SPAWN_INTERVAL, Config.MOBS_SPAWN_INTERVAL);
         this.world = game.getGameArenaData().getBound().getWorld();
-        MobManager mobManager = game.getMobManager();
-        this.dayMobs = mobManager.getDayMobs();
-        this.nightMobs = mobManager.getNightMobs();
+        this.mobManager = game.getMobManager();
     }
 
     @Override
     public void run() {
-        for (UUID u : game.getGamePlayerData().getPlayers()) {
-            Player player = Bukkit.getPlayer(u);
+        int entityCount = this.bound.getEntityCount();
+        int playerCap = this.gamePlayerData.getPlayers().size() * this.cap;
+        // Prevent spawning if cap already reached
+        if (entityCount > playerCap) return;
+
+        for (UUID uuid : this.gamePlayerData.getPlayers()) {
+            // Keep checking cap as we spawn more
+            if (entityCount > playerCap) return;
+
+            Player player = Bukkit.getPlayer(uuid);
             if (player != null) {
-                Location loc = player.getLocation().clone();
+                Location spawnLocation = getSafeSpawnLocation(this.world, player.getLocation().clone());
 
-                loc = getSafeLoc(world, loc.getBlockX(), loc.getBlockY(), loc.getBlockZ());
-
-                if (loc != null && game.getGameArenaData().isInRegion(loc)) {
+                if (spawnLocation != null && this.gameArenaData.isInRegion(spawnLocation)) {
                     MobEntry mobEntry;
-                    if (isDay(world)) {
-                        mobEntry = dayMobs.get(random.nextInt(dayMobs.size()));
+                    if (isDayTime()) {
+                        mobEntry = this.mobManager.getRandomDayMob();
                     } else {
-                        mobEntry = nightMobs.get(random.nextInt(nightMobs.size()));
+                        mobEntry = this.mobManager.getRandomNightMob();
                     }
-                    mobEntry.spawn(loc);
+                    Entity spawn = mobEntry.spawn(spawnLocation);
+                    if (spawn != null) {
+                        this.bound.addEntity(spawn);
+                        entityCount++;
+                    }
                 }
             }
         }
     }
 
-    private boolean isDay(World w) {
-        long time = w.getTime();
+    private boolean isDayTime() {
+        long time = this.world.getTime();
         return time < 12542 || time > 23460;
     }
 
     private int getRandomNumber() {
-        int r = random.nextInt(20) + 6;
-        return random.nextBoolean() ? r : -r;
+        int randomInt = this.random.nextInt(20) + 6;
+        return this.random.nextBoolean() ? randomInt : -randomInt;
 
     }
 
-    private Location getSafeLoc(World w, int x, int y, int z) {
+    private @Nullable Location getSafeSpawnLocation(World world, Location location) {
         int trys = 30;
 
-        x = x + getRandomNumber();
-        z = z + getRandomNumber();
+        int x = location.getBlockX() + getRandomNumber();
+        int y = location.getBlockY();
+        int z = location.getBlockZ() + getRandomNumber();
 
         while (trys > 0) {
             trys--;
 
-            Material material = w.getBlockAt(x, y, z).getType();
-            Material below = w.getBlockAt(x, y - 1, z).getType();
-            Material above = w.getBlockAt(x, y + 1, z).getType();
+            Material material = world.getBlockAt(x, y, z).getType();
+            Material below = world.getBlockAt(x, y - 1, z).getType();
+            Material above = world.getBlockAt(x, y + 1, z).getType();
 
             if (material.isSolid()) {
                 y++;
@@ -85,14 +103,14 @@ public class SpawnerTask implements Runnable {
                 x = x + getRandomNumber();
                 z = z + getRandomNumber();
             } else {
-                return new Location(w, x, y, z);
+                return new Location(world, x, y, z);
             }
         }
         return null;
     }
 
     public void stop() {
-        Bukkit.getScheduler().cancelTask(id);
+        Bukkit.getScheduler().cancelTask(this.taskId);
     }
 
 }

@@ -24,8 +24,6 @@ public class Config {
     public static boolean broadcastJoinMessages;
     public static boolean broadcastWinMessages;
     public static boolean economy = true;
-    public static boolean spawnmobs;
-    public static int spawnmobsinterval;
     public static boolean bossbar;
     public static int trackingstickuses;
     public static int playersfortrackingstick;
@@ -38,6 +36,11 @@ public class Config {
     public static List<String> bonusBlockTypes;
     public static boolean hideNametags;
     public static boolean savePreviousLocation;
+
+    // Mobs
+    public static boolean MOBS_SPAWN_ENABLED;
+    public static int MOBS_SPAWN_INTERVAL;
+    public static int MOBS_SPAWN_CAP_PER_PLAYER;
 
     //Team info
     public static boolean team_showTeamNames;
@@ -112,8 +115,6 @@ public class Config {
         debug = config.getBoolean("settings.debug");
         broadcastJoinMessages = config.getBoolean("settings.broadcast-join-messages");
         broadcastWinMessages = config.getBoolean("settings.broadcast-win-messages");
-        spawnmobs = config.getBoolean("settings.spawn-mobs");
-        spawnmobsinterval = config.getInt("settings.spawn-mobs-interval") * 20;
         bossbar = config.getBoolean("settings.bossbar-countdown");
         trackingstickuses = config.getInt("settings.trackingstick-uses");
         playersfortrackingstick = config.getInt("settings.players-for-trackingstick");
@@ -124,6 +125,11 @@ public class Config {
         hideNametags = config.getBoolean("settings.hide-nametags");
         savePreviousLocation = config.getBoolean("settings.save-previous-location");
         bonusBlockTypes = config.getStringList("settings.bonus-block-types");
+
+        // Mobs
+        MOBS_SPAWN_ENABLED = config.getBoolean("mob-spawning.enabled");
+        MOBS_SPAWN_INTERVAL = config.getInt("mob-spawning.interval") * 20;
+        MOBS_SPAWN_CAP_PER_PLAYER = config.getInt("mob-spawning.cap-per-player");
 
         // Team
         team_maxTeamSize = config.getInt("team.max-team-size");

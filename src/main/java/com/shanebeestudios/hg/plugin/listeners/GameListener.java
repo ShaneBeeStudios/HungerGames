@@ -8,6 +8,7 @@ import com.shanebeestudios.hg.data.Leaderboard;
 import com.shanebeestudios.hg.data.PlayerData;
 import com.shanebeestudios.hg.events.ChestOpenEvent;
 import com.shanebeestudios.hg.events.PlayerDeathGameEvent;
+import com.shanebeestudios.hg.game.Bound;
 import com.shanebeestudios.hg.game.Game;
 import com.shanebeestudios.hg.game.GameArenaData;
 import com.shanebeestudios.hg.game.GameBlockData;
@@ -53,6 +54,7 @@ import org.bukkit.event.entity.EntityDamageEvent;
 import org.bukkit.event.entity.EntityDamageEvent.DamageCause;
 import org.bukkit.event.entity.EntityExplodeEvent;
 import org.bukkit.event.entity.EntityPickupItemEvent;
+import org.bukkit.event.entity.EntityRemoveEvent;
 import org.bukkit.event.entity.EntityShootBowEvent;
 import org.bukkit.event.entity.EntitySpawnEvent;
 import org.bukkit.event.entity.EntityTargetEvent;
@@ -706,8 +708,8 @@ public class GameListener implements Listener {
                         }
                     }
                 }
-                entity.setPersistent(false);
-                game.getGameArenaData().getBound().addEntity(entity);
+                Bound bound = game.getGameArenaData().getBound();
+                if (!bound.hasEntity(entity)) bound.addEntity(entity);
             }
         }
     }
@@ -777,6 +779,16 @@ public class GameListener implements Listener {
                 }
             }
         }
+    }
+
+    @EventHandler
+    private void onEntityRemoved(EntityRemoveEvent event) {
+        Entity entity = event.getEntity();
+        Game game = this.gameManager.getGame(entity.getLocation());
+        if (game == null) return;
+
+        Bound bound = game.getGameArenaData().getBound();
+        bound.removeEntity(entity);
     }
 
 }

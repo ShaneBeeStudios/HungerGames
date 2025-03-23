@@ -1,11 +1,13 @@
 package com.shanebeestudios.hg.game;
 
+import com.shanebeestudios.hg.HungerGames;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.World;
 import org.bukkit.block.Block;
 import org.bukkit.entity.Entity;
+import org.bukkit.metadata.FixedMetadataValue;
 import org.bukkit.util.BoundingBox;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -19,6 +21,8 @@ import java.util.Random;
  */
 @SuppressWarnings({"WeakerAccess", "unused"})
 public class Bound {
+
+    private static final FixedMetadataValue SPAWN_KEY = new FixedMetadataValue(HungerGames.getPlugin(), true);
 
     private final BoundingBox boundingBox;
     private final String world;
@@ -72,13 +76,33 @@ public class Bound {
         this.entities.clear();
     }
 
+    /** Remove an entity from this bound
+     * @param entity Entity to remove
+     */
+    public void removeEntity(Entity entity) {
+        this.entities.remove(entity);
+    }
+
     /**
      * Add an entity to the entity list
      *
      * @param entity The entity to add
      */
-    public void addEntity(Entity entity) {
+    public void addEntity(@NotNull Entity entity) {
+        if (this.entities.contains(entity)) return;
+        entity.setPersistent(false);
+        entity.setMetadata("hunger-games-spawned", SPAWN_KEY);
         this.entities.add(entity);
+    }
+
+    /**
+     * Check if this bound already contains an entity
+     *
+     * @param entity Entity to check
+     * @return True if entity is already in this bound
+     */
+    public boolean hasEntity(Entity entity) {
+        return this.entities.contains(entity);
     }
 
     /**
@@ -88,6 +112,15 @@ public class Bound {
      */
     public List<Entity> getEntities() {
         return this.entities;
+    }
+
+    /**
+     * Get amount of entities already in this bound
+     *
+     * @return Entities in this bound
+     */
+    public int getEntityCount() {
+        return this.entities.size();
     }
 
     /**

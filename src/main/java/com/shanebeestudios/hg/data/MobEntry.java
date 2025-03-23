@@ -168,15 +168,15 @@ public class MobEntry {
      * Spawn a new mob from this mob entry
      *
      * @param location Location to spawn the mob at
+     * @return The entity that was spawned
      */
-    public void spawn(Location location) {
-        assert location.getWorld() != null;
+    public @Nullable Entity spawn(@NotNull Location location) {
         if (!isMythic()) {
             Class<? extends Entity> entityClass = this.type.getEntityClass();
             if (entityClass == null) {
-                return;
+                return null;
             }
-            location.getWorld().spawn(location, entityClass, entity -> {
+            return location.getWorld().spawn(location, entityClass, entity -> {
                 if (this.name != null) {
                     entity.customName(this.name);
                     entity.setCustomNameVisible(true);
@@ -209,8 +209,10 @@ public class MobEntry {
                 if (this.deathMessage != null) {
                     activeMob.getEntity().getBukkitEntity().setMetadata("death-message", new FixedMetadataValue(HungerGames.getPlugin(), deathMessage));
                 }
+                return activeMob.getEntity().getBukkitEntity();
             }
         }
+        return null;
     }
 
     /**

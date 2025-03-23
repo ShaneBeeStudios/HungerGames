@@ -4,9 +4,9 @@ import com.google.common.collect.ImmutableList;
 import com.shanebeestudios.hg.HungerGames;
 import com.shanebeestudios.hg.api.parsers.ItemParser;
 import com.shanebeestudios.hg.api.registry.Registries;
+import com.shanebeestudios.hg.api.util.Util;
 import com.shanebeestudios.hg.data.MobEntry;
 import com.shanebeestudios.hg.game.Game;
-import com.shanebeestudios.hg.api.util.Util;
 import org.bukkit.NamespacedKey;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.file.FileConfiguration;
@@ -20,6 +20,7 @@ import java.util.Arrays;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
+import java.util.Random;
 
 /**
  * Manager for mob spawning in games
@@ -28,12 +29,13 @@ import java.util.Map;
 @SuppressWarnings("unused")
 public class MobManager {
 
+    private final Random random = new Random();
     private final List<MobEntry> dayMobs = new ArrayList<>();
     private final List<MobEntry> nightMobs = new ArrayList<>();
-    private final FileConfiguration config;
+    private final FileConfiguration mobsConfig;
 
     public MobManager(Game game) {
-        this.config = HungerGames.getPlugin().getMobConfig().getMobsConfig();
+        this.mobsConfig = HungerGames.getPlugin().getMobConfig().getMobsConfig();
         loadMobs(game.getGameArenaData().getName());
     }
 
@@ -42,10 +44,10 @@ public class MobManager {
         for (String time : Arrays.asList("day", "night")) {
             String mobTimeKey = "mobs." + time + ".";
             String sectionName = gameName;
-            if (this.config.getConfigurationSection(mobTimeKey + gameName) == null) {
+            if (this.mobsConfig.getConfigurationSection(mobTimeKey + gameName) == null) {
                 sectionName = "default";
             }
-            ConfigurationSection gameSection = config.getConfigurationSection(mobTimeKey + sectionName);
+            ConfigurationSection gameSection = mobsConfig.getConfigurationSection(mobTimeKey + sectionName);
             if (gameSection == null) {
                 continue;
             }
@@ -135,6 +137,15 @@ public class MobManager {
     }
 
     /**
+     * Get a random day mob
+     *
+     * @return Random day mob
+     */
+    public MobEntry getRandomDayMob() {
+        return this.dayMobs.get(this.random.nextInt(this.dayMobs.size()));
+    }
+
+    /**
      * Add a new mob entry to the day mobs
      *
      * @param mobEntry Mob entry to add
@@ -150,6 +161,15 @@ public class MobManager {
      */
     public List<MobEntry> getNightMobs() {
         return ImmutableList.copyOf(this.nightMobs);
+    }
+
+    /**
+     * Get a random night mob
+     *
+     * @return Random night mob
+     */
+    public MobEntry getRandomNightMob() {
+        return this.nightMobs.get(this.random.nextInt(this.nightMobs.size()));
     }
 
     /**
