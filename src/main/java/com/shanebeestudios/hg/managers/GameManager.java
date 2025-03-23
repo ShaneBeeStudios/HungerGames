@@ -26,6 +26,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.Random;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 /**
  * General manager for games
@@ -42,8 +43,22 @@ public class GameManager {
         this.lang = plugin.getLang();
     }
 
+    /**
+     * Get all games
+     *
+     * @return All games
+     */
     public ImmutableList<Game> getGames() {
         return ImmutableList.copyOf(this.games.values());
+    }
+
+    /**
+     * Get names of all games
+     *
+     * @return Names of all games
+     */
+    public List<String> getGameNames() {
+        return this.games.keySet().stream().sorted().collect(Collectors.toList());
     }
 
     /**

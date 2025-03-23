@@ -8,6 +8,7 @@ import dev.jorel.commandapi.arguments.CustomArgument;
 import dev.jorel.commandapi.arguments.StringArgument;
 
 import java.util.Locale;
+import java.util.concurrent.CompletableFuture;
 
 public abstract class CustomArg {
 
@@ -18,7 +19,8 @@ public abstract class CustomArg {
         public Argument<?> get(String name) {
             return new CustomArgument<>(new StringArgument(name), info ->
                 GAME_MANAGER.getGame(info.input().toLowerCase(Locale.ROOT)))
-                .includeSuggestions(ArgumentSuggestions.strings(GAME_MANAGER.getGames().stream().map(game -> game.getGameArenaData().getName()).toList()));
+                .includeSuggestions(ArgumentSuggestions.stringCollectionAsync(info ->
+                    CompletableFuture.supplyAsync(GAME_MANAGER::getGameNames)));
         }
     };
 
