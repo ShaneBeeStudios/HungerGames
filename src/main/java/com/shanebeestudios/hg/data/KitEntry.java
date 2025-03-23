@@ -4,7 +4,6 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-import com.shanebeestudios.hg.HungerGames;
 import com.shanebeestudios.hg.util.Util;
 
 import org.bukkit.entity.Player;
@@ -17,11 +16,11 @@ import org.bukkit.potion.PotionEffect;
 @SuppressWarnings("unused")
 public class KitEntry {
 
-	private ItemStack helm = null;
-	private String perm = null;
+    private String perm = null;
+	private ItemStack helmet = null;
+    private ItemStack chestplate = null;
+    private ItemStack leggings = null;
 	private ItemStack boots = null;
-	private ItemStack chestplate = null;
-	private ItemStack leggings = null;
 	private ItemStack[] inventoryContents = null;
 	private List<PotionEffect> potions = null;
 
@@ -42,7 +41,7 @@ public class KitEntry {
 	public KitEntry(ItemStack[] ic, ItemStack helmet, ItemStack boots, ItemStack chestplate, ItemStack leggings,
 					String permission, List<PotionEffect> potions) {
 		this.inventoryContents = ic;
-		this.helm = helmet;
+		this.helmet = helmet;
 		this.boots = boots;
 		this.chestplate = chestplate;
 		this.leggings = leggings;
@@ -62,14 +61,14 @@ public class KitEntry {
 	 * @param helmet The helmet
 	 */
 	public void setHelmet(ItemStack helmet) {
-		this.helm = helmet;
+		this.helmet = helmet;
 	}
 
 	/** Get the helmet for this kit entry
 	 * @return The helmet
 	 */
 	public ItemStack getHelmet() {
-		return this.helm;
+		return this.helmet;
 	}
 
 	/** Set the chestplate for this kit entry
@@ -168,31 +167,29 @@ public class KitEntry {
 	 */
 	public void setInventoryContent(Player player) {
 		Util.clearInv(player);
-		player.getInventory().setContents(inventoryContents);
-		player.getInventory().setHelmet(helm);
-		player.getInventory().setChestplate(chestplate);
-		player.getInventory().setLeggings(leggings);
-		player.getInventory().setBoots(boots);
+		player.getInventory().setContents(this.inventoryContents);
+		player.getInventory().setHelmet(this.helmet);
+		player.getInventory().setChestplate(this.chestplate);
+		player.getInventory().setLeggings(this.leggings);
+		player.getInventory().setBoots(this.boots);
 
 		for (PotionEffect effect : player.getActivePotionEffects()) {
 			player.removePotionEffect(effect.getType());
 		}
-		player.addPotionEffects(potions);
-		HungerGames.getPlugin().getPlayerManager().getPlayerData(player.getUniqueId()).getGame().getGamePlayerData().freeze(player);
+		player.addPotionEffects(this.potions);
 		player.updateInventory();
 	}
 
     @Override
     public String toString() {
         return "KitEntry{" +
-                "helm=" + helm +
-                ", perm='" + perm + '\'' +
-                ", boots=" + boots +
-                ", chestplate=" + chestplate +
-                ", leggings=" + leggings +
-                ", inventoryContents=" + Arrays.toString(inventoryContents) +
-                ", potions=" + potions +
-                '}';
+            "perm='" + perm + '\'' +
+            ", helmet=" + helmet +
+            ", chestplate=" + chestplate +
+            ", leggings=" + leggings +
+            ", boots=" + boots +
+            ", inventoryContents=" + Arrays.toString(inventoryContents) +
+            ", potions=" + potions +
+            '}';
     }
-
 }

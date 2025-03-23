@@ -58,7 +58,7 @@ import com.shanebeestudios.hg.game.GameBlockData;
 import com.shanebeestudios.hg.game.GameCommandData.CommandType;
 import com.shanebeestudios.hg.game.GamePlayerData;
 import com.shanebeestudios.hg.managers.KillManager;
-import com.shanebeestudios.hg.managers.Manager;
+import com.shanebeestudios.hg.managers.GameManager;
 import com.shanebeestudios.hg.managers.PlayerManager;
 import com.shanebeestudios.hg.util.BlockUtils;
 import com.shanebeestudios.hg.util.Util;
@@ -75,14 +75,14 @@ public class GameListener implements Listener {
 	private final String tsn = ChatColor.GOLD + "TrackingStick " + ChatColor.GREEN + "Uses: ";
 	private final ItemStack trackingStick;
     private final KillManager killManager;
-    private final Manager gameManager;
+    private final GameManager gameManager;
     private final PlayerManager playerManager;
     private final Leaderboard leaderboard;
 
 	public GameListener(HungerGames plugin) {
 		this.plugin = plugin;
 		this.lang = plugin.getLang();
-		this.gameManager = plugin.getManager();
+		this.gameManager = plugin.getGameManager();
 		this.playerManager = plugin.getPlayerManager();
 		this.leaderboard = plugin.getLeaderboard();
 		ItemStack it = new ItemStack(Material.STICK, 1);
@@ -367,7 +367,7 @@ public class GameListener implements Listener {
 		Game game = event.getGame();
 		GameBlockData gameBlockData = game.getGameBlockData();
 		if (!gameBlockData.isLoggedChest(block.getLocation())) {
-			HungerGames.getPlugin().getManager().fillChests(block, game, event.isBonus());
+			HungerGames.getPlugin().getGameManager().fillChests(block, game, event.isBonus());
 			gameBlockData.addGameChest(block.getLocation());
 		}
 	}
@@ -433,7 +433,7 @@ public class GameListener implements Listener {
 					} else {
 						if (player.getInventory().getItemInMainHand().getType() == Material.AIR) {
 						    // Process this after event has finished running to prevent double click issues
-                            Bukkit.getScheduler().scheduleSyncDelayedTask(plugin, () -> game.getGamePlayerData().join(player), 2);
+                            Bukkit.getScheduler().scheduleSyncDelayedTask(plugin, () -> game.joinGame(player), 2);
 						} else {
 							Util.scm(player, lang.listener_sign_click_hand);
 						}
@@ -477,7 +477,7 @@ public class GameListener implements Listener {
 				}
 			} else {
 				if (player.hasPermission("hg.create")) {
-				    Game game = plugin.getManager().getGame(block.getLocation());
+				    Game game = plugin.getGameManager().getGame(block.getLocation());
 				    Status status = game.getGameArenaData().getStatus();
 				    switch (status) {
                         case BEGINNING:
@@ -558,7 +558,7 @@ public class GameListener implements Listener {
 	    final boolean WATER = event.getBucket() == Material.WATER_BUCKET && (Config.blocks.contains("WATER") || Config.blocks.contains("ALL"));
 	    final boolean LAVA = event.getBucket() == Material.LAVA_BUCKET && (Config.blocks.contains("LAVA") || Config.blocks.contains("ALL"));
 
-        if (plugin.getManager().isInRegion(block.getLocation())) {
+        if (plugin.getGameManager().isInRegion(block.getLocation())) {
             if (Config.breakblocks && playerManager.hasPlayerData(player)) {
                 Game game = playerManager.getPlayerData(player).getGame();
                 GameBlockData gameBlockData = game.getGameBlockData();
@@ -769,7 +769,7 @@ public class GameListener implements Listener {
 	private void onTeleportIntoArena(PlayerTeleportEvent event) {
 		Player player = event.getPlayer();
 		Location location = event.getTo();
-		for (Game game : plugin.getGames()) {
+		for (Game game : this.plugin.getGameManager().getGames()) {
 			GameArenaData gameArenaData = game.getGameArenaData();
 			if (gameArenaData.isInRegion(location) && gameArenaData.getStatus() == Status.RUNNING) {
 				if (event.getCause() == PlayerTeleportEvent.TeleportCause.ENDER_PEARL && !game.getGamePlayerData().getPlayers().contains(player.getUniqueId()) && !game.getGamePlayerData().getSpectators().contains(player.getUniqueId())) {

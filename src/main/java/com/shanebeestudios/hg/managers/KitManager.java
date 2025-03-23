@@ -38,7 +38,7 @@ public class KitManager {
 	 */
 	public String getKitListString() {
 		StringBuilder kits = new StringBuilder();
-		if (kititems.size() > 0) {
+		if (!kititems.isEmpty()) {
             for (String s : kititems.keySet()) {
                 kits.append(", ").append(s);
             }

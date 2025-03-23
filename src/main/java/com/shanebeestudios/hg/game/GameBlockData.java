@@ -222,6 +222,9 @@ public class GameBlockData extends Data {
             sign2.setLine(1, Util.getColString(game.gameArenaData.status.getName()));
             sign3.setLine(0, Util.getColString(lang.lobby_sign_3_1));
             sign3.setLine(1, Util.getColString("&l" + 0 + "/" + game.gameArenaData.maxPlayers));
+            sign1.setWaxed(true);
+            sign2.setWaxed(true);
+            sign3.setWaxed(true);
             sign1.update(true);
             sign2.update(true);
             sign3.update(true);

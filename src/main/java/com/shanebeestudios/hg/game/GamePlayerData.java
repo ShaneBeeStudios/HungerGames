@@ -1,26 +1,28 @@
 package com.shanebeestudios.hg.game;
 
-import org.bukkit.Bukkit;
-import org.bukkit.GameMode;
-import org.bukkit.Location;
-import org.bukkit.Material;
-import org.bukkit.Sound;
-import org.bukkit.block.BlockFace;
-import org.bukkit.entity.Player;
-import org.bukkit.plugin.IllegalPluginAccessException;
-import org.bukkit.potion.PotionEffect;
-import org.bukkit.potion.PotionEffectType;
-import org.jetbrains.annotations.Nullable;
 import com.shanebeestudios.hg.Status;
 import com.shanebeestudios.hg.data.Config;
 import com.shanebeestudios.hg.data.PlayerData;
-import com.shanebeestudios.hg.events.PlayerJoinGameEvent;
 import com.shanebeestudios.hg.events.PlayerLeaveGameEvent;
 import com.shanebeestudios.hg.game.GameCommandData.CommandType;
 import com.shanebeestudios.hg.gui.SpectatorGUI;
 import com.shanebeestudios.hg.managers.PlayerManager;
 import com.shanebeestudios.hg.util.Util;
 import com.shanebeestudios.hg.util.Vault;
+import org.bukkit.Bukkit;
+import org.bukkit.GameMode;
+import org.bukkit.Location;
+import org.bukkit.Material;
+import org.bukkit.NamespacedKey;
+import org.bukkit.Sound;
+import org.bukkit.attribute.Attribute;
+import org.bukkit.attribute.AttributeInstance;
+import org.bukkit.attribute.AttributeModifier;
+import org.bukkit.attribute.AttributeModifier.Operation;
+import org.bukkit.block.BlockFace;
+import org.bukkit.entity.Player;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -33,6 +35,11 @@ import java.util.UUID;
  * Data class for holding a {@link Game Game's} players
  */
 public class GamePlayerData extends Data {
+
+    @SuppressWarnings("DataFlowIssue")
+    private static final @NotNull NamespacedKey JUMP_KEY = NamespacedKey.fromString("hg:freeze_jump");
+    @SuppressWarnings("DataFlowIssue")
+    private static final @NotNull NamespacedKey MOVE_KEY = NamespacedKey.fromString("hg:freeze_move");
 
     private final PlayerManager playerManager;
     private final SpectatorGUI spectatorGUI;
@@ -62,12 +69,12 @@ public class GamePlayerData extends Data {
      * @return UUID list of all players in game
      */
     public List<UUID> getPlayers() {
-        return players;
+        return this.players;
     }
 
     void clearPlayers() {
-        players.clear();
-        allPlayers.clear();
+        this.players.clear();
+        this.allPlayers.clear();
     }
 
     /**
@@ -111,24 +118,19 @@ public class GamePlayerData extends Data {
      * Respawn all players in the game back to spawn points
      */
     public void respawnAll() {
-        for (UUID u : players) {
-            Player p = Bukkit.getPlayer(u);
-            if (p != null)
-                p.teleport(pickSpawn());
+        for (UUID uuid : this.players) {
+            Player player = Bukkit.getPlayer(uuid);
+            if (player != null)
+                player.teleport(pickSpawn());
         }
     }
 
     void heal(Player player) {
-        for (PotionEffect ef : player.getActivePotionEffects()) {
-            player.removePotionEffect(ef.getType());
-        }
+        player.clearActivePotionEffects();
         player.closeInventory();
         player.setHealth(20);
         player.setFoodLevel(20);
-        try {
-            Bukkit.getScheduler().scheduleSyncDelayedTask(plugin, () -> player.setFireTicks(0), 1);
-        } catch (IllegalPluginAccessException ignore) {
-        }
+        Bukkit.getScheduler().scheduleSyncDelayedTask(this.plugin, () -> player.setFireTicks(0), 1);
     }
 
     /**
@@ -138,9 +140,19 @@ public class GamePlayerData extends Data {
      */
     public void freeze(Player player) {
         player.setGameMode(GameMode.SURVIVAL);
-        player.addPotionEffect(new PotionEffect(PotionEffectType.JUMP_BOOST, 23423525, -10, false, false));
-        player.setWalkSpeed(0.0001F);
-        player.setFoodLevel(1);
+
+        // Freeze movement
+        AttributeInstance movementSpeed = player.getAttribute(Attribute.MOVEMENT_SPEED);
+        assert movementSpeed != null;
+        AttributeModifier moveMod = new AttributeModifier(MOVE_KEY, -movementSpeed.getValue(), Operation.ADD_NUMBER);
+        movementSpeed.addTransientModifier(moveMod);
+
+        // Freeze jumping
+        AttributeInstance jumpStrength = player.getAttribute(Attribute.JUMP_STRENGTH);
+        assert jumpStrength != null;
+        AttributeModifier jumpMod = new AttributeModifier(JUMP_KEY, -jumpStrength.getValue(), Operation.ADD_NUMBER);
+        jumpStrength.addTransientModifier(jumpMod);
+
         player.setAllowFlight(false);
         player.setFlying(false);
         player.setInvulnerable(true);
@@ -151,9 +163,10 @@ public class GamePlayerData extends Data {
      *
      * @param player Player to unfreeze
      */
+    @SuppressWarnings("DataFlowIssue")
     public void unFreeze(Player player) {
-        player.removePotionEffect(PotionEffectType.JUMP_BOOST);
-        player.setWalkSpeed(0.2F);
+        player.getAttribute(Attribute.MOVEMENT_SPEED).removeModifier(MOVE_KEY);
+        player.getAttribute(Attribute.JUMP_STRENGTH).removeModifier(JUMP_KEY);
     }
 
     /**
@@ -163,12 +176,12 @@ public class GamePlayerData extends Data {
      */
     public void msgAll(String message) {
         List<UUID> allPlayers = new ArrayList<>();
-        allPlayers.addAll(players);
-        allPlayers.addAll(spectators);
-        for (UUID u : allPlayers) {
-            Player p = Bukkit.getPlayer(u);
-            if (p != null)
-                Util.scm(p, message);
+        allPlayers.addAll(this.players);
+        allPlayers.addAll(this.spectators);
+        for (UUID uuid : allPlayers) {
+            Player player = Bukkit.getPlayer(uuid);
+            if (player != null)
+                Util.scm(player, message);
         }
     }
 
@@ -189,8 +202,8 @@ public class GamePlayerData extends Data {
         }
     }
 
-    Location pickSpawn() {
-        GameArenaData gameArenaData = game.getGameArenaData();
+    private Location pickSpawn() {
+        GameArenaData gameArenaData = this.game.getGameArenaData();
         double spawn = getRandomIntegerBetweenRange(gameArenaData.maxPlayers - 1);
         if (containsPlayer(gameArenaData.spawns.get(((int) spawn)))) {
             Collections.shuffle(gameArenaData.spawns);
@@ -237,95 +250,58 @@ public class GamePlayerData extends Data {
         this.kills.put(player, this.kills.get(player) + 1);
     }
 
-    // TODO Game methods
-
-    /**
-     * Join a player to the game
-     *
-     * @param player Player to join the game
-     */
-    public void join(Player player) {
-        join(player, false);
-    }
-
-    /**
-     * Join a player to the game
-     *
-     * @param player  Player to join the game
-     * @param command Whether joined using by using a command
-     */
-    public void join(Player player, boolean command) {
-        GameArenaData gameArenaData = game.getGameArenaData();
+    public void teleportIntoArena(Player player, boolean savePreviousLocation) {
+        GameArenaData gameArenaData = this.game.getGameArenaData();
         Status status = gameArenaData.getStatus();
-        if (status != Status.WAITING && status != Status.STOPPED && status != Status.COUNTDOWN && status != Status.READY) {
-            Util.scm(player, lang.arena_not_ready);
-            if ((status == Status.RUNNING || status == Status.BEGINNING) && Config.spectateEnabled) {
-                Util.scm(player, lang.arena_spectate.replace("<arena>", game.gameArenaData.getName()));
+
+        UUID uuid = player.getUniqueId();
+        this.players.add(uuid);
+        this.allPlayers.add(uuid);
+
+        Location loc = pickSpawn();
+        if (loc.getBlock().getRelative(BlockFace.DOWN).getType() == Material.AIR) {
+            while (loc.getBlock().getRelative(BlockFace.DOWN).getType() == Material.AIR) {
+                loc.setY(loc.getY() - 1);
             }
-        } else if (gameArenaData.maxPlayers <= players.size()) {
-            Util.scm(player, "&c" + gameArenaData.getName() + " " + lang.game_full);
-        } else if (!players.contains(player.getUniqueId())) {
-            if (!vaultCheck(player)) {
-                return;
-            }
-            // Call PlayerJoinGameEvent
-            PlayerJoinGameEvent event = new PlayerJoinGameEvent(game, player);
-            Bukkit.getPluginManager().callEvent(event);
-            // If cancelled, stop the player from joining the game
-            if (event.isCancelled()) return;
-
-            if (player.isInsideVehicle()) {
-                player.leaveVehicle();
-            }
-
-            UUID uuid = player.getUniqueId();
-            players.add(uuid);
-            allPlayers.add(uuid);
-
-            Location loc = pickSpawn();
-            if (loc.getBlock().getRelative(BlockFace.DOWN).getType() == Material.AIR) {
-                while (loc.getBlock().getRelative(BlockFace.DOWN).getType() == Material.AIR) {
-                    loc.setY(loc.getY() - 1);
-                }
-            }
-            Location previousLocation = player.getLocation();
-
-            // Teleport async into the arena so it loads a little more smoothly
-            player.teleportAsync(loc).thenAccept(a -> {
-
-                PlayerData playerData = new PlayerData(player, game);
-                if (command && Config.savePreviousLocation) {
-                    playerData.setPreviousLocation(previousLocation);
-                }
-                playerManager.addPlayerData(playerData);
-                gameArenaData.board.setBoard(player);
-
-                heal(player);
-                freeze(player);
-                kills.put(player, 0);
-
-                if (players.size() == 1 && status == Status.READY)
-                    gameArenaData.setStatus(Status.WAITING);
-                if (players.size() >= game.gameArenaData.minPlayers && (status == Status.WAITING || status == Status.READY)) {
-                    game.startPreGame();
-                } else if (status == Status.WAITING) {
-                    String broadcast = lang.player_joined_game
-                            .replace("<arena>", gameArenaData.getName())
-                            .replace("<player>", player.getName()) + (gameArenaData.minPlayers - players.size() <= 0 ? "!" : ":" +
-                            lang.players_to_start.replace("<amount>", String.valueOf((gameArenaData.minPlayers - players.size()))));
-                    if (Config.broadcastJoinMessages) {
-                        Util.broadcast(broadcast);
-                    } else {
-                        msgAll(broadcast);
-                    }
-                }
-                kitHelp(player);
-
-                game.gameBlockData.updateLobbyBlock();
-                game.gameArenaData.updateBoards();
-                game.gameCommandData.runCommands(CommandType.JOIN, player);
-            });
         }
+        Location previousLocation = player.getLocation();
+
+        // Teleport async into the arena so it loads a little more smoothly
+        player.teleportAsync(loc).thenAccept(a -> {
+
+            PlayerData playerData = new PlayerData(player, this.game);
+            if (savePreviousLocation && Config.savePreviousLocation) {
+                playerData.setPreviousLocation(previousLocation);
+            }
+            this.playerManager.addPlayerData(playerData);
+            gameArenaData.board.setBoard(player);
+
+            heal(player);
+            freeze(player);
+            this.kills.put(player, 0);
+
+            int playerSize = this.players.size();
+            if (playerSize == 1 && status == Status.READY)
+                gameArenaData.setStatus(Status.WAITING);
+            if (playerSize >= gameArenaData.minPlayers && (status == Status.WAITING || status == Status.READY)) {
+                this.game.startPreGame();
+            } else if (status == Status.WAITING) {
+                String broadcast = this.lang.player_joined_game
+                    .replace("<arena>", gameArenaData.getName())
+                    .replace("<player>", player.getName()) + (gameArenaData.minPlayers - playerSize <= 0 ? "!" : ":" +
+                    this.lang.players_to_start.replace("<amount>", String.valueOf((gameArenaData.minPlayers - playerSize))));
+                if (Config.broadcastJoinMessages) {
+                    Util.broadcast(broadcast);
+                } else {
+                    msgAll(broadcast);
+                }
+            }
+            kitHelp(player);
+
+            this.game.gameBlockData.updateLobbyBlock();
+            gameArenaData.updateBoards();
+            this.game.gameCommandData.runCommands(CommandType.JOIN, player);
+        });
     }
 
     /**
@@ -334,7 +310,7 @@ public class GamePlayerData extends Data {
      * @param player Player to leave the game
      * @param death  Whether the player has died or not (Generally should be false)
      */
-    public void leave(Player player, Boolean death) {
+    public void leave(Player player, boolean death) {
         Bukkit.getPluginManager().callEvent(new PlayerLeaveGameEvent(game, player, death));
         UUID uuid = player.getUniqueId();
         players.remove(uuid);
@@ -364,21 +340,22 @@ public class GamePlayerData extends Data {
     }
 
     void exit(Player player, @Nullable Location exitLocation) {
+        unFreeze(player);
         GameArenaData gameArenaData = game.getGameArenaData();
         player.setInvulnerable(false);
         if (gameArenaData.getStatus() == Status.RUNNING)
-            game.getGameBarData().removePlayer(player);
+            this.game.getGameBarData().removePlayer(player);
         Location loc;
         if (exitLocation != null) {
             loc = exitLocation;
         } else if (gameArenaData.exit != null && gameArenaData.exit.getWorld() != null) {
             loc = gameArenaData.exit;
         } else {
-            Location worldSpawn = Bukkit.getWorlds().get(0).getSpawnLocation();
-            Location bedLocation = player.getBedSpawnLocation();
-            loc = bedLocation != null ? bedLocation : worldSpawn;
+            Location worldSpawn = Bukkit.getWorlds().getFirst().getSpawnLocation();
+            Location respawnLocation = player.getRespawnLocation();
+            loc = respawnLocation != null ? respawnLocation : worldSpawn;
         }
-        PlayerData playerData = playerManager.getData(player);
+        PlayerData playerData = this.playerManager.getData(player);
         if (playerData == null || playerData.isOnline()) {
             player.teleportAsync(loc);
         } else {

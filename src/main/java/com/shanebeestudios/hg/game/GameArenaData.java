@@ -2,6 +2,7 @@ package com.shanebeestudios.hg.game;
 
 import org.bukkit.Location;
 import com.shanebeestudios.hg.Status;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -20,6 +21,7 @@ public class GameArenaData extends Data {
     int cost;
     final List<Location> spawns;
     Location exit;
+    Location persistentExit;
     Status status;
     int chestRefillTime = 0;
     int chestRefillRepeat = 0;
@@ -82,6 +84,10 @@ public class GameArenaData extends Data {
      */
     public int getRoamTime() {
         return this.roamTime;
+    }
+
+    public int getTimer() {
+        return this.timer;
     }
 
     /**
@@ -168,13 +174,18 @@ public class GameArenaData extends Data {
         return this.exit;
     }
 
+    public @Nullable Location getPersistentExit() {
+        return this.persistentExit;
+    }
+
     /**
      * Set exit location for this game
      *
      * @param location Location where players will exit
      */
-    public void setExit(Location location) {
+    public void setExit(Location location, boolean persistent) {
         this.exit = location;
+        if (persistent) this.persistentExit = location;
     }
 
     /**

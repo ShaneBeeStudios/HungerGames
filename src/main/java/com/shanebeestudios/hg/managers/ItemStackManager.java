@@ -11,7 +11,6 @@ import org.bukkit.Bukkit;
 import org.bukkit.Color;
 import org.bukkit.DyeColor;
 import org.bukkit.Material;
-import org.bukkit.configuration.Configuration;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.enchantments.Enchantment;
@@ -63,42 +62,42 @@ public class ItemStackManager {
      * Set the kits for a game from a config
      *
      * @param gameName The game to set the kits for
-     * @param config   Config the kit is pulled from
+     * @param arenaSection   Config the kit is pulled from
      * @return New KitManager for a game
      */
-    public KitManager setGameKits(String gameName, Configuration config) {
-        String gamePath = "arenas." + gameName + ".";
+    public KitManager loadGameKits(String gameName, ConfigurationSection arenaSection) {
         KitManager kit = new KitManager();
-        if (config.getConfigurationSection(gamePath + "kits") == null) return null;
-        kitCreator(config, kit, gamePath);
+        if (arenaSection.getConfigurationSection("kits") == null) return null;
+
+        kitCreator(arenaSection, kit, null);
         Util.logMini("- Loaded custom kits for arena: <aqua>" + gameName);
         return kit;
     }
 
     @SuppressWarnings({"ConstantConditions", "unchecked"})
-    private void kitCreator(Configuration config, KitManager kit, @Nullable String gameName) {
+    private void kitCreator(ConfigurationSection config, KitManager kit, @Nullable String gameName) {
         if (gameName == null) gameName = "";
         if (config.getConfigurationSection(gameName + "kits") == null) return;
 
         for (String path : config.getConfigurationSection(gameName + "kits").getKeys(false)) {
-            ConfigurationSection section = config.getConfigurationSection(gameName + "kits." + path);
+            ConfigurationSection kitsSection = config.getConfigurationSection(gameName + "kits." + path);
 
             try {
                 Map<Integer, ItemStack> items = new HashMap<>();
-                loadItems(section.getMapList("items"), items);
+                loadItems(kitsSection.getMapList("items"), items);
 
-                ItemStack helmet = ItemParser.parseItem(section.getConfigurationSection("helmet"));
-                ItemStack chestplate = ItemParser.parseItem(section.getConfigurationSection("chestplate"));
-                ItemStack leggings = ItemParser.parseItem(section.getConfigurationSection("leggings"));
-                ItemStack boots = ItemParser.parseItem(section.getConfigurationSection("boots"));
+                ItemStack helmet = ItemParser.parseItem(kitsSection.getConfigurationSection("helmet"));
+                ItemStack chestplate = ItemParser.parseItem(kitsSection.getConfigurationSection("chestplate"));
+                ItemStack leggings = ItemParser.parseItem(kitsSection.getConfigurationSection("leggings"));
+                ItemStack boots = ItemParser.parseItem(kitsSection.getConfigurationSection("boots"));
 
                 List<PotionEffect> potionEffects = new ArrayList<>();
-                List<Map<?, ?>> mapList = section.getMapList("potion-effects");
+                List<Map<?, ?>> mapList = kitsSection.getMapList("potion-effects");
                 mapList.forEach(map -> potionEffects.add(ItemParser.parsePotionEffect((Map<String, Object>) map)));
 
                 String permission = null;
-                if (section.contains("permission") && !section.getString("permission").equalsIgnoreCase("none"))
-                    permission = section.getString("permission");
+                if (kitsSection.contains("permission") && !kitsSection.getString("permission").equalsIgnoreCase("none"))
+                    permission = kitsSection.getString("permission");
 
                 KitEntry kitEntry = new KitEntry(items.values().toArray(new ItemStack[0]), helmet, boots, chestplate, leggings, permission, potionEffects);
                 kit.addKit(path, kitEntry);

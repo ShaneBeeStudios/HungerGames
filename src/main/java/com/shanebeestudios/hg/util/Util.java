@@ -64,6 +64,18 @@ public class Util {
         CONSOLE.sendMessage(mini);
     }
 
+    public static void sendPrefixedMini(CommandSender sender, String format, Object... args) {
+        String s = String.format(format, args);
+        Component mini = getMini("<grey>[<bold><aqua>Hunger<dark_aqua>Games<grey></bold>] " + s);
+        sender.sendMessage(mini);
+    }
+
+    public static void sendMini(CommandSender sender, String format, Object... args) {
+        String s = String.format(format, args);
+        Component mini = getMini(s);
+        sender.sendMessage(mini);
+    }
+
     /**
      * Log a formatted message to console prefixed with the plugin's name
      *

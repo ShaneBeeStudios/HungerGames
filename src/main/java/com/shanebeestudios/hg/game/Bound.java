@@ -7,10 +7,11 @@ import org.bukkit.World;
 import org.bukkit.block.Block;
 import org.bukkit.entity.Entity;
 import org.bukkit.util.BoundingBox;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Objects;
 import java.util.Random;
 
 /**
@@ -19,145 +20,149 @@ import java.util.Random;
 @SuppressWarnings({"WeakerAccess", "unused"})
 public class Bound {
 
-	private int x;
-	private int y;
-	private int z;
-	private int x2;
-	private int y2;
-	private int z2;
-	private String world;
-	private List<Entity> entities;
+    private final BoundingBox boundingBox;
+    private final String world;
+    private final List<Entity> entities = new ArrayList<>();
 
-	/** Create a new bounding box between 2 sets of coordinates
-	 * @param world World this bound is in
-	 * @param x x coord of 1st corner of bound
-	 * @param y y coord of 1st corner of bound
-	 * @param z z coord of 1st corner of bound
-	 * @param x2 x coord of 2nd corner of bound
-	 * @param y2 y coord of 2nd corner of bound
-	 * @param z2 z coord of 2nd corner of bound
-	 */
-	public Bound(String world, int x, int y, int z, int x2, int y2, int z2) {
-		this.world = world;
-		this.x = Math.min(x,x2);
-		this.y = Math.min(y, y2);
-		this.z = Math.min(z, z2);
-		this.x2 = Math.max(x,x2);
-		this.y2 = Math.max(y, y2);
-		this.z2 = Math.max(z, z2);
-		this.entities = new ArrayList<>();
-	}
-
-    /** Create a new bounding box between 2 locations (must be in same world)
-     * @param location Location 1
-     * @param location2 Location 2
-     */
-    public Bound(Location location, Location location2) {
-        this(Objects.requireNonNull(location.getWorld()).getName(), ((int) location.getX()), ((int) location.getY()),
-                ((int) location.getZ()), ((int) location2.getX()), ((int) location2.getY()), ((int) location2.getZ()));
+    public static Bound createNew(@NotNull Block corner1, @NotNull Block corner2) {
+        BoundingBox boundingBox = BoundingBox.of(corner1, corner2);
+        return new Bound(corner1.getWorld().getName(), boundingBox);
     }
 
-	public Integer[] getRandomLocs() {
-		Random r = new Random();
-		return new Integer[] {r.nextInt(x2 - x + 1) + x, y2, r.nextInt(z2 - z + 1) + z};
-	}
+    public static Bound loadFromConfig(String world, BoundingBox boundingBox) {
+        return new Bound(world, boundingBox);
+    }
 
-	/** Check if a location is within the region of this bound
-	 * @param loc Location to check
-	 * @return True if location is within this bound
-	 */
-	public boolean isInRegion(Location loc) {
-		if (!Objects.requireNonNull(loc.getWorld()).getName().equals(world)) return false;
-		int cx = loc.getBlockX();
-		int cy = loc.getBlockY();
-		int cz = loc.getBlockZ();
-		return (cx >= x && cx <= x2) && (cy >= y && cy <= y2) && (cz >= z && cz <= z2);
-	}
+    /**
+     * Create a new bounding box between 2 sets of coordinates
+     *
+     * @param world       World this bound is in
+     * @param boundingBox BoundingBox for this bound
+     */
+    private Bound(String world, BoundingBox boundingBox) {
+        this.world = world;
+        this.boundingBox = boundingBox;
+    }
 
-	/**
-	 * Kill/Remove all entities in this bound
-	 */
-	public void removeEntities() {
-		entities.forEach(Entity::remove);
-		entities.clear();
-	}
+    public Integer[] getRandomLocs() {
+        Random r = new Random();
+        double minX = this.boundingBox.getMinX();
+        double minZ = this.boundingBox.getMinZ();
+        return new Integer[]{
+            (int) (r.nextInt((int) this.boundingBox.getWidthX()) + minX),
+            (int) this.boundingBox.getMaxY(),
+            (int) (r.nextInt((int) (this.boundingBox.getWidthZ())) + minZ)};
+    }
 
-	/** Add an entity to the entity list
-	 * @param entity The entity to add
-	 */
-	public void addEntity(Entity entity) {
-		this.entities.add(entity);
-	}
+    /**
+     * Check if a location is within the region of this bound
+     *
+     * @param loc Location to check
+     * @return True if location is within this bound
+     */
+    public boolean isInRegion(Location loc) {
+        return this.boundingBox.contains(loc.toVector());
+    }
 
-	/** Get a list of all entities in this bound
-	 * @return Entities in this bound
-	 */
-	public List<Entity> getEntities() {
-		return this.entities;
-	}
+    /**
+     * Kill/Remove all entities in this bound
+     */
+    public void removeEntities() {
+        this.entities.forEach(Entity::remove);
+        this.entities.clear();
+    }
 
-	/** Get location of all blocks of a type within a bound
-	 * @param type Material type to check
-	 * @return ArrayList of locations of all blocks of this type in this bound
-	 */
-	@SuppressWarnings("unused")
-	public ArrayList<Location> getBlocks(Material type) {
-		World w = Bukkit.getWorld(world);
-		ArrayList <Location> array = new ArrayList<>();
-		for (int x3 = x; x3 <= x2; x3++) {
-			for (int y3 = y; y3 <= y2; y3++) {
-				for (int z3 = z; z3 <= z2; z3++) {
-					assert w != null;
-					Block b = w.getBlockAt(x3, y3, z3);
-					if (b.getType() == type) {
-						array.add(b.getLocation());
-					}
-				}
-			}
-		}
-		return array;
-	}
+    /**
+     * Add an entity to the entity list
+     *
+     * @param entity The entity to add
+     */
+    public void addEntity(Entity entity) {
+        this.entities.add(entity);
+    }
 
-	/** Get the world of this bound
-	 * @return World of this bound
-	 */
-	public World getWorld() {
-		return Bukkit.getWorld(world);
-	}
+    /**
+     * Get a list of all entities in this bound
+     *
+     * @return Entities in this bound
+     */
+    public List<Entity> getEntities() {
+        return this.entities;
+    }
 
-	/** Get the greater corner of this bound
-	 * @return Location of greater corner
-	 */
-	public Location getGreaterCorner() {
-		return new Location(Bukkit.getWorld(world), x2, y2, z2);
-	}
+    /**
+     * Get location of all blocks of a type within a bound
+     *
+     * @param type Material type to check
+     * @return ArrayList of locations of all blocks of this type in this bound
+     */
+    @SuppressWarnings("unused")
+    public List<Location> getBlocks(@Nullable Material type) {
+        World world = Bukkit.getWorld(this.world);
+        assert world != null;
+        List<Location> blockList = new ArrayList<>();
 
-	/** Get the lesser corner of this bound
-	 * @return Location of lesser corner
-	 */
-	public Location getLesserCorner() {
-		return new Location(Bukkit.getWorld(world), x, y, z);
-	}
+        for (int x = (int) this.boundingBox.getMinX(); x < this.boundingBox.getMaxX() - 1; x++) {
+            for (int y = (int) this.boundingBox.getMinY(); y < this.boundingBox.getMaxY() - 1; y++) {
+                for (int z = (int) this.boundingBox.getMinZ(); z < this.boundingBox.getMaxZ() - 1; z++) {
 
-	/** Get the center location of this bound
-	 * @return The center location
-	 */
-	public Location getCenter() {
-		BoundingBox box = new BoundingBox(x, y, z, x2, y2, z2);
-		return new Location(this.getWorld(), box.getCenterX(), box.getCenterY(), box.getCenterZ());
-	}
+                    Block block = world.getBlockAt(x, y, z);
+                    if (type == null || block.getType() == type) {
+                        blockList.add(block.getLocation());
+                    }
+                }
+            }
+        }
+        return blockList;
+    }
+
+    /**
+     * Get the world of this bound
+     *
+     * @return World of this bound
+     */
+    public World getWorld() {
+        return Bukkit.getWorld(this.world);
+    }
+
+    public BoundingBox getBoundingBox() {
+        return this.boundingBox;
+    }
+
+    /**
+     * Get the greater corner of this bound
+     *
+     * @return Location of greater corner
+     */
+    public Location getGreaterCorner() {
+        return new Location(getWorld(), this.boundingBox.getMaxX(), this.boundingBox.getMaxY(), this.boundingBox.getMaxZ());
+    }
+
+    /**
+     * Get the lesser corner of this bound
+     *
+     * @return Location of lesser corner
+     */
+    public Location getLesserCorner() {
+        return new Location(getWorld(), this.boundingBox.getMinX(), this.boundingBox.getMinY(), this.boundingBox.getMinZ());
+    }
+
+    /**
+     * Get the center location of this bound
+     *
+     * @return The center location
+     */
+    public Location getCenter() {
+        return new Location(getWorld(), this.boundingBox.getCenterX(), this.boundingBox.getCenterY(), this.boundingBox.getCenterZ());
+    }
 
     @Override
     public String toString() {
         return "Bound{" +
-                "x=" + x +
-                ", y=" + y +
-                ", z=" + z +
-                ", x2=" + x2 +
-                ", y2=" + y2 +
-                ", z2=" + z2 +
-                ", world='" + world + '\'' +
-                '}';
+            "boundingBox=" + boundingBox +
+            ", world='" + world + '\'' +
+            ", entities=" + entities +
+            '}';
     }
 
 }

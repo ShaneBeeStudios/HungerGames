@@ -1,54 +1,110 @@
 package com.shanebeestudios.hg.data;
 
+import com.shanebeestudios.hg.HungerGames;
+import com.shanebeestudios.hg.util.Util;
 import org.bukkit.Location;
+import org.bukkit.block.Block;
+import org.bukkit.block.Sign;
+import org.bukkit.entity.Player;
 import org.bukkit.util.BoundingBox;
 
-@SuppressWarnings("BooleanMethodIsAlwaysInverted")
+import java.util.ArrayList;
+import java.util.List;
+
 public class PlayerSession {
 
-    private Location loc1;
-
-    private Location loc2;
-
-    public PlayerSession(Location l1, Location l2) {
-        setInfo(l1, l2);
+    private enum Stage {
+        CORNER_1,
+        CORNER_2,
+        SPAWN_LOCATIONS,
+        SIGN;
     }
 
-    public void setLoc1(Location loc1) {
-        this.loc1 = loc1;
+    private Stage stage = null;
+    private final String name;
+    private Block corner1;
+    private Block corner2;
+    private final int time;
+    private final int minPlayers;
+    private final int maxPlayers;
+    private final int cost;
+    private final List<Location> spawnLocations = new ArrayList<>();
+    private Sign signLocation;
+
+    public PlayerSession(String name, int time, int minPlayers, int maxPlayers, int cost) {
+        this.name = name;
+        this.time = time;
+        this.minPlayers = minPlayers;
+        this.maxPlayers = maxPlayers;
+        this.cost = cost;
     }
 
-    public void setLoc2(Location loc2) {
-        this.loc2 = loc2;
+    public void start(Player player) {
+        this.stage = Stage.CORNER_1;
+        Util.sendPrefixedMini(player, "Click your first corner");
     }
 
-    public Location getLoc1() {
-        return loc1;
+    public void click(Player player, Block block) {
+        if (this.stage == Stage.CORNER_1) {
+            this.corner1 = block;
+            this.stage = Stage.CORNER_2;
+            // TODO message set sign 2
+            Util.sendPrefixedMini(player, "First corner selected, now select second corner.");
+        } else if (this.stage == Stage.CORNER_2) {
+            this.corner2 = block;
+            if (isBigEnough()) {
+                this.stage = Stage.SPAWN_LOCATIONS;
+                // TODO message start spawn locations
+                Util.sendPrefixedMini(player, "Second corner selected, now start selecting spawn locations.");
+            } else {
+                // TODO message not big enough
+                Util.sendPrefixedMini(player, "Too small, arena must be at least 5x5x5, please re-select second corner.");
+            }
+        } else if (this.stage == Stage.SPAWN_LOCATIONS) {
+            if (this.spawnLocations.size() >= this.maxPlayers) {
+                this.stage = Stage.SIGN;
+                // TODO message
+                Util.sendPrefixedMini(player, "Congrats all locations set, now select your sign!");
+            } else {
+                double height = block.getBoundingBox().getHeight();
+                this.spawnLocations.add(block.getLocation().add(0.5, height, 0.5));
+                // TODO count/next location
+                if (this.spawnLocations.size() >= this.maxPlayers) {
+                    this.stage = Stage.SIGN;
+                    // TODO message
+                    Util.sendPrefixedMini(player, "Congrats all locations set, now select your sign!");
+                } else {
+                    int left = this.maxPlayers - this.spawnLocations.size();
+                    Util.sendPrefixedMini(player, "Selected %s, only %s more to go.", this.spawnLocations.size(), left);
+                }
+            }
+        } else if (this.stage == Stage.SIGN) {
+            // TODO handle sign
+            if (block.getState() instanceof Sign sign) {
+                this.signLocation = sign;
+                // TODO all done message
+                finalizeGame();
+            } else {
+                // TODO not a sign message
+                Util.sendPrefixedMini(player, "That's not a sign silly!");
+            }
+        }
     }
 
-    public Location getLoc2() {
-        return loc2;
-    }
-
-    public void setInfo(Location l1, Location l2) {
-        setLoc1(l1);
-        setLoc2(l2);
+    public void finalizeGame() {
+        HungerGames.getPlugin().getGameManager().createGame(this.name,
+            this.corner1, this.corner2, this.spawnLocations,
+            this.signLocation, this.time, this.minPlayers, this.maxPlayers, this.cost);
     }
 
     public boolean hasValidSelection() {
-        if (loc1 == null || loc2 == null) return false;
-        return true;
+        return this.corner1 != null && this.corner2 != null;
     }
 
     public boolean isBigEnough() {
-        if (loc1 == null || loc2 == null) return false;
-        BoundingBox boundingBox = new BoundingBox(loc1.getX(), loc1.getY(), loc1.getZ(), loc2.getX(), loc2.getY(), loc2.getZ());
+        if (this.corner1 == null || this.corner2 == null) return false;
+        BoundingBox boundingBox = BoundingBox.of(this.corner1, this.corner2);
         return boundingBox.getWidthX() > 5 && boundingBox.getWidthZ() > 5 && boundingBox.getHeight() > 5;
-    }
-
-    @Override
-    public String toString() {
-        return "PlayerSession{loc1=" + loc1 + ", loc2=" + loc2 + '}';
     }
 
 }

@@ -1,5 +1,10 @@
 package com.shanebeestudios.hg.listeners;
 
+import com.shanebeestudios.hg.HungerGames;
+import com.shanebeestudios.hg.data.Language;
+import com.shanebeestudios.hg.data.PlayerSession;
+import com.shanebeestudios.hg.game.Game;
+import com.shanebeestudios.hg.util.Util;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
@@ -9,11 +14,6 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.block.Action;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.EquipmentSlot;
-import com.shanebeestudios.hg.HungerGames;
-import com.shanebeestudios.hg.data.Language;
-import com.shanebeestudios.hg.data.PlayerSession;
-import com.shanebeestudios.hg.game.Game;
-import com.shanebeestudios.hg.util.Util;
 
 /**
  * Internal event listener
@@ -24,8 +24,8 @@ public class WandListener implements Listener {
     private final Language lang;
 
     public WandListener(HungerGames instance) {
-        plugin = instance;
-        lang = plugin.getLang();
+        this.plugin = instance;
+        this.lang = this.plugin.getLang();
     }
 
     @EventHandler
@@ -37,35 +37,21 @@ public class WandListener implements Listener {
 
         Location location = block.getLocation();
         if (!player.getInventory().getItemInMainHand().getType().equals(Material.BLAZE_ROD)) return;
-        PlayerSession session = plugin.getPlayerSessions().get(player.getUniqueId());
+
+        PlayerSession session = this.plugin.getSessionManager().getPlayerSession(player.getUniqueId());
 
         if (session != null && (action.equals(Action.RIGHT_CLICK_BLOCK) || action.equals(Action.LEFT_CLICK_BLOCK))) {
             if (event.getHand() == EquipmentSlot.OFF_HAND) return;
             event.setCancelled(true);
 
-            for (Game game : plugin.getGames()) {
+            for (Game game : this.plugin.getGameManager().getGames()) {
                 if (game.getGameArenaData().getBound().isInRegion(location)) {
                     Util.sendPrefixedMessage(player, "&cThis location is already within an arena");
                     return;
                 }
             }
 
-            String pos;
-            if (session.getLoc1() == null) {
-                session.setLoc1(location);
-                pos = "Pos1";
-            } else {
-                session.setLoc2(location);
-                pos = "Pos2";
-            }
-            Util.sendPrefixedMessage(player, "&b%s: &r%s, %s, %s", pos, location.getX(), location.getY(), location.getZ());
-            if (!session.hasValidSelection()) {
-                Util.sendPrefixedMessage(player, lang.listener_wand_set_pos_2);
-            } else if (!session.isBigEnough()) {
-                Util.sendPrefixedMessage(player, lang.listener_wand_big_enough);
-            } else {
-                Util.sendPrefixedMessage(player, lang.listener_wand_create_arena);
-            }
+            session.click(player, block);
         }
     }
 

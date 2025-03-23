@@ -6,7 +6,3 @@ version: '${version}'
 website: https://github.com/ShaneBeeStudios/HungerGames
 api-version: '1.13'
 softdepend: [Multiverse-Core, MultiWorld, Vault, My_Worlds, GoldenEnchants, mcMMO, MythicMobs, PlaceholderAPI, XConomy]
-
-commands:
-  hg:
-    description: HungerGames Base command

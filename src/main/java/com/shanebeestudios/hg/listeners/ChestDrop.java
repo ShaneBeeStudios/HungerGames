@@ -110,7 +110,7 @@ public class ChestDrop implements Listener {
             i.clear();
             int c = rg.nextInt(Config.randomChestMaxContent) + 1;
             while (c != 0) {
-                ItemStack it = HungerGames.getPlugin().getManager().randomItem(game,false);
+                ItemStack it = HungerGames.getPlugin().getGameManager().randomItem(game,false);
                 if (it != null) {
                     i.addItem(it);
                 }

@@ -1,9 +1,5 @@
 package com.shanebeestudios.hg.game;
 
-import org.bukkit.Bukkit;
-import org.bukkit.Location;
-import org.bukkit.block.Sign;
-import org.bukkit.entity.Player;
 import com.shanebeestudios.hg.HungerGames;
 import com.shanebeestudios.hg.Status;
 import com.shanebeestudios.hg.data.Config;
@@ -12,6 +8,7 @@ import com.shanebeestudios.hg.data.Leaderboard;
 import com.shanebeestudios.hg.data.PlayerData;
 import com.shanebeestudios.hg.events.GameEndEvent;
 import com.shanebeestudios.hg.events.GameStartEvent;
+import com.shanebeestudios.hg.events.PlayerJoinGameEvent;
 import com.shanebeestudios.hg.game.GameCommandData.CommandType;
 import com.shanebeestudios.hg.managers.KitManager;
 import com.shanebeestudios.hg.managers.MobManager;
@@ -24,6 +21,10 @@ import com.shanebeestudios.hg.tasks.StartingTask;
 import com.shanebeestudios.hg.tasks.TimerTask;
 import com.shanebeestudios.hg.util.Util;
 import com.shanebeestudios.hg.util.Vault;
+import org.bukkit.Bukkit;
+import org.bukkit.Location;
+import org.bukkit.block.Sign;
+import org.bukkit.entity.Player;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -272,6 +273,56 @@ public class Game {
         if (chestDrop != null) chestDrop.shutdown();
     }
 
+    public boolean canJoin() {
+        if (this.gamePlayerData.players.size() >= gameArenaData.maxPlayers) {
+            return false;
+        }
+        return true;
+    }
+
+    /**
+     * Join a player to the game
+     *
+     * @param player Player to join the game
+     */
+    public void joinGame(Player player) {
+        joinGame(player, false);
+    }
+
+    /**
+     * Join a player to the game
+     *
+     * @param player               Player to join the game
+     * @param savePreviousLocation Whether to save the player's previous location
+     */
+    public void joinGame(Player player, boolean savePreviousLocation) {
+        String name = this.gameArenaData.getName();
+
+        Status status = gameArenaData.getStatus();
+        if (status != Status.WAITING && status != Status.STOPPED && status != Status.COUNTDOWN && status != Status.READY) {
+            Util.sendPrefixedMini(player, this.lang.arena_not_ready);
+            if ((status == Status.RUNNING || status == Status.BEGINNING) && Config.spectateEnabled) {
+                Util.sendPrefixedMini(player, this.lang.arena_spectate.replace("<arena>", name));
+            }
+        } else if (this.gameArenaData.getMaxPlayers() <= this.gamePlayerData.getPlayers().size()) {
+            Util.sendPrefixedMini(player, "<red>%s %s", this.gameArenaData.getName(), this.lang.game_full);
+        } else if (!this.gamePlayerData.getPlayers().contains(player.getUniqueId())) {
+            if (!this.gamePlayerData.vaultCheck(player)) {
+                return;
+            }
+            // Call PlayerJoinGameEvent
+            PlayerJoinGameEvent event = new PlayerJoinGameEvent(this, player);
+            // If cancelled, stop the player from joining the game
+            if (!event.callEvent()) return;
+
+            if (player.isInsideVehicle()) {
+                player.leaveVehicle();
+            }
+
+            this.gamePlayerData.teleportIntoArena(player, savePreviousLocation);
+        }
+    }
+
     /**
      * Stop the game
      */
@@ -286,12 +337,12 @@ public class Game {
      */
     public void stop(Boolean death) {
         if (Config.borderEnabled) {
-            gameBorderData.resetBorder();
+            this.gameBorderData.resetBorder();
         }
-        gameArenaData.bound.removeEntities();
+        this.gameArenaData.bound.removeEntities();
         List<UUID> win = new ArrayList<>();
         cancelTasks();
-        for (UUID uuid : gamePlayerData.players) {
+        for (UUID uuid : this.gamePlayerData.players) {
             Player player = Bukkit.getPlayer(uuid);
             if (player != null) {
                 PlayerData playerData = playerManager.getPlayerData(uuid);
@@ -407,10 +458,10 @@ public class Game {
             }
         } else if (status == Status.WAITING) {
             gamePlayerData.msgAll(lang.player_left_game
-                    .replace("<arena>", gameArenaData.getName())
-                    .replace("<player>", player.getName()) +
-                    (gameArenaData.minPlayers - gamePlayerData.players.size() <= 0 ? "!" : ": " + lang.players_to_start
-                            .replace("<amount>", String.valueOf((gameArenaData.minPlayers - gamePlayerData.players.size())))));
+                .replace("<arena>", gameArenaData.getName())
+                .replace("<player>", player.getName()) +
+                (gameArenaData.minPlayers - gamePlayerData.players.size() <= 0 ? "!" : ": " + lang.players_to_start
+                    .replace("<amount>", String.valueOf((gameArenaData.minPlayers - gamePlayerData.players.size())))));
         }
         gameBlockData.updateLobbyBlock();
         gameArenaData.updateBoards();

@@ -196,7 +196,7 @@ public class PlayerManager {
      * @param player Player to get game
      * @return Game of player, null if player is not in a game
      */
-    public Game getGame(Player player) {
+    public @Nullable Game getGame(Player player) {
         return getGame(player.getUniqueId());
     }
 
@@ -205,8 +205,7 @@ public class PlayerManager {
      * @return Game of player, null if player is not in a game
      */
     @SuppressWarnings("ConstantConditions")
-    @Nullable
-    public Game getGame(UUID uuid) {
+    public @Nullable Game getGame(UUID uuid) {
         if (hasPlayerData(uuid))
             return getPlayerData(uuid).getGame();
         else if (hasSpectatorData(uuid))

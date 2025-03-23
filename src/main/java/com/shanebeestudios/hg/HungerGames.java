@@ -1,66 +1,38 @@
 package com.shanebeestudios.hg;
 
-import com.shanebeestudios.hg.commands.AddSpawnCmd;
-import com.shanebeestudios.hg.commands.BaseCmd;
-import com.shanebeestudios.hg.commands.BorderCenterCmd;
-import com.shanebeestudios.hg.commands.BorderSizeCmd;
-import com.shanebeestudios.hg.commands.BorderTimerCmd;
-import com.shanebeestudios.hg.commands.ChestRefillCmd;
-import com.shanebeestudios.hg.commands.ChestRefillNowCmd;
-import com.shanebeestudios.hg.commands.CreateCmd;
-import com.shanebeestudios.hg.commands.DebugCmd;
-import com.shanebeestudios.hg.commands.DeleteCmd;
-import com.shanebeestudios.hg.commands.JoinCmd;
-import com.shanebeestudios.hg.commands.KitCmd;
-import com.shanebeestudios.hg.commands.LeaveCmd;
-import com.shanebeestudios.hg.commands.ListCmd;
-import com.shanebeestudios.hg.commands.ListGamesCmd;
-import com.shanebeestudios.hg.commands.NBTCmd;
-import com.shanebeestudios.hg.commands.ReloadCmd;
-import com.shanebeestudios.hg.commands.SetExitCmd;
-import com.shanebeestudios.hg.commands.SetLobbyWallCmd;
-import com.shanebeestudios.hg.commands.SpectateCmd;
-import com.shanebeestudios.hg.commands.StartCmd;
-import com.shanebeestudios.hg.commands.StopCmd;
-import com.shanebeestudios.hg.commands.TeamCmd;
-import com.shanebeestudios.hg.commands.ToggleCmd;
-import com.shanebeestudios.hg.commands.WandCmd;
 import com.shanebeestudios.hg.data.ArenaConfig;
 import com.shanebeestudios.hg.data.Config;
 import com.shanebeestudios.hg.data.Language;
 import com.shanebeestudios.hg.data.Leaderboard;
 import com.shanebeestudios.hg.data.MobConfig;
-import com.shanebeestudios.hg.data.PlayerSession;
 import com.shanebeestudios.hg.data.RandomItems;
-import com.shanebeestudios.hg.game.Game;
 import com.shanebeestudios.hg.listeners.CancelListener;
-import com.shanebeestudios.hg.listeners.CommandListener;
 import com.shanebeestudios.hg.listeners.GameListener;
 import com.shanebeestudios.hg.listeners.McmmoListeners;
 import com.shanebeestudios.hg.listeners.WandListener;
+import com.shanebeestudios.hg.managers.SessionManager;
 import com.shanebeestudios.hg.managers.ItemStackManager;
 import com.shanebeestudios.hg.managers.KillManager;
 import com.shanebeestudios.hg.managers.KitManager;
-import com.shanebeestudios.hg.managers.Manager;
+import com.shanebeestudios.hg.managers.GameManager;
 import com.shanebeestudios.hg.managers.Placeholders;
 import com.shanebeestudios.hg.managers.PlayerManager;
+import com.shanebeestudios.hg.old_commands.BaseCmd;
+import com.shanebeestudios.hg.plugin.commands.MainCommand;
 import com.shanebeestudios.hg.util.NBTApi;
 import com.shanebeestudios.hg.util.Util;
+import dev.jorel.commandapi.CommandAPI;
+import dev.jorel.commandapi.CommandAPIBukkitConfig;
+import dev.jorel.commandapi.exceptions.UnsupportedVersionException;
 import io.lumine.mythic.api.MythicProvider;
 import io.lumine.mythic.api.mobs.MobManager;
 import org.bstats.bukkit.Metrics;
 import org.bukkit.Bukkit;
-import org.bukkit.entity.Player;
 import org.bukkit.event.HandlerList;
-import org.bukkit.permissions.Permission;
-import org.bukkit.permissions.PermissionDefault;
 import org.bukkit.plugin.java.JavaPlugin;
 
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
-import java.util.UUID;
 
 /**
  * <b>Main class for HungerGames</b>
@@ -69,15 +41,11 @@ public class HungerGames extends JavaPlugin {
 
     //Maps
     private Map<String, BaseCmd> cmds;
-    private Map<UUID, PlayerSession> playerSession;
-
-    //Lists
-    private List<Game> games;
 
     //Instances
     private static HungerGames plugin;
     private Config config;
-    private Manager manager;
+    private GameManager gameManager;
     private PlayerManager playerManager;
     private ArenaConfig arenaconfig;
     private KillManager killManager;
@@ -89,11 +57,30 @@ public class HungerGames extends JavaPlugin {
     private Metrics metrics;
     private MobManager mmMobManager;
 
+    // Managers
+    private final SessionManager sessionManager = new SessionManager();
+
     //Mobs
     private MobConfig mobConfig;
 
     //NMS Nbt
     private NBTApi nbtApi;
+
+    /**
+     * @hidden
+     */
+    @Override
+    public void onLoad() {
+        try {
+            CommandAPI.onLoad(new CommandAPIBukkitConfig(this)
+                .setNamespace("hungergames")
+                .verboseOutput(false)
+                .silentLogs(true)
+                .skipReloadDatapacks(true));
+        } catch (UnsupportedVersionException ignore) {
+            Util.logMini("CommandAPI does not support this version of Minecraft, will update soon.");
+        }
+    }
 
     @Override
     public void onEnable() {
@@ -113,8 +100,6 @@ public class HungerGames extends JavaPlugin {
         if (load) {
             cmds = new HashMap<>();
         }
-        games = new ArrayList<>();
-        playerSession = new HashMap<>();
 
         config = new Config(this);
         metrics = new Metrics(this, 25144);
@@ -133,9 +118,9 @@ public class HungerGames extends JavaPlugin {
         mobConfig = new MobConfig(this);
         randomItems = new RandomItems(this);
         playerManager = new PlayerManager();
-        arenaconfig = new ArenaConfig(this);
+        this.gameManager = new GameManager(this);
+        this.arenaconfig = new ArenaConfig(this);
         killManager = new KillManager();
-        manager = new Manager(this);
         leaderboard = new Leaderboard(this);
 
         //PAPI check
@@ -158,10 +143,11 @@ public class HungerGames extends JavaPlugin {
         }
 
         //noinspection ConstantConditions
-        getCommand("hg").setExecutor(new CommandListener(this));
-        if (load) {
-            loadCmds();
-        }
+//        getCommand("hg").setExecutor(new CommandListener(this));
+//        if (load) {
+//            loadCmds();
+//        }
+        loadCmds();;
         getServer().getPluginManager().registerEvents(new WandListener(this), this);
         getServer().getPluginManager().registerEvents(new CancelListener(this), this);
         getServer().getPluginManager().registerEvents(new GameListener(this), this);
@@ -179,9 +165,7 @@ public class HungerGames extends JavaPlugin {
     }
 
     private void unloadPlugin(boolean reload) {
-        stopAll();
-        games = null;
-        playerSession = null;
+        this.gameManager.stopAllGames();
         plugin = null;
         config = null;
         metrics = null;
@@ -195,7 +179,7 @@ public class HungerGames extends JavaPlugin {
         playerManager = null;
         arenaconfig = null;
         killManager = null;
-        manager = null;
+        gameManager = null;
         leaderboard = null;
         HandlerList.unregisterAll(this);
         if (reload) {
@@ -214,77 +198,53 @@ public class HungerGames extends JavaPlugin {
     }
 
     private void loadCmds() {
-        cmds.put("team", new TeamCmd());
-        cmds.put("addspawn", new AddSpawnCmd());
-        cmds.put("create", new CreateCmd());
-        cmds.put("join", new JoinCmd());
-        cmds.put("leave", new LeaveCmd());
-        cmds.put("reload", new ReloadCmd());
-        cmds.put("setlobbywall", new SetLobbyWallCmd());
-        cmds.put("wand", new WandCmd());
-        cmds.put("kit", new KitCmd());
-        cmds.put("debug", new DebugCmd());
-        cmds.put("list", new ListCmd());
-        cmds.put("listgames", new ListGamesCmd());
-        cmds.put("forcestart", new StartCmd());
-        cmds.put("stop", new StopCmd());
-        cmds.put("toggle", new ToggleCmd());
-        cmds.put("setexit", new SetExitCmd());
-        cmds.put("delete", new DeleteCmd());
-        cmds.put("chestrefill", new ChestRefillCmd());
-        cmds.put("chestrefillnow", new ChestRefillNowCmd());
-        cmds.put("bordersize", new BorderSizeCmd());
-        cmds.put("bordercenter", new BorderCenterCmd());
-        cmds.put("bordertimer", new BorderTimerCmd());
-        if (Config.spectateEnabled) {
-            cmds.put("spectate", new SpectateCmd());
+//        cmds.put("team", new TeamCmd());
+//        cmds.put("addspawn", new AddSpawnCmd());
+//        cmds.put("create", new CreateCmd());
+//        cmds.put("join", new JoinCmd());
+//        cmds.put("leave", new LeaveCmd());
+//        cmds.put("reload", new ReloadCmd());
+//        cmds.put("setlobbywall", new SetLobbyWallCmd());
+//        cmds.put("wand", new WandCmd());
+//        cmds.put("kit", new KitCmd());
+//        cmds.put("debug", new DebugCmd());
+//        cmds.put("list", new ListCmd());
+//        cmds.put("listgames", new ListGamesCmd());
+//        cmds.put("forcestart", new StartCmd());
+//        cmds.put("stop", new StopCmd());
+//        cmds.put("toggle", new ToggleCmd());
+//        cmds.put("setexit", new SetExitCmd());
+//        cmds.put("delete", new DeleteCmd());
+//        cmds.put("chestrefill", new ChestRefillCmd());
+//        cmds.put("chestrefillnow", new ChestRefillNowCmd());
+//        cmds.put("bordersize", new BorderSizeCmd());
+//        cmds.put("bordercenter", new BorderCenterCmd());
+//        cmds.put("bordertimer", new BorderTimerCmd());
+//        if (Config.spectateEnabled) {
+//            cmds.put("spectate", new SpectateCmd());
+//        }
+//        if (nbtApi != null) {
+//            cmds.put("nbt", new NBTCmd());
+//        }
+//
+//        ArrayList<String> cArray = new ArrayList<>();
+//        cArray.add("join");
+//        cArray.add("leave");
+//        cArray.add("kit");
+//        cArray.add("listgames");
+//        cArray.add("list");
+//
+//        for (String bc : cmds.keySet()) {
+//            getServer().getPluginManager().addPermission(new Permission("hg." + bc));
+//            if (cArray.contains(bc))
+//                //noinspection ConstantConditions
+//                getServer().getPluginManager().getPermission("hg." + bc).setDefault(PermissionDefault.TRUE);
+//
+//        }
+        if (CommandAPI.isLoaded()) {
+            CommandAPI.onEnable();
+            new MainCommand(this);
         }
-        if (nbtApi != null) {
-            cmds.put("nbt", new NBTCmd());
-        }
-
-        ArrayList<String> cArray = new ArrayList<>();
-        cArray.add("join");
-        cArray.add("leave");
-        cArray.add("kit");
-        cArray.add("listgames");
-        cArray.add("list");
-
-        for (String bc : cmds.keySet()) {
-            getServer().getPluginManager().addPermission(new Permission("hg." + bc));
-            if (cArray.contains(bc))
-                //noinspection ConstantConditions
-                getServer().getPluginManager().getPermission("hg." + bc).setDefault(PermissionDefault.TRUE);
-
-        }
-    }
-
-    /**
-     * Stop all games
-     */
-    public void stopAll() {
-        ArrayList<UUID> ps = new ArrayList<>();
-        for (Game g : games) {
-            g.cancelTasks();
-            g.getGameBlockData().forceRollback();
-            ps.addAll(g.getGamePlayerData().getPlayers());
-            ps.addAll(g.getGamePlayerData().getSpectators());
-        }
-        for (UUID u : ps) {
-            Player p = Bukkit.getPlayer(u);
-            if (p != null) {
-                p.closeInventory();
-                if (playerManager.hasPlayerData(u)) {
-                    playerManager.getPlayerData(u).getGame().getGamePlayerData().leave(p, false);
-                    playerManager.removePlayerData(u);
-                }
-                if (playerManager.hasSpectatorData(u)) {
-                    playerManager.getSpectatorData(u).getGame().getGamePlayerData().leaveSpectate(p);
-                    playerManager.removePlayerData(u);
-                }
-            }
-        }
-        games.clear();
     }
 
     /**
@@ -333,12 +293,12 @@ public class HungerGames extends JavaPlugin {
     }
 
     /**
-     * Get the instance of the manager
+     * Get the instance of the game manager
      *
-     * @return The manager
+     * @return The game manager
      */
-    public Manager getManager() {
-        return this.manager;
+    public GameManager getGameManager() {
+        return this.gameManager;
     }
 
     /**
@@ -366,24 +326,6 @@ public class HungerGames extends JavaPlugin {
      */
     public Leaderboard getLeaderboard() {
         return this.leaderboard;
-    }
-
-    /**
-     * Get a list of all loaded games
-     *
-     * @return A list of games
-     */
-    public List<Game> getGames() {
-        return this.games;
-    }
-
-    /**
-     * Get player sessions map
-     *
-     * @return Player Sessions map
-     */
-    public Map<UUID, PlayerSession> getPlayerSessions() {
-        return this.playerSession;
     }
 
     /**
@@ -442,6 +384,11 @@ public class HungerGames extends JavaPlugin {
      */
     public MobManager getMmMobManager() {
         return this.mmMobManager;
+    }
+
+    // Managers
+    public SessionManager getSessionManager() {
+        return this.sessionManager;
     }
 
 }

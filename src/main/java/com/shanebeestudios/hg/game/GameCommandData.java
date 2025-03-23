@@ -40,6 +40,10 @@ public class GameCommandData extends Data {
         this.commands.add(type.getType() + ":" + command);
     }
 
+    public List<String> getCommands() {
+        return this.commands;
+    }
+
     /**
      * Run commands for this game that are defined in the arenas.yml
      *
