@@ -20,12 +20,12 @@ public class ToggleCmd extends BaseCmd {
 		Game game = gameManager.getGame(args[1]);
 		GameArenaData gameArenaData = game.getGameArenaData();
 		if (game != null) {
-			if (gameArenaData.getStatus() == Status.NOTREADY || gameArenaData.getStatus() == Status.BROKEN) {
+			if (gameArenaData.getStatus() == Status.NOT_READY || gameArenaData.getStatus() == Status.BROKEN) {
 				gameArenaData.setStatus(Status.READY);
 				Util.scm(sender, lang.cmd_toggle_unlocked.replace("<arena>", gameArenaData.getName()));
 			} else {
 				game.stop(false);
-				gameArenaData.setStatus(Status.NOTREADY);
+				gameArenaData.setStatus(Status.NOT_READY);
 				Util.scm(sender, lang.cmd_toggle_locked.replace("<arena>", gameArenaData.getName()));
 			}
 		} else {

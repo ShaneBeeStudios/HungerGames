@@ -47,8 +47,8 @@ public class Game {
 
     // Task ID's here!
     private SpawnerTask spawner;
-    private FreeRoamTask freeRoam;
-    private StartingTask starting;
+    private FreeRoamTask freeRoamTask;
+    private StartingTask startingTask;
     private TimerTask timer;
     private ChestDropTask chestDrop;
 
@@ -105,7 +105,7 @@ public class Game {
     public Game(String name, Bound bound, int timer, int minPlayers, int maxPlayers, int roam, int cost) {
         this.plugin = HungerGames.getPlugin();
         this.gameArenaData = new GameArenaData(this, name, bound, timer, minPlayers, maxPlayers, roam, cost);
-        this.gameArenaData.status = Status.NOTREADY;
+        this.gameArenaData.status = Status.NOT_READY;
         this.playerManager = HungerGames.getPlugin().getPlayerManager();
         this.lang = plugin.getLang();
         this.kitManager = plugin.getKitManager();
@@ -184,7 +184,7 @@ public class Game {
     }
 
     public StartingTask getStartingTask() {
-        return this.starting;
+        return this.startingTask;
     }
 
     /**
@@ -225,34 +225,44 @@ public class Game {
     }
 
     /**
+     * Initialize the waiting period of the game
+     * <p>This will be called when a player first joins</p>
+     */
+    public void startWaitingPeriod() {
+        this.gameArenaData.setStatus(Status.WAITING);
+        this.gameBlockData.updateLobbyBlock();
+        // TODO Broadcast?!?!?
+    }
+
+    /**
      * Start the pregame countdown
      */
-    public void startPreGame() {
+    public void startPreGameCountdown() {
         // Call the GameStartEvent
         GameStartEvent event = new GameStartEvent(this);
         Bukkit.getPluginManager().callEvent(event);
 
-        gameArenaData.status = Status.COUNTDOWN;
-        starting = new StartingTask(this);
-        gameBlockData.updateLobbyBlock();
+        this.gameArenaData.status = Status.COUNTDOWN;
+        this.startingTask = new StartingTask(this);
+        this.gameBlockData.updateLobbyBlock();
     }
 
     /**
      * Start the free roam state of the game
      */
     public void startFreeRoam() {
-        gameArenaData.status = Status.BEGINNING;
-        gameBlockData.updateLobbyBlock();
-        gameArenaData.bound.removeEntities();
-        freeRoam = new FreeRoamTask(this);
-        gameCommandData.runCommands(CommandType.START, null);
+        this.gameArenaData.status = Status.FREE_ROAM;
+        this.gameBlockData.updateLobbyBlock();
+        this.gameArenaData.bound.removeEntities();
+        this.freeRoamTask = new FreeRoamTask(this);
+        this.gameCommandData.runCommands(CommandType.START, null);
     }
 
     /**
-     * Start the game
+     * Start running the game
      */
-    public void startGame() {
-        gameArenaData.status = Status.RUNNING;
+    public void startRunningGame() {
+        this.gameArenaData.status = Status.RUNNING;
         if (Config.spawnmobs) spawner = new SpawnerTask(this, Config.spawnmobsinterval);
         if (Config.randomChest) chestDrop = new ChestDropTask(this);
         gameBlockData.updateLobbyBlock();
@@ -268,16 +278,9 @@ public class Game {
     public void cancelTasks() {
         if (spawner != null) spawner.stop();
         if (timer != null) timer.stop();
-        if (starting != null) starting.stop();
-        if (freeRoam != null) freeRoam.stop();
+        if (startingTask != null) startingTask.stop();
+        if (freeRoamTask != null) freeRoamTask.stop();
         if (chestDrop != null) chestDrop.shutdown();
-    }
-
-    public boolean canJoin() {
-        if (this.gamePlayerData.players.size() >= gameArenaData.maxPlayers) {
-            return false;
-        }
-        return true;
     }
 
     /**
@@ -285,8 +288,8 @@ public class Game {
      *
      * @param player Player to join the game
      */
-    public void joinGame(Player player) {
-        joinGame(player, false);
+    public boolean joinGame(Player player) {
+        return joinGame(player, false);
     }
 
     /**
@@ -295,32 +298,51 @@ public class Game {
      * @param player               Player to join the game
      * @param savePreviousLocation Whether to save the player's previous location
      */
-    public void joinGame(Player player, boolean savePreviousLocation) {
-        String name = this.gameArenaData.getName();
+    public boolean joinGame(Player player, boolean savePreviousLocation) {
+        if (this.gamePlayerData.getPlayers().contains(player.getUniqueId())) {
+            // TODO message already in game
+            return false;
+        }
+        // Call PlayerJoinGameEvent
+        PlayerJoinGameEvent event = new PlayerJoinGameEvent(this, player);
+        // If cancelled, stop the player from joining the game
+        if (!event.callEvent()) return false;
+
+        String arenaName = this.gameArenaData.getName();
 
         Status status = gameArenaData.getStatus();
-        if (status != Status.WAITING && status != Status.STOPPED && status != Status.COUNTDOWN && status != Status.READY) {
-            Util.sendPrefixedMini(player, this.lang.arena_not_ready);
-            if ((status == Status.RUNNING || status == Status.BEGINNING) && Config.spectateEnabled) {
-                Util.sendPrefixedMini(player, this.lang.arena_spectate.replace("<arena>", name));
+        switch (status) {
+            case NOT_READY, ROLLBACK, STOPPED, BROKEN -> {
+                Util.sendPrefixedMini(player, this.lang.arena_not_ready);
+                return false;
             }
-        } else if (this.gameArenaData.getMaxPlayers() <= this.gamePlayerData.getPlayers().size()) {
-            Util.sendPrefixedMini(player, "<red>%s %s", this.gameArenaData.getName(), this.lang.game_full);
-        } else if (!this.gamePlayerData.getPlayers().contains(player.getUniqueId())) {
-            if (!this.gamePlayerData.vaultCheck(player)) {
-                return;
+            case RUNNING, FREE_ROAM -> {
+                Util.sendPrefixedMini(player, this.lang.game_running.replace("<arena>", arenaName), arenaName);
+                if (Config.spectateEnabled) {
+                    Util.sendPrefixedMini(player, this.lang.arena_spectate.replace("<arena>", arenaName));
+                }
+                return false;
             }
-            // Call PlayerJoinGameEvent
-            PlayerJoinGameEvent event = new PlayerJoinGameEvent(this, player);
-            // If cancelled, stop the player from joining the game
-            if (!event.callEvent()) return;
-
-            if (player.isInsideVehicle()) {
-                player.leaveVehicle();
+            case READY -> {
+                if (!canJoin(player)) return false;
+                this.gamePlayerData.addPlayerData(player);
+                startWaitingPeriod();
             }
-
-            this.gamePlayerData.teleportIntoArena(player, savePreviousLocation);
+            case WAITING -> {
+                if (!canJoin(player)) return false;
+                this.gamePlayerData.addPlayerData(player);
+                if (this.gamePlayerData.getPlayers().size() >= this.gameArenaData.getMinPlayers()) {
+                    startPreGameCountdown();
+                }
+            }
+            case COUNTDOWN -> {
+                if (!canJoin(player)) return false;
+                this.gamePlayerData.addPlayerData(player);
+            }
         }
+
+        this.gamePlayerData.putPlayerIntoArena(player, savePreviousLocation);
+        return true;
     }
 
     /**
@@ -435,7 +457,7 @@ public class Game {
 
     void updateAfterDeath(Player player, boolean death) {
         Status status = gameArenaData.status;
-        if (status == Status.RUNNING || status == Status.BEGINNING || status == Status.COUNTDOWN) {
+        if (status == Status.RUNNING || status == Status.FREE_ROAM || status == Status.COUNTDOWN) {
             if (isGameOver()) {
                 if (!death) {
                     for (UUID uuid : gamePlayerData.players) {
@@ -484,9 +506,31 @@ public class Game {
         return false;
     }
 
+    boolean canJoin(Player player) {
+        if (this.gamePlayerData.getPlayers().size() >= this.getGameArenaData().getMaxPlayers()) {
+            Util.sendPrefixedMini(player, this.lang.game_full);
+            return false;
+        }
+        return vaultCheck(player);
+    }
+
+    boolean vaultCheck(Player player) {
+        if (Config.economy) {
+            int cost = this.getGameArenaData().getCost();
+            if (Vault.economy.getBalance(player) >= cost) {
+                Vault.economy.withdrawPlayer(player, cost);
+                return true;
+            } else {
+                Util.scm(player, lang.prefix + lang.cmd_join_no_money.replace("<cost>", String.valueOf(cost)));
+                return false;
+            }
+        }
+        return true;
+    }
+
     @Override
     public String toString() {
-        return "Game{name='" + gameArenaData.name + '\'' + ", bound=" + gameArenaData.bound + '}';
+        return "Game{name='" + this.gameArenaData.getName() + '\'' + ", bound=" + this.gameArenaData.getBound() + '}';
     }
 
 }

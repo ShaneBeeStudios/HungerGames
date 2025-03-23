@@ -1,7 +1,7 @@
 package com.shanebeestudios.hg.game;
 
-import org.bukkit.Location;
 import com.shanebeestudios.hg.Status;
+import org.bukkit.Location;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.ArrayList;

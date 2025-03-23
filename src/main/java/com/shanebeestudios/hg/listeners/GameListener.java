@@ -177,7 +177,7 @@ public class GameListener implements Listener {
 	        Game game = gameManager.getGame(itemFrame.getLocation());
 	        switch (game.getGameArenaData().getStatus()) {
                 case RUNNING:
-                case BEGINNING:
+                case FREE_ROAM:
                 case COUNTDOWN:
                     if (cancel) {
                         ((Cancellable) event).setCancelled(true);
@@ -417,7 +417,7 @@ public class GameListener implements Listener {
             }
         } else if (action != Action.PHYSICAL && playerManager.hasPlayerData(player)) {
             Status status = playerManager.getPlayerData(player).getGame().getGameArenaData().getStatus();
-            if (status != Status.RUNNING && status != Status.BEGINNING) {
+            if (status != Status.RUNNING && status != Status.FREE_ROAM) {
                 event.setCancelled(true);
                 Util.scm(player, lang.listener_no_interact);
             }
@@ -461,7 +461,7 @@ public class GameListener implements Listener {
                 Game game = playerManager.getPlayerData(player).getGame();
                 GameBlockData gameBlockData = game.getGameBlockData();
                 Status status = game.getGameArenaData().getStatus();
-				if (status == Status.RUNNING || status == Status.BEGINNING) {
+				if (status == Status.RUNNING || status == Status.FREE_ROAM) {
 					if (!BlockUtils.isBreakableBlock(block)) {
 						Util.scm(player, lang.listener_no_edit_block);
 						event.setCancelled(true);
@@ -480,7 +480,7 @@ public class GameListener implements Listener {
 				    Game game = plugin.getGameManager().getGame(block.getLocation());
 				    Status status = game.getGameArenaData().getStatus();
 				    switch (status) {
-                        case BEGINNING:
+                        case FREE_ROAM:
                         case RUNNING:
                             game.getGameBlockData().recordBlockPlace(event.getBlockReplacedState());
                         default:
@@ -525,7 +525,7 @@ public class GameListener implements Listener {
                     Game game = gameManager.getGame(block.getLocation());
                     Status status = game.getGameArenaData().getStatus();
                     switch (status) {
-                        case BEGINNING:
+                        case FREE_ROAM:
                         case RUNNING:
 							game.getGameBlockData().removeGameChest(block.getLocation());
                         default:
@@ -596,7 +596,7 @@ public class GameListener implements Listener {
 		if (Config.breakblocks && gameManager.isInRegion(block.getLocation())) {
 			Game game = gameManager.getGame(block.getLocation());
 			Status status = game.getGameArenaData().getStatus();
-			if (status == Status.RUNNING || status == Status.BEGINNING) {
+			if (status == Status.RUNNING || status == Status.FREE_ROAM) {
 				game.getGameBlockData().recordBlockBreak(block);
 			}
 		}
@@ -609,7 +609,7 @@ public class GameListener implements Listener {
 			if (Config.breakblocks && gameManager.isInRegion(event.getEntity().getLocation())) {
 				Game game = gameManager.getGame(event.getEntity().getLocation());
 				Status status = game.getGameArenaData().getStatus();
-				if (status == Status.RUNNING || status == Status.BEGINNING) {
+				if (status == Status.RUNNING || status == Status.FREE_ROAM) {
 					game.getGameBlockData().recordBlockPlace(block.getState());
 				}
 			}
@@ -676,7 +676,7 @@ public class GameListener implements Listener {
 		PlayerData playerData = playerManager.getPlayerData(player);
 		if (playerData != null) {
 			Status status = playerData.getGame().getGameArenaData().getStatus();
-		    if (status != Status.BEGINNING && status != Status.RUNNING) {
+		    if (status != Status.FREE_ROAM && status != Status.RUNNING) {
                 event.setCancelled(true);
             }
 		}

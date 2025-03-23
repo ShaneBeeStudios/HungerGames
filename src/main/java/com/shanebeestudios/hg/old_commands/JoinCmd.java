@@ -22,7 +22,7 @@ public class JoinCmd extends BaseCmd {
 		} else {
 			Game g = gameManager.getGame(args[1]);
 			if (g != null && !g.getGamePlayerData().getPlayers().contains(player.getUniqueId())) {
-				g.joinGame(player, true);
+				//g.joinGame(player, true);
 			} else {
 				Util.scm(player, lang.cmd_delete_noexist);
 			}

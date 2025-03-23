@@ -30,6 +30,7 @@ public class Language {
     public String game_ending_sec;
     public String game_border_closing;
     public String game_chest_refill;
+    public String game_running;
     public String players_to_start;
     public String arena_not_ready;
     public String arena_spectate;
@@ -246,6 +247,7 @@ public class Language {
         game_ending_min = lang.getString("game-ending-min");
         game_ending_sec = lang.getString("game-ending-sec");
         game_border_closing = lang.getString("game-border-closing");
+        game_running = lang.getString("game-running");
 
         players_to_start = lang.getString("players-to-start");
         arena_not_ready = lang.getString("arena-not-ready");

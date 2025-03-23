@@ -4,11 +4,9 @@ import com.shanebeestudios.hg.Status;
 import com.shanebeestudios.hg.data.Config;
 import com.shanebeestudios.hg.data.PlayerData;
 import com.shanebeestudios.hg.events.PlayerLeaveGameEvent;
-import com.shanebeestudios.hg.game.GameCommandData.CommandType;
 import com.shanebeestudios.hg.gui.SpectatorGUI;
 import com.shanebeestudios.hg.managers.PlayerManager;
 import com.shanebeestudios.hg.util.Util;
-import com.shanebeestudios.hg.util.Vault;
 import org.bukkit.Bukkit;
 import org.bukkit.GameMode;
 import org.bukkit.Location;
@@ -202,24 +200,26 @@ public class GamePlayerData extends Data {
         }
     }
 
+    // TODO redo?
     private Location pickSpawn() {
-        GameArenaData gameArenaData = this.game.getGameArenaData();
-        double spawn = getRandomIntegerBetweenRange(gameArenaData.maxPlayers - 1);
-        if (containsPlayer(gameArenaData.spawns.get(((int) spawn)))) {
-            Collections.shuffle(gameArenaData.spawns);
-            for (Location l : gameArenaData.spawns) {
+        GameArenaData gameArenaData = this.getGame().getGameArenaData();
+        double spawn = getRandomIntegerBetweenRange(gameArenaData.getMaxPlayers() - 1);
+        if (containsPlayer(gameArenaData.getSpawns().get(((int) spawn)))) {
+            Collections.shuffle(gameArenaData.getSpawns());
+            for (Location l : gameArenaData.getSpawns()) {
                 if (!containsPlayer(l)) {
                     return l;
                 }
             }
         }
-        return gameArenaData.spawns.get((int) spawn);
+        return gameArenaData.getSpawns().get((int) spawn);
     }
 
+    // TODO redo?
     boolean containsPlayer(Location location) {
         if (location == null) return false;
 
-        for (UUID u : players) {
+        for (UUID u : this.getGame().getGamePlayerData().getPlayers()) {
             Player p = Bukkit.getPlayer(u);
             if (p != null && p.getLocation().getBlock().equals(location.getBlock()))
                 return true;
@@ -227,18 +227,49 @@ public class GamePlayerData extends Data {
         return false;
     }
 
-    boolean vaultCheck(Player player) {
-        if (Config.economy) {
-            int cost = game.gameArenaData.cost;
-            if (Vault.economy.getBalance(player) >= cost) {
-                Vault.economy.withdrawPlayer(player, cost);
-                return true;
-            } else {
-                Util.scm(player, lang.prefix + lang.cmd_join_no_money.replace("<cost>", String.valueOf(cost)));
-                return false;
+    // UTIL
+    private static double getRandomIntegerBetweenRange(double max) {
+        return (int) (Math.random() * ((max - (double) 0) + 1)) + (double) 0;
+    }
+
+    void addPlayerData(Player player) {
+        UUID uuid = player.getUniqueId();
+        this.players.add(uuid);
+        this.allPlayers.add(uuid);
+    }
+
+    void putPlayerIntoArena(Player player, boolean savePreviousLocation) {
+        GameArenaData gameArenaData = this.getGame().getGameArenaData();
+        Location loc = pickSpawn(); // TODO rewrite spawn pick thingy
+        if (loc.getBlock().getRelative(BlockFace.DOWN).getType() == Material.AIR) {
+            while (loc.getBlock().getRelative(BlockFace.DOWN).getType() == Material.AIR) {
+                loc.setY(loc.getY() - 1);
             }
         }
-        return true;
+
+        if (player.isInsideVehicle()) {
+            player.leaveVehicle();
+        }
+
+        Location previousLocation = player.getLocation();
+
+        // Teleport async into the arena so it loads a little more smoothly
+        player.teleportAsync(loc).thenAccept(a -> {
+            PlayerData playerData = new PlayerData(player, this.game);
+            if (savePreviousLocation && Config.savePreviousLocation) {
+                playerData.setPreviousLocation(previousLocation);
+            }
+            this.playerManager.addPlayerData(playerData);
+            gameArenaData.getBoard().setBoard(player);
+
+            heal(player);
+            freeze(player);
+            this.kills.put(player, 0);
+            kitHelp(player);
+
+            gameArenaData.updateBoards();
+            this.game.getGameCommandData().runCommands(GameCommandData.CommandType.JOIN, player);
+        });
     }
 
     /**
@@ -250,60 +281,6 @@ public class GamePlayerData extends Data {
         this.kills.put(player, this.kills.get(player) + 1);
     }
 
-    public void teleportIntoArena(Player player, boolean savePreviousLocation) {
-        GameArenaData gameArenaData = this.game.getGameArenaData();
-        Status status = gameArenaData.getStatus();
-
-        UUID uuid = player.getUniqueId();
-        this.players.add(uuid);
-        this.allPlayers.add(uuid);
-
-        Location loc = pickSpawn();
-        if (loc.getBlock().getRelative(BlockFace.DOWN).getType() == Material.AIR) {
-            while (loc.getBlock().getRelative(BlockFace.DOWN).getType() == Material.AIR) {
-                loc.setY(loc.getY() - 1);
-            }
-        }
-        Location previousLocation = player.getLocation();
-
-        // Teleport async into the arena so it loads a little more smoothly
-        player.teleportAsync(loc).thenAccept(a -> {
-
-            PlayerData playerData = new PlayerData(player, this.game);
-            if (savePreviousLocation && Config.savePreviousLocation) {
-                playerData.setPreviousLocation(previousLocation);
-            }
-            this.playerManager.addPlayerData(playerData);
-            gameArenaData.board.setBoard(player);
-
-            heal(player);
-            freeze(player);
-            this.kills.put(player, 0);
-
-            int playerSize = this.players.size();
-            if (playerSize == 1 && status == Status.READY)
-                gameArenaData.setStatus(Status.WAITING);
-            if (playerSize >= gameArenaData.minPlayers && (status == Status.WAITING || status == Status.READY)) {
-                this.game.startPreGame();
-            } else if (status == Status.WAITING) {
-                String broadcast = this.lang.player_joined_game
-                    .replace("<arena>", gameArenaData.getName())
-                    .replace("<player>", player.getName()) + (gameArenaData.minPlayers - playerSize <= 0 ? "!" : ":" +
-                    this.lang.players_to_start.replace("<amount>", String.valueOf((gameArenaData.minPlayers - playerSize))));
-                if (Config.broadcastJoinMessages) {
-                    Util.broadcast(broadcast);
-                } else {
-                    msgAll(broadcast);
-                }
-            }
-            kitHelp(player);
-
-            this.game.gameBlockData.updateLobbyBlock();
-            gameArenaData.updateBoards();
-            this.game.gameCommandData.runCommands(CommandType.JOIN, player);
-        });
-    }
-
     /**
      * Make a player leave the game
      *
@@ -311,7 +288,7 @@ public class GamePlayerData extends Data {
      * @param death  Whether the player has died or not (Generally should be false)
      */
     public void leave(Player player, boolean death) {
-        Bukkit.getPluginManager().callEvent(new PlayerLeaveGameEvent(game, player, death));
+        new PlayerLeaveGameEvent(this.game, player, death).callEvent();
         UUID uuid = player.getUniqueId();
         players.remove(uuid);
         if (!death) allPlayers.remove(uuid); // Only remove the player if they voluntarily left the game
@@ -439,11 +416,6 @@ public class GamePlayerData extends Data {
 
     public boolean hasTeam(String name) {
         return teams.containsKey(name);
-    }
-
-    // UTIL
-    private static double getRandomIntegerBetweenRange(double max) {
-        return (int) (Math.random() * ((max - (double) 0) + 1)) + (double) 0;
     }
 
 }

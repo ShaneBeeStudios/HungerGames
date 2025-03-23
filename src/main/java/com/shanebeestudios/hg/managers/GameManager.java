@@ -3,7 +3,6 @@ package com.shanebeestudios.hg.managers;
 import com.google.common.collect.ImmutableList;
 import com.shanebeestudios.hg.HungerGames;
 import com.shanebeestudios.hg.Status;
-import com.shanebeestudios.hg.data.ArenaConfig;
 import com.shanebeestudios.hg.data.Config;
 import com.shanebeestudios.hg.data.Language;
 import com.shanebeestudios.hg.game.Bound;
@@ -16,8 +15,6 @@ import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.block.Sign;
-import org.bukkit.command.CommandSender;
-import org.bukkit.configuration.Configuration;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.InventoryHolder;
@@ -222,7 +219,7 @@ public class GameManager {
             switch (game.getGameArenaData().getStatus()) {
                 case RUNNING:
                 case COUNTDOWN:
-                case BEGINNING:
+                case FREE_ROAM:
                 case ROLLBACK:
                     i++;
             }

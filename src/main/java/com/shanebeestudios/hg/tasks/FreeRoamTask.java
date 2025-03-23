@@ -43,7 +43,7 @@ public class FreeRoamTask implements Runnable {
         if (roamTime > 0) {
             game.getGamePlayerData().msgAll(HungerGames.getPlugin().getLang().roam_finished);
         }
-        game.startGame();
+        game.startRunningGame();
     }
 
     public void stop() {

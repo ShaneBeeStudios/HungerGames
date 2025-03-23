@@ -8,6 +8,22 @@ import com.shanebeestudios.hg.util.Util;
  */
 public enum Status {
 
+    /**
+     * Game is ready to run
+     */
+    READY,
+    /**
+     * Game is waiting for players to join
+     */
+    WAITING,
+    /**
+     * Game is counting down to start
+     */
+    COUNTDOWN,
+    /**
+     * Game is starting to run in the free roam state
+     */
+    FREE_ROAM,
 	/**
 	 * Game is running
 	 */
@@ -16,34 +32,19 @@ public enum Status {
 	 * Game has stopped
 	 */
 	STOPPED,
-	/**
-	 * Game is ready to run
-	 */
-	READY,
-	/**
-	 * Game is waiting
-	 */
-	WAITING,
+    /**
+     * Game is currently rolling back blocks
+     */
+    ROLLBACK,
 	/**
 	 * Game is broken
 	 */
 	BROKEN,
 	/**
-	 * Game is currently rolling back blocks
-	 */
-	ROLLBACK,
-	/**
 	 * Game is not ready
 	 */
-	NOTREADY,
-	/**
-	 * Game is starting to run
-	 */
-	BEGINNING,
-	/**
-	 * Game is counting down to start
-	 */
-	COUNTDOWN;
+	NOT_READY
+    ;
 
 	Language lang = HungerGames.getPlugin().getLang();
 
@@ -61,9 +62,9 @@ public enum Status {
                 return Util.getColString(lang.status_broken);
             case ROLLBACK:
                 return Util.getColString(lang.status_rollback);
-            case NOTREADY:
+            case NOT_READY:
                 return Util.getColString(lang.status_not_ready);
-            case BEGINNING:
+            case FREE_ROAM:
                 return Util.getColString(lang.status_beginning);
             case COUNTDOWN:
                 return Util.getColString(lang.status_countdown);
