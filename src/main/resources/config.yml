@@ -44,12 +44,11 @@ settings:
     # This value will be ignored when clicking lobby signs
     save-previous-location: true
     # Blocks that will be represented as bonus chests
-    # Supports Bukkit material enums and block tags
-    # `tag:shulker_boxes` was added in 1.15, for versions below this use `SHULKER_BOX` instead (which will cover all shulker boxes)
+    # prefix with '#' to use a block tag
     bonus-block-types:
-        - TRAPPED_CHEST
-        - BARREL
-        - tag:shulker_boxes
+        - 'minecraft:trapped_chest'
+        - 'minecraft:barrel'
+        - '#minecraft:shulker_boxes'
     # When enabled, name tags will be hidden from all players in the game
     hide-nametags: true
 mob-spawning:
@@ -106,18 +105,18 @@ rollback:
     fix-leaves: true
     # Prevent players from trampling crops in your arenas
     prevent-trampling: true
-    # List of blocks players can break (use ALL for all blocks)
+    # List of blocks players can break (use 'all' for all blocks)
+    # prefix with '#' to use a block tag
     editable-blocks:
-        - GRASS
-        - TALL_GRASS
-        - GRASS_BLOCK
-        - DIRT
-        - COBBLESTONE
-        - OAK_PLANKS
-        - SANDSTONE
-        - WHITE_WOOL
-        - STONE_BRICKS
-        - GLASS_PANE
+      - '#minecraft:wool'
+      - '#minecraft:dirt'
+      - 'minecraft:short_grass'
+      - 'minecraft:tall_grass'
+      - 'minecraft:cobblestone'
+      - 'minecraft:oak_planks'
+      - 'minecraft:sandstone'
+      - 'minecraft:stone_bricks'
+      - 'minecraft:glass_pane'
 
 ## WORLD BORDER
 # (Note) ONLY use this if you have a world dedicated to 1 arena.

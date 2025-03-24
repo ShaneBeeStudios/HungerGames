@@ -465,7 +465,7 @@ public class GameListener implements Listener {
                 GameBlockData gameBlockData = game.getGameBlockData();
                 Status status = game.getGameArenaData().getStatus();
                 if (status == Status.RUNNING || status == Status.FREE_ROAM) {
-                    if (!BlockUtils.isBreakableBlock(block)) {
+                    if (!BlockUtils.isEditableBlock(block.getType())) {
                         Util.sendMessage(player, this.lang.listener_no_edit_block);
                         event.setCancelled(true);
                     } else {
@@ -509,7 +509,7 @@ public class GameListener implements Listener {
             if (Config.breakblocks && this.playerManager.hasPlayerData(player)) {
                 Game game = this.playerManager.getPlayerData(player).getGame();
                 if (game.getGameArenaData().getStatus() == Status.RUNNING || !Config.protectCooldown) {
-                    if (!BlockUtils.isBreakableBlock(block)) {
+                    if (!BlockUtils.isEditableBlock(block.getType())) {
                         Util.sendMessage(player, this.lang.listener_no_edit_block);
                         event.setCancelled(true);
                     } else {
@@ -554,15 +554,15 @@ public class GameListener implements Listener {
     private void handleBucketEvent(PlayerBucketEvent event, boolean fill) {
         Block block = event.getBlock();
         Player player = event.getPlayer();
-        final boolean WATER = event.getBucket() == Material.WATER_BUCKET && (Config.blocks.contains("WATER") || Config.blocks.contains("ALL"));
-        final boolean LAVA = event.getBucket() == Material.LAVA_BUCKET && (Config.blocks.contains("LAVA") || Config.blocks.contains("ALL"));
+        final boolean WATER = event.getBucket() == Material.WATER_BUCKET && BlockUtils.isEditableBlock(Material.WATER);
+        final boolean LAVA = event.getBucket() == Material.LAVA_BUCKET && BlockUtils.isEditableBlock(Material.LAVA);
 
         if (this.gameManager.isInRegion(block.getLocation())) {
             if (Config.breakblocks && this.playerManager.hasPlayerData(player)) {
                 Game game = this.playerManager.getPlayerData(player).getGame();
                 GameBlockData gameBlockData = game.getGameBlockData();
                 if (game.getGameArenaData().getStatus() == Status.RUNNING || !Config.protectCooldown) {
-                    if (fill && BlockUtils.isBreakableBlock(block)) {
+                    if (fill && BlockUtils.isEditableBlock(block.getType())) {
                         gameBlockData.recordBlockBreak(block);
                     } else if (!fill && (WATER || LAVA)) {
                         gameBlockData.recordBlockPlace(block.getState());

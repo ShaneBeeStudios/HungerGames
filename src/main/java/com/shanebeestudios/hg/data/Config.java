@@ -33,7 +33,7 @@ public class Config {
     public static int minbonuscontent;
     public static boolean teleportEnd;
     public static int teleportEndTime;
-    public static List<String> bonusBlockTypes;
+    public static List<String> SETTINGS_BONUS_BLOCK_TYPES;
     public static boolean hideNametags;
     public static boolean savePreviousLocation;
 
@@ -60,7 +60,7 @@ public class Config {
     public static boolean protectCooldown;
     public static boolean fixleaves;
     public static boolean preventtrample;
-    public static List<String> blocks;
+    public static List<String> ROLLBACK_EDITABLE_BLOCKS;
     public static boolean itemframe_take;
 
     //Random chest
@@ -124,7 +124,7 @@ public class Config {
         minbonuscontent = config.getInt("settings.min-bonus-chestcontent");
         hideNametags = config.getBoolean("settings.hide-nametags");
         savePreviousLocation = config.getBoolean("settings.save-previous-location");
-        bonusBlockTypes = config.getStringList("settings.bonus-block-types");
+        SETTINGS_BONUS_BLOCK_TYPES = config.getStringList("settings.bonus-block-types");
 
         // Mobs
         MOBS_SPAWN_ENABLED = config.getBoolean("mob-spawning.enabled");
@@ -148,7 +148,7 @@ public class Config {
         protectCooldown = config.getBoolean("rollback.protect-during-cooldown");
         fixleaves = config.getBoolean("rollback.fix-leaves");
         preventtrample = config.getBoolean("rollback.prevent-trampling");
-        blocks = config.getStringList("rollback.editable-blocks");
+        ROLLBACK_EDITABLE_BLOCKS = config.getStringList("rollback.editable-blocks");
         itemframe_take = config.getBoolean("rollback.allow-itemframe-take");
 
         randomChest = config.getBoolean("random-chest.enabled");
