@@ -6,6 +6,7 @@ import java.util.List;
 
 import com.shanebeestudios.hg.api.util.Util;
 
+import com.shanebeestudios.hg.plugin.permission.Permissions;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.potion.PotionEffect;
@@ -47,6 +48,9 @@ public class KitEntry {
 		this.leggings = leggings;
 		this.perm = permission;
 		this.potions = potions;
+        if (permission != null && !permission.isEmpty()) {
+            Permissions.registerKitPermission("name", permission);
+        }
 	}
 
 	/** Check if a player has permission for this kit

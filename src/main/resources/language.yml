@@ -132,6 +132,7 @@ cmd-base-noperm: '<red>You do not have permission to use: /hg <command>'
 cmd-base-nogame: '<red>You are not in a valid game!'
 cmd-base-noregion: '<red>You are not in a valid HungerGames region!'
 cmd-base-wrongusage: '<red>Wrong usage:'
+cmd-base-status: "Status for arena <white>'<aqua><arena><white>' <grey>= <status>"
 
 ## Create
 cmd-create-need-selection: '<red>You need to make a selection before making an arena!'
@@ -169,8 +170,11 @@ cmd-reload-reloaded-items: '<gold> - <yellow>RandomItems have been reloaded!'
 cmd-reload-reloaded-config: '<gold> - <yellow>Config values have been reloaded!'
 cmd-reload-reloaded-success: '<green>- Successfully reloaded HungerGames'
 
-## Exit
+## COMMANDS
 command:
+  # Base
+  base-status: "Status for arena <white>'<aqua><arena><white>' <grey>= <status>"
+  # Exit
   exit-set-global: '<gold>Global exit has been set to your location!'
   exit-set-all: 'Exit for all arenas has been set to your location!'
   exit-set-arena: '<gold>Exit for arena <arena> has been set to your location!'

@@ -100,6 +100,7 @@ public class Language {
     public String cmd_base_nogame;
     public String cmd_base_noregion;
     public String cmd_base_wrongusage;
+    public String cmd_base_status;
     public String cmd_create_need_selection;
     public String cmd_create_divisible_1;
     public String cmd_create_divisible_2;
@@ -317,6 +318,7 @@ public class Language {
         cmd_base_nogame = lang.getString("cmd-base-nogame");
         cmd_base_noregion = lang.getString("cmd-base-noregion");
         cmd_base_wrongusage = lang.getString("cmd-base-wrongusage");
+        cmd_base_status = lang.getString("command.base-status");
         cmd_create_need_selection = lang.getString("cmd-create-need-selection");
         cmd_create_divisible_1 = lang.getString("cmd-create-divisible-1");
         cmd_create_divisible_2 = lang.getString("cmd-create-divisible-2");

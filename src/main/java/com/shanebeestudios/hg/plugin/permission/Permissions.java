@@ -20,14 +20,22 @@ public class Permissions {
 
     // Command permissions
     public static final Permission COMMAND_CREATE = getCommand("create", "Create a new game arena", PermissionDefault.OP);
+    public static final Permission COMMAND_FORCE_START = getCommand("forcestart", "Force start a game arena", PermissionDefault.OP);
     public static final Permission COMMAND_JOIN = getCommand("join", "Join a game", PermissionDefault.TRUE);
     public static final Permission COMMAND_JOIN_OTHERS = getCommand("join_others", "Join other players to a game", PermissionDefault.OP);
+    public static final Permission COMMAND_PERMISSIONS = getCommand("permissions", "List of permissions", PermissionDefault.OP);
     public static final Permission COMMAND_SET_EXIT = getCommand("setexit", "Set the exit of a game, all games or the global exit", PermissionDefault.OP);
+    public static final Permission COMMAND_STATUS = getCommand("status", "Show status of a game", PermissionDefault.TRUE);
     public static final Permission COMMAND_STOP = getCommand("stop", "Stop the game", PermissionDefault.OP);
     public static final Permission COMMAND_STOP_ALL =  getCommand("stopallgames", "Stop all games", PermissionDefault.OP);
+    public static final Permission COMMAND_TOGGLE = getCommand("toggle", "Toggle a game", PermissionDefault.OP);
 
     private static Permission getCommand(String perm, String description, PermissionDefault defaultPermission) {
         return getBase("command", perm, description, defaultPermission);
+    }
+
+    public static void registerKitPermission(String kitName, String kitPermission) {
+        getBase("kit", kitPermission, "Permission for kit '" + kitName + "'", PermissionDefault.FALSE);
     }
 
     private static Permission getBase(String base, String perm, String description, PermissionDefault defaultPermission) {

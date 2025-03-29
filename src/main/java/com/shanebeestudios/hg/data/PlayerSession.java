@@ -2,10 +2,13 @@ package com.shanebeestudios.hg.data;
 
 import com.shanebeestudios.hg.HungerGames;
 import com.shanebeestudios.hg.api.util.Util;
+import io.papermc.paper.datacomponent.DataComponentTypes;
 import org.bukkit.Location;
 import org.bukkit.block.Block;
 import org.bukkit.block.Sign;
 import org.bukkit.entity.Player;
+import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.ItemType;
 import org.bukkit.util.BoundingBox;
 
 import java.util.ArrayList;
@@ -39,8 +42,12 @@ public class PlayerSession {
         this.cost = cost;
     }
 
+    @SuppressWarnings("UnstableApiUsage")
     public void start(Player player) {
         this.stage = Stage.CORNER_1;
+        ItemStack itemStack = ItemType.BLAZE_ROD.createItemStack();
+        itemStack.setData(DataComponentTypes.ITEM_NAME, Util.getMini("Selection Tool"));
+        player.getInventory().addItem(itemStack);
         Util.sendPrefixedMessage(player, "Click your first corner");
     }
 

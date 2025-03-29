@@ -63,4 +63,8 @@ public enum Status {
         };
 	}
 
+    public String getStringName() {
+        return Util.unMini(this.getName());
+    }
+
 }

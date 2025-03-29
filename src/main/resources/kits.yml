@@ -152,7 +152,7 @@ kits:
         amplifier: 1
         type: minecraft:speed
   stupid_class:
-    permission: hg.vip
+    permission: stupid_class
     helmet: ''
     chestplate: ''
     leggings: ''

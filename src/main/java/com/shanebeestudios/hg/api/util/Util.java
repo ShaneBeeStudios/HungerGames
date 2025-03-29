@@ -42,7 +42,7 @@ public class Util {
         if (PREFIX == null) {
             Language lang = HungerGames.getPlugin().getLang();
             if (lang != null) {
-                PREFIX = lang.prefix + " ";
+                PREFIX = lang.prefix;
             } else {
                 return "<grey>[<aqua>Hunger<dark_aqua>Games<grey>] ";
             }
