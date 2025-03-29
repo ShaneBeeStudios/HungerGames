@@ -3,44 +3,44 @@
 items:
   - id: minecraft:stone_sword
     count: 1
-    chance: 5
+    weight: 5
   - id: minecraft:golden_sword
     count: 1
   - id: minecraft:mushroom_stew
     count: 1
-    chance: 2
+    weight: 2
   - id: minecraft:stone_hoe
     count: 1
   - id: minecraft:leather_helmet
     count: 1
-    chance: 2
+    weight: 2
   - id: minecraft:leather_chestplate
     count: 1
-    chance: 2
+    weight: 2
   - id: minecraft:leather_leggings
     count: 1
-    chance: 2
+    weight: 2
   - id: minecraft:iron_helmet
     count: 1
-    chance: 2
+    weight: 2
   - id: minecraft:iron_chestplate
     count: 1
-    chance: 2
+    weight: 2
   - id: minecraft:iron_leggings
     count: 1
-    chance: 2
+    weight: 2
   - id: minecraft:iron_boots
     count: 1
-    chance: 2
+    weight: 2
   - id: minecraft:bow
     count: 1
-    chance: 3
+    weight: 3
   - id: minecraft:arrow
     count: 20
-    chance: 2
+    weight: 2
   - id: minecraft:milk_bucket
     count: 1
-    chance: 2
+    weight: 2
   - id: minecraft:fishing_rod
     count: 1
   - id: minecraft:compass
@@ -58,7 +58,7 @@ items:
     count: 1
   - id: minecraft:bone
     count: 1
-    chance: 2
+    weight: 2
   - id: minecraft:golden_leggings
     count: 1
   - id: minecraft:golden_boots
@@ -72,22 +72,22 @@ items:
     count: 1
   - id: minecraft:chainmail_chestplate
     count: 1
-    chance: 1
+    weight: 1
   - id: minecraft:chainmail_leggings
     count: 1
-    chance: 1
+    weight: 1
   - id: minecraft:cookie
     count: 2
-    chance: 3
+    weight: 3
   - id: minecraft:melon_slice
     count: 1
-    chance: 4
+    weight: 4
   - id: minecraft:cooked_beef
     count: 1
-    chance: 2
+    weight: 2
   - id: minecraft:ender_pearl
     count: 1
-    chance: 2
+    weight: 2
   - id: minecraft:potion
     count: 1
     custom_name: Potion of Swiftness
@@ -95,7 +95,7 @@ items:
       - type: minecraft:speed
         duration: 3600
         amplifier: 1
-    chance: 2
+    weight: 2
   - id: minecraft:potion
     count: 1
     custom_name: Potion of Healing
@@ -103,7 +103,7 @@ items:
       - type: minecraft:instant_health
         duration: 1
         amplifier: 1
-    chance: 2
+    weight: 2
   - id: minecraft:splash_potion
     count: 1
     custom_name: Splash Potion of Poison
@@ -118,7 +118,7 @@ items:
       - type: minecraft:regeneration
         duration: 660
         amplifier: 1
-    chance: 2
+    weight: 2
   - id: minecraft:tipped_arrow
     count: 1
     potion: minecraft:long_poison
@@ -130,7 +130,7 @@ items:
     potion: minecraft:harming
   - id: minecraft:apple
     count: 2
-    chance: 5
+    weight: 5
 bonus:
   - id: minecraft:diamond_sword
     count: 1

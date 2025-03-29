@@ -8,44 +8,44 @@ mobs:
     default:
       '1':
         type: minecraft:sheep
-        chance: 2
+        weight: 2
       '2':
         type: minecraft:cow
-        chance: 3
+        weight: 3
       '3':
         type: minecraft:pig
-        chance: 3
+        weight: 3
       '4':
         type: minecraft:chicken
-        chance: 1
+        weight: 1
       '5':
         type: minecraft:parrot
-        chance: 2
+        weight: 2
       '6':
         type: minecraft:spider
-        chance: 1
+        weight: 1
       '7':
         type: minecraft:creeper
-        chance: 1
+        weight: 1
   # These mobs will only spawn during nighttime
   night:
     # Default will apply to all arenas which don't have a custom mob setup
     default:
       '1':
         type: minecraft:zombie
-        chance: 4
+        weight: 4
       '2':
         type: minecraft:drowned
-        chance: 2
+        weight: 2
       '3':
         type: minecraft:skeleton
-        chance: 2
+        weight: 2
       '4':
         type: minecraft:stray
-        chance: 1
+        weight: 1
       '5':
         type: minecraft:creeper
-        chance: 1
+        weight: 1
     # Example setup for mobs (plugin will ignore these examples)
     # Arena name
     example-night:
@@ -54,7 +54,7 @@ mobs:
         # Minecraft ID of entity type
         type: minecraft:skeleton
         # The amount of times this mob will be added to the list to randomly pull from (optional - default = 1)
-        chance: 3
+        weight: 3
         # The custom name that will appear above this mobs head (optional)
         name: '<gray>Night Guard'
 
@@ -99,7 +99,7 @@ mobs:
             amplifier: 1
       '2':
         type: minecraft:zombie
-        chance: 10
+        weight: 10
         name: '<dark_aqua>The Beast'
         gear:
           feet:
@@ -129,7 +129,7 @@ mobs:
         # I have no clue what level is for (optional - default = 1)
         level: 1
         # The amount of times this mob will be added to the list to randomly pull from (optional - default = 1)
-        chance: 3
+        weight: 3
         # The death message that will be sent when a player is killed by this mob (optional)
         death: '<aqua><player> <red>was sliced in half by a <yellow>Skeleton King'
 

@@ -115,8 +115,8 @@ public class MobManager {
                 if (deathMessageString != null) {
                     entry.setDeathMessage(Util.getMini(deathMessageString));
                 }
-                int chance = mobSection.getInt("chance", 1);
-                for (int i = 1; i <= chance; i++) {
+                int weight = mobSection.getInt("weight", 1);
+                for (int i = 1; i <= weight; i++) {
                     if (time.equalsIgnoreCase("day")) {
                         this.dayMobs.add(entry);
                     } else {

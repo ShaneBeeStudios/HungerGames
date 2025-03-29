@@ -117,8 +117,8 @@ public class ItemStackManager {
             Map<String, Object> itemMap = (Map<String, Object>) itemMapUnchecked;
 
             ItemStack itemStack = ItemParser.parseItem(itemMap);
-            int chance = (int) itemMap.getOrDefault("chance", 1);
-            for (int i = 0; i < chance; i++) {
+            int weight = (int) itemMap.getOrDefault("weight", 1);
+            for (int i = 0; i < weight; i++) {
                 map.put(map.size() + 1, itemStack);
             }
         }
