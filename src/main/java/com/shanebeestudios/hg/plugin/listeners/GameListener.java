@@ -3,6 +3,7 @@ package com.shanebeestudios.hg.plugin.listeners;
 import com.shanebeestudios.hg.HungerGames;
 import com.shanebeestudios.hg.Status;
 import com.shanebeestudios.hg.api.util.BlockUtils;
+import com.shanebeestudios.hg.api.util.Constants;
 import com.shanebeestudios.hg.api.util.Util;
 import com.shanebeestudios.hg.data.Config;
 import com.shanebeestudios.hg.data.Language;
@@ -73,6 +74,8 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.PlayerInventory;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.metadata.FixedMetadataValue;
+import org.bukkit.persistence.PersistentDataContainer;
+import org.bukkit.persistence.PersistentDataType;
 import org.bukkit.util.Vector;
 
 /**
@@ -427,17 +430,18 @@ public class GameListener implements Listener {
             assert block != null;
             if (Tag.WALL_SIGNS.isTagged(block.getType())) {
                 Sign sign = (Sign) block.getState();
-                // TODO PDC for the sign
-                if (sign.getLine(0).equals(Util.getColString(lang.lobby_sign_1_1))) {
-                    Game game = gameManager.getGame(sign.getLine(1).substring(2));
+                PersistentDataContainer pdc = sign.getPersistentDataContainer();
+                if (pdc.has(Constants.LOBBY_SIGN_KEY, PersistentDataType.STRING)) {
+                    String name = pdc.get(Constants.LOBBY_SIGN_KEY, PersistentDataType.STRING);
+                    Game game = this.gameManager.getGame(name);
                     if (game == null) {
                         Util.sendMessage(player, lang.cmd_delete_noexist);
                     } else {
                         if (player.getInventory().getItemInMainHand().getType() == Material.AIR) {
                             // Process this after event has finished running to prevent double click issues
-                            Bukkit.getScheduler().scheduleSyncDelayedTask(plugin, () -> game.joinGame(player), 2);
+                            Bukkit.getScheduler().scheduleSyncDelayedTask(this.plugin, () -> game.joinGame(player), 2);
                         } else {
-                            Util.sendMessage(player, lang.listener_sign_click_hand);
+                            Util.sendMessage(player, this.lang.listener_sign_click_hand);
                         }
                     }
                 }

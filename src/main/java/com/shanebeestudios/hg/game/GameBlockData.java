@@ -1,6 +1,7 @@
 package com.shanebeestudios.hg.game;
 
 import com.shanebeestudios.hg.HungerGames;
+import com.shanebeestudios.hg.api.util.Constants;
 import com.shanebeestudios.hg.api.util.Util;
 import com.shanebeestudios.hg.data.ItemFrameData;
 import org.bukkit.Location;
@@ -13,6 +14,8 @@ import org.bukkit.block.data.Directional;
 import org.bukkit.block.sign.Side;
 import org.bukkit.entity.ItemFrame;
 import org.bukkit.inventory.InventoryHolder;
+import org.bukkit.persistence.PersistentDataContainer;
+import org.bukkit.persistence.PersistentDataType;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -228,6 +231,8 @@ public class GameBlockData extends Data {
         GameArenaData gameArenaData = this.game.getGameArenaData();
         try {
             this.sign1 = sign;
+            PersistentDataContainer pdc = this.sign1.getPersistentDataContainer();
+            pdc.set(Constants.LOBBY_SIGN_KEY, PersistentDataType.STRING, gameArenaData.getName());
             Block c = this.sign1.getBlock();
             BlockFace face = Util.getSignFace(((Directional) this.sign1.getBlockData()).getFacing());
             this.sign2 = (Sign) c.getRelative(face).getState();

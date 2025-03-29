@@ -11,6 +11,7 @@ import org.bukkit.Color;
 import org.bukkit.FireworkEffect;
 import org.bukkit.FireworkEffect.Type;
 import org.bukkit.Location;
+import org.bukkit.NamespacedKey;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
 import org.bukkit.command.CommandSender;
@@ -279,6 +280,11 @@ public class Util {
 //        return attached.getRelative(face).equals(base);
         // TODO figure out a replacement
         return true;
+    }
+
+    @SuppressWarnings("DataFlowIssue")
+    public static @NotNull NamespacedKey getPluginKey(String key) {
+        return NamespacedKey.fromString("hungergames:" + key);
     }
 
     /**

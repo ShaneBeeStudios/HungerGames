@@ -85,7 +85,8 @@ public class Game {
         if (!this.gameBlockData.setLobbyBlock(lobbySign)) {
             isReady = false;
         }
-        gameArenaData.setStatus(isReady ? Status.READY : Status.BROKEN);
+        this.gameArenaData.setStatus(isReady ? Status.READY : Status.BROKEN);
+        this.gameBlockData.updateLobbyBlock();
 
         this.kitManager = plugin.getKitManager();
     }
