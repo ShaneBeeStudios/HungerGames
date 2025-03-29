@@ -252,14 +252,14 @@ public class GamePlayerData extends Data {
                 playerData.setPreviousLocation(previousLocation);
             }
             this.playerManager.addPlayerData(playerData);
-            gameArenaData.getBoard().setBoard(player);
+            this.game.getGameScoreboard().setupBoard(player);
 
             heal(player);
             freeze(player);
             this.kills.put(player, 0);
             kitHelp(player);
 
-            gameArenaData.updateBoards();
+            this.game.getGameScoreboard().updateBoards();
             this.game.getGameCommandData().runCommands(GameCommandData.CommandType.JOIN, player);
         });
     }
@@ -301,6 +301,7 @@ public class GamePlayerData extends Data {
         assert playerData != null;
         Location previousLocation = playerData.getPreviousLocation();
 
+        this.game.getGameScoreboard().removePlayer(player);
         playerData.restore(player);
         exit(player, previousLocation);
         this.playerManager.removePlayerData(player);
@@ -361,8 +362,8 @@ public class GamePlayerData extends Data {
                 player.hidePlayer(plugin, spectator);
             }
         }
-        game.getGameBarData().addPlayer(spectator);
-        game.gameArenaData.board.setBoard(spectator);
+        this.game.getGameBarData().addPlayer(spectator);
+        this.game.getGameScoreboard().setupBoard(spectator);
         spectator.getInventory().setItem(0, plugin.getItemStackManager().getSpectatorCompass());
     }
 

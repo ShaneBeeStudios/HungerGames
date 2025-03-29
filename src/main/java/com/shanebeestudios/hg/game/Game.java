@@ -54,6 +54,7 @@ public class Game {
 
     // Data Objects
     final GameArenaData gameArenaData;
+    final GameScoreboard gameScoreboard;
     final GameBarData bar;
     final GamePlayerData gamePlayerData;
     final GameBlockData gameBlockData;
@@ -105,10 +106,11 @@ public class Game {
      */
     public Game(String name, Bound bound, int timer, int minPlayers, int maxPlayers, int roam, int cost) {
         this.plugin = HungerGames.getPlugin();
+        this.lang = plugin.getLang();
         this.gameArenaData = new GameArenaData(this, name, bound, timer, minPlayers, maxPlayers, roam, cost);
         this.gameArenaData.status = Status.NOT_READY;
+        this.gameScoreboard = new GameScoreboard(this);
         this.playerManager = HungerGames.getPlugin().getPlayerManager();
-        this.lang = plugin.getLang();
         this.kitManager = plugin.getKitManager();
         this.mobManager = new MobManager(this);
         this.bar = new GameBarData(this);
@@ -128,6 +130,15 @@ public class Game {
      */
     public GameArenaData getGameArenaData() {
         return gameArenaData;
+    }
+
+    /**
+     * Get an instance of the GameScoreboard
+     *
+     * @return Instance of GameScoreboard
+     */
+    public GameScoreboard getGameScoreboard() {
+        return this.gameScoreboard;
     }
 
     /**
@@ -363,6 +374,8 @@ public class Game {
             this.gameBorderData.resetBorder();
         }
         this.gameArenaData.bound.removeEntities();
+        this.gameScoreboard.resetBoards();
+
         // TODO win list should be players
         List<UUID> win = new ArrayList<>();
         cancelTasks();
@@ -436,7 +449,6 @@ public class Game {
             gameArenaData.status = Status.READY;
             gameBlockData.updateLobbyBlock();
         }
-        gameArenaData.updateBoards();
         gameCommandData.runCommands(CommandType.STOP, null);
 
         // Call GameEndEvent
@@ -468,7 +480,7 @@ public class Game {
                     Bukkit.getScheduler().runTaskLater(plugin, () -> {
                         stop(finalDeath);
                         gameBlockData.updateLobbyBlock();
-                        gameArenaData.updateBoards();
+                        this.gameScoreboard.updateBoards();
                     }, 20);
                 } else {
                     stop(finalDeath);
@@ -483,7 +495,7 @@ public class Game {
                     .replace("<amount>", String.valueOf((gameArenaData.minPlayers - gamePlayerData.players.size())))));
         }
         gameBlockData.updateLobbyBlock();
-        gameArenaData.updateBoards();
+        this.gameScoreboard.updateBoards();
     }
 
     boolean isGameOver() {

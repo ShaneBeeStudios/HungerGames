@@ -31,7 +31,8 @@ public class Team {
         playerData.setPendingTeam(null);
 
         // Board/McTeam stuff
-        bukkitTeam = game.gameArenaData.getBoard().registerTeam(name);
+        //bukkitTeam = game.gameArenaData.getBoard().registerTeam(name);
+        this.bukkitTeam = Bukkit.getScoreboardManager().getMainScoreboard().getTeam(name);
         bukkitTeam.addEntry(leader.getName());
     }
 

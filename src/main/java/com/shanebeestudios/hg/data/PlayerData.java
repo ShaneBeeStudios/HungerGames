@@ -22,6 +22,8 @@ import java.util.UUID;
 @SuppressWarnings("WeakerAccess")
 public class PlayerData implements Cloneable {
 
+    private static final Scoreboard DUMMY = Bukkit.getScoreboardManager().getNewScoreboard();
+
     //Pregame data
     private final ItemStack[] inv;
     private final ItemStack[] equip;
@@ -84,7 +86,9 @@ public class PlayerData implements Cloneable {
         player.updateInventory();
         player.setInvulnerable(false);
         restoreHealth(player);
-        player.setScoreboard(scoreboard);
+        // Force back their original scoreboard
+        player.setScoreboard(DUMMY);
+        player.setScoreboard(this.scoreboard);
     }
 
     // Restores later if player has an item in their inventory which changes their max health value
