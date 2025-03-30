@@ -59,6 +59,9 @@ dependencies {
     compileOnly("com.github.MilkBowl:VaultAPI:1.7") {
         isTransitive = false
     }
+
+    // FastBoard
+    implementation("fr.mrmicky:fastboard:2.1.4")
 }
 
 tasks {
