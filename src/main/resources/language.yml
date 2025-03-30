@@ -155,10 +155,6 @@ cmd-join-no-money: '<red>You do not have enough money to join this game. Cost: <
 ## Kit
 cmd-kit-no-change: '<red>You can not change your kit while the game is running!'
 
-## Leave
-cmd-leave-left: '<gold>You left <aqua><arena><red>!'
-cmd-leave-refund: '<gold>You got a refund of <aqua>$<cost> <gold>for leaving the game before it started'
-
 ## Reload
 cmd-reload-attempt: '<green>Attempting to reload HungerGames!'
 cmd-reload-reloaded-arena: '<gold> - <yellow>Arenas have been reloaded!'
@@ -175,6 +171,9 @@ command:
   exit-set-global: '<gold>Global exit has been set to your location!'
   exit-set-all: 'Exit for all arenas has been set to your location!'
   exit-set-arena: '<gold>Exit for arena <arena> has been set to your location!'
+  # Leave
+  leave-left: '<grey>You left <aqua><arena><grey>!'
+  leave-refund: '<grey>You got a refund of <aqua>$<cost> <grey>for leaving the game before it started.'
   # Team
   team-player-not-available: '<aqua><player> <red>Is not available!'
   team-only-leader: '<red>Only the leader can invite other players!'

@@ -112,17 +112,12 @@ public class Language {
     public String cmd_join_already_in_game_other;
     public String cmd_join_no_money;
     public String cmd_kit_no_change;
-    public String cmd_leave_left;
-    public String cmd_leave_refund;
     public String cmd_reload_attempt;
     public String cmd_reload_reloaded_arena;
     public String cmd_reload_reloaded_kit;
     public String cmd_reload_reloaded_items;
     public String cmd_reload_reloaded_config;
     public String cmd_reload_reloaded_success;
-    public String command_exit_set_global;
-    public String command_exit_set_all;
-    public String command_exit_set_arena;
     public String cmd_lobbywall_set;
     public String cmd_lobbywall_notcorrect;
     public String cmd_lobbywall_format;
@@ -130,23 +125,6 @@ public class Language {
     public String cmd_stop_all;
     public String cmd_stop_arena;
     public String cmd_stop_noexist;
-    public String command_team_player_not_available;
-    public String command_team_only_leader;
-    public String command_team_on_team;
-    public String command_team_max;
-    public String command_team_invited;
-    public String command_team_wrong;
-    public String command_team_no_pend;
-    public String command_team_joined;
-    public String command_team_deny;
-    public String command_team_no_team;
-    public String command_team_not_on_team;
-    public String command_team_tp;
-    public String command_team_self;
-    public String command_team_created;
-    public String command_team_already_exists;
-    public String command_team_already_have;
-    public String command_team_none;
     public String cmd_toggle_locked;
     public String cmd_toggle_unlocked;
     public String cmd_handler_nokit;
@@ -188,6 +166,33 @@ public class Language {
     public String check_invalid_lobby;
     public String check_set_lobby;
     public String check_ready_run;
+
+    // COMMANDS
+    // Exit
+    public String command_exit_set_global;
+    public String command_exit_set_all;
+    public String command_exit_set_arena;
+    // Leave
+    public String command_leave_left;
+    public String command_leave_refund;
+    // Team
+    public String command_team_player_not_available;
+    public String command_team_only_leader;
+    public String command_team_on_team;
+    public String command_team_max;
+    public String command_team_invited;
+    public String command_team_wrong;
+    public String command_team_no_pend;
+    public String command_team_joined;
+    public String command_team_deny;
+    public String command_team_no_team;
+    public String command_team_not_on_team;
+    public String command_team_tp;
+    public String command_team_self;
+    public String command_team_created;
+    public String command_team_already_exists;
+    public String command_team_already_have;
+    public String command_team_none;
 
 
     public Language(HungerGames plugin) {
@@ -331,17 +336,13 @@ public class Language {
         cmd_join_already_in_game_other = lang.getString("cmd-join-already-in-game-other");
         cmd_join_no_money = lang.getString("cmd-join-no-money");
         cmd_kit_no_change = lang.getString("cmd-kit-no-change");
-        cmd_leave_left = lang.getString("cmd-leave-left");
-        cmd_leave_refund = lang.getString("cmd-leave-refund");
         cmd_reload_attempt = lang.getString("cmd-reload-attempt");
         cmd_reload_reloaded_arena = lang.getString("cmd-reload-reloaded-arena");
         cmd_reload_reloaded_config = lang.getString("cmd-reload-reloaded-config");
         cmd_reload_reloaded_items = lang.getString("cmd-reload-reloaded-items");
         cmd_reload_reloaded_kit = lang.getString("cmd-reload-reloaded-kit");
         cmd_reload_reloaded_success = lang.getString("cmd-reload-reloaded-success");
-        command_exit_set_global = lang.getString("command.exit-set-global");
-        command_exit_set_all = lang.getString("command.exit-set-all");
-        command_exit_set_arena = lang.getString("command.exit-set-arena");
+
         cmd_lobbywall_set = lang.getString("cmd-lobbywall-set");
         cmd_lobbywall_notcorrect = lang.getString("cmd-lobbywall-notcorrect");
         cmd_lobbywall_format = lang.getString("cmd-lobbywall-format");
@@ -349,24 +350,6 @@ public class Language {
         cmd_stop_all = lang.getString("cmd-stop-all");
         cmd_stop_arena = lang.getString("cmd-stop-arena");
         cmd_stop_noexist = lang.getString("cmd-stop-noexist");
-
-        command_team_player_not_available = lang.getString("command.team-player-not-available");
-        command_team_only_leader = lang.getString("command.team-only-leader");
-        command_team_on_team = lang.getString("command.team-on-team");
-        command_team_max = lang.getString("command.team-max");
-        command_team_invited = lang.getString("command.team-invited");
-        command_team_wrong = lang.getString("command.team-wrong");
-        command_team_no_pend = lang.getString("command.team-no-pending");
-        command_team_joined = lang.getString("command.team-joined");
-        command_team_deny = lang.getString("command.team-deny");
-        command_team_no_team = lang.getString("command.team-no-team");
-        command_team_not_on_team = lang.getString("command.team-not-on-team");
-        command_team_tp = lang.getString("command.team-tp");
-        command_team_self = lang.getString("command.team-self");
-        command_team_created = lang.getString("command.team-created");
-        command_team_already_exists = lang.getString("command.team-already-exists");
-        command_team_already_have = lang.getString("command.team-already-have");
-        command_team_none = lang.getString("command.team-none");
 
         cmd_toggle_unlocked = lang.getString("cmd-toggle-unlocked");
         cmd_toggle_locked = lang.getString("cmd-toggle-locked");
@@ -425,6 +408,33 @@ public class Language {
         check_invalid_lobby = lang.getString("check-invalid-lobby");
         check_set_lobby = lang.getString("check-set-lobby");
         check_ready_run = lang.getString("check-ready-run");
+
+        // COMMANDS
+        // Exit
+        command_exit_set_global = lang.getString("command.exit-set-global");
+        command_exit_set_all = lang.getString("command.exit-set-all");
+        command_exit_set_arena = lang.getString("command.exit-set-arena");
+        // Leave
+        command_leave_left = lang.getString("command.leave-left");
+        command_leave_refund = lang.getString("command.leave-refund");
+        // Team
+        command_team_player_not_available = lang.getString("command.team-player-not-available");
+        command_team_only_leader = lang.getString("command.team-only-leader");
+        command_team_on_team = lang.getString("command.team-on-team");
+        command_team_max = lang.getString("command.team-max");
+        command_team_invited = lang.getString("command.team-invited");
+        command_team_wrong = lang.getString("command.team-wrong");
+        command_team_no_pend = lang.getString("command.team-no-pending");
+        command_team_joined = lang.getString("command.team-joined");
+        command_team_deny = lang.getString("command.team-deny");
+        command_team_no_team = lang.getString("command.team-no-team");
+        command_team_not_on_team = lang.getString("command.team-not-on-team");
+        command_team_tp = lang.getString("command.team-tp");
+        command_team_self = lang.getString("command.team-self");
+        command_team_created = lang.getString("command.team-created");
+        command_team_already_exists = lang.getString("command.team-already-exists");
+        command_team_already_have = lang.getString("command.team-already-have");
+        command_team_none = lang.getString("command.team-none");
     }
 
 }

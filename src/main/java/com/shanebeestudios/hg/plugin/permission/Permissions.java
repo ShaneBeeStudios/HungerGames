@@ -23,6 +23,7 @@ public class Permissions {
     public static final Permission COMMAND_FORCE_START = getCommand("forcestart", "Force start a game arena", PermissionDefault.OP);
     public static final Permission COMMAND_JOIN = getCommand("join", "Join a game", PermissionDefault.TRUE);
     public static final Permission COMMAND_JOIN_OTHERS = getCommand("join_others", "Join other players to a game", PermissionDefault.OP);
+    public static final Permission COMMAND_LEAVE = getCommand("leave", "Leave a game", PermissionDefault.TRUE);
     public static final Permission COMMAND_PERMISSIONS = getCommand("permissions", "List of permissions", PermissionDefault.OP);
     public static final Permission COMMAND_SET_EXIT = getCommand("setexit", "Set the exit of a game, all games or the global exit", PermissionDefault.OP);
     public static final Permission COMMAND_STATUS = getCommand("status", "Show status of a game", PermissionDefault.TRUE);
