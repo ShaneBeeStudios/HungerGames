@@ -45,9 +45,8 @@ public class EditCommand extends SubCommand {
             .then(LiteralArgument.literal("final_size")
                 .then(new IntegerArgument("final_size", 5)
                     .executes(info -> {
-                        Game game = info.args().getByClass("game", Game.class);
+                        Game game = CustomArg.getGame(info);
                         int finalSize = info.args().getByClass("final_size", Integer.class);
-                        assert game != null;
                         GameBorderData gameBorderData = game.getGameBorderData();
                         gameBorderData.setFinalBorderSize(finalSize);
                         saveGame(game);
@@ -55,10 +54,8 @@ public class EditCommand extends SubCommand {
             .then(LiteralArgument.literal("countdown_start")
                 .then(new IntegerArgument("countdown_start", 5)
                     .executes(info -> {
-
-                        Game game = info.args().getByClass("game", Game.class);
+                        Game game = CustomArg.getGame(info);
                         int countdownStart = info.args().getByClass("countdown_start", Integer.class);
-                        assert game != null;
                         GameBorderData gameBorderData = game.getGameBorderData();
                         gameBorderData.setBorderCountdownStart(countdownStart);
                         saveGame(game);
@@ -66,9 +63,8 @@ public class EditCommand extends SubCommand {
             .then(LiteralArgument.literal("countdown_end")
                 .then(new IntegerArgument("countdown_end", 5)
                     .executes(info -> {
-                        Game game = info.args().getByClass("game", Game.class);
+                        Game game = CustomArg.getGame(info);
                         int countdownEnd = info.args().getByClass("countdown_end", Integer.class);
-                        assert game != null;
                         GameBorderData gameBorderData = game.getGameBorderData();
                         gameBorderData.setBorderCountdownEnd(countdownEnd);
                         saveGame(game);
@@ -76,9 +72,8 @@ public class EditCommand extends SubCommand {
             .then(LiteralArgument.literal("center_location")
                 .then(new Location2DArgument("center_location", LocationType.BLOCK_POSITION)
                     .executes(info -> {
-                        Game game = info.args().getByClass("game", Game.class);
+                        Game game = CustomArg.getGame(info);
                         Location2D centerLocation = info.args().getByClass("center_location", Location2D.class);
-                        assert game != null;
                         GameBorderData gameBorderData = game.getGameBorderData();
                         gameBorderData.setCenterLocation(convert(centerLocation));
                         saveGame(game);
@@ -93,6 +88,7 @@ public class EditCommand extends SubCommand {
                 Block targetBlock = player.getTargetBlockExact(10);
                 if (targetBlock != null && Tag.WALL_SIGNS.isTagged(targetBlock.getType()) && game.getGameBlockData().setLobbyBlock((Sign) targetBlock.getState())) {
                     Util.sendPrefixedMessage(player, this.lang.command_edit_lobbywall_set);
+                    saveGame(game);
                 } else {
                     Util.sendPrefixedMessage(player, this.lang.command_edit_lobbywall_incorrect);
                     Util.sendMessage(player, this.lang.command_edit_lobbywall_format);
