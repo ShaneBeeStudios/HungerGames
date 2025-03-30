@@ -23,11 +23,11 @@ public class GameBorderData extends Data {
     }
 
     private double getBorderSize(Location center) {
-        Bound bound = game.gameArenaData.getBound();
-        double x1 = Math.abs(bound.getGreaterCorner().getX() - center.getX());
-        double x2 = Math.abs(bound.getLesserCorner().getX() - center.getX());
-        double z1 = Math.abs(bound.getGreaterCorner().getZ() - center.getZ());
-        double z2 = Math.abs(bound.getLesserCorner().getZ() - center.getZ());
+        GameRegion gameRegion = game.gameArenaData.getBound();
+        double x1 = Math.abs(gameRegion.getGreaterCorner().getX() - center.getX());
+        double x2 = Math.abs(gameRegion.getLesserCorner().getX() - center.getX());
+        double z1 = Math.abs(gameRegion.getGreaterCorner().getZ() - center.getZ());
+        double z2 = Math.abs(gameRegion.getLesserCorner().getZ() - center.getZ());
 
         double x = Math.max(x1, x2);
         double z = Math.max(z1, z2);
@@ -70,7 +70,7 @@ public class GameBorderData extends Data {
         } else if (borderCenter != null) {
             center = borderCenter;
         } else {
-            center = game.gameArenaData.bound.getCenter();
+            center = game.gameArenaData.gameRegion.getCenter();
         }
         World world = center.getWorld();
         assert world != null;

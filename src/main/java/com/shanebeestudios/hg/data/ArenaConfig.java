@@ -2,7 +2,7 @@ package com.shanebeestudios.hg.data;
 
 import com.shanebeestudios.hg.HungerGames;
 import com.shanebeestudios.hg.api.util.Util;
-import com.shanebeestudios.hg.game.Bound;
+import com.shanebeestudios.hg.game.GameRegion;
 import com.shanebeestudios.hg.game.Game;
 import com.shanebeestudios.hg.game.GameArenaData;
 import com.shanebeestudios.hg.managers.ItemStackManager;
@@ -111,7 +111,7 @@ public class ArenaConfig {
                     int cost = 0;
                     int minPlayers = 0;
                     int maxPlayers = 0;
-                    Bound bound = null;
+                    GameRegion gameRegion = null;
                     List<String> commands;
 
                     ConfigurationSection arenaSection = allArenasSection.getConfigurationSection(arenaName);
@@ -156,17 +156,17 @@ public class ArenaConfig {
                         ConfigurationSection regionSection = arenaSection.getConfigurationSection("region");
                         String world = regionSection.getString("world");
                         BoundingBox boundingBox = regionSection.getObject("bounding_box", BoundingBox.class);
-                        bound = Bound.loadFromConfig(world, boundingBox);
+                        gameRegion = GameRegion.loadFromConfig(world, boundingBox);
                     } catch (Exception e) {
                         Util.warning("Unable to load region bounds for arena " + arenaName + "!");
                         isReady = false;
                     }
 
-                    Game game = new Game(arenaName, bound, spawns, lobbysign, timer, minPlayers, maxPlayers, freeRoamTime, isReady, cost);
+                    Game game = new Game(arenaName, gameRegion, spawns, lobbysign, timer, minPlayers, maxPlayers, freeRoamTime, isReady, cost);
                     this.plugin.getGameManager().loadGameFromConfig(arenaName, game);
                     GameArenaData gameArenaData = game.getGameArenaData();
 
-                    World world = bound.getWorld();
+                    World world = gameRegion.getWorld();
                     if (world.getDifficulty() == Difficulty.PEACEFUL) {
                         Util.warning("Difficulty in world '%s' for arena '%s' is set to PEACEFUL...", world.getName(), arenaName);
                         Util.warning("This can have negative effects on the game, please consider raising the difficulty.");

@@ -13,7 +13,7 @@ import java.util.List;
 public class GameArenaData extends Data {
 
     final String name;
-    final Bound bound;
+    final GameRegion gameRegion;
     final int timer;
     final int minPlayers;
     final int maxPlayers;
@@ -26,10 +26,10 @@ public class GameArenaData extends Data {
     int chestRefillTime = 0;
     int chestRefillRepeat = 0;
 
-    public GameArenaData(Game game, String name, Bound bound, int timer, int minPlayers, int maxPlayers, int roamTime, int cost) {
+    public GameArenaData(Game game, String name, GameRegion gameRegion, int timer, int minPlayers, int maxPlayers, int roamTime, int cost) {
         super(game);
         this.name = name;
-        this.bound = bound;
+        this.gameRegion = gameRegion;
         this.timer = timer;
         this.minPlayers = minPlayers;
         this.maxPlayers = maxPlayers;
@@ -43,8 +43,8 @@ public class GameArenaData extends Data {
      *
      * @return Bound of this game
      */
-    public Bound getBound() {
-        return this.bound;
+    public GameRegion getBound() {
+        return this.gameRegion;
     }
 
     /**
@@ -63,7 +63,7 @@ public class GameArenaData extends Data {
      * @return True if location is within the arena bounds
      */
     public boolean isInRegion(Location location) {
-        return bound.isInRegion(location);
+        return gameRegion.isInRegion(location);
     }
 
     /**

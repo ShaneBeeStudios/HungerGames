@@ -4,7 +4,7 @@ import com.shanebeestudios.hg.HungerGames;
 import com.shanebeestudios.hg.api.util.Util;
 import com.shanebeestudios.hg.data.Config;
 import com.shanebeestudios.hg.data.Language;
-import com.shanebeestudios.hg.game.Bound;
+import com.shanebeestudios.hg.game.GameRegion;
 import com.shanebeestudios.hg.game.Game;
 import com.shanebeestudios.hg.plugin.listeners.ChestDrop;
 import org.bukkit.Bukkit;
@@ -32,19 +32,19 @@ public class ChestDropTask implements Runnable {
     }
 
     public void run() {
-        Bound bound = game.getGameArenaData().getBound();
-        Integer[] i = bound.getRandomLocs();
+        GameRegion gameRegion = game.getGameArenaData().getBound();
+        Integer[] i = gameRegion.getRandomLocs();
 
         int x = i[0];
         int y = i[1];
         int z = i[2];
-        World w = bound.getWorld();
+        World w = gameRegion.getWorld();
 
         while (w.getBlockAt(x, y, z).getType() == Material.AIR) {
             y--;
 
             if (y <= 0) {
-                i = bound.getRandomLocs();
+                i = gameRegion.getRandomLocs();
 
                 x = i[0];
                 y = i[1];

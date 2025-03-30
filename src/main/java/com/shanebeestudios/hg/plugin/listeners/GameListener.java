@@ -11,7 +11,7 @@ import com.shanebeestudios.hg.data.Leaderboard;
 import com.shanebeestudios.hg.data.PlayerData;
 import com.shanebeestudios.hg.events.ChestOpenEvent;
 import com.shanebeestudios.hg.events.PlayerDeathGameEvent;
-import com.shanebeestudios.hg.game.Bound;
+import com.shanebeestudios.hg.game.GameRegion;
 import com.shanebeestudios.hg.game.Game;
 import com.shanebeestudios.hg.game.GameArenaData;
 import com.shanebeestudios.hg.game.GameBlockData;
@@ -25,7 +25,6 @@ import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
 import org.bukkit.Material;
-import org.bukkit.Sound;
 import org.bukkit.Tag;
 import org.bukkit.World;
 import org.bukkit.block.Block;
@@ -708,8 +707,8 @@ public class GameListener implements Listener {
                         }
                     }
                 }
-                Bound bound = game.getGameArenaData().getBound();
-                if (!bound.hasEntity(entity)) bound.addEntity(entity);
+                GameRegion gameRegion = game.getGameArenaData().getBound();
+                if (!gameRegion.hasEntity(entity)) gameRegion.addEntity(entity);
             }
         }
     }
@@ -786,8 +785,8 @@ public class GameListener implements Listener {
         Game game = this.gameManager.getGame(entity.getLocation());
         if (game == null) return;
 
-        Bound bound = game.getGameArenaData().getBound();
-        bound.removeEntity(entity);
+        GameRegion gameRegion = game.getGameArenaData().getBound();
+        gameRegion.removeEntity(entity);
     }
 
 }

@@ -67,7 +67,7 @@ public class Game {
      * <p>Internally used when loading from config on server start</p>
      *
      * @param name       Name of this game
-     * @param bound      Bounding region of this game
+     * @param gameRegion      Bounding region of this game
      * @param spawns     List of spawns for this game
      * @param lobbySign  Lobby sign block
      * @param timer      Length of the game (in seconds)
@@ -77,8 +77,8 @@ public class Game {
      * @param isReady    If the game is ready to start
      * @param cost       Cost of this game
      */
-    public Game(String name, Bound bound, List<Location> spawns, Sign lobbySign, int timer, int minPlayers, int maxPlayers, int roam, boolean isReady, int cost) {
-        this(name, bound, timer, minPlayers, maxPlayers, roam, cost);
+    public Game(String name, GameRegion gameRegion, List<Location> spawns, Sign lobbySign, int timer, int minPlayers, int maxPlayers, int roam, boolean isReady, int cost) {
+        this(name, gameRegion, timer, minPlayers, maxPlayers, roam, cost);
         gameArenaData.spawns.addAll(spawns);
         this.gameBlockData.setSign(lobbySign);
 
@@ -97,17 +97,17 @@ public class Game {
      * <p>Internally used when creating a game with the <b>/hg create</b> command</p>
      *
      * @param name       Name of this game
-     * @param bound      Bounding region of this game
+     * @param gameRegion      Bounding region of this game
      * @param timer      Length of the game (in seconds)
      * @param minPlayers Minimum players to be able to start the game
      * @param maxPlayers Maximum players that can join this game
      * @param roam       Roam time for this game
      * @param cost       Cost of this game
      */
-    public Game(String name, Bound bound, int timer, int minPlayers, int maxPlayers, int roam, int cost) {
+    public Game(String name, GameRegion gameRegion, int timer, int minPlayers, int maxPlayers, int roam, int cost) {
         this.plugin = HungerGames.getPlugin();
         this.lang = plugin.getLang();
-        this.gameArenaData = new GameArenaData(this, name, bound, timer, minPlayers, maxPlayers, roam, cost);
+        this.gameArenaData = new GameArenaData(this, name, gameRegion, timer, minPlayers, maxPlayers, roam, cost);
         this.gameArenaData.status = Status.NOT_READY;
         this.gameScoreboard = new GameScoreboard(this);
         this.playerManager = HungerGames.getPlugin().getPlayerManager();
@@ -265,7 +265,7 @@ public class Game {
     public void startFreeRoam() {
         this.gameArenaData.status = Status.FREE_ROAM;
         this.gameBlockData.updateLobbyBlock();
-        this.gameArenaData.bound.removeEntities();
+        this.gameArenaData.gameRegion.removeEntities();
         this.freeRoamTask = new FreeRoamTask(this);
         this.gameCommandData.runCommands(CommandType.START, null);
     }
@@ -373,7 +373,7 @@ public class Game {
         if (Config.borderEnabled) {
             this.gameBorderData.resetBorder();
         }
-        this.gameArenaData.bound.removeEntities();
+        this.gameArenaData.gameRegion.removeEntities();
         this.gameScoreboard.resetBoards();
 
         // TODO win list should be players

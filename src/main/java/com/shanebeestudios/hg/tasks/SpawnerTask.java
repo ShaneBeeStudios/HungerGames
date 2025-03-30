@@ -2,7 +2,7 @@ package com.shanebeestudios.hg.tasks;
 
 import com.shanebeestudios.hg.data.Config;
 import com.shanebeestudios.hg.data.MobEntry;
-import com.shanebeestudios.hg.game.Bound;
+import com.shanebeestudios.hg.game.GameRegion;
 import com.shanebeestudios.hg.game.Game;
 import com.shanebeestudios.hg.game.GameArenaData;
 import com.shanebeestudios.hg.game.GamePlayerData;
@@ -21,7 +21,7 @@ public class SpawnerTask implements Runnable {
 
     private final GamePlayerData gamePlayerData;
     private final GameArenaData gameArenaData;
-    private final Bound bound;
+    private final GameRegion gameRegion;
     private final int taskId;
     private final Random random = new Random();
     private final World world;
@@ -31,7 +31,7 @@ public class SpawnerTask implements Runnable {
     public SpawnerTask(Game game) {
         this.gamePlayerData = game.getGamePlayerData();
         this.gameArenaData = game.getGameArenaData();
-        this.bound = game.getGameArenaData().getBound();
+        this.gameRegion = game.getGameArenaData().getBound();
         this.taskId = Bukkit.getScheduler().scheduleSyncRepeatingTask(game.getGameArenaData().getPlugin(), this, Config.MOBS_SPAWN_INTERVAL, Config.MOBS_SPAWN_INTERVAL);
         this.world = game.getGameArenaData().getBound().getWorld();
         this.mobManager = game.getMobManager();
@@ -39,7 +39,7 @@ public class SpawnerTask implements Runnable {
 
     @Override
     public void run() {
-        int entityCount = this.bound.getEntityCount();
+        int entityCount = this.gameRegion.getEntityCount();
         int playerCap = this.gamePlayerData.getPlayers().size() * this.cap;
         // Prevent spawning if cap already reached
         if (entityCount > playerCap) return;
@@ -59,7 +59,7 @@ public class SpawnerTask implements Runnable {
                 }
                 Entity spawn = mobEntry.spawn(spawnLocation);
                 if (spawn != null) {
-                    this.bound.addEntity(spawn);
+                    this.gameRegion.addEntity(spawn);
                     entityCount++;
                 }
             }

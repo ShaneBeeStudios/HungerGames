@@ -5,7 +5,6 @@ import org.bukkit.entity.Player;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.List;
-import java.util.UUID;
 
 /**
  * Data class for holding a {@link Game Game's} commands
@@ -58,7 +57,7 @@ public class GameCommandData extends Data {
             if (!type.equals(commandType.getType())) continue;
             if (command.equalsIgnoreCase("none")) continue;
             command = command.split(":")[1]
-                    .replace("<world>", this.game.gameArenaData.bound.getWorld().getName())
+                    .replace("<world>", this.game.gameArenaData.gameRegion.getWorld().getName())
                     .replace("<arena>", this.game.gameArenaData.getName());
             if (player != null) {
                 command = command.replace("<player>", player.getName());

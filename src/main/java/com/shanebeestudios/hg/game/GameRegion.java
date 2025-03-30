@@ -20,7 +20,7 @@ import java.util.Random;
  * Bounding box object for creating regions
  */
 @SuppressWarnings({"WeakerAccess", "unused"})
-public class Bound {
+public class GameRegion {
 
     private static final FixedMetadataValue SPAWN_KEY = new FixedMetadataValue(HungerGames.getPlugin(), true);
 
@@ -28,13 +28,13 @@ public class Bound {
     private final String world;
     private final List<Entity> entities = new ArrayList<>();
 
-    public static Bound createNew(@NotNull Block corner1, @NotNull Block corner2) {
+    public static GameRegion createNew(@NotNull Block corner1, @NotNull Block corner2) {
         BoundingBox boundingBox = BoundingBox.of(corner1, corner2);
-        return new Bound(corner1.getWorld().getName(), boundingBox);
+        return new GameRegion(corner1.getWorld().getName(), boundingBox);
     }
 
-    public static Bound loadFromConfig(String world, BoundingBox boundingBox) {
-        return new Bound(world, boundingBox);
+    public static GameRegion loadFromConfig(String world, BoundingBox boundingBox) {
+        return new GameRegion(world, boundingBox);
     }
 
     /**
@@ -43,7 +43,7 @@ public class Bound {
      * @param world       World this bound is in
      * @param boundingBox BoundingBox for this bound
      */
-    private Bound(String world, BoundingBox boundingBox) {
+    private GameRegion(String world, BoundingBox boundingBox) {
         this.world = world;
         this.boundingBox = boundingBox;
     }
