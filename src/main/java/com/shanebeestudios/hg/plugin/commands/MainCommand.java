@@ -16,6 +16,7 @@ public class MainCommand {
         this.command.then(new ForceStartCommand(plugin).register());
         this.command.then(new JoinCommand(plugin).register());
         this.command.then(new KitCommand().register());
+        this.command.then(new ListGamesCommand(plugin).register());
         this.command.then(new PermissionsCommand().register());
         this.command.then(new SetExitCommand(plugin).register());
         this.command.then(new StatusCommand(plugin).register());
