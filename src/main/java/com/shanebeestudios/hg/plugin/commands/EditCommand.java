@@ -2,6 +2,8 @@ package com.shanebeestudios.hg.plugin.commands;
 
 import com.shanebeestudios.hg.HungerGames;
 import com.shanebeestudios.hg.api.command.CustomArg;
+import com.shanebeestudios.hg.api.util.Util;
+import com.shanebeestudios.hg.data.Language;
 import com.shanebeestudios.hg.game.Game;
 import com.shanebeestudios.hg.game.GameBorderData;
 import com.shanebeestudios.hg.plugin.permission.Permissions;
@@ -12,13 +14,19 @@ import dev.jorel.commandapi.arguments.Location2DArgument;
 import dev.jorel.commandapi.arguments.LocationType;
 import dev.jorel.commandapi.wrappers.Location2D;
 import org.bukkit.Location;
+import org.bukkit.Tag;
+import org.bukkit.block.Block;
+import org.bukkit.block.Sign;
+import org.bukkit.entity.Player;
 
 public class EditCommand extends SubCommand {
 
     private final HungerGames plugin;
+    private final Language lang;
 
     public EditCommand(HungerGames plugin) {
         this.plugin = plugin;
+        this.lang = plugin.getLang();
     }
 
     @Override
@@ -26,7 +34,9 @@ public class EditCommand extends SubCommand {
         return LiteralArgument.literal("edit")
             .withPermission(Permissions.COMMAND_EDIT.permission())
             .then(CustomArg.GAME.get("game")
-                .then(border()));
+                .then(border())
+                .then(lobbyWall())
+            );
     }
 
     @SuppressWarnings("DataFlowIssue")
@@ -45,6 +55,7 @@ public class EditCommand extends SubCommand {
             .then(LiteralArgument.literal("countdown_start")
                 .then(new IntegerArgument("countdown_start", 5)
                     .executes(info -> {
+
                         Game game = info.args().getByClass("game", Game.class);
                         int countdownStart = info.args().getByClass("countdown_start", Integer.class);
                         assert game != null;
@@ -72,6 +83,21 @@ public class EditCommand extends SubCommand {
                         gameBorderData.setCenterLocation(convert(centerLocation));
                         saveGame(game);
                     })));
+    }
+
+    private Argument<?> lobbyWall() {
+        return LiteralArgument.literal("lobby_wall")
+            .executesPlayer(info -> {
+                Game game = CustomArg.getGame(info);
+                Player player = info.sender();
+                Block targetBlock = player.getTargetBlockExact(10);
+                if (targetBlock != null && Tag.WALL_SIGNS.isTagged(targetBlock.getType()) && game.getGameBlockData().setLobbyBlock((Sign) targetBlock.getState())) {
+                    Util.sendPrefixedMessage(player, this.lang.command_edit_lobbywall_set);
+                } else {
+                    Util.sendPrefixedMessage(player, this.lang.command_edit_lobbywall_incorrect);
+                    Util.sendMessage(player, this.lang.command_edit_lobbywall_format);
+                }
+            });
     }
 
     private void saveGame(Game game) {

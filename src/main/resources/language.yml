@@ -167,6 +167,12 @@ cmd-reload-reloaded-success: '<green>- Successfully reloaded HungerGames'
 command:
   # Base
   base-status: "Status for arena <white>'<aqua><arena><white>' <grey>= <status>"
+  # Edit
+  edit:
+    # LobbyWall
+    lobbywall-set: '<green>The LobbyWallSign has been set!'
+    lobbywall-incorrect: '<red>These signs are not in correct format!'
+    lobbywall-format: '<grey>format: <gold>[sign] <red>[sign] [sign]'
   # Exit
   exit-set-global: '<gold>Global exit has been set to your location!'
   exit-set-all: 'Exit for all arenas has been set to your location!'
@@ -193,10 +199,6 @@ command:
   team-already-have: "<red>You have already created a team: <aqua><name>"
   team-none: "<red>You do not have a team, create one first with command <aqua>'/hg team create <name>'"
 
-## LobbyWall
-cmd-lobbywall-set: '<green>The lobbyWallSign has been set!'
-cmd-lobbywall-notcorrect: '<red>These signs are not in correct format!'
-cmd-lobbywall-format: '<red>format: <gold>[sign] <red>[sign] [sign]'
 lobby-signs:
   sign-1:
     line-1: '<dark_blue>Hunger Games'

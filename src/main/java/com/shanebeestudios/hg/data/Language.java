@@ -118,9 +118,6 @@ public class Language {
     public String cmd_reload_reloaded_items;
     public String cmd_reload_reloaded_config;
     public String cmd_reload_reloaded_success;
-    public String cmd_lobbywall_set;
-    public String cmd_lobbywall_notcorrect;
-    public String cmd_lobbywall_format;
     public String cmd_start_starting;
     public String cmd_stop_all;
     public String cmd_stop_arena;
@@ -168,6 +165,11 @@ public class Language {
     public String check_ready_run;
 
     // COMMANDS
+    // Edit
+    // LobbyWall
+    public String command_edit_lobbywall_set;
+    public String command_edit_lobbywall_incorrect;
+    public String command_edit_lobbywall_format;
     // Exit
     public String command_exit_set_global;
     public String command_exit_set_all;
@@ -342,10 +344,6 @@ public class Language {
         cmd_reload_reloaded_items = lang.getString("cmd-reload-reloaded-items");
         cmd_reload_reloaded_kit = lang.getString("cmd-reload-reloaded-kit");
         cmd_reload_reloaded_success = lang.getString("cmd-reload-reloaded-success");
-
-        cmd_lobbywall_set = lang.getString("cmd-lobbywall-set");
-        cmd_lobbywall_notcorrect = lang.getString("cmd-lobbywall-notcorrect");
-        cmd_lobbywall_format = lang.getString("cmd-lobbywall-format");
         cmd_start_starting = lang.getString("cmd-start-starting");
         cmd_stop_all = lang.getString("cmd-stop-all");
         cmd_stop_arena = lang.getString("cmd-stop-arena");
@@ -410,6 +408,11 @@ public class Language {
         check_ready_run = lang.getString("check-ready-run");
 
         // COMMANDS
+        // Edit
+        // LobbyWall
+        command_edit_lobbywall_set = lang.getString("command.edit.lobbywall-set");
+        command_edit_lobbywall_incorrect = lang.getString("command.edit.lobbywall-incorrect");
+        command_edit_lobbywall_format = lang.getString("command.edit.lobbywall-format");
         // Exit
         command_exit_set_global = lang.getString("command.exit-set-global");
         command_exit_set_all = lang.getString("command.exit-set-all");
