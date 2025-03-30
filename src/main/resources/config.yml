@@ -155,6 +155,11 @@ spectate:
   # Allow spectators to chat
   chat: false
 
+# Different sounds played in the game
+sounds:
+  # Played when a player dies in the game
+  death: 'ui.toast.challenge_complete'
+  open-chest-drop: 'block.ender_chest.open'
 mcmmo:
   # If players in game can use mcMMO skills in game
   use-skills: false

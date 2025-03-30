@@ -287,7 +287,7 @@ public class GamePlayerData extends Data {
         if (death) {
             if (Config.spectateEnabled && Config.spectateOnDeath && !game.isGameOver()) {
                 spectate(player);
-                player.playSound(player.getLocation(), Sound.UI_TOAST_CHALLENGE_COMPLETE, 5, 1);
+                player.playSound(player.getLocation(), Config.SOUNDS_DEATH, 5, 1);
                 player.sendTitle(this.game.getGameArenaData().getName(), Util.getColString(lang.spectator_start_title), 10, 100, 10);
                 game.updateAfterDeath(player, true);
                 return;
@@ -305,7 +305,7 @@ public class GamePlayerData extends Data {
         exit(player, previousLocation);
         this.playerManager.removePlayerData(player);
         if (death) {
-            player.playSound(player.getLocation(), Sound.UI_TOAST_CHALLENGE_COMPLETE, 5, 1);
+            player.playSound(player.getLocation(), Config.SOUNDS_DEATH, 5, 1);
         }
         this.game.updateAfterDeath(player, death);
     }

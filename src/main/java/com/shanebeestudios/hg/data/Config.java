@@ -83,6 +83,10 @@ public class Config {
     public static boolean spectateFly;
     public static boolean spectateChat;
 
+    // Sounds
+    public static String SOUNDS_DEATH;
+    public static String SOUNDS_OPEN_CHEST_DROP;
+
     //mcMMO
     public static boolean mcmmoUseSkills;
     public static boolean mcmmoGainExp;
@@ -169,6 +173,9 @@ public class Config {
         spectateHide = config.getBoolean("spectate.hide-spectators");
         spectateFly = config.getBoolean("spectate.fly");
         spectateChat = config.getBoolean("spectate.chat");
+
+        SOUNDS_DEATH = config.getString("sounds.death");
+        SOUNDS_OPEN_CHEST_DROP = config.getString("sounds.open-chest-drop");
 
         mcmmoUseSkills = config.getBoolean("mcmmo.use-skills");
         mcmmoGainExp = config.getBoolean("mcmmo.gain-experience");

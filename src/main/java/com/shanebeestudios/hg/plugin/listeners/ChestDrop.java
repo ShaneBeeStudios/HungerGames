@@ -117,7 +117,7 @@ public class ChestDrop implements Listener {
                 c--;
             }
             event.setCancelled(true);
-            player.playSound(player.getLocation(), Sound.BLOCK_ENDER_CHEST_OPEN, 1, 1);
+            player.playSound(player.getLocation(), Config.SOUNDS_OPEN_CHEST_DROP, 1, 1);
             player.openInventory(i);
         }
     }

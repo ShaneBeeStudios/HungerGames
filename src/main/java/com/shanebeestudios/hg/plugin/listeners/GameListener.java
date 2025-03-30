@@ -258,7 +258,7 @@ public class GameListener implements Listener {
 
             for (Player alive : game.getGamePlayerData().getPlayers()) {
                 if (alive != null && player != alive) {
-                    alive.playSound(alive.getLocation(), Sound.UI_TOAST_CHALLENGE_COMPLETE, 5, 1);
+                    alive.playSound(alive.getLocation(), Config.SOUNDS_DEATH, 5, 1);
                 }
             }
 
