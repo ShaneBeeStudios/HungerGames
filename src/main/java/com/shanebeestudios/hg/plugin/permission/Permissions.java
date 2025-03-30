@@ -28,6 +28,8 @@ public class Permissions {
     public static final Permission COMMAND_STATUS = getCommand("status", "Show status of a game", PermissionDefault.TRUE);
     public static final Permission COMMAND_STOP = getCommand("stop", "Stop the game", PermissionDefault.OP);
     public static final Permission COMMAND_STOP_ALL =  getCommand("stopallgames", "Stop all games", PermissionDefault.OP);
+    public static final Permission COMMAND_TEAM = getCommand("team", "Create/join teams in a game", PermissionDefault.TRUE);
+    public static final Permission COMMAND_TEAM_TELEPORT = getCommand("team.teleport", "Teleport to a team member", PermissionDefault.TRUE);
     public static final Permission COMMAND_TOGGLE = getCommand("toggle", "Toggle a game", PermissionDefault.OP);
 
     private static Permission getCommand(String perm, String description, PermissionDefault defaultPermission) {

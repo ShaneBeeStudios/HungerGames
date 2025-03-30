@@ -34,7 +34,7 @@ public class Config {
     public static boolean teleportEnd;
     public static int teleportEndTime;
     public static List<String> SETTINGS_BONUS_BLOCK_TYPES;
-    public static boolean hideNametags;
+    public static boolean HIDE_NAMETAGS;
     public static boolean savePreviousLocation;
 
     // Mobs
@@ -43,10 +43,10 @@ public class Config {
     public static int MOBS_SPAWN_CAP_PER_PLAYER;
 
     //Team info
-    public static boolean team_showTeamNames;
+    public static boolean TEAM_SHOW_TEAM_NAMES;
     public static int team_maxTeamSize;
-    public static boolean team_friendly_fire;
-    public static boolean team_see_invis;
+    public static boolean TEAM_ALLOW_FRIENDLY_FIRE;
+    public static boolean TEAM_CAN_SEE_INVISIBLES;
 
     //Reward info
     public static boolean giveReward;
@@ -122,7 +122,7 @@ public class Config {
         minchestcontent = config.getInt("settings.min-chestcontent");
         maxbonuscontent = config.getInt("settings.max-bonus-chestcontent");
         minbonuscontent = config.getInt("settings.min-bonus-chestcontent");
-        hideNametags = config.getBoolean("settings.hide-nametags");
+        HIDE_NAMETAGS = config.getBoolean("settings.hide-nametags");
         savePreviousLocation = config.getBoolean("settings.save-previous-location");
         SETTINGS_BONUS_BLOCK_TYPES = config.getStringList("settings.bonus-block-types");
 
@@ -133,9 +133,9 @@ public class Config {
 
         // Team
         team_maxTeamSize = config.getInt("team.max-team-size");
-        team_showTeamNames = config.getBoolean("team.show-team-nametags");
-        team_friendly_fire = config.getBoolean("team.allow-friendly-fire");
-        team_see_invis = config.getBoolean("team.can-see-friendly-invisibles");
+        TEAM_SHOW_TEAM_NAMES = config.getBoolean("team.show-team-nametags");
+        TEAM_ALLOW_FRIENDLY_FIRE = config.getBoolean("team.allow-friendly-fire");
+        TEAM_CAN_SEE_INVISIBLES = config.getBoolean("team.can-see-friendly-invisibles");
 
         giveReward = config.getBoolean("reward.enabled");
         cash = config.getInt("reward.cash");

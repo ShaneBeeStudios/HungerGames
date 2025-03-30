@@ -10,7 +10,7 @@ import org.bukkit.scoreboard.Scoreboard;
 import org.jetbrains.annotations.Nullable;
 import com.shanebeestudios.hg.HungerGames;
 import com.shanebeestudios.hg.game.Game;
-import com.shanebeestudios.hg.game.Team;
+import com.shanebeestudios.hg.game.GameTeam;
 import com.shanebeestudios.hg.api.util.Util;
 
 import java.util.Arrays;
@@ -39,8 +39,8 @@ public class PlayerData implements Cloneable {
     private boolean online;
 
     //InGame data
-    private Team team;
-    private Team pendingTeam;
+    private GameTeam gameTeam;
+    private GameTeam pendingGameTeam;
     private final Game game;
 
     /**
@@ -105,11 +105,11 @@ public class PlayerData implements Cloneable {
     /**
      * Check if a player is on a team
      *
-     * @param uuid Uuid of player to check
+     * @param player Player to check
      * @return True if player is on a team
      */
-    public boolean isOnTeam(UUID uuid) {
-        return (team != null && team.isOnTeam(uuid));
+    public boolean isOnTeam(Player player) {
+        return (this.gameTeam != null && this.gameTeam.isOnTeam(player));
     }
 
     /**
@@ -126,17 +126,17 @@ public class PlayerData implements Cloneable {
      *
      * @return The team
      */
-    public Team getTeam() {
-        return team;
+    public GameTeam getTeam() {
+        return gameTeam;
     }
 
     /**
      * Set the team of this player data
      *
-     * @param team The team to set
+     * @param gameTeam The team to set
      */
-    public void setTeam(Team team) {
-        this.team = team;
+    public void setTeam(GameTeam gameTeam) {
+        this.gameTeam = gameTeam;
     }
 
     /**
@@ -144,17 +144,17 @@ public class PlayerData implements Cloneable {
      *
      * @return Pending team of this player data
      */
-    public Team getPendingTeam() {
-        return pendingTeam;
+    public GameTeam getPendingTeam() {
+        return pendingGameTeam;
     }
 
     /**
      * Set the pending team of this player data
      *
-     * @param pendingTeam Team for pending
+     * @param pendingGameTeam Team for pending
      */
-    public void setPendingTeam(Team pendingTeam) {
-        this.pendingTeam = pendingTeam;
+    public void setPendingTeam(GameTeam pendingGameTeam) {
+        this.pendingGameTeam = pendingGameTeam;
     }
 
     /**
@@ -227,8 +227,8 @@ public class PlayerData implements Cloneable {
                 ", saturation=" + saturation +
                 ", mode=" + mode +
                 ", uuid=" + uuid +
-                ", team=" + team +
-                ", pending=" + pendingTeam +
+                ", team=" + gameTeam +
+                ", pending=" + pendingGameTeam +
                 ", game=" + game +
                 '}';
     }

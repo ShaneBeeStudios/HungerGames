@@ -460,7 +460,7 @@ public class Game {
         // Game has ended, we can clear all players now
         gamePlayerData.clearPlayers();
         gamePlayerData.clearSpectators();
-        gamePlayerData.clearTeams();
+        this.gameScoreboard.clearGameTeams();
         Bukkit.getPluginManager().callEvent(new GameEndEvent(this, winners, death));
     }
 
@@ -502,11 +502,11 @@ public class Game {
         if (this.gamePlayerData.getPlayers().size() <= 1) return true;
         for (Player player : this.gamePlayerData.getPlayers()) {
             PlayerData playerData = this.playerManager.getPlayerData(player);
-            Team team = playerData.getTeam();
+            GameTeam gameTeam = playerData.getTeam();
 
-            if (team != null && (team.getPlayers().size() >= gamePlayerData.players.size())) {
+            if (gameTeam != null && (gameTeam.getPlayers().size() >= gamePlayerData.players.size())) {
                 for (Player player1 : this.gamePlayerData.getPlayers()) {
-                    if (!team.getPlayers().contains(player1.getUniqueId())) {
+                    if (!gameTeam.getPlayers().contains(player1.getUniqueId())) {
                         return false;
                     }
                 }

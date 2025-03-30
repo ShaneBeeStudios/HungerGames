@@ -29,21 +29,6 @@ public class GameSidebar {
 
     }
 
-//    Team registerTeam(String name) {
-//        Team team = scoreboard.registerNewTeam(name);
-//        String prefix = Util.getColString(plugin.getLang().team_prefix.replace("<name>", name) + " ");
-//        team.setPrefix(prefix);
-//        String suffix = Util.getColString(" " + plugin.getLang().team_suffix.replace("<name>", name));
-//        team.setSuffix(suffix);
-//        team.setColor(COLORS[game.gamePlayerData.teams.size() % COLORS.length]);
-//        if (Config.hideNametags && Config.team_showTeamNames) {
-//            team.setOption(Option.NAME_TAG_VISIBILITY, OptionStatus.FOR_OTHER_TEAMS);
-//        }
-//        team.setAllowFriendlyFire(Config.team_friendly_fire);
-//        team.setCanSeeFriendlyInvisibles(Config.team_see_invis);
-//        return team;
-//    }
-
     /**
      * Add a player to this scoreboard
      *
@@ -89,7 +74,14 @@ public class GameSidebar {
             lines.add(Util.getMini(this.lang.players_alive));
             lines.add(Util.getMini(alive));
             lines.add(Util.getMini(" "));
-            // TODO team stuff?
+
+            // Team stuff
+            GameTeam gameTeam = this.game.getGameScoreboard().getGameTeam(player);
+            if (gameTeam != null) {
+                lines.add(Util.getMini("Team:"));
+                lines.add(Util.getMini(" <grey>Name: <aqua>" + gameTeam.getTeamName()));
+                lines.add(Util.getMini(" <grey>Players: <green>" + gameTeam.getPlayers().size()));
+            }
 
             board.updateLines(lines);
         });

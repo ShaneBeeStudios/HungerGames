@@ -62,18 +62,15 @@ players-alive-num: '<yellow><num> alive'
 scoreboard-arena: "<green>Arena: <aqua>"
 
 #  TEAMS
-team-invite-1: '<gold>*<aqua><strikethrough>                                                                             <gold>*'
-team-invite-2: '| <white><inviter> <dark_aqua>just invited you to a <white>Team<dark_aqua>!'
-team-invite-3: '| <dark_aqua>Type <white>/hg team accept <dark_aqua>To join!'
-team-invite-4: '<gold>*<aqua><strikethrough>                                                                             <gold>*'
-joined-team: '<dark_aqua>You successfully joined this team!'
-# <name> will be replaced with team name
-team-prefix: "<grey>[<green>Team-<name><grey>]"
-team-suffix: ""
-team-created: "<green>Created team: <aqua><name>"
-team-already-exists: "<red>Team <aqua><name> <red>already exists."
-team-already-have: "<red>You have already created a team: <aqua><name>"
-team-none: "<red>You do not have a team, create one first with command <aqua>'/hg team create <name>'"
+team:
+  invite-1: '<gold>*<aqua><strikethrough>                                                                             <gold>*'
+  invite-2: '| <white><inviter> <dark_aqua>just invited you to a <white>Team<dark_aqua>!'
+  invite-3: '| <dark_aqua>Type <white>/hg team accept <dark_aqua>To join!'
+  invite-4: '<gold>*<aqua><strikethrough>                                                                             <gold>*'
+  joined: '<dark_aqua>You successfully joined this team!'
+  # <name> will be replaced with team name
+  prefix: "<grey>[<green>Team-<name><grey>]"
+  suffix: ""
 
 #  CHEST DROPS
 chest-drop-1: '<gold>*<aqua><strikethrough>                                                                                   <gold>*'
@@ -178,6 +175,24 @@ command:
   exit-set-global: '<gold>Global exit has been set to your location!'
   exit-set-all: 'Exit for all arenas has been set to your location!'
   exit-set-arena: '<gold>Exit for arena <arena> has been set to your location!'
+  # Team
+  team-player-not-available: '<aqua><player> <red>Is not available!'
+  team-only-leader: '<red>Only the leader can invite other players!'
+  team-on-team: '<aqua><player> <gold>is already on a team!'
+  team-max: '<red>You have hit the max team limit!'
+  team-invited: '<aqua><player> <gold>Has been invited!'
+  team-wrong: '<red>Wrong Usage: <gold>/hg team invite <aqua><name>'
+  team-no-pending: '<red>You have no pending invites...'
+  team-joined: '<aqua><player> <gold>Just joined your team!'
+  team-deny: '<aqua><player> <gold>has denied your invitation!'
+  team-no-team: '<red>You are not on a team!'
+  team-not-on-team: '<aqua><player> <red>is not on your team!'
+  team-tp: '<gold>Teleporting to <aqua><player>'
+  team-self: '<red>You can not invite yourself to your own team.'
+  team-created: "<green>Created team: <aqua><name>"
+  team-already-exists: "<red>Team <aqua><name> <red>already exists."
+  team-already-have: "<red>You have already created a team: <aqua><name>"
+  team-none: "<red>You do not have a team, create one first with command <aqua>'/hg team create <name>'"
 
 ## LobbyWall
 cmd-lobbywall-set: '<green>The lobbyWallSign has been set!'
@@ -200,20 +215,6 @@ cmd-start-starting: '<aqua><arena><gold> is now starting!'
 cmd-stop-all: '<green>Stopped all games'
 cmd-stop-arena: '<aqua><arena><red> Has been stopped!'
 cmd-stop-noexist: '<red>The game <aqua><arena><red> does not exist!'
-
-## Team
-cmd-team-not-avail: '<aqua><player> <red>Is not available!'
-cmd-team-only-leader: '<red>Only the leader can invite other players!'
-cmd-team-on-team: '<aqua><player> <gold>is already on a team!'
-cmd-team-max: '<red>You have hit the max team limit!'
-cmd-team-invited: '<aqua><player> <gold>Has been invited!'
-cmd-team-wrong: '<red>Wrong Usage: <gold>/hg team invite <aqua><name>'
-cmd-team-no-pending: '<red>You have no pending invites...'
-cmd-team-joined: '<aqua><player> <gold>Just joined your team!'
-cmd-team-no-team: '<red>You are not on a team!'
-cmd-team-not-on-team: '<aqua><player> <red>is not on your team!'
-cmd-team-tp: '<gold>Teleporting to <aqua><player>'
-cmd-team-self: '<red>You can not invite yourself to your own team.'
 
 ## Toggle
 cmd-toggle-unlocked: '<aqua><arena><gold> is now <green>UNLOCKED!'

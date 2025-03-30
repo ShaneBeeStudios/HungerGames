@@ -21,6 +21,7 @@ public class MainCommand {
         this.command.then(new StatusCommand(plugin).register());
         this.command.then(new StopCommand().register());
         this.command.then(new StopAllCommand().register());
+        this.command.then(new TeamCommand(plugin).register());
         this.command.then(new ToggleCommand(plugin).register());
 
         this.command.register();

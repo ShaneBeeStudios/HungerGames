@@ -1,9 +1,9 @@
 package com.shanebeestudios.hg.data;
 
-import org.bukkit.configuration.file.FileConfiguration;
-import org.bukkit.configuration.file.YamlConfiguration;
 import com.shanebeestudios.hg.HungerGames;
 import com.shanebeestudios.hg.api.util.Util;
+import org.bukkit.configuration.file.FileConfiguration;
+import org.bukkit.configuration.file.YamlConfiguration;
 
 import java.io.File;
 import java.io.InputStream;
@@ -54,11 +54,7 @@ public class Language {
     public String team_invite_4;
     public String team_prefix;
     public String team_suffix;
-    public String joined_team;
-    public String team_created;
-    public String team_already_exists;
-    public String team_already_have;
-    public String team_none;
+    public String team_joined;
     public String chest_drop_1;
     public String chest_drop_2;
     public String compass_nearest_player;
@@ -134,18 +130,23 @@ public class Language {
     public String cmd_stop_all;
     public String cmd_stop_arena;
     public String cmd_stop_noexist;
-    public String cmd_team_not_avail;
-    public String cmd_team_only_leader;
-    public String cmd_team_on_team;
-    public String cmd_team_max;
-    public String cmd_team_invited;
-    public String cmd_team_wrong;
-    public String cmd_team_no_pend;
-    public String cmd_team_joined;
-    public String cmd_team_no_team;
-    public String cmd_team_not_on_team;
-    public String cmd_team_tp;
-    public String cmd_team_self;
+    public String command_team_player_not_available;
+    public String command_team_only_leader;
+    public String command_team_on_team;
+    public String command_team_max;
+    public String command_team_invited;
+    public String command_team_wrong;
+    public String command_team_no_pend;
+    public String command_team_joined;
+    public String command_team_deny;
+    public String command_team_no_team;
+    public String command_team_not_on_team;
+    public String command_team_tp;
+    public String command_team_self;
+    public String command_team_created;
+    public String command_team_already_exists;
+    public String command_team_already_have;
+    public String command_team_none;
     public String cmd_toggle_locked;
     public String cmd_toggle_unlocked;
     public String cmd_handler_nokit;
@@ -206,7 +207,7 @@ public class Language {
             lang = YamlConfiguration.loadConfiguration(customLangFile);
         }
         matchConfig(lang, customLangFile);
-		loadLang();
+        loadLang();
         Util.log("language.yml <green>successfully loaded");
     }
 
@@ -271,17 +272,13 @@ public class Language {
         scoreboard_arena = lang.getString("scoreboard-arena");
         players_alive = lang.getString("players-alive");
         players_alive_num = lang.getString("players-alive-num");
-        team_invite_1 = lang.getString("team-invite-1");
-        team_invite_2 = lang.getString("team-invite-2");
-        team_invite_3 = lang.getString("team-invite-3");
-        team_invite_4 = lang.getString("team-invite-4");
-        team_prefix = lang.getString("team-prefix");
-        team_suffix = lang.getString("team-suffix");
-        joined_team = lang.getString("joined-team");
-        team_created = lang.getString("team-created");
-        team_already_exists = lang.getString("team-already-exists");
-        team_already_have = lang.getString("team-already-have");
-        team_none = lang.getString("team-none");
+        team_invite_1 = lang.getString("team.invite-1");
+        team_invite_2 = lang.getString("team.invite-2");
+        team_invite_3 = lang.getString("team.invite-3");
+        team_invite_4 = lang.getString("team.invite-4");
+        team_prefix = lang.getString("team.prefix");
+        team_suffix = lang.getString("team.suffix");
+        team_joined = lang.getString("team.joined");
 
         chest_drop_1 = lang.getString("chest-drop-1");
         chest_drop_2 = lang.getString("chest-drop-2");
@@ -352,18 +349,25 @@ public class Language {
         cmd_stop_all = lang.getString("cmd-stop-all");
         cmd_stop_arena = lang.getString("cmd-stop-arena");
         cmd_stop_noexist = lang.getString("cmd-stop-noexist");
-        cmd_team_not_avail = lang.getString("cmd-team-not-avail");
-        cmd_team_only_leader = lang.getString("cmd-team-only-leader");
-        cmd_team_on_team = lang.getString("cmd-team-on-team");
-        cmd_team_max = lang.getString("cmd-team-max");
-        cmd_team_invited = lang.getString("cmd-team-invited");
-        cmd_team_wrong = lang.getString("cmd-team-wrong");
-        cmd_team_no_pend = lang.getString("cmd-team-no-pending");
-        cmd_team_joined = lang.getString("cmd-team-joined");
-        cmd_team_no_team = lang.getString("cmd-team-no-team");
-        cmd_team_not_on_team = lang.getString("cmd-team-not-on-team");
-        cmd_team_tp = lang.getString("cmd-team-tp");
-        cmd_team_self = lang.getString("cmd-team-self");
+
+        command_team_player_not_available = lang.getString("command.team-player-not-available");
+        command_team_only_leader = lang.getString("command.team-only-leader");
+        command_team_on_team = lang.getString("command.team-on-team");
+        command_team_max = lang.getString("command.team-max");
+        command_team_invited = lang.getString("command.team-invited");
+        command_team_wrong = lang.getString("command.team-wrong");
+        command_team_no_pend = lang.getString("command.team-no-pending");
+        command_team_joined = lang.getString("command.team-joined");
+        command_team_deny = lang.getString("command.team-deny");
+        command_team_no_team = lang.getString("command.team-no-team");
+        command_team_not_on_team = lang.getString("command.team-not-on-team");
+        command_team_tp = lang.getString("command.team-tp");
+        command_team_self = lang.getString("command.team-self");
+        command_team_created = lang.getString("command.team-created");
+        command_team_already_exists = lang.getString("command.team-already-exists");
+        command_team_already_have = lang.getString("command.team-already-have");
+        command_team_none = lang.getString("command.team-none");
+
         cmd_toggle_unlocked = lang.getString("cmd-toggle-unlocked");
         cmd_toggle_locked = lang.getString("cmd-toggle-locked");
         cmd_handler_nokit = lang.getString("cmd-handler-nokit");

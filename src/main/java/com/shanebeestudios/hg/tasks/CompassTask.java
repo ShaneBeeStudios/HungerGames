@@ -70,7 +70,7 @@ public class CompassTask implements Runnable {
 
 		for (Player p2: g.getGamePlayerData().getPlayers()) {
 
-			if (p2 != null && !p2.equals(p) && !pd.isOnTeam(p2.getUniqueId())) {
+			if (p2 != null && !p2.equals(p) && !pd.isOnTeam(p2)) {
 
 				Location l = p2.getLocation();
 

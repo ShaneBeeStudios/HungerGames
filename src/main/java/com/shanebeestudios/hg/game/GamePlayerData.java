@@ -51,7 +51,6 @@ public class GamePlayerData extends Data {
 
     // Data lists
     final Map<Player, Integer> kills = new HashMap<>();
-    final Map<String, Team> teams = new HashMap<>();
 
     protected GamePlayerData(Game game) {
         super(game);
@@ -397,18 +396,6 @@ public class GamePlayerData extends Data {
         for (Player player : Bukkit.getOnlinePlayers()) {
             player.showPlayer(plugin, hidden);
         }
-    }
-
-    public void addTeam(Team team) {
-        teams.put(team.getName(), team);
-    }
-
-    public void clearTeams() {
-        teams.clear();
-    }
-
-    public boolean hasTeam(String name) {
-        return teams.containsKey(name);
     }
 
 }
