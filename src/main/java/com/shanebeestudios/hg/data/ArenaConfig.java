@@ -2,9 +2,10 @@ package com.shanebeestudios.hg.data;
 
 import com.shanebeestudios.hg.HungerGames;
 import com.shanebeestudios.hg.api.util.Util;
-import com.shanebeestudios.hg.game.GameRegion;
 import com.shanebeestudios.hg.game.Game;
 import com.shanebeestudios.hg.game.GameArenaData;
+import com.shanebeestudios.hg.game.GameBorderData;
+import com.shanebeestudios.hg.game.GameRegion;
 import com.shanebeestudios.hg.managers.ItemStackManager;
 import com.shanebeestudios.hg.managers.KitManager;
 import com.shanebeestudios.hg.tasks.CompassTask;
@@ -195,20 +196,22 @@ public class ArenaConfig {
                     }
 
                     // BORDER
-                    if (arenaSection.isSet("border")) {
-                        ConfigurationSection borderSection = arenaSection.getConfigurationSection("border");
-                        if (borderSection.isSet("center")) {
-                            Location borderCenter = getBlockLocFromString(borderSection.getString("center"));
-                            game.getGameBorderData().setBorderCenter(borderCenter);
+                    if (arenaSection.isSet("game_border")) {
+                        ConfigurationSection borderSection = arenaSection.getConfigurationSection("game_border");
+                        GameBorderData gameBorderData = game.getGameBorderData();
+                        if (borderSection.isSet("center_location")) {
+                            Location borderCenter = getBlockLocFromString(borderSection.getString("center_location"));
+                            gameBorderData.setCenterLocation(borderCenter);
                         }
-                        if (borderSection.isSet("size")) {
-                            int borderSize = borderSection.getInt("size");
-                            game.getGameBorderData().setBorderSize(borderSize);
+                        if (borderSection.isSet("final_size")) {
+                            int borderSize = borderSection.getInt("final_size");
+                            gameBorderData.setFinalBorderSize(borderSize);
                         }
                         if (borderSection.isSet("countdown_start") && borderSection.isSet("countdown_end")) {
                             int countdownStart = borderSection.getInt("countdown_start");
                             int countdownEnd = borderSection.getInt("countdown_end");
-                            game.getGameBorderData().setBorderTimer(countdownStart, countdownEnd);
+                            gameBorderData.setBorderCountdownStart(countdownStart);
+                            gameBorderData.setBorderCountdownEnd(countdownEnd);
                         }
                     }
 
@@ -271,7 +274,8 @@ public class ArenaConfig {
         saveArenaConfig();
     }
 
-    public void saveGameToConfig(String arenaName, Game game) {
+    public void saveGameToConfig(Game game) {
+        String arenaName = game.getGameArenaData().getName();
         ConfigurationSection gameSection = this.arenaConfig.createSection("arenas." + arenaName);
         GameArenaData gameArenaData = game.getGameArenaData();
 
@@ -282,8 +286,8 @@ public class ArenaConfig {
         infoSection.set("max_players", gameArenaData.getMaxPlayers());
 
         ConfigurationSection regionSection = gameSection.createSection("region");
-        regionSection.set("world", gameArenaData.getBound().getWorld().getName());
-        regionSection.set("bounding_box", gameArenaData.getBound().getBoundingBox());
+        regionSection.set("world", gameArenaData.getGameRegion().getWorld().getName());
+        regionSection.set("bounding_box", gameArenaData.getGameRegion().getBoundingBox());
 
         gameSection.set("commands", game.getGameCommandData().getCommands());
 
@@ -298,7 +302,19 @@ public class ArenaConfig {
         }
         locationsSection.set("lobby_sign", blockLocToString(game.getLobbyLocation()));
 
-        // TODO border
+        // BORDER
+        GameBorderData borderData = game.getGameBorderData();
+        if (!borderData.isDefault()) {
+            ConfigurationSection borderSection = gameSection.createSection("game_border");
+            Location centerLocation = borderData.getCenterLocation();
+            if (centerLocation != null) {
+                String locString = blockLocToString(centerLocation);
+                borderSection.set("center_location", locString);
+            }
+            borderSection.set("final_size", borderData.getFinalBorderSize());
+            borderSection.set("countdown_start", borderData.getBorderCountdownStart());
+            borderSection.set("countdown_end", borderData.getBorderCountdownEnd());
+        }
 
         saveArenaConfig();
     }
@@ -308,8 +324,8 @@ public class ArenaConfig {
     }
 
     public String locToString(Location location) {
-        float yaw = (float)Math.floor(location.getYaw());
-        float pitch = (float)Math.floor(location.getPitch());
+        float yaw = (float) Math.floor(location.getYaw());
+        float pitch = (float) Math.floor(location.getPitch());
         return location.getWorld().getName() + ":" + location.getX() + ":" + location.getY() + ":" + location.getZ() + ":" + yaw + ":" + pitch;
     }
 

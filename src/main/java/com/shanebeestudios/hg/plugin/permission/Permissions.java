@@ -20,6 +20,7 @@ public class Permissions {
 
     // Command permissions
     public static final Permission COMMAND_CREATE = getCommand("create", "Create a new game arena", PermissionDefault.OP);
+    public static final Permission COMMAND_EDIT = getCommand("edit", "Edit a game arena", PermissionDefault.OP);
     public static final Permission COMMAND_FORCE_START = getCommand("forcestart", "Force start a game arena", PermissionDefault.OP);
     public static final Permission COMMAND_JOIN = getCommand("join", "Join a game", PermissionDefault.TRUE);
     public static final Permission COMMAND_JOIN_OTHERS = getCommand("join_others", "Join other players to a game", PermissionDefault.OP);

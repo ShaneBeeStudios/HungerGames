@@ -707,7 +707,7 @@ public class GameListener implements Listener {
                         }
                     }
                 }
-                GameRegion gameRegion = game.getGameArenaData().getBound();
+                GameRegion gameRegion = game.getGameArenaData().getGameRegion();
                 if (!gameRegion.hasEntity(entity)) gameRegion.addEntity(entity);
             }
         }
@@ -785,7 +785,7 @@ public class GameListener implements Listener {
         Game game = this.gameManager.getGame(entity.getLocation());
         if (game == null) return;
 
-        GameRegion gameRegion = game.getGameArenaData().getBound();
+        GameRegion gameRegion = game.getGameArenaData().getGameRegion();
         gameRegion.removeEntity(entity);
     }
 

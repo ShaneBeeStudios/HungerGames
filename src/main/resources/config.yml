@@ -119,13 +119,13 @@ rollback:
     - 'minecraft:glass_pane'
 
 ## WORLD BORDER
-# (Note) ONLY use this if you have a world dedicated to 1 arena.
-# - Will not work if more than 1 arena is in a world, will screw up other arenas
-# - Will not work if the world is used for other purposes - Will kill players outside of the arena
+# Default world border data for arenas
+# Each arena can change some of these values with the `/hg edit` command
+# Borders are client side, and will not harm other players outside the arena
 world-border:
   # Enable the world borders for arenas
   enabled: false
-  # If true, when the game starts a world border will start just outside of the arena
+  # If true, when the game starts a world border will start just outside the arena
   # It will count down based on the time of the arena
   initiate-on-start: true
   # When the countdown for the arena will start
@@ -139,7 +139,7 @@ world-border:
   # Final border size from the centre outward
   final-border-size: 30
   # If true, the centre of the arena will be based on the first spawn location you set
-  # If false, the centre will be calculated by the centre of the arena
+  # If false, the centre will be calculated by the centre of the arena's bounds
   center-on-first-spawn: true
 ## SPECTATE
 # When enabled players can spectate games without interfering with players in the game

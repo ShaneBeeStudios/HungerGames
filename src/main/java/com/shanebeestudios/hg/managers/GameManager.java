@@ -6,10 +6,10 @@ import com.shanebeestudios.hg.Status;
 import com.shanebeestudios.hg.api.util.Util;
 import com.shanebeestudios.hg.data.Config;
 import com.shanebeestudios.hg.data.Language;
-import com.shanebeestudios.hg.game.GameRegion;
 import com.shanebeestudios.hg.game.Game;
 import com.shanebeestudios.hg.game.GameArenaData;
 import com.shanebeestudios.hg.game.GameItemData;
+import com.shanebeestudios.hg.game.GameRegion;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
@@ -95,7 +95,7 @@ public class GameManager {
         boolean isReady = true; // TODO yeah?
         Game game = new Game(name, gameRegion, spawns, sign, timer, minPlayers, maxPlayers, roam, isReady, cost);
         this.games.put(name, game);
-        this.plugin.getArenaConfig().saveGameToConfig(name, game);
+        this.plugin.getArenaConfig().saveGameToConfig(game);
         return game;
     }
 

@@ -32,7 +32,7 @@ public class ChestDropTask implements Runnable {
     }
 
     public void run() {
-        GameRegion gameRegion = game.getGameArenaData().getBound();
+        GameRegion gameRegion = game.getGameArenaData().getGameRegion();
         Integer[] i = gameRegion.getRandomLocs();
 
         int x = i[0];

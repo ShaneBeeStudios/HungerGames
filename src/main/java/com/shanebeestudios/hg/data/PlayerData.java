@@ -86,6 +86,7 @@ public class PlayerData implements Cloneable {
         player.updateInventory();
         player.setInvulnerable(false);
         restoreHealth(player);
+        player.setWorldBorder(player.getWorld().getWorldBorder());
         // Force back their original scoreboard
         player.setScoreboard(DUMMY);
         player.setScoreboard(this.scoreboard);

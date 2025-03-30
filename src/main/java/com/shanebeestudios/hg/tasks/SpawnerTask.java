@@ -31,9 +31,9 @@ public class SpawnerTask implements Runnable {
     public SpawnerTask(Game game) {
         this.gamePlayerData = game.getGamePlayerData();
         this.gameArenaData = game.getGameArenaData();
-        this.gameRegion = game.getGameArenaData().getBound();
+        this.gameRegion = game.getGameArenaData().getGameRegion();
         this.taskId = Bukkit.getScheduler().scheduleSyncRepeatingTask(game.getGameArenaData().getPlugin(), this, Config.MOBS_SPAWN_INTERVAL, Config.MOBS_SPAWN_INTERVAL);
-        this.world = game.getGameArenaData().getBound().getWorld();
+        this.world = game.getGameArenaData().getGameRegion().getWorld();
         this.mobManager = game.getMobManager();
     }
 

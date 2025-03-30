@@ -13,6 +13,7 @@ public class MainCommand {
 
         // Register sub-commands
         this.command.then(new CreateCommand(plugin).register());
+        this.command.then(new EditCommand(plugin).register());
         this.command.then(new ForceStartCommand(plugin).register());
         this.command.then(new JoinCommand(plugin).register());
         this.command.then(new KitCommand().register());

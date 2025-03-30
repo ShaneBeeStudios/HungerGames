@@ -14,10 +14,8 @@ import com.shanebeestudios.hg.game.GameArenaData;
 public class TimerTask implements Runnable {
 
 	private int timer = 0;
-	private int remainingtime;
+	private int remainingTime;
 	private final int teleportTimer;
-	private final int borderCountdownStart;
-	private final int borderCountdownEnd;
 	private final int taskId;
 	private final Game game;
 	private final Language lang;
@@ -26,13 +24,11 @@ public class TimerTask implements Runnable {
     private final String end_sec;
 
 	public TimerTask(Game game, int time) {
-		this.remainingtime = time;
+		this.remainingTime = time;
 		this.game = game;
 		HungerGames plugin = this.game.getGameArenaData().getPlugin();
 		this.lang = plugin.getLang();
 		this.teleportTimer = Config.teleportEndTime;
-		this.borderCountdownStart = game.getGameBorderData().getBorderTimer().get(0);
-		this.borderCountdownEnd = game.getGameBorderData().getBorderTimer().get(1);
 		game.getGamePlayerData().getPlayers().forEach(player -> player.setInvulnerable(false));
 
 		this.end_min = lang.game_ending_min;
@@ -45,21 +41,13 @@ public class TimerTask implements Runnable {
 	@Override
 	public void run() {
 		GameArenaData gameArenaData = this.game.getGameArenaData();
-        GameBorderData gameBorderData = this.game.getGameBorderData();
         GameBlockData gameBlockData = this.game.getGameBlockData();
         GamePlayerData gamePlayerData = this.game.getGamePlayerData();
         if (gameArenaData.getStatus() != Status.RUNNING) stop(); //A quick null check!
 
+		if (Config.bossbar) game.getGameBarData().bossbarUpdate(remainingTime);
 
-		if (Config.bossbar) game.getGameBarData().bossbarUpdate(remainingtime);
-
-		if (Config.borderEnabled && remainingtime == borderCountdownStart) {
-			int closingIn = remainingtime - borderCountdownEnd;
-			gameBorderData.setBorder(closingIn);
-			gamePlayerData.msgAll(lang.game_border_closing.replace("<seconds>", String.valueOf(closingIn)));
-		}
-
-		if (gameArenaData.getChestRefillTime() > 0 && remainingtime == gameArenaData.getChestRefillTime()) {
+		if (gameArenaData.getChestRefillTime() > 0 && remainingTime == gameArenaData.getChestRefillTime()) {
 			gameBlockData.refillChests();
 			gamePlayerData.msgAll(lang.game_chest_refill);
 		}
@@ -70,16 +58,16 @@ public class TimerTask implements Runnable {
 			gamePlayerData.msgAll(this.lang.game_chest_refill);
 		}
 
-		if (this.remainingtime == this.teleportTimer && Config.teleportEnd) {
+		if (this.remainingTime == this.teleportTimer && Config.teleportEnd) {
 			gamePlayerData.msgAll(lang.game_almost_over);
 			gamePlayerData.respawnAll();
-		} else if (this.remainingtime < 10) {
+		} else if (this.remainingTime < 10) {
 			stop();
 			this.game.stop(false);
 		} else {
 			if (!Config.bossbar) {
-				int minutes = this.remainingtime / 60;
-				int asd = this.remainingtime % 60;
+				int minutes = this.remainingTime / 60;
+				int asd = this.remainingTime % 60;
 				if (minutes != 0) {
 					if (asd == 0) {
 					    if (this.end_min.isEmpty()) return;
@@ -90,15 +78,19 @@ public class TimerTask implements Runnable {
                     }
 				} else {
 				    if (this.end_sec.isEmpty()) return;
-				    gamePlayerData.msgAll(this.end_sec.replace("<seconds>", "" + this.remainingtime));
+				    gamePlayerData.msgAll(this.end_sec.replace("<seconds>", "" + this.remainingTime));
                 }
 			}
 		}
-		this.remainingtime = (this.remainingtime - 30);
+		this.remainingTime = (this.remainingTime - 30);
 		this.timer += 30;
 	}
 
-	public void stop() {
+    public int getRemainingTime() {
+        return remainingTime;
+    }
+
+    public void stop() {
 		Bukkit.getScheduler().cancelTask(this.taskId);
 	}
 

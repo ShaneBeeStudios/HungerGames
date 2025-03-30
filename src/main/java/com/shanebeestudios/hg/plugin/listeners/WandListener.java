@@ -45,7 +45,7 @@ public class WandListener implements Listener {
             event.setCancelled(true);
 
             for (Game game : this.plugin.getGameManager().getGames()) {
-                if (game.getGameArenaData().getBound().isInRegion(location)) {
+                if (game.getGameArenaData().getGameRegion().isInRegion(location)) {
                     Util.sendPrefixedMessage(player, "&cThis location is already within an arena");
                     return;
                 }

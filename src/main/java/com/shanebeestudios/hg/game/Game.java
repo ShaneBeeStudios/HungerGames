@@ -119,8 +119,6 @@ public class Game {
         this.gameItemData = new GameItemData(this);
         this.gameCommandData = new GameCommandData(this);
         this.gameBorderData = new GameBorderData(this);
-        this.gameBorderData.setBorderSize(Config.borderFinalSize);
-        this.gameBorderData.setBorderTimer(Config.borderCountdownStart, Config.borderCountdownEnd);
     }
 
     /**
@@ -236,6 +234,15 @@ public class Game {
         return this.mobManager;
     }
 
+    public HungerGames getPlugin() {
+        return this.plugin;
+    }
+
+    public int getRemainingTime() {
+        if (this.timer != null) return this.timer.getRemainingTime();
+        return 0;
+    }
+
     /**
      * Initialize the waiting period of the game
      * <p>This will be called when a player first joins</p>
@@ -281,8 +288,8 @@ public class Game {
         if (Config.bossbar) {
             bar.createBossbar(gameArenaData.timer);
         }
-        if (Config.borderEnabled && Config.borderOnStart) {
-            gameBorderData.setBorder(gameArenaData.timer);
+        if (Config.WORLD_BORDER_ENABLED) {
+            this.gameBorderData.initialize();
         }
         timer = new TimerTask(this, gameArenaData.timer);
     }
@@ -370,7 +377,7 @@ public class Game {
      * @param death Whether the game stopped after the result of a death (false = no winnings payed out)
      */
     public void stop(Boolean death) {
-        if (Config.borderEnabled) {
+        if (Config.WORLD_BORDER_ENABLED) {
             this.gameBorderData.resetBorder();
         }
         this.gameArenaData.gameRegion.removeEntities();
@@ -540,7 +547,7 @@ public class Game {
 
     @Override
     public String toString() {
-        return "Game{name='" + this.gameArenaData.getName() + '\'' + ", bound=" + this.gameArenaData.getBound() + '}';
+        return "Game{name='" + this.gameArenaData.getName() + '\'' + ", bound=" + this.gameArenaData.getGameRegion() + '}';
     }
 
 }

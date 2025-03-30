@@ -43,7 +43,7 @@ public class GameArenaData extends Data {
      *
      * @return Bound of this game
      */
-    public GameRegion getBound() {
+    public GameRegion getGameRegion() {
         return this.gameRegion;
     }
 

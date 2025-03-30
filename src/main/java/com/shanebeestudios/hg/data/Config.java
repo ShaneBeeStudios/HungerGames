@@ -69,12 +69,12 @@ public class Config {
     public static int randomChestMaxContent;
 
     //World border
-    public static boolean borderEnabled;
-    public static boolean borderOnStart;
-    public static boolean centerSpawn;
-    public static int borderCountdownStart;
-    public static int borderCountdownEnd;
-    public static int borderFinalSize;
+    public static boolean WORLD_BORDER_ENABLED;
+    public static boolean WORLD_BORDER_INITIATE_ON_START;
+    public static boolean WORLD_BORDER_CENTER_ON_FIRST_SPAWN;
+    public static int WORLD_BORDER_COUNTDOWN_START;
+    public static int WORLD_BORDER_COUNTDOWN_END;
+    public static int WORLD_BORDER_FINAL_SIZE;
 
     //Spectate
     public static boolean spectateEnabled;
@@ -161,12 +161,12 @@ public class Config {
         teleportEnd = config.getBoolean("settings.teleport-at-end");
         teleportEndTime = config.getInt("settings.teleport-at-end-time");
 
-        borderEnabled = config.getBoolean("world-border.enabled");
-        borderOnStart = config.getBoolean("world-border.initiate-on-start");
-        centerSpawn = config.getBoolean("world-border.center-on-first-spawn");
-        borderCountdownStart = config.getInt("world-border.countdown-start");
-        borderCountdownEnd = config.getInt("world-border.countdown-end");
-        borderFinalSize = config.getInt("world-border.final-border-size");
+        WORLD_BORDER_ENABLED = config.getBoolean("world-border.enabled");
+        WORLD_BORDER_INITIATE_ON_START = config.getBoolean("world-border.initiate-on-start");
+        WORLD_BORDER_CENTER_ON_FIRST_SPAWN = config.getBoolean("world-border.center-on-first-spawn");
+        WORLD_BORDER_COUNTDOWN_START = config.getInt("world-border.countdown-start");
+        WORLD_BORDER_COUNTDOWN_END = config.getInt("world-border.countdown-end");
+        WORLD_BORDER_FINAL_SIZE = config.getInt("world-border.final-border-size");
 
         spectateEnabled = config.getBoolean("spectate.enabled");
         spectateOnDeath = config.getBoolean("spectate.death-to-spectate");
