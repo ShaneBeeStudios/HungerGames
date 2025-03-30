@@ -72,7 +72,8 @@ public class Bound {
      * Kill/Remove all entities in this bound
      */
     public void removeEntities() {
-        this.entities.forEach(Entity::remove);
+        List<Entity> entitiesToRemove = new ArrayList<>(this.entities);
+        entitiesToRemove.forEach(Entity::remove);
         this.entities.clear();
     }
 
