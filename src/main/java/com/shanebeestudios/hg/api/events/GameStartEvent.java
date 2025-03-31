@@ -1,4 +1,4 @@
-package com.shanebeestudios.hg.events;
+package com.shanebeestudios.hg.api.events;
 
 import org.bukkit.event.Event;
 import org.bukkit.event.HandlerList;

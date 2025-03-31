@@ -3,7 +3,7 @@ package com.shanebeestudios.hg.plugin.listeners;
 import com.shanebeestudios.hg.HungerGames;
 import com.shanebeestudios.hg.api.util.BlockUtils;
 import com.shanebeestudios.hg.data.PlayerData;
-import com.shanebeestudios.hg.events.ChestOpenEvent;
+import com.shanebeestudios.hg.api.events.ChestOpenEvent;
 import com.shanebeestudios.hg.game.Game;
 import com.shanebeestudios.hg.game.GameBlockData;
 import org.bukkit.Bukkit;

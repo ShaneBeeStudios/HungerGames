@@ -7,7 +7,7 @@ import com.shanebeestudios.hg.api.util.Util;
 import com.shanebeestudios.hg.data.Config;
 import com.shanebeestudios.hg.data.Language;
 import com.shanebeestudios.hg.data.Leaderboard;
-import com.shanebeestudios.hg.events.PlayerDeathGameEvent;
+import com.shanebeestudios.hg.api.events.PlayerDeathGameEvent;
 import com.shanebeestudios.hg.game.Game;
 import com.shanebeestudios.hg.game.GameCommandData;
 import com.shanebeestudios.hg.game.GamePlayerData;
@@ -26,11 +26,14 @@ import org.bukkit.entity.Entity;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
 import org.bukkit.entity.Projectile;
+import org.bukkit.event.entity.PlayerDeathEvent;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.PlayerInventory;
 import org.jetbrains.annotations.Nullable;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -183,7 +186,7 @@ public class KillManager {
 
     @SuppressWarnings("UnstableApiUsage")
     public void processDeath(Player player, Game game, Entity attacker, DamageSource damageSource) {
-        dropInventoryOfPlayer(player);
+        List<ItemStack> drops = dropInventoryOfPlayer(player);
         player.setHealth(20);
         Bukkit.getScheduler().runTaskLater(this.plugin, () -> {
             GamePlayerData gamePlayerData = game.getGamePlayerData();
@@ -220,8 +223,8 @@ public class KillManager {
             // Send death message to all players in game
             gamePlayerData.msgAll(this.lang.death_messages_prefix + " <light_purple>" + deathString);
 
-            leaderboard.addStat(player, Leaderboard.Stats.DEATHS);
-            leaderboard.addStat(player, Leaderboard.Stats.GAMES);
+            this.leaderboard.addStat(player, Leaderboard.Stats.DEATHS);
+            this.leaderboard.addStat(player, Leaderboard.Stats.GAMES);
 
             for (Player alive : game.getGamePlayerData().getPlayers()) {
                 if (alive != null && player != alive) {
@@ -233,32 +236,37 @@ public class KillManager {
             game.getGameCommandData().runCommands(GameCommandData.CommandType.DEATH, player);
 
             // Call our death event so other plugins can pick up the fake death
-            PlayerDeathGameEvent event = new PlayerDeathGameEvent(player, deathString, game);
-            Bukkit.getPluginManager().callEvent(event);
+            PlayerDeathGameEvent event = new PlayerDeathGameEvent(player, damageSource, drops, deathString, game);
+            event.callEvent();
             // Call bukkit player death event so other plugins can pick up on that too
-            // TODO manage damage source
-//			PlayerDeathEvent playerDeathEvent = new PlayerDeathEvent(player, Collections.emptyList(), 0, deathString);
-//			Bukkit.getPluginManager().callEvent(playerDeathEvent);
+            PlayerDeathEvent playerDeathEvent = new PlayerDeathEvent(player, damageSource,
+                drops, 0,
+                Util.getMini(deathString));
+            playerDeathEvent.callEvent();
 
-            Bukkit.getScheduler().scheduleSyncDelayedTask(plugin, () -> checkStick(game), 40L);
+            Bukkit.getScheduler().scheduleSyncDelayedTask(this.plugin, () -> checkStick(game), 40L);
         }, 1);
     }
 
-    private void dropInventoryOfPlayer(Player player) {
+    private List<ItemStack> dropInventoryOfPlayer(Player player) {
+        List<ItemStack> drops = new ArrayList<>();
         PlayerInventory inventory = player.getInventory();
         Location location = player.getLocation();
         World world = player.getWorld();
 
         for (ItemStack itemStack : inventory.getStorageContents()) {
             if (itemStack != null && itemStack.getType() != Material.AIR && !ItemUtils.isCursed(itemStack)) {
+                drops.add(itemStack);
                 world.dropItemNaturally(location, itemStack).setPersistent(false);
             }
         }
         for (ItemStack itemStack : inventory.getArmorContents()) {
             if (itemStack != null && itemStack.getType() != Material.AIR && !ItemUtils.isCursed(itemStack)) {
+                drops.add(itemStack);
                 world.dropItemNaturally(location, itemStack).setPersistent(false);
             }
         }
+        return drops;
     }
 
     private void checkStick(Game g) {
