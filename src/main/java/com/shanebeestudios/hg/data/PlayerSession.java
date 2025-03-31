@@ -20,9 +20,10 @@ public class PlayerSession {
         CORNER_1,
         CORNER_2,
         SPAWN_LOCATIONS,
-        SIGN;
+        SIGN
     }
 
+    private final Language lang = HungerGames.getPlugin().getLang();
     private Stage stage = null;
     private final String name;
     private Block corner1;
@@ -45,70 +46,61 @@ public class PlayerSession {
     @SuppressWarnings("UnstableApiUsage")
     public void start(Player player) {
         this.stage = Stage.CORNER_1;
-        ItemStack itemStack = ItemType.BLAZE_ROD.createItemStack();
-        itemStack.setData(DataComponentTypes.ITEM_NAME, Util.getMini("Selection Tool"));
-        player.getInventory().addItem(itemStack);
-        Util.sendPrefixedMessage(player, "Click your first corner");
+        ItemStack itemStack = ItemType.STICK.createItemStack();
+        itemStack.setData(DataComponentTypes.ITEM_NAME, Util.getMini(this.lang.command_create_session_stick_name));
+        player.getWorld().dropItem(player.getLocation(), itemStack);
+        Util.sendPrefixedMessage(player, this.lang.command_create_session_start);
     }
 
     public void click(Player player, Block block) {
         if (this.stage == Stage.CORNER_1) {
             this.corner1 = block;
             this.stage = Stage.CORNER_2;
-            // TODO message set sign 2
-            Util.sendPrefixedMessage(player, "First corner selected, now select second corner.");
+            Util.sendPrefixedMessage(player, this.lang.command_create_session_next_corner);
         } else if (this.stage == Stage.CORNER_2) {
             this.corner2 = block;
             if (isBigEnough()) {
                 this.stage = Stage.SPAWN_LOCATIONS;
-                // TODO message start spawn locations
-                Util.sendPrefixedMessage(player, "Second corner selected, now start selecting spawn locations.");
+                Util.sendPrefixedMessage(player, this.lang.command_create_session_select_spawns);
             } else {
-                // TODO message not big enough
-                Util.sendPrefixedMessage(player, "Too small, arena must be at least 5x5x5, please re-select second corner.");
+                Util.sendPrefixedMessage(player, this.lang.command_create_session_error_too_small);
             }
         } else if (this.stage == Stage.SPAWN_LOCATIONS) {
             if (this.spawnLocations.size() >= this.maxPlayers) {
                 this.stage = Stage.SIGN;
-                // TODO message
-                Util.sendPrefixedMessage(player, "Congrats all locations set, now select your sign!");
+                Util.sendPrefixedMessage(player, this.lang.command_create_session_select_sign);
             } else {
                 double height = block.getBoundingBox().getHeight();
                 Location location = block.getLocation().add(0.5, height, 0.5);
                 location.setYaw(player.getLocation().getYaw());
                 this.spawnLocations.add(location);
-                // TODO count/next location
                 if (this.spawnLocations.size() >= this.maxPlayers) {
                     this.stage = Stage.SIGN;
-                    // TODO message
-                    Util.sendPrefixedMessage(player, "Congrats all locations set, now select your sign!");
+                    Util.sendPrefixedMessage(player, this.lang.command_create_session_select_sign);
                 } else {
                     int left = this.maxPlayers - this.spawnLocations.size();
-                    Util.sendPrefixedMessage(player, "Selected %s, only %s more to go.", this.spawnLocations.size(), left);
+                    Util.sendPrefixedMessage(player, this.lang.command_create_session_select_spawns_next
+                        .replace("<selected>", String.valueOf(this.spawnLocations.size()))
+                        .replace("<left>", String.valueOf(left)));
                 }
             }
         } else if (this.stage == Stage.SIGN) {
-            // TODO handle sign
             if (block.getState() instanceof Sign sign) {
                 this.signLocation = sign;
-                // TODO all done message
-                Util.sendPrefixedMessage(player, "Sign selected, you're dont, good job you!!");
-                finalizeGame();
+                Util.sendPrefixedMessage(player, this.lang.command_create_session_done);
+                finalizeGame(player);
             } else {
-                // TODO not a sign message
-                Util.sendPrefixedMessage(player, "That's not a sign silly!");
+                Util.sendPrefixedMessage(player, this.lang.command_create_session_sign_invalid);
             }
         }
     }
 
-    public void finalizeGame() {
-        HungerGames.getPlugin().getGameManager().createGame(this.name,
+    public void finalizeGame(Player player) {
+        HungerGames plugin = HungerGames.getPlugin();
+        plugin.getGameManager().createGame(this.name,
             this.corner1, this.corner2, this.spawnLocations,
             this.signLocation, this.time, this.minPlayers, this.maxPlayers, this.cost);
-    }
-
-    public boolean hasValidSelection() {
-        return this.corner1 != null && this.corner2 != null;
+        plugin.getSessionManager().endPlayerSession(player);
     }
 
     public boolean isBigEnough() {

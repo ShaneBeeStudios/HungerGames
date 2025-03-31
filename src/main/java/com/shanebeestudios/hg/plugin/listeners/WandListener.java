@@ -1,10 +1,12 @@
 package com.shanebeestudios.hg.plugin.listeners;
 
 import com.shanebeestudios.hg.HungerGames;
+import com.shanebeestudios.hg.api.util.Util;
 import com.shanebeestudios.hg.data.Language;
 import com.shanebeestudios.hg.data.PlayerSession;
 import com.shanebeestudios.hg.game.Game;
-import com.shanebeestudios.hg.api.util.Util;
+import com.shanebeestudios.hg.managers.GameManager;
+import com.shanebeestudios.hg.managers.SessionManager;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
@@ -20,12 +22,14 @@ import org.bukkit.inventory.EquipmentSlot;
  */
 public class WandListener implements Listener {
 
-    private final HungerGames plugin;
+    private final SessionManager sessionManager;
+    private final GameManager gameManager;
     private final Language lang;
 
-    public WandListener(HungerGames instance) {
-        this.plugin = instance;
-        this.lang = this.plugin.getLang();
+    public WandListener(HungerGames plugin) {
+        this.sessionManager = plugin.getSessionManager();
+        this.gameManager = plugin.getGameManager();
+        this.lang = plugin.getLang();
     }
 
     @EventHandler
@@ -36,17 +40,17 @@ public class WandListener implements Listener {
         if (block == null) return;
 
         Location location = block.getLocation();
-        if (!player.getInventory().getItemInMainHand().getType().equals(Material.BLAZE_ROD)) return;
+        if (!player.getInventory().getItemInMainHand().getType().equals(Material.STICK)) return;
 
-        PlayerSession session = this.plugin.getSessionManager().getPlayerSession(player.getUniqueId());
+        PlayerSession session = this.sessionManager.getPlayerSession(player);
 
         if (session != null && (action.equals(Action.RIGHT_CLICK_BLOCK) || action.equals(Action.LEFT_CLICK_BLOCK))) {
             if (event.getHand() == EquipmentSlot.OFF_HAND) return;
             event.setCancelled(true);
 
-            for (Game game : this.plugin.getGameManager().getGames()) {
+            for (Game game : this.gameManager.getGames()) {
                 if (game.getGameArenaData().getGameRegion().isInRegion(location)) {
-                    Util.sendPrefixedMessage(player, "&cThis location is already within an arena");
+                    Util.sendPrefixedMessage(player, this.lang.command_create_session_already_in_arena);
                     return;
                 }
             }

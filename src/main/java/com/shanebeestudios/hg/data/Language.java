@@ -92,12 +92,6 @@ public class Language {
     public String death_other_entity;
     public String cmd_spawn_same;
     public String cmd_spawn_set;
-    public String cmd_create_need_selection;
-    public String cmd_create_divisible_1;
-    public String cmd_create_divisible_2;
-    public String cmd_create_minmax;
-    public String cmd_create_add_spawn;
-    public String cmd_create_created;
     public String cmd_kit_no_change;
     public String cmd_reload_attempt;
     public String cmd_reload_reloaded_arena;
@@ -154,6 +148,25 @@ public class Language {
     public String command_base_not_in_valid_game;
     public String command_base_no_region;
     public String command_base_status;
+    // Create
+    public String command_create_error_arguments;
+    public String command_create_error_already_exists;
+    public String command_create_error_session_exists;
+    public String command_create_divisible_1;
+    public String command_create_divisible_2;
+    public String command_create_minmax;
+    public String command_create_add_spawn;
+    public String command_create_created;
+    public String command_create_session_stick_name;
+    public String command_create_session_start;
+    public String command_create_session_next_corner;
+    public String command_create_session_select_spawns;
+    public String command_create_session_select_spawns_next;
+    public String command_create_session_error_too_small;
+    public String command_create_session_already_in_arena;
+    public String command_create_session_select_sign;
+    public String command_create_session_done;
+    public String command_create_session_sign_invalid;
     // Delete
     public String command_delete_attempt;
     public String command_delete_kicking;
@@ -325,12 +338,6 @@ public class Language {
 
         cmd_spawn_same = lang.getString("cmd-spawn-same");
         cmd_spawn_set = lang.getString("cmd-spawn-set");
-        cmd_create_need_selection = lang.getString("cmd-create-need-selection");
-        cmd_create_divisible_1 = lang.getString("cmd-create-divisible-1");
-        cmd_create_divisible_2 = lang.getString("cmd-create-divisible-2");
-        cmd_create_minmax = lang.getString("cmd-create-minmax");
-        cmd_create_created = lang.getString("cmd-create-created");
-        cmd_create_add_spawn = lang.getString("cmd-create-add-spawns");
         cmd_kit_no_change = lang.getString("cmd-kit-no-change");
         cmd_reload_attempt = lang.getString("cmd-reload-attempt");
         cmd_reload_reloaded_arena = lang.getString("cmd-reload-reloaded-arena");
@@ -406,6 +413,25 @@ public class Language {
         command_base_status = lang.getString("command.base-status");
         // ChestRefill
         command_chest_refill_now = lang.getString("command.chest-refill-now");
+        // Create
+        command_create_error_arguments = lang.getString("command.create-error-arguments");
+        command_create_error_already_exists = lang.getString("command.create-error-already-exists");
+        command_create_error_session_exists = lang.getString("command.create-error-session-exists");
+        command_create_divisible_1 = lang.getString("command.create-divisible-1");
+        command_create_divisible_2 = lang.getString("command.create-divisible-2");
+        command_create_minmax = lang.getString("command.create-minmax");
+        command_create_created = lang.getString("command.create-created");
+        command_create_add_spawn = lang.getString("command.create-add-spawns");
+        command_create_session_stick_name = lang.getString("command.create-session-stick-name");
+        command_create_session_start = lang.getString("command.create-session-start");
+        command_create_session_next_corner = lang.getString("command.create-session-next-corner");
+        command_create_session_select_spawns = lang.getString("command.create-session-select-spawns");
+        command_create_session_select_spawns_next = lang.getString("command.create-session-select-spawns-next");
+        command_create_session_error_too_small = lang.getString("command.create-session-error-too-small");
+        command_create_session_already_in_arena = lang.getString("command.create-session-already-in-arena");
+        command_create_session_select_sign = lang.getString("command.create-session-select-sign");
+        command_create_session_sign_invalid = lang.getString("command.create-session-sign-invalid");
+        command_create_session_done = lang.getString("command.create-session-done");
         // Delete
         command_delete_attempt = lang.getString("command.delete-attempt");
         command_delete_kicking = lang.getString("command.delete-kicking");

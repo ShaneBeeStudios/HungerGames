@@ -1,6 +1,7 @@
 package com.shanebeestudios.hg.plugin.commands;
 
 import com.shanebeestudios.hg.HungerGames;
+import com.shanebeestudios.hg.api.util.Util;
 import com.shanebeestudios.hg.data.PlayerSession;
 import com.shanebeestudios.hg.game.Game;
 import com.shanebeestudios.hg.managers.SessionManager;
@@ -29,7 +30,7 @@ public class CreateCommand extends SubCommand {
         return LiteralArgument.literal("create")
             .withPermission(Permissions.COMMAND_CREATE.permission())
             .then(new StringArgument("name")
-                .then(new IntegerArgument("min-players")
+                .then(new IntegerArgument("min-players", 2)
                     .then(new IntegerArgument("max-players")
                         .then(new IntegerArgument("time")
                             .then(new IntegerArgument("cost")
@@ -45,20 +46,29 @@ public class CreateCommand extends SubCommand {
                                     Integer cost = args.getByClassOrDefault("cost", Integer.class, 0);
 
                                     if (name == null || minPlayers == null || maxPlayers == null || time == null) {
-                                        // TODO error
+                                        Util.sendPrefixedMessage(player, this.lang.command_create_error_arguments);
+                                        return;
+                                    }
+                                    if (time % 30 != 0) {
+                                        Util.sendPrefixedMessage(player, this.lang.command_create_divisible_1);
+                                        Util.sendMessage(player, this.lang.command_create_divisible_2);
+                                        return;
+                                    }
+                                    if (minPlayers > maxPlayers) {
+                                        Util.sendPrefixedMessage(player, this.lang.command_create_minmax);
                                         return;
                                     }
 
                                     Game game = this.plugin.getGameManager().getGame(name);
                                     if (game != null) {
-                                        // TODO message, game already exists
+                                        Util.sendPrefixedMessage(player, this.lang.command_create_error_already_exists);
                                         return;
                                     }
 
-                                    if (this.sessionManager.hasPlayerSession(uuid)) {
-                                        // TODO message
+                                    if (this.sessionManager.hasPlayerSession(player)) {
+                                        Util.sendPrefixedMessage(player, this.lang.command_create_error_session_exists);
                                     } else {
-                                        PlayerSession playerSession = this.sessionManager.createPlayerSession(uuid, name, time, minPlayers, maxPlayers, cost);
+                                        PlayerSession playerSession = this.sessionManager.createPlayerSession(player, name, time, minPlayers, maxPlayers, cost);
                                         playerSession.start(player);
                                     }
                                 }))))));

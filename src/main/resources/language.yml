@@ -124,14 +124,6 @@ death-other-entity: '<player> Spontaneously died!'
 cmd-spawn-same: '<red>You cannot have two spawns in the same location!'
 cmd-spawn-set: '<green>You set HungerGames spawn <grey>#<number><green>!'
 
-## Create
-cmd-create-need-selection: '<red>You need to make a selection before making an arena!'
-cmd-create-divisible-1: '<red>Time-in-seconds must be divisible by 30!'
-cmd-create-divisible-2: '<red>Ex: 90 is divisible by 30'
-cmd-create-minmax: '<red>min-players cannot be more then max-players!'
-cmd-create-created: '<green>You created HungerGames arena <aqua><arena><green>!'
-cmd-create-add-spawns: "<gold>You're now ready to set some spawns with '<green>/hg addspawn<gold>'"
-
 ## Kit
 cmd-kit-no-change: '<red>You can not change your kit while the game is running!'
 
@@ -151,8 +143,28 @@ command:
   base-status: "Status for arena <white>'<aqua><arena><white>' <grey>= <status>"
   # ChestRefill
   chest-refill-now: '<gold>Chests have now been refilled in <aqua><arena>'
+  ## Create
+  create-error-arguments: '<red>Looks like something went wrong with your command arguments'
+  create-error-already-exists: '<red>Looks like the arena <yellow><arena><red> already exists!'
+  create-error-session-exists: '<red>Looks like you are already in a creation session!'
+  create-divisible-1: '<red>Time-in-seconds must be divisible by 30!'
+  create-divisible-2: '<red>Ex: 90 is divisible by 30'
+  create-minmax: '<red>min-players cannot be more then max-players!'
+  create-created: '<green>You created HungerGames arena <aqua><arena><green>!'
+  create-add-spawns: "<gold>You're now ready to set some spawns with '<green>/hg addspawn<gold>'"
+  create-session-stick-name: '<aqua><!italic>HungerGames Selection Stick'
+  create-session-start: '<aqua>You are now ready to create your area, click the first corner of your area with the stick.'
+  create-session-next-corner: '<green>First corner selected! <aqua>Now select your second corner.'
+  create-session-select-spawns: '<green>Second corner selected! <aqua>Now start selecting your spawn locations. Simply right click a block where a player will spawn above!'
+  # <selected> = Will be replaced with how many spawns you have selected so far
+  # <left> = Will be replaced with how many more spawns you must select
+  create-session-select-spawns-next: 'Selected <selected>, only <left> more to go.'
+  create-session-error-too-small: '<red>Too small, arena must be at least 5x5x5, please re-select second corner.'
+  create-session-select-sign: '<green>Spawns selected! <aqua>Now select your lobby sign. Make sure you have 3 wall signs in a row, and click on the far left one.'
+  create-session-sign-invalid: '<red>That is not a sign silly!'
+  create-session-already-in-arena: '<red>This location is already within an arena!'
+  create-session-done: "<green>You're all done, your arena is ready to go!"
   # Delete
-  ## Delete
   delete-attempt: '<green>Attempting to delete <arena>!'
   delete-stopping: '<grey>- <red>Game running! <yellow>Stopping..'
   delete-kicking: '<grey>- <red>Players detected! <yellow>Kicking..'
