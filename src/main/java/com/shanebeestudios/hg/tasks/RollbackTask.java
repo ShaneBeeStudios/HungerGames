@@ -14,7 +14,7 @@ import com.shanebeestudios.hg.game.GameBlockData;
 /**
  * Rollback task for resetting blocks after a game finishes
  */
-public class Rollback implements Runnable {
+public class RollbackTask implements Runnable {
 
 	private final Iterator<BlockState> blockRollbackSession;
 	private final Iterator<ItemFrameData> itemFrameDataIterator;
@@ -23,7 +23,7 @@ public class Rollback implements Runnable {
 	private final int blocks_per_tick;
 	private int taskId;
 
-	public Rollback(Game game) {
+	public RollbackTask(Game game) {
 		this.game = game;
 		this.gameBlockData = game.getGameBlockData();
 		this.blocks_per_tick = Config.ROLLBACK_BLOCKS_PER_SECOND / 20;

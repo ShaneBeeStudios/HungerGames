@@ -31,10 +31,10 @@ public class Config {
     public static int minchestcontent;
     public static int maxbonuscontent;
     public static int minbonuscontent;
-    public static boolean teleportEnd;
-    public static int teleportEndTime;
+    public static int SETTINGS_TELEPORT_AT_END_TIME;
     public static List<String> SETTINGS_BONUS_BLOCK_TYPES;
     public static boolean savePreviousLocation;
+    public static int SETTINGS_FREE_ROAM_TIME;
 
     // Scoreboard
     public static boolean SCOREBOARD_HIDE_NAMETAGS;
@@ -118,6 +118,7 @@ public class Config {
 
 
     private void loadConfig() {
+        // Settings
         debug = config.getBoolean("settings.debug");
         broadcastJoinMessages = config.getBoolean("settings.broadcast-join-messages");
         broadcastWinMessages = config.getBoolean("settings.broadcast-win-messages");
@@ -130,6 +131,8 @@ public class Config {
         minbonuscontent = config.getInt("settings.min-bonus-chestcontent");
         savePreviousLocation = config.getBoolean("settings.save-previous-location");
         SETTINGS_BONUS_BLOCK_TYPES = config.getStringList("settings.bonus-block-types");
+        SETTINGS_TELEPORT_AT_END_TIME = config.getInt("settings.teleport-at-end-time");
+        SETTINGS_FREE_ROAM_TIME = config.getInt("settings.free-room-time");
 
         // Scoreboard
         SCOREBOARD_HIDE_NAMETAGS = config.getBoolean("scoreboard.hide-nametags");
@@ -164,8 +167,6 @@ public class Config {
         randomChest = config.getBoolean("random-chest.enabled");
         randomChestInterval = config.getInt("random-chest.interval") * 20;
         randomChestMaxContent = config.getInt("random-chest.max-chestcontent");
-        teleportEnd = config.getBoolean("settings.teleport-at-end");
-        teleportEndTime = config.getInt("settings.teleport-at-end-time");
 
         WORLD_BORDER_ENABLED = config.getBoolean("world-border.enabled");
         WORLD_BORDER_INITIATE_ON_START = config.getBoolean("world-border.initiate-on-start");

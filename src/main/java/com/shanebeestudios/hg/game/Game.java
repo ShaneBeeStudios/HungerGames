@@ -1,6 +1,9 @@
 package com.shanebeestudios.hg.game;
 
 import com.shanebeestudios.hg.HungerGames;
+import com.shanebeestudios.hg.api.events.GameEndEvent;
+import com.shanebeestudios.hg.api.events.GameStartEvent;
+import com.shanebeestudios.hg.api.events.PlayerJoinGameEvent;
 import com.shanebeestudios.hg.api.status.Status;
 import com.shanebeestudios.hg.api.util.Util;
 import com.shanebeestudios.hg.api.util.Vault;
@@ -8,19 +11,17 @@ import com.shanebeestudios.hg.data.Config;
 import com.shanebeestudios.hg.data.Language;
 import com.shanebeestudios.hg.data.Leaderboard;
 import com.shanebeestudios.hg.data.PlayerData;
-import com.shanebeestudios.hg.api.events.GameEndEvent;
-import com.shanebeestudios.hg.api.events.GameStartEvent;
-import com.shanebeestudios.hg.api.events.PlayerJoinGameEvent;
 import com.shanebeestudios.hg.game.GameCommandData.CommandType;
 import com.shanebeestudios.hg.managers.KitManager;
 import com.shanebeestudios.hg.managers.MobManager;
 import com.shanebeestudios.hg.managers.PlayerManager;
 import com.shanebeestudios.hg.tasks.ChestDropTask;
+import com.shanebeestudios.hg.tasks.ChestRefillRepeatTask;
 import com.shanebeestudios.hg.tasks.FreeRoamTask;
-import com.shanebeestudios.hg.tasks.Rollback;
-import com.shanebeestudios.hg.tasks.SpawnerTask;
+import com.shanebeestudios.hg.tasks.GameTimerTask;
+import com.shanebeestudios.hg.tasks.MobSpawnerTask;
+import com.shanebeestudios.hg.tasks.RollbackTask;
 import com.shanebeestudios.hg.tasks.StartingTask;
-import com.shanebeestudios.hg.tasks.TimerTask;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
@@ -45,11 +46,12 @@ public class Game {
     private final PlayerManager playerManager;
 
     // Task ID's here!
-    private SpawnerTask spawner;
+    private MobSpawnerTask mobSpawnerTask;
     private FreeRoamTask freeRoamTask;
     private StartingTask startingTask;
-    private TimerTask timer;
-    private ChestDropTask chestDrop;
+    private GameTimerTask gameTimerTask;
+    private ChestRefillRepeatTask chestRefillRepeatTask;
+    private ChestDropTask chestDropTask;
 
     // Data Objects
     final GameArenaData gameArenaData;
@@ -65,21 +67,21 @@ public class Game {
      * Create a new game
      * <p>Internally used when loading from config on server start</p>
      *
-     * @param name       Name of this game
-     * @param gameRegion Bounding region of this game
-     * @param spawns     List of spawns for this game
-     * @param lobbySign  Lobby sign block
-     * @param timer      Length of the game (in seconds)
-     * @param minPlayers Minimum players to be able to start the game
-     * @param maxPlayers Maximum players that can join this game
-     * @param roam       Roam time for this game
-     * @param isReady    If the game is ready to start
-     * @param cost       Cost of this game
+     * @param name          Name of this game
+     * @param gameRegion    Bounding region of this game
+     * @param spawns        List of spawns for this game
+     * @param lobbySign     Lobby sign block
+     * @param gameTimerTask Length of the game (in seconds)
+     * @param minPlayers    Minimum players to be able to start the game
+     * @param maxPlayers    Maximum players that can join this game
+     * @param roam          Roam time for this game
+     * @param isReady       If the game is ready to start
+     * @param cost          Cost of this game
      */
-    public Game(String name, GameRegion gameRegion, List<Location> spawns, Location lobbySign, int timer, int minPlayers, int maxPlayers, int roam, boolean isReady, int cost) {
+    public Game(String name, GameRegion gameRegion, List<Location> spawns, Location lobbySign, int gameTimerTask, int minPlayers, int maxPlayers, int roam, boolean isReady, int cost) {
         this.plugin = HungerGames.getPlugin();
         this.lang = plugin.getLang();
-        this.gameArenaData = new GameArenaData(this, name, gameRegion, timer, minPlayers, maxPlayers, roam, cost);
+        this.gameArenaData = new GameArenaData(this, name, gameRegion, gameTimerTask, minPlayers, maxPlayers, roam, cost);
         this.gamePlayerData = new GamePlayerData(this);
         this.gameBlockData = new GameBlockData(this);
         this.gameScoreboard = new GameScoreboard(this);
@@ -219,7 +221,7 @@ public class Game {
     }
 
     public int getRemainingTime() {
-        if (this.timer != null) return this.timer.getRemainingTime();
+        if (this.gameTimerTask != null) return this.gameTimerTask.getRemainingTime();
         return 0;
     }
 
@@ -263,24 +265,28 @@ public class Game {
      */
     public void startRunningGame() {
         this.gameArenaData.setStatus(Status.RUNNING);
-        if (Config.MOBS_SPAWN_ENABLED) spawner = new SpawnerTask(this);
-        if (Config.randomChest) chestDrop = new ChestDropTask(this);
+        if (Config.MOBS_SPAWN_ENABLED) this.mobSpawnerTask = new MobSpawnerTask(this);
+        if (Config.randomChest) chestDropTask = new ChestDropTask(this);
         this.gameBlockData.updateLobbyBlock();
         if (Config.bossbar) {
-            bar.createBossBar(gameArenaData.timer);
+            this.bar.createBossBar(gameArenaData.timer);
         }
         if (Config.WORLD_BORDER_ENABLED) {
             this.gameBorderData.initialize();
         }
-        timer = new TimerTask(this, gameArenaData.timer);
+        this.gameTimerTask = new GameTimerTask(this, this.gameArenaData.getTimer());
+        if (this.gameArenaData.getChestRefillRepeat() > 0) {
+            this.chestRefillRepeatTask = new ChestRefillRepeatTask(this);
+        }
     }
 
     public void cancelTasks() {
-        if (spawner != null) spawner.stop();
-        if (timer != null) timer.stop();
-        if (startingTask != null) startingTask.stop();
-        if (freeRoamTask != null) freeRoamTask.stop();
-        if (chestDrop != null) chestDrop.shutdown();
+        if (this.startingTask != null) this.startingTask.stop();
+        if (this.freeRoamTask != null) this.freeRoamTask.stop();
+        if (this.gameTimerTask != null) this.gameTimerTask.stop();
+        if (this.mobSpawnerTask != null) this.mobSpawnerTask.stop();
+        if (this.chestRefillRepeatTask != null) this.chestRefillRepeatTask.stop();
+        if (this.chestDropTask != null) this.chestDropTask.shutdown();
     }
 
     /**
@@ -429,7 +435,7 @@ public class Game {
         }
         if (this.gameBlockData.requiresRollback()) {
             if (this.plugin.isEnabled()) {
-                new Rollback(this);
+                new RollbackTask(this);
             } else {
                 // Force rollback if server is stopping
                 this.gameBlockData.forceRollback();

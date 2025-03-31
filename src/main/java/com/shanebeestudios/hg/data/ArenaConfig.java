@@ -99,8 +99,7 @@ public class ArenaConfig {
     @SuppressWarnings("ConstantConditions")
     public void loadArenas() {
         Util.log("Loading arenas:");
-        Configuration pluginConfig = plugin.getHGConfig().getConfig();
-        int freeRoamTime = pluginConfig.getInt("settings.free-roam");
+        int freeRoamTime = Config.SETTINGS_FREE_ROAM_TIME;
 
         if (this.arenaConfigFile.exists()) {
             new CompassTask(this.plugin);

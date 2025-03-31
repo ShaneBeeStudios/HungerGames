@@ -17,7 +17,7 @@ import org.jetbrains.annotations.Nullable;
 
 import java.util.Random;
 
-public class SpawnerTask implements Runnable {
+public class MobSpawnerTask implements Runnable {
 
     private final GamePlayerData gamePlayerData;
     private final GameArenaData gameArenaData;
@@ -28,7 +28,7 @@ public class SpawnerTask implements Runnable {
     private final MobManager mobManager;
     private final int cap = Config.MOBS_SPAWN_CAP_PER_PLAYER;
 
-    public SpawnerTask(Game game) {
+    public MobSpawnerTask(Game game) {
         this.gamePlayerData = game.getGamePlayerData();
         this.gameArenaData = game.getGameArenaData();
         this.gameRegion = game.getGameArenaData().getGameRegion();

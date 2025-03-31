@@ -20,8 +20,8 @@ settings:
   # When enabled, winners will be broadcast to the whole server
   # If disable, winners will only broadcast to players who played that specific game
   broadcast-win-messages: true
-  # The time once the game starts, how long they are safe from PvP (In seconds)
-  free-roam: 25
+  # The time once the game starts, how long players are safe from PvP (In seconds)
+  free-roam-time: 25
   # Whether or not to show a countdown bossbar in game
   bossbar-countdown: true
   # The amount of uses a tracking stick will have
@@ -35,9 +35,7 @@ settings:
   max-bonus-chestcontent: 5
   min-bonus-chestcontent: 1
   # When the game has x seconds left, teleport the players back to their starting point
-  teleport-at-end: false
-  # The time in seconds to teleport players back to their starting point
-  # (note: increments of 30, ex: 30, 60, 90, 120, etc)
+  # If set to '0' players will not teleport
   teleport-at-end-time: 30
   # When enabled, if a player joins a game via command, when they leave they will
   # be teleported back to their previous location (ie: where they ran the command)
