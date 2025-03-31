@@ -125,6 +125,10 @@ public class KillManager {
             return getPlayerKillString(victimName, playerShooter, projectile);
         }
 
+        if (killer instanceof Player playerKiller) {
+            return getPlayerKillString(victimName, playerKiller, null);
+        }
+
         if (this.entityTypeMessages.containsKey(killer.getType())) {
             return this.entityTypeMessages.get(killer.getType()).replace("<player>", victimName);
         }
@@ -158,7 +162,8 @@ public class KillManager {
             Component data = itemStack.getData(DataComponentTypes.ITEM_NAME);
             weaponName = Util.unMini(data);
         }
-        return this.entityTypeMessages.get(EntityType.PLAYER).replace("<player>", victimName)
+        return this.entityTypeMessages.get(EntityType.PLAYER)
+            .replace("<player>", victimName)
             .replace("<killer>", killer.getName())
             .replace("<weapon>", weaponName);
     }
