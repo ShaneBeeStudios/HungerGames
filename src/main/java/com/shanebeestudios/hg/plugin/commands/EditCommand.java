@@ -4,18 +4,20 @@ import com.shanebeestudios.hg.HungerGames;
 import com.shanebeestudios.hg.api.command.CustomArg;
 import com.shanebeestudios.hg.api.util.Util;
 import com.shanebeestudios.hg.game.Game;
+import com.shanebeestudios.hg.game.GameArenaData;
 import com.shanebeestudios.hg.game.GameBorderData;
 import com.shanebeestudios.hg.plugin.permission.Permissions;
+import dev.jorel.commandapi.CommandAPI;
 import dev.jorel.commandapi.arguments.Argument;
 import dev.jorel.commandapi.arguments.IntegerArgument;
 import dev.jorel.commandapi.arguments.LiteralArgument;
 import dev.jorel.commandapi.arguments.Location2DArgument;
+import dev.jorel.commandapi.arguments.LocationArgument;
 import dev.jorel.commandapi.arguments.LocationType;
 import dev.jorel.commandapi.wrappers.Location2D;
 import org.bukkit.Location;
 import org.bukkit.Tag;
 import org.bukkit.block.Block;
-import org.bukkit.block.Sign;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
@@ -33,7 +35,8 @@ public class EditCommand extends SubCommand {
                 .then(chestRefillRepeat())
                 .then(chestRefillTime())
                 .then(border())
-                .then(lobbyWall())
+                .then(info())
+                .then(locations())
             );
     }
 
@@ -121,20 +124,102 @@ public class EditCommand extends SubCommand {
                 }));
     }
 
-    private Argument<?> lobbyWall() {
-        return LiteralArgument.literal("lobby_wall")
-            .executesPlayer(info -> {
-                Game game = CustomArg.getGame(info);
-                Player player = info.sender();
-                Block targetBlock = player.getTargetBlockExact(10);
-                if (targetBlock != null && Tag.WALL_SIGNS.isTagged(targetBlock.getType()) && game.getGameBlockData().setLobbyBlock(targetBlock.getLocation())) {
-                    Util.sendPrefixedMessage(player, this.lang.command_edit_lobbywall_set);
+    @SuppressWarnings("DataFlowIssue")
+    private Argument<?> info() {
+        return LiteralArgument.literal("info")
+            .then(LiteralArgument.literal("free_roam_time")
+                .then(new IntegerArgument("seconds", -1)
+                    .executes(info -> {
+                        Game game = CustomArg.getGame(info);
+                        int freeRoamTime = info.args().getByClass("seconds", Integer.class);
+                        game.getGameArenaData().setFreeRoamTime(freeRoamTime);
+                        saveGame(game);
+                    })))
+            .then(LiteralArgument.literal("cost")
+                .then(new IntegerArgument("dollars", 0)
+                    .executes(info -> {
+                        Game game = CustomArg.getGame(info);
+                        int cost = info.args().getByClass("dollars", Integer.class);
+                        game.getGameArenaData().setCost(cost);
+                        saveGame(game);
+                    })))
+            .then(LiteralArgument.literal("timer")
+                .then(new IntegerArgument("seconds", 30)
+                    .executes(info -> {
+                        Game game = CustomArg.getGame(info);
+                        int timerSeconds = info.args().getByClass("seconds", Integer.class);
+                        game.getGameArenaData().setTimer(timerSeconds);
+                        saveGame(game);
+                    })))
+            .then(LiteralArgument.literal("min_players")
+                .then(new IntegerArgument("min", 2)
+                    .executes(info -> {
+                        Game game = CustomArg.getGame(info);
+                        int minPlayers = info.args().getByClass("min", Integer.class);
+                        if (minPlayers > game.getGameArenaData().getMinPlayers()) {
+                            throw CommandAPI.failWithString("Min players cannot be greater than max players");
+                        }
+                        game.getGameArenaData().setMinPlayers(minPlayers);
+                        saveGame(game);
+                    })))
+            .then(LiteralArgument.literal("max_players")
+                .then(new IntegerArgument("max", 2)
+                    .executes(info -> {
+                        Game game = CustomArg.getGame(info);
+                        int maxPlayers = info.args().getByClass("max", Integer.class);
+                        if (maxPlayers < game.getGameArenaData().getMinPlayers()) {
+                            throw CommandAPI.failWithString("Max players cannot be less than min players");
+                        }
+                        game.getGameArenaData().setMaxPlayers(maxPlayers);
+                        saveGame(game);
+                    })));
+    }
+
+    private Argument<?> locations() {
+        return LiteralArgument.literal("locations")
+            .then(LiteralArgument.literal("lobby_wall")
+                .executesPlayer(info -> {
+                    Game game = CustomArg.getGame(info);
+                    Player player = info.sender();
+                    Block targetBlock = player.getTargetBlockExact(10);
+                    if (targetBlock != null && Tag.WALL_SIGNS.isTagged(targetBlock.getType()) && game.getGameBlockData().setLobbyBlock(targetBlock.getLocation())) {
+                        Util.sendPrefixedMessage(player, this.lang.command_edit_lobbywall_set);
+                        saveGame(game);
+                    } else {
+                        Util.sendPrefixedMessage(player, this.lang.command_edit_lobbywall_incorrect);
+                        Util.sendMessage(player, this.lang.command_edit_lobbywall_format);
+                    }
+                }))
+            .then(LiteralArgument.literal("clear_spawns")
+                .executes(info -> {
+                    Game game = CustomArg.getGame(info);
+                    game.getGameArenaData().clearSpawns();
+                    Util.sendPrefixedMessage(info.sender(), "Spawns have been cleared. <yellow>Arena <white>'<aqua>%s<white>'<yellow> has a max of <red>%s<yellow> players, so make sure to add spawns for them.",
+                        game.getGameArenaData().getName(), game.getGameArenaData().getMaxPlayers());
                     saveGame(game);
-                } else {
-                    Util.sendPrefixedMessage(player, this.lang.command_edit_lobbywall_incorrect);
-                    Util.sendMessage(player, this.lang.command_edit_lobbywall_format);
-                }
-            });
+                }))
+            .then(LiteralArgument.literal("add_spawn")
+                .then(new LocationArgument("location", LocationType.BLOCK_POSITION)
+                    .executesPlayer(info -> {
+                        Game game = CustomArg.getGame(info);
+                        GameArenaData gameArenaData = game.getGameArenaData();
+                        Location location = info.args().getByClass("location", Location.class);
+                        assert location != null;
+                        location.setPitch(0);
+                        location.setYaw(info.sender().getLocation().getYaw());
+                        gameArenaData.addSpawn(location);
+
+                        int spawnCount = gameArenaData.getSpawns().size();
+                        int maxPlayers = gameArenaData.getMaxPlayers();
+                        if (spawnCount < maxPlayers) {
+                            Util.sendPrefixedMessage(info.sender(),
+                                "<yellow>You currently have <aqua>%s <yellow>spawns but a max of <red>%s <yellow>players, you should add <green>%s<yellow> more spawns",
+                                spawnCount, maxPlayers, maxPlayers - spawnCount);
+                        } else {
+                            Util.sendPrefixedMessage(info.sender(), "<green>Spawns all set!");
+                        }
+                        saveGame(game);
+                    })));
     }
 
     private Location convert(Location2D location2D) {

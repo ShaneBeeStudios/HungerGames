@@ -13,7 +13,6 @@ import org.bukkit.Bukkit;
 import org.bukkit.Difficulty;
 import org.bukkit.Location;
 import org.bukkit.World;
-import org.bukkit.configuration.Configuration;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
@@ -99,7 +98,6 @@ public class ArenaConfig {
     @SuppressWarnings("ConstantConditions")
     public void loadArenas() {
         Util.log("Loading arenas:");
-        int freeRoamTime = Config.SETTINGS_FREE_ROAM_TIME;
 
         if (this.arenaConfigFile.exists()) {
             new CompassTask(this.plugin);
@@ -115,6 +113,7 @@ public class ArenaConfig {
                     int cost = 0;
                     int minPlayers = 0;
                     int maxPlayers = 0;
+                    int freeRoamTime = 0;
                     GameRegion gameRegion = null;
                     List<String> commands;
 
@@ -126,6 +125,7 @@ public class ArenaConfig {
                         timer = infoSection.getInt("timer");
                         minPlayers = infoSection.getInt("min_players");
                         maxPlayers = infoSection.getInt("max_players");
+                        freeRoamTime = infoSection.getInt("free_roam_time");
                     } catch (Exception e) {
                         Util.warning("Unable to load information for arena '" + arenaName + "'!");
                         isReady = false;
@@ -294,6 +294,7 @@ public class ArenaConfig {
         infoSection.set("timer", gameArenaData.getTimer());
         infoSection.set("min_players", gameArenaData.getMinPlayers());
         infoSection.set("max_players", gameArenaData.getMaxPlayers());
+        infoSection.set("free_roam_time", gameArenaData.getFreeRoamTime());
 
         // REGION
         ConfigurationSection regionSection = gameSection.createSection("region");

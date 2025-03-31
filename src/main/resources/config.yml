@@ -18,9 +18,10 @@ settings:
   # If disabled, this will only broadcast to players in that specific game
   broadcast-join-messages: true
   # When enabled, winners will be broadcast to the whole server
-  # If disable, winners will only broadcast to players who played that specific game
+  # If disabled, winners will only broadcast to players who played that specific game
   broadcast-win-messages: true
   # The time once the game starts, how long players are safe from PvP (In seconds)
+  # Set to 0 to disable
   free-roam-time: 25
   # Whether or not to show a countdown bossbar in game
   bossbar-countdown: true

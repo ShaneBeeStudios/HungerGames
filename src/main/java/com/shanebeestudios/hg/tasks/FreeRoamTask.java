@@ -2,6 +2,7 @@ package com.shanebeestudios.hg.tasks;
 
 import com.shanebeestudios.hg.HungerGames;
 import com.shanebeestudios.hg.api.util.Util;
+import com.shanebeestudios.hg.data.Config;
 import com.shanebeestudios.hg.data.Language;
 import com.shanebeestudios.hg.game.Game;
 import org.bukkit.Bukkit;
@@ -11,14 +12,19 @@ public class FreeRoamTask implements Runnable {
 
     private final Game game;
     private final Language lang;
-    private final int id;
     private final int roamTime;
+    private final int taskId;
 
     public FreeRoamTask(Game game) {
         this.game = game;
-        this.roamTime = game.getGameArenaData().getRoamTime();
+        this.lang = game.getPlugin().getLang();
+        int roamTime = game.getGameArenaData().getFreeRoamTime();
+        if (roamTime < 0) {
+            // Use default if less than 0
+            roamTime = Config.SETTINGS_FREE_ROAM_TIME;
+        }
+        this.roamTime = Math.max(roamTime, 0);
 
-        this.lang = HungerGames.getPlugin().getLang();
         String gameStarted = this.lang.roam_game_started;
         String roamTimeString = this.lang.roam_time.replace("<roam>", "" + this.roamTime);
 
@@ -31,7 +37,7 @@ public class FreeRoamTask implements Runnable {
             player.setFoodLevel(20);
             game.getGamePlayerData().unFreeze(player);
         }
-        this.id = Bukkit.getScheduler().scheduleSyncDelayedTask(HungerGames.getPlugin(), this, this.roamTime * 20L);
+        this.taskId = Bukkit.getScheduler().scheduleSyncDelayedTask(HungerGames.getPlugin(), this, this.roamTime * 20L);
     }
 
     @Override
@@ -43,7 +49,7 @@ public class FreeRoamTask implements Runnable {
     }
 
     public void stop() {
-        Bukkit.getScheduler().cancelTask(id);
+        Bukkit.getScheduler().cancelTask(this.taskId);
     }
 
 }

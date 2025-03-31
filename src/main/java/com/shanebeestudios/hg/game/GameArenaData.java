@@ -14,10 +14,10 @@ public class GameArenaData extends Data {
 
     final String name;
     final GameRegion gameRegion;
-    final int timer;
-    final int minPlayers;
-    final int maxPlayers;
-    private final int roamTime;
+    int timer;
+    int minPlayers;
+    int maxPlayers;
+    private int freeRoamTime;
     int cost;
     final List<Location> spawns;
     Location exit;
@@ -26,14 +26,14 @@ public class GameArenaData extends Data {
     int chestRefillTime = 0;
     int chestRefillRepeat = 0;
 
-    public GameArenaData(Game game, String name, GameRegion gameRegion, int timer, int minPlayers, int maxPlayers, int roamTime, int cost) {
+    public GameArenaData(Game game, String name, GameRegion gameRegion, int timer, int minPlayers, int maxPlayers, int freeRoamTime, int cost) {
         super(game);
         this.name = name;
         this.gameRegion = gameRegion;
         this.timer = timer;
         this.minPlayers = minPlayers;
         this.maxPlayers = maxPlayers;
-        this.roamTime = roamTime;
+        this.freeRoamTime = freeRoamTime;
         this.cost = cost;
         this.spawns = new ArrayList<>();
     }
@@ -67,16 +67,29 @@ public class GameArenaData extends Data {
     }
 
     /**
-     * Get the roam time of the game
+     * Get the free roam time of the game
      *
-     * @return The roam time
+     * @return Free roam time
      */
-    public int getRoamTime() {
-        return this.roamTime;
+    public int getFreeRoamTime() {
+        return this.freeRoamTime;
+    }
+
+    /**
+     * Set the free roam time of the game
+     *
+     * @param freeRoamTime Free roam time
+     */
+    public void setFreeRoamTime(int freeRoamTime) {
+        this.freeRoamTime = freeRoamTime;
     }
 
     public int getTimer() {
         return this.timer;
+    }
+
+    public void setTimer(int timer) {
+        this.timer = timer;
     }
 
     /**
@@ -85,7 +98,16 @@ public class GameArenaData extends Data {
      * @return Max amount of players for this game
      */
     public int getMaxPlayers() {
-        return maxPlayers;
+        return this.maxPlayers;
+    }
+
+    /**
+     * Set max players for this game
+     *
+     * @param maxPlayers Max players
+     */
+    public void setMaxPlayers(int maxPlayers) {
+        this.maxPlayers = maxPlayers;
     }
 
     /**
@@ -94,7 +116,16 @@ public class GameArenaData extends Data {
      * @return Min amount of players for this game
      */
     public int getMinPlayers() {
-        return minPlayers;
+        return this.minPlayers;
+    }
+
+    /**
+     * Set min players for this game
+     *
+     * @param minPlayers Min players
+     */
+    public void setMinPlayers(int minPlayers) {
+        this.minPlayers = minPlayers;
     }
 
     /**
@@ -124,6 +155,10 @@ public class GameArenaData extends Data {
      */
     public List<Location> getSpawns() {
         return spawns;
+    }
+
+    public void clearSpawns() {
+        this.spawns.clear();
     }
 
     /**
