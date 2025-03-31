@@ -4,7 +4,6 @@ import com.shanebeestudios.hg.HungerGames;
 import com.shanebeestudios.hg.Status;
 import com.shanebeestudios.hg.api.command.CustomArg;
 import com.shanebeestudios.hg.api.util.Util;
-import com.shanebeestudios.hg.data.Language;
 import com.shanebeestudios.hg.game.Game;
 import com.shanebeestudios.hg.plugin.permission.Permissions;
 import dev.jorel.commandapi.arguments.Argument;
@@ -14,10 +13,8 @@ import org.bukkit.command.CommandSender;
 
 public class ForceStartCommand extends SubCommand {
 
-    private final Language lang;
-
     public ForceStartCommand(HungerGames plugin) {
-        this.lang = plugin.getLang();
+        super(plugin);
     }
 
     @SuppressWarnings("DataFlowIssue")

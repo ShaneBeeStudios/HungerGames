@@ -3,7 +3,6 @@ package com.shanebeestudios.hg.plugin.commands;
 import com.shanebeestudios.hg.HungerGames;
 import com.shanebeestudios.hg.api.command.CustomArg;
 import com.shanebeestudios.hg.api.util.Util;
-import com.shanebeestudios.hg.data.Language;
 import com.shanebeestudios.hg.game.Game;
 import com.shanebeestudios.hg.game.GameBorderData;
 import com.shanebeestudios.hg.plugin.permission.Permissions;
@@ -17,16 +16,13 @@ import org.bukkit.Location;
 import org.bukkit.Tag;
 import org.bukkit.block.Block;
 import org.bukkit.block.Sign;
+import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
 public class EditCommand extends SubCommand {
 
-    private final HungerGames plugin;
-    private final Language lang;
-
     public EditCommand(HungerGames plugin) {
-        this.plugin = plugin;
-        this.lang = plugin.getLang();
+        super(plugin);
     }
 
     @Override
@@ -34,6 +30,8 @@ public class EditCommand extends SubCommand {
         return LiteralArgument.literal("edit")
             .withPermission(Permissions.COMMAND_EDIT.permission())
             .then(CustomArg.GAME.get("game")
+                .then(chestRefillRepeat())
+                .then(chestRefillTime())
                 .then(border())
                 .then(lobbyWall())
             );
@@ -80,6 +78,49 @@ public class EditCommand extends SubCommand {
                     })));
     }
 
+    @SuppressWarnings("DataFlowIssue")
+    private Argument<?> chestRefillTime() {
+        return LiteralArgument.literal("chest-refill-time")
+            .then(new IntegerArgument("time", 30)
+                .executes(info -> {
+                    Game game = CustomArg.getGame(info);
+                    CommandSender sender = info.sender();
+                    String name = game.getGameArenaData().getName();
+                    int time = info.args().getByClass("time", Integer.class);
+                    if (time % 30 != 0) {
+                        Util.sendPrefixedMessage(sender, "<yellow><time> <red>must be in increments of 30");
+                        return;
+                    }
+                    game.getGameArenaData().setChestRefillTime(time);
+                    saveGame(game);
+                    Util.sendPrefixedMessage(sender, this.lang.command_edit_chest_refill_time_set
+                        .replace("<arena>", name)
+                        .replace("<sec>", String.valueOf(time)));
+
+                }));
+    }
+
+    @SuppressWarnings("DataFlowIssue")
+    private Argument<?> chestRefillRepeat() {
+        return LiteralArgument.literal("chest-refill-repeat")
+            .then(new IntegerArgument("time", 30)
+                .executes(info -> {
+                    Game game = CustomArg.getGame(info);
+                    CommandSender sender = info.sender();
+                    String name = game.getGameArenaData().getName();
+                    int time = info.args().getByClass("time", Integer.class);
+                    if (time % 30 != 0) {
+                        Util.sendPrefixedMessage(sender, "<yellow><time> <red>must be in increments of 30");
+                        return;
+                    }
+                    game.getGameArenaData().setChestRefillRepeat(time);
+                    saveGame(game);
+                    Util.sendPrefixedMessage(sender, this.lang.command_edit_chest_refill_repeat_set
+                        .replace("<arena>", name)
+                        .replace("<sec>", String.valueOf(time)));
+                }));
+    }
+
     private Argument<?> lobbyWall() {
         return LiteralArgument.literal("lobby_wall")
             .executesPlayer(info -> {
@@ -94,10 +135,6 @@ public class EditCommand extends SubCommand {
                     Util.sendMessage(player, this.lang.command_edit_lobbywall_format);
                 }
             });
-    }
-
-    private void saveGame(Game game) {
-        this.plugin.getArenaConfig().saveGameToConfig(game);
     }
 
     private Location convert(Location2D location2D) {

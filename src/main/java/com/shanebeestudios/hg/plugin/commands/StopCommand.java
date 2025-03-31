@@ -1,5 +1,6 @@
 package com.shanebeestudios.hg.plugin.commands;
 
+import com.shanebeestudios.hg.HungerGames;
 import com.shanebeestudios.hg.api.command.CustomArg;
 import com.shanebeestudios.hg.game.Game;
 import com.shanebeestudios.hg.plugin.permission.Permissions;
@@ -7,6 +8,10 @@ import dev.jorel.commandapi.arguments.Argument;
 import dev.jorel.commandapi.arguments.LiteralArgument;
 
 public class StopCommand extends SubCommand {
+
+    public StopCommand(HungerGames plugin) {
+        super(plugin);
+    }
 
     @Override
     protected Argument<?> register() {

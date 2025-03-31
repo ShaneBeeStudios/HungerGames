@@ -1,5 +1,6 @@
 package com.shanebeestudios.hg.plugin.commands;
 
+import com.shanebeestudios.hg.HungerGames;
 import com.shanebeestudios.hg.api.util.Util;
 import com.shanebeestudios.hg.plugin.permission.Permissions;
 import dev.jorel.commandapi.arguments.Argument;
@@ -8,6 +9,10 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
 public class PermissionsCommand extends SubCommand {
+
+    public PermissionsCommand(HungerGames plugin) {
+        super(plugin);
+    }
 
     @Override
     protected Argument<?> register() {

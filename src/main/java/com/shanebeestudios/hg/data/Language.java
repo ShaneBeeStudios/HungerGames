@@ -92,11 +92,6 @@ public class Language {
     public String death_other_entity;
     public String cmd_spawn_same;
     public String cmd_spawn_set;
-    public String cmd_base_noperm;
-    public String cmd_base_nogame;
-    public String cmd_base_noregion;
-    public String cmd_base_wrongusage;
-    public String cmd_base_status;
     public String cmd_create_need_selection;
     public String cmd_create_divisible_1;
     public String cmd_create_divisible_2;
@@ -108,9 +103,6 @@ public class Language {
     public String cmd_delete_deleted;
     public String cmd_delete_failed;
     public String cmd_delete_noexist;
-    public String cmd_join_already_in_game;
-    public String cmd_join_already_in_game_other;
-    public String cmd_join_no_money;
     public String cmd_kit_no_change;
     public String cmd_reload_attempt;
     public String cmd_reload_reloaded_arena;
@@ -127,8 +119,6 @@ public class Language {
     public String cmd_handler_nokit;
     public String cmd_handler_nocmd;
     public String cmd_handler_playing;
-    public String cmd_chest_refill;
-    public String cmd_chest_refill_now;
     public String cmd_border_size;
     public String cmd_border_center;
     public String cmd_border_timer;
@@ -165,15 +155,29 @@ public class Language {
     public String check_ready_run;
 
     // COMMANDS
-    // Edit
-    // LobbyWall
+    // Base
+    public String command_base_not_in_valid_game;
+    public String command_base_no_region;
+    public String command_base_status;
+
+    // EDIT
+    // - ChestRefill
+    public String command_edit_chest_refill_time_set;
+    public String command_edit_chest_refill_repeat_set;
+    public String command_chest_refill_now;
+    // - LobbyWall
     public String command_edit_lobbywall_set;
     public String command_edit_lobbywall_incorrect;
     public String command_edit_lobbywall_format;
+
     // Exit
     public String command_exit_set_global;
     public String command_exit_set_all;
     public String command_exit_set_arena;
+    // Join
+    public String command_join_already_in_game;
+    public String command_join_already_in_game_other;
+    public String command_join_no_money;
     // Leave
     public String command_leave_left;
     public String command_leave_refund;
@@ -318,11 +322,6 @@ public class Language {
 
         cmd_spawn_same = lang.getString("cmd-spawn-same");
         cmd_spawn_set = lang.getString("cmd-spawn-set");
-        cmd_base_noperm = lang.getString("cmd-base-noperm");
-        cmd_base_nogame = lang.getString("cmd-base-nogame");
-        cmd_base_noregion = lang.getString("cmd-base-noregion");
-        cmd_base_wrongusage = lang.getString("cmd-base-wrongusage");
-        cmd_base_status = lang.getString("command.base-status");
         cmd_create_need_selection = lang.getString("cmd-create-need-selection");
         cmd_create_divisible_1 = lang.getString("cmd-create-divisible-1");
         cmd_create_divisible_2 = lang.getString("cmd-create-divisible-2");
@@ -334,9 +333,6 @@ public class Language {
         cmd_delete_deleted = lang.getString("cmd-delete-deleted");
         cmd_delete_failed = lang.getString("cmd-delete-failed");
         cmd_delete_noexist = lang.getString("cmd-delete-noexist");
-        cmd_join_already_in_game = lang.getString("cmd-join-already-in-game");
-        cmd_join_already_in_game_other = lang.getString("cmd-join-already-in-game-other");
-        cmd_join_no_money = lang.getString("cmd-join-no-money");
         cmd_kit_no_change = lang.getString("cmd-kit-no-change");
         cmd_reload_attempt = lang.getString("cmd-reload-attempt");
         cmd_reload_reloaded_arena = lang.getString("cmd-reload-reloaded-arena");
@@ -370,8 +366,6 @@ public class Language {
         bossbar = lang.getString("game-bossbar");
 
         game_chest_refill = lang.getString("game-chests-refill");
-        cmd_chest_refill = lang.getString("cmd-chestrefill-set");
-        cmd_chest_refill_now = lang.getString("cmd-chestrefill-now");
         cmd_border_center = lang.getString("cmd-border-center");
         cmd_border_size = lang.getString("cmd-border-size");
         cmd_border_timer = lang.getString("cmd-border-timer");
@@ -408,15 +402,29 @@ public class Language {
         check_ready_run = lang.getString("check-ready-run");
 
         // COMMANDS
+        // Base
+        command_base_not_in_valid_game = lang.getString("command.base-not-in-valid-game");
+        command_base_no_region = lang.getString("command.base-no-region");
+        command_base_status = lang.getString("command.base-status");
+        // ChestRefill
+        command_chest_refill_now = lang.getString("command.chest-refill-now");
         // Edit
-        // LobbyWall
+        // - ChestRefill
+        command_edit_chest_refill_time_set = lang.getString("command.edit.chest-refill-time-set");
+        command_edit_chest_refill_repeat_set = lang.getString("command.edit.chest-refill-repeat-set");
+        // - LobbyWall
         command_edit_lobbywall_set = lang.getString("command.edit.lobbywall-set");
         command_edit_lobbywall_incorrect = lang.getString("command.edit.lobbywall-incorrect");
         command_edit_lobbywall_format = lang.getString("command.edit.lobbywall-format");
+
         // Exit
         command_exit_set_global = lang.getString("command.exit-set-global");
         command_exit_set_all = lang.getString("command.exit-set-all");
         command_exit_set_arena = lang.getString("command.exit-set-arena");
+        // Join
+        command_join_already_in_game = lang.getString("command.join-already-in-game");
+        command_join_already_in_game_other = lang.getString("command.join-already-in-game-other");
+        command_join_no_money = lang.getString("command.join-no-money");
         // Leave
         command_leave_left = lang.getString("command.leave-left");
         command_leave_refund = lang.getString("command.leave-refund");

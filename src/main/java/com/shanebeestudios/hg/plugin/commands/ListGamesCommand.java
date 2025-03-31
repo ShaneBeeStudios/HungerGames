@@ -10,10 +10,8 @@ import org.bukkit.command.CommandSender;
 
 public class ListGamesCommand extends SubCommand {
 
-    private final HungerGames plugin;
-
     public ListGamesCommand(HungerGames plugin) {
-        this.plugin = plugin;
+        super(plugin);
     }
 
     @Override

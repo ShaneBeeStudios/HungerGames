@@ -3,7 +3,6 @@ package com.shanebeestudios.hg.plugin.commands;
 import com.shanebeestudios.hg.HungerGames;
 import com.shanebeestudios.hg.api.command.CustomArg;
 import com.shanebeestudios.hg.api.util.Util;
-import com.shanebeestudios.hg.data.Language;
 import com.shanebeestudios.hg.game.Game;
 import com.shanebeestudios.hg.game.GameArenaData;
 import com.shanebeestudios.hg.plugin.permission.Permissions;
@@ -14,12 +13,8 @@ import org.bukkit.entity.Player;
 
 public class SetExitCommand extends SubCommand {
 
-    private final HungerGames plugin;
-    private final Language lang;
-
     public SetExitCommand(HungerGames plugin) {
-        this.plugin = plugin;
-        this.lang = plugin.getLang();
+        super(plugin);
     }
 
     @Override

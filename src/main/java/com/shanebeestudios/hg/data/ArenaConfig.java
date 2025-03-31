@@ -279,18 +279,29 @@ public class ArenaConfig {
         ConfigurationSection gameSection = this.arenaConfig.createSection("arenas." + arenaName);
         GameArenaData gameArenaData = game.getGameArenaData();
 
+        // CHEST REFILL
+        ConfigurationSection chestRefillSection = gameSection.createSection("chest_refill");
+        int chestRefillTime = gameArenaData.getChestRefillTime();
+        if (chestRefillTime > 0) chestRefillSection.set("time", chestRefillTime);
+        int chestRefillRepeat = gameArenaData.getChestRefillRepeat();
+        if (chestRefillRepeat > 0) chestRefillSection.set("repeat", chestRefillRepeat);
+
+        // INFO
         ConfigurationSection infoSection = gameSection.createSection("info");
         infoSection.set("cost", gameArenaData.getCost());
         infoSection.set("timer", gameArenaData.getTimer());
         infoSection.set("min_players", gameArenaData.getMinPlayers());
         infoSection.set("max_players", gameArenaData.getMaxPlayers());
 
+        // REGION
         ConfigurationSection regionSection = gameSection.createSection("region");
         regionSection.set("world", gameArenaData.getGameRegion().getWorld().getName());
         regionSection.set("bounding_box", gameArenaData.getGameRegion().getBoundingBox());
 
+        // COMMANDS
         gameSection.set("commands", game.getGameCommandData().getCommands());
 
+        // LOCATIONS
         ConfigurationSection locationsSection = gameSection.createSection("locations");
         List<String> spawns = new ArrayList<>();
         gameArenaData.getSpawns().forEach(spawn -> spawns.add(locToString(spawn)));

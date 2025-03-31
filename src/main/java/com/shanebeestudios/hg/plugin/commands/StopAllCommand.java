@@ -6,7 +6,12 @@ import com.shanebeestudios.hg.plugin.permission.Permissions;
 import dev.jorel.commandapi.arguments.Argument;
 import dev.jorel.commandapi.arguments.LiteralArgument;
 
-public class StopAllCommand extends SubCommand{
+public class StopAllCommand extends SubCommand {
+
+    public StopAllCommand(HungerGames plugin) {
+        super(plugin);
+    }
+
     @Override
     protected Argument<?> register() {
         return LiteralArgument.literal("stopall")

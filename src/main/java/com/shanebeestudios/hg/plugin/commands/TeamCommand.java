@@ -3,11 +3,9 @@ package com.shanebeestudios.hg.plugin.commands;
 import com.shanebeestudios.hg.HungerGames;
 import com.shanebeestudios.hg.api.util.Util;
 import com.shanebeestudios.hg.data.Config;
-import com.shanebeestudios.hg.data.Language;
 import com.shanebeestudios.hg.data.PlayerData;
 import com.shanebeestudios.hg.game.Game;
 import com.shanebeestudios.hg.game.GameTeam;
-import com.shanebeestudios.hg.managers.PlayerManager;
 import com.shanebeestudios.hg.plugin.permission.Permissions;
 import dev.jorel.commandapi.arguments.Argument;
 import dev.jorel.commandapi.arguments.EntitySelectorArgument;
@@ -17,12 +15,8 @@ import org.bukkit.entity.Player;
 
 public class TeamCommand extends SubCommand {
 
-    private final Language lang;
-    private final PlayerManager playerManager;
-
     public TeamCommand(HungerGames plugin) {
-        this.lang = plugin.getLang();
-        this.playerManager = plugin.getPlayerManager();
+        super(plugin);
     }
 
     @Override
@@ -35,7 +29,7 @@ public class TeamCommand extends SubCommand {
                         Player player = info.sender();
                         PlayerData playerData = this.playerManager.getPlayerData(player);
                         if (playerData == null) {
-                            Util.sendPrefixedMessage(player, this.lang.cmd_base_nogame);
+                            Util.sendPrefixedMessage(player, this.lang.command_base_not_in_valid_game);
                             return;
                         }
                         GameTeam gameTeam = playerData.getTeam();
@@ -64,7 +58,7 @@ public class TeamCommand extends SubCommand {
                         PlayerData playerData = this.playerManager.getPlayerData(teamLeader);
                         if (playerData == null) {
                             // Not in a game
-                            Util.sendPrefixedMessage(teamLeader, this.lang.cmd_base_nogame);
+                            Util.sendPrefixedMessage(teamLeader, this.lang.command_base_not_in_valid_game);
                             return;
                         }
 
@@ -114,7 +108,7 @@ public class TeamCommand extends SubCommand {
                     PlayerData playerData = this.playerManager.getPlayerData(player);
                     if (playerData == null) {
                         // Not in a game
-                        Util.sendPrefixedMessage(player, this.lang.cmd_base_nogame);
+                        Util.sendPrefixedMessage(player, this.lang.command_base_not_in_valid_game);
                         return;
                     }
                     GameTeam gameTeam = playerData.getPendingTeam();
@@ -133,7 +127,7 @@ public class TeamCommand extends SubCommand {
                     Player player = info.sender();
                     PlayerData playerData = this.playerManager.getPlayerData(player);
                     if (playerData == null) {
-                        Util.sendPrefixedMessage(player, this.lang.cmd_base_nogame);
+                        Util.sendPrefixedMessage(player, this.lang.command_base_not_in_valid_game);
                         return;
                     }
                     GameTeam gameTeam = playerData.getPendingTeam();
@@ -151,7 +145,7 @@ public class TeamCommand extends SubCommand {
                         Player player = info.sender();
                         PlayerData playerData = this.playerManager.getPlayerData(player);
                         if (playerData == null) {
-                            Util.sendPrefixedMessage(player, this.lang.cmd_base_nogame);
+                            Util.sendPrefixedMessage(player, this.lang.command_base_not_in_valid_game);
                             return;
                         }
 

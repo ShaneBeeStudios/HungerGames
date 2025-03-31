@@ -12,6 +12,11 @@ import org.bukkit.entity.Player;
 import java.util.concurrent.CompletableFuture;
 
 public class KitCommand extends SubCommand {
+
+    public KitCommand(HungerGames plugin) {
+        super(plugin);
+    }
+
     @Override
     protected Argument<?> register() {
         return LiteralArgument.literal("kit")

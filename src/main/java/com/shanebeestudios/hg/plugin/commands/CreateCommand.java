@@ -17,11 +17,10 @@ import java.util.UUID;
 @SuppressWarnings({"FieldCanBeLocal", "unused"})
 public class CreateCommand extends SubCommand {
 
-    private final HungerGames plugin;
     private final SessionManager sessionManager;
 
     public CreateCommand(HungerGames plugin) {
-        this.plugin = plugin;
+        super(plugin);
         this.sessionManager = plugin.getSessionManager();
     }
 

@@ -32,26 +32,7 @@ public abstract class BaseCmd {
 	public Player player;
 
 	public boolean processCmd(HungerGames plugin, CommandSender sender, String[] args) {
-		this.sender = sender;
-		this.args = args;
-		this.playerManager = plugin.getPlayerManager();
-		this.gameManager = plugin.getGameManager();
-		this.arenaConfig = plugin.getArenaConfig();
-		this.lang = plugin.getLang();
 
-		if (forcePlayer) {
-			if (!(sender instanceof Player)) return false;
-			else player = (Player) sender;
-		}
-		if (!sender.hasPermission("hg." + cmdName))
-			Util.sendMessage(this.sender, lang.cmd_base_noperm.replace("<command>", cmdName));
-		else if (forceInGame && !playerManager.hasPlayerData(player) && !playerManager.hasSpectatorData(player))
-			Util.sendMessage(this.sender, lang.cmd_base_nogame);
-		else if (forceInRegion && !gameManager.isInRegion(player.getLocation()))
-			Util.sendMessage(this.sender, lang.cmd_base_noregion);
-		else if (argLength > args.length)
-			Util.sendMessage(sender, lang.cmd_base_wrongusage + " " + sendHelpLine());
-		else return run();
 		return true;
 	}
 

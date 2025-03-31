@@ -48,13 +48,13 @@ public class TimerTask implements Runnable {
 		if (Config.bossbar) game.getGameBarData().bossbarUpdate(remainingTime);
 
 		if (gameArenaData.getChestRefillTime() > 0 && remainingTime == gameArenaData.getChestRefillTime()) {
-			gameBlockData.refillChests();
+			gameBlockData.clearChests();
 			gamePlayerData.msgAll(lang.game_chest_refill);
 		}
 
 		int refillRepeat = gameArenaData.getChestRefillRepeat();
 		if (refillRepeat > 0 && this.timer % refillRepeat == 0) {
-			gameBlockData.refillChests();
+			gameBlockData.clearChests();
 			gamePlayerData.msgAll(this.lang.game_chest_refill);
 		}
 

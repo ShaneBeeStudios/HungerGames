@@ -75,20 +75,16 @@ public class GameBlockData extends Data {
     }
 
     /**
-     * Refill chests in this game
+     * Clear chests and mark them for refill
      */
-    public void refillChests() {
-        this.chests.clear();
-    }
-
-    void clearChests() {
-        for (Location loc : chests) {
-            if (loc.getBlock().getState() instanceof InventoryHolder) {
-                ((InventoryHolder) loc.getBlock().getState()).getInventory().clear();
-                loc.getBlock().getState().update();
+    public void clearChests() {
+        for (Location location : this.chests) {
+            if (location.getBlock().getState() instanceof InventoryHolder inventoryHolder) {
+                inventoryHolder.getInventory().clear();
+                location.getBlock().getState().update();
             }
         }
-        chests.clear();
+        this.chests.clear();
     }
 
     private void addState(BlockState s) {

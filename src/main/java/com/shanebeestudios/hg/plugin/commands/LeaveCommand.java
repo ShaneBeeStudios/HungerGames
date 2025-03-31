@@ -5,10 +5,8 @@ import com.shanebeestudios.hg.Status;
 import com.shanebeestudios.hg.api.util.Util;
 import com.shanebeestudios.hg.api.util.Vault;
 import com.shanebeestudios.hg.data.Config;
-import com.shanebeestudios.hg.data.Language;
 import com.shanebeestudios.hg.game.Game;
 import com.shanebeestudios.hg.game.GameArenaData;
-import com.shanebeestudios.hg.managers.PlayerManager;
 import com.shanebeestudios.hg.plugin.permission.Permissions;
 import dev.jorel.commandapi.arguments.Argument;
 import dev.jorel.commandapi.arguments.LiteralArgument;
@@ -16,12 +14,8 @@ import org.bukkit.entity.Player;
 
 public class LeaveCommand extends SubCommand {
 
-    private final PlayerManager playerManager;
-    private final Language lang;
-
     public LeaveCommand(HungerGames plugin) {
-        this.playerManager = plugin.getPlayerManager();
-        this.lang = plugin.getLang();
+        super(plugin);
     }
 
     @SuppressWarnings("DataFlowIssue")
@@ -48,7 +42,7 @@ public class LeaveCommand extends SubCommand {
                     game = playerManager.getSpectatorData(player).getGame();
                     game.getGamePlayerData().leaveSpectate(player);
                 } else {
-                    Util.sendMessage(player, this.lang.cmd_base_nogame);
+                    Util.sendMessage(player, this.lang.command_base_not_in_valid_game);
                     return;
                 }
                 Util.sendMessage(player, this.lang.command_leave_left.replace("<arena>", game.getGameArenaData().getName()));

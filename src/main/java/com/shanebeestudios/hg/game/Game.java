@@ -319,7 +319,7 @@ public class Game {
      */
     public boolean joinGame(Player player, boolean savePreviousLocation) {
         if (this.playerManager.isInGame(player)) {
-            Util.sendPrefixedMessage(player, this.lang.cmd_join_already_in_game);
+            Util.sendPrefixedMessage(player, this.lang.command_join_already_in_game);
             return false;
         }
         // Call PlayerJoinGameEvent
@@ -538,7 +538,7 @@ public class Game {
                 Vault.economy.withdrawPlayer(player, cost);
                 return true;
             } else {
-                Util.sendMessage(player, lang.prefix + lang.cmd_join_no_money.replace("<cost>", String.valueOf(cost)));
+                Util.sendMessage(player, lang.prefix + lang.command_join_no_money.replace("<cost>", String.valueOf(cost)));
                 return false;
             }
         }

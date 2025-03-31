@@ -2,11 +2,9 @@ package com.shanebeestudios.hg.plugin.commands;
 
 import com.shanebeestudios.hg.HungerGames;
 import com.shanebeestudios.hg.api.command.CustomArg;
-import com.shanebeestudios.hg.data.Language;
-import com.shanebeestudios.hg.game.Game;
-import com.shanebeestudios.hg.managers.PlayerManager;
-import com.shanebeestudios.hg.plugin.permission.Permissions;
 import com.shanebeestudios.hg.api.util.Util;
+import com.shanebeestudios.hg.game.Game;
+import com.shanebeestudios.hg.plugin.permission.Permissions;
 import dev.jorel.commandapi.arguments.Argument;
 import dev.jorel.commandapi.arguments.EntitySelectorArgument;
 import dev.jorel.commandapi.arguments.LiteralArgument;
@@ -18,12 +16,8 @@ import java.util.Collection;
 
 public class JoinCommand extends SubCommand {
 
-    private final PlayerManager playerManager;
-    private final Language lang;
-
     public JoinCommand(HungerGames plugin) {
-        this.playerManager = plugin.getPlayerManager();
-        this.lang = plugin.getLang();
+        super(plugin);
     }
 
     @SuppressWarnings("unchecked")
@@ -55,9 +49,9 @@ public class JoinCommand extends SubCommand {
     private void joinGame(CommandSender sender, Player player, Game game) {
         if (this.playerManager.isInGame(player)) {
             if (sender == player) {
-                Util.sendPrefixedMessage(sender, this.lang.cmd_join_already_in_game);
+                Util.sendPrefixedMessage(sender, this.lang.command_join_already_in_game);
             } else {
-                Util.sendPrefixedMessage(sender, this.lang.cmd_join_already_in_game_other.replace("<player>", player.getName()));
+                Util.sendPrefixedMessage(sender, this.lang.command_join_already_in_game_other.replace("<player>", player.getName()));
             }
             return;
         }

@@ -3,7 +3,6 @@ package com.shanebeestudios.hg.plugin.commands;
 import com.shanebeestudios.hg.HungerGames;
 import com.shanebeestudios.hg.api.command.CustomArg;
 import com.shanebeestudios.hg.api.util.Util;
-import com.shanebeestudios.hg.data.Language;
 import com.shanebeestudios.hg.game.Game;
 import com.shanebeestudios.hg.game.GameArenaData;
 import com.shanebeestudios.hg.plugin.permission.Permissions;
@@ -13,10 +12,8 @@ import org.bukkit.command.CommandSender;
 
 public class StatusCommand extends SubCommand {
 
-    private final Language lang;
-
     public StatusCommand(HungerGames plugin) {
-        this.lang = plugin.getLang();
+        super(plugin);
     }
 
     @Override
@@ -29,7 +26,7 @@ public class StatusCommand extends SubCommand {
                     CommandSender sender = info.sender();
                     if (game != null) {
                         GameArenaData arenaData = game.getGameArenaData();
-                        Util.sendPrefixedMessage(sender, this.lang.cmd_base_status
+                        Util.sendPrefixedMessage(sender, this.lang.command_base_status
                             .replace("<arena>", arenaData.getName())
                             .replace("<status>", arenaData.getStatus().getStringName()));
 
