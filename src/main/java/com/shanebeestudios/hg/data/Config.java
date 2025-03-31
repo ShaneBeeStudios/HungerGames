@@ -51,22 +51,19 @@ public class Config {
     public static int MOBS_SPAWN_INTERVAL;
     public static int MOBS_SPAWN_CAP_PER_PLAYER;
 
-
-
     //Reward info
     public static boolean giveReward;
     public static int cash;
     public static List<String> rewardCommands;
     public static List<String> rewardMessages;
 
-    //Rollback config info
-    public static boolean BREAK_BLOCKS;
+    //Rollback
+    public static boolean ROLLBACK_ALLOW_BREAK_BLOCKS;
     public static int ROLLBACK_BLOCKS_PER_SECOND;
-    public static boolean PROTECT_COOLDOWN;
-    public static boolean fixleaves;
-    public static boolean preventtrample;
+    public static boolean ROLLBACK_PROTECT_DURING_FREE_ROAM;
+    public static boolean ROLLBACK_PREVENT_TRAMPLING;
     public static List<String> ROLLBACK_EDITABLE_BLOCKS;
-    public static boolean itemframe_take;
+    public static boolean ROLLBACK_ALLOW_ITEMFRAME_TAKE;
 
     //Random chest
     public static boolean randomChest;
@@ -155,13 +152,14 @@ public class Config {
         rewardMessages = config.getStringList("reward.messages");
         giveReward = config.getBoolean("reward.enabled");
         cash = config.getInt("reward.cash");
-        BREAK_BLOCKS = config.getBoolean("rollback.allow-block-break");
+
+        // Rollback
+        ROLLBACK_ALLOW_BREAK_BLOCKS = config.getBoolean("rollback.allow-block-break");
         ROLLBACK_BLOCKS_PER_SECOND = config.getInt("rollback.blocks-per-second");
-        PROTECT_COOLDOWN = config.getBoolean("rollback.protect-during-cooldown");
-        fixleaves = config.getBoolean("rollback.fix-leaves");
-        preventtrample = config.getBoolean("rollback.prevent-trampling");
+        ROLLBACK_PROTECT_DURING_FREE_ROAM = config.getBoolean("rollback.protect-during-free-roam");
+        ROLLBACK_PREVENT_TRAMPLING = config.getBoolean("rollback.prevent-trampling");
         ROLLBACK_EDITABLE_BLOCKS = config.getStringList("rollback.editable-blocks");
-        itemframe_take = config.getBoolean("rollback.allow-itemframe-take");
+        ROLLBACK_ALLOW_ITEMFRAME_TAKE = config.getBoolean("rollback.allow-itemframe-take");
 
         randomChest = config.getBoolean("random-chest.enabled");
         randomChestInterval = config.getInt("random-chest.interval") * 20;

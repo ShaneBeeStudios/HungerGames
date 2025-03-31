@@ -110,12 +110,10 @@ rollback:
   allow-block-break: false
   # Allow players to take items out of item frames (will be rolled back)
   allow-itemframe-take: false
-  # The amount of blocks that will be restored during rollback per second (this number is actually divided by 10 and restored in 2 tick intervals)
+  # The amount of blocks that will be restored during rollback per second (this number is actually divided by 20 and restored in 1 tick intervals)
   blocks-per-second: 500
   # When enabled, will not allow players to break blocks during the free-roam time
-  protect-during-cooldown: true
-  # If allow-block-break is true, this will fix leaves that decay if a tree is broken
-  fix-leaves: true
+  protect-during-free-roam: true
   # Prevent players from trampling crops in your arenas
   prevent-trampling: true
   # List of blocks players can break (use 'all' for all blocks)

@@ -6,6 +6,7 @@ import com.shanebeestudios.hg.api.util.BlockUtils;
 import com.shanebeestudios.hg.api.util.Util;
 import com.shanebeestudios.hg.data.Config;
 import com.shanebeestudios.hg.game.Game;
+import com.shanebeestudios.hg.game.GameArenaData;
 import com.shanebeestudios.hg.game.GameBlockData;
 import com.shanebeestudios.hg.plugin.permission.Permissions;
 import org.bukkit.Material;
@@ -39,7 +40,7 @@ public class GameBlockListener extends GameListenerBase {
     private void onAttack(EntityDamageByEntityEvent event) {
         // Stop players from removing items from item frames
         if (event.getEntity() instanceof Hanging hanging) {
-            handleItemFrame(hanging, event, !Config.itemframe_take);
+            handleItemFrame(hanging, event, !Config.ROLLBACK_ALLOW_ITEMFRAME_TAKE);
         }
     }
 
@@ -66,7 +67,7 @@ public class GameBlockListener extends GameListenerBase {
 
     @SuppressWarnings("DataFlowIssue")
     @EventHandler
-    private void blockPlace(BlockPlaceEvent event) {
+    private void onBlockPlace(BlockPlaceEvent event) {
         Player player = event.getPlayer();
         Block block = event.getBlock();
 
@@ -74,12 +75,21 @@ public class GameBlockListener extends GameListenerBase {
             event.setCancelled(true);
             return;
         }
-        if (this.gameManager.isInRegion(block.getLocation())) {
-            if (Config.BREAK_BLOCKS && this.playerManager.hasPlayerData(player)) {
-                Game game = this.playerManager.getPlayerData(player).getGame();
+        if (!this.playerManager.hasPlayerData(player)) {
+            if (this.gameManager.isInRegion(block.getLocation()) && !Permissions.COMMAND_CREATE.has(player)) {
+                // Prevent non-game players placing blocks in arena
+                event.setCancelled(true);
+            }
+            return;
+        }
+        Game game = this.playerManager.getPlayerData(player).getGame();
+        GameArenaData gameArenaData = game.getGameArenaData();
+
+        if (gameArenaData.getGameRegion().isInRegion(block.getLocation())) {
+            if (Config.ROLLBACK_ALLOW_BREAK_BLOCKS) {
                 GameBlockData gameBlockData = game.getGameBlockData();
-                Status status = game.getGameArenaData().getStatus();
-                if (status == Status.RUNNING || status == Status.FREE_ROAM) {
+                Status status = gameArenaData.getStatus();
+                if (status == Status.RUNNING || (status == Status.ROLLBACK && !Config.ROLLBACK_PROTECT_DURING_FREE_ROAM)) {
                     if (!BlockUtils.isEditableBlock(block.getType())) {
                         Util.sendMessage(player, this.lang.listener_no_edit_block);
                         event.setCancelled(true);
@@ -92,12 +102,15 @@ public class GameBlockListener extends GameListenerBase {
                     Util.sendMessage(player, this.lang.listener_not_running);
                     event.setCancelled(true);
                 }
-            } else {
-                if (!Permissions.COMMAND_CREATE.has(player)) {
-                    event.setCancelled(true);
-                }
+            } else if (!Permissions.COMMAND_CREATE.has(player)) {
+                event.setCancelled(true);
+
             }
+        } else {
+            // Prevent placing blocks outside arena
+            event.setCancelled(true);
         }
+
     }
 
     @SuppressWarnings("DataFlowIssue")
@@ -110,10 +123,20 @@ public class GameBlockListener extends GameListenerBase {
             event.setCancelled(true);
             return;
         }
-        if (this.gameManager.isInRegion(block.getLocation())) {
-            if (Config.BREAK_BLOCKS && this.playerManager.hasPlayerData(player)) {
-                Game game = this.playerManager.getPlayerData(player).getGame();
-                if (game.getGameArenaData().getStatus() == Status.RUNNING || !Config.PROTECT_COOLDOWN) {
+        if (!this.playerManager.hasPlayerData(player)) {
+            if (this.gameManager.isInRegion(block.getLocation()) && !Permissions.COMMAND_CREATE.has(player)) {
+                // Prevent non-game players breaking blocks in arena
+                event.setCancelled(true);
+            }
+            return;
+        }
+        Game game = this.playerManager.getPlayerData(player).getGame();
+        GameArenaData gameArenaData = game.getGameArenaData();
+
+        if (gameArenaData.getGameRegion().isInRegion(block.getLocation())) {
+            if (Config.ROLLBACK_ALLOW_BREAK_BLOCKS) {
+                Status status = gameArenaData.getStatus();
+                if (status == Status.RUNNING || (status == Status.ROLLBACK && !Config.ROLLBACK_PROTECT_DURING_FREE_ROAM)) {
                     if (!BlockUtils.isEditableBlock(block.getType())) {
                         Util.sendMessage(player, this.lang.listener_no_edit_block);
                         event.setCancelled(true);
@@ -129,9 +152,8 @@ public class GameBlockListener extends GameListenerBase {
                     event.setCancelled(true);
                 }
             } else {
-                if (!this.playerManager.hasPlayerData(player) && Permissions.COMMAND_CREATE.has(player)) {
-                    Game game = this.gameManager.getGame(block.getLocation());
-                    Status status = game.getGameArenaData().getStatus();
+                if (Permissions.COMMAND_CREATE.has(player)) {
+                    Status status = gameArenaData.getStatus();
                     switch (status) {
                         case FREE_ROAM:
                         case RUNNING:
@@ -142,6 +164,9 @@ public class GameBlockListener extends GameListenerBase {
                 }
                 event.setCancelled(true);
             }
+        } else {
+            // Prevent breaking blocks outside arena
+            event.setCancelled(true);
         }
     }
 
@@ -163,9 +188,9 @@ public class GameBlockListener extends GameListenerBase {
         final boolean LAVA = event.getBucket() == Material.LAVA_BUCKET && BlockUtils.isEditableBlock(Material.LAVA);
 
         if (this.gameManager.isInRegion(block.getLocation())) {
-            if (Config.BREAK_BLOCKS && this.playerManager.hasPlayerData(player)) {
+            if (Config.ROLLBACK_ALLOW_BREAK_BLOCKS && this.playerManager.hasPlayerData(player)) {
                 Game game = this.playerManager.getPlayerData(player).getGame();
-                if (game.getGameArenaData().getStatus() == Status.RUNNING || !Config.PROTECT_COOLDOWN) {
+                if (game.getGameArenaData().getStatus() == Status.RUNNING || !Config.ROLLBACK_PROTECT_DURING_FREE_ROAM) {
                     if ((fill && !BlockUtils.isEditableBlock(block.getType())) ||
                         (!fill && !(WATER || LAVA))) {
                         Util.sendMessage(player, this.lang.listener_no_edit_block);
@@ -185,7 +210,7 @@ public class GameBlockListener extends GameListenerBase {
 
     @EventHandler
     private void onTrample(PlayerInteractEvent event) {
-        if (!Config.preventtrample) return;
+        if (!Config.ROLLBACK_PREVENT_TRAMPLING) return;
         Player player = event.getPlayer();
         if (this.playerManager.hasSpectatorData(player)) {
             event.setCancelled(true);
