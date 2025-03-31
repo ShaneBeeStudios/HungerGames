@@ -1,4 +1,4 @@
-package com.shanebeestudios.hg.data;
+package com.shanebeestudios.hg.plugin.configs;
 
 import org.bukkit.configuration.Configuration;
 import org.bukkit.configuration.file.FileConfiguration;

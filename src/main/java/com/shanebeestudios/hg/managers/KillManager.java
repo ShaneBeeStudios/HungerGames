@@ -4,7 +4,7 @@ import com.shanebeestudios.hg.HungerGames;
 import com.shanebeestudios.hg.api.registry.Registries;
 import com.shanebeestudios.hg.api.util.ItemUtils;
 import com.shanebeestudios.hg.api.util.Util;
-import com.shanebeestudios.hg.data.Config;
+import com.shanebeestudios.hg.plugin.configs.Config;
 import com.shanebeestudios.hg.data.Language;
 import com.shanebeestudios.hg.data.Leaderboard;
 import com.shanebeestudios.hg.api.events.PlayerDeathGameEvent;

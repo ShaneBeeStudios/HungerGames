@@ -18,7 +18,7 @@ import org.bukkit.event.world.ChunkUnloadEvent;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 import com.shanebeestudios.hg.HungerGames;
-import com.shanebeestudios.hg.data.Config;
+import com.shanebeestudios.hg.plugin.configs.Config;
 import com.shanebeestudios.hg.game.Game;
 import com.shanebeestudios.hg.managers.PlayerManager;
 import com.shanebeestudios.hg.api.util.Util;

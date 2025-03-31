@@ -1,4 +1,4 @@
-package com.shanebeestudios.hg.tasks;
+package com.shanebeestudios.hg.plugin.tasks;
 
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
@@ -11,8 +11,6 @@ import com.shanebeestudios.hg.game.Game;
 import com.shanebeestudios.hg.HungerGames;
 import com.shanebeestudios.hg.data.PlayerData;
 import com.shanebeestudios.hg.managers.PlayerManager;
-
-import java.util.UUID;
 
 public class CompassTask implements Runnable {
 

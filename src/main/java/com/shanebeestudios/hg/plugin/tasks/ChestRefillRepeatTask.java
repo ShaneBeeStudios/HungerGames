@@ -1,4 +1,4 @@
-package com.shanebeestudios.hg.tasks;
+package com.shanebeestudios.hg.plugin.tasks;
 
 import com.shanebeestudios.hg.api.status.Status;
 import com.shanebeestudios.hg.data.Language;

@@ -1,7 +1,7 @@
 package com.shanebeestudios.hg.game;
 
 import com.shanebeestudios.hg.api.util.Util;
-import com.shanebeestudios.hg.data.Config;
+import com.shanebeestudios.hg.plugin.configs.Config;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.scoreboard.Criteria;

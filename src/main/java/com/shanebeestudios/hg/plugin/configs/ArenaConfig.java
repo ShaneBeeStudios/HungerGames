@@ -1,4 +1,4 @@
-package com.shanebeestudios.hg.data;
+package com.shanebeestudios.hg.plugin.configs;
 
 import com.shanebeestudios.hg.HungerGames;
 import com.shanebeestudios.hg.api.util.Util;
@@ -8,7 +8,7 @@ import com.shanebeestudios.hg.game.GameBorderData;
 import com.shanebeestudios.hg.game.GameRegion;
 import com.shanebeestudios.hg.managers.ItemStackManager;
 import com.shanebeestudios.hg.managers.KitManager;
-import com.shanebeestudios.hg.tasks.CompassTask;
+import com.shanebeestudios.hg.plugin.tasks.CompassTask;
 import org.bukkit.Bukkit;
 import org.bukkit.Difficulty;
 import org.bukkit.Location;

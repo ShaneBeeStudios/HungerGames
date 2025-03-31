@@ -1,8 +1,8 @@
-package com.shanebeestudios.hg.tasks;
+package com.shanebeestudios.hg.plugin.tasks;
 
 import com.shanebeestudios.hg.HungerGames;
 import com.shanebeestudios.hg.api.util.Util;
-import com.shanebeestudios.hg.data.Config;
+import com.shanebeestudios.hg.plugin.configs.Config;
 import com.shanebeestudios.hg.data.Language;
 import com.shanebeestudios.hg.game.Game;
 import org.bukkit.Bukkit;

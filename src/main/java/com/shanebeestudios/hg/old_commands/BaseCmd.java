@@ -3,11 +3,10 @@ package com.shanebeestudios.hg.old_commands;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import com.shanebeestudios.hg.HungerGames;
-import com.shanebeestudios.hg.data.ArenaConfig;
+import com.shanebeestudios.hg.plugin.configs.ArenaConfig;
 import com.shanebeestudios.hg.data.Language;
 import com.shanebeestudios.hg.managers.GameManager;
 import com.shanebeestudios.hg.managers.PlayerManager;
-import com.shanebeestudios.hg.api.util.Util;
 
 public abstract class BaseCmd {
 

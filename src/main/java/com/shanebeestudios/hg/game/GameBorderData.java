@@ -1,7 +1,7 @@
 package com.shanebeestudios.hg.game;
 
-import com.shanebeestudios.hg.data.Config;
-import com.shanebeestudios.hg.tasks.WorldBorderTask;
+import com.shanebeestudios.hg.plugin.configs.Config;
+import com.shanebeestudios.hg.plugin.tasks.WorldBorderTask;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.WorldBorder;

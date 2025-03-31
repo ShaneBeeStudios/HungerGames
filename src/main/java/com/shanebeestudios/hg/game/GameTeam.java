@@ -1,7 +1,7 @@
 package com.shanebeestudios.hg.game;
 
 import com.shanebeestudios.hg.api.util.Util;
-import com.shanebeestudios.hg.data.Config;
+import com.shanebeestudios.hg.plugin.configs.Config;
 import com.shanebeestudios.hg.data.Language;
 import com.shanebeestudios.hg.data.PlayerData;
 import com.shanebeestudios.hg.managers.PlayerManager;

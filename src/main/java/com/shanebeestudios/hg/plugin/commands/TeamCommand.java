@@ -2,7 +2,7 @@ package com.shanebeestudios.hg.plugin.commands;
 
 import com.shanebeestudios.hg.HungerGames;
 import com.shanebeestudios.hg.api.util.Util;
-import com.shanebeestudios.hg.data.Config;
+import com.shanebeestudios.hg.plugin.configs.Config;
 import com.shanebeestudios.hg.data.PlayerData;
 import com.shanebeestudios.hg.game.Game;
 import com.shanebeestudios.hg.game.GameTeam;

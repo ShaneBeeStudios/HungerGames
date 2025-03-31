@@ -2,7 +2,7 @@ package com.shanebeestudios.hg.api.util;
 
 import com.google.common.collect.ImmutableSet;
 import com.shanebeestudios.hg.api.registry.Registries;
-import com.shanebeestudios.hg.data.Config;
+import com.shanebeestudios.hg.plugin.configs.Config;
 import io.papermc.paper.registry.RegistryKey;
 import io.papermc.paper.registry.TypedKey;
 import io.papermc.paper.registry.tag.TagKey;

@@ -2,11 +2,11 @@ package com.shanebeestudios.hg;
 
 import com.shanebeestudios.hg.api.util.NBTApi;
 import com.shanebeestudios.hg.api.util.Util;
-import com.shanebeestudios.hg.data.ArenaConfig;
-import com.shanebeestudios.hg.data.Config;
+import com.shanebeestudios.hg.plugin.configs.ArenaConfig;
+import com.shanebeestudios.hg.plugin.configs.Config;
 import com.shanebeestudios.hg.data.Language;
 import com.shanebeestudios.hg.data.Leaderboard;
-import com.shanebeestudios.hg.data.MobConfig;
+import com.shanebeestudios.hg.plugin.configs.MobConfig;
 import com.shanebeestudios.hg.data.RandomItems;
 import com.shanebeestudios.hg.managers.GameManager;
 import com.shanebeestudios.hg.managers.ItemStackManager;
