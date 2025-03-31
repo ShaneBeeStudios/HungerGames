@@ -15,6 +15,7 @@ import com.shanebeestudios.hg.game.GameCommandData.CommandType;
 import com.shanebeestudios.hg.managers.KitManager;
 import com.shanebeestudios.hg.managers.MobManager;
 import com.shanebeestudios.hg.managers.PlayerManager;
+import com.shanebeestudios.hg.plugin.permission.Permissions;
 import com.shanebeestudios.hg.tasks.ChestDropTask;
 import com.shanebeestudios.hg.tasks.ChestRefillRepeatTask;
 import com.shanebeestudios.hg.tasks.FreeRoamTask;
@@ -96,6 +97,9 @@ public class Game {
 
         // If lobby signs are not properly setup, game is not ready
         if (!this.gameBlockData.setLobbyBlock(lobbySign)) {
+            isReady = false;
+        }
+        if (!this.plugin.getGameManager().checkGame(this, null)) {
             isReady = false;
         }
         this.gameArenaData.setStatus(isReady ? Status.READY : Status.BROKEN);
@@ -306,6 +310,15 @@ public class Game {
      * @param savePreviousLocation Whether to save the player's previous location
      */
     public boolean joinGame(Player player, boolean savePreviousLocation) {
+        if (this.gameArenaData.getStatus() == Status.BROKEN) {
+            if (Permissions.COMMAND_CREATE.has(player)) {
+                String name = this.gameArenaData.getName();
+                Util.sendPrefixedMessage(player, this.lang.arena_debug_broken_debug.replace("<arena>", name));
+                Util.sendPrefixedMessage(player, this.lang.arena_debug_broken_debug_2.replace("<arena>", name));
+            }
+            return false;
+        }
+
         if (this.playerManager.isInGame(player)) {
             Util.sendPrefixedMessage(player, this.lang.command_join_already_in_game);
             return false;

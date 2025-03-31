@@ -105,16 +105,19 @@ public class Language {
     public String spectator_compass;
     public String spectator_compass_head_lore;
     public String spectator_start_title;
-    public String check_need_more_spawns;
-    public String check_broken_debug;
-    public String check_broken_debug_2;
-    public String check_invalid_lobby;
-    public String check_set_lobby;
-    public String check_ready_run;
 
     // Tracking Stick
     public String tracking_stick_name;
     public String tracking_stick_lore;
+
+    // ARENA DEBUG
+    public String arena_debug_need_more_spawns;
+    public String arena_debug_min_max_players;
+    public String arena_debug_broken_debug;
+    public String arena_debug_broken_debug_2;
+    public String arena_debug_invalid_lobby;
+    public String arena_debug_set_lobby;
+    public String arena_debug_ready_run;
 
     // COMMANDS
     // Base
@@ -369,12 +372,14 @@ public class Language {
         spectator_compass_head_lore = lang.getString("spectator-head-lore");
         spectator_start_title = lang.getString("spectator-start-title");
 
-        check_need_more_spawns = lang.getString("check-need-more-spawns");
-        check_broken_debug = lang.getString("check-broken-debug");
-        check_broken_debug_2 = lang.getString("check-broken-debug-2");
-        check_invalid_lobby = lang.getString("check-invalid-lobby");
-        check_set_lobby = lang.getString("check-set-lobby");
-        check_ready_run = lang.getString("check-ready-run");
+        // ARENA DEBUG
+        arena_debug_need_more_spawns = lang.getString("arena-debug.need-more-spawns");
+        arena_debug_min_max_players = lang.getString("arena-debug.min-max-players");
+        arena_debug_broken_debug = lang.getString("arena-debug.broken-debug");
+        arena_debug_broken_debug_2 = lang.getString("arena-debug.broken-debug-2");
+        arena_debug_invalid_lobby = lang.getString("arena-debug.invalid-lobby");
+        arena_debug_set_lobby = lang.getString("arena-debug.set-lobby");
+        arena_debug_ready_run = lang.getString("arena-debug.ready-run");
 
         // Tracking Stick
         tracking_stick_name = lang.getString("tracking-stick.name");

@@ -2,6 +2,7 @@ package com.shanebeestudios.hg.plugin.commands;
 
 import com.shanebeestudios.hg.HungerGames;
 import com.shanebeestudios.hg.api.command.CustomArg;
+import com.shanebeestudios.hg.api.status.Status;
 import com.shanebeestudios.hg.api.util.Util;
 import com.shanebeestudios.hg.game.Game;
 import com.shanebeestudios.hg.plugin.permission.Permissions;

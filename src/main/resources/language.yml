@@ -301,13 +301,15 @@ listener-wand-create-arena: "<gold>You're now ready to create your arena with '<
 listener-wand-set-pos-2: '<gold>Now you need to set position 2!'
 listener-wand-big-enough: '<red>An arena needs to be a cuboid of at least 5x5x5 in size.'
 
-#  ARENA CHECK
-check-need-more-spawns: '<red>You still need <grey><number> <red> more spawns!'
-check-broken-debug: '<red>Your arena is marked as broken! use <grey>/hg debug <arena> <red>to check for errors!'
-check-broken-debug-2: '<red>If no errors are found, please use <grey>/hg toggle <arena><red>!'
-check-invalid-lobby: '<red>Your LobbyWall is invalid! Please reset them!'
-check-set-lobby: '<gold>Set lobbywall: <grey>/hg setlobbywall <arena>'
-check-ready-run: '<green>Your HungerGames arena <grey><arena><green> is ready to run!'
+#  ARENA DEBUG
+arena-debug:
+  need-more-spawns: '<red>You still need <aqua><number> <red>more spawns!'
+  min-max-players: '<red>Max players cannot be less than min players, found: <yellow><min><white>/<yellow<max>'
+  broken-debug: '<red>Your arena is marked as broken! use <aqua>/hg debug <arena> <red>to check for errors!'
+  broken-debug-2: '<red>If no errors are found, please use <aqua>/hg toggle <arena><red>!'
+  invalid-lobby: '<red>Your LobbyWall is invalid! Please reset them!'
+  set-lobby: '<gold>Set lobbywall: <grey>/hg setlobbywall <arena>'
+  ready-run: '<green>Your HungerGames arena <grey><arena><green> is ready to run!'
 
 #  TRACK STICK
 tracking-stick:

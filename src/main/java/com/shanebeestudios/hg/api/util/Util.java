@@ -19,6 +19,7 @@ import org.bukkit.entity.Firework;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.meta.FireworkMeta;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -70,7 +71,8 @@ public class Util {
      * @param format Message format
      * @param args   Objects to replace in format
      */
-    public static void sendPrefixedMessage(CommandSender sender, String format, Object... args) {
+    public static void sendPrefixedMessage(@Nullable CommandSender sender, @NotNull String format, Object... args) {
+        if (sender == null) return;
         String s = String.format(format, args);
         Component mini = getMini(getPrefix() + s);
         sender.sendMessage(mini);

@@ -2,8 +2,8 @@ package com.shanebeestudios.hg.managers;
 
 import com.google.common.collect.ImmutableList;
 import com.shanebeestudios.hg.HungerGames;
-import com.shanebeestudios.hg.api.status.Status;
 import com.shanebeestudios.hg.api.command.CustomArg;
+import com.shanebeestudios.hg.api.status.Status;
 import com.shanebeestudios.hg.api.util.Util;
 import com.shanebeestudios.hg.data.Config;
 import com.shanebeestudios.hg.data.Language;
@@ -14,6 +14,7 @@ import com.shanebeestudios.hg.game.GameRegion;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
+import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.InventoryHolder;
@@ -108,24 +109,42 @@ public class GameManager {
      * Check the status of a game while being set up
      *
      * @param game   Game to check
-     * @param player Player issuing the check
+     * @param sender Sender issuing the check
      */
-    public void checkGame(Game game, Player player) {
+    public boolean checkGame(Game game, CommandSender sender) {
         GameArenaData gameArenaData = game.getGameArenaData();
+        int minPlayers = gameArenaData.getMinPlayers();
+        int maxPlayers = gameArenaData.getMaxPlayers();
         String name = gameArenaData.getName();
-        if (gameArenaData.getSpawns().size() < gameArenaData.getMaxPlayers()) {
-            Util.sendPrefixedMessage(player, lang.check_need_more_spawns.replace("<number>",
-                "" + (gameArenaData.getMaxPlayers() - gameArenaData.getSpawns().size())));
-        } else if (gameArenaData.getStatus() == Status.BROKEN) {
-            Util.sendPrefixedMessage(player, lang.check_broken_debug.replace("<arena>", name));
-            Util.sendPrefixedMessage(player, lang.check_broken_debug_2.replace("<arena>", name));
-        } else if (!game.getGameBlockData().isLobbyValid()) {
-            Util.sendPrefixedMessage(player, lang.check_invalid_lobby);
-            Util.sendPrefixedMessage(player, lang.check_set_lobby.replace("<arena>", name));
-        } else {
-            Util.sendPrefixedMessage(player, lang.check_ready_run.replace("<arena>", name));
-            gameArenaData.setStatus(Status.READY);
+
+        boolean isReady = true;
+
+        // Check spawns
+        if (gameArenaData.getSpawns().size() < maxPlayers) {
+            Util.sendPrefixedMessage(sender, this.lang.arena_debug_need_more_spawns.replace("<number>",
+                "" + (maxPlayers - gameArenaData.getSpawns().size())));
+            isReady = false;
         }
+        // Check min/max players
+        if (maxPlayers < minPlayers) {
+            Util.sendPrefixedMessage(sender, this.lang.arena_debug_min_max_players
+                .replace("<min>", "" + minPlayers)
+                .replace("<max>", "" + maxPlayers));
+            isReady = false;
+        }
+        // Check lobby wall
+        if (!game.getGameBlockData().isLobbyValid()) {
+            Util.sendPrefixedMessage(sender, this.lang.arena_debug_invalid_lobby);
+            Util.sendPrefixedMessage(sender, this.lang.arena_debug_set_lobby.replace("<arena>", name));
+            isReady = false;
+        }
+        // Yay! All good to go
+        if (isReady) {
+            Util.sendPrefixedMessage(sender, this.lang.arena_debug_ready_run.replace("<arena>", name));
+            // Only update status if the debug command is run
+            if (sender != null) gameArenaData.setStatus(Status.READY);
+        }
+        return isReady;
     }
 
     /**
