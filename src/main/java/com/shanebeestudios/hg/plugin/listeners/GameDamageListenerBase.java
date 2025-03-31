@@ -1,13 +1,11 @@
 package com.shanebeestudios.hg.plugin.listeners;
 
 import com.shanebeestudios.hg.HungerGames;
-import com.shanebeestudios.hg.Status;
-import com.shanebeestudios.hg.data.Config;
+import com.shanebeestudios.hg.api.status.Status;
 import com.shanebeestudios.hg.data.PlayerData;
 import com.shanebeestudios.hg.game.Game;
 import org.bukkit.Material;
 import org.bukkit.entity.Entity;
-import org.bukkit.entity.Hanging;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;

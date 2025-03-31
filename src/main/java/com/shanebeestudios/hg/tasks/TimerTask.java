@@ -7,7 +7,7 @@ import com.shanebeestudios.hg.data.Config;
 import com.shanebeestudios.hg.data.Language;
 import com.shanebeestudios.hg.game.Game;
 import com.shanebeestudios.hg.HungerGames;
-import com.shanebeestudios.hg.Status;
+import com.shanebeestudios.hg.api.status.Status;
 import com.shanebeestudios.hg.game.GameArenaData;
 
 public class TimerTask implements Runnable {

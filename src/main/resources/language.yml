@@ -92,16 +92,21 @@ roam-game-started: '<dark_red>[]---------[ <gold>The game has started! <dark_red
 roam-time: ' <yellow> You have <roam> seconds to roam without taking damage!'
 roam-finished: '<red>Free-Roam is over, PVP is now enabled!'
 
-#  GAME STATUSES
-status-running: '<green>Running'
-status-stopped: '<dark_red>Stopped'
-status-ready: '<dark_purple>Ready'
-status-waiting: '<aqua>Waiting...'
-status-broken: '<dark_red>BROKEN'
-status-rollback: '<red>Restoring...'
-status-notready: '<dark_blue>NotReady'
-status-beginning: '<green>Running'
-status-countdown: '<aqua>Starting...'
+# GAME STATUSES
+game-status:
+  running: '<green>Running'
+  stopped: '<dark_red>Stopped'
+  ready: '<dark_purple>Ready'
+  waiting: '<aqua>Waiting...'
+  broken: '<dark_red>BROKEN'
+  rollback: '<red>Restoring...'
+  not-ready: '<dark_blue>NotReady'
+  beginning: '<green>Running'
+  countdown: '<aqua>Starting...'
+player-status:
+  in-game: 'In Game'
+  spectator: 'Spectator'
+  not-in-game: 'Not In Game'
 
 # DEATH MESSAGES
 death-messages:

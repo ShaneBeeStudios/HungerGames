@@ -2,7 +2,7 @@ package com.shanebeestudios.hg.managers;
 
 import com.google.common.collect.ImmutableList;
 import com.shanebeestudios.hg.HungerGames;
-import com.shanebeestudios.hg.Status;
+import com.shanebeestudios.hg.api.status.Status;
 import com.shanebeestudios.hg.api.command.CustomArg;
 import com.shanebeestudios.hg.api.util.Util;
 import com.shanebeestudios.hg.data.Config;
@@ -14,7 +14,6 @@ import com.shanebeestudios.hg.game.GameRegion;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
-import org.bukkit.block.Sign;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.InventoryHolder;

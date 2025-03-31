@@ -1,5 +1,6 @@
-package com.shanebeestudios.hg;
+package com.shanebeestudios.hg.api.status;
 
+import com.shanebeestudios.hg.HungerGames;
 import com.shanebeestudios.hg.data.Language;
 import com.shanebeestudios.hg.api.util.Util;
 import net.kyori.adventure.text.Component;
@@ -51,15 +52,15 @@ public enum Status {
 
 	public Component getName() {
         return switch (this) {
-            case RUNNING -> Util.getMini(this.lang.status_running);
-            case STOPPED -> Util.getMini(this.lang.status_stopped);
-            case READY -> Util.getMini(this.lang.status_ready);
-            case WAITING -> Util.getMini(this.lang.status_waiting);
-            case BROKEN -> Util.getMini(this.lang.status_broken);
-            case ROLLBACK -> Util.getMini(this.lang.status_rollback);
-            case NOT_READY -> Util.getMini(this.lang.status_not_ready);
-            case FREE_ROAM -> Util.getMini(this.lang.status_beginning);
-            case COUNTDOWN -> Util.getMini(this.lang.status_countdown);
+            case RUNNING -> Util.getMini(this.lang.game_status_running);
+            case STOPPED -> Util.getMini(this.lang.game_status_stopped);
+            case READY -> Util.getMini(this.lang.game_status_ready);
+            case WAITING -> Util.getMini(this.lang.game_status_waiting);
+            case BROKEN -> Util.getMini(this.lang.game_status_broken);
+            case ROLLBACK -> Util.getMini(this.lang.game_status_rollback);
+            case NOT_READY -> Util.getMini(this.lang.game_status_not_ready);
+            case FREE_ROAM -> Util.getMini(this.lang.game_status_beginning);
+            case COUNTDOWN -> Util.getMini(this.lang.game_status_countdown);
         };
 	}
 

@@ -1,6 +1,7 @@
 package com.shanebeestudios.hg.managers;
 
 import com.shanebeestudios.hg.HungerGames;
+import com.shanebeestudios.hg.api.status.PlayerStatus;
 import com.shanebeestudios.hg.data.PlayerData;
 import com.shanebeestudios.hg.game.Game;
 import org.bukkit.entity.Player;
@@ -258,6 +259,18 @@ public class PlayerManager {
      */
     public boolean isInGame(Player player) {
         return getGame(player) != null;
+    }
+
+    /**
+     * Get the status of a player
+     *
+     * @param player Player to get status for
+     * @return Status of player
+     */
+    public PlayerStatus getPlayerStatus(Player player) {
+        if (hasPlayerData(player)) return PlayerStatus.IN_GAME;
+        else if (hasSpectatorData(player)) return PlayerStatus.SPECTATOR;
+        else return PlayerStatus.NOT_IN_GAME;
     }
 
 }

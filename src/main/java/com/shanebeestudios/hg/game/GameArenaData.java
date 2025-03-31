@@ -1,6 +1,6 @@
 package com.shanebeestudios.hg.game;
 
-import com.shanebeestudios.hg.Status;
+import com.shanebeestudios.hg.api.status.Status;
 import org.bukkit.Location;
 import org.jetbrains.annotations.Nullable;
 

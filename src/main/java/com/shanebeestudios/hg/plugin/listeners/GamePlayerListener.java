@@ -1,7 +1,7 @@
 package com.shanebeestudios.hg.plugin.listeners;
 
 import com.shanebeestudios.hg.HungerGames;
-import com.shanebeestudios.hg.Status;
+import com.shanebeestudios.hg.api.status.Status;
 import com.shanebeestudios.hg.api.util.Util;
 import com.shanebeestudios.hg.data.Config;
 import com.shanebeestudios.hg.data.PlayerData;

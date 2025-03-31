@@ -1,13 +1,15 @@
 package com.shanebeestudios.hg.managers;
 
+import com.shanebeestudios.hg.HungerGames;
 import com.shanebeestudios.hg.api.util.Util;
+import com.shanebeestudios.hg.data.Language;
+import com.shanebeestudios.hg.data.Leaderboard;
 import me.clip.placeholderapi.expansion.PlaceholderExpansion;
 import net.kyori.adventure.text.Component;
 import org.bukkit.OfflinePlayer;
-import com.shanebeestudios.hg.HungerGames;
-import com.shanebeestudios.hg.data.Language;
-import com.shanebeestudios.hg.data.Leaderboard;
+import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 /**
  * Internal placeholder class
@@ -53,34 +55,10 @@ public class Placeholders extends PlaceholderExpansion {
         return this.plugin.getPluginMeta().getVersion();
     }
 
+    @Nullable
     @Override
-    public String onRequest(OfflinePlayer player, String identifier) {
-        if (identifier.startsWith("lb_player_")) {
-            int leader = Integer.parseInt(identifier.replace("lb_player_", ""));
-            if (leaderboard.getStatsPlayers(Leaderboard.Stats.WINS).size() >= leader)
-                return leaderboard.getStatsPlayers(Leaderboard.Stats.WINS).get(leader - 1);
-            else
-                return lang.lb_blank_space;
-        }
-        if (identifier.startsWith("lb_score_")) {
-            int leader = (Integer.parseInt(identifier.replace("lb_score_", "")));
-            if (leaderboard.getStatsScores(Leaderboard.Stats.WINS).size() >= leader)
-                return leaderboard.getStatsScores(Leaderboard.Stats.WINS).get(leader - 1);
-            else
-                return lang.lb_blank_space;
-
-        }
-        if (identifier.startsWith("lb_combined_")) {
-            int leader = (Integer.parseInt(identifier.replace("lb_combined_", "")));
-            if (leaderboard.getStatsPlayers(Leaderboard.Stats.WINS).size() >= leader)
-                return leaderboard.getStatsPlayers(Leaderboard.Stats.WINS).get(leader - 1) + lang.lb_combined_separator +
-                        leaderboard.getStatsScores(Leaderboard.Stats.WINS).get(leader - 1);
-            else
-                return lang.lb_blank_space + lang.lb_combined_separator + lang.lb_blank_space;
-        }
-        if (identifier.equalsIgnoreCase("lb_player")) {
-            return String.valueOf(leaderboard.getStat(player.getUniqueId(), Leaderboard.Stats.WINS));
-        }
+    public String onPlaceholderRequest(Player player, @NotNull String identifier) {
+        GameManager gameManager = this.plugin.getGameManager();
         String[] id = identifier.split("_");
         switch (id[0]) {
             case "lb":
@@ -99,16 +77,19 @@ public class Placeholders extends PlaceholderExpansion {
                             return getStatsPlayer(identifier, player);
                 }
             case "status":
-                Component name = this.plugin.getGameManager().getGame(id[1]).getGameArenaData().getStatus().getName();
+                Component name = gameManager.getGame(id[1]).getGameArenaData().getStatus().getName();
                 return Util.unMini(name);
+            case "player_status":
+                if (player == null) return null;
+                return this.plugin.getPlayerManager().getPlayerStatus(player).getStringName();
             case "cost":
-                return String.valueOf(this.plugin.getGameManager().getGame(id[1]).getGameArenaData().getCost());
+                return String.valueOf(gameManager.getGame(id[1]).getGameArenaData().getCost());
             case "playerscurrent":
-                return String.valueOf(this.plugin.getGameManager().getGame(id[1]).getGamePlayerData().getPlayers().size());
+                return String.valueOf(gameManager.getGame(id[1]).getGamePlayerData().getPlayers().size());
             case "playersmax":
-                return String.valueOf(this.plugin.getGameManager().getGame(id[1]).getGameArenaData().getMaxPlayers());
+                return String.valueOf(gameManager.getGame(id[1]).getGameArenaData().getMaxPlayers());
             case "playersmin":
-                return String.valueOf(this.plugin.getGameManager().getGame(id[1]).getGameArenaData().getMinPlayers());
+                return String.valueOf(gameManager.getGame(id[1]).getGameArenaData().getMinPlayers());
         }
         return null;
     }

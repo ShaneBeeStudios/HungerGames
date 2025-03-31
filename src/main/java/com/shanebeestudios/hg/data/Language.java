@@ -61,15 +61,6 @@ public class Language {
     public String roam_game_started;
     public String roam_time;
     public String roam_finished;
-    public String status_running;
-    public String status_stopped;
-    public String status_ready;
-    public String status_waiting;
-    public String status_broken;
-    public String status_rollback;
-    public String status_not_ready;
-    public String status_beginning;
-    public String status_countdown;
     public String cmd_spawn_same;
     public String cmd_spawn_set;
     public String cmd_kit_no_change;
@@ -218,6 +209,20 @@ public class Language {
     public String scoreboard_sidebar_players_alive_num;
     public String scoreboard_show_health_name;
 
+    // Status
+    public String game_status_running;
+    public String game_status_stopped;
+    public String game_status_ready;
+    public String game_status_waiting;
+    public String game_status_broken;
+    public String game_status_rollback;
+    public String game_status_not_ready;
+    public String game_status_beginning;
+    public String game_status_countdown;
+    public String player_status_in_game;
+    public String player_status_spectator;
+    public String player_status_not_in_game;
+
 
     public Language(HungerGames plugin) {
         this.plugin = plugin;
@@ -364,16 +369,6 @@ public class Language {
         spectator_compass_head_lore = lang.getString("spectator-head-lore");
         spectator_start_title = lang.getString("spectator-start-title");
 
-        status_running = lang.getString("status-running");
-        status_stopped = lang.getString("status-stopped");
-        status_ready = lang.getString("status-ready");
-        status_waiting = lang.getString("status-waiting");
-        status_broken = lang.getString("status-broken");
-        status_rollback = lang.getString("status-rollback");
-        status_not_ready = lang.getString("status-notready");
-        status_beginning = lang.getString("status-beginning");
-        status_countdown = lang.getString("status-countdown");
-
         check_need_more_spawns = lang.getString("check-need-more-spawns");
         check_broken_debug = lang.getString("check-broken-debug");
         check_broken_debug_2 = lang.getString("check-broken-debug-2");
@@ -489,6 +484,20 @@ public class Language {
         this.scoreboard_sidebar_players_alive = this.lang.getString("scoreboard.sidebar.players-alive");
         this.scoreboard_sidebar_players_alive_num = this.lang.getString("scoreboard.sidebar.players-alive-num");
         this.scoreboard_show_health_name = this.lang.getString("scoreboard.show-health.name");
+
+        // Status
+        this.game_status_running = this.lang.getString("game-status.running");
+        this.game_status_stopped = this.lang.getString("game-status.stopped");
+        this.game_status_ready = this.lang.getString("game-status.ready");
+        this.game_status_waiting = this.lang.getString("game-status.waiting");
+        this.game_status_broken = this.lang.getString("game-status.broken");
+        this.game_status_rollback = this.lang.getString("game-status.rollback");
+        this.game_status_not_ready = this.lang.getString("game-status.not-ready");
+        this.game_status_beginning = this.lang.getString("game-status.beginning");
+        this.game_status_countdown = this.lang.getString("game-status.countdown");
+        this.player_status_in_game = this.lang.getString("player-status.in-game");
+        this.player_status_spectator = this.lang.getString("player-status.spectator");
+        this.player_status_not_in_game = this.lang.getString("player-status.not-in-game");
     }
 
 }
