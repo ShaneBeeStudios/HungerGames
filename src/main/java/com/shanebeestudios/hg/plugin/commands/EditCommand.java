@@ -205,6 +205,7 @@ public class EditCommand extends SubCommand {
                         GameArenaData gameArenaData = game.getGameArenaData();
                         Location location = info.args().getByClass("location", Location.class);
                         assert location != null;
+                        location.add(0.5,0,0.5);
                         location.setPitch(0);
                         location.setYaw(info.sender().getLocation().getYaw());
                         gameArenaData.addSpawn(location);
