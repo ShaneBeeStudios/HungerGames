@@ -25,8 +25,8 @@ public class Config {
     public static boolean broadcastWinMessages;
     public static boolean economy = true;
     public static boolean bossbar;
-    public static int trackingstickuses;
-    public static int playersfortrackingstick;
+    public static int TRACKING_STICK_USES;
+    public static int PLAYERS_FOR_TRACKING_STICK;
     public static int maxchestcontent;
     public static int minchestcontent;
     public static int maxbonuscontent;
@@ -81,7 +81,7 @@ public class Config {
     public static boolean spectateOnDeath;
     public static boolean spectateHide;
     public static boolean spectateFly;
-    public static boolean spectateChat;
+    public static boolean SPECTATE_CHAT;
 
     // Sounds
     public static String SOUNDS_DEATH;
@@ -120,8 +120,8 @@ public class Config {
         broadcastJoinMessages = config.getBoolean("settings.broadcast-join-messages");
         broadcastWinMessages = config.getBoolean("settings.broadcast-win-messages");
         bossbar = config.getBoolean("settings.bossbar-countdown");
-        trackingstickuses = config.getInt("settings.trackingstick-uses");
-        playersfortrackingstick = config.getInt("settings.players-for-trackingstick");
+        TRACKING_STICK_USES = config.getInt("settings.trackingstick-uses");
+        PLAYERS_FOR_TRACKING_STICK = config.getInt("settings.players-for-trackingstick");
         maxchestcontent = config.getInt("settings.max-chestcontent");
         minchestcontent = config.getInt("settings.min-chestcontent");
         maxbonuscontent = config.getInt("settings.max-bonus-chestcontent");
@@ -172,7 +172,7 @@ public class Config {
         spectateOnDeath = config.getBoolean("spectate.death-to-spectate");
         spectateHide = config.getBoolean("spectate.hide-spectators");
         spectateFly = config.getBoolean("spectate.fly");
-        spectateChat = config.getBoolean("spectate.chat");
+        SPECTATE_CHAT = config.getBoolean("spectate.chat");
 
         SOUNDS_DEATH = config.getString("sounds.death");
         SOUNDS_OPEN_CHEST_DROP = config.getString("sounds.open-chest-drop");

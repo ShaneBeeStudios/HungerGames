@@ -20,13 +20,13 @@ import org.bukkit.inventory.EquipmentSlot;
 /**
  * Internal event listener
  */
-public class WandListener implements Listener {
+public class SessionWandListener implements Listener {
 
     private final SessionManager sessionManager;
     private final GameManager gameManager;
     private final Language lang;
 
-    public WandListener(HungerGames plugin) {
+    public SessionWandListener(HungerGames plugin) {
         this.sessionManager = plugin.getSessionManager();
         this.gameManager = plugin.getGameManager();
         this.lang = plugin.getLang();

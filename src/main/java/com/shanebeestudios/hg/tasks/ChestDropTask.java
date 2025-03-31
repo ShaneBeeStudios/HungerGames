@@ -6,7 +6,7 @@ import com.shanebeestudios.hg.data.Config;
 import com.shanebeestudios.hg.data.Language;
 import com.shanebeestudios.hg.game.GameRegion;
 import com.shanebeestudios.hg.game.Game;
-import com.shanebeestudios.hg.plugin.listeners.ChestDrop;
+import com.shanebeestudios.hg.plugin.listeners.GameChestDropListener;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Material;
@@ -22,7 +22,7 @@ public class ChestDropTask implements Runnable {
     private final Game game;
     private final Language lang;
     private final int taskId;
-    private final List<ChestDrop> chests = new ArrayList<>();
+    private final List<GameChestDropListener> chests = new ArrayList<>();
 
     public ChestDropTask(Game game) {
         this.game = game;
@@ -58,7 +58,7 @@ public class ChestDropTask implements Runnable {
 
         FallingBlock fb = w.spawnFallingBlock(l, Bukkit.getServer().createBlockData(Material.STRIPPED_SPRUCE_WOOD));
 
-        this.chests.add(new ChestDrop(fb));
+        this.chests.add(new GameChestDropListener(fb));
 
         for (Player player : this.game.getGamePlayerData().getPlayers()) {
             Util.sendMessage(player, this.lang.chest_drop_1);
@@ -72,7 +72,7 @@ public class ChestDropTask implements Runnable {
 
     public void shutdown() {
         Bukkit.getScheduler().cancelTask(taskId);
-        for (ChestDrop cd : this.chests) {
+        for (GameChestDropListener cd : this.chests) {
             if (cd != null) cd.remove();
         }
     }

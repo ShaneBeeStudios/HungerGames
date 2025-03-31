@@ -143,6 +143,10 @@ public class Language {
     public String check_set_lobby;
     public String check_ready_run;
 
+    // Tracking Stick
+    public String tracking_stick_name;
+    public String tracking_stick_lore;
+
     // COMMANDS
     // Base
     public String command_base_not_in_valid_game;
@@ -408,6 +412,10 @@ public class Language {
         check_invalid_lobby = lang.getString("check-invalid-lobby");
         check_set_lobby = lang.getString("check-set-lobby");
         check_ready_run = lang.getString("check-ready-run");
+
+        // Tracking Stick
+        tracking_stick_name = lang.getString("tracking-stick.name");
+        tracking_stick_lore = lang.getString("tracking-stick.lore");
 
         // COMMANDS
         // Base

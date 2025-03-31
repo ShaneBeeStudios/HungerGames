@@ -29,7 +29,7 @@ import java.util.Random;
 /**
  * Manager for chest drops
  */
-public class ChestDrop implements Listener {
+public class GameChestDropListener implements Listener {
 
     private FallingBlock fb;
     private BlockState beforeBlock;
@@ -37,7 +37,8 @@ public class ChestDrop implements Listener {
     private Chunk c;
     private PlayerManager playerManager;
 
-    public ChestDrop(FallingBlock fb) {
+    // TODO this is probably getting deleted
+    public GameChestDropListener(FallingBlock fb) {
         this.fb = fb;
         this.c = fb.getLocation().getChunk();
         c.load();

@@ -1,26 +1,33 @@
 package com.shanebeestudios.hg;
 
+import com.shanebeestudios.hg.api.util.NBTApi;
+import com.shanebeestudios.hg.api.util.Util;
 import com.shanebeestudios.hg.data.ArenaConfig;
 import com.shanebeestudios.hg.data.Config;
 import com.shanebeestudios.hg.data.Language;
 import com.shanebeestudios.hg.data.Leaderboard;
 import com.shanebeestudios.hg.data.MobConfig;
 import com.shanebeestudios.hg.data.RandomItems;
-import com.shanebeestudios.hg.plugin.listeners.CancelListener;
-import com.shanebeestudios.hg.plugin.listeners.GameListener;
-import com.shanebeestudios.hg.plugin.listeners.McmmoListeners;
-import com.shanebeestudios.hg.plugin.listeners.WandListener;
-import com.shanebeestudios.hg.managers.SessionManager;
+import com.shanebeestudios.hg.managers.GameManager;
 import com.shanebeestudios.hg.managers.ItemStackManager;
 import com.shanebeestudios.hg.managers.KillManager;
 import com.shanebeestudios.hg.managers.KitManager;
-import com.shanebeestudios.hg.managers.GameManager;
 import com.shanebeestudios.hg.managers.Placeholders;
 import com.shanebeestudios.hg.managers.PlayerManager;
+import com.shanebeestudios.hg.managers.SessionManager;
 import com.shanebeestudios.hg.old_commands.BaseCmd;
 import com.shanebeestudios.hg.plugin.commands.MainCommand;
-import com.shanebeestudios.hg.api.util.NBTApi;
-import com.shanebeestudios.hg.api.util.Util;
+import com.shanebeestudios.hg.plugin.listeners.GameBlockListener;
+import com.shanebeestudios.hg.plugin.listeners.GameChestListener;
+import com.shanebeestudios.hg.plugin.listeners.GameCommandListener;
+import com.shanebeestudios.hg.plugin.listeners.GameCompassListener;
+import com.shanebeestudios.hg.plugin.listeners.GameDamageListenerBase;
+import com.shanebeestudios.hg.plugin.listeners.GameEntityListener;
+import com.shanebeestudios.hg.plugin.listeners.GameLobbyListener;
+import com.shanebeestudios.hg.plugin.listeners.GamePlayerListener;
+import com.shanebeestudios.hg.plugin.listeners.GameTrackingStickListener;
+import com.shanebeestudios.hg.plugin.listeners.McmmoListeners;
+import com.shanebeestudios.hg.plugin.listeners.SessionWandListener;
 import dev.jorel.commandapi.CommandAPI;
 import dev.jorel.commandapi.CommandAPIBukkitConfig;
 import dev.jorel.commandapi.exceptions.UnsupportedVersionException;
@@ -29,6 +36,7 @@ import io.lumine.mythic.api.mobs.MobManager;
 import org.bstats.bukkit.Metrics;
 import org.bukkit.Bukkit;
 import org.bukkit.event.HandlerList;
+import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import java.util.HashMap;
@@ -120,8 +128,8 @@ public class HungerGames extends JavaPlugin {
         playerManager = new PlayerManager();
         this.gameManager = new GameManager(this);
         this.arenaconfig = new ArenaConfig(this);
-        killManager = new KillManager();
-        leaderboard = new Leaderboard(this);
+        this.leaderboard = new Leaderboard(this);
+        this.killManager = new KillManager(this);
 
         //PAPI check
         if (Bukkit.getPluginManager().getPlugin("PlaceholderAPI") != null) {
@@ -142,15 +150,8 @@ public class HungerGames extends JavaPlugin {
             Util.log("<grey>mcMMO not found, mcMMO event hooks have been <red>disabled");
         }
 
-        //noinspection ConstantConditions
-//        getCommand("hg").setExecutor(new CommandListener(this));
-//        if (load) {
-//            loadCmds();
-//        }
-        loadCmds();;
-        getServer().getPluginManager().registerEvents(new WandListener(this), this);
-        getServer().getPluginManager().registerEvents(new CancelListener(this), this);
-        getServer().getPluginManager().registerEvents(new GameListener(this), this);
+        loadCommands();
+        loadListeners();
 
         if (this.getDescription().getVersion().contains("Beta")) {
             Util.log("<yellow>YOU ARE RUNNING A BETA VERSION, please use with caution");
@@ -197,50 +198,21 @@ public class HungerGames extends JavaPlugin {
         Util.log("HungerGames has been disabled!");
     }
 
-    private void loadCmds() {
-//        cmds.put("team", new TeamCmd());
-//        cmds.put("addspawn", new AddSpawnCmd());
-//        cmds.put("create", new CreateCmd());
-//        cmds.put("join", new JoinCmd());
-//        cmds.put("leave", new LeaveCmd());
-//        cmds.put("reload", new ReloadCmd());
-//        cmds.put("setlobbywall", new SetLobbyWallCmd());
-//        cmds.put("wand", new WandCmd());
-//        cmds.put("kit", new KitCmd());
-//        cmds.put("debug", new DebugCmd());
-//        cmds.put("list", new ListCmd());
-//        cmds.put("listgames", new ListGamesCmd());
-//        cmds.put("forcestart", new StartCmd());
-//        cmds.put("stop", new StopCmd());
-//        cmds.put("toggle", new ToggleCmd());
-//        cmds.put("setexit", new SetExitCmd());
-//        cmds.put("delete", new DeleteCmd());
-//        cmds.put("chestrefill", new ChestRefillCmd());
-//        cmds.put("chestrefillnow", new ChestRefillNowCmd());
-//        cmds.put("bordersize", new BorderSizeCmd());
-//        cmds.put("bordercenter", new BorderCenterCmd());
-//        cmds.put("bordertimer", new BorderTimerCmd());
-//        if (Config.spectateEnabled) {
-//            cmds.put("spectate", new SpectateCmd());
-//        }
-//        if (nbtApi != null) {
-//            cmds.put("nbt", new NBTCmd());
-//        }
-//
-//        ArrayList<String> cArray = new ArrayList<>();
-//        cArray.add("join");
-//        cArray.add("leave");
-//        cArray.add("kit");
-//        cArray.add("listgames");
-//        cArray.add("list");
-//
-//        for (String bc : cmds.keySet()) {
-//            getServer().getPluginManager().addPermission(new Permission("hg." + bc));
-//            if (cArray.contains(bc))
-//                //noinspection ConstantConditions
-//                getServer().getPluginManager().getPermission("hg." + bc).setDefault(PermissionDefault.TRUE);
-//
-//        }
+    private void loadListeners() {
+        PluginManager pluginManager = Bukkit.getPluginManager();
+        pluginManager.registerEvents(new GameBlockListener(this), this);
+        pluginManager.registerEvents(new GameChestListener(this), this);
+        pluginManager.registerEvents(new GameCommandListener(this), this);
+        pluginManager.registerEvents(new GameCompassListener(this), this);
+        pluginManager.registerEvents(new GameDamageListenerBase(this), this);
+        pluginManager.registerEvents(new GameEntityListener(this), this);
+        pluginManager.registerEvents(new GameLobbyListener(this), this);
+        pluginManager.registerEvents(new GamePlayerListener(this), this);
+        pluginManager.registerEvents(new GameTrackingStickListener(this), this);
+        pluginManager.registerEvents(new SessionWandListener(this), this);
+    }
+
+    private void loadCommands() {
         if (CommandAPI.isLoaded()) {
             CommandAPI.onEnable();
             new MainCommand(this);
