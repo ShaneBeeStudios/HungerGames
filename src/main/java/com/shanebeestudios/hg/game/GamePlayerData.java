@@ -12,7 +12,6 @@ import org.bukkit.GameMode;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.NamespacedKey;
-import org.bukkit.Sound;
 import org.bukkit.attribute.Attribute;
 import org.bukkit.attribute.AttributeInstance;
 import org.bukkit.attribute.AttributeModifier;
@@ -285,7 +284,7 @@ public class GamePlayerData extends Data {
         if (!death) this.allPlayers.remove(player); // Only remove the player if they voluntarily left the game
         unFreeze(player);
         if (death) {
-            if (Config.spectateEnabled && Config.spectateOnDeath && !game.isGameOver()) {
+            if (Config.SPECTATE_ENABLED && Config.spectateOnDeath && !game.isGameOver()) {
                 spectate(player);
                 player.playSound(player.getLocation(), Config.SOUNDS_DEATH, 5, 1);
                 player.sendTitle(this.game.getGameArenaData().getName(), Util.getColString(lang.spectator_start_title), 10, 100, 10);

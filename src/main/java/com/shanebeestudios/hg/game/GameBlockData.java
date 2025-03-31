@@ -5,7 +5,6 @@ import com.shanebeestudios.hg.api.util.Constants;
 import com.shanebeestudios.hg.api.util.Util;
 import com.shanebeestudios.hg.data.ItemFrameData;
 import org.bukkit.Location;
-import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
 import org.bukkit.block.BlockState;
@@ -59,22 +58,6 @@ public class GameBlockData extends Data {
     }
 
     /**
-     * Force a rollback for this game
-     * <p>This is not recommended to use as it forces all blocks to
-     * rollback at once, which can cause heavy amounts of lag.</p>
-     */
-    public void forceRollback() {
-        Collections.reverse(blocks);
-        for (BlockState state : blocks) {
-            state.update(true);
-        }
-    }
-
-    boolean requiresRollback() {
-        return !blocks.isEmpty() || !itemFrameData.isEmpty();
-    }
-
-    /**
      * Clear chests and mark them for refill
      */
     public void clearChests() {
@@ -85,12 +68,6 @@ public class GameBlockData extends Data {
             }
         }
         this.chests.clear();
-    }
-
-    private void addState(BlockState s) {
-        if (s.getType() != Material.AIR) {
-            blocks.add(s);
-        }
     }
 
     /**
@@ -139,35 +116,26 @@ public class GameBlockData extends Data {
         playerChests.remove(location);
     }
 
-    /**
-     * Record a block as broken in the arena to be restored when the game finishes
-     *
-     * @param block The block that was broken
-     */
-    public void recordBlockBreak(Block block) {
-        Block top = block.getRelative(BlockFace.UP);
-
-        if (!top.getType().isSolid() || !top.getType().isBlock()) {
-            addState(block.getRelative(BlockFace.UP).getState());
+    public void logBlocksForRollback() {
+        for (Location location : this.getGame().getGameArenaData().getGameRegion().getBlocks(null)) {
+            this.blocks.add(location.getBlock().getState());
         }
-
-        for (BlockFace bf : Util.BLOCK_FACES) {
-            Block rel = block.getRelative(bf);
-
-            if (Util.isAttached(block, rel)) {
-                addState(rel.getState());
-            }
-        }
-        addState(block.getState());
     }
 
     /**
-     * Add a block to be restored when the game finishes
-     *
-     * @param blockState BlockState to be added to the list
+     * Force a rollback for this game
+     * <p>This is not recommended to use as it forces all blocks to
+     * rollback at once, which can cause heavy amounts of lag.</p>
      */
-    public void recordBlockPlace(BlockState blockState) {
-        blocks.add(blockState);
+    public void forceRollback() {
+        Collections.reverse(blocks);
+        for (BlockState state : blocks) {
+            state.update(true);
+        }
+    }
+
+    boolean requiresRollback() {
+        return !blocks.isEmpty() || !itemFrameData.isEmpty();
     }
 
     /**
@@ -176,11 +144,11 @@ public class GameBlockData extends Data {
      * @param itemFrame ItemFrame to be added to the list
      */
     public void recordItemFrame(ItemFrame itemFrame) {
-        itemFrameData.add(new ItemFrameData(itemFrame));
+        this.itemFrameData.add(new ItemFrameData(itemFrame));
     }
 
     public List<ItemFrameData> getItemFrameData() {
-        return itemFrameData;
+        return this.itemFrameData;
     }
 
     /**
@@ -189,8 +157,8 @@ public class GameBlockData extends Data {
      * @return List of all recorded blocks
      */
     public List<BlockState> getBlocks() {
-        Collections.reverse(blocks);
-        return blocks;
+        Collections.reverse(this.blocks);
+        return this.blocks;
     }
 
     /**
@@ -208,7 +176,10 @@ public class GameBlockData extends Data {
     }
 
     void updateLobbyBlock() {
-        if (sign2 == null || sign3 == null) return;
+        if (sign2 == null || sign3 == null) {
+            Util.warning("The wall is null?!?!?");
+            return;
+        }
         GameArenaData gameArenaData = this.game.getGameArenaData();
         this.sign2.getSide(Side.FRONT).line(1, gameArenaData.getStatus().getName());
         this.sign3.getSide(Side.FRONT).line(1, Util.getMini("<bold>" + this.game.getGamePlayerData().getPlayers().size() + "/" + gameArenaData.getMaxPlayers()));

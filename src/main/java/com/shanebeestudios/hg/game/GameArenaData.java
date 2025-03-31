@@ -22,7 +22,7 @@ public class GameArenaData extends Data {
     final List<Location> spawns;
     Location exit;
     Location persistentExit;
-    Status status;
+    private Status status;
     int chestRefillTime = 0;
     int chestRefillRepeat = 0;
 
@@ -142,7 +142,7 @@ public class GameArenaData extends Data {
      */
     public void setStatus(Status status) {
         this.status = status;
-        game.gameBlockData.updateLobbyBlock();
+        this.game.getGameBlockData().updateLobbyBlock();
     }
 
     /**

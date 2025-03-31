@@ -16,50 +16,50 @@ import com.shanebeestudios.hg.game.GameBlockData;
  */
 public class Rollback implements Runnable {
 
-	private final Iterator<BlockState> session;
+	private final Iterator<BlockState> blockRollbackSession;
 	private final Iterator<ItemFrameData> itemFrameDataIterator;
 	private final Game game;
 	private final GameBlockData gameBlockData;
-	private final int blocks_per_second;
-	private int timerID;
+	private final int blocks_per_tick;
+	private int taskId;
 
 	public Rollback(Game game) {
 		this.game = game;
 		this.gameBlockData = game.getGameBlockData();
-		this.blocks_per_second = Config.blocks_per_second / 10;
+		this.blocks_per_tick = Config.ROLLBACK_BLOCKS_PER_SECOND / 20;
 		game.getGameArenaData().setStatus(Status.ROLLBACK);
-		this.session = gameBlockData.getBlocks().iterator();
-		this.itemFrameDataIterator = gameBlockData.getItemFrameData().iterator();
-		timerID = Bukkit.getServer().getScheduler().scheduleSyncDelayedTask(HungerGames.getPlugin(), this, 2);
+		this.blockRollbackSession = this.gameBlockData.getBlocks().iterator();
+		this.itemFrameDataIterator = this.gameBlockData.getItemFrameData().iterator();
+		this.taskId = Bukkit.getServer().getScheduler().scheduleSyncDelayedTask(HungerGames.getPlugin(), this, 1);
 	}
 
 	public void run() {
-		int i = 0;
+		int rolledBack = 0;
 		// Rollback blocks
-		while (i < blocks_per_second && session.hasNext()) {
-		    BlockState state = session.next();
-		    if (state != null) {
-                state.update(true);
+		while (rolledBack < this.blocks_per_tick && this.blockRollbackSession.hasNext()) {
+		    BlockState state = this.blockRollbackSession.next();
+		    if (state != null && state.getType() != state.getBlock().getType()) {
+                state.update(true, false);
+                rolledBack++;
             }
-			i++;
 		}
-		if (session.hasNext()) {
-			timerID = Bukkit.getServer().getScheduler().scheduleSyncDelayedTask(HungerGames.getPlugin(), this, 2);
+		if (this.blockRollbackSession.hasNext()) {
+			this.taskId = Bukkit.getScheduler().scheduleSyncDelayedTask(HungerGames.getPlugin(), this, 1);
 			return;
 		}
 
 		// Rollback item frames
-		while (itemFrameDataIterator.hasNext()) {
-		    ItemFrameData data = itemFrameDataIterator.next();
+		while (this.itemFrameDataIterator.hasNext()) {
+		    ItemFrameData data = this.itemFrameDataIterator.next();
 		    if (data != null) {
 		        data.resetItem();
             }
         }
 
-        Bukkit.getServer().getScheduler().cancelTask(timerID);
-        gameBlockData.resetBlocks();
-        gameBlockData.resetItemFrames();
-        game.getGameArenaData().setStatus(Status.READY);
+        this.gameBlockData.resetBlocks();
+        this.gameBlockData.resetItemFrames();
+        this.game.getGameArenaData().setStatus(Status.READY);
+        Bukkit.getScheduler().cancelTask(this.taskId);
 	}
 
 }

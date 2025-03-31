@@ -67,7 +67,7 @@ public class Game {
      * <p>Internally used when loading from config on server start</p>
      *
      * @param name       Name of this game
-     * @param gameRegion      Bounding region of this game
+     * @param gameRegion Bounding region of this game
      * @param spawns     List of spawns for this game
      * @param lobbySign  Lobby sign block
      * @param timer      Length of the game (in seconds)
@@ -97,7 +97,7 @@ public class Game {
      * <p>Internally used when creating a game with the <b>/hg create</b> command</p>
      *
      * @param name       Name of this game
-     * @param gameRegion      Bounding region of this game
+     * @param gameRegion Bounding region of this game
      * @param timer      Length of the game (in seconds)
      * @param minPlayers Minimum players to be able to start the game
      * @param maxPlayers Maximum players that can join this game
@@ -108,14 +108,14 @@ public class Game {
         this.plugin = HungerGames.getPlugin();
         this.lang = plugin.getLang();
         this.gameArenaData = new GameArenaData(this, name, gameRegion, timer, minPlayers, maxPlayers, roam, cost);
-        this.gameArenaData.status = Status.NOT_READY;
+        this.gamePlayerData = new GamePlayerData(this);
+        this.gameBlockData = new GameBlockData(this);
+        this.gameArenaData.setStatus(Status.NOT_READY);
         this.gameScoreboard = new GameScoreboard(this);
         this.playerManager = HungerGames.getPlugin().getPlayerManager();
         this.kitManager = plugin.getKitManager();
         this.mobManager = new MobManager(this);
         this.bar = new GameBarData(this);
-        this.gamePlayerData = new GamePlayerData(this);
-        this.gameBlockData = new GameBlockData(this);
         this.gameItemData = new GameItemData(this);
         this.gameCommandData = new GameCommandData(this);
         this.gameBorderData = new GameBorderData(this);
@@ -249,8 +249,11 @@ public class Game {
      */
     public void startWaitingPeriod() {
         this.gameArenaData.setStatus(Status.WAITING);
-        this.gameBlockData.updateLobbyBlock();
         // TODO Broadcast?!?!?
+        long start = System.currentTimeMillis();
+        this.gameBlockData.logBlocksForRollback();
+        long fin = System.currentTimeMillis() - start;
+        Util.log("Logged blocks in %s ms", fin);
     }
 
     /**
@@ -261,18 +264,16 @@ public class Game {
         GameStartEvent event = new GameStartEvent(this);
         Bukkit.getPluginManager().callEvent(event);
 
-        this.gameArenaData.status = Status.COUNTDOWN;
+        this.gameArenaData.setStatus(Status.COUNTDOWN);
         this.startingTask = new StartingTask(this);
-        this.gameBlockData.updateLobbyBlock();
     }
 
     /**
      * Start the free roam state of the game
      */
     public void startFreeRoam() {
-        this.gameArenaData.status = Status.FREE_ROAM;
-        this.gameBlockData.updateLobbyBlock();
-        this.gameArenaData.gameRegion.removeEntities();
+        this.gameArenaData.setStatus(Status.FREE_ROAM);
+        this.gameArenaData.getGameRegion().removeEntities();
         this.freeRoamTask = new FreeRoamTask(this);
         this.gameCommandData.runCommands(CommandType.START, null);
     }
@@ -281,7 +282,7 @@ public class Game {
      * Start running the game
      */
     public void startRunningGame() {
-        this.gameArenaData.status = Status.RUNNING;
+        this.gameArenaData.setStatus(Status.RUNNING);
         if (Config.MOBS_SPAWN_ENABLED) spawner = new SpawnerTask(this);
         if (Config.randomChest) chestDrop = new ChestDropTask(this);
         gameBlockData.updateLobbyBlock();
@@ -307,6 +308,7 @@ public class Game {
      *
      * @param player Player to join the game
      */
+    @SuppressWarnings("UnusedReturnValue")
     public boolean joinGame(Player player) {
         return joinGame(player, false);
     }
@@ -329,15 +331,14 @@ public class Game {
 
         String arenaName = this.gameArenaData.getName();
 
-        Status status = gameArenaData.getStatus();
-        switch (status) {
+        switch (this.gameArenaData.getStatus()) {
             case NOT_READY, ROLLBACK, STOPPED, BROKEN -> {
                 Util.sendPrefixedMessage(player, this.lang.arena_not_ready);
                 return false;
             }
             case RUNNING, FREE_ROAM -> {
                 Util.sendPrefixedMessage(player, this.lang.game_running.replace("<arena>", arenaName), arenaName);
-                if (Config.spectateEnabled) {
+                if (Config.SPECTATE_ENABLED) {
                     Util.sendPrefixedMessage(player, this.lang.arena_spectate.replace("<arena>", arenaName));
                 }
                 return false;
@@ -389,6 +390,7 @@ public class Game {
         for (Player player : this.gamePlayerData.getPlayers()) {
             UUID uuid = player.getUniqueId();
             PlayerData playerData = this.playerManager.getPlayerData(uuid);
+            assert playerData != null;
             Location previousLocation = playerData.getPreviousLocation();
 
             this.gamePlayerData.heal(player);
@@ -402,7 +404,7 @@ public class Game {
             this.gamePlayerData.leaveSpectate(spectator);
         }
 
-        if (gameArenaData.status == Status.RUNNING) {
+        if (gameArenaData.getStatus() == Status.RUNNING) {
             bar.clearBar();
         }
 
@@ -433,7 +435,7 @@ public class Game {
                 plugin.getLeaderboard().addStat(u, Leaderboard.Stats.GAMES);
             }
         }
-        gameBlockData.clearChests();
+        this.gameBlockData.clearChests();
         String winner = Util.translateStop(Util.convertUUIDListToStringList(win));
 
         // Broadcast wins
@@ -445,18 +447,17 @@ public class Game {
                 gamePlayerData.msgAllPlayers(broadcast);
             }
         }
-        if (gameBlockData.requiresRollback()) {
-            if (plugin.isEnabled()) {
+        if (this.gameBlockData.requiresRollback()) {
+            if (this.plugin.isEnabled()) {
                 new Rollback(this);
             } else {
                 // Force rollback if server is stopping
-                gameBlockData.forceRollback();
+                this.gameBlockData.forceRollback();
             }
         } else {
-            gameArenaData.status = Status.READY;
-            gameBlockData.updateLobbyBlock();
+            this.gameArenaData.setStatus(Status.READY);
         }
-        gameCommandData.runCommands(CommandType.STOP, null);
+        this.gameCommandData.runCommands(CommandType.STOP, null);
 
         // Call GameEndEvent
         Collection<Player> winners = new ArrayList<>();
@@ -465,14 +466,14 @@ public class Game {
         }
 
         // Game has ended, we can clear all players now
-        gamePlayerData.clearPlayers();
-        gamePlayerData.clearSpectators();
+        this.gamePlayerData.clearPlayers();
+        this.gamePlayerData.clearSpectators();
         this.gameScoreboard.clearGameTeams();
-        Bukkit.getPluginManager().callEvent(new GameEndEvent(this, winners, death));
+        new GameEndEvent(this, winners, death).callEvent();
     }
 
     void updateAfterDeath(Player player, boolean death) {
-        Status status = gameArenaData.status;
+        Status status = gameArenaData.getStatus();
         if (status == Status.RUNNING || status == Status.FREE_ROAM || status == Status.COUNTDOWN) {
             if (isGameOver()) {
                 if (!death) {
@@ -509,11 +510,12 @@ public class Game {
         if (this.gamePlayerData.getPlayers().size() <= 1) return true;
         for (Player player : this.gamePlayerData.getPlayers()) {
             PlayerData playerData = this.playerManager.getPlayerData(player);
+            assert playerData != null;
             GameTeam gameTeam = playerData.getTeam();
 
             if (gameTeam != null && (gameTeam.getPlayers().size() >= gamePlayerData.players.size())) {
                 for (Player player1 : this.gamePlayerData.getPlayers()) {
-                    if (!gameTeam.getPlayers().contains(player1.getUniqueId())) {
+                    if (!gameTeam.getPlayers().contains(player1)) {
                         return false;
                     }
                 }

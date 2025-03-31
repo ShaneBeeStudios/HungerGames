@@ -10,8 +10,6 @@ import com.shanebeestudios.hg.game.GameBlockData;
 import com.shanebeestudios.hg.plugin.permission.Permissions;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
-import org.bukkit.entity.Entity;
-import org.bukkit.entity.FallingBlock;
 import org.bukkit.entity.Hanging;
 import org.bukkit.entity.ItemFrame;
 import org.bukkit.entity.Player;
@@ -22,12 +20,8 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.block.Action;
 import org.bukkit.event.block.BlockBreakEvent;
-import org.bukkit.event.block.BlockExplodeEvent;
 import org.bukkit.event.block.BlockPlaceEvent;
-import org.bukkit.event.block.LeavesDecayEvent;
-import org.bukkit.event.entity.EntityChangeBlockEvent;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
-import org.bukkit.event.entity.EntityExplodeEvent;
 import org.bukkit.event.hanging.HangingBreakByEntityEvent;
 import org.bukkit.event.player.PlayerBucketEmptyEvent;
 import org.bukkit.event.player.PlayerBucketEvent;
@@ -70,6 +64,7 @@ public class GameBlockListener extends GameListenerBase {
         }
     }
 
+    @SuppressWarnings("DataFlowIssue")
     @EventHandler
     private void blockPlace(BlockPlaceEvent event) {
         Player player = event.getPlayer();
@@ -80,8 +75,7 @@ public class GameBlockListener extends GameListenerBase {
             return;
         }
         if (this.gameManager.isInRegion(block.getLocation())) {
-
-            if (Config.breakblocks && this.playerManager.hasPlayerData(player)) {
+            if (Config.BREAK_BLOCKS && this.playerManager.hasPlayerData(player)) {
                 Game game = this.playerManager.getPlayerData(player).getGame();
                 GameBlockData gameBlockData = game.getGameBlockData();
                 Status status = game.getGameArenaData().getStatus();
@@ -90,7 +84,6 @@ public class GameBlockListener extends GameListenerBase {
                         Util.sendMessage(player, this.lang.listener_no_edit_block);
                         event.setCancelled(true);
                     } else {
-                        gameBlockData.recordBlockPlace(event.getBlockReplacedState());
                         if (isChest(block)) {
                             gameBlockData.addPlayerChest(block.getLocation());
                         }
@@ -100,22 +93,14 @@ public class GameBlockListener extends GameListenerBase {
                     event.setCancelled(true);
                 }
             } else {
-                if (Permissions.COMMAND_CREATE.has(player)) {
-                    Game game = this.plugin.getGameManager().getGame(block.getLocation());
-                    Status status = game.getGameArenaData().getStatus();
-                    switch (status) {
-                        case FREE_ROAM:
-                        case RUNNING:
-                            game.getGameBlockData().recordBlockPlace(event.getBlockReplacedState());
-                        default:
-                            return;
-                    }
+                if (!Permissions.COMMAND_CREATE.has(player)) {
+                    event.setCancelled(true);
                 }
-                event.setCancelled(true);
             }
         }
     }
 
+    @SuppressWarnings("DataFlowIssue")
     @EventHandler
     private void blockBreak(BlockBreakEvent event) {
         Player player = event.getPlayer();
@@ -126,16 +111,14 @@ public class GameBlockListener extends GameListenerBase {
             return;
         }
         if (this.gameManager.isInRegion(block.getLocation())) {
-
-            if (Config.breakblocks && this.playerManager.hasPlayerData(player)) {
+            if (Config.BREAK_BLOCKS && this.playerManager.hasPlayerData(player)) {
                 Game game = this.playerManager.getPlayerData(player).getGame();
-                if (game.getGameArenaData().getStatus() == Status.RUNNING || !Config.protectCooldown) {
+                if (game.getGameArenaData().getStatus() == Status.RUNNING || !Config.PROTECT_COOLDOWN) {
                     if (!BlockUtils.isEditableBlock(block.getType())) {
                         Util.sendMessage(player, this.lang.listener_no_edit_block);
                         event.setCancelled(true);
                     } else {
                         GameBlockData gameBlockData = game.getGameBlockData();
-                        gameBlockData.recordBlockBreak(block);
                         if (isChest(block)) {
                             gameBlockData.removeGameChest(block.getLocation());
                             gameBlockData.removePlayerChest(block.getLocation());
@@ -168,10 +151,11 @@ public class GameBlockListener extends GameListenerBase {
     }
 
     @EventHandler
-    private void onBucketDrain(PlayerBucketFillEvent event) {
+    private void onBucketFill(PlayerBucketFillEvent event) {
         handleBucketEvent(event, true);
     }
 
+    @SuppressWarnings("DataFlowIssue")
     private void handleBucketEvent(PlayerBucketEvent event, boolean fill) {
         Block block = event.getBlock();
         Player player = event.getPlayer();
@@ -179,15 +163,11 @@ public class GameBlockListener extends GameListenerBase {
         final boolean LAVA = event.getBucket() == Material.LAVA_BUCKET && BlockUtils.isEditableBlock(Material.LAVA);
 
         if (this.gameManager.isInRegion(block.getLocation())) {
-            if (Config.breakblocks && this.playerManager.hasPlayerData(player)) {
+            if (Config.BREAK_BLOCKS && this.playerManager.hasPlayerData(player)) {
                 Game game = this.playerManager.getPlayerData(player).getGame();
-                GameBlockData gameBlockData = game.getGameBlockData();
-                if (game.getGameArenaData().getStatus() == Status.RUNNING || !Config.protectCooldown) {
-                    if (fill && BlockUtils.isEditableBlock(block.getType())) {
-                        gameBlockData.recordBlockBreak(block);
-                    } else if (!fill && (WATER || LAVA)) {
-                        gameBlockData.recordBlockPlace(block.getState());
-                    } else {
+                if (game.getGameArenaData().getStatus() == Status.RUNNING || !Config.PROTECT_COOLDOWN) {
+                    if ((fill && !BlockUtils.isEditableBlock(block.getType())) ||
+                        (!fill && !(WATER || LAVA))) {
                         Util.sendMessage(player, this.lang.listener_no_edit_block);
                         event.setCancelled(true);
                     }
@@ -198,65 +178,6 @@ public class GameBlockListener extends GameListenerBase {
             } else {
                 if (this.playerManager.hasPlayerData(player) || !Permissions.COMMAND_CREATE.has(player)) {
                     event.setCancelled(true);
-                }
-            }
-        }
-    }
-
-    @EventHandler
-    private void onFallingBlockLand(EntityChangeBlockEvent event) {
-        Block block = event.getBlock();
-        if (!Config.breakblocks || !this.gameManager.isInRegion(block.getLocation())) return;
-        Game game = this.gameManager.getGame(block.getLocation());
-        Status status = game.getGameArenaData().getStatus();
-
-        Material blockType = block.getType();
-        Entity entity = event.getEntity();
-
-        if (entity instanceof FallingBlock fallingBlock && (status == Status.RUNNING || status == Status.FREE_ROAM)) {
-            // Block starts falling
-            if (blockType == fallingBlock.getBlockData().getMaterial()) {
-                game.getGameBlockData().recordBlockBreak(block);
-            }
-
-            // Falling block lands
-            if (!blockType.isSolid()) {
-                game.getGameBlockData().recordBlockPlace(block.getState());
-            }
-        }
-    }
-
-    @EventHandler
-    private void onEntityExplode(EntityExplodeEvent event) {
-        if (this.gameManager.isInRegion(event.getLocation())) {
-            Game game = this.gameManager.getGame(event.getLocation());
-            for (Block block : event.blockList()) {
-                game.getGameBlockData().recordBlockBreak(block);
-            }
-            event.setYield(0);
-        }
-    }
-
-    @EventHandler
-    private void onBlockExplode(BlockExplodeEvent event) {
-        if (gameManager.isInRegion(event.getBlock().getLocation())) {
-            GameBlockData gameBlockData = gameManager.getGame(event.getBlock().getLocation()).getGameBlockData();
-            for (Block block : event.blockList()) {
-                gameBlockData.recordBlockBreak(block);
-            }
-            event.setYield(0);
-        }
-    }
-
-    @EventHandler
-    private void onLeafDecay(LeavesDecayEvent event) {
-        if (!Config.fixleaves) return;
-        Block block = event.getBlock();
-        if (this.gameManager.isInRegion(block.getLocation())) {
-            if (Config.breakblocks) {
-                Game game = this.gameManager.getGame(block.getLocation());
-                if (game.getGameArenaData().getStatus() == Status.RUNNING) {
-                    game.getGameBlockData().recordBlockBreak(block);
                 }
             }
         }

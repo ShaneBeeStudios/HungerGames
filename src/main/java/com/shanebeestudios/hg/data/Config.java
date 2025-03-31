@@ -55,9 +55,9 @@ public class Config {
     public static List<String> rewardMessages;
 
     //Rollback config info
-    public static boolean breakblocks;
-    public static int blocks_per_second;
-    public static boolean protectCooldown;
+    public static boolean BREAK_BLOCKS;
+    public static int ROLLBACK_BLOCKS_PER_SECOND;
+    public static boolean PROTECT_COOLDOWN;
     public static boolean fixleaves;
     public static boolean preventtrample;
     public static List<String> ROLLBACK_EDITABLE_BLOCKS;
@@ -77,7 +77,7 @@ public class Config {
     public static int WORLD_BORDER_FINAL_SIZE;
 
     //Spectate
-    public static boolean spectateEnabled;
+    public static boolean SPECTATE_ENABLED;
     public static boolean spectateOnDeath;
     public static boolean spectateHide;
     public static boolean spectateFly;
@@ -147,9 +147,9 @@ public class Config {
         rewardMessages = config.getStringList("reward.messages");
         giveReward = config.getBoolean("reward.enabled");
         cash = config.getInt("reward.cash");
-        breakblocks = config.getBoolean("rollback.allow-block-break");
-        blocks_per_second = config.getInt("rollback.blocks-per-second");
-        protectCooldown = config.getBoolean("rollback.protect-during-cooldown");
+        BREAK_BLOCKS = config.getBoolean("rollback.allow-block-break");
+        ROLLBACK_BLOCKS_PER_SECOND = config.getInt("rollback.blocks-per-second");
+        PROTECT_COOLDOWN = config.getBoolean("rollback.protect-during-cooldown");
         fixleaves = config.getBoolean("rollback.fix-leaves");
         preventtrample = config.getBoolean("rollback.prevent-trampling");
         ROLLBACK_EDITABLE_BLOCKS = config.getStringList("rollback.editable-blocks");
@@ -168,7 +168,7 @@ public class Config {
         WORLD_BORDER_COUNTDOWN_END = config.getInt("world-border.countdown-end");
         WORLD_BORDER_FINAL_SIZE = config.getInt("world-border.final-border-size");
 
-        spectateEnabled = config.getBoolean("spectate.enabled");
+        SPECTATE_ENABLED = config.getBoolean("spectate.enabled");
         spectateOnDeath = config.getBoolean("spectate.death-to-spectate");
         spectateHide = config.getBoolean("spectate.hide-spectators");
         spectateFly = config.getBoolean("spectate.fly");
