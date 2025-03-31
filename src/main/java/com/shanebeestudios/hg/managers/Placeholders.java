@@ -1,11 +1,9 @@
 package com.shanebeestudios.hg.managers;
 
 import com.shanebeestudios.hg.HungerGames;
-import com.shanebeestudios.hg.api.util.Util;
 import com.shanebeestudios.hg.data.Language;
 import com.shanebeestudios.hg.data.Leaderboard;
 import me.clip.placeholderapi.expansion.PlaceholderExpansion;
-import net.kyori.adventure.text.Component;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
@@ -77,8 +75,7 @@ public class Placeholders extends PlaceholderExpansion {
                             return getStatsPlayer(identifier, player);
                 }
             case "status":
-                Component name = gameManager.getGame(id[1]).getGameArenaData().getStatus().getName();
-                return Util.unMini(name);
+                return gameManager.getGame(id[1]).getGameArenaData().getStatus().getStringName();
             case "player_status":
                 if (player == null) return null;
                 return this.plugin.getPlayerManager().getPlayerStatus(player).getStringName();
