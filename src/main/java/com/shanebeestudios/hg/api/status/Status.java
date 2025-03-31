@@ -50,6 +50,13 @@ public enum Status {
 
 	final Language lang = HungerGames.getPlugin().getLang();
 
+    public boolean isActive() {
+        return switch (this) {
+            case WAITING, COUNTDOWN, FREE_ROAM, RUNNING, ROLLBACK -> true;
+            default -> false;
+        };
+    }
+
 	public Component getName() {
         return switch (this) {
             case RUNNING -> Util.getMini(this.lang.game_status_running);

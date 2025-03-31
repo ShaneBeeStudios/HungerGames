@@ -7,8 +7,12 @@ import org.bukkit.entity.ItemFrame;
 import org.bukkit.inventory.InventoryHolder;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.Collections;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+import java.util.UUID;
 
 /**
  * Data class for holding a {@link Game Game's} blocks
@@ -18,7 +22,7 @@ public class GameBlockData extends Data {
     private final List<Location> openedChests = new ArrayList<>();
     private final List<Location> playerPlacedChests = new ArrayList<>();
     private final List<BlockState> blocks = new ArrayList<>();
-    private final List<ItemFrameData> itemFrameData = new ArrayList<>();
+    private final Map<UUID,ItemFrameData> itemFrameData = new HashMap<>();
     private final GameLobbyWall gameLobbyWall;
 
     protected GameBlockData(Game game) {
@@ -135,11 +139,12 @@ public class GameBlockData extends Data {
      * @param itemFrame ItemFrame to be added to the list
      */
     public void recordItemFrame(ItemFrame itemFrame) {
-        this.itemFrameData.add(new ItemFrameData(itemFrame));
+        if (this.itemFrameData.containsKey(itemFrame.getUniqueId())) return;
+        this.itemFrameData.put(itemFrame.getUniqueId(), new ItemFrameData(itemFrame));
     }
 
-    public List<ItemFrameData> getItemFrameData() {
-        return this.itemFrameData;
+    public Collection<ItemFrameData> getItemFrameData() {
+        return this.itemFrameData.values();
     }
 
     /**

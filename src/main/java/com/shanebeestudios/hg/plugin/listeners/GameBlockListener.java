@@ -23,6 +23,7 @@ import org.bukkit.event.block.BlockBreakEvent;
 import org.bukkit.event.block.BlockPlaceEvent;
 import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.hanging.HangingBreakByEntityEvent;
+import org.bukkit.event.hanging.HangingBreakEvent;
 import org.bukkit.event.player.PlayerBucketEmptyEvent;
 import org.bukkit.event.player.PlayerBucketEvent;
 import org.bukkit.event.player.PlayerBucketFillEvent;
@@ -43,9 +44,9 @@ public class GameBlockListener extends GameListenerBase {
         }
     }
 
-    @EventHandler // Prevent players breaking item frames
-    private void onBreakItemFrame(HangingBreakByEntityEvent event) {
-        handleItemFrame(event.getEntity(), event, true);
+    @EventHandler
+    private void hangingPopOff(HangingBreakEvent event) {
+        handleItemFrame(event.getEntity(), event, event instanceof HangingBreakByEntityEvent);
     }
 
     private void handleItemFrame(Hanging hanging, Event event, boolean cancel) {

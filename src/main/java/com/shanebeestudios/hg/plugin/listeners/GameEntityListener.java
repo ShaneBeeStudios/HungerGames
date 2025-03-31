@@ -4,9 +4,9 @@ import com.shanebeestudios.hg.HungerGames;
 import com.shanebeestudios.hg.api.status.Status;
 import com.shanebeestudios.hg.game.Game;
 import com.shanebeestudios.hg.game.GameRegion;
-import org.bukkit.entity.ArmorStand;
+import org.bukkit.Location;
 import org.bukkit.entity.Entity;
-import org.bukkit.entity.ItemFrame;
+import org.bukkit.entity.EntityType;
 import org.bukkit.entity.LivingEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -37,26 +37,29 @@ public class GameEntityListener extends GameListenerBase {
     @EventHandler
     private void onSpawn(EntitySpawnEvent event) {
         Entity entity = event.getEntity();
-        if (entity instanceof ItemFrame || entity instanceof ArmorStand) return;
-        if (!(entity instanceof Player)) {
-            if (this.gameManager.isInRegion(event.getLocation())) {
-                Game game = gameManager.getGame(event.getLocation());
-                if (entity instanceof LivingEntity) {
-                    if (game.getGameArenaData().getStatus() != Status.RUNNING) {
-                        event.setCancelled(true);
-                        return;
-                    }
-                    if (event instanceof CreatureSpawnEvent creatureSpawnEvent) {
-                        switch (creatureSpawnEvent.getSpawnReason()) {
-                            case DEFAULT:
-                            case NATURAL:
-                                event.setCancelled(true);
-                                return;
-                        }
+        Location location = event.getLocation();
+
+        if (this.gameManager.isInRegion(location)) {
+            Game game = gameManager.getGame(location);
+            Status status = game.getGameArenaData().getStatus();
+            if (entity instanceof LivingEntity && entity.getType() != EntityType.ARMOR_STAND) {
+                if (status != Status.RUNNING) {
+                    event.setCancelled(true);
+                    return;
+                }
+                if (event instanceof CreatureSpawnEvent creatureSpawnEvent) {
+                    switch (creatureSpawnEvent.getSpawnReason()) {
+                        case DEFAULT:
+                        case NATURAL:
+                            event.setCancelled(true);
+                            return;
                     }
                 }
+            }
+
+            if (status.isActive()) {
                 GameRegion gameRegion = game.getGameArenaData().getGameRegion();
-                if (!gameRegion.hasEntity(entity)) gameRegion.addEntity(entity);
+                gameRegion.addEntity(entity);
             }
         }
     }
