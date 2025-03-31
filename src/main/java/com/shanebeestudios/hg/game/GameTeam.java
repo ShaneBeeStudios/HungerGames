@@ -46,7 +46,7 @@ public class GameTeam {
 
         this.bukkitTeam.setAllowFriendlyFire(Config.TEAM_ALLOW_FRIENDLY_FIRE);
         this.bukkitTeam.setCanSeeFriendlyInvisibles(Config.TEAM_CAN_SEE_INVISIBLES);
-        if (Config.HIDE_NAMETAGS && Config.TEAM_SHOW_TEAM_NAMES) {
+        if (Config.SCOREBOARD_HIDE_NAMETAGS && Config.TEAM_SHOW_TEAM_NAMES) {
             this.bukkitTeam.setOption(Team.Option.NAME_TAG_VISIBILITY, Team.OptionStatus.FOR_OTHER_TEAMS);
         }
         this.bukkitTeam.prefix(Util.getMini(this.lang.team_prefix.replace("<name>", teamName)));

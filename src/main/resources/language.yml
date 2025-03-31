@@ -55,11 +55,16 @@ kit-doesnt-exist: '<red>Does not exist'
 kit-disabled: '<red>Kits disabled in this game.'
 
 #  SCOREBOARD
-scoreboard-title: '<gold>HungerGames'
-players-alive: '<light_purple>Tributes:'
-# <num> will be replaced by the number of remaining players in the game
-players-alive-num: '<yellow><num> alive'
-scoreboard-arena: "<green>Arena: <aqua>"
+scoreboard:
+  sidebar:
+    title: '<gold>HungerGames'
+    arena: "<green>Arena: <aqua>"
+    players-alive: '<light_purple>Tributes:'
+    # <num> will be replaced by the number of remaining players in the game
+    players-alive-num: '<yellow><num> alive'
+  show-health:
+    # This is the name that will show for the health objective
+    name: '<aqua>Health'
 
 #  TEAMS
 team:

@@ -93,7 +93,7 @@ public class TeamCommand extends SubCommand {
                             Util.sendMessage(teamLeader, this.lang.command_team_on_team.replace("<player>", invitee.getName()));
                             return;
                         }
-                        if ((gameTeam.getPlayers().size() + gameTeam.getPendingPlayers().size()) >= Config.team_maxTeamSize) {
+                        if ((gameTeam.getPlayers().size() + gameTeam.getPendingPlayers().size()) >= Config.TEAM_MAX_TEAM_SIZE) {
                             // Size check
                             Util.sendMessage(teamLeader, this.lang.command_team_max);
                             return;

@@ -25,7 +25,7 @@ public class GameSidebar {
     public GameSidebar(Game game) {
         this.game = game;
         this.lang = game.lang;
-        setTitle(this.lang.scoreboard_title);
+        setTitle(this.lang.scoreboard_sidebar_title);
 
     }
 
@@ -61,17 +61,17 @@ public class GameSidebar {
      * Update this scoreboard
      */
     public void updateBoard() {
-        String alive = "  " + this.lang.players_alive_num.replace("<num>", String.valueOf(this.game.getGamePlayerData().getPlayers().size()));
+        String alive = "  " + this.lang.scoreboard_sidebar_players_alive_num.replace("<num>", String.valueOf(this.game.getGamePlayerData().getPlayers().size()));
         String name = this.game.getGameArenaData().getName();
 
         this.playersFastBoards.forEach((player, board) -> {
             board.updateTitle(this.title);
             List<Component> lines = new ArrayList<>();
             lines.add(Util.getMini(" "));
-            lines.add(Util.getMini(this.lang.scoreboard_arena));
+            lines.add(Util.getMini(this.lang.scoreboard_sidebar_arena));
             lines.add(Util.getMini("  <yellow>" + name));
             lines.add(Util.getMini(" "));
-            lines.add(Util.getMini(this.lang.players_alive));
+            lines.add(Util.getMini(this.lang.scoreboard_sidebar_players_alive));
             lines.add(Util.getMini(alive));
             lines.add(Util.getMini(" "));
 

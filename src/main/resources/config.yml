@@ -49,8 +49,31 @@ settings:
     - 'minecraft:trapped_chest'
     - 'minecraft:barrel'
     - '#minecraft:shulker_boxes'
+
+# Settings for different scoreboard options
+# This doesn't necessarily mean the sidebar
+scoreboard:
   # When enabled, name tags will be hidden from all players in the game
   hide-nametags: true
+  show-health:
+    enabled: true
+    # Where to show health
+    # Options are 'player_list' or 'below_name'
+    # Note: 'below_name' won't work if 'hide-nametags' is enabled
+    display-slot: player_list
+    # How to render health
+    # Options are 'hearts' or 'integer'
+    render-type: hearts
+    teams:
+      # When enabled, players will see nametags of other players on their team
+      # if 'hide-nametags' is disabled, this option is ignored and names will be shown regardless
+      show-team-nametags: true
+      # Maximum amount of players allowed on a team
+      max-team-size: 3
+      # When enabled, teammates can hurt each other
+      allow-friendly-fire: false
+      # When enabled, teammates can see each other if using invisibility potion
+      can-see-friendly-invisibles: true
 mob-spawning:
   # If mobs will spawn in game arenas
   # Mobs are defined in the mobs.yml file
@@ -59,16 +82,6 @@ mob-spawning:
   interval: 35
   # Limit how many mobs can spawn per player
   cap-per-player: 5
-team:
-  # When enabled, players will see nametags of other players on their team
-  # if 'hide-nametags' is disabled, this option is ignored and names will show regardless
-  show-team-nametags: true
-  # Maximum amount of players allowed on a team
-  max-team-size: 3
-  # When enabled, teammates can hurt each other
-  allow-friendly-fire: false
-  # When enabled, teammates can see each other if using invisibility potion
-  can-see-friendly-invisibles: true
 reward:
   # Whether players get a reward when the game is done!
   enabled: true

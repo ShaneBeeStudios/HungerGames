@@ -34,19 +34,24 @@ public class Config {
     public static boolean teleportEnd;
     public static int teleportEndTime;
     public static List<String> SETTINGS_BONUS_BLOCK_TYPES;
-    public static boolean HIDE_NAMETAGS;
     public static boolean savePreviousLocation;
+
+    // Scoreboard
+    public static boolean SCOREBOARD_HIDE_NAMETAGS;
+    public static boolean SCOREBOARD_SHOW_HEALTH_ENABLED;
+    public static String SCOREBOARD_SHOW_HEALTH_DISPLAY_SLOT;
+    public static String SCOREBOARD_SHOW_HEALTH_RENDER_TYPE;
+    public static boolean TEAM_SHOW_TEAM_NAMES;
+    public static int TEAM_MAX_TEAM_SIZE;
+    public static boolean TEAM_ALLOW_FRIENDLY_FIRE;
+    public static boolean TEAM_CAN_SEE_INVISIBLES;
 
     // Mobs
     public static boolean MOBS_SPAWN_ENABLED;
     public static int MOBS_SPAWN_INTERVAL;
     public static int MOBS_SPAWN_CAP_PER_PLAYER;
 
-    //Team info
-    public static boolean TEAM_SHOW_TEAM_NAMES;
-    public static int team_maxTeamSize;
-    public static boolean TEAM_ALLOW_FRIENDLY_FIRE;
-    public static boolean TEAM_CAN_SEE_INVISIBLES;
+
 
     //Reward info
     public static boolean giveReward;
@@ -126,20 +131,23 @@ public class Config {
         minchestcontent = config.getInt("settings.min-chestcontent");
         maxbonuscontent = config.getInt("settings.max-bonus-chestcontent");
         minbonuscontent = config.getInt("settings.min-bonus-chestcontent");
-        HIDE_NAMETAGS = config.getBoolean("settings.hide-nametags");
         savePreviousLocation = config.getBoolean("settings.save-previous-location");
         SETTINGS_BONUS_BLOCK_TYPES = config.getStringList("settings.bonus-block-types");
+
+        // Scoreboard
+        SCOREBOARD_HIDE_NAMETAGS = config.getBoolean("scoreboard.hide-nametags");
+        SCOREBOARD_SHOW_HEALTH_ENABLED = config.getBoolean("scoreboard.show-health.enabled");
+        SCOREBOARD_SHOW_HEALTH_DISPLAY_SLOT = config.getString("scoreboard.show-health.display-slot");
+        SCOREBOARD_SHOW_HEALTH_RENDER_TYPE = config.getString("scoreboard.show-health.render-type");
+        TEAM_MAX_TEAM_SIZE = config.getInt("scoreboard.teams.max-team-size");
+        TEAM_SHOW_TEAM_NAMES = config.getBoolean("scoreboard.teams.show-team-nametags");
+        TEAM_ALLOW_FRIENDLY_FIRE = config.getBoolean("scoreboard.teams.allow-friendly-fire");
+        TEAM_CAN_SEE_INVISIBLES = config.getBoolean("scoreboard.teams.can-see-friendly-invisibles");
 
         // Mobs
         MOBS_SPAWN_ENABLED = config.getBoolean("mob-spawning.enabled");
         MOBS_SPAWN_INTERVAL = config.getInt("mob-spawning.interval") * 20;
         MOBS_SPAWN_CAP_PER_PLAYER = config.getInt("mob-spawning.cap-per-player");
-
-        // Team
-        team_maxTeamSize = config.getInt("team.max-team-size");
-        TEAM_SHOW_TEAM_NAMES = config.getBoolean("team.show-team-nametags");
-        TEAM_ALLOW_FRIENDLY_FIRE = config.getBoolean("team.allow-friendly-fire");
-        TEAM_CAN_SEE_INVISIBLES = config.getBoolean("team.can-see-friendly-invisibles");
 
         giveReward = config.getBoolean("reward.enabled");
         cash = config.getInt("reward.cash");
