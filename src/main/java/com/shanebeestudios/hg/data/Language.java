@@ -98,11 +98,6 @@ public class Language {
     public String cmd_create_minmax;
     public String cmd_create_add_spawn;
     public String cmd_create_created;
-    public String cmd_delete_attempt;
-    public String cmd_delete_kicking;
-    public String cmd_delete_deleted;
-    public String cmd_delete_failed;
-    public String cmd_delete_noexist;
     public String cmd_kit_no_change;
     public String cmd_reload_attempt;
     public String cmd_reload_reloaded_arena;
@@ -159,6 +154,14 @@ public class Language {
     public String command_base_not_in_valid_game;
     public String command_base_no_region;
     public String command_base_status;
+    // Delete
+    public String command_delete_attempt;
+    public String command_delete_kicking;
+    public String command_delete_stopping;
+    public String command_delete_deleted;
+    public String command_delete_failed;
+    public String command_delete_rollback;
+    public String command_delete_noexist;
 
     // EDIT
     // - ChestRefill
@@ -328,11 +331,6 @@ public class Language {
         cmd_create_minmax = lang.getString("cmd-create-minmax");
         cmd_create_created = lang.getString("cmd-create-created");
         cmd_create_add_spawn = lang.getString("cmd-create-add-spawns");
-        cmd_delete_attempt = lang.getString("cmd-delete-attempt");
-        cmd_delete_kicking = lang.getString("cmd-delete-kicking");
-        cmd_delete_deleted = lang.getString("cmd-delete-deleted");
-        cmd_delete_failed = lang.getString("cmd-delete-failed");
-        cmd_delete_noexist = lang.getString("cmd-delete-noexist");
         cmd_kit_no_change = lang.getString("cmd-kit-no-change");
         cmd_reload_attempt = lang.getString("cmd-reload-attempt");
         cmd_reload_reloaded_arena = lang.getString("cmd-reload-reloaded-arena");
@@ -408,6 +406,14 @@ public class Language {
         command_base_status = lang.getString("command.base-status");
         // ChestRefill
         command_chest_refill_now = lang.getString("command.chest-refill-now");
+        // Delete
+        command_delete_attempt = lang.getString("command.delete-attempt");
+        command_delete_kicking = lang.getString("command.delete-kicking");
+        command_delete_stopping = lang.getString("command.delete-stopping");
+        command_delete_deleted = lang.getString("command.delete-deleted");
+        command_delete_failed = lang.getString("command.delete-failed");
+        command_delete_rollback = lang.getString("command.delete-rollback");
+        command_delete_noexist = lang.getString("command.delete-noexist");
         // Edit
         // - ChestRefill
         command_edit_chest_refill_time_set = lang.getString("command.edit.chest-refill-time-set");

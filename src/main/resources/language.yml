@@ -132,14 +132,6 @@ cmd-create-minmax: '<red>min-players cannot be more then max-players!'
 cmd-create-created: '<green>You created HungerGames arena <aqua><arena><green>!'
 cmd-create-add-spawns: "<gold>You're now ready to set some spawns with '<green>/hg addspawn<gold>'"
 
-## Delete
-cmd-delete-attempt: '<green>Attempting to delete <arena>!'
-cmd-delete-stopping: '<grey>- <red>Game running! <green>Stopping..'
-cmd-delete-kicking: '<grey>- <red><red>Players detected! <green>Kicking..'
-cmd-delete-deleted: '<green>Successfully deleted HungerGames arena <aqua><arena>!'
-cmd-delete-failed: '<red>Failed to delete arena!'
-cmd-delete-noexist: "<red>The arena <white>'<yellow><arena><white>'<red> does not exist!"
-
 ## Kit
 cmd-kit-no-change: '<red>You can not change your kit while the game is running!'
 
@@ -159,6 +151,16 @@ command:
   base-status: "Status for arena <white>'<aqua><arena><white>' <grey>= <status>"
   # ChestRefill
   chest-refill-now: '<gold>Chests have now been refilled in <aqua><arena>'
+  # Delete
+  ## Delete
+  delete-attempt: '<green>Attempting to delete <arena>!'
+  delete-stopping: '<grey>- <red>Game running! <yellow>Stopping..'
+  delete-kicking: '<grey>- <red>Players detected! <yellow>Kicking..'
+  delete-deleted: '<green>Successfully deleted HungerGames arena <aqua><arena><green>!'
+  delete-failed: '<red>Failed to delete arena!'
+  delete-rollback: '<red>The game is currently rolling back and cannot be deleted right now!'
+  delete-noexist: "<red>The arena <white>'<yellow><arena><white>'<red> does not exist!"
+
   # Edit
   edit:
     # ChestRefill

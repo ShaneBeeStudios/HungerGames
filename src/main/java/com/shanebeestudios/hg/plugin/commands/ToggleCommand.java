@@ -37,7 +37,7 @@ public class ToggleCommand extends SubCommand {
                         }
                     } else {
                         String name = info.args().getOrDefaultRaw("game", "huh?");
-                        Util.sendMessage(sender, this.lang.cmd_delete_noexist.replace("<arena>", name));
+                        Util.sendMessage(sender, this.lang.command_delete_noexist.replace("<arena>", name));
                     }
                 }));
     }

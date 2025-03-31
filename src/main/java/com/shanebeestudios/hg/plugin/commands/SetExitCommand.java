@@ -41,7 +41,7 @@ public class SetExitCommand extends SubCommand {
                     Game game = info.args().getByClass("game", Game.class);
                     if (game == null) {
                         String raw = info.args().getOrDefaultRaw("game", "huh?");
-                        Util.sendPrefixedMessage(player, this.lang.cmd_delete_noexist.replace("<arena>", raw));
+                        Util.sendPrefixedMessage(player, this.lang.command_delete_noexist.replace("<arena>", raw));
                     } else {
                         setExit(game, player, false);
                         Util.sendPrefixedMessage(player, this.lang.command_exit_set_arena.replace("<arena>", game.getGameArenaData().getName()));

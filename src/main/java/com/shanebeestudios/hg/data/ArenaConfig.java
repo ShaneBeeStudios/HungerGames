@@ -92,6 +92,11 @@ public class ArenaConfig {
         }
     }
 
+    public void removeArena(String name) {
+        this.arenaConfig.set("arenas." + name, null);
+        saveArenaConfig();
+    }
+
     @SuppressWarnings("ConstantConditions")
     public void loadArenas() {
         Util.log("Loading arenas:");

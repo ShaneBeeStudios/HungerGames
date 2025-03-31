@@ -221,6 +221,17 @@ public class GameManager {
     }
 
     /**
+     * Delete a game
+     *
+     * @param game Game to delete
+     */
+    public void deleteGame(Game game) {
+        String name = game.getGameArenaData().getName();
+        this.games.remove(name);
+        this.plugin.getArenaConfig().removeArena(name);
+    }
+
+    /**
      * Get the number of games running
      *
      * @return Number of games running
