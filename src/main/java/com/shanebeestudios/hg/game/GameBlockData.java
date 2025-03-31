@@ -15,8 +15,8 @@ import java.util.List;
  */
 public class GameBlockData extends Data {
 
-    private final List<Location> chests = new ArrayList<>();
-    private final List<Location> playerChests = new ArrayList<>();
+    private final List<Location> openedChests = new ArrayList<>();
+    private final List<Location> playerPlacedChests = new ArrayList<>();
     private final List<BlockState> blocks = new ArrayList<>();
     private final List<ItemFrameData> itemFrameData = new ArrayList<>();
     private final GameLobbyWall gameLobbyWall;
@@ -51,50 +51,51 @@ public class GameBlockData extends Data {
      * Clear chests and mark them for refill
      */
     public void clearChests() {
-        for (Location location : this.chests) {
+        for (Location location : this.openedChests) {
             if (location.getBlock().getState() instanceof InventoryHolder inventoryHolder) {
                 inventoryHolder.getInventory().clear();
-                location.getBlock().getState().update();
             }
         }
-        this.chests.clear();
+        this.openedChests.clear();
     }
 
     /**
-     * Add a game chest location to the game
+     * Log that a chest has been opened by a player
      *
-     * @param location Location of the chest to add (Needs to actually be a chest there)
+     * @param location Location of the chest to log
      */
-    public void addGameChest(Location location) {
-        chests.add(location);
+    public void logOpenedChest(Location location) {
+        if (this.openedChests.contains(location)) return;
+        this.openedChests.add(location);
     }
 
     /**
-     * Add a player placed chest to the game
-     *
-     * @param location Location of the chest
-     */
-    public void addPlayerChest(Location location) {
-        playerChests.add(location);
-    }
-
-    /**
-     * Check if chest at this location is logged
-     *
-     * @param location Location of chest to check
-     * @return True if this chest was added already
-     */
-    public boolean isLoggedChest(Location location) {
-        return chests.contains(location) || playerChests.contains(location);
-    }
-
-    /**
-     * Remove a game chest from the game
+     * Remove a logged chest from the game
      *
      * @param location Location of the chest to remove
      */
-    public void removeGameChest(Location location) {
-        chests.remove(location);
+    public void removeOpenedChest(Location location) {
+        this.openedChests.remove(location);
+    }
+
+    /**
+     * Log a chest that a player placed
+     *
+     * @param location Location of the chest
+     */
+    public void logPlayerPlacedChest(Location location) {
+        this.playerPlacedChests.add(location);
+    }
+
+    /**
+     * Check if chest at this location can be filled
+     *
+     * @param location Location of chest to check
+     * @return True if this chest can be filled,
+     * false if its already been opened or is player placed
+     */
+    public boolean canBeFilled(Location location) {
+        return !this.openedChests.contains(location) && !this.playerPlacedChests.contains(location);
     }
 
     /**
@@ -103,7 +104,7 @@ public class GameBlockData extends Data {
      * @param location Location of the chest
      */
     public void removePlayerChest(Location location) {
-        playerChests.remove(location);
+        playerPlacedChests.remove(location);
     }
 
     public void logBlocksForRollback() {
@@ -125,7 +126,7 @@ public class GameBlockData extends Data {
     }
 
     boolean requiresRollback() {
-        return !blocks.isEmpty() || !itemFrameData.isEmpty();
+        return !this.blocks.isEmpty() || !this.itemFrameData.isEmpty();
     }
 
     /**

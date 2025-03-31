@@ -14,7 +14,6 @@ import org.bukkit.block.Block;
 import org.bukkit.entity.Hanging;
 import org.bukkit.entity.ItemFrame;
 import org.bukkit.entity.Player;
-import org.bukkit.entity.Shulker;
 import org.bukkit.event.Cancellable;
 import org.bukkit.event.Event;
 import org.bukkit.event.EventHandler;
@@ -93,10 +92,8 @@ public class GameBlockListener extends GameListenerBase {
                     if (!BlockUtils.isEditableBlock(block.getType())) {
                         Util.sendMessage(player, this.lang.listener_no_edit_block);
                         event.setCancelled(true);
-                    } else {
-                        if (isChest(block)) {
-                            gameBlockData.addPlayerChest(block.getLocation());
-                        }
+                    } else if (isChest(block)) {
+                        gameBlockData.logPlayerPlacedChest(block.getLocation());
                     }
                 } else {
                     Util.sendMessage(player, this.lang.listener_not_running);
@@ -140,12 +137,10 @@ public class GameBlockListener extends GameListenerBase {
                     if (!BlockUtils.isEditableBlock(block.getType())) {
                         Util.sendMessage(player, this.lang.listener_no_edit_block);
                         event.setCancelled(true);
-                    } else {
+                    } else if (isChest(block)) {
                         GameBlockData gameBlockData = game.getGameBlockData();
-                        if (isChest(block)) {
-                            gameBlockData.removeGameChest(block.getLocation());
-                            gameBlockData.removePlayerChest(block.getLocation());
-                        }
+                        gameBlockData.removeOpenedChest(block.getLocation());
+                        gameBlockData.removePlayerChest(block.getLocation());
                     }
                 } else {
                     Util.sendMessage(player, this.lang.listener_not_running);
@@ -157,7 +152,7 @@ public class GameBlockListener extends GameListenerBase {
                     switch (status) {
                         case FREE_ROAM:
                         case RUNNING:
-                            game.getGameBlockData().removeGameChest(block.getLocation());
+                            game.getGameBlockData().removeOpenedChest(block.getLocation());
                         default:
                             return;
                     }
@@ -228,12 +223,8 @@ public class GameBlockListener extends GameListenerBase {
     }
 
     // UTIL
-    // TODO something better here
     private boolean isChest(Block block) {
-        if (block.getType() == Material.CHEST || block.getType() == Material.TRAPPED_CHEST || block.getState() instanceof Shulker) {
-            return true;
-        }
-        return Util.isRunningMinecraft(1, 14) && block.getType() == Material.BARREL;
+        return block.getType() == Material.CHEST || BlockUtils.isBonusBlock(block);
     }
 
 }
