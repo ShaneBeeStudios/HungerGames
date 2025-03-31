@@ -1,13 +1,19 @@
 package com.shanebeestudios.hg.data;
 
 import com.shanebeestudios.hg.HungerGames;
+import com.shanebeestudios.hg.api.registry.Registries;
 import com.shanebeestudios.hg.api.util.Util;
+import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
 
 import java.io.File;
+import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.util.HashMap;
+import java.util.Map;
+import java.util.TreeMap;
 
 /**
  * Language handler for plugin messages
@@ -70,26 +76,6 @@ public class Language {
     public String status_not_ready;
     public String status_beginning;
     public String status_countdown;
-
-    public String death_fallen;
-    public String death_explosion;
-    public String death_custom;
-    public String death_fall;
-    public String death_falling_block;
-    public String death_fire;
-    public String death_projectile;
-    public String death_lava;
-    public String death_magic;
-    public String death_suicide;
-    public String death_other_cause;
-    public String death_player;
-    public String death_zombie;
-    public String death_skeleton;
-    public String death_spider;
-    public String death_drowned;
-    public String death_trident;
-    public String death_stray;
-    public String death_other_entity;
     public String cmd_spawn_same;
     public String cmd_spawn_set;
     public String cmd_kit_no_change;
@@ -178,7 +164,7 @@ public class Language {
     public String command_delete_rollback;
     public String command_delete_noexist;
 
-    // EDIT
+    // Edit
     // - ChestRefill
     public String command_edit_chest_refill_time_set;
     public String command_edit_chest_refill_repeat_set;
@@ -225,6 +211,12 @@ public class Language {
     public String command_toggle_unlocked;
     public String command_toggle_running;
 
+    // Death Messages
+    public Map<String, String> death_message_entity_types = new HashMap<>();
+    public Map<String, String> death_message_damage_types = new TreeMap<>();
+    public String death_messages_prefix;
+    public String death_messages_other;
+
 
     public Language(HungerGames plugin) {
         this.plugin = plugin;
@@ -263,7 +255,8 @@ public class Language {
                 }
             }
             for (String key : config.getConfigurationSection("").getKeys(true)) {
-                if (!defConfig.contains(key)) {
+                if (!defConfig.contains(key) && !key.contains("death-messages")) {
+                    Util.log("Deleting: " + key);
                     config.set(key, null);
                     hasUpdated = true;
                 }
@@ -324,26 +317,6 @@ public class Language {
         roam_game_started = lang.getString("roam-game-started");
         roam_time = lang.getString("roam-time");
         roam_finished = lang.getString("roam-finished");
-
-        death_fallen = lang.getString("death-fallen");
-        death_explosion = lang.getString("death-explosion");
-        death_custom = lang.getString("death-custom");
-        death_fall = lang.getString("death-fall");
-        death_falling_block = lang.getString("death-falling-block");
-        death_fire = lang.getString("death-fire");
-        death_projectile = lang.getString("death-projectile");
-        death_lava = lang.getString("death-lava");
-        death_magic = lang.getString("death-magic");
-        death_suicide = lang.getString("death-suicide");
-        death_other_cause = lang.getString("death-other-cause");
-        death_player = lang.getString("death-player");
-        death_zombie = lang.getString("death-zombie");
-        death_skeleton = lang.getString("death-skeleton");
-        death_spider = lang.getString("death-spider");
-        death_stray = lang.getString("death-stray");
-        death_drowned = lang.getString("death-drowned");
-        death_trident = lang.getString("death-trident");
-        death_other_entity = lang.getString("death-other-entity");
 
         cmd_spawn_same = lang.getString("cmd-spawn-same");
         cmd_spawn_set = lang.getString("cmd-spawn-set");
@@ -495,6 +468,24 @@ public class Language {
         command_toggle_unlocked = lang.getString("command.toggle-unlocked");
         command_toggle_locked = lang.getString("command.toggle-locked");
         command_toggle_running = lang.getString("command.toggle-running");
+
+        // Death Messages
+        ConfigurationSection entityTypeSection = this.lang.getConfigurationSection("death-messages.entity-types");
+        if (entityTypeSection != null) {
+            entityTypeSection.getKeys(false).forEach(key -> {
+                String string = entityTypeSection.getString(key);
+                this.death_message_entity_types.put(key, string);
+            });
+        }
+        ConfigurationSection damageTypeSection = this.lang.getConfigurationSection("death-messages.damage-types");
+        if (damageTypeSection != null) {
+            damageTypeSection.getKeys(false).forEach(key -> {
+                String string = damageTypeSection.getString(key);
+                this.death_message_damage_types.put(key, string);
+            });
+        }
+        this.death_messages_prefix = this.lang.getString("death-messages.prefix");
+        this.death_messages_other = this.lang.getString("death-messages.other");
     }
 
 }

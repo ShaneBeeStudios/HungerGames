@@ -1,6 +1,7 @@
 package com.shanebeestudios.hg.managers;
 
 import com.shanebeestudios.hg.HungerGames;
+import com.shanebeestudios.hg.api.registry.Registries;
 import com.shanebeestudios.hg.api.util.ItemUtils;
 import com.shanebeestudios.hg.api.util.Util;
 import com.shanebeestudios.hg.data.Config;
@@ -16,14 +17,21 @@ import net.kyori.adventure.text.TranslatableComponent;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Material;
+import org.bukkit.NamespacedKey;
 import org.bukkit.World;
 import org.bukkit.damage.DamageSource;
 import org.bukkit.damage.DamageType;
+import org.bukkit.entity.AbstractArrow;
 import org.bukkit.entity.Entity;
+import org.bukkit.entity.EntityType;
 import org.bukkit.entity.Player;
 import org.bukkit.entity.Projectile;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.PlayerInventory;
+import org.jetbrains.annotations.Nullable;
+
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * Manager for deaths in game
@@ -35,6 +43,8 @@ public class KillManager {
     private final Language lang;
     private final Leaderboard leaderboard;
     private final ItemStack trackingStick;
+    private final Map<EntityType, String> entityTypeMessages = new HashMap<>();
+    private final Map<DamageType, String> damageTypeMessages = new HashMap<>();
 
     public KillManager(HungerGames plugin) {
         this.plugin = plugin;
@@ -44,38 +54,53 @@ public class KillManager {
         this.trackingStick = new ItemStack(Material.STICK, 1);
         this.trackingStick.setData(DataComponentTypes.ITEM_NAME, Util.getMini(this.lang.tracking_stick_name
             .replace("<uses>", String.valueOf(Config.TRACKING_STICK_USES))));
+
+        this.lang.death_message_entity_types.forEach((entityTypeString, message) -> {
+            NamespacedKey key = NamespacedKey.fromString(entityTypeString);
+            if (key != null) {
+                EntityType entityType = Registries.ENTITY_TYPE_REGISTRY.get(key);
+                if (entityType != null) {
+                    this.entityTypeMessages.put(entityType, message);
+                } else {
+                    Util.warning("Invalid EntityType '%s', check lang file", key);
+                }
+            } else {
+                Util.warning("Invalid key for EntityType '%s', check lang file", entityTypeString);
+            }
+        });
+        this.lang.death_message_damage_types.forEach((damageTypeString, message) -> {
+            NamespacedKey key = NamespacedKey.fromString(damageTypeString);
+            if (key != null) {
+                DamageType damageType = Registries.DAMAGE_TYPE_REGISTRY.get(key);
+                if (damageType != null) {
+                    this.damageTypeMessages.put(damageType, message);
+                } else {
+                    Util.warning("Invalid DamageType '%s', check lang file", key);
+                }
+            } else {
+                Util.warning("Invalid key for DamageType '%s', check lang file", damageTypeString);
+            }
+        });
     }
 
     /**
      * Get the death message when a player dies of natural causes (non-entity involved deaths)
      *
      * @param damageSource Source of the damage
-     * @param name         Name of the player
+     * @param victim       Player victim
      * @return Message that will be sent when the player dies
      */
     @SuppressWarnings("UnstableApiUsage")
-    public String getDeathString(DamageSource damageSource, String name) {
-        DamageType damageType = damageSource.getDamageType();
-        if (damageType == DamageType.EXPLOSION) {
-            return this.lang.death_explosion.replace("<player>", name);
-        } else if (damageType == DamageType.FALL) {
-            return this.lang.death_fall.replace("<player>", name);
-        } else if (damageType == DamageType.FALLING_BLOCK) {
-            return this.lang.death_falling_block.replace("<player>", name);
-        } else if (damageType == DamageType.IN_FIRE || damageType == DamageType.ON_FIRE) {
-            return this.lang.death_fire.replace("<player>", name);
-        } else if (damageType == DamageType.MOB_PROJECTILE) {
-            return this.lang.death_projectile.replace("<player>", name);
-        } else if (damageType == DamageType.LAVA) {
-            return this.lang.death_lava.replace("<player>", name);
-        } else if (damageType == DamageType.MAGIC) {
-            return this.lang.death_magic.replace("<player>", name);
+    public String getNaturalDeathString(DamageSource damageSource, Player victim) {
+        String damageType = this.damageTypeMessages.get(damageSource.getDamageType());
+        if (damageType != null) {
+            return damageType.replace("<player>", victim.getName());
         } else {
             TranslatableComponent translatable = Component.translatable(damageSource.getDamageType().getTranslationKey());
-            String trans = Util.unMini(translatable);
-            return this.lang.death_other_cause
-                .replace("<player>", name)
-                .replace("<cause>", trans);
+            String cause = Util.unMini(translatable);
+            return this.lang.death_messages_other
+                .replace("<player>", victim.getName())
+                .replace("<cause>", cause);
         }
     }
 
@@ -83,52 +108,56 @@ public class KillManager {
      * Get the death message when a player is killed by an entity
      *
      * @param victimName Name of player who died
-     * @param entity     Entity that killed this player
+     * @param killer     Entity that killed this player
      * @return Death string including the victim's name and the killer
      */
-    public String getKillString(String victimName, Entity entity) {
-        if (entity.hasMetadata("death-message")) {
-            return entity.getMetadata("death-message").getFirst().asString().replace("<player>", victimName);
+    public String getKillString(String victimName, DamageSource damageSource, Entity killer) {
+        // Custom death message from mobs.yml
+        if (killer.hasMetadata("death-message")) {
+            return killer.getMetadata("death-message").getFirst().asString().replace("<player>", victimName);
         }
-        switch (entity.getType()) {
-            case ARROW:
-                if (!isShotByPlayer(entity)) {
-                    return this.lang.death_skeleton.replace("<player>", victimName);
-                } else {
-                    return getPlayerKillString(victimName, getShooter(entity), true);
-                }
-            case PLAYER:
-                return getPlayerKillString(victimName, ((Player) entity), false);
-            case ZOMBIE:
-                return this.lang.death_zombie.replace("<player>", victimName);
-            case SKELETON:
-            case SPIDER:
-                return this.lang.death_spider.replace("<player>", victimName);
-            case DROWNED:
-                return this.lang.death_drowned.replace("<player>", victimName);
-            case TRIDENT:
-                return this.lang.death_trident.replace("<player>", victimName);
-            case STRAY:
-                return this.lang.death_stray.replace("<player>", victimName);
-            default:
-                return this.lang.death_other_entity.replace("<player>", victimName);
+
+        // Projectile shooter
+        if (killer instanceof Projectile projectile && projectile.getShooter() instanceof Player playerShooter) {
+            return getPlayerKillString(victimName, playerShooter, projectile);
         }
+
+        if (this.entityTypeMessages.containsKey(killer.getType())) {
+            return this.entityTypeMessages.get(killer.getType()).replace("<player>", victimName);
+        }
+
+        TranslatableComponent translatable = Component.translatable(damageSource.getDamageType().getTranslationKey());
+        String cause = Util.unMini(translatable);
+        return this.lang.death_messages_other
+            .replace("<player>", victimName)
+            .replace("<cause>", cause);
     }
 
-    private String getPlayerKillString(String victimName, Player killer, boolean projectile) {
-        String weapon;
-        if (projectile) {
-            weapon = "bow and arrow";
+    @SuppressWarnings("ReplaceNullCheck")
+    private String getPlayerKillString(String victimName, Player killer, Projectile projectile) {
+        String weaponName;
+        if (projectile != null) {
+            if (projectile instanceof AbstractArrow arrow) {
+                ItemStack weapon = arrow.getWeapon();
+                if (weapon != null) {
+                    weaponName = Util.unMini(weapon.getData(DataComponentTypes.ITEM_NAME));
+                } else {
+                    weaponName = Util.unMini(arrow.getItemStack().getData(DataComponentTypes.ITEM_NAME));
+                }
+            } else {
+                // Fallback, just in case
+                weaponName = "bow and arrow";
+            }
         } else if (killer.getInventory().getItemInMainHand().getType() == Material.AIR) {
-            weapon = "fist";
+            weaponName = "fist";
         } else {
             ItemStack itemStack = killer.getInventory().getItemInMainHand();
             Component data = itemStack.getData(DataComponentTypes.ITEM_NAME);
-            weapon = Util.unMini(data);
+            weaponName = Util.unMini(data);
         }
-        return this.lang.death_player.replace("<player>", victimName)
+        return this.entityTypeMessages.get(EntityType.PLAYER).replace("<player>", victimName)
             .replace("<killer>", killer.getName())
-            .replace("<weapon>", weapon);
+            .replace("<weapon>", weaponName);
     }
 
     /**
@@ -138,7 +167,7 @@ public class KillManager {
      * @return True if the arrow was shot by a player
      */
     public boolean isShotByPlayer(Entity projectile) {
-        return projectile instanceof Projectile && projectile.hasMetadata("shooter");
+        return projectile instanceof Projectile p && p.getShooter() instanceof Player;
     }
 
     /**
@@ -147,8 +176,9 @@ public class KillManager {
      * @param projectile The arrow in question
      * @return The player which shot the arrow
      */
-    public Player getShooter(Entity projectile) {
-        return Bukkit.getPlayer(projectile.getMetadata("shooter").get(0).asString());
+    public @Nullable Player getPlayerShooter(Projectile projectile) {
+        if (projectile.getShooter() instanceof Player player) return player;
+        return null;
     }
 
     @SuppressWarnings("UnstableApiUsage")
@@ -161,24 +191,34 @@ public class KillManager {
 
             DamageType damageType = damageSource.getDamageType();
 
+            // Player attack
             if (attacker instanceof Player attackerPlayer) {
                 gamePlayerData.addKill(attackerPlayer);
                 this.leaderboard.addStat(attackerPlayer, Leaderboard.Stats.KILLS);
-                deathString = getKillString(player.getName(), attacker);
-            } else if (damageType == DamageType.MOB_ATTACK) {
-                deathString = getKillString(player.getName(), attacker);
-            } else if (damageType == DamageType.MOB_PROJECTILE) {
-                deathString = getKillString(player.getName(), attacker);
-                if (isShotByPlayer(attacker) && getShooter(attacker) != player) {
-                    gamePlayerData.addKill(getShooter(attacker));
-                    this.leaderboard.addStat(getShooter(attacker), Leaderboard.Stats.KILLS);
+                deathString = getKillString(player.getName(), damageSource, attacker);
+            }
+            // Projectile attack
+            else if (attacker instanceof Projectile projectile) {
+                deathString = getKillString(player.getName(), damageSource, attacker);
+                if (isShotByPlayer(attacker)) {
+                    Player shooter = getPlayerShooter(projectile);
+                    if (shooter != null && shooter != player) {
+                        gamePlayerData.addKill(shooter);
+                        this.leaderboard.addStat(shooter, Leaderboard.Stats.KILLS);
+                    }
                 }
-            } else {
-                deathString = getDeathString(damageSource, player.getName());
+            }
+            // Mob attack
+            else if (damageType == DamageType.MOB_ATTACK || damageType == DamageType.MOB_ATTACK_NO_AGGRO) {
+                deathString = getKillString(player.getName(), damageSource, attacker);
+            }
+            // Natural death
+            else {
+                deathString = getNaturalDeathString(damageSource, player);
             }
 
             // Send death message to all players in game
-            gamePlayerData.msgAll(this.lang.death_fallen + " <light_purple>" + deathString);
+            gamePlayerData.msgAll(this.lang.death_messages_prefix + " <light_purple>" + deathString);
 
             leaderboard.addStat(player, Leaderboard.Stats.DEATHS);
             leaderboard.addStat(player, Leaderboard.Stats.GAMES);
