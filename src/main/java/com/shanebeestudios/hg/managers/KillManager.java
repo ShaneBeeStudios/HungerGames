@@ -12,6 +12,7 @@ import com.shanebeestudios.hg.game.GameCommandData;
 import com.shanebeestudios.hg.game.GamePlayerData;
 import io.papermc.paper.datacomponent.DataComponentTypes;
 import net.kyori.adventure.text.Component;
+import net.kyori.adventure.text.TranslatableComponent;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Material;
@@ -70,7 +71,11 @@ public class KillManager {
         } else if (damageType == DamageType.MAGIC) {
             return this.lang.death_magic.replace("<player>", name);
         } else {
-            return (this.lang.death_other_cause.replace("<player>", name).replace("<cause>", damageSource.toString().toLowerCase()));
+            TranslatableComponent translatable = Component.translatable(damageSource.getDamageType().getTranslationKey());
+            String trans = Util.unMini(translatable);
+            return this.lang.death_other_cause
+                .replace("<player>", name)
+                .replace("<cause>", trans);
         }
     }
 
