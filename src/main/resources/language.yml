@@ -193,6 +193,9 @@ command:
   # Leave
   leave-left: '<grey>You left <aqua><arena><grey>!'
   leave-refund: '<grey>You got a refund of <aqua>$<cost> <grey>for leaving the game before it started.'
+  # List
+  list-players: "<gold>Players in arena <white>'<aqua><arena><white>': <aqua><players>"
+  list-players-delimiter: '<white>, <aqua>'
   # Team
   team-player-not-available: '<aqua><player> <red>Is not available!'
   team-only-leader: '<red>Only the leader can invite other players!'

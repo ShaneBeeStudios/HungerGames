@@ -194,6 +194,9 @@ public class Language {
     public String command_join_already_in_game;
     public String command_join_already_in_game_other;
     public String command_join_no_money;
+    // List
+    public String command_list_players;
+    public String command_list_players_delimiter;
     // Leave
     public String command_leave_left;
     public String command_leave_refund;
@@ -457,6 +460,9 @@ public class Language {
         command_join_already_in_game = lang.getString("command.join-already-in-game");
         command_join_already_in_game_other = lang.getString("command.join-already-in-game-other");
         command_join_no_money = lang.getString("command.join-no-money");
+        // List
+        command_list_players = lang.getString("command.list-players");
+        command_list_players_delimiter = lang.getString("command.list-players-delimiter");
         // Leave
         command_leave_left = lang.getString("command.leave-left");
         command_leave_refund = lang.getString("command.leave-refund");
