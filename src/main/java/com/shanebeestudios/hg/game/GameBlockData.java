@@ -1,20 +1,10 @@
 package com.shanebeestudios.hg.game;
 
-import com.shanebeestudios.hg.HungerGames;
-import com.shanebeestudios.hg.api.util.Constants;
-import com.shanebeestudios.hg.api.util.Util;
 import com.shanebeestudios.hg.data.ItemFrameData;
 import org.bukkit.Location;
-import org.bukkit.block.Block;
-import org.bukkit.block.BlockFace;
 import org.bukkit.block.BlockState;
-import org.bukkit.block.Sign;
-import org.bukkit.block.data.Directional;
-import org.bukkit.block.sign.Side;
 import org.bukkit.entity.ItemFrame;
 import org.bukkit.inventory.InventoryHolder;
-import org.bukkit.persistence.PersistentDataContainer;
-import org.bukkit.persistence.PersistentDataType;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -29,14 +19,11 @@ public class GameBlockData extends Data {
     private final List<Location> playerChests = new ArrayList<>();
     private final List<BlockState> blocks = new ArrayList<>();
     private final List<ItemFrameData> itemFrameData = new ArrayList<>();
-
-    // LobbySign
-    private Sign sign1;
-    private Sign sign2;
-    private Sign sign3;
+    private final GameLobbyWall gameLobbyWall;
 
     protected GameBlockData(Game game) {
         super(game);
+        this.gameLobbyWall = new GameLobbyWall(game);
     }
 
     /**
@@ -44,17 +31,20 @@ public class GameBlockData extends Data {
      *
      * @return Main lobby sign
      */
-    public Sign getSign() {
-        return this.sign1;
+    public Location getSignLocation() {
+        return this.gameLobbyWall.getSignLocation();
     }
 
-    /**
-     * Set the main lobby sign
-     *
-     * @param sign Sign to set
-     */
-    public void setSign(Sign sign) {
-        this.sign1 = sign;
+    public boolean setLobbyBlock(Location location) {
+        return this.gameLobbyWall.setLobbyBlock(location);
+    }
+
+    public void updateLobbyBlock() {
+        this.gameLobbyWall.updateLobbyBlock();
+    }
+
+    public boolean isLobbyValid() {
+        return this.gameLobbyWall.isLobbyValid();
     }
 
     /**
@@ -173,67 +163,6 @@ public class GameBlockData extends Data {
      */
     public void resetItemFrames() {
         this.itemFrameData.clear();
-    }
-
-    void updateLobbyBlock() {
-        if (this.sign2 == null || this.sign3 == null) {
-            Util.warning("The lobby wall seems to be missing for '%s'", this.game.getGameArenaData().getName());
-            return;
-        }
-        GameArenaData gameArenaData = this.game.getGameArenaData();
-        this.sign2.getSide(Side.FRONT).line(1, gameArenaData.getStatus().getName());
-        this.sign3.getSide(Side.FRONT).line(1, Util.getMini("<bold>%s/%s",
-            this.game.getGamePlayerData().getPlayers().size(),
-            gameArenaData.getMaxPlayers()));
-        this.sign2.update(true);
-        this.sign3.update(true);
-    }
-
-    /**
-     * Set the lobby block for this game
-     *
-     * @param sign The sign to which the lobby will be set at
-     * @return True if lobby is set
-     */
-    public boolean setLobbyBlock(Sign sign) {
-        GameArenaData gameArenaData = this.game.getGameArenaData();
-        try {
-            this.sign1 = sign;
-            PersistentDataContainer pdc = this.sign1.getPersistentDataContainer();
-            pdc.set(Constants.LOBBY_SIGN_KEY, PersistentDataType.STRING, gameArenaData.getName());
-            Block c = this.sign1.getBlock();
-            BlockFace face = Util.getSignFace(((Directional) this.sign1.getBlockData()).getFacing());
-            this.sign2 = (Sign) c.getRelative(face).getState(false);
-            this.sign3 = (Sign) this.sign2.getBlock().getRelative(face).getState(false);
-
-            this.sign1.getSide(Side.FRONT).line(0, Util.getMini(this.lang.lobby_sign_1_1));
-            this.sign1.getSide(Side.FRONT).line(1, Util.getMini("<bold>" + gameArenaData.getName()));
-            this.sign1.getSide(Side.FRONT).line(2, Util.getMini(this.lang.lobby_sign_1_3));
-            if (gameArenaData.cost > 0)
-                this.sign1.getSide(Side.FRONT).line(3, Util.getMini(HungerGames.getPlugin().getLang().lobby_sign_cost.replace("<cost>", String.valueOf(gameArenaData.cost))));
-            this.sign2.getSide(Side.FRONT).line(0, Util.getMini(this.lang.lobby_sign_2_1));
-            this.sign2.getSide(Side.FRONT).line(1, gameArenaData.getStatus().getName());
-            this.sign3.getSide(Side.FRONT).line(0, Util.getMini(this.lang.lobby_sign_3_1));
-            this.sign3.getSide(Side.FRONT).line(1, Util.getMini("<bold>0/%s", gameArenaData.getMaxPlayers()));
-            this.sign1.setWaxed(true);
-            this.sign2.setWaxed(true);
-            this.sign3.setWaxed(true);
-            this.sign1.update(true);
-            this.sign2.update(true);
-            this.sign3.update(true);
-        } catch (Exception e) {
-            Util.warning("Failed to setup lobby wall for arena '%s', msg: %s", gameArenaData.getName(), e.getMessage());
-            return false;
-        }
-        return true;
-    }
-
-    public boolean isLobbyValid() {
-        try {
-            return this.sign1 != null && this.sign2 != null && this.sign3 != null;
-        } catch (Exception e) {
-            return false;
-        }
     }
 
 }

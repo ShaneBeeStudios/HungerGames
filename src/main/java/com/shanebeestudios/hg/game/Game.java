@@ -23,7 +23,6 @@ import com.shanebeestudios.hg.tasks.StartingTask;
 import com.shanebeestudios.hg.tasks.TimerTask;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
-import org.bukkit.block.Sign;
 import org.bukkit.entity.Player;
 
 import java.util.ArrayList;
@@ -77,7 +76,7 @@ public class Game {
      * @param isReady    If the game is ready to start
      * @param cost       Cost of this game
      */
-    public Game(String name, GameRegion gameRegion, List<Location> spawns, Sign lobbySign, int timer, int minPlayers, int maxPlayers, int roam, boolean isReady, int cost) {
+    public Game(String name, GameRegion gameRegion, List<Location> spawns, Location lobbySign, int timer, int minPlayers, int maxPlayers, int roam, boolean isReady, int cost) {
         this.plugin = HungerGames.getPlugin();
         this.lang = plugin.getLang();
         this.gameArenaData = new GameArenaData(this, name, gameRegion, timer, minPlayers, maxPlayers, roam, cost);
@@ -97,7 +96,6 @@ public class Game {
         if (!this.gameBlockData.setLobbyBlock(lobbySign)) {
             isReady = false;
         }
-        Util.log("Is %s Ready: %s", name, isReady);
         this.gameArenaData.setStatus(isReady ? Status.READY : Status.BROKEN);
 
         this.kitManager = plugin.getKitManager();
@@ -185,7 +183,7 @@ public class Game {
      * @return Location of the lobby sign
      */
     public Location getLobbyLocation() {
-        return this.gameBlockData.getSign().getLocation();
+        return this.gameBlockData.getSignLocation();
     }
 
     /**

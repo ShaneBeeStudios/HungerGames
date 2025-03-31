@@ -127,7 +127,7 @@ public class EditCommand extends SubCommand {
                 Game game = CustomArg.getGame(info);
                 Player player = info.sender();
                 Block targetBlock = player.getTargetBlockExact(10);
-                if (targetBlock != null && Tag.WALL_SIGNS.isTagged(targetBlock.getType()) && game.getGameBlockData().setLobbyBlock((Sign) targetBlock.getState())) {
+                if (targetBlock != null && Tag.WALL_SIGNS.isTagged(targetBlock.getType()) && game.getGameBlockData().setLobbyBlock(targetBlock.getLocation())) {
                     Util.sendPrefixedMessage(player, this.lang.command_edit_lobbywall_set);
                     saveGame(game);
                 } else {

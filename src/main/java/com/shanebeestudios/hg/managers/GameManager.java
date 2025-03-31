@@ -90,7 +90,7 @@ public class GameManager {
         this.games.clear();
     }
 
-    public Game createGame(String name, Block corner1, Block corner2, List<Location> spawns, Sign sign,
+    public Game createGame(String name, Block corner1, Block corner2, List<Location> spawns, Location sign,
                            int timer, int minPlayers, int maxPlayers, int cost) {
         GameRegion gameRegion = GameRegion.createNew(corner1, corner2);
         int roam = 1; // tODO  what are you?

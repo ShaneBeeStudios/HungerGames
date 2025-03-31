@@ -33,7 +33,7 @@ public class PlayerSession {
     private final int maxPlayers;
     private final int cost;
     private final List<Location> spawnLocations = new ArrayList<>();
-    private Sign signLocation;
+    private Location signLocation;
 
     public PlayerSession(String name, int time, int minPlayers, int maxPlayers, int cost) {
         this.name = name;
@@ -86,7 +86,7 @@ public class PlayerSession {
             }
         } else if (this.stage == Stage.SIGN) {
             if (block.getState(false) instanceof Sign sign) {
-                this.signLocation = sign;
+                this.signLocation = sign.getLocation();
                 Util.sendPrefixedMessage(player, this.lang.command_create_session_done);
                 finalizeGame(player);
             } else {

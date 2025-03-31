@@ -13,7 +13,6 @@ import org.bukkit.Bukkit;
 import org.bukkit.Difficulty;
 import org.bukkit.Location;
 import org.bukkit.World;
-import org.bukkit.block.Sign;
 import org.bukkit.configuration.Configuration;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.file.FileConfiguration;
@@ -112,7 +111,7 @@ public class ArenaConfig {
                 for (String arenaName : allArenasSection.getKeys(false)) {
                     boolean isReady = true;
                     List<Location> spawns = new ArrayList<>();
-                    Sign lobbysign = null;
+                    Location lobbysign = null;
                     int timer = 0;
                     int cost = 0;
                     int minPlayers = 0;
@@ -140,7 +139,7 @@ public class ArenaConfig {
                     // LOCATIONS
                     ConfigurationSection locationsSection = arenaSection.getConfigurationSection("locations");
                     try {
-                        lobbysign = (Sign) getBlockLocFromString(locationsSection.getString("lobby_sign")).getBlock().getState(false);
+                        lobbysign = getBlockLocFromString(locationsSection.getString("lobby_sign"));
                     } catch (Exception e) {
                         Util.warning("Unable to load lobby sign for arena '" + arenaName + "'!");
                         Util.debug(e);
