@@ -29,11 +29,12 @@ public class ToggleCommand extends SubCommand {
                         GameArenaData arenaData = game.getGameArenaData();
                         if (arenaData.getStatus() == Status.NOT_READY || arenaData.getStatus() == Status.BROKEN) {
                             arenaData.setStatus(Status.READY);
-                            Util.sendMessage(sender, this.lang.cmd_toggle_unlocked.replace("<arena>", arenaData.getName()));
-                        } else {
-                            game.stop(false);
+                            Util.sendMessage(sender, this.lang.command_toggle_unlocked.replace("<arena>", arenaData.getName()));
+                        } else if (arenaData.getStatus() == Status.READY) {
                             arenaData.setStatus(Status.NOT_READY);
-                            Util.sendMessage(sender, this.lang.cmd_toggle_locked.replace("<arena>", arenaData.getName()));
+                            Util.sendMessage(sender, this.lang.command_toggle_locked.replace("<arena>", arenaData.getName()));
+                        } else {
+                            Util.sendMessage(sender, this.lang.command_toggle_running);
                         }
                     } else {
                         String name = info.args().getOrDefaultRaw("game", "huh?");

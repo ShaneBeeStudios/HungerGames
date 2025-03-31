@@ -176,13 +176,15 @@ public class GameBlockData extends Data {
     }
 
     void updateLobbyBlock() {
-        if (sign2 == null || sign3 == null) {
-            Util.warning("The wall is null?!?!?");
+        if (this.sign2 == null || this.sign3 == null) {
+            Util.warning("The lobby wall seems to be missing for '%s'", this.game.getGameArenaData().getName());
             return;
         }
         GameArenaData gameArenaData = this.game.getGameArenaData();
         this.sign2.getSide(Side.FRONT).line(1, gameArenaData.getStatus().getName());
-        this.sign3.getSide(Side.FRONT).line(1, Util.getMini("<bold>" + this.game.getGamePlayerData().getPlayers().size() + "/" + gameArenaData.getMaxPlayers()));
+        this.sign3.getSide(Side.FRONT).line(1, Util.getMini("<bold>%s/%s",
+            this.game.getGamePlayerData().getPlayers().size(),
+            gameArenaData.getMaxPlayers()));
         this.sign2.update(true);
         this.sign3.update(true);
     }
@@ -193,7 +195,6 @@ public class GameBlockData extends Data {
      * @param sign The sign to which the lobby will be set at
      * @return True if lobby is set
      */
-    @SuppressWarnings("ConstantConditions")
     public boolean setLobbyBlock(Sign sign) {
         GameArenaData gameArenaData = this.game.getGameArenaData();
         try {
@@ -202,8 +203,8 @@ public class GameBlockData extends Data {
             pdc.set(Constants.LOBBY_SIGN_KEY, PersistentDataType.STRING, gameArenaData.getName());
             Block c = this.sign1.getBlock();
             BlockFace face = Util.getSignFace(((Directional) this.sign1.getBlockData()).getFacing());
-            this.sign2 = (Sign) c.getRelative(face).getState();
-            this.sign3 = (Sign) this.sign2.getBlock().getRelative(face).getState();
+            this.sign2 = (Sign) c.getRelative(face).getState(false);
+            this.sign3 = (Sign) this.sign2.getBlock().getRelative(face).getState(false);
 
             this.sign1.getSide(Side.FRONT).line(0, Util.getMini(this.lang.lobby_sign_1_1));
             this.sign1.getSide(Side.FRONT).line(1, Util.getMini("<bold>" + gameArenaData.getName()));
@@ -213,7 +214,7 @@ public class GameBlockData extends Data {
             this.sign2.getSide(Side.FRONT).line(0, Util.getMini(this.lang.lobby_sign_2_1));
             this.sign2.getSide(Side.FRONT).line(1, gameArenaData.getStatus().getName());
             this.sign3.getSide(Side.FRONT).line(0, Util.getMini(this.lang.lobby_sign_3_1));
-            this.sign3.getSide(Side.FRONT).line(1, Util.getMini("<bold>" + 0 + "/" + gameArenaData.getMaxPlayers()));
+            this.sign3.getSide(Side.FRONT).line(1, Util.getMini("<bold>0/%s", gameArenaData.getMaxPlayers()));
             this.sign1.setWaxed(true);
             this.sign2.setWaxed(true);
             this.sign3.setWaxed(true);
@@ -221,7 +222,7 @@ public class GameBlockData extends Data {
             this.sign2.update(true);
             this.sign3.update(true);
         } catch (Exception e) {
-            Util.warning("Failed to setup lobby wall for arena '%s'", gameArenaData.getName());
+            Util.warning("Failed to setup lobby wall for arena '%s', msg: %s", gameArenaData.getName(), e.getMessage());
             return false;
         }
         return true;

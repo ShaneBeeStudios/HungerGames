@@ -214,6 +214,10 @@ command:
   team-already-exists: "<red>Team <aqua><name> <red>already exists."
   team-already-have: "<red>You have already created a team: <aqua><name>"
   team-none: "<red>You do not have a team, create one first with command <aqua>'/hg team create <name>'"
+  ## Toggle
+  toggle-unlocked: '<aqua><arena><gold> is now <green>UNLOCKED!'
+  toggle-locked: '<dark_aqua><arena><aqua> is now <dark_red>LOCKED<aqua>!'
+  toggle-running: '<aqua><arena><red> is running and cannot be toggled!'
 
 lobby-signs:
   sign-1:
@@ -232,10 +236,6 @@ cmd-start-starting: '<aqua><arena><gold> is now starting!'
 cmd-stop-all: '<green>Stopped all games'
 cmd-stop-arena: '<aqua><arena><red> Has been stopped!'
 cmd-stop-noexist: '<red>The game <aqua><arena><red> does not exist!'
-
-## Toggle
-cmd-toggle-unlocked: '<aqua><arena><gold> is now <green>UNLOCKED!'
-cmd-toggle-locked: '<dark_aqua><arena><aqua> is now <dark_red>LOCKED<aqua>!'
 
 ## Handler
 cmd-handler-nokit: '<red>You can not choose a kit while the game is running!'

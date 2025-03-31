@@ -78,39 +78,11 @@ public class Game {
      * @param cost       Cost of this game
      */
     public Game(String name, GameRegion gameRegion, List<Location> spawns, Sign lobbySign, int timer, int minPlayers, int maxPlayers, int roam, boolean isReady, int cost) {
-        this(name, gameRegion, timer, minPlayers, maxPlayers, roam, cost);
-        gameArenaData.spawns.addAll(spawns);
-        this.gameBlockData.setSign(lobbySign);
-
-        // If lobby signs are not properly setup, game is not ready
-        if (!this.gameBlockData.setLobbyBlock(lobbySign)) {
-            isReady = false;
-        }
-        this.gameArenaData.setStatus(isReady ? Status.READY : Status.BROKEN);
-        this.gameBlockData.updateLobbyBlock();
-
-        this.kitManager = plugin.getKitManager();
-    }
-
-    /**
-     * Create a new game
-     * <p>Internally used when creating a game with the <b>/hg create</b> command</p>
-     *
-     * @param name       Name of this game
-     * @param gameRegion Bounding region of this game
-     * @param timer      Length of the game (in seconds)
-     * @param minPlayers Minimum players to be able to start the game
-     * @param maxPlayers Maximum players that can join this game
-     * @param roam       Roam time for this game
-     * @param cost       Cost of this game
-     */
-    public Game(String name, GameRegion gameRegion, int timer, int minPlayers, int maxPlayers, int roam, int cost) {
         this.plugin = HungerGames.getPlugin();
         this.lang = plugin.getLang();
         this.gameArenaData = new GameArenaData(this, name, gameRegion, timer, minPlayers, maxPlayers, roam, cost);
         this.gamePlayerData = new GamePlayerData(this);
         this.gameBlockData = new GameBlockData(this);
-        this.gameArenaData.setStatus(Status.NOT_READY);
         this.gameScoreboard = new GameScoreboard(this);
         this.playerManager = HungerGames.getPlugin().getPlayerManager();
         this.kitManager = plugin.getKitManager();
@@ -119,6 +91,16 @@ public class Game {
         this.gameItemData = new GameItemData(this);
         this.gameCommandData = new GameCommandData(this);
         this.gameBorderData = new GameBorderData(this);
+        this.gameArenaData.spawns.addAll(spawns);
+
+        // If lobby signs are not properly setup, game is not ready
+        if (!this.gameBlockData.setLobbyBlock(lobbySign)) {
+            isReady = false;
+        }
+        Util.log("Is %s Ready: %s", name, isReady);
+        this.gameArenaData.setStatus(isReady ? Status.READY : Status.BROKEN);
+
+        this.kitManager = plugin.getKitManager();
     }
 
     /**
@@ -285,7 +267,7 @@ public class Game {
         this.gameArenaData.setStatus(Status.RUNNING);
         if (Config.MOBS_SPAWN_ENABLED) spawner = new SpawnerTask(this);
         if (Config.randomChest) chestDrop = new ChestDropTask(this);
-        gameBlockData.updateLobbyBlock();
+        this.gameBlockData.updateLobbyBlock();
         if (Config.bossbar) {
             bar.createBossBar(gameArenaData.timer);
         }
@@ -473,7 +455,7 @@ public class Game {
     }
 
     void updateAfterDeath(Player player, boolean death) {
-        Status status = gameArenaData.getStatus();
+        Status status = this.gameArenaData.getStatus();
         if (status == Status.RUNNING || status == Status.FREE_ROAM || status == Status.COUNTDOWN) {
             if (isGameOver()) {
                 if (!death) {
@@ -484,10 +466,9 @@ public class Game {
                     }
                 }
                 boolean finalDeath = death;
-                if (plugin.isEnabled()) {
-                    Bukkit.getScheduler().runTaskLater(plugin, () -> {
+                if (this.plugin.isEnabled()) {
+                    Bukkit.getScheduler().runTaskLater(this.plugin, () -> {
                         stop(finalDeath);
-                        gameBlockData.updateLobbyBlock();
                         this.gameScoreboard.updateBoards();
                     }, 20);
                 } else {
@@ -496,13 +477,13 @@ public class Game {
 
             }
         } else if (status == Status.WAITING) {
-            gamePlayerData.msgAll(lang.player_left_game
-                .replace("<arena>", gameArenaData.getName())
+            this.gamePlayerData.msgAll(lang.player_left_game
+                .replace("<arena>", this.gameArenaData.getName())
                 .replace("<player>", player.getName()) +
-                (gameArenaData.minPlayers - gamePlayerData.players.size() <= 0 ? "!" : ": " + lang.players_to_start
-                    .replace("<amount>", String.valueOf((gameArenaData.minPlayers - gamePlayerData.players.size())))));
+                (this.gameArenaData.getMinPlayers() - this.gamePlayerData.getPlayers().size() <= 0 ? "!" : ": " + this.lang.players_to_start
+                    .replace("<amount>", String.valueOf((this.gameArenaData.getMinPlayers() - this.gamePlayerData.getPlayers().size())))));
         }
-        gameBlockData.updateLobbyBlock();
+        this.gameBlockData.updateLobbyBlock();
         this.gameScoreboard.updateBoards();
     }
 

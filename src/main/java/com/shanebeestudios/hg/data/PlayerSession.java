@@ -85,7 +85,7 @@ public class PlayerSession {
                 }
             }
         } else if (this.stage == Stage.SIGN) {
-            if (block.getState() instanceof Sign sign) {
+            if (block.getState(false) instanceof Sign sign) {
                 this.signLocation = sign;
                 Util.sendPrefixedMessage(player, this.lang.command_create_session_done);
                 finalizeGame(player);

@@ -22,7 +22,7 @@ public class GameArenaData extends Data {
     final List<Location> spawns;
     Location exit;
     Location persistentExit;
-    private Status status;
+    private Status status = Status.NOT_READY;
     int chestRefillTime = 0;
     int chestRefillRepeat = 0;
 

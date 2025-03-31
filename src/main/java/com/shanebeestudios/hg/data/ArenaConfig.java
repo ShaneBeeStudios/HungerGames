@@ -140,8 +140,7 @@ public class ArenaConfig {
                     // LOCATIONS
                     ConfigurationSection locationsSection = arenaSection.getConfigurationSection("locations");
                     try {
-                        // TODO proper class for this
-                        lobbysign = (Sign) getBlockLocFromString(locationsSection.getString("lobby_sign")).getBlock().getState();
+                        lobbysign = (Sign) getBlockLocFromString(locationsSection.getString("lobby_sign")).getBlock().getState(false);
                     } catch (Exception e) {
                         Util.warning("Unable to load lobby sign for arena '" + arenaName + "'!");
                         Util.debug(e);

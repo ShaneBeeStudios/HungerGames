@@ -103,8 +103,6 @@ public class Language {
     public String cmd_stop_all;
     public String cmd_stop_arena;
     public String cmd_stop_noexist;
-    public String cmd_toggle_locked;
-    public String cmd_toggle_unlocked;
     public String cmd_handler_nokit;
     public String cmd_handler_nocmd;
     public String cmd_handler_playing;
@@ -222,6 +220,10 @@ public class Language {
     public String command_team_already_exists;
     public String command_team_already_have;
     public String command_team_none;
+    // Toggle
+    public String command_toggle_locked;
+    public String command_toggle_unlocked;
+    public String command_toggle_running;
 
 
     public Language(HungerGames plugin) {
@@ -356,9 +358,6 @@ public class Language {
         cmd_stop_all = lang.getString("cmd-stop-all");
         cmd_stop_arena = lang.getString("cmd-stop-arena");
         cmd_stop_noexist = lang.getString("cmd-stop-noexist");
-
-        cmd_toggle_unlocked = lang.getString("cmd-toggle-unlocked");
-        cmd_toggle_locked = lang.getString("cmd-toggle-locked");
         cmd_handler_nokit = lang.getString("cmd-handler-nokit");
         cmd_handler_nocmd = lang.getString("cmd-handler-nocmd");
         cmd_handler_playing = lang.getString("cmd-handler-playing");
@@ -492,6 +491,10 @@ public class Language {
         command_team_already_exists = lang.getString("command.team-already-exists");
         command_team_already_have = lang.getString("command.team-already-have");
         command_team_none = lang.getString("command.team-none");
+        // Toggle
+        command_toggle_unlocked = lang.getString("command.toggle-unlocked");
+        command_toggle_locked = lang.getString("command.toggle-locked");
+        command_toggle_running = lang.getString("command.toggle-running");
     }
 
 }

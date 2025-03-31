@@ -30,7 +30,7 @@ public class Rollback implements Runnable {
 		game.getGameArenaData().setStatus(Status.ROLLBACK);
 		this.blockRollbackSession = this.gameBlockData.getBlocks().iterator();
 		this.itemFrameDataIterator = this.gameBlockData.getItemFrameData().iterator();
-		this.taskId = Bukkit.getServer().getScheduler().scheduleSyncDelayedTask(HungerGames.getPlugin(), this, 1);
+		this.taskId = Bukkit.getScheduler().scheduleSyncDelayedTask(HungerGames.getPlugin(), this, 20);
 	}
 
 	public void run() {

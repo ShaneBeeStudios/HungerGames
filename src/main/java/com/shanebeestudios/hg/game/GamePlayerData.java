@@ -207,6 +207,7 @@ public class GamePlayerData extends Data {
     void addPlayerData(Player player) {
         this.players.add(player);
         this.allPlayers.add(player);
+        this.game.getGameBlockData().updateLobbyBlock();
     }
 
     void putPlayerIntoArena(Player player, boolean savePreviousLocation) {
@@ -268,7 +269,7 @@ public class GamePlayerData extends Data {
                 spectate(player);
                 player.playSound(player.getLocation(), Config.SOUNDS_DEATH, 5, 1);
                 player.sendTitle(this.game.getGameArenaData().getName(), Util.getColString(lang.spectator_start_title), 10, 100, 10);
-                game.updateAfterDeath(player, true);
+                this.game.updateAfterDeath(player, true);
                 return;
             } else if (this.game.getGameArenaData().getStatus() == Status.RUNNING) {
                 this.game.getGameBarData().removePlayer(player);
@@ -298,8 +299,8 @@ public class GamePlayerData extends Data {
         Location loc;
         if (exitLocation != null) {
             loc = exitLocation;
-        } else if (gameArenaData.exit != null && gameArenaData.exit.getWorld() != null) {
-            loc = gameArenaData.exit;
+        } else if (gameArenaData.getExit() != null && gameArenaData.getExit().getWorld() != null) {
+            loc = gameArenaData.getExit();
         } else {
             Location worldSpawn = Bukkit.getWorlds().getFirst().getSpawnLocation();
             Location respawnLocation = player.getRespawnLocation();
