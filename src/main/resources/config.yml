@@ -64,16 +64,16 @@ scoreboard:
     # How to render health
     # Options are 'hearts' or 'integer'
     render-type: hearts
-    teams:
-      # When enabled, players will see nametags of other players on their team
-      # if 'hide-nametags' is disabled, this option is ignored and names will be shown regardless
-      show-team-nametags: true
-      # Maximum amount of players allowed on a team
-      max-team-size: 3
-      # When enabled, teammates can hurt each other
-      allow-friendly-fire: false
-      # When enabled, teammates can see each other if using invisibility potion
-      can-see-friendly-invisibles: true
+  teams:
+    # When enabled, players will see nametags of other players on their team
+    # if 'hide-nametags' is disabled, this option is ignored and names will be shown regardless
+    show-team-nametags: true
+    # Maximum amount of players allowed on a team
+    max-team-size: 3
+    # When enabled, teammates can hurt each other
+    allow-friendly-fire: false
+    # When enabled, teammates can see each other if using invisibility potion
+    can-see-friendly-invisibles: true
 mob-spawning:
   # If mobs will spawn in game arenas
   # Mobs are defined in the mobs.yml file
