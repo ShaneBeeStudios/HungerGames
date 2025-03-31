@@ -50,6 +50,7 @@ public class GamePlayerData extends Data {
 
     // Data lists
     final Map<Player, Integer> kills = new HashMap<>();
+    private final List<Location> randomizedSpawns = new ArrayList<>();
 
     protected GamePlayerData(Game game) {
         super(game);
@@ -114,8 +115,9 @@ public class GamePlayerData extends Data {
      * Respawn all players in the game back to spawn points
      */
     public void respawnAll() {
+        this.randomizedSpawns.clear();
         for (Player player : this.players) {
-            player.teleport(pickSpawn());
+            player.teleport(pickRandomSpawn());
         }
     }
 
@@ -192,35 +194,14 @@ public class GamePlayerData extends Data {
         }
     }
 
-    // TODO redo?
-    private Location pickSpawn() {
-        GameArenaData gameArenaData = this.getGame().getGameArenaData();
-        double spawn = getRandomIntegerBetweenRange(gameArenaData.getMaxPlayers() - 1);
-        if (containsPlayer(gameArenaData.getSpawns().get(((int) spawn)))) {
-            Collections.shuffle(gameArenaData.getSpawns());
-            for (Location l : gameArenaData.getSpawns()) {
-                if (!containsPlayer(l)) {
-                    return l;
-                }
-            }
+    private Location pickRandomSpawn() {
+        if (this.randomizedSpawns.isEmpty()) {
+            this.randomizedSpawns.addAll(this.game.getGameArenaData().getSpawns());
         }
-        return gameArenaData.getSpawns().get((int) spawn);
-    }
-
-    // TODO redo?
-    boolean containsPlayer(Location location) {
-        if (location == null) return false;
-
-        for (Player p : this.players) {
-            if (p.getLocation().getBlock().equals(location.getBlock()))
-                return true;
-        }
-        return false;
-    }
-
-    // UTIL
-    private static double getRandomIntegerBetweenRange(double max) {
-        return (int) (Math.random() * ((max - (double) 0) + 1)) + (double) 0;
+        Collections.shuffle(this.randomizedSpawns);
+        Location spawn = this.randomizedSpawns.getFirst();
+        this.randomizedSpawns.remove(spawn);
+        return spawn;
     }
 
     void addPlayerData(Player player) {
@@ -229,8 +210,7 @@ public class GamePlayerData extends Data {
     }
 
     void putPlayerIntoArena(Player player, boolean savePreviousLocation) {
-        GameArenaData gameArenaData = this.getGame().getGameArenaData();
-        Location loc = pickSpawn(); // TODO rewrite spawn pick thingy
+        Location loc = pickRandomSpawn();
         if (loc.getBlock().getRelative(BlockFace.DOWN).getType() == Material.AIR) {
             while (loc.getBlock().getRelative(BlockFace.DOWN).getType() == Material.AIR) {
                 loc.setY(loc.getY() - 1);
