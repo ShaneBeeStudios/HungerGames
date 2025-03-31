@@ -3,6 +3,7 @@ package com.shanebeestudios.hg.managers;
 import com.google.common.collect.ImmutableList;
 import com.shanebeestudios.hg.HungerGames;
 import com.shanebeestudios.hg.Status;
+import com.shanebeestudios.hg.api.command.CustomArg;
 import com.shanebeestudios.hg.api.util.Util;
 import com.shanebeestudios.hg.data.Config;
 import com.shanebeestudios.hg.data.Language;
@@ -41,6 +42,7 @@ public class GameManager {
     public GameManager(HungerGames plugin) {
         this.plugin = plugin;
         this.lang = plugin.getLang();
+        CustomArg.init(this);
     }
 
     /**

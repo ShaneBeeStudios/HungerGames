@@ -1,6 +1,5 @@
 package com.shanebeestudios.hg.api.command;
 
-import com.shanebeestudios.hg.HungerGames;
 import com.shanebeestudios.hg.game.Game;
 import com.shanebeestudios.hg.managers.GameManager;
 import dev.jorel.commandapi.CommandAPI;
@@ -16,9 +15,13 @@ import java.util.concurrent.CompletableFuture;
 
 public abstract class CustomArg {
 
-    private static final GameManager GAME_MANAGER = HungerGames.getPlugin().getGameManager();
+    private static GameManager GAME_MANAGER;
 
-    public static Game getGame(ExecutionInfo<?,?> info) throws WrapperCommandSyntaxException {
+    public static void init(GameManager gameManager) {
+        GAME_MANAGER = gameManager;
+    }
+
+    public static Game getGame(ExecutionInfo<?, ?> info) throws WrapperCommandSyntaxException {
         Game game = info.args().getByClass("game", Game.class);
         if (game == null) {
             String raw = info.args().getRaw("game");
