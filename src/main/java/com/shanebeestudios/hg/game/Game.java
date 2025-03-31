@@ -286,7 +286,7 @@ public class Game {
         if (Config.randomChest) chestDrop = new ChestDropTask(this);
         gameBlockData.updateLobbyBlock();
         if (Config.bossbar) {
-            bar.createBossbar(gameArenaData.timer);
+            bar.createBossBar(gameArenaData.timer);
         }
         if (Config.WORLD_BORDER_ENABLED) {
             this.gameBorderData.initialize();

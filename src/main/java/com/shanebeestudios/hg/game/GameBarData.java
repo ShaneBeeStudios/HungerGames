@@ -2,10 +2,10 @@ package com.shanebeestudios.hg.game;
 
 import com.shanebeestudios.hg.HungerGames;
 import com.shanebeestudios.hg.api.util.Util;
-import org.bukkit.Bukkit;
-import org.bukkit.boss.BarColor;
-import org.bukkit.boss.BarStyle;
-import org.bukkit.boss.BossBar;
+import net.kyori.adventure.audience.Audience;
+import net.kyori.adventure.bossbar.BossBar;
+import net.kyori.adventure.bossbar.BossBar.Color;
+import net.kyori.adventure.bossbar.BossBar.Overlay;
 import org.bukkit.entity.Player;
 
 /**
@@ -26,16 +26,16 @@ public class GameBarData extends Data {
      *
      * @param time Time to be displayed on the bar
      */
-    public void createBossbar(int time) {
+    public void createBossBar(int time) {
         int min = (time / 60);
         int sec = (time % 60);
-        String title = this.title.replace("<min>", String.valueOf(min)).replace("<sec>", String.valueOf(sec));
-        bar = Bukkit.createBossBar(Util.getColString(title), BarColor.GREEN, BarStyle.SEGMENTED_20);
+        String title = formatTitle(min, sec);
+        this.bar = BossBar.bossBar(Util.getMini(title), 1f, Color.GREEN, Overlay.NOTCHED_20);
         for (Player player : getGame().getGamePlayerData().getPlayers()) {
-            bar.addPlayer(player);
+            this.bar.addViewer(player);
         }
         for (Player player : getGame().getGamePlayerData().getSpectators()) {
-            bar.addPlayer(player);
+            this.bar.addViewer(player);
         }
     }
 
@@ -45,18 +45,18 @@ public class GameBarData extends Data {
      *
      * @param remaining Remaining time to show on bar
      */
-    public void bossbarUpdate(int remaining) {
-        if (bar == null) return;
-        double remain = ((double) remaining) / ((double) getGame().gameArenaData.timer);
+    public void bossBarUpdate(int remaining) {
+        if (this.bar == null) return;
+        float remain = ((float) remaining) / ((float) getGame().gameArenaData.timer);
         int min = (remaining / 60);
         int sec = (remaining % 60);
-        String title = this.title.replace("<min>", String.valueOf(min)).replace("<sec>", String.valueOf(sec));
-        bar.setTitle(Util.getColString(title));
-        bar.setProgress(remain);
+        String title = formatTitle(min, sec);
+        this.bar.name(Util.getMini(title));
+        this.bar.progress(remain);
         if (remain <= 0.5 && remain >= 0.2)
-            bar.setColor(BarColor.YELLOW);
+            this.bar.color(Color.YELLOW);
         if (remain < 0.2)
-            bar.setColor(BarColor.RED);
+            this.bar.color(Color.RED);
     }
 
     /**
@@ -64,10 +64,11 @@ public class GameBarData extends Data {
      * <p>Will remove all players and delete the current {@link BossBar}</p>
      */
     public void clearBar() {
-        if (bar != null) {
-            bar.removeAll();
+        if (this.bar != null) {
+            this.bar.viewers().forEach(player ->
+                this.bar.removeViewer((Audience) player));
         }
-        bar = null;
+        this.bar = null;
     }
 
     /**
@@ -77,8 +78,8 @@ public class GameBarData extends Data {
      * @param player Player to remove
      */
     public void removePlayer(Player player) {
-        if (bar != null) {
-            bar.removePlayer(player);
+        if (this.bar != null) {
+            this.bar.removeViewer(player);
         }
     }
 
@@ -89,18 +90,15 @@ public class GameBarData extends Data {
      * @param player Player to add
      */
     public void addPlayer(Player player) {
-        if (bar != null) {
-            bar.addPlayer(player);
+        if (this.bar != null) {
+            this.bar.addViewer(player);
         }
     }
 
-    /**
-     * Get the associated {@link BossBar} if one exists
-     *
-     * @return Associated bossbar
-     */
-    public BossBar getBossBar() {
-        return this.bar;
+    private String formatTitle(int min, int sec) {
+        return this.title
+            .replace("<min>", String.valueOf(min))
+            .replace("<sec>", String.valueOf(sec));
     }
 
 }

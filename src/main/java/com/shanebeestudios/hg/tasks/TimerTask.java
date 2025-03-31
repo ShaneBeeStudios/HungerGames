@@ -1,7 +1,6 @@
 package com.shanebeestudios.hg.tasks;
 
 import com.shanebeestudios.hg.game.GameBlockData;
-import com.shanebeestudios.hg.game.GameBorderData;
 import com.shanebeestudios.hg.game.GamePlayerData;
 import org.bukkit.Bukkit;
 import com.shanebeestudios.hg.data.Config;
@@ -45,7 +44,7 @@ public class TimerTask implements Runnable {
         GamePlayerData gamePlayerData = this.game.getGamePlayerData();
         if (gameArenaData.getStatus() != Status.RUNNING) stop(); //A quick null check!
 
-		if (Config.bossbar) game.getGameBarData().bossbarUpdate(remainingTime);
+		if (Config.bossbar) game.getGameBarData().bossBarUpdate(remainingTime);
 
 		if (gameArenaData.getChestRefillTime() > 0 && remainingTime == gameArenaData.getChestRefillTime()) {
 			gameBlockData.clearChests();
