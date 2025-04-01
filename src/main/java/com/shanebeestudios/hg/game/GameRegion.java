@@ -2,6 +2,7 @@ package com.shanebeestudios.hg.game;
 
 import com.shanebeestudios.hg.HungerGames;
 import org.bukkit.Bukkit;
+import org.bukkit.HeightMap;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.World;
@@ -48,14 +49,15 @@ public class GameRegion {
         this.boundingBox = boundingBox;
     }
 
-    public Integer[] getRandomLocs() {
-        Random r = new Random();
-        double minX = this.boundingBox.getMinX();
-        double minZ = this.boundingBox.getMinZ();
-        return new Integer[]{
-            (int) (r.nextInt((int) this.boundingBox.getWidthX()) + minX),
-            (int) this.boundingBox.getMaxY(),
-            (int) (r.nextInt((int) (this.boundingBox.getWidthZ())) + minZ)};
+    public Location getRandomLocation() {
+        Random random = new Random();
+        Location location = new Location(this.getWorld(),
+            random.nextInt((int) this.boundingBox.getWidthX()) + this.boundingBox.getMinX(),
+            this.boundingBox.getMaxY(),
+            random.nextInt((int) this.boundingBox.getWidthZ()) + this.boundingBox.getMinZ());
+
+        return location.getWorld().getHighestBlockAt(location, HeightMap.MOTION_BLOCKING_NO_LEAVES)
+            .getLocation().add(0, 1, 0);
     }
 
     /**
@@ -77,7 +79,9 @@ public class GameRegion {
         this.entities.clear();
     }
 
-    /** Remove an entity from this bound
+    /**
+     * Remove an entity from this bound
+     *
      * @param entity Entity to remove
      */
     public void removeEntity(Entity entity) {

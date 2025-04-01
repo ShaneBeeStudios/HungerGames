@@ -103,7 +103,7 @@ reward:
 random-chest:
   enabled: false
   interval: 30
-  max-chestcontent: 9
+  max-chest-content: 9
 rollback:
   # Let players break blocks in the arena, and restore when the game is done
   allow-block-break: false

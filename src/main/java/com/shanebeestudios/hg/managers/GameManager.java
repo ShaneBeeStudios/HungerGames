@@ -5,12 +5,13 @@ import com.shanebeestudios.hg.HungerGames;
 import com.shanebeestudios.hg.api.command.CustomArg;
 import com.shanebeestudios.hg.api.status.Status;
 import com.shanebeestudios.hg.api.util.Util;
-import com.shanebeestudios.hg.plugin.configs.Config;
 import com.shanebeestudios.hg.data.Language;
 import com.shanebeestudios.hg.game.Game;
 import com.shanebeestudios.hg.game.GameArenaData;
+import com.shanebeestudios.hg.game.GameBlockData;
 import com.shanebeestudios.hg.game.GameItemData;
 import com.shanebeestudios.hg.game.GameRegion;
+import com.shanebeestudios.hg.plugin.configs.Config;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
@@ -150,11 +151,11 @@ public class GameManager {
     /**
      * Fill chests in a game
      *
-     * @param block Chest to fill
-     * @param game  Game this chest is in
-     * @param bonus Whether or not this is a bonus chest
+     * @param block     Chest to fill
+     * @param game      Game this chest is in
+     * @param chestType Type of chest
      */
-    public void fillChests(Block block, Game game, boolean bonus) {
+    public void fillChests(Block block, Game game, GameBlockData.ChestType chestType) {
         Inventory i = ((InventoryHolder) block.getState()).getInventory();
         List<Integer> slots = new ArrayList<>();
         for (int slot = 0; slot <= 26; slot++) {
@@ -162,13 +163,18 @@ public class GameManager {
         }
         Collections.shuffle(slots);
         i.clear();
-        int max = bonus ? Config.maxbonuscontent : Config.maxchestcontent;
-        int min = bonus ? Config.minbonuscontent : Config.minchestcontent;
+        //int max = bonus ? Config.maxbonuscontent : Config.maxchestcontent;
+        int max = switch (chestType) {
+            case REGULAR -> Config.maxchestcontent;
+            case BONUS -> Config.maxbonuscontent;
+            case DROP -> Config.RANDOM_CHEST_MAX_CONTENT;
+        };
+        int min = chestType == GameBlockData.ChestType.BONUS ? Config.minbonuscontent : Config.minchestcontent;
 
         int c = rg.nextInt(max) + 1;
         c = Math.max(c, min);
         while (c != 0) {
-            ItemStack it = randomItem(game, bonus);
+            ItemStack it = randomItem(game, chestType == GameBlockData.ChestType.BONUS);
             int slot = slots.getFirst();
             slots.removeFirst();
             i.setItem(slot, it);

@@ -1,9 +1,10 @@
 package com.shanebeestudios.hg.api.events;
 
+import com.shanebeestudios.hg.game.Game;
+import com.shanebeestudios.hg.game.GameBlockData.ChestType;
 import org.bukkit.block.Block;
 import org.bukkit.event.Event;
 import org.bukkit.event.HandlerList;
-import com.shanebeestudios.hg.game.Game;
 
 /**
  * Called when a player opens an empty chest in the game
@@ -11,53 +12,61 @@ import com.shanebeestudios.hg.game.Game;
  */
 public class ChestOpenEvent extends Event {
 
-	private Game game;
-	private Block block;
-	private boolean bonus;
+    private final Game game;
+    private final Block block;
+    private final ChestType chestType;
 
-	/** Create a new player open chest event
-	 * @param game The game this is happening in
-	 * @param block The block that is opening
-	 * @param bonus If the chest is a bonus chest
-	 */
-	public ChestOpenEvent(Game game, Block block, boolean bonus) {
-		this.game = game;
-		this.block = block;
-		this.bonus = bonus;
-	}
+    /**
+     * Create a new player open chest event
+     *
+     * @param game      The game this is happening in
+     * @param block     The block that is opening
+     * @param chestType Type of chest
+     */
+    public ChestOpenEvent(Game game, Block block, ChestType chestType) {
+        this.game = game;
+        this.block = block;
+        this.chestType = chestType;
+    }
 
-	/** Get the game in this event
-	 * @return The game for this event
-	 */
-	public Game getGame() {
-		return game;
-	}
+    /**
+     * Get the game in this event
+     *
+     * @return The game for this event
+     */
+    public Game getGame() {
+        return game;
+    }
 
-	/** Get the chest that has been opened
-	 * @return The chest in the event
-	 */
-	public Block getChest() {
-		return block;
-	}
+    /**
+     * Get the chest that has been opened
+     *
+     * @return The chest in the event
+     */
+    public Block getChest() {
+        return block;
+    }
 
-	/** Check if this chest is a bonus chest
-	 * @return True if bonus chest
-	 */
-	public boolean isBonus() {
-		return bonus;
-	}
+    /**
+     * Get the type of chest that was opened
+     *
+     * @return Type of chest
+     */
+    public ChestType getChestType() {
+        return this.chestType;
+    }
 
-	private static final HandlerList handlers = new HandlerList();
+    private static final HandlerList handlers = new HandlerList();
 
-	@SuppressWarnings("NullableProblems")
-	@Override
-	public HandlerList getHandlers() {
-	    return handlers;
-	}
+    @SuppressWarnings("NullableProblems")
+    @Override
+    public HandlerList getHandlers() {
+        return handlers;
+    }
 
-	@SuppressWarnings("unused")
-	public static HandlerList getHandlerList() {
-	    return handlers;
-	}
+    @SuppressWarnings("unused")
+    public static HandlerList getHandlerList() {
+        return handlers;
+    }
 
 }

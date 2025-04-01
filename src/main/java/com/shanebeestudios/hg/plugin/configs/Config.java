@@ -66,9 +66,9 @@ public class Config {
     public static boolean ROLLBACK_ALLOW_ITEMFRAME_TAKE;
 
     //Random chest
-    public static boolean randomChest;
-    public static int randomChestInterval;
-    public static int randomChestMaxContent;
+    public static boolean RANDOM_CHEST_ENABLED;
+    public static int RANDOM_CHEST_INTERVAL;
+    public static int RANDOM_CHEST_MAX_CONTENT;
 
     //World border
     public static boolean WORLD_BORDER_ENABLED;
@@ -164,9 +164,9 @@ public class Config {
         ROLLBACK_EDITABLE_BLOCKS = config.getStringList("rollback.editable-blocks");
         ROLLBACK_ALLOW_ITEMFRAME_TAKE = config.getBoolean("rollback.allow-itemframe-take");
 
-        randomChest = config.getBoolean("random-chest.enabled");
-        randomChestInterval = config.getInt("random-chest.interval") * 20;
-        randomChestMaxContent = config.getInt("random-chest.max-chestcontent");
+        RANDOM_CHEST_ENABLED = config.getBoolean("random-chest.enabled");
+        RANDOM_CHEST_INTERVAL = config.getInt("random-chest.interval");
+        RANDOM_CHEST_MAX_CONTENT = config.getInt("random-chest.max-chest-content");
 
         WORLD_BORDER_ENABLED = config.getBoolean("world-border.enabled");
         WORLD_BORDER_INITIATE_ON_START = config.getBoolean("world-border.initiate-on-start");

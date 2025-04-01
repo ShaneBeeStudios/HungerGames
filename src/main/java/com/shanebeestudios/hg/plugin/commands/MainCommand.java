@@ -12,6 +12,7 @@ public class MainCommand {
         this.command.withAliases("hg");
 
         // Register sub-commands
+        this.command.then(new ChestDropCommand(plugin).register());
         this.command.then(new CreateCommand(plugin).register());
         this.command.then(new DebugCommand(plugin).register());
         this.command.then(new DeleteArenaCommand(plugin).register());

@@ -272,7 +272,7 @@ public class Game {
     public void startRunningGame() {
         this.gameArenaData.setStatus(Status.RUNNING);
         if (Config.MOBS_SPAWN_ENABLED) this.mobSpawnerTask = new MobSpawnerTask(this);
-        if (Config.randomChest) chestDropTask = new ChestDropTask(this);
+        if (Config.RANDOM_CHEST_ENABLED) this.chestDropTask = new ChestDropTask(this);
         this.gameBlockData.updateLobbyBlock();
         if (Config.bossbar) {
             this.bar.createBossBar(gameArenaData.timer);
@@ -293,7 +293,7 @@ public class Game {
         if (this.gameTimerTask != null) this.gameTimerTask.stop();
         if (this.mobSpawnerTask != null) this.mobSpawnerTask.stop();
         if (this.chestRefillRepeatTask != null) this.chestRefillRepeatTask.stop();
-        if (this.chestDropTask != null) this.chestDropTask.shutdown();
+        if (this.chestDropTask != null) this.chestDropTask.stop();
         if (this.nearestPlayerCompassTask != null) this.nearestPlayerCompassTask.stop();
     }
 

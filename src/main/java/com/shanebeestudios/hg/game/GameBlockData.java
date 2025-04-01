@@ -171,4 +171,9 @@ public class GameBlockData extends Data {
         this.itemFrameData.clear();
     }
 
+    public enum ChestType {
+        REGULAR,
+        BONUS,
+        DROP
+    }
 }

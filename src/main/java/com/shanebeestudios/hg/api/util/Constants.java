@@ -18,4 +18,6 @@ public class Constants {
      */
     public static NamespacedKey TRACKING_STICK_KEY = Util.getPluginKey("tracking_stick");
 
+    public static NamespacedKey CHEST_DROP_BLOCK = Util.getPluginKey("chest_drop");
+
 }

@@ -2,16 +2,12 @@ package com.shanebeestudios.hg.plugin.tasks;
 
 import com.shanebeestudios.hg.HungerGames;
 import com.shanebeestudios.hg.api.util.Util;
-import com.shanebeestudios.hg.plugin.configs.Config;
 import com.shanebeestudios.hg.data.Language;
-import com.shanebeestudios.hg.game.GameRegion;
 import com.shanebeestudios.hg.game.Game;
-import com.shanebeestudios.hg.plugin.listeners.GameChestDropListener;
+import com.shanebeestudios.hg.game.GameRegion;
+import com.shanebeestudios.hg.plugin.configs.Config;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
-import org.bukkit.Material;
-import org.bukkit.World;
-import org.bukkit.entity.FallingBlock;
 import org.bukkit.entity.Player;
 
 import java.util.ArrayList;
@@ -22,58 +18,35 @@ public class ChestDropTask implements Runnable {
     private final Game game;
     private final Language lang;
     private final int taskId;
-    private final List<GameChestDropListener> chests = new ArrayList<>();
+    private final List<ChestDropChestTask> tasks = new ArrayList<>();
 
     public ChestDropTask(Game game) {
         this.game = game;
         HungerGames plugin = HungerGames.getPlugin();
         this.lang = plugin.getLang();
-        this.taskId = Bukkit.getServer().getScheduler().scheduleSyncRepeatingTask(plugin, this, Config.randomChestInterval, Config.randomChestInterval);
+        int interval = Config.RANDOM_CHEST_INTERVAL * 20;
+        this.taskId = Bukkit.getServer().getScheduler().scheduleSyncRepeatingTask(plugin, this, interval, interval);
     }
 
     public void run() {
-        GameRegion gameRegion = game.getGameArenaData().getGameRegion();
-        Integer[] i = gameRegion.getRandomLocs();
-
-        int x = i[0];
-        int y = i[1];
-        int z = i[2];
-        World w = gameRegion.getWorld();
-
-        while (w.getBlockAt(x, y, z).getType() == Material.AIR) {
-            y--;
-
-            if (y <= 0) {
-                i = gameRegion.getRandomLocs();
-
-                x = i[0];
-                y = i[1];
-                z = i[2];
-            }
-        }
-
-        y = y + 10;
-
-        Location l = new Location(w, x, y, z);
-
-        FallingBlock fb = w.spawnFallingBlock(l, Bukkit.getServer().createBlockData(Material.STRIPPED_SPRUCE_WOOD));
-
-        this.chests.add(new GameChestDropListener(fb));
+        GameRegion gameRegion = this.game.getGameArenaData().getGameRegion();
+        Location randomLocation = gameRegion.getRandomLocation();
 
         for (Player player : this.game.getGamePlayerData().getPlayers()) {
             Util.sendMessage(player, this.lang.chest_drop_1);
             Util.sendMessage(player, this.lang.chest_drop_2
-                .replace("<x>", String.valueOf(x))
-                .replace("<y>", String.valueOf(y))
-                .replace("<z>", String.valueOf(z)));
+                .replace("<x>", "" + randomLocation.getBlockX())
+                .replace("<y>", "" + randomLocation.getBlockY())
+                .replace("<z>", "" + randomLocation.getBlockZ()));
             Util.sendMessage(player, this.lang.chest_drop_1);
+            this.tasks.add(new ChestDropChestTask(randomLocation));
         }
     }
 
-    public void shutdown() {
-        Bukkit.getScheduler().cancelTask(taskId);
-        for (GameChestDropListener cd : this.chests) {
-            if (cd != null) cd.remove();
-        }
+    public void stop() {
+        this.tasks.forEach(ChestDropChestTask::stop);
+        this.tasks.clear();
+        Bukkit.getScheduler().cancelTask(this.taskId);
     }
+
 }
