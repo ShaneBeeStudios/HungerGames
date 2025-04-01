@@ -8,7 +8,6 @@ import com.shanebeestudios.hg.game.GameBorderData;
 import com.shanebeestudios.hg.game.GameRegion;
 import com.shanebeestudios.hg.managers.ItemStackManager;
 import com.shanebeestudios.hg.managers.KitManager;
-import com.shanebeestudios.hg.plugin.tasks.CompassTask;
 import org.bukkit.Bukkit;
 import org.bukkit.Difficulty;
 import org.bukkit.Location;
@@ -100,7 +99,6 @@ public class ArenaConfig {
         Util.log("Loading arenas:");
 
         if (this.arenaConfigFile.exists()) {
-            new CompassTask(this.plugin);
 
             ConfigurationSection allArenasSection = this.arenaConfig.getConfigurationSection("arenas");
 

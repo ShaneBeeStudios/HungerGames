@@ -18,6 +18,7 @@ import com.shanebeestudios.hg.managers.PlayerManager;
 import com.shanebeestudios.hg.plugin.permission.Permissions;
 import com.shanebeestudios.hg.plugin.tasks.ChestDropTask;
 import com.shanebeestudios.hg.plugin.tasks.ChestRefillRepeatTask;
+import com.shanebeestudios.hg.plugin.tasks.NearestPlayerCompassTask;
 import com.shanebeestudios.hg.plugin.tasks.FreeRoamTask;
 import com.shanebeestudios.hg.plugin.tasks.GameTimerTask;
 import com.shanebeestudios.hg.plugin.tasks.MobSpawnerTask;
@@ -46,13 +47,14 @@ public class Game {
     private final MobManager mobManager;
     private final PlayerManager playerManager;
 
-    // Task ID's here!
+    // Tasks here!
     private MobSpawnerTask mobSpawnerTask;
     private FreeRoamTask freeRoamTask;
     private StartingTask startingTask;
     private GameTimerTask gameTimerTask;
     private ChestRefillRepeatTask chestRefillRepeatTask;
     private ChestDropTask chestDropTask;
+    private NearestPlayerCompassTask nearestPlayerCompassTask;
 
     // Data Objects
     final GameArenaData gameArenaData;
@@ -282,6 +284,7 @@ public class Game {
         if (this.gameArenaData.getChestRefillRepeat() > 0) {
             this.chestRefillRepeatTask = new ChestRefillRepeatTask(this);
         }
+        this.nearestPlayerCompassTask = new NearestPlayerCompassTask(this);
     }
 
     public void cancelTasks() {
@@ -291,6 +294,7 @@ public class Game {
         if (this.mobSpawnerTask != null) this.mobSpawnerTask.stop();
         if (this.chestRefillRepeatTask != null) this.chestRefillRepeatTask.stop();
         if (this.chestDropTask != null) this.chestDropTask.shutdown();
+        if (this.nearestPlayerCompassTask != null) this.nearestPlayerCompassTask.stop();
     }
 
     /**

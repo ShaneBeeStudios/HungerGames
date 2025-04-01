@@ -84,7 +84,7 @@ chest-drop-2: '"<aqua>| <dark_aqua>A Care-Package was just dropped near: <white>
 #  COMPASS
 #  <player> will be replaced with the name of the nearest player
 #  <distance> will be replaced with the distance of the nearest player
-compass-nearest-player: '<white>Nearest Player: <reset><player>    <grey>Distance: <red><distance>'
+compass-nearest-player: '<grey>Nearest Player: <aqua><player> <grey>Distance: <green><distance>'
 
 #  FREE ROAM
 roam-game-started: '<dark_red>[]---------[ <gold>The game has started! <dark_red>]---------[]'
