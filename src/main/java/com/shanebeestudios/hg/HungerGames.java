@@ -2,11 +2,8 @@ package com.shanebeestudios.hg;
 
 import com.shanebeestudios.hg.api.util.NBTApi;
 import com.shanebeestudios.hg.api.util.Util;
-import com.shanebeestudios.hg.plugin.configs.ArenaConfig;
-import com.shanebeestudios.hg.plugin.configs.Config;
 import com.shanebeestudios.hg.data.Language;
 import com.shanebeestudios.hg.data.Leaderboard;
-import com.shanebeestudios.hg.plugin.configs.MobConfig;
 import com.shanebeestudios.hg.data.RandomItems;
 import com.shanebeestudios.hg.managers.GameManager;
 import com.shanebeestudios.hg.managers.ItemStackManager;
@@ -15,8 +12,10 @@ import com.shanebeestudios.hg.managers.KitManager;
 import com.shanebeestudios.hg.managers.Placeholders;
 import com.shanebeestudios.hg.managers.PlayerManager;
 import com.shanebeestudios.hg.managers.SessionManager;
-import com.shanebeestudios.hg.old_commands.BaseCmd;
 import com.shanebeestudios.hg.plugin.commands.MainCommand;
+import com.shanebeestudios.hg.plugin.configs.ArenaConfig;
+import com.shanebeestudios.hg.plugin.configs.Config;
+import com.shanebeestudios.hg.plugin.configs.MobConfig;
 import com.shanebeestudios.hg.plugin.listeners.GameBlockListener;
 import com.shanebeestudios.hg.plugin.listeners.GameChestListener;
 import com.shanebeestudios.hg.plugin.listeners.GameCommandListener;
@@ -39,16 +38,10 @@ import org.bukkit.event.HandlerList;
 import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.java.JavaPlugin;
 
-import java.util.HashMap;
-import java.util.Map;
-
 /**
  * <b>Main class for HungerGames</b>
  */
 public class HungerGames extends JavaPlugin {
-
-    //Maps
-    private Map<String, BaseCmd> cmds;
 
     //Instances
     private static HungerGames plugin;
@@ -104,10 +97,6 @@ public class HungerGames extends JavaPlugin {
     public void loadPlugin(boolean load) {
         long start = System.currentTimeMillis();
         plugin = this;
-
-        if (load) {
-            cmds = new HashMap<>();
-        }
 
         config = new Config(this);
         metrics = new Metrics(this, 25144);
@@ -185,8 +174,6 @@ public class HungerGames extends JavaPlugin {
         HandlerList.unregisterAll(this);
         if (reload) {
             loadPlugin(false);
-        } else {
-            cmds = null;
         }
     }
 
@@ -298,15 +285,6 @@ public class HungerGames extends JavaPlugin {
      */
     public Leaderboard getLeaderboard() {
         return this.leaderboard;
-    }
-
-    /**
-     * Get a map of commands
-     *
-     * @return Map of commands
-     */
-    public Map<String, BaseCmd> getCommands() {
-        return this.cmds;
     }
 
     /**
