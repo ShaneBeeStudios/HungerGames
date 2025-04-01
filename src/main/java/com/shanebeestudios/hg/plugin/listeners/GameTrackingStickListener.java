@@ -1,11 +1,11 @@
 package com.shanebeestudios.hg.plugin.listeners;
 
 import com.shanebeestudios.hg.HungerGames;
+import com.shanebeestudios.hg.api.util.ItemUtils;
 import com.shanebeestudios.hg.api.util.Util;
 import com.shanebeestudios.hg.data.PlayerData;
 import com.shanebeestudios.hg.game.Game;
 import org.bukkit.Location;
-import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
@@ -13,7 +13,7 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.block.Action;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.ItemStack;
-import org.bukkit.inventory.meta.ItemMeta;
+import org.bukkit.util.BoundingBox;
 import org.bukkit.util.Vector;
 
 public class GameTrackingStickListener extends GameListenerBase {
@@ -23,47 +23,42 @@ public class GameTrackingStickListener extends GameListenerBase {
     }
 
     @EventHandler
-    private void onInteract(PlayerInteractEvent event) {
-        Player player = event.getPlayer();
+    private void onClickWithStick(PlayerInteractEvent event) {
         Action action = event.getAction();
-        if (action == Action.LEFT_CLICK_AIR) {
-            if (player.getInventory().getItemInMainHand().getType().equals(Material.STICK) && playerManager.hasPlayerData(player)) {
-                useTrackStick(player);
+        if (action == Action.LEFT_CLICK_AIR || action == Action.LEFT_CLICK_BLOCK) {
+            Player player = event.getPlayer();
+            ItemStack item = event.getItem();
+            if (this.playerManager.hasPlayerData(player) && ItemUtils.isTrackingStick(item)) {
+                event.setCancelled(true);
+                useTrackStick(player, item);
             }
         }
     }
 
     // UTIL
-    private void useTrackStick(Player p) {
-//        ItemStack i = p.getInventory().getItemInMainHand();
-//        ItemMeta im = i.getItemMeta();
-//        assert im != null;
-//        im.getDisplayName();
-//        if (im.getDisplayName().startsWith(tsn)) {
-//            int uses = Integer.parseInt(im.getDisplayName().replace(tsn, ""));
-//            if (uses == 0) {
-//                Util.sendMessage(p, lang.track_empty);
-//            } else {
-//                PlayerData pd = playerManager.getPlayerData(p);
-//                final Game g = pd.getGame();
-//                for (Entity e : p.getNearbyEntities(120, 50, 120)) {
-//                    if (e instanceof Player) {
-//                        if (!g.getGamePlayerData().getPlayers().contains(e.getUniqueId())) continue;
-//                        im.setDisplayName(tsn + (uses - 1));
-//                        Location l = e.getLocation();
-//                        int range = (int) p.getLocation().distance(l);
-//                        Util.sendMessage(p, lang.track_nearest
-//                            .replace("<player>", e.getName())
-//                            .replace("<range>", String.valueOf(range))
-//                            .replace("<location>", getDirection(p.getLocation().getBlock(), l.getBlock())));
-//                        i.setItemMeta(im);
-//                        p.updateInventory();
-//                        return;
-//                    }
-//                }
-//                Util.sendMessage(p, lang.track_no_near);
-//            }
-//        }
+    private void useTrackStick(Player player, ItemStack itemStack) {
+        PlayerData playerData = this.playerManager.getPlayerData(player);
+        assert playerData != null;
+        final Game game = playerData.getGame();
+        BoundingBox box = game.getGameArenaData().getGameRegion().getBoundingBox();
+
+        int distance = (int) Math.min(120, Math.max(box.getWidthX() / 2, box.getWidthZ() / 2));
+        for (Entity nearbyEntity : player.getNearbyEntities(distance, 50, distance)) {
+            if (nearbyEntity instanceof Player nearbyPlayer) {
+                if (!game.getGamePlayerData().getPlayers().contains(nearbyPlayer)) continue;
+
+                Location location = nearbyEntity.getLocation();
+                int range = (int) player.getLocation().distance(location);
+                Util.sendMessage(player, this.lang.tracking_stick_nearest
+                    .replace("<player>", nearbyEntity.getName())
+                    .replace("<range>", "" + range)
+                    .replace("<location>", getDirection(player.getLocation().getBlock(), location.getBlock())));
+                itemStack.damage(1, player);
+                player.updateInventory();
+                return;
+            }
+        }
+        Util.sendMessage(player, this.lang.tracking_stick_no_near);
     }
 
     private String getDirection(Block block, Block block1) {

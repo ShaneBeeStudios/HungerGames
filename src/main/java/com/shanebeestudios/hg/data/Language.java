@@ -10,6 +10,7 @@ import java.io.File;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.TreeMap;
 
@@ -86,12 +87,6 @@ public class Language {
     public String listener_wand_create_arena;
     public String listener_wand_set_pos_2;
     public String listener_wand_big_enough;
-    public String track_nearest;
-    public String track_no_near;
-    public String track_empty;
-    public String track_bar;
-    public String track_new1;
-    public String track_new2;
     public String listener_sign_click_hand;
     public String bossbar;
     public String lb_blank_space;
@@ -108,7 +103,12 @@ public class Language {
 
     // Tracking Stick
     public String tracking_stick_name;
-    public String tracking_stick_lore;
+    public List<String> tracking_stick_lore;
+    public String tracking_stick_nearest;
+    public String tracking_stick_no_near;
+    public String tracking_stick_bar;
+    public String tracking_stick_new1;
+    public String tracking_stick_new2;
 
     // ARENA DEBUG
     public String arena_debug_need_more_spawns;
@@ -341,12 +341,6 @@ public class Language {
         listener_not_running = lang.getString("listener-not-running");
         listener_no_edit_block = lang.getString("listener-no-edit-block");
         listener_no_interact = lang.getString("listener-no-interact");
-        track_nearest = lang.getString("track-nearest");
-        track_no_near = lang.getString("track-no-near");
-        track_empty = lang.getString("track-empty");
-        track_bar = lang.getString("track-bar");
-        track_new1 = lang.getString("track-new1");
-        track_new2 = lang.getString("track-new2");
         listener_sign_click_hand = lang.getString("listener-sign-click-hand");
         listener_wand_create_arena = lang.getString("listener-wand-create-arena");
         listener_wand_set_pos_2 = lang.getString("listener-wand-set-pos-2");
@@ -382,8 +376,13 @@ public class Language {
         arena_debug_ready_run = lang.getString("arena-debug.ready-run");
 
         // Tracking Stick
-        tracking_stick_name = lang.getString("tracking-stick.name");
-        tracking_stick_lore = lang.getString("tracking-stick.lore");
+        this.tracking_stick_name = this.lang.getString("tracking-stick.name");
+        this.tracking_stick_lore = this.lang.getStringList("tracking-stick.lore");
+        this.tracking_stick_nearest = this.lang.getString("tracking-stick.nearest");
+        this.tracking_stick_no_near = this.lang.getString("tracking-stick.no-near");
+        this.tracking_stick_bar = this.lang.getString("tracking-stick.bar");
+        this.tracking_stick_new1 = this.lang.getString("tracking-stick.new1");
+        this.tracking_stick_new2 = this.lang.getString("tracking-stick.new2");
 
         // COMMANDS
         // Base

@@ -314,13 +314,14 @@ arena-debug:
 #  TRACK STICK
 tracking-stick:
   name: 'Tracking Stick'
-  lore: 'Uses Left: <uses>'
-track-nearest: '"<aqua><player> <yellow>is <aqua><range> <yellow>blocks away from you: <aqua><location>"'
-track-no-near: '<red>Could not locate any nearby players!'
-track-empty: '<red>This tracking stick is out of uses!'
-track-bar: '<green>[]------------------------------------------[]'
-track-new1: '<green> |<gold>   You have been given a player-tracking stick! <green> |'
-track-new2: '<green> |<gold>   Swing the stick to track players!                <green> |'
+  lore:
+    - '<yellow><!italic>Click your stick'
+    - '<yellow><!italic>to track nearby players'
+  nearest: '"<aqua><player> <yellow>is <aqua><range> <yellow>blocks away from you: <aqua><location>"'
+  no-near: '<red>Could not locate any nearby players!'
+  bar: '<green>[]------------------------------------------[]'
+  new1: '<green> |<gold>   You have been given a player-tracking stick! <green> |'
+  new2: '<green> |<gold>   Swing the stick to track players!                <green> |'
 
 #  LEADERBOARD
 lb-blank-space: ''

@@ -45,7 +45,6 @@ public class KillManager {
     private final HungerGames plugin;
     private final Language lang;
     private final Leaderboard leaderboard;
-    private final ItemStack trackingStick;
     private final Map<EntityType, String> entityTypeMessages = new HashMap<>();
     private final Map<DamageType, String> damageTypeMessages = new HashMap<>();
 
@@ -53,10 +52,6 @@ public class KillManager {
         this.plugin = plugin;
         this.lang = plugin.getLang();
         this.leaderboard = plugin.getLeaderboard();
-
-        this.trackingStick = new ItemStack(Material.STICK, 1);
-        this.trackingStick.setData(DataComponentTypes.ITEM_NAME, Util.getMini(this.lang.tracking_stick_name
-            .replace("<uses>", String.valueOf(Config.TRACKING_STICK_USES))));
 
         this.lang.death_message_entity_types.forEach((entityTypeString, message) -> {
             NamespacedKey key = NamespacedKey.fromString(entityTypeString);
@@ -274,14 +269,14 @@ public class KillManager {
         return drops;
     }
 
-    private void checkStick(Game g) {
-        if (Config.PLAYERS_FOR_TRACKING_STICK == g.getGamePlayerData().getPlayers().size()) {
-            for (Player player : g.getGamePlayerData().getPlayers()) {
-                Util.sendMessage(player, this.lang.track_bar);
-                Util.sendMessage(player, this.lang.track_new1);
-                Util.sendMessage(player, this.lang.track_new2);
-                Util.sendMessage(player, this.lang.track_bar);
-                player.getInventory().addItem(this.trackingStick.clone());
+    private void checkStick(Game game) {
+        if (Config.PLAYERS_FOR_TRACKING_STICK == game.getGamePlayerData().getPlayers().size()) {
+            for (Player player : game.getGamePlayerData().getPlayers()) {
+                Util.sendMessage(player, this.lang.tracking_stick_bar);
+                Util.sendMessage(player, this.lang.tracking_stick_new1);
+                Util.sendMessage(player, this.lang.tracking_stick_new2);
+                Util.sendMessage(player, this.lang.tracking_stick_bar);
+                player.getInventory().addItem(ItemUtils.getTrackingStick());
             }
         }
     }
