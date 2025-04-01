@@ -28,7 +28,7 @@ public class RefillChestNowCommand extends SubCommand {
                         Util.sendMessage(sender, this.lang.listener_not_running);
                         return;
                     }
-                    game.getGameBlockData().clearChests();
+                    game.getGameBlockData().markChestForRefill();
                     Util.sendMessage(sender, this.lang.command_chest_refill_now.replace("<arena>", game.getGameArenaData().getName()));
                 }));
     }

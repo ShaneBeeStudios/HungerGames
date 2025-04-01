@@ -33,11 +33,7 @@ public class GameChestListener extends GameListenerBase {
         if (gameBlockData.canBeFilled(block.getLocation())) {
             ChestType chestType = event.getChestType();
             HungerGames.getPlugin().getGameManager().fillChests(block, game, chestType);
-            if (chestType == GameBlockData.ChestType.DROP) {
-                gameBlockData.logPlayerPlacedChest(block.getLocation());
-            } else {
-                gameBlockData.logOpenedChest(block.getLocation());
-            }
+            gameBlockData.logChest(chestType, block.getLocation());
         }
     }
 
@@ -45,8 +41,12 @@ public class GameChestListener extends GameListenerBase {
     public void onClose(InventoryCloseEvent event) {
         if (event.getInventory().getHolder() instanceof Chest chest) {
             if (chest.getPersistentDataContainer().has(Constants.CHEST_DROP_BLOCK, PersistentDataType.BOOLEAN)) {
-                chest.getBlock().setType(Material.AIR);
-                chest.getWorld().createExplosion(chest.getLocation().add(0.5, 0.5, 0.5), 1, false, false);
+                Game game = this.gameManager.getGame(chest.getLocation());
+                if (game != null) {
+                    chest.getBlock().setType(Material.AIR);
+                    chest.getWorld().createExplosion(chest.getLocation().add(0.5, 0.5, 0.5), 1, false, false);
+                    game.getGameBlockData().removeChest(ChestType.DROP, chest.getLocation());
+                }
             }
         }
     }

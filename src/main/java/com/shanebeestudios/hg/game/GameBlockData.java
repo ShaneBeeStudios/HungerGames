@@ -5,6 +5,7 @@ import org.bukkit.Location;
 import org.bukkit.block.BlockState;
 import org.bukkit.entity.ItemFrame;
 import org.bukkit.inventory.InventoryHolder;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
 import java.util.Collection;
@@ -19,10 +20,9 @@ import java.util.UUID;
  */
 public class GameBlockData extends Data {
 
-    private final List<Location> openedChests = new ArrayList<>();
-    private final List<Location> playerPlacedChests = new ArrayList<>();
+    private final Map<ChestType, List<Location>> chests = new HashMap<>();
     private final List<BlockState> blocks = new ArrayList<>();
-    private final Map<UUID,ItemFrameData> itemFrameData = new HashMap<>();
+    private final Map<UUID, ItemFrameData> itemFrameData = new HashMap<>();
     private final GameLobbyWall gameLobbyWall;
 
     protected GameBlockData(Game game) {
@@ -51,45 +51,71 @@ public class GameBlockData extends Data {
         return this.gameLobbyWall.isLobbyValid();
     }
 
+    private void resetChestMap() {
+        for (ChestType value : ChestType.values()) {
+            this.chests.put(value, new ArrayList<>());
+        }
+    }
+
+    public void markChestForRefill() {
+        this.chests.forEach((chestType, locations) -> {
+            if (chestType == ChestType.REGULAR || chestType == ChestType.DROP) {
+                locations.forEach(location -> {
+                    if (location.getBlock().getState() instanceof InventoryHolder inventoryHolder) {
+                        inventoryHolder.getInventory().clear();
+                    }
+                });
+            }
+        });
+    }
+
     /**
      * Clear chests and mark them for refill
      */
     public void clearChests() {
-        for (Location location : this.openedChests) {
-            if (location.getBlock().getState() instanceof InventoryHolder inventoryHolder) {
-                inventoryHolder.getInventory().clear();
-            }
-        }
-        this.openedChests.clear();
+        this.chests.forEach((chestType, locations) -> {
+            locations.forEach(location -> {
+                if (location.getBlock().getState() instanceof InventoryHolder inventoryHolder) {
+                    inventoryHolder.getInventory().clear();
+                }
+            });
+        });
+        resetChestMap();
     }
 
     /**
      * Log that a chest has been opened by a player
      *
-     * @param location Location of the chest to log
+     * @param chestType Type of chest to log
+     * @param location  Location of the chest to log
      */
-    public void logOpenedChest(Location location) {
-        if (this.openedChests.contains(location)) return;
-        this.openedChests.add(location);
+    public void logChest(ChestType chestType, Location location) {
+        if (this.chests.get(chestType).contains(location)) return;
+        this.chests.get(chestType).add(location);
+    }
+
+    /**
+     * Remove a logged chest from the game
+     * <p>Will remove from all lists</p>
+     *
+     * @param location Location of the chest to remove
+     */
+    public void removeChest(Location location) {
+        for (ChestType value : ChestType.values()) {
+            this.chests.get(value).remove(location);
+        }
     }
 
     /**
      * Remove a logged chest from the game
      *
-     * @param location Location of the chest to remove
+     * @param chestType Type of chest to remove
+     * @param location  Location of the chest to remove
      */
-    public void removeOpenedChest(Location location) {
-        this.openedChests.remove(location);
+    public void removeChest(@NotNull ChestType chestType, Location location) {
+        this.chests.get(chestType).remove(location);
     }
 
-    /**
-     * Log a chest that a player placed
-     *
-     * @param location Location of the chest
-     */
-    public void logPlayerPlacedChest(Location location) {
-        this.playerPlacedChests.add(location);
-    }
 
     /**
      * Check if chest at this location can be filled
@@ -99,16 +125,10 @@ public class GameBlockData extends Data {
      * false if its already been opened or is player placed
      */
     public boolean canBeFilled(Location location) {
-        return !this.openedChests.contains(location) && !this.playerPlacedChests.contains(location);
-    }
-
-    /**
-     * Remove a player placed chest from the game
-     *
-     * @param location Location of the chest
-     */
-    public void removePlayerChest(Location location) {
-        playerPlacedChests.remove(location);
+        for (List<Location> value : this.chests.values()) {
+            if (value.contains(location)) return false;
+        }
+        return true;
     }
 
     public void logBlocksForRollback() {
@@ -174,6 +194,8 @@ public class GameBlockData extends Data {
     public enum ChestType {
         REGULAR,
         BONUS,
+        PLAYER_PLACED,
         DROP
     }
+
 }

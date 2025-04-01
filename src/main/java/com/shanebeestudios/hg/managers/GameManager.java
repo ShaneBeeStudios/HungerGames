@@ -163,10 +163,10 @@ public class GameManager {
         }
         Collections.shuffle(slots);
         i.clear();
-        //int max = bonus ? Config.maxbonuscontent : Config.maxchestcontent;
         int max = switch (chestType) {
             case REGULAR -> Config.maxchestcontent;
             case BONUS -> Config.maxbonuscontent;
+            case PLAYER_PLACED -> 0;
             case DROP -> Config.RANDOM_CHEST_MAX_CONTENT;
         };
         int min = chestType == GameBlockData.ChestType.BONUS ? Config.minbonuscontent : Config.minchestcontent;

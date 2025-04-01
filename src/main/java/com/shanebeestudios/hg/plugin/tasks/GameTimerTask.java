@@ -51,7 +51,7 @@ public class GameTimerTask implements Runnable {
 
         // Refill chests
         if (this.gameArenaData.getChestRefillTime() > 0 && this.remainingTime == this.gameArenaData.getChestRefillTime()) {
-            this.gameBlockData.clearChests();
+            this.gameBlockData.markChestForRefill();
             this.gamePlayerData.msgAll(this.lang.game_chest_refill);
         }
 

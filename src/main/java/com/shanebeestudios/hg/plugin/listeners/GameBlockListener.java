@@ -4,10 +4,11 @@ import com.shanebeestudios.hg.HungerGames;
 import com.shanebeestudios.hg.api.status.Status;
 import com.shanebeestudios.hg.api.util.BlockUtils;
 import com.shanebeestudios.hg.api.util.Util;
-import com.shanebeestudios.hg.plugin.configs.Config;
 import com.shanebeestudios.hg.game.Game;
 import com.shanebeestudios.hg.game.GameArenaData;
 import com.shanebeestudios.hg.game.GameBlockData;
+import com.shanebeestudios.hg.game.GameBlockData.ChestType;
+import com.shanebeestudios.hg.plugin.configs.Config;
 import com.shanebeestudios.hg.plugin.permission.Permissions;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
@@ -94,7 +95,7 @@ public class GameBlockListener extends GameListenerBase {
                         Util.sendMessage(player, this.lang.listener_no_edit_block);
                         event.setCancelled(true);
                     } else if (isChest(block)) {
-                        gameBlockData.logPlayerPlacedChest(block.getLocation());
+                        gameBlockData.logChest(ChestType.PLAYER_PLACED, block.getLocation());
                     }
                 } else {
                     Util.sendMessage(player, this.lang.listener_not_running);
@@ -140,8 +141,7 @@ public class GameBlockListener extends GameListenerBase {
                         event.setCancelled(true);
                     } else if (isChest(block)) {
                         GameBlockData gameBlockData = game.getGameBlockData();
-                        gameBlockData.removeOpenedChest(block.getLocation());
-                        gameBlockData.removePlayerChest(block.getLocation());
+                        gameBlockData.removeChest(block.getLocation());
                     }
                 } else {
                     Util.sendMessage(player, this.lang.listener_not_running);
@@ -153,7 +153,7 @@ public class GameBlockListener extends GameListenerBase {
                     switch (status) {
                         case FREE_ROAM:
                         case RUNNING:
-                            game.getGameBlockData().removeOpenedChest(block.getLocation());
+                            game.getGameBlockData().removeChest( block.getLocation());
                         default:
                             return;
                     }
