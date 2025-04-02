@@ -1,6 +1,8 @@
 package com.shanebeestudios.hg.api.parsers;
 
+import com.shanebeestudios.hg.HungerGames;
 import com.shanebeestudios.hg.api.registry.Registries;
+import com.shanebeestudios.hg.api.util.NBTApi;
 import com.shanebeestudios.hg.api.util.Util;
 import io.papermc.paper.datacomponent.DataComponentTypes;
 import io.papermc.paper.datacomponent.item.DyedItemColor;
@@ -25,6 +27,8 @@ import java.util.Map;
 import java.util.concurrent.atomic.AtomicInteger;
 
 public class ItemParser {
+
+    private static final NBTApi NBT_API = HungerGames.getPlugin().getNbtApi();
 
     public static abstract class General<T> {
         T object;
@@ -247,6 +251,12 @@ public class ItemParser {
         if (map.containsKey("dyed_color")) {
             int color = map.getInt("dyed_color");
             itemStack.setData(DataComponentTypes.DYED_COLOR, DyedItemColor.dyedItemColor(Color.fromRGB(color), false));
+        }
+
+        // NBT
+        if (map.containsKey("nbt")) {
+            String nbtString = map.getString("nbt");
+            NBT_API.applyNBTToItem(itemStack, nbtString);
         }
 
         return itemStack;

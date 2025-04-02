@@ -28,6 +28,7 @@ public class Permissions {
     public static final Permission COMMAND_JOIN_OTHERS = getCommand("join_others", "Join other players to a game", PermissionDefault.OP);
     public static final Permission COMMAND_LEAVE = getCommand("leave", "Leave a game", PermissionDefault.TRUE);
     public static final Permission COMMAND_LIST = getCommand("list", "List all players in your game", PermissionDefault.TRUE);
+    public static final Permission COMMAND_NBT = getCommand("nbt", "Get the NBT of an item from the configs", PermissionDefault.OP);
     public static final Permission COMMAND_PERMISSIONS = getCommand("permissions", "List of permissions", PermissionDefault.OP);
     public static final Permission COMMAND_REFILL_CHESTS = getCommand("refill_chests", "Refill chests in a game", PermissionDefault.OP);
     public static final Permission COMMAND_RELOAD = getCommand("reload", "Reload configs/arenas", PermissionDefault.OP);

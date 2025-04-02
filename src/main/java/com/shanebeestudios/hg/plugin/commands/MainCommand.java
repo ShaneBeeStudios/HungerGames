@@ -34,6 +34,10 @@ public class MainCommand {
         this.command.then(new TeamCommand(plugin).register());
         this.command.then(new ToggleCommand(plugin).register());
 
+        if (plugin.getNbtApi().isEnabled()) {
+            this.command.then(new NBTCommand(plugin).register());
+        }
+
         this.command.register();
     }
 

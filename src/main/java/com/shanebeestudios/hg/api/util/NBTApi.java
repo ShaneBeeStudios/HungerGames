@@ -1,74 +1,110 @@
 package com.shanebeestudios.hg.api.util;
 
+import de.tr7zw.changeme.nbtapi.NBT;
+import de.tr7zw.changeme.nbtapi.NBTCompound;
 import de.tr7zw.changeme.nbtapi.NBTContainer;
-import de.tr7zw.changeme.nbtapi.NBTItem;
+import de.tr7zw.changeme.nbtapi.NbtApiException;
+import de.tr7zw.changeme.nbtapi.iface.ReadWriteNBT;
 import de.tr7zw.changeme.nbtapi.utils.MinecraftVersion;
-import org.bukkit.Material;
 import org.bukkit.inventory.ItemStack;
+import org.jetbrains.annotations.Nullable;
+
+import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
 
 /**
  * NBT class for adding NBT to items
  * <p>(Mainly for internal use)</p>
  */
+@SuppressWarnings("CallToPrintStackTrace")
 public class NBTApi {
 
-    private boolean enabled = true;
+    private final boolean enabled;
 
     public NBTApi() {
         MinecraftVersion.replaceLogger(HgLogger.getLogger());
-        if (!isEnabled()) {
-            warning();
+        if (!NBT.preloadApi()) {
+            Util.warning("NBT-API unavailable for your server version.");
+            Util.warning(" - Some items may not be loaded correctly if you are using the 'data' option");
+            this.enabled = false;
+        } else {
+            this.enabled = true;
         }
-    }
-
-    /**
-     * Set the NBT of an item
-     *
-     * @param item  The item to set
-     * @param value The NBT string to add to the item
-     * @return Returns the ItemStack with the new NBT
-     */
-    public ItemStack getItemWithNBT(ItemStack item, String value) {
-        if (!enabled) {
-            return item;
-        }
-        NBTItem nbtItem = new NBTItem(item);
-        try {
-            nbtItem.mergeCompound(new NBTContainer(value));
-        } catch (Exception ignore) {
-        }
-        return nbtItem.getItem();
-    }
-
-    /**
-     * Get the NBT string from an item
-     *
-     * @param item Item to grab NBT from
-     * @return NBT string from item
-     */
-    public String getNBT(org.bukkit.inventory.ItemStack item) {
-        if (!enabled) {
-            return "NBT-API not available";
-        }
-        NBTItem nbtItem = new NBTItem(item);
-        return nbtItem.getCompound().toString().replace("§", "&");
     }
 
     public boolean isEnabled() {
+        return this.enabled;
+    }
+
+    public void applyNBTToItem(ItemStack itemStack, String nbtString) {
+        if (!isEnabled()) {
+            Util.warning("NBT API is not enabled and cannot apply NBT to item.");
+            return;
+        }
         try {
-            ItemStack itemStack = new ItemStack(Material.DIAMOND_SWORD);
-            NBTItem nbtItem = new NBTItem(itemStack);
-            nbtItem.mergeCompound(new NBTContainer("{Damage:0}"));
-            return true;
-        } catch (Exception ignore) {
-            this.enabled = false;
-            return false;
+            ReadWriteNBT nbt = NBT.parseNBT(nbtString);
+            NBT.modifyComponents(itemStack, itemNbt -> {
+                itemNbt.mergeCompound(nbt);
+            });
+        } catch (NbtApiException ex) {
+            Util.warning("Invalid NBT '%s'", nbtString);
+            Util.warning("Error: %s", ex.getMessage());
         }
     }
 
-    public void warning() {
-        Util.warning("NBT-API unavailable for your server version.");
-        Util.warning(" - Some items may not be loaded correctly if you are using the 'data' option");
+    // Cache these classes/methods to prevent retrieving them too often
+    private static final Class<?> ICHAT_BASE_COMPONENT_CLASS = ReflectionUtils.getNMSClass("net.minecraft.network.chat.IChatBaseComponent");
+    private static final Class<?> CRAFT_CHAT_MESSAGE_CLASS = ReflectionUtils.getOBCClass("util.CraftChatMessage");
+    private static final Class<?> TEXT_TAG_VISITOR_CLASS;
+    private static final Class<?> NBT_BASE_CLASS = ReflectionUtils.getNMSClass("net.minecraft.nbt.NBTBase");
+    private static final Method FROM_COMPONENT;
+    private static final Method VISIT_METHOD;
+    private static final boolean IS_RUNNING_1_20_5 = Util.isRunningMinecraft(1, 20, 5);
+
+    static {
+        TEXT_TAG_VISITOR_CLASS = ReflectionUtils.getNMSClass("net.minecraft.nbt.TextComponentTagVisitor");
+        Method from_comp = null;
+        Method visit = null;
+        try {
+            assert TEXT_TAG_VISITOR_CLASS != null;
+            assert CRAFT_CHAT_MESSAGE_CLASS != null;
+            visit = TEXT_TAG_VISITOR_CLASS.getDeclaredMethod("visit", NBT_BASE_CLASS);
+            from_comp = CRAFT_CHAT_MESSAGE_CLASS.getMethod("fromComponent", ICHAT_BASE_COMPONENT_CLASS);
+        } catch (NoSuchMethodException e) {
+            e.printStackTrace();
+        }
+        FROM_COMPONENT = from_comp;
+        VISIT_METHOD = visit;
+    }
+
+    /**
+     * Get a pretty NBT string
+     * <p>This is the same as what vanilla Minecraft outputs when using the '/data' command</p>
+     *
+     * @param compound Compound to convert to pretty
+     * @param split    When null NBT will print on one long line, if not null NBT compound will be
+     *                 split into lines with JSON style, and this string will start each line off
+     *                 (usually spaces)
+     * @return Pretty string of NBTCompound
+     */
+    @SuppressWarnings("deprecation")
+    public static @Nullable String getPrettyNBT(NBTCompound compound, String split) {
+        Object nmsNBT = new NBTContainer(compound.toString()).getCompound();
+        String s = split != null ? split : "";
+        try {
+            Object tagVisitorInstance;
+            if (IS_RUNNING_1_20_5) {
+                tagVisitorInstance = TEXT_TAG_VISITOR_CLASS.getConstructor(String.class).newInstance(s);
+            } else {
+                tagVisitorInstance = TEXT_TAG_VISITOR_CLASS.getConstructor(String.class, int.class).newInstance(s, 0);
+            }
+            Object prettyComponent = VISIT_METHOD.invoke(tagVisitorInstance, nmsNBT);
+            return ((String) FROM_COMPONENT.invoke(CRAFT_CHAT_MESSAGE_CLASS, prettyComponent));
+        } catch (InstantiationException | IllegalAccessException | NoSuchMethodException |
+                 InvocationTargetException e) {
+            e.printStackTrace();
+        }
+        return null;
     }
 
 }

@@ -51,7 +51,7 @@ dependencies {
     compileOnly("me.clip:placeholderapi:2.11.6")
 
     // NBT-API
-    implementation("de.tr7zw:item-nbt-api:2.14.1") {
+    implementation("de.tr7zw:item-nbt-api:2.14.2-SNAPSHOT") {
         isTransitive = false
     }
 
