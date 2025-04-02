@@ -170,6 +170,9 @@ public class Language {
     public String command_join_already_in_game;
     public String command_join_already_in_game_other;
     public String command_join_no_money;
+    // Kit
+    public String command_kit_game_running;
+    public String command_kit_invalid_name;
     // List
     public String command_list_players;
     public String command_list_players_delimiter;
@@ -435,6 +438,9 @@ public class Language {
         command_join_already_in_game = lang.getString("command.join-already-in-game");
         command_join_already_in_game_other = lang.getString("command.join-already-in-game-other");
         command_join_no_money = lang.getString("command.join-no-money");
+        // Kit
+        this.command_kit_game_running = this.lang.getString("command.kit-game-running");
+        this.command_kit_invalid_name = lang.getString("command.kit-invalid-name");
         // List
         command_list_players = lang.getString("command.list-players");
         command_list_players_delimiter = lang.getString("command.list-players-delimiter");

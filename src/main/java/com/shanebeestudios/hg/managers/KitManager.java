@@ -1,10 +1,10 @@
 package com.shanebeestudios.hg.managers;
 
-import org.bukkit.ChatColor;
-import org.bukkit.entity.Player;
 import com.shanebeestudios.hg.HungerGames;
 import com.shanebeestudios.hg.api.util.Util;
 import com.shanebeestudios.hg.data.KitEntry;
+import org.bukkit.ChatColor;
+import org.bukkit.entity.Player;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -18,14 +18,14 @@ public class KitManager {
 
 	private HashMap<String, KitEntry> kititems = new HashMap<>();
 
-	/** Set a kit for a player
+    /** Set a kit for a player
 	 * @param player The player to set the kit for
 	 * @param kitName The name of the kit to set
 	 */
 	public void setKit(Player player, String kitName) {
 		if (!kititems.containsKey(kitName)) {
-			Util.sendMessage(player, ChatColor.RED + kitName + HungerGames.getPlugin().getLang().kit_doesnt_exist);
-			Util.sendMessage(player, "&9&lKits:&b" + getKitListString());
+			Util.sendMessage(player, "<red>" + kitName + HungerGames.getPlugin().getLang().kit_doesnt_exist);
+			Util.sendMessage(player, "Available Kits:" + getKitListString());
 		} else if (!kititems.get(kitName).hasKitPermission(player))
 			Util.sendMessage(player, HungerGames.getPlugin().getLang().kit_no_perm);
 		else {

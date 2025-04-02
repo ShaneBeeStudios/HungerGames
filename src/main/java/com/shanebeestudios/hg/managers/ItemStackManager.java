@@ -7,6 +7,7 @@ import com.shanebeestudios.hg.api.util.NBTApi;
 import com.shanebeestudios.hg.api.util.PotionEffectUtils;
 import com.shanebeestudios.hg.api.util.PotionTypeUtils;
 import com.shanebeestudios.hg.api.util.Util;
+import com.shanebeestudios.hg.game.Game;
 import org.bukkit.Bukkit;
 import org.bukkit.Color;
 import org.bukkit.DyeColor;
@@ -61,16 +62,16 @@ public class ItemStackManager {
     /**
      * Set the kits for a game from a config
      *
-     * @param gameName The game to set the kits for
+     * @param game The game to set the kits for
      * @param arenaSection   Config the kit is pulled from
      * @return New KitManager for a game
      */
-    public KitManager loadGameKits(String gameName, ConfigurationSection arenaSection) {
+    public KitManager loadGameKits(Game game, ConfigurationSection arenaSection) {
         KitManager kit = new KitManager();
         if (arenaSection.getConfigurationSection("kits") == null) return null;
 
         kitCreator(arenaSection, kit, null);
-        Util.log("- Loaded custom kits for arena: <aqua>" + gameName);
+        Util.log("- Loaded custom kits for arena: <aqua>" + game.getGameArenaData().getName());
         return kit;
     }
 

@@ -175,7 +175,7 @@ public class ArenaConfig {
                     }
 
                     // KITS
-                    KitManager kitManager = plugin.getItemStackManager().loadGameKits(arenaName, arenaSection);
+                    KitManager kitManager = plugin.getItemStackManager().loadGameKits(game, arenaSection);
                     if (kitManager != null)
                         game.setKitManager(kitManager);
 

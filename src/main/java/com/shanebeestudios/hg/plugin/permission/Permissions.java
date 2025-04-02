@@ -26,6 +26,7 @@ public class Permissions {
     public static final Permission COMMAND_FORCE_START = getCommand("forcestart", "Force start a game arena", PermissionDefault.OP);
     public static final Permission COMMAND_JOIN = getCommand("join", "Join a game", PermissionDefault.TRUE);
     public static final Permission COMMAND_JOIN_OTHERS = getCommand("join_others", "Join other players to a game", PermissionDefault.OP);
+    public static final Permission COMMAND_KIT = getCommand("kit", "Get a kit in a game", PermissionDefault.TRUE);
     public static final Permission COMMAND_LEAVE = getCommand("leave", "Leave a game", PermissionDefault.TRUE);
     public static final Permission COMMAND_LIST = getCommand("list", "List all players in your game", PermissionDefault.TRUE);
     public static final Permission COMMAND_NBT = getCommand("nbt", "Get the NBT of an item from the configs", PermissionDefault.OP);
