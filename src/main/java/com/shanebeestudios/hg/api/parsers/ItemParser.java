@@ -162,6 +162,17 @@ public class ItemParser {
             itemStack.setData(DataComponentTypes.ITEM_NAME, Util.getMini(name));
         }
 
+        // MODEL
+        if (map.containsKey("item_model")) {
+            String model = map.getString("item_model");
+            NamespacedKey modelKey = NamespacedKey.fromString(model);
+            if (modelKey == null) {
+                Util.warning("Invalid item model: " + model);
+            } else {
+                itemStack.setData(DataComponentTypes.ITEM_MODEL, modelKey);
+            }
+        }
+
         // LORE
         if (map.containsKey("lore")) {
             List<String> lore = map.getStringList("lore");
@@ -249,7 +260,10 @@ public class ItemParser {
             if (potionEffectType != null) {
                 int duration = (int) entry.getOrDefault("duration", 300); // Default to 15 seconds
                 int amplifier = (int) entry.getOrDefault("amplifier", 0);
-                return potionEffectType.createEffect(duration, amplifier);
+                boolean ambient = (boolean) entry.getOrDefault("ambient", false);
+                boolean show_icon = (boolean) entry.getOrDefault("show_icon", true);
+                boolean show_particles = (boolean) entry.getOrDefault("show_particles", true);
+                return new PotionEffect(potionEffectType, duration, amplifier, ambient, show_particles, show_icon);
             }
         }
         return null;
