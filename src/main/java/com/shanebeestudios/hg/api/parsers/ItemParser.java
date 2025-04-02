@@ -247,7 +247,7 @@ public class ItemParser {
         if (namespacedKey != null) {
             PotionEffectType potionEffectType = Registries.POTION_EFFECT_TYPE_REGISTRY.get(namespacedKey);
             if (potionEffectType != null) {
-                int duration = (int) entry.getOrDefault("duration", -1);
+                int duration = (int) entry.getOrDefault("duration", 300); // Default to 15 seconds
                 int amplifier = (int) entry.getOrDefault("amplifier", 0);
                 return potionEffectType.createEffect(duration, amplifier);
             }
