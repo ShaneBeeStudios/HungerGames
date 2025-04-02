@@ -18,6 +18,7 @@ import java.util.UUID;
 /**
  * Data class for holding a {@link Game Game's} blocks
  */
+@SuppressWarnings("MismatchedQueryAndUpdateOfCollection")
 public class GameBlockData extends Data {
 
     private final Map<ChestType, List<Location>> chests = new HashMap<>();
@@ -51,12 +52,15 @@ public class GameBlockData extends Data {
         return this.gameLobbyWall.isLobbyValid();
     }
 
-    private void resetChestMap() {
-        for (ChestType value : ChestType.values()) {
-            this.chests.put(value, new ArrayList<>());
+    private void clearChestMaps(ChestType... type) {
+        for (ChestType chestType : type) {
+            this.chests.get(chestType).clear();
         }
     }
 
+    /**
+     * Mark chests to be refilled
+     */
     public void markChestForRefill() {
         this.chests.forEach((chestType, locations) -> {
             if (chestType == ChestType.REGULAR || chestType == ChestType.DROP) {
@@ -67,20 +71,21 @@ public class GameBlockData extends Data {
                 });
             }
         });
+        clearChestMaps(ChestType.REGULAR);
+        clearChestMaps(ChestType.BONUS);
     }
 
     /**
-     * Clear chests and mark them for refill
+     * Clear chests
      */
     public void clearChests() {
-        this.chests.forEach((chestType, locations) -> {
+        this.chests.forEach((chestType, locations) ->
             locations.forEach(location -> {
                 if (location.getBlock().getState() instanceof InventoryHolder inventoryHolder) {
                     inventoryHolder.getInventory().clear();
                 }
-            });
-        });
-        resetChestMap();
+            }));
+        clearChestMaps(ChestType.values());
     }
 
     /**
