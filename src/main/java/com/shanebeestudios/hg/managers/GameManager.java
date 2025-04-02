@@ -8,8 +8,7 @@ import com.shanebeestudios.hg.api.util.Util;
 import com.shanebeestudios.hg.data.Language;
 import com.shanebeestudios.hg.game.Game;
 import com.shanebeestudios.hg.game.GameArenaData;
-import com.shanebeestudios.hg.game.GameBlockData;
-import com.shanebeestudios.hg.game.GameItemData;
+import com.shanebeestudios.hg.game.GameBlockData.ChestType;
 import com.shanebeestudios.hg.game.GameRegion;
 import com.shanebeestudios.hg.plugin.configs.Config;
 import org.bukkit.Location;
@@ -38,7 +37,7 @@ public class GameManager {
     private final HungerGames plugin;
     private final Map<String, Game> games = new HashMap<>();
     private final Language lang;
-    private final Random rg = new Random();
+    private final Random random = new Random();
 
     public GameManager(HungerGames plugin) {
         this.plugin = plugin;
@@ -67,6 +66,7 @@ public class GameManager {
     /**
      * Stop all currently running games
      */
+    @SuppressWarnings("DataFlowIssue")
     public void stopAllGames() {
         PlayerManager playerManager = this.plugin.getPlayerManager();
         List<Player> players = new ArrayList<>();
@@ -91,6 +91,7 @@ public class GameManager {
         this.games.clear();
     }
 
+    @SuppressWarnings("UnusedReturnValue")
     public Game createGame(String name, Block corner1, Block corner2, List<Location> spawns, Location sign,
                            int timer, int minPlayers, int maxPlayers, int cost) {
         GameRegion gameRegion = GameRegion.createNew(corner1, corner2);
@@ -151,33 +152,38 @@ public class GameManager {
     /**
      * Fill chests in a game
      *
-     * @param block     Chest to fill
      * @param game      Game this chest is in
+     * @param block     Chest to fill
      * @param chestType Type of chest
      */
-    public void fillChests(Block block, Game game, GameBlockData.ChestType chestType) {
-        Inventory i = ((InventoryHolder) block.getState()).getInventory();
+    public void fillChests(Game game, Block block, ChestType chestType) {
+        Inventory inventory = ((InventoryHolder) block.getState()).getInventory();
         List<Integer> slots = new ArrayList<>();
         for (int slot = 0; slot <= 26; slot++) {
             slots.add(slot);
         }
         Collections.shuffle(slots);
-        i.clear();
-        int max = switch (chestType) {
-            case REGULAR -> Config.maxchestcontent;
-            case BONUS -> Config.maxbonuscontent;
+        inventory.clear();
+        int min = switch (chestType) {
+            case REGULAR -> Config.CHESTS_REGULAR_MIN_CONTENT;
+            case BONUS -> Config.CHESTS_BONUS_MIN_CONTENT;
             case PLAYER_PLACED -> 0;
-            case DROP -> Config.RANDOM_CHEST_MAX_CONTENT;
+            case CHEST_DROP -> Config.CHESTS_CHEST_DROP_MIN_CONTENT;
         };
-        int min = chestType == GameBlockData.ChestType.BONUS ? Config.minbonuscontent : Config.minchestcontent;
+        int max = switch (chestType) {
+            case REGULAR -> Config.CHESTS_REGULAR_MAX_CONTENT;
+            case BONUS -> Config.CHESTS_BONUS_MAX_CONTENT;
+            case PLAYER_PLACED -> 0;
+            case CHEST_DROP -> Config.CHESTS_CHEST_DROP_MAX_CONTENT;
+        };
 
-        int c = rg.nextInt(max) + 1;
+        int c = this.random.nextInt(max) + 1;
         c = Math.max(c, min);
         while (c != 0) {
-            ItemStack it = randomItem(game, chestType == GameBlockData.ChestType.BONUS);
+            ItemStack it = randomItem(game, chestType);
             int slot = slots.getFirst();
             slots.removeFirst();
-            i.setItem(slot, it);
+            inventory.setItem(slot, it);
             c--;
         }
     }
@@ -185,27 +191,17 @@ public class GameManager {
     /**
      * Get a random item from a game's item list
      *
-     * @param game  Game to get the item from
-     * @param bonus Whether or not its a bonus item
+     * @param game      Game to get the item from
+     * @param chestType Type of chest for items
      * @return Random ItemStack
      */
-    public ItemStack randomItem(Game game, boolean bonus) {
-        GameItemData gameItemData = game.getGameItemData();
-        if (bonus) {
-            int r = gameItemData.getBonusItems().size();
-            if (r == 0) {
-                return new ItemStack(Material.AIR);
-            }
-            int i = rg.nextInt(r) + 1;
-            return gameItemData.getBonusItems().get(i);
-        } else {
-            int r = gameItemData.getItems().size();
-            if (r == 0) {
-                return new ItemStack(Material.AIR);
-            }
-            int i = rg.nextInt(r) + 1;
-            return gameItemData.getItems().get(i);
-        }
+    public ItemStack randomItem(Game game, ChestType chestType) {
+        Map<Integer, ItemStack> items = game.getGameItemData().getItems(chestType);
+        int r = items.size();
+        if (r == 0) return new ItemStack(Material.AIR);
+        int i = this.random.nextInt(r) + 1;
+        return items.get(i);
+
     }
 
     /**

@@ -24,7 +24,7 @@ public class ChestDropTask implements Runnable {
         this.game = game;
         HungerGames plugin = HungerGames.getPlugin();
         this.lang = plugin.getLang();
-        int interval = Config.RANDOM_CHEST_INTERVAL * 20;
+        int interval = Config.CHESTS_CHEST_DROP_INTERVAL * 20;
         this.taskId = Bukkit.getServer().getScheduler().scheduleSyncRepeatingTask(plugin, this, interval, interval);
     }
 

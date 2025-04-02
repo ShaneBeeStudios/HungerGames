@@ -1,8 +1,10 @@
 package com.shanebeestudios.hg.data;
 
 import com.shanebeestudios.hg.HungerGames;
-import com.shanebeestudios.hg.managers.ItemStackManager;
 import com.shanebeestudios.hg.api.util.Util;
+import com.shanebeestudios.hg.game.GameBlockData.ChestType;
+import com.shanebeestudios.hg.managers.ItemStackManager;
+import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.inventory.ItemStack;
@@ -20,14 +22,16 @@ public class RandomItems {
     private File itemsConfigFile = null;
     private final HungerGames plugin;
     private final ItemStackManager itemStackManager;
-    private final Map<Integer, ItemStack> items = new HashMap<>();
-    private final Map<Integer, ItemStack> bonusItems = new HashMap<>();
+    private final Map<ChestType, Map<Integer, ItemStack>> chestItems = new HashMap<>();
 
     public RandomItems(HungerGames plugin) {
         this.plugin = plugin;
         this.itemStackManager = plugin.getItemStackManager();
         loadItemsConfig();
         Util.log("Loading random items:");
+        for (ChestType value : ChestType.values()) {
+            this.chestItems.put(value, new HashMap<>());
+        }
         loadItems();
     }
 
@@ -35,7 +39,7 @@ public class RandomItems {
         if (this.itemsConfigFile == null) {
             this.itemsConfigFile = new File(this.plugin.getDataFolder(), "items.yml");
         }
-        if (!itemsConfigFile.exists()) {
+        if (!this.itemsConfigFile.exists()) {
             this.plugin.saveResource("items.yml", false);
             Util.log("- New items.yml file has been <green>successfully generated!");
         }
@@ -43,22 +47,22 @@ public class RandomItems {
     }
 
     public void loadItems() {
-        // Regular items
-        this.itemStackManager.loadItems(this.itemsConfig.getMapList("items"), this.items);
+        ConfigurationSection itemsSection = this.itemsConfig.getConfigurationSection("items");
+        assert itemsSection != null;
+        for (ChestType chestType : ChestType.values()) {
+            if (chestType == ChestType.PLAYER_PLACED) continue;
 
-        // Bonus items
-        this.itemStackManager.loadItems(this.itemsConfig.getMapList("bonus"), this.bonusItems);
-
-        Util.log("- Loaded <green>%s <grey>random items!", this.items.size());
-        Util.log("- Loaded <green>%s <grey>bonus items!", this.bonusItems.size());
+            String chestTypeName = chestType.getName();
+            if (itemsSection.isSet(chestTypeName)) {
+                Map<Integer, ItemStack> itemMap = this.chestItems.get(chestType);
+                this.itemStackManager.loadItems(itemsSection.getMapList(chestTypeName), itemMap);
+                Util.log("- Loaded <green>%s <grey>%s items!", itemMap.size(), chestTypeName);
+            }
+        }
     }
 
-    public Map<Integer, ItemStack> getItems() {
-        return this.items;
-    }
-
-    public Map<Integer, ItemStack> getBonusItems() {
-        return this.bonusItems;
+    public Map<Integer, ItemStack> getItems(ChestType type) {
+        return this.chestItems.get(type);
     }
 
 }

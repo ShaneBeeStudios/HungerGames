@@ -32,7 +32,7 @@ public class GameChestListener extends GameListenerBase {
         GameBlockData gameBlockData = game.getGameBlockData();
         if (gameBlockData.canBeFilled(block.getLocation())) {
             ChestType chestType = event.getChestType();
-            HungerGames.getPlugin().getGameManager().fillChests(block, game, chestType);
+            HungerGames.getPlugin().getGameManager().fillChests(game, block, chestType);
             gameBlockData.logChest(chestType, block.getLocation());
         }
     }
@@ -45,7 +45,7 @@ public class GameChestListener extends GameListenerBase {
                 if (game != null) {
                     chest.getBlock().setType(Material.AIR);
                     chest.getWorld().createExplosion(chest.getLocation().add(0.5, 0.5, 0.5), 1, false, false);
-                    game.getGameBlockData().removeChest(ChestType.DROP, chest.getLocation());
+                    game.getGameBlockData().removeChest(ChestType.CHEST_DROP, chest.getLocation());
                 }
             }
         }
@@ -64,7 +64,7 @@ public class GameChestListener extends GameListenerBase {
             if (block.getType() == Material.CHEST) {
                 ChestType chestType = GameBlockData.ChestType.REGULAR;
                 if (((Chest) block.getState()).getPersistentDataContainer().has(Constants.CHEST_DROP_BLOCK, PersistentDataType.BOOLEAN)) {
-                    chestType = GameBlockData.ChestType.DROP;
+                    chestType = GameBlockData.ChestType.CHEST_DROP;
                 }
                 Bukkit.getServer().getPluginManager().callEvent(new ChestOpenEvent(game, block, chestType));
             } else if (BlockUtils.isBonusBlock(block)) {

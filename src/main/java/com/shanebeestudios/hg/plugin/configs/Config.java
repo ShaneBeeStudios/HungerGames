@@ -27,10 +27,6 @@ public class Config {
     public static boolean bossbar;
     public static int TRACKING_STICK_USES;
     public static int PLAYERS_FOR_TRACKING_STICK;
-    public static int maxchestcontent;
-    public static int minchestcontent;
-    public static int maxbonuscontent;
-    public static int minbonuscontent;
     public static int SETTINGS_TELEPORT_AT_END_TIME;
     public static List<String> SETTINGS_BONUS_BLOCK_TYPES;
     public static boolean savePreviousLocation;
@@ -65,10 +61,20 @@ public class Config {
     public static List<String> ROLLBACK_EDITABLE_BLOCKS;
     public static boolean ROLLBACK_ALLOW_ITEMFRAME_TAKE;
 
-    //Random chest
-    public static boolean RANDOM_CHEST_ENABLED;
-    public static int RANDOM_CHEST_INTERVAL;
-    public static int RANDOM_CHEST_MAX_CONTENT;
+    // Chests
+    // Regular
+    public static int CHESTS_REGULAR_MIN_CONTENT;
+    public static int CHESTS_REGULAR_MAX_CONTENT;
+
+    // Bonus
+    public static int CHESTS_BONUS_MIN_CONTENT;
+    public static int CHESTS_BONUS_MAX_CONTENT;
+
+    // Chest Drops
+    public static boolean CHESTS_CHEST_DROP_ENABLED;
+    public static int CHESTS_CHEST_DROP_INTERVAL;
+    public static int CHESTS_CHEST_DROP_MIN_CONTENT;
+    public static int CHESTS_CHEST_DROP_MAX_CONTENT;
 
     //World border
     public static boolean WORLD_BORDER_ENABLED;
@@ -125,10 +131,6 @@ public class Config {
         bossbar = config.getBoolean("settings.bossbar-countdown");
         TRACKING_STICK_USES = config.getInt("settings.trackingstick-uses");
         PLAYERS_FOR_TRACKING_STICK = config.getInt("settings.players-for-trackingstick");
-        maxchestcontent = config.getInt("settings.max-chestcontent");
-        minchestcontent = config.getInt("settings.min-chestcontent");
-        maxbonuscontent = config.getInt("settings.max-bonus-chestcontent");
-        minbonuscontent = config.getInt("settings.min-bonus-chestcontent");
         savePreviousLocation = config.getBoolean("settings.save-previous-location");
         SETTINGS_BONUS_BLOCK_TYPES = config.getStringList("settings.bonus-block-types");
         SETTINGS_TELEPORT_AT_END_TIME = config.getInt("settings.teleport-at-end-time");
@@ -164,9 +166,15 @@ public class Config {
         ROLLBACK_EDITABLE_BLOCKS = config.getStringList("rollback.editable-blocks");
         ROLLBACK_ALLOW_ITEMFRAME_TAKE = config.getBoolean("rollback.allow-itemframe-take");
 
-        RANDOM_CHEST_ENABLED = config.getBoolean("random-chest.enabled");
-        RANDOM_CHEST_INTERVAL = config.getInt("random-chest.interval");
-        RANDOM_CHEST_MAX_CONTENT = config.getInt("random-chest.max-chest-content");
+        // Chests
+        CHESTS_REGULAR_MIN_CONTENT = config.getInt("chests.regular.min-content");
+        CHESTS_REGULAR_MAX_CONTENT = config.getInt("chests.regular.max-content");
+        CHESTS_BONUS_MIN_CONTENT = config.getInt("chests.bonus.min-content");
+        CHESTS_BONUS_MAX_CONTENT = config.getInt("chests.bonus.max-content");
+        CHESTS_CHEST_DROP_ENABLED = config.getBoolean("chests.chest-drop.enabled");
+        CHESTS_CHEST_DROP_INTERVAL = config.getInt("chests.chest-drop.interval");
+        CHESTS_CHEST_DROP_MIN_CONTENT = config.getInt("chests.chest-drop.min-content");
+        CHESTS_CHEST_DROP_MAX_CONTENT = config.getInt("chests.chest-drop.max-content");
 
         WORLD_BORDER_ENABLED = config.getBoolean("world-border.enabled");
         WORLD_BORDER_INITIATE_ON_START = config.getBoolean("world-border.initiate-on-start");

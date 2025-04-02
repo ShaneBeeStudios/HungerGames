@@ -100,10 +100,27 @@ reward:
   #  - '&7Congrats &b<player> &7you won a vote key for winning &3Hunger&bGames'
   messages:
     - none
-random-chest:
-  enabled: false
-  interval: 30
-  max-chest-content: 9
+
+# Settings for chests in game
+chests:
+  # Regular chests
+  regular:
+    # Min amount of items to appear in a chest
+    min-content: 3
+    # Max amount of items to appear in a chest
+    max-content: 7
+  # Bonus chests
+  bonus:
+    min-content: 1
+    max-content: 5
+  # Chest drops
+  chest-drop:
+    # Whether to enable chest drops
+    enabled: false
+    # Interval for chest drops in seconds
+    interval: 30
+    min-content: 1
+    max-content: 5
 rollback:
   # Let players break blocks in the arena, and restore when the game is done
   allow-block-break: false

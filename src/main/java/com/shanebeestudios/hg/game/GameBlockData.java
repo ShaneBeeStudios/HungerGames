@@ -29,6 +29,9 @@ public class GameBlockData extends Data {
     protected GameBlockData(Game game) {
         super(game);
         this.gameLobbyWall = new GameLobbyWall(game);
+        for (ChestType value : ChestType.values()) {
+            this.chests.put(value, new ArrayList<>());
+        }
     }
 
     /**
@@ -63,7 +66,7 @@ public class GameBlockData extends Data {
      */
     public void markChestForRefill() {
         this.chests.forEach((chestType, locations) -> {
-            if (chestType == ChestType.REGULAR || chestType == ChestType.DROP) {
+            if (chestType == ChestType.REGULAR || chestType == ChestType.CHEST_DROP) {
                 locations.forEach(location -> {
                     if (location.getBlock().getState() instanceof InventoryHolder inventoryHolder) {
                         inventoryHolder.getInventory().clear();
@@ -197,10 +200,20 @@ public class GameBlockData extends Data {
     }
 
     public enum ChestType {
-        REGULAR,
-        BONUS,
-        PLAYER_PLACED,
-        DROP
+        REGULAR("regular"),
+        BONUS("bonus"),
+        PLAYER_PLACED("player-placed"),
+        CHEST_DROP("chest-drop"),;
+
+        private final String name;
+
+        ChestType(String name) {
+            this.name = name;
+        }
+
+        public String getName() {
+            return this.name;
+        }
     }
 
 }

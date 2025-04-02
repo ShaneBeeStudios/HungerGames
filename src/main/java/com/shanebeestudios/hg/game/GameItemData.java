@@ -1,8 +1,10 @@
 package com.shanebeestudios.hg.game;
 
 import com.shanebeestudios.hg.data.RandomItems;
+import com.shanebeestudios.hg.game.GameBlockData.ChestType;
 import org.bukkit.inventory.ItemStack;
 
+import java.util.HashMap;
 import java.util.Map;
 
 /**
@@ -12,15 +14,18 @@ import java.util.Map;
 public class GameItemData extends Data {
 
     private final RandomItems randomItems;
-    private Map<Integer, ItemStack> items;
-    private Map<Integer, ItemStack> bonusItems;
+    private final Map<ChestType, Map<Integer, ItemStack>> chestItems = new HashMap<>();
 
     protected GameItemData(Game game) {
         super(game);
         this.randomItems = getPlugin().getRandomItems();
+        for (ChestType value : ChestType.values()) {
+            this.chestItems.put(value, new HashMap<>());
+        }
         // Set default items from items.yml (if arenas.yml has items it will override this)
-        resetItemsDefault();
-        resetBonusItemsDefault();
+        resetItemsDefault(ChestType.REGULAR);
+        resetItemsDefault(ChestType.BONUS);
+        resetItemsDefault(ChestType.CHEST_DROP);
     }
 
     /**
@@ -28,8 +33,8 @@ public class GameItemData extends Data {
      *
      * @param items Map of items to set
      */
-    public void setItems(Map<Integer, ItemStack> items) {
-        this.items = items;
+    public void setItems(ChestType chestType, Map<Integer, ItemStack> items) {
+        this.chestItems.put(chestType, items);
     }
 
     /**
@@ -37,8 +42,8 @@ public class GameItemData extends Data {
      *
      * @return Map of items
      */
-    public Map<Integer, ItemStack> getItems() {
-        return this.items;
+    public Map<Integer, ItemStack> getItems(ChestType chestType) {
+        return this.chestItems.get(chestType);
     }
 
     /**
@@ -46,63 +51,23 @@ public class GameItemData extends Data {
      *
      * @param item ItemStack to add
      */
-    public void addToItems(ItemStack item) {
-        this.items.put(this.items.size() + 1, item.clone());
+    public void addToItems(ChestType chestType, ItemStack item) {
+        Map<Integer, ItemStack> map = this.chestItems.get(chestType);
+        map.put(map.size() + 1, item.clone());
     }
 
     /**
      * Clear the items for this game
      */
-    public void clearItems() {
-        this.items.clear();
+    public void clearItems(ChestType chestType) {
+        this.chestItems.get(chestType).clear();
     }
 
     /**
      * Reset the items for this game to the plugin's default items list
      */
-    public void resetItemsDefault() {
-        this.items = this.randomItems.getItems();
-    }
-
-    /**
-     * Set the bonus items for this game to a new map
-     *
-     * @param items Map of bonus items
-     */
-    public void setBonusItems(Map<Integer, ItemStack> items) {
-        this.bonusItems = items;
-    }
-
-    /**
-     * Get the bonus items map for this game
-     *
-     * @return Map of bonus items
-     */
-    public Map<Integer, ItemStack> getBonusItems() {
-        return this.bonusItems;
-    }
-
-    /**
-     * Add an item to this game's bonus items
-     *
-     * @param item ItemStack to add to bonus items
-     */
-    public void addToBonusItems(ItemStack item) {
-        this.bonusItems.put(this.bonusItems.size() + 1, item.clone());
-    }
-
-    /**
-     * Clear this game's bonus items
-     */
-    public void clearBonusItems() {
-        this.bonusItems.clear();
-    }
-
-    /**
-     * Reset the bonus items for this game to the plugin's default bonus items list
-     */
-    public void resetBonusItemsDefault() {
-        this.bonusItems = this.randomItems.getBonusItems();
+    public void resetItemsDefault(ChestType chestType) {
+        this.chestItems.put(chestType, this.randomItems.getItems(chestType));
     }
 
 }

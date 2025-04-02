@@ -4,6 +4,7 @@ import com.shanebeestudios.hg.HungerGames;
 import com.shanebeestudios.hg.api.util.Util;
 import com.shanebeestudios.hg.game.Game;
 import com.shanebeestudios.hg.game.GameArenaData;
+import com.shanebeestudios.hg.game.GameBlockData.ChestType;
 import com.shanebeestudios.hg.game.GameBorderData;
 import com.shanebeestudios.hg.game.GameRegion;
 import com.shanebeestudios.hg.managers.ItemStackManager;
@@ -181,17 +182,15 @@ public class ArenaConfig {
                     // ITEMS
                     if (arenaSection.isSet("items")) {
                         ConfigurationSection itemsSection = arenaSection.getConfigurationSection("items");
-                        if (itemsSection.isSet("items")) {
-                            HashMap<Integer, ItemStack> items = new HashMap<>();
-                            this.itemStackManager.loadItems(itemsSection.getMapList("items"), items);
-                            game.getGameItemData().setItems(items);
-                            Util.log(items.size() + " Random items have been loaded for arena: &b" + arenaName);
-                        }
-                        if (itemsSection.isSet("bonus")) {
-                            HashMap<Integer, ItemStack> bonusItems = new HashMap<>();
-                            this.itemStackManager.loadItems(itemsSection.getMapList("bonus"), bonusItems);
-                            game.getGameItemData().setBonusItems(bonusItems);
-                            Util.log(bonusItems.size() + " Random bonus items have been loaded for arena: &b" + arenaName);
+                        for (ChestType chestType : ChestType.values()) {
+                            String chestTypeName = chestType.getName();
+                            if (itemsSection.isSet(chestTypeName)) {
+                                HashMap<Integer, ItemStack> items = new HashMap<>();
+                                this.itemStackManager.loadItems(itemsSection.getMapList(chestTypeName), items);
+                                game.getGameItemData().setItems(chestType, items);
+                                Util.log("%s random %s have been loaded for arena <white>'<aqua>%s<white>'",
+                                    items.size(), chestTypeName, arenaName);
+                            }
                         }
                     }
 
