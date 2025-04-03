@@ -9,13 +9,13 @@ import com.shanebeestudios.hg.managers.GameManager;
 import com.shanebeestudios.hg.managers.ItemStackManager;
 import com.shanebeestudios.hg.managers.KillManager;
 import com.shanebeestudios.hg.managers.KitManager;
+import com.shanebeestudios.hg.managers.MobManager;
 import com.shanebeestudios.hg.managers.Placeholders;
 import com.shanebeestudios.hg.managers.PlayerManager;
 import com.shanebeestudios.hg.managers.SessionManager;
 import com.shanebeestudios.hg.plugin.commands.MainCommand;
 import com.shanebeestudios.hg.plugin.configs.ArenaConfig;
 import com.shanebeestudios.hg.plugin.configs.Config;
-import com.shanebeestudios.hg.plugin.configs.MobConfig;
 import com.shanebeestudios.hg.plugin.listeners.GameBlockListener;
 import com.shanebeestudios.hg.plugin.listeners.GameChestListener;
 import com.shanebeestudios.hg.plugin.listeners.GameCommandListener;
@@ -60,10 +60,8 @@ public class HungerGames extends JavaPlugin {
     private RandomItems randomItems;
     private KitManager kitManager;
     private SessionManager sessionManager;
+    private MobManager mobManager;
     private io.lumine.mythic.api.mobs.MobManager mythicMobManager;
-
-    //Mobs
-    private MobConfig mobConfig;
 
     //NMS Nbt
     private NBTApi nbtApi;
@@ -115,7 +113,7 @@ public class HungerGames extends JavaPlugin {
         this.kitManager = new KitManager(this);
         this.sessionManager = new SessionManager();
 
-        this.mobConfig = new MobConfig(this);
+        this.mobManager = new MobManager(this);
         this.randomItems = new RandomItems(this);
         this.playerManager = new PlayerManager();
         this.gameManager = new GameManager(this);
@@ -152,11 +150,11 @@ public class HungerGames extends JavaPlugin {
         this.config = null;
         this.metrics = null;
         this.nbtApi = null;
+        this.mobManager = null;
         this.mythicMobManager = null;
         this.lang = null;
         this.kitManager = null;
         this.itemStackManager = null;
-        this.mobConfig = null;
         this.randomItems = null;
         this.playerManager = null;
         this.arenaconfig = null;
@@ -298,12 +296,12 @@ public class HungerGames extends JavaPlugin {
     }
 
     /**
-     * Get an instance of the mob confile
+     * Get an instance of the MobManager
      *
-     * @return Mob config
+     * @return MobManager
      */
-    public MobConfig getMobConfig() {
-        return this.mobConfig;
+    public MobManager getMobManager() {
+        return this.mobManager;
     }
 
     /**

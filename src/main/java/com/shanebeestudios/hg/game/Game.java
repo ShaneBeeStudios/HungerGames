@@ -11,7 +11,6 @@ import com.shanebeestudios.hg.data.Language;
 import com.shanebeestudios.hg.data.Leaderboard;
 import com.shanebeestudios.hg.data.PlayerData;
 import com.shanebeestudios.hg.game.GameCommandData.CommandType;
-import com.shanebeestudios.hg.managers.MobManager;
 import com.shanebeestudios.hg.managers.PlayerManager;
 import com.shanebeestudios.hg.plugin.configs.Config;
 import com.shanebeestudios.hg.plugin.permission.Permissions;
@@ -42,7 +41,6 @@ public class Game {
     final Language lang;
 
     // Managers
-    private final MobManager mobManager;
     private final PlayerManager playerManager;
 
     // Tasks here!
@@ -56,6 +54,7 @@ public class Game {
 
     // Data Objects
     final GameArenaData gameArenaData;
+    private final GameEntityData gameEntityData;
     final GameScoreboard gameScoreboard;
     final GameBarData bar;
     final GamePlayerData gamePlayerData;
@@ -83,11 +82,11 @@ public class Game {
         this.plugin = HungerGames.getPlugin();
         this.lang = plugin.getLang();
         this.gameArenaData = new GameArenaData(this, name, gameRegion, gameTimerTask, minPlayers, maxPlayers, roam, cost);
+        this.gameEntityData = new GameEntityData(this);
         this.gamePlayerData = new GamePlayerData(this);
         this.gameBlockData = new GameBlockData(this);
         this.gameScoreboard = new GameScoreboard(this);
         this.playerManager = HungerGames.getPlugin().getPlayerManager();
-        this.mobManager = new MobManager(this);
         this.bar = new GameBarData(this);
         this.gameItemData = new GameItemData(this);
         this.gameCommandData = new GameCommandData(this);
@@ -111,6 +110,15 @@ public class Game {
      */
     public GameArenaData getGameArenaData() {
         return gameArenaData;
+    }
+
+    /**
+     * Get an instance of the GameEntityData
+     *
+     * @return Instance of GameEntityData
+     */
+    public GameEntityData getGameEntityData() {
+        return this.gameEntityData;
     }
 
     /**
@@ -187,15 +195,6 @@ public class Game {
      */
     public Location getLobbyLocation() {
         return this.gameBlockData.getSignLocation();
-    }
-
-    /**
-     * Get this game's MobManager
-     *
-     * @return MobManager for this game
-     */
-    public MobManager getMobManager() {
-        return this.mobManager;
     }
 
     public HungerGames getPlugin() {

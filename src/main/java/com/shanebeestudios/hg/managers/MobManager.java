@@ -1,71 +1,106 @@
 package com.shanebeestudios.hg.managers;
 
-import com.google.common.collect.ImmutableList;
 import com.shanebeestudios.hg.HungerGames;
 import com.shanebeestudios.hg.api.parsers.ItemParser;
 import com.shanebeestudios.hg.api.registry.Registries;
 import com.shanebeestudios.hg.api.util.Util;
+import com.shanebeestudios.hg.data.MobData;
 import com.shanebeestudios.hg.data.MobEntry;
 import com.shanebeestudios.hg.game.Game;
+import io.lumine.mythic.api.mobs.MythicMob;
 import org.bukkit.NamespacedKey;
 import org.bukkit.configuration.ConfigurationSection;
-import org.bukkit.configuration.file.FileConfiguration;
+import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.EntityType;
 import org.bukkit.inventory.EquipmentSlot;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.potion.PotionEffect;
+import org.jetbrains.annotations.Nullable;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
+import java.util.Optional;
 import java.util.Random;
 
 /**
  * Manager for mob spawning in games
- * <p>Get an instance of this class with {@link Game#getMobManager()}</p>
+ * <p>Get an instance of this class with {@link HungerGames#getMobManager()}</p>
  */
 @SuppressWarnings("unused")
 public class MobManager {
 
+    private final HungerGames plugin;
     private final Random random = new Random();
-    private final List<MobEntry> dayMobs = new ArrayList<>();
-    private final List<MobEntry> nightMobs = new ArrayList<>();
-    private final FileConfiguration mobsConfig;
+    private MobData defaultMobData;
 
-    public MobManager(Game game) {
-        this.mobsConfig = HungerGames.getPlugin().getMobConfig().getMobsConfig();
-        loadMobs(game.getGameArenaData().getName());
+    public MobManager(HungerGames plugin) {
+        this.plugin = plugin;
+        loadDefaultMobs();
+    }
+
+    public void loadDefaultMobs() {
+        Util.log("Loading mobs:");
+        File kitFile = new File(this.plugin.getDataFolder(), "mobs.yml");
+
+        if (!kitFile.exists()) {
+            this.plugin.saveResource("mobs.yml", false);
+            Util.log("- New mobs.yml file has been <green>successfully generated!");
+        }
+        YamlConfiguration mobConfig = YamlConfiguration.loadConfiguration(kitFile);
+        ConfigurationSection mobsSection = mobConfig.getConfigurationSection("mobs");
+        assert mobsSection != null;
+        this.defaultMobData = createMobData(mobsSection, null);
+        Util.log("- <aqua>%s <grey>mobs have been <green>successfully loaded!", this.defaultMobData.getMobCount());
+    }
+
+    public void loadGameMobs(Game game, ConfigurationSection arenaSection) {
+        ConfigurationSection mobsSection = arenaSection.getConfigurationSection("mobs");
+        if (mobsSection == null) {
+            game.getGameEntityData().setMobData(this.defaultMobData);
+            return;
+        }
+
+        MobData mobData = createMobData(mobsSection, game);
+        Util.log("- Loaded <aqua>%s <grey>custom mobs for arena: <aqua>%s",
+            mobData.getMobCount(), game.getGameArenaData().getName());
+        game.getGameEntityData().setMobData(mobData);
     }
 
     @SuppressWarnings("unchecked")
-    private void loadMobs(String gameName) {
+    public MobData createMobData(ConfigurationSection mobsSection, @Nullable Game game) {
+        MobData mobData = new MobData();
+        String gameName = game != null ? game.getGameArenaData().getName() + ":" : "";
         for (String time : Arrays.asList("day", "night")) {
-            String mobTimeKey = "mobs." + time + ".";
-            String sectionName = gameName;
-            if (this.mobsConfig.getConfigurationSection(mobTimeKey + gameName) == null) {
-                sectionName = "default";
-            }
-            ConfigurationSection gameSection = mobsConfig.getConfigurationSection(mobTimeKey + sectionName);
-            if (gameSection == null) {
-                continue;
-            }
-            for (String key : gameSection.getKeys(false)) {
-                ConfigurationSection mobSection = gameSection.getConfigurationSection(key);
-                if (mobSection == null) continue;
+            if (!mobsSection.contains(time)) continue;
+            ConfigurationSection timeSection = mobsSection.getConfigurationSection(time);
+            assert timeSection != null;
 
-                MobEntry entry;
+            for (String key : timeSection.getKeys(false)) {
+                ConfigurationSection mobSection = timeSection.getConfigurationSection(key);
+                assert mobSection != null;
+
                 String typeString = mobSection.getString("type");
-
-                // MYTHIC MOB
                 if (typeString == null) continue;
 
+                MobEntry mobEntry;
+                // MYTHIC MOB
                 if (typeString.startsWith("MM:")) {
-                    if (HungerGames.getPlugin().getMythicMobManager() == null) continue;
+                    if (this.plugin.getMythicMobManager() == null) continue;
 
                     String mythicMob = typeString.replace("MM:", "");
-                    entry = new MobEntry(mythicMob, mobSection.getInt("level"));
+                    double level = mobSection.getDouble("level", 0);
+
+                    Optional<MythicMob> mob = this.plugin.getMythicMobManager().getMythicMob(mythicMob);
+                    if (mob.isPresent()) {
+                        mobEntry = new MobEntry(mob.get(), level);
+                    } else {
+                        Util.warning("Invalid MythicMob: %s", mythicMob);
+                        continue;
+                    }
 
                 }
                 // REGULAR MOB
@@ -81,10 +116,10 @@ public class MobManager {
                         continue;
                     }
 
-                    entry = new MobEntry(entityType);
-                    String name = mobSection.getString("name");
-                    if (name != null) {
-                        entry.setName(Util.getMini(name));
+                    mobEntry = new MobEntry(entityType);
+                    if (mobSection.contains("name")) {
+                        String name = mobSection.getString("name");
+                        mobEntry.setName(Util.getMini(name));
                     }
 
                     ConfigurationSection gearSection = mobSection.getConfigurationSection("gear");
@@ -95,7 +130,7 @@ public class MobManager {
                                 ConfigurationSection itemSection = gearSection.getConfigurationSection(slotName);
                                 ItemStack itemStack = ItemParser.parseItem(itemSection);
                                 if (itemStack != null) {
-                                    entry.addGear(slot, itemStack);
+                                    mobEntry.addGear(slot, itemStack);
                                 }
                             }
                         }
@@ -108,89 +143,25 @@ public class MobManager {
                             PotionEffect potionEffect = ItemParser.parsePotionEffect((Map<String, Object>) map);
                             potionEffects.add(potionEffect);
                         });
-                        entry.addPotionEffects(potionEffects);
+                        mobEntry.addPotionEffects(potionEffects);
                     }
                 }
-                String deathMessageString = mobSection.getString("death_message", null);
-                if (deathMessageString != null) {
-                    entry.setDeathMessage(Util.getMini(deathMessageString));
+                String deathMessage = mobSection.getString("death_message", null);
+                if (deathMessage != null) {
+                    mobEntry.setDeathMessage(Util.getMini(deathMessage));
                 }
                 int weight = mobSection.getInt("weight", 1);
                 for (int i = 1; i <= weight; i++) {
                     if (time.equalsIgnoreCase("day")) {
-                        this.dayMobs.add(entry);
+                        mobData.addDayMob(mobEntry);
                     } else {
-                        this.nightMobs.add(entry);
+                        mobData.addNightMob(mobEntry);
                     }
                 }
             }
         }
+        return mobData;
     }
 
-    /**
-     * Get list of MobEntries for daytime
-     *
-     * @return List of MobEntries
-     */
-    public List<MobEntry> getDayMobs() {
-        return ImmutableList.copyOf(this.dayMobs);
-    }
-
-    /**
-     * Get a random day mob
-     *
-     * @return Random day mob
-     */
-    public MobEntry getRandomDayMob() {
-        return this.dayMobs.get(this.random.nextInt(this.dayMobs.size()));
-    }
-
-    /**
-     * Add a new mob entry to the day mobs
-     *
-     * @param mobEntry Mob entry to add
-     */
-    public void addDayMob(MobEntry mobEntry) {
-        this.dayMobs.add(mobEntry);
-    }
-
-    /**
-     * Get list of MobEntries for nighttime
-     *
-     * @return List of MobEntries
-     */
-    public List<MobEntry> getNightMobs() {
-        return ImmutableList.copyOf(this.nightMobs);
-    }
-
-    /**
-     * Get a random night mob
-     *
-     * @return Random night mob
-     */
-    public MobEntry getRandomNightMob() {
-        return this.nightMobs.get(this.random.nextInt(this.nightMobs.size()));
-    }
-
-    /**
-     * Add a new mob entry to the night mobs
-     *
-     * @param mobEntry Mob entry to add
-     */
-    public void addNightMob(MobEntry mobEntry) {
-        this.nightMobs.add(mobEntry);
-    }
-
-    /**
-     * Get list of all MobEntries
-     *
-     * @return List of MobEntries
-     */
-    public List<MobEntry> getAllMobs() {
-        List<MobEntry> mobs = new ArrayList<>();
-        mobs.addAll(this.dayMobs);
-        mobs.addAll(this.nightMobs);
-        return mobs;
-    }
 
 }

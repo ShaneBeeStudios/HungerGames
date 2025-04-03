@@ -1,7 +1,6 @@
 package com.shanebeestudios.hg.data;
 
 import com.shanebeestudios.hg.HungerGames;
-import com.shanebeestudios.hg.api.util.Util;
 import io.lumine.mythic.api.mobs.MythicMob;
 import io.lumine.mythic.bukkit.BukkitAdapter;
 import io.lumine.mythic.core.mobs.ActiveMob;
@@ -22,7 +21,6 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.Optional;
 
 /**
  * MobEntry holds data for mobs to spawn in games
@@ -30,14 +28,17 @@ import java.util.Optional;
 @SuppressWarnings({"unused", "WeakerAccess"})
 public class MobEntry {
 
+    // Normal Mob
     private EntityType type;
     private Component name;
     private final Map<EquipmentSlot, ItemStack> gear = new HashMap<>();
-    private final List<PotionEffect> potionEffect = new ArrayList<>();
+    private final List<PotionEffect> potionEffects = new ArrayList<>();
+    private FixedMetadataValue deathMessageMeta = null;
     private Component deathMessage = null;
-    private final boolean isMythic;
-    private String mythicMob;
-    private int mythicLevel;
+
+    // MythicMob
+    private final MythicMob mythicMob;
+    private final double mythicLevel;
 
     /**
      * Create a new mob entry
@@ -45,8 +46,9 @@ public class MobEntry {
      * @param type Type of new mob
      */
     public MobEntry(EntityType type) {
-        this.isMythic = false;
         this.type = type;
+        this.mythicMob = null;
+        this.mythicLevel = 0;
     }
 
     /**
@@ -55,10 +57,9 @@ public class MobEntry {
      * @param mythicMob   MythicMob to create
      * @param mythicLevel Level of MythicMob
      */
-    public MobEntry(String mythicMob, int mythicLevel) {
-        this.isMythic = true;
-        this.mythicMob = mythicMob;
+    public MobEntry(MythicMob mythicMob, double mythicLevel) {
         this.mythicLevel = mythicLevel;
+        this.mythicMob = mythicMob;
     }
 
     /**
@@ -122,8 +123,8 @@ public class MobEntry {
      *
      * @return List of potion effects for this mob entry
      */
-    public List<PotionEffect> getPotionEffect() {
-        return this.potionEffect;
+    public List<PotionEffect> getPotionEffects() {
+        return this.potionEffects;
     }
 
     /**
@@ -132,7 +133,7 @@ public class MobEntry {
      * @param potionEffect Potion effect to add
      */
     public void addPotionEffect(PotionEffect potionEffect) {
-        this.potionEffect.add(potionEffect);
+        this.potionEffects.add(potionEffect);
     }
 
     /**
@@ -141,7 +142,7 @@ public class MobEntry {
      * @param potionEffects Potion effect list to add
      */
     public void addPotionEffects(List<PotionEffect> potionEffects) {
-        this.potionEffect.addAll(potionEffects);
+        this.potionEffects.addAll(potionEffects);
     }
 
     /**
@@ -162,6 +163,7 @@ public class MobEntry {
      */
     public void setDeathMessage(@Nullable Component message) {
         this.deathMessage = message;
+        this.deathMessageMeta = new FixedMetadataValue(HungerGames.getPlugin(), message);
     }
 
     /**
@@ -171,7 +173,16 @@ public class MobEntry {
      * @return The entity that was spawned
      */
     public @Nullable Entity spawn(@NotNull Location location) {
-        if (!isMythic()) {
+        // Spawn MythicMob
+        if (this.mythicMob != null) {
+            ActiveMob activeMob = this.mythicMob.spawn(BukkitAdapter.adapt(location), this.mythicLevel);
+            if (this.deathMessageMeta != null) {
+                activeMob.getEntity().getBukkitEntity().setMetadata("death-message", this.deathMessageMeta);
+            }
+            return activeMob.getEntity().getBukkitEntity();
+        }
+        // Spawn Regular Mob
+        else {
             Class<? extends Entity> entityClass = this.type.getEntityClass();
             if (entityClass == null) {
                 return null;
@@ -191,28 +202,17 @@ public class MobEntry {
                             }
                         }
                     }
-                    if (!this.potionEffect.isEmpty()) {
-                        for (PotionEffect effect : this.potionEffect) {
+                    if (!this.potionEffects.isEmpty()) {
+                        for (PotionEffect effect : this.potionEffects) {
                             livingEntity.addPotionEffect(effect);
                         }
                     }
-                    if (this.deathMessage != null) {
-                        livingEntity.setMetadata("death-message", new FixedMetadataValue(HungerGames.getPlugin(), this.deathMessage));
+                    if (this.deathMessageMeta != null) {
+                        livingEntity.setMetadata("death-message", this.deathMessageMeta);
                     }
                 }
             });
-        } else {
-            Optional<MythicMob> mythicMob = HungerGames.getPlugin().getMythicMobManager().getMythicMob(this.mythicMob);
-            if (mythicMob.isPresent()) {
-                MythicMob mob = mythicMob.get();
-                ActiveMob activeMob = mob.spawn(BukkitAdapter.adapt(location), mythicLevel);
-                if (this.deathMessage != null) {
-                    activeMob.getEntity().getBukkitEntity().setMetadata("death-message", new FixedMetadataValue(HungerGames.getPlugin(), deathMessage));
-                }
-                return activeMob.getEntity().getBukkitEntity();
-            }
         }
-        return null;
     }
 
     /**
@@ -221,7 +221,16 @@ public class MobEntry {
      * @return True if a MythicMob
      */
     public boolean isMythic() {
-        return this.isMythic;
+        return this.mythicMob != null;
+    }
+
+    /**
+     * Get the MythicMob held by this entry
+     *
+     * @return MythicMob if exists
+     */
+    public @Nullable MythicMob getMythicMob() {
+        return this.mythicMob;
     }
 
     /**
@@ -229,22 +238,8 @@ public class MobEntry {
      *
      * @return Level of this MythicMob
      */
-    public int getMythicLevel() {
+    public double getMythicLevel() {
         return this.mythicLevel;
-    }
-
-    @Override
-    public String toString() {
-        return "MobEntry{" +
-            "type=" + this.type +
-            ", name='" + Util.unMini(this.name) + '\'' +
-            ", gear=" + this.gear +
-            ", potionEffect=" + this.potionEffect +
-            ", deathMessage='" + Util.unMini(this.deathMessage) + '\'' +
-            ", isMythic=" + this.isMythic +
-            ", mythicMob='" + this.mythicMob + '\'' +
-            ", mythicLevel=" + this.mythicLevel +
-            '}';
     }
 
 }

@@ -174,6 +174,8 @@ public class ArenaConfig {
 
                     // KITS
                     this.plugin.getKitManager().loadGameKits(game, arenaSection);
+                    // MOBS
+                    this.plugin.getMobManager().loadGameMobs(game, arenaSection);
 
                     // ITEMS
                     if (arenaSection.isSet("items")) {
