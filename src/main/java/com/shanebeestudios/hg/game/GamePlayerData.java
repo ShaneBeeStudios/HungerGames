@@ -10,6 +10,8 @@ import com.shanebeestudios.hg.plugin.configs.Config;
 import com.shanebeestudios.hg.plugin.managers.GameManager;
 import com.shanebeestudios.hg.plugin.managers.PlayerManager;
 import com.shanebeestudios.hg.plugin.permission.Permissions;
+import net.kyori.adventure.title.Title;
+import net.kyori.adventure.title.Title.Times;
 import org.bukkit.Bukkit;
 import org.bukkit.GameMode;
 import org.bukkit.Location;
@@ -24,6 +26,7 @@ import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+import java.time.Duration;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
@@ -274,7 +277,7 @@ public class GamePlayerData extends Data {
             if (Config.SPECTATE_ENABLED && Config.spectateOnDeath && !game.isGameOver()) {
                 spectate(player);
                 player.playSound(player.getLocation(), Config.SOUNDS_DEATH, 5, 1);
-                player.sendTitle(this.game.getGameArenaData().getName(), Util.getColString(lang.spectator_start_title), 10, 100, 10);
+                player.showTitle(createTitle());
                 this.game.updateAfterDeath(player, true);
                 return;
             } else if (this.game.getGameArenaData().getStatus() == Status.RUNNING) {
@@ -373,6 +376,12 @@ public class GamePlayerData extends Data {
         for (Player player : Bukkit.getOnlinePlayers()) {
             player.showPlayer(plugin, hidden);
         }
+    }
+
+    private Title createTitle() {
+        return Title.title(this.game.getGameArenaData().getNameComponent(),
+            Util.getMini(this.lang.spectator_start_title),
+            Times.times(Duration.ofMillis(500), Duration.ofSeconds(5), Duration.ofMillis(500)));
     }
 
 }
