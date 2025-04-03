@@ -81,9 +81,9 @@ public class GameRegion {
         assert world != null;
         List<Location> blockList = new ArrayList<>();
 
-        for (int x = (int) this.boundingBox.getMinX(); x < this.boundingBox.getMaxX() - 1; x++) {
-            for (int y = (int) this.boundingBox.getMinY(); y < this.boundingBox.getMaxY() - 1; y++) {
-                for (int z = (int) this.boundingBox.getMinZ(); z < this.boundingBox.getMaxZ() - 1; z++) {
+        for (int x = (int) this.boundingBox.getMinX(); x < this.boundingBox.getMaxX(); x++) {
+            for (int y = (int) this.boundingBox.getMinY(); y < this.boundingBox.getMaxY(); y++) {
+                for (int z = (int) this.boundingBox.getMinZ(); z < this.boundingBox.getMaxZ(); z++) {
 
                     Block block = world.getBlockAt(x, y, z);
                     if (type == null || block.getType() == type) {
