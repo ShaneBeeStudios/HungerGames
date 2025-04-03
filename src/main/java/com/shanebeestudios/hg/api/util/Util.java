@@ -181,7 +181,8 @@ public class Util {
      * @param component Component to convert
      * @return Text from component
      */
-    public static String unMini(Component component) {
+    public static @NotNull String unMini(Component component) {
+        if (component == null) return "";
         return MINI_MESSAGE.serialize(component);
     }
 
