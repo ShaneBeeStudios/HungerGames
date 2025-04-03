@@ -2,8 +2,10 @@ package com.shanebeestudios.hg.plugin.listeners;
 
 import com.shanebeestudios.hg.api.status.Status;
 import com.shanebeestudios.hg.game.Game;
+import com.shanebeestudios.hg.game.GameArenaData;
 import com.shanebeestudios.hg.plugin.HungerGames;
 import org.bukkit.Location;
+import org.bukkit.block.Block;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.LivingEntity;
@@ -11,11 +13,15 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.entity.CreatureSpawnEvent;
+import org.bukkit.event.entity.EntityExplodeEvent;
 import org.bukkit.event.entity.EntityRemoveEvent;
 import org.bukkit.event.entity.EntityShootBowEvent;
 import org.bukkit.event.entity.EntitySpawnEvent;
 import org.bukkit.event.entity.EntityTargetEvent;
 import org.bukkit.metadata.FixedMetadataValue;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class GameEntityListener extends GameListenerBase {
 
@@ -71,6 +77,25 @@ public class GameEntityListener extends GameListenerBase {
         }
         if (entity instanceof Player && playerManager.hasPlayerData(entity.getUniqueId())) {
             event.getProjectile().setMetadata("shooter", new FixedMetadataValue(plugin, entity.getName()));
+        }
+    }
+
+    // Prevent explosions breaking blocks outside arena
+    @EventHandler
+    private void onExplode(EntityExplodeEvent event) {
+        Location location = event.getLocation();
+        if (this.gameManager.isInRegion(location)) {
+            Game game = this.gameManager.getGame(location);
+            assert game != null;
+            GameArenaData gameArenaData = game.getGameArenaData();
+
+            List<Block> outside = new ArrayList<>();
+            event.blockList().forEach(block -> {
+                if (!gameArenaData.isInRegion(block.getLocation())) {
+                    outside.add(block);
+                }
+            });
+            event.blockList().removeAll(outside);
         }
     }
 
