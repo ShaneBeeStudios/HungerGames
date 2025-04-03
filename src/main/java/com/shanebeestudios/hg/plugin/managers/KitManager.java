@@ -1,11 +1,11 @@
 package com.shanebeestudios.hg.plugin.managers;
 
-import com.shanebeestudios.hg.plugin.HungerGames;
 import com.shanebeestudios.hg.api.parsers.ItemParser;
 import com.shanebeestudios.hg.api.util.Util;
 import com.shanebeestudios.hg.data.KitData;
 import com.shanebeestudios.hg.data.KitEntry;
 import com.shanebeestudios.hg.game.Game;
+import com.shanebeestudios.hg.plugin.HungerGames;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.inventory.ItemStack;
@@ -49,6 +49,15 @@ public class KitManager {
     }
 
     /**
+     * Get the default KitData
+     *
+     * @return Default KitData
+     */
+    public KitData getDefaultKitData() {
+        return this.defaultKitData;
+    }
+
+    /**
      * Set the kits for a game from a config
      *
      * @param game         The game to set the kits for
@@ -56,10 +65,7 @@ public class KitManager {
      */
     public void loadGameKits(Game game, ConfigurationSection arenaSection) {
         ConfigurationSection kitsSection = arenaSection.getConfigurationSection("kits");
-        if (kitsSection == null) {
-            game.getGameItemData().setKitData(this.defaultKitData);
-            return;
-        }
+        if (kitsSection == null) return;
 
         KitData kitData = kitCreator(kitsSection, game);
         Util.log("- Loaded custom kits for arena: <aqua>" + game.getGameArenaData().getName());

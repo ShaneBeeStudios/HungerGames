@@ -42,7 +42,7 @@ public class MobManager {
         loadDefaultMobs();
     }
 
-    public void loadDefaultMobs() {
+    private void loadDefaultMobs() {
         Util.log("Loading mobs:");
         File kitFile = new File(this.plugin.getDataFolder(), "mobs.yml");
 
@@ -57,12 +57,25 @@ public class MobManager {
         Util.log("- <aqua>%s <grey>mobs have been <green>successfully loaded!", this.defaultMobData.getMobCount());
     }
 
+    /**
+     * Get the default MobData
+     * <p>This is from the mobs.yml file</p>
+     *
+     * @return Default MobData
+     */
+    public MobData getDefaultMobData() {
+        return this.defaultMobData;
+    }
+
+    /**
+     * Load MobData from an arena config
+     *
+     * @param game         Game to add data to
+     * @param arenaSection Section of config to grab data from
+     */
     public void loadGameMobs(Game game, ConfigurationSection arenaSection) {
         ConfigurationSection mobsSection = arenaSection.getConfigurationSection("mobs");
-        if (mobsSection == null) {
-            game.getGameEntityData().setMobData(this.defaultMobData);
-            return;
-        }
+        if (mobsSection == null) return;
 
         MobData mobData = createMobData(mobsSection, game);
         Util.log("- Loaded <aqua>%s <grey>custom mobs for arena: <aqua>%s",
@@ -71,7 +84,7 @@ public class MobManager {
     }
 
     @SuppressWarnings("unchecked")
-    public MobData createMobData(ConfigurationSection mobsSection, @Nullable Game game) {
+    private MobData createMobData(ConfigurationSection mobsSection, @Nullable Game game) {
         MobData mobData = new MobData();
         String gameName = game != null ? game.getGameArenaData().getName() + ":" : "";
         for (String time : Arrays.asList("day", "night")) {

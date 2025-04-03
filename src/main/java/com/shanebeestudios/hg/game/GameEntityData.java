@@ -24,6 +24,7 @@ public class GameEntityData extends Data {
 
     GameEntityData(Game game) {
         super(game);
+        this.mobData = getPlugin().getMobManager().getDefaultMobData();
     }
 
     /**

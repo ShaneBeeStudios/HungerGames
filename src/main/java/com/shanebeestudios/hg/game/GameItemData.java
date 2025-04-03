@@ -24,6 +24,7 @@ public class GameItemData extends Data {
         for (ChestType value : ChestType.values()) {
             this.chestItems.put(value, new HashMap<>());
         }
+        this.kitData = getPlugin().getKitManager().getDefaultKitData();
         // Set default items from items.yml (if arenas.yml has items it will override this)
         resetItemsDefault(ChestType.REGULAR);
         resetItemsDefault(ChestType.BONUS);
