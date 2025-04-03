@@ -1,10 +1,10 @@
 package com.shanebeestudios.hg.plugin.commands;
 
-import com.shanebeestudios.hg.HungerGames;
+import com.shanebeestudios.hg.plugin.HungerGames;
 import com.shanebeestudios.hg.data.Language;
 import com.shanebeestudios.hg.game.Game;
-import com.shanebeestudios.hg.managers.GameManager;
-import com.shanebeestudios.hg.managers.PlayerManager;
+import com.shanebeestudios.hg.plugin.managers.GameManager;
+import com.shanebeestudios.hg.plugin.managers.PlayerManager;
 import dev.jorel.commandapi.arguments.Argument;
 
 public abstract class SubCommand {

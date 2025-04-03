@@ -1,13 +1,13 @@
 package com.shanebeestudios.hg.plugin.configs;
 
-import com.shanebeestudios.hg.HungerGames;
+import com.shanebeestudios.hg.plugin.HungerGames;
 import com.shanebeestudios.hg.api.util.Util;
 import com.shanebeestudios.hg.game.Game;
 import com.shanebeestudios.hg.game.GameArenaData;
 import com.shanebeestudios.hg.game.GameBlockData.ChestType;
 import com.shanebeestudios.hg.game.GameBorderData;
 import com.shanebeestudios.hg.game.GameRegion;
-import com.shanebeestudios.hg.managers.ItemStackManager;
+import com.shanebeestudios.hg.plugin.managers.ItemStackManager;
 import org.bukkit.Bukkit;
 import org.bukkit.Difficulty;
 import org.bukkit.Location;

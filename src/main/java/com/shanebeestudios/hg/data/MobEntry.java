@@ -1,6 +1,6 @@
 package com.shanebeestudios.hg.data;
 
-import com.shanebeestudios.hg.HungerGames;
+import com.shanebeestudios.hg.plugin.HungerGames;
 import io.lumine.mythic.api.mobs.MythicMob;
 import io.lumine.mythic.bukkit.BukkitAdapter;
 import io.lumine.mythic.core.mobs.ActiveMob;

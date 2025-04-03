@@ -1,6 +1,6 @@
 package com.shanebeestudios.hg.api.util;
 
-import com.shanebeestudios.hg.HungerGames;
+import com.shanebeestudios.hg.plugin.HungerGames;
 import com.shanebeestudios.hg.plugin.configs.Config;
 import com.shanebeestudios.hg.data.Language;
 import net.kyori.adventure.text.Component;

@@ -1,7 +1,7 @@
-package com.shanebeestudios.hg.managers;
+package com.shanebeestudios.hg.plugin.managers;
 
 import com.google.common.collect.ImmutableList;
-import com.shanebeestudios.hg.HungerGames;
+import com.shanebeestudios.hg.plugin.HungerGames;
 import com.shanebeestudios.hg.api.command.CustomArg;
 import com.shanebeestudios.hg.api.status.Status;
 import com.shanebeestudios.hg.api.util.Util;

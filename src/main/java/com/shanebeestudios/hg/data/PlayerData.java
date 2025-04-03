@@ -8,7 +8,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.scoreboard.Scoreboard;
 import org.jetbrains.annotations.Nullable;
-import com.shanebeestudios.hg.HungerGames;
+import com.shanebeestudios.hg.plugin.HungerGames;
 import com.shanebeestudios.hg.game.Game;
 import com.shanebeestudios.hg.game.GameTeam;
 import com.shanebeestudios.hg.api.util.Util;

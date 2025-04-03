@@ -4,7 +4,7 @@ import com.shanebeestudios.hg.api.util.Util;
 import com.shanebeestudios.hg.plugin.configs.Config;
 import com.shanebeestudios.hg.data.Language;
 import com.shanebeestudios.hg.data.PlayerData;
-import com.shanebeestudios.hg.managers.PlayerManager;
+import com.shanebeestudios.hg.plugin.managers.PlayerManager;
 import org.bukkit.entity.Player;
 import org.bukkit.scoreboard.Team;
 import org.jetbrains.annotations.NotNull;

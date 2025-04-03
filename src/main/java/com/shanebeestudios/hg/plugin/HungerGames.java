@@ -1,18 +1,18 @@
-package com.shanebeestudios.hg;
+package com.shanebeestudios.hg.plugin;
 
 import com.shanebeestudios.hg.api.util.NBTApi;
 import com.shanebeestudios.hg.api.util.Util;
 import com.shanebeestudios.hg.data.Language;
 import com.shanebeestudios.hg.data.Leaderboard;
 import com.shanebeestudios.hg.data.RandomItems;
-import com.shanebeestudios.hg.managers.GameManager;
-import com.shanebeestudios.hg.managers.ItemStackManager;
-import com.shanebeestudios.hg.managers.KillManager;
-import com.shanebeestudios.hg.managers.KitManager;
-import com.shanebeestudios.hg.managers.MobManager;
-import com.shanebeestudios.hg.managers.Placeholders;
-import com.shanebeestudios.hg.managers.PlayerManager;
-import com.shanebeestudios.hg.managers.SessionManager;
+import com.shanebeestudios.hg.plugin.managers.GameManager;
+import com.shanebeestudios.hg.plugin.managers.ItemStackManager;
+import com.shanebeestudios.hg.plugin.managers.KillManager;
+import com.shanebeestudios.hg.plugin.managers.KitManager;
+import com.shanebeestudios.hg.plugin.managers.MobManager;
+import com.shanebeestudios.hg.plugin.managers.Placeholders;
+import com.shanebeestudios.hg.plugin.managers.PlayerManager;
+import com.shanebeestudios.hg.plugin.managers.SessionManager;
 import com.shanebeestudios.hg.plugin.commands.MainCommand;
 import com.shanebeestudios.hg.plugin.configs.ArenaConfig;
 import com.shanebeestudios.hg.plugin.configs.Config;

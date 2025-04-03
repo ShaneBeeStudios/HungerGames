@@ -1,4 +1,4 @@
-package com.shanebeestudios.hg.gui;
+package com.shanebeestudios.hg.api.gui;
 
 import net.kyori.adventure.text.Component;
 import org.bukkit.Bukkit;
@@ -13,15 +13,12 @@ import org.bukkit.inventory.InventoryHolder;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.SkullMeta;
 import org.jetbrains.annotations.NotNull;
-import com.shanebeestudios.hg.HungerGames;
+import com.shanebeestudios.hg.plugin.HungerGames;
 import com.shanebeestudios.hg.game.Game;
 import com.shanebeestudios.hg.api.util.Util;
 
-import java.awt.*;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
-import java.util.UUID;
 
 public class SpectatorGUI implements InventoryHolder, Listener {
 

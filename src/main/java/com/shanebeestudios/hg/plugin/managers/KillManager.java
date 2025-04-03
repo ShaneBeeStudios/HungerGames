@@ -1,6 +1,6 @@
-package com.shanebeestudios.hg.managers;
+package com.shanebeestudios.hg.plugin.managers;
 
-import com.shanebeestudios.hg.HungerGames;
+import com.shanebeestudios.hg.plugin.HungerGames;
 import com.shanebeestudios.hg.api.registry.Registries;
 import com.shanebeestudios.hg.api.util.ItemUtils;
 import com.shanebeestudios.hg.api.util.Util;

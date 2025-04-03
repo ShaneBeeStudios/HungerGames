@@ -1,7 +1,7 @@
 package com.shanebeestudios.hg.api.command;
 
 import com.shanebeestudios.hg.game.Game;
-import com.shanebeestudios.hg.managers.GameManager;
+import com.shanebeestudios.hg.plugin.managers.GameManager;
 import dev.jorel.commandapi.CommandAPI;
 import dev.jorel.commandapi.arguments.Argument;
 import dev.jorel.commandapi.arguments.ArgumentSuggestions;
@@ -9,6 +9,7 @@ import dev.jorel.commandapi.arguments.CustomArgument;
 import dev.jorel.commandapi.arguments.StringArgument;
 import dev.jorel.commandapi.exceptions.WrapperCommandSyntaxException;
 import dev.jorel.commandapi.executors.ExecutionInfo;
+import org.jetbrains.annotations.ApiStatus;
 
 import java.util.Locale;
 import java.util.concurrent.CompletableFuture;
@@ -17,10 +18,20 @@ public abstract class CustomArg {
 
     private static GameManager GAME_MANAGER;
 
+    /**
+     * Initialize GameManager constant
+     * <p>Internally used for reloads</p>
+     *
+     * @param gameManager GameManager instance
+     */
+    @ApiStatus.Internal
     public static void init(GameManager gameManager) {
         GAME_MANAGER = gameManager;
     }
 
+    /**
+     * @hidden
+     */
     public static Game getGame(ExecutionInfo<?, ?> info) throws WrapperCommandSyntaxException {
         Game game = info.args().getByClass("game", Game.class);
         if (game == null) {
@@ -30,6 +41,9 @@ public abstract class CustomArg {
         return game;
     }
 
+    /**
+     * Custom command argument for {@link Game Games}
+     */
     public static final CustomArg GAME = new CustomArg() {
         @Override
         public Argument<?> get(String name) {

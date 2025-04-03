@@ -1,5 +1,5 @@
 name: HungerGames
-main: com.shanebeestudios.hg.HungerGames
+main: com.shanebeestudios.hg.plugin.HungerGames
 authors: [bob7l, Spoopy, ShaneBee]
 description: A Simple, fun, PvP arena plugin
 version: '${version}'

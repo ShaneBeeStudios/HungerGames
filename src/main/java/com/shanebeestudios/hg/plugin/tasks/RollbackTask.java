@@ -4,7 +4,7 @@ import java.util.Iterator;
 
 import org.bukkit.Bukkit;
 import org.bukkit.block.BlockState;
-import com.shanebeestudios.hg.HungerGames;
+import com.shanebeestudios.hg.plugin.HungerGames;
 import com.shanebeestudios.hg.plugin.configs.Config;
 import com.shanebeestudios.hg.data.ItemFrameData;
 import com.shanebeestudios.hg.game.Game;

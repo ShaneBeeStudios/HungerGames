@@ -1,6 +1,6 @@
 package com.shanebeestudios.hg.game;
 
-import com.shanebeestudios.hg.HungerGames;
+import com.shanebeestudios.hg.plugin.HungerGames;
 import com.shanebeestudios.hg.data.Language;
 
 /**

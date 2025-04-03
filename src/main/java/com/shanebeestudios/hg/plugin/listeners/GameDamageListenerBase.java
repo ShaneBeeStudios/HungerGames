@@ -1,6 +1,6 @@
 package com.shanebeestudios.hg.plugin.listeners;
 
-import com.shanebeestudios.hg.HungerGames;
+import com.shanebeestudios.hg.plugin.HungerGames;
 import com.shanebeestudios.hg.api.status.Status;
 import com.shanebeestudios.hg.data.PlayerData;
 import com.shanebeestudios.hg.game.Game;

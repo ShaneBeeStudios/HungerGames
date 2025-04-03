@@ -1,9 +1,9 @@
 package com.shanebeestudios.hg.data;
 
-import com.shanebeestudios.hg.HungerGames;
+import com.shanebeestudios.hg.plugin.HungerGames;
 import com.shanebeestudios.hg.api.util.Util;
 import com.shanebeestudios.hg.game.GameBlockData.ChestType;
-import com.shanebeestudios.hg.managers.ItemStackManager;
+import com.shanebeestudios.hg.plugin.managers.ItemStackManager;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;

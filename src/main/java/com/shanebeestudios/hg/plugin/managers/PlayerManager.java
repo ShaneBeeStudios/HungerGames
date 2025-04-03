@@ -1,6 +1,6 @@
-package com.shanebeestudios.hg.managers;
+package com.shanebeestudios.hg.plugin.managers;
 
-import com.shanebeestudios.hg.HungerGames;
+import com.shanebeestudios.hg.plugin.HungerGames;
 import com.shanebeestudios.hg.api.status.PlayerStatus;
 import com.shanebeestudios.hg.data.PlayerData;
 import com.shanebeestudios.hg.game.Game;

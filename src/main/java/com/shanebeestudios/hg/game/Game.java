@@ -1,6 +1,6 @@
 package com.shanebeestudios.hg.game;
 
-import com.shanebeestudios.hg.HungerGames;
+import com.shanebeestudios.hg.plugin.HungerGames;
 import com.shanebeestudios.hg.api.events.GameEndEvent;
 import com.shanebeestudios.hg.api.events.GameStartEvent;
 import com.shanebeestudios.hg.api.events.PlayerJoinGameEvent;
@@ -11,7 +11,7 @@ import com.shanebeestudios.hg.data.Language;
 import com.shanebeestudios.hg.data.Leaderboard;
 import com.shanebeestudios.hg.data.PlayerData;
 import com.shanebeestudios.hg.game.GameCommandData.CommandType;
-import com.shanebeestudios.hg.managers.PlayerManager;
+import com.shanebeestudios.hg.plugin.managers.PlayerManager;
 import com.shanebeestudios.hg.plugin.configs.Config;
 import com.shanebeestudios.hg.plugin.permission.Permissions;
 import com.shanebeestudios.hg.plugin.tasks.ChestDropTask;

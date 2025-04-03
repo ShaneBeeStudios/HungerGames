@@ -1,6 +1,6 @@
 package com.shanebeestudios.hg.plugin.commands;
 
-import com.shanebeestudios.hg.HungerGames;
+import com.shanebeestudios.hg.plugin.HungerGames;
 import dev.jorel.commandapi.CommandTree;
 
 public class MainCommand {
