@@ -1,9 +1,9 @@
 package com.shanebeestudios.hg.game;
 
 import com.shanebeestudios.hg.api.util.Util;
-import com.shanebeestudios.hg.plugin.configs.Config;
 import com.shanebeestudios.hg.data.Language;
 import com.shanebeestudios.hg.data.PlayerData;
+import com.shanebeestudios.hg.plugin.configs.Config;
 import com.shanebeestudios.hg.plugin.managers.PlayerManager;
 import org.bukkit.entity.Player;
 import org.bukkit.scoreboard.Team;
@@ -164,6 +164,9 @@ public class GameTeam {
         }
     }
 
+    /**
+     * Unregister {@link Team BukkitTeam}
+     */
     public void unregister() {
         this.bukkitTeam.unregister();
     }

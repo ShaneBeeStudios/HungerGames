@@ -47,7 +47,7 @@ public class GamePlayerListener extends GameListenerBase {
             PlayerData playerData = this.playerManager.getPlayerData(player);
             assert playerData != null;
             playerData.setOnline(false);
-            playerData.getGame().getGamePlayerData().leave(player, false);
+            playerData.getGame().getGamePlayerData().leaveGame(player, false);
         }
         if (this.playerManager.hasSpectatorData(player)) {
             PlayerData playerData = this.playerManager.getSpectatorData(player);

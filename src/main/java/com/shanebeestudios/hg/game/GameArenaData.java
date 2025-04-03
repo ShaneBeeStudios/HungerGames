@@ -1,6 +1,8 @@
 package com.shanebeestudios.hg.game;
 
 import com.shanebeestudios.hg.api.status.Status;
+import com.shanebeestudios.hg.api.util.Util;
+import net.kyori.adventure.text.Component;
 import org.bukkit.Location;
 import org.jetbrains.annotations.Nullable;
 
@@ -26,7 +28,7 @@ public class GameArenaData extends Data {
     int chestRefillTime = 0;
     int chestRefillRepeat = 0;
 
-    public GameArenaData(Game game, String name, GameRegion gameRegion, int timer, int minPlayers, int maxPlayers, int freeRoamTime, int cost) {
+    GameArenaData(Game game, String name, GameRegion gameRegion, int timer, int minPlayers, int maxPlayers, int freeRoamTime, int cost) {
         super(game);
         this.name = name;
         this.gameRegion = gameRegion;
@@ -57,6 +59,15 @@ public class GameArenaData extends Data {
     }
 
     /**
+     * Get the name of this game as a {@link Component}
+     *
+     * @return Name of this game
+     */
+    public Component getNameComponent() {
+        return Util.getMini(this.name);
+    }
+
+    /**
      * Check if a location is within the games arena
      *
      * @param location Location to be checked
@@ -84,10 +95,20 @@ public class GameArenaData extends Data {
         this.freeRoamTime = freeRoamTime;
     }
 
+    /**
+     * Get the timer of this game
+     *
+     * @return How many seconds this game will run for
+     */
     public int getTimer() {
         return this.timer;
     }
 
+    /**
+     * Set the timer for this game
+     *
+     * @param timer How many seconds this game will run for
+     */
     public void setTimer(int timer) {
         this.timer = timer;
     }
@@ -157,6 +178,9 @@ public class GameArenaData extends Data {
         return spawns;
     }
 
+    /**
+     * Clear all spawns
+     */
     public void clearSpawns() {
         this.spawns.clear();
     }

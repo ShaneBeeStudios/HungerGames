@@ -37,7 +37,7 @@ public class LeaveCommand extends SubCommand {
                             Util.sendMessage(player, this.lang.command_leave_refund.replace("<cost>", String.valueOf(cost)));
                         }
                     }
-                    game.getGamePlayerData().leave(player, false);
+                    game.getGamePlayerData().leaveGame(player, false);
                 } else if (this.playerManager.hasSpectatorData(player)) {
                     game = playerManager.getSpectatorData(player).getGame();
                     game.getGamePlayerData().leaveSpectate(player);

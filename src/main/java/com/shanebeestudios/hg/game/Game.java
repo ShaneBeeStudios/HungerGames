@@ -1,6 +1,5 @@
 package com.shanebeestudios.hg.game;
 
-import com.shanebeestudios.hg.plugin.HungerGames;
 import com.shanebeestudios.hg.api.events.GameEndEvent;
 import com.shanebeestudios.hg.api.events.GameStartEvent;
 import com.shanebeestudios.hg.api.events.PlayerJoinGameEvent;
@@ -11,8 +10,9 @@ import com.shanebeestudios.hg.data.Language;
 import com.shanebeestudios.hg.data.Leaderboard;
 import com.shanebeestudios.hg.data.PlayerData;
 import com.shanebeestudios.hg.game.GameCommandData.CommandType;
-import com.shanebeestudios.hg.plugin.managers.PlayerManager;
+import com.shanebeestudios.hg.plugin.HungerGames;
 import com.shanebeestudios.hg.plugin.configs.Config;
+import com.shanebeestudios.hg.plugin.managers.PlayerManager;
 import com.shanebeestudios.hg.plugin.permission.Permissions;
 import com.shanebeestudios.hg.plugin.tasks.ChestDropTask;
 import com.shanebeestudios.hg.plugin.tasks.ChestRefillRepeatTask;
@@ -70,7 +70,7 @@ public class Game {
      * @param name          Name of this game
      * @param gameRegion    Bounding region of this game
      * @param spawns        List of spawns for this game
-     * @param lobbySign     Lobby sign block
+     * @param lobbySign     Location of lobby sign block
      * @param gameTimerTask Length of the game (in seconds)
      * @param minPlayers    Minimum players to be able to start the game
      * @param maxPlayers    Maximum players that can join this game
@@ -184,6 +184,11 @@ public class Game {
         return gameBorderData;
     }
 
+    /**
+     * Get an instance of the StartingGameTAsk
+     *
+     * @return Instance of StartingGameTask
+     */
     public StartingTask getStartingTask() {
         return this.startingTask;
     }
@@ -197,10 +202,20 @@ public class Game {
         return this.gameBlockData.getSignLocation();
     }
 
+    /**
+     * Get plugin instance from game
+     *
+     * @return Plugin instance
+     */
     public HungerGames getPlugin() {
         return this.plugin;
     }
 
+    /**
+     * Get the time remaining in this game
+     *
+     * @return Amount of seconds left if active otherwise 0
+     */
     public int getRemainingTime() {
         if (this.gameTimerTask != null) return this.gameTimerTask.getRemainingTime();
         return 0;
@@ -262,6 +277,9 @@ public class Game {
         this.nearestPlayerCompassTask = new NearestPlayerCompassTask(this);
     }
 
+    /**
+     * Cancel all active tasks
+     */
     public void cancelTasks() {
         if (this.startingTask != null) this.startingTask.stop();
         if (this.freeRoamTask != null) this.freeRoamTask.stop();
@@ -276,6 +294,7 @@ public class Game {
      * Join a player to the game
      *
      * @param player Player to join the game
+     * @return Whether the player joined the game
      */
     @SuppressWarnings("UnusedReturnValue")
     public boolean joinGame(Player player) {
@@ -287,6 +306,7 @@ public class Game {
      *
      * @param player               Player to join the game
      * @param savePreviousLocation Whether to save the player's previous location
+     * @return Whether the player joined the game
      */
     public boolean joinGame(Player player, boolean savePreviousLocation) {
         if (this.gameArenaData.getStatus() == Status.BROKEN) {
@@ -360,7 +380,7 @@ public class Game {
             this.gameBorderData.resetBorder();
         }
         this.gameArenaData.gameRegion.removeEntities();
-        this.gameScoreboard.resetBoards();
+        this.gameScoreboard.resetSidebars();
 
         // TODO win list should be players
         List<UUID> win = new ArrayList<>();
@@ -422,7 +442,7 @@ public class Game {
             if (Config.broadcastWinMessages) {
                 Util.broadcast(broadcast);
             } else {
-                gamePlayerData.msgAllPlayers(broadcast);
+                gamePlayerData.messageAllPlayers(broadcast);
             }
         }
         if (this.gameBlockData.requiresRollback()) {
@@ -473,7 +493,7 @@ public class Game {
 
             }
         } else if (status == Status.WAITING) {
-            this.gamePlayerData.msgAll(lang.player_left_game
+            this.gamePlayerData.messageAllActivePlayers(lang.player_left_game
                 .replace("<arena>", this.gameArenaData.getName())
                 .replace("<player>", player.getName()) +
                 (this.gameArenaData.getMinPlayers() - this.gamePlayerData.getPlayers().size() <= 0 ? "!" : ": " + this.lang.players_to_start

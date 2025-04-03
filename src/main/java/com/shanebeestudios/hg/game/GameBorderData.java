@@ -23,12 +23,12 @@ public class GameBorderData extends Data {
     private final WorldBorder worldBorder;
     private WorldBorderTask worldBorderTask;
 
-    protected GameBorderData(Game game) {
+    GameBorderData(Game game) {
         this(game, null, Config.WORLD_BORDER_FINAL_SIZE, Config.WORLD_BORDER_COUNTDOWN_START, Config.WORLD_BORDER_COUNTDOWN_END);
         this.isDefault = true;
     }
 
-    protected GameBorderData(Game game, Location centerLocation, int finalSize, int start, int end) {
+    GameBorderData(Game game, Location centerLocation, int finalSize, int start, int end) {
         super(game);
         this.gamePlayerData = game.getGamePlayerData();
         this.worldBorder = Bukkit.createWorldBorder();
@@ -39,16 +39,27 @@ public class GameBorderData extends Data {
         this.isDefault = false;
     }
 
+    /**
+     * Get the {@link WorldBorder} of this game
+     *
+     * @return WorldBorder of game
+     */
     public WorldBorder getWorldBorder() {
         return this.worldBorder;
     }
 
+    /**
+     * Initialize the {@link WorldBorder} of this game
+     */
     public void initialize() {
         resetBorder();
         this.gamePlayerData.getPlayers().forEach(player -> player.setWorldBorder(this.worldBorder));
         this.worldBorderTask = new WorldBorderTask(this.game);
     }
 
+    /**
+     * Reset the {@link WorldBorder} of this game
+     */
     public void resetBorder() {
         Location center;
         if (this.centerLocation != null) {
@@ -74,6 +85,11 @@ public class GameBorderData extends Data {
         }
     }
 
+    /**
+     * Start the shrinking process of the {@link WorldBorder}
+     *
+     * @param closingIn How long for the border to take to shrink (in seconds)
+     */
     public void startShrinking(int closingIn) {
         this.worldBorder.setSize(this.finalBorderSize, closingIn);
     }
@@ -88,6 +104,11 @@ public class GameBorderData extends Data {
         this.isDefault = false;
     }
 
+    /**
+     * Get the center location of the border
+     *
+     * @return Center location
+     */
     public @Nullable Location getCenterLocation() {
         return this.centerLocation;
     }
@@ -102,23 +123,48 @@ public class GameBorderData extends Data {
         this.isDefault = false;
     }
 
+    /**
+     * Get the final size for the border
+     *
+     * @return Final size
+     */
     public int getFinalBorderSize() {
         return this.finalBorderSize;
     }
 
+    /**
+     * Get when the border will start to countdown
+     *
+     * @return Start countdown
+     */
     public int getBorderCountdownStart() {
         return this.borderCountdownStart;
     }
 
+    /**
+     * Set when the border will start to countdown
+     *
+     * @param borderCountdownStart When to countdown
+     */
     public void setBorderCountdownStart(int borderCountdownStart) {
         this.borderCountdownStart = borderCountdownStart;
         this.isDefault = false;
     }
 
+    /**
+     * Get when the border countdown will stop
+     *
+     * @return When countdown stops
+     */
     public int getBorderCountdownEnd() {
         return this.borderCountdownEnd;
     }
 
+    /**
+     * Set when the border countdown will stop
+     *
+     * @param borderCountdownEnd When to stop
+     */
     public void setBorderCountdownEnd(int borderCountdownEnd) {
         this.borderCountdownEnd = borderCountdownEnd;
         this.isDefault = false;

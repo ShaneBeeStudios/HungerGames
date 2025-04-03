@@ -1,12 +1,12 @@
 package com.shanebeestudios.hg.game;
 
+import com.shanebeestudios.hg.api.events.PlayerLeaveGameEvent;
+import com.shanebeestudios.hg.api.gui.SpectatorGUI;
 import com.shanebeestudios.hg.api.status.Status;
 import com.shanebeestudios.hg.api.util.Util;
 import com.shanebeestudios.hg.data.KitData;
-import com.shanebeestudios.hg.plugin.configs.Config;
 import com.shanebeestudios.hg.data.PlayerData;
-import com.shanebeestudios.hg.api.events.PlayerLeaveGameEvent;
-import com.shanebeestudios.hg.api.gui.SpectatorGUI;
+import com.shanebeestudios.hg.plugin.configs.Config;
 import com.shanebeestudios.hg.plugin.managers.PlayerManager;
 import com.shanebeestudios.hg.plugin.permission.Permissions;
 import org.bukkit.Bukkit;
@@ -169,11 +169,11 @@ public class GamePlayerData extends Data {
     }
 
     /**
-     * Send a message to all players/spectators in the game
+     * Send a message to all active players/spectators in the game
      *
      * @param message Message to send
      */
-    public void msgAll(String message) {
+    public void messageAllActivePlayers(String message) {
         List<Player> allPlayers = new ArrayList<>();
         allPlayers.addAll(this.players);
         allPlayers.addAll(this.spectators);
@@ -184,12 +184,12 @@ public class GamePlayerData extends Data {
 
     /**
      * Sends a message to all players/spectators
-     * <b>Includes players who have died and left the game.
-     * Used for broadcasting win messages</b>
+     * <br>Includes players who have died and left the game.
+     * Used for broadcasting win messages
      *
      * @param message Message to send
      */
-    public void msgAllPlayers(String message) {
+    public void messageAllPlayers(String message) {
         List<Player> allPlayers = new ArrayList<>(this.allPlayers);
         allPlayers.addAll(this.spectators);
         for (Player player : allPlayers) {
@@ -261,7 +261,7 @@ public class GamePlayerData extends Data {
      * @param player Player to leave the game
      * @param death  Whether the player has died or not (Generally should be false)
      */
-    public void leave(Player player, boolean death) {
+    public void leaveGame(Player player, boolean death) {
         new PlayerLeaveGameEvent(this.game, player, death).callEvent();
         UUID uuid = player.getUniqueId();
         this.players.remove(player);
@@ -283,7 +283,7 @@ public class GamePlayerData extends Data {
         assert playerData != null;
         Location previousLocation = playerData.getPreviousLocation();
 
-        this.game.getGameScoreboard().removePlayer(player);
+        this.game.getGameScoreboard().removePlayerFromSidebar(player);
         playerData.restore(player);
         exit(player, previousLocation);
         this.playerManager.removePlayerData(player);
@@ -324,29 +324,29 @@ public class GamePlayerData extends Data {
      */
     public void spectate(Player spectator) {
         UUID uuid = spectator.getUniqueId();
-        spectator.teleport(game.gameArenaData.getSpawns().getFirst());
-        if (playerManager.hasPlayerData(uuid)) {
-            playerManager.transferPlayerDataToSpectator(uuid);
+        spectator.teleport(this.game.getGameArenaData().getSpawns().getFirst());
+        if (this.playerManager.hasPlayerData(uuid)) {
+            this.playerManager.transferPlayerDataToSpectator(uuid);
         } else {
-            playerManager.addSpectatorData(new PlayerData(spectator, game));
+            this.playerManager.addSpectatorData(new PlayerData(spectator, game));
         }
         this.spectators.add(spectator);
         spectator.setGameMode(GameMode.SURVIVAL);
         spectator.setCollidable(false);
-        if (Config.spectateFly)
+        if (Config.SPECTATE_FLY)
             spectator.setAllowFlight(true);
 
-        if (Config.spectateHide) {
+        if (Config.SPECTATE_HIDE) {
             for (Player player : this.players) {
-                player.hidePlayer(plugin, spectator);
+                player.hidePlayer(this.plugin, spectator);
             }
             for (Player player : this.spectators) {
-                player.hidePlayer(plugin, spectator);
+                player.hidePlayer(this.plugin, spectator);
             }
         }
         this.game.getGameBarData().addPlayer(spectator);
         this.game.getGameScoreboard().setupBoard(spectator);
-        spectator.getInventory().setItem(0, plugin.getItemStackManager().getSpectatorCompass());
+        spectator.getInventory().setItem(0, this.plugin.getItemStackManager().getSpectatorCompass());
     }
 
     /**
@@ -356,23 +356,23 @@ public class GamePlayerData extends Data {
      */
     public void leaveSpectate(Player spectator) {
         UUID uuid = spectator.getUniqueId();
-        PlayerData playerData = playerManager.getSpectatorData(uuid);
+        PlayerData playerData = this.playerManager.getSpectatorData(uuid);
         if (playerData == null) return;
 
         Location previousLocation = playerData.getPreviousLocation();
 
         playerData.restore(spectator);
-        spectators.remove(spectator);
+        this.spectators.remove(spectator);
         spectator.setCollidable(true);
-        if (Config.spectateFly) {
+        if (Config.SPECTATE_FLY) {
             GameMode mode = spectator.getGameMode();
             if (mode == GameMode.SURVIVAL || mode == GameMode.ADVENTURE)
                 spectator.setAllowFlight(false);
         }
-        if (Config.spectateHide)
+        if (Config.SPECTATE_HIDE)
             revealPlayer(spectator);
         exit(spectator, previousLocation);
-        playerManager.removeSpectatorData(uuid);
+        this.playerManager.removeSpectatorData(uuid);
     }
 
     void revealPlayer(Player hidden) {

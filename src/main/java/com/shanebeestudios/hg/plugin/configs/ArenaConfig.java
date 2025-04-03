@@ -17,6 +17,7 @@ import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.util.BoundingBox;
+import org.jetbrains.annotations.ApiStatus;
 
 import java.io.File;
 import java.io.IOException;
@@ -35,6 +36,10 @@ public class ArenaConfig {
     private final HungerGames plugin;
     private final ItemStackManager itemStackManager;
 
+    /**
+     * @hidden
+     */
+    @ApiStatus.Internal
     public ArenaConfig(HungerGames plugin) {
         this.plugin = plugin;
         this.itemStackManager = plugin.getItemStackManager();

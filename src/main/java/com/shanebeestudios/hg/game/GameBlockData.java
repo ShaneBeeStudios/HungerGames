@@ -26,7 +26,7 @@ public class GameBlockData extends Data {
     private final Map<UUID, ItemFrameData> itemFrameData = new HashMap<>();
     private final GameLobbyWall gameLobbyWall;
 
-    protected GameBlockData(Game game) {
+    GameBlockData(Game game) {
         super(game);
         this.gameLobbyWall = new GameLobbyWall(game);
         for (ChestType value : ChestType.values()) {
@@ -43,14 +43,28 @@ public class GameBlockData extends Data {
         return this.gameLobbyWall.getSignLocation();
     }
 
+    /**
+     * Set the location of the lobby wall
+     *
+     * @param location Location of far left sign
+     * @return Whether the lobby wall correctly set
+     */
     public boolean setLobbyBlock(Location location) {
         return this.gameLobbyWall.setLobbyBlock(location);
     }
 
+    /**
+     * Update the lobby wall
+     */
     public void updateLobbyBlock() {
         this.gameLobbyWall.updateLobbyBlock();
     }
 
+    /**
+     * Check whether the lobby wall is valid
+     *
+     * @return Whether lobby wall is valid
+     */
     public boolean isLobbyValid() {
         return this.gameLobbyWall.isLobbyValid();
     }
@@ -139,6 +153,9 @@ public class GameBlockData extends Data {
         return true;
     }
 
+    /**
+     * Log all blocks in an arena for rollback
+     */
     public void logBlocksForRollback() {
         for (Location location : this.getGame().getGameArenaData().getGameRegion().getBlocks(null)) {
             this.blocks.add(location.getBlock().getState());
@@ -171,6 +188,11 @@ public class GameBlockData extends Data {
         this.itemFrameData.put(itemFrame.getUniqueId(), new ItemFrameData(itemFrame));
     }
 
+    /**
+     * Get all the logged item frames
+     *
+     * @return Logged item frames
+     */
     public Collection<ItemFrameData> getItemFrameData() {
         return this.itemFrameData.values();
     }
@@ -199,11 +221,28 @@ public class GameBlockData extends Data {
         this.itemFrameData.clear();
     }
 
+    /**
+     * Represents the type of chests in game
+     * <p>Used for logging and refilling</p>
+     */
     public enum ChestType {
+        /**
+         * A chest holding regular items
+         */
         REGULAR("regular"),
+        /**
+         * A chest holding bonus items
+         */
         BONUS("bonus"),
+        /**
+         * A player placed chest which cannot be refilled
+         */
         PLAYER_PLACED("player-placed"),
-        CHEST_DROP("chest-drop"),;
+        /**
+         * A chest that has dropped
+         */
+        CHEST_DROP("chest-drop"),
+        ;
 
         private final String name;
 
@@ -211,6 +250,11 @@ public class GameBlockData extends Data {
             this.name = name;
         }
 
+        /**
+         * Get the name of this chest type
+         *
+         * @return Name of chest type
+         */
         public String getName() {
             return this.name;
         }

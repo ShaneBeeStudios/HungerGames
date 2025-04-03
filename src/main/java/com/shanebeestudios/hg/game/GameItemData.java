@@ -9,7 +9,7 @@ import java.util.HashMap;
 import java.util.Map;
 
 /**
- * Data class for holding a {@link Game Game's} items
+ * Data holder for a {@link Game Game's} items
  */
 @SuppressWarnings("unused")
 public class GameItemData extends Data {

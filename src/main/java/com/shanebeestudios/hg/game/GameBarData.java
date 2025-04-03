@@ -16,7 +16,7 @@ public class GameBarData extends Data {
     private BossBar bar;
     private final String title;
 
-    protected GameBarData(Game game) {
+    GameBarData(Game game) {
         super(game);
         this.title = HungerGames.getPlugin().getLang().bossbar;
     }

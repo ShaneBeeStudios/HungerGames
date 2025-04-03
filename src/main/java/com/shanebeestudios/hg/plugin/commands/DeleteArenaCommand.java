@@ -49,7 +49,7 @@ public class DeleteArenaCommand extends SubCommand {
                         if (!gamePlayerData.getPlayers().isEmpty()) {
                             Util.sendMessage(sender, this.lang.command_delete_kicking);
                             for (Player player : gamePlayerData.getPlayers()) {
-                                gamePlayerData.leave(player, false);
+                                gamePlayerData.leaveGame(player, false);
                             }
                         }
 

@@ -34,7 +34,7 @@ public class ChestRefillRepeatTask implements Runnable {
             return;
         }
         this.gameBlockData.markChestForRefill();
-        this.gamePlayerData.msgAll(this.lang.game_chest_refill);
+        this.gamePlayerData.messageAllActivePlayers(this.lang.game_chest_refill);
     }
 
     public void stop() {

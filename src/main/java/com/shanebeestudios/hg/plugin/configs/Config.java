@@ -87,8 +87,8 @@ public class Config {
     //Spectate
     public static boolean SPECTATE_ENABLED;
     public static boolean spectateOnDeath;
-    public static boolean spectateHide;
-    public static boolean spectateFly;
+    public static boolean SPECTATE_HIDE;
+    public static boolean SPECTATE_FLY;
     public static boolean SPECTATE_CHAT;
 
     // Sounds
@@ -181,8 +181,8 @@ public class Config {
 
         SPECTATE_ENABLED = config.getBoolean("spectate.enabled");
         spectateOnDeath = config.getBoolean("spectate.death-to-spectate");
-        spectateHide = config.getBoolean("spectate.hide-spectators");
-        spectateFly = config.getBoolean("spectate.fly");
+        SPECTATE_HIDE = config.getBoolean("spectate.hide-spectators");
+        SPECTATE_FLY = config.getBoolean("spectate.fly");
         SPECTATE_CHAT = config.getBoolean("spectate.chat");
 
         SOUNDS_DEATH = config.getString("sounds.death");

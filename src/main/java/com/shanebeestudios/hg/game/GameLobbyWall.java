@@ -13,7 +13,7 @@ import org.bukkit.persistence.PersistentDataContainer;
 import org.bukkit.persistence.PersistentDataType;
 
 /**
- * Represents the Lobby Wall of a Game
+ * Data holder for a {@link Game Game's} lobby signs
  */
 public class GameLobbyWall extends Data {
 
@@ -25,6 +25,9 @@ public class GameLobbyWall extends Data {
         super(game);
     }
 
+    /** Get location of far left sign of lobby wall
+     * @return Location of sign
+     */
     public Location getSignLocation() {
         return this.signLoc1;
     }
@@ -71,7 +74,7 @@ public class GameLobbyWall extends Data {
         return true;
     }
 
-    protected void updateLobbyBlock() {
+    void updateLobbyBlock() {
         if (this.signLoc2 == null || this.signLoc3 == null) {
             Util.warning("The lobby wall seems to be missing for '%s'", this.game.getGameArenaData().getName());
             return;
@@ -87,7 +90,7 @@ public class GameLobbyWall extends Data {
         }
     }
 
-    protected boolean isLobbyValid() {
+    boolean isLobbyValid() {
         return this.signLoc1.getBlock().getState() instanceof Sign && this.signLoc2.getBlock().getState() instanceof Sign
             && this.signLoc3.getBlock().getState() instanceof Sign;
     }

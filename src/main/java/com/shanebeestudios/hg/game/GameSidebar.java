@@ -87,6 +87,9 @@ public class GameSidebar {
         });
     }
 
+    /**
+     * Reset the sidebar of all players
+     */
     public void reset() {
         this.playersFastBoards.forEach((player, fastBoard) -> fastBoard.delete());
         this.playersFastBoards.clear();

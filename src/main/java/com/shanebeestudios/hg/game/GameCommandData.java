@@ -36,9 +36,14 @@ public class GameCommandData extends Data {
      * @param type    The type of the command
      */
     public void addCommand(String command, CommandType type) {
-        this.commands.add(type.getType() + ":" + command);
+        this.commands.add(type.getName() + ":" + command);
     }
 
+    /**
+     * Get all the commands for this data
+     *
+     * @return All commands
+     */
     public List<String> getCommands() {
         return this.commands;
     }
@@ -54,11 +59,11 @@ public class GameCommandData extends Data {
         if (commands == null) return;
         for (String command : commands) {
             String type = command.split(":")[0];
-            if (!type.equals(commandType.getType())) continue;
+            if (!type.equals(commandType.getName())) continue;
             if (command.equalsIgnoreCase("none")) continue;
             command = command.split(":")[1]
-                    .replace("<world>", this.game.gameArenaData.gameRegion.getWorld().getName())
-                    .replace("<arena>", this.game.gameArenaData.getName());
+                .replace("<world>", this.game.gameArenaData.gameRegion.getWorld().getName())
+                .replace("<arena>", this.game.gameArenaData.getName());
             if (player != null) {
                 command = command.replace("<player>", player.getName());
             }
@@ -93,13 +98,18 @@ public class GameCommandData extends Data {
          */
         JOIN("join");
 
-        String type;
+        final String type;
 
         CommandType(String type) {
             this.type = type;
         }
 
-        public String getType() {
+        /**
+         * Get the name of this command type
+         *
+         * @return Name of type
+         */
+        public String getName() {
             return type;
         }
     }

@@ -26,7 +26,7 @@ public class StartingTask implements Runnable {
             Util.broadcast(broadcast);
             Util.broadcast(lang.game_join.replace("<arena>", name));
         } else {
-            game.getGamePlayerData().msgAll(broadcast);
+            game.getGamePlayerData().messageAllActivePlayers(broadcast);
         }
         this.id = Bukkit.getScheduler().scheduleSyncRepeatingTask(HungerGames.getPlugin(), this, 5 * 20L, 5 * 20L);
     }
@@ -39,7 +39,7 @@ public class StartingTask implements Runnable {
             stop();
             game.startFreeRoam();
         } else {
-            game.getGamePlayerData().msgAll(lang.game_countdown.replace("<timer>", String.valueOf(timer)));
+            game.getGamePlayerData().messageAllActivePlayers(lang.game_countdown.replace("<timer>", String.valueOf(timer)));
         }
     }
 

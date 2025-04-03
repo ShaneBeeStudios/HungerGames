@@ -12,7 +12,7 @@ public abstract class Data {
     final HungerGames plugin;
     final Language lang;
 
-    protected Data(Game game) {
+    Data(Game game) {
         this.game = game;
         this.plugin = game.plugin;
         this.lang = game.lang;

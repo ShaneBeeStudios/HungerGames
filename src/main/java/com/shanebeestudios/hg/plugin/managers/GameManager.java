@@ -80,7 +80,7 @@ public class GameManager {
             UUID uuid = player.getUniqueId();
             player.closeInventory();
             if (playerManager.hasPlayerData(uuid)) {
-                playerManager.getPlayerData(uuid).getGame().getGamePlayerData().leave(player, false);
+                playerManager.getPlayerData(uuid).getGame().getGamePlayerData().leaveGame(player, false);
                 playerManager.removePlayerData(uuid);
             }
             if (playerManager.hasSpectatorData(uuid)) {

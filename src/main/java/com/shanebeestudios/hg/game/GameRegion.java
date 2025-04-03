@@ -18,7 +18,7 @@ import java.util.List;
 import java.util.Random;
 
 /**
- * Bounding box object for creating regions
+ * Data holder for a {@link Game Game's} bounding box
  */
 @SuppressWarnings({"WeakerAccess", "unused"})
 public class GameRegion {
@@ -49,6 +49,11 @@ public class GameRegion {
         this.boundingBox = boundingBox;
     }
 
+    /**
+     * Get a random location within this region
+     *
+     * @return Random location
+     */
     public Location getRandomLocation() {
         Random random = new Random();
         Location location = new Location(this.getWorld(),

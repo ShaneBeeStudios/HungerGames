@@ -43,7 +43,7 @@ public class FreeRoamTask implements Runnable {
     @Override
     public void run() {
         if (this.roamTime > 0) {
-            this.game.getGamePlayerData().msgAll(this.lang.roam_finished);
+            this.game.getGamePlayerData().messageAllActivePlayers(this.lang.roam_finished);
         }
         this.game.startRunningGame();
     }

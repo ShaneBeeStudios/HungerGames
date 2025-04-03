@@ -53,7 +53,7 @@ public class WorldBorderTask implements Runnable {
                 this.hasStartedClosingIn = true;
                 int closingIn = this.gameBorderData.getBorderCountdownStart() - this.gameBorderData.getBorderCountdownEnd();
                 this.gameBorderData.startShrinking(closingIn);
-                this.gamePlayerData.msgAll(this.lang.game_border_closing.replace("<seconds>", String.valueOf(closingIn)));
+                this.gamePlayerData.messageAllActivePlayers(this.lang.game_border_closing.replace("<seconds>", String.valueOf(closingIn)));
 
             }
         }

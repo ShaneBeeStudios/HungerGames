@@ -221,7 +221,7 @@ public class KillManager {
             }
 
             // Send death message to all players in game
-            gamePlayerData.msgAll(this.lang.death_messages_prefix + " <light_purple>" + deathString);
+            gamePlayerData.messageAllActivePlayers(this.lang.death_messages_prefix + " <light_purple>" + deathString);
 
             this.leaderboard.addStat(player, Leaderboard.Stats.DEATHS);
             this.leaderboard.addStat(player, Leaderboard.Stats.GAMES);
@@ -232,7 +232,7 @@ public class KillManager {
                 }
             }
 
-            gamePlayerData.leave(player, true);
+            gamePlayerData.leaveGame(player, true);
             game.getGameCommandData().runCommands(GameCommandData.CommandType.DEATH, player);
 
             // Call our death event so other plugins can pick up the fake death
