@@ -53,9 +53,10 @@ public class Placeholders extends PlaceholderExpansion {
         return this.plugin.getPluginMeta().getVersion();
     }
 
+
     @Nullable
     @Override
-    public String onPlaceholderRequest(Player player, @NotNull String identifier) {
+    public String onRequest(OfflinePlayer offlinePlayer, @NotNull String identifier) {
         GameManager gameManager = this.plugin.getGameManager();
         String[] id = identifier.split("_");
         switch (id[0]) {
@@ -72,13 +73,13 @@ public class Placeholders extends PlaceholderExpansion {
                         else if (id[2].equalsIgnoreCase("c"))
                             return getStatPlayers(identifier) + " : " + getStatScores(identifier);
                         else if (id[2].equalsIgnoreCase("player"))
-                            return getStatsPlayer(identifier, player);
+                            return getStatsPlayer(identifier, offlinePlayer);
                 }
             case "status":
                 return gameManager.getGame(id[1]).getGameArenaData().getStatus().getStringName();
             case "player_status":
-                if (player == null) return null;
-                return this.plugin.getPlayerManager().getPlayerStatus(player).getStringName();
+                if (offlinePlayer instanceof Player player)
+                    return this.plugin.getPlayerManager().getPlayerStatus(player).getStringName();
             case "cost":
                 return String.valueOf(gameManager.getGame(id[1]).getGameArenaData().getCost());
             case "playerscurrent":
