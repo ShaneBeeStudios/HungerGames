@@ -25,7 +25,6 @@ import com.shanebeestudios.hg.plugin.listeners.GameEntityListener;
 import com.shanebeestudios.hg.plugin.listeners.GameLobbyListener;
 import com.shanebeestudios.hg.plugin.listeners.GamePlayerListener;
 import com.shanebeestudios.hg.plugin.listeners.GameTrackingStickListener;
-import com.shanebeestudios.hg.plugin.listeners.McmmoListeners;
 import com.shanebeestudios.hg.plugin.listeners.SessionWandListener;
 import dev.jorel.commandapi.CommandAPI;
 import dev.jorel.commandapi.CommandAPIBukkitConfig;
@@ -44,22 +43,25 @@ import org.bukkit.plugin.java.JavaPlugin;
 public class HungerGames extends JavaPlugin {
 
     //Instances
-    private static HungerGames plugin;
-    private Config config;
-    private GameManager gameManager;
-    private PlayerManager playerManager;
-    private ArenaConfig arenaconfig;
-    private KillManager killManager;
-    private RandomItems randomItems;
-    private Language lang;
-    private KitManager kitManager;
-    private ItemStackManager itemStackManager;
+    private static HungerGames PLUGIN_INSTANCE;
+
     private Leaderboard leaderboard;
     private Metrics metrics;
-    private MobManager mmMobManager;
+
+    // Configs
+    private Config config;
+    private Language lang;
+    private ArenaConfig arenaconfig;
 
     // Managers
-    private final SessionManager sessionManager = new SessionManager();
+    private GameManager gameManager;
+    private PlayerManager playerManager;
+    private KillManager killManager;
+    private ItemStackManager itemStackManager;
+    private RandomItems randomItems;
+    private KitManager kitManager;
+    private SessionManager sessionManager;
+    private MobManager mmMobManager;
 
     //Mobs
     private MobConfig mobConfig;
@@ -96,11 +98,11 @@ public class HungerGames extends JavaPlugin {
 
     public void loadPlugin(boolean load) {
         long start = System.currentTimeMillis();
-        plugin = this;
+        PLUGIN_INSTANCE = this;
 
-        config = new Config(this);
-        metrics = new Metrics(this, 25144);
-        nbtApi = new NBTApi();
+        this.config = new Config(this);
+        this.metrics = new Metrics(this, 25144);
+        this.nbtApi = new NBTApi();
 
         //MythicMob check
         if (Bukkit.getPluginManager().getPlugin("MythicMobs") != null) {
@@ -112,10 +114,11 @@ public class HungerGames extends JavaPlugin {
         this.lang = new Language(this);
         this.itemStackManager = new ItemStackManager(this);
         this.kitManager = new KitManager(this);
+        this.sessionManager = new SessionManager();
 
-        mobConfig = new MobConfig(this);
-        randomItems = new RandomItems(this);
-        playerManager = new PlayerManager();
+        this.mobConfig = new MobConfig(this);
+        this.randomItems = new RandomItems(this);
+        this.playerManager = new PlayerManager();
         this.gameManager = new GameManager(this);
         this.arenaconfig = new ArenaConfig(this);
         this.leaderboard = new Leaderboard(this);
@@ -128,24 +131,13 @@ public class HungerGames extends JavaPlugin {
         } else {
             Util.log("<grey>PAPI not found, Placeholders have been <red>disabled");
         }
-        //mcMMO check
-        if (Bukkit.getPluginManager().getPlugin("mcMMO") != null) {
-            if (Util.classExists("com.gmail.nossr50.events.skills.secondaryabilities.SubSkillEvent")) {
-                getServer().getPluginManager().registerEvents(new McmmoListeners(this), this);
-                Util.log("<grey>mcMMO found, mcMMO event hooks <green>enabled");
-            } else {
-                Util.log("<grey>mcMMO classic found. HungerGames does not support mcMMO classic, mcMMO hooks <red>disabled");
-            }
-        } else {
-            Util.log("<grey>mcMMO not found, mcMMO event hooks have been <red>disabled");
-        }
 
         loadCommands();
         loadListeners();
 
         if (this.getDescription().getVersion().contains("Beta")) {
-            Util.log("<yellow>YOU ARE RUNNING A BETA VERSION, please use with caution");
-            Util.log("<yellow>Report any issues to: <aqua>https://github.com/ShaneBeeStudios/HungerGames/issues");
+            Util.warning("YOU ARE RUNNING A BETA VERSION, please use with caution");
+            Util.warning("Report any issues to: <aqua>https://github.com/ShaneBeeStudios/HungerGames/issues");
         }
 
         Util.log("HungerGames has been <green>enabled<grey> in <aqua>%.2f seconds<grey>!", (float) (System.currentTimeMillis() - start) / 1000);
@@ -157,21 +149,21 @@ public class HungerGames extends JavaPlugin {
 
     private void unloadPlugin(boolean reload) {
         this.gameManager.stopAllGames();
-        plugin = null;
-        config = null;
-        metrics = null;
-        nbtApi = null;
-        mmMobManager = null;
-        lang = null;
-        kitManager = null;
-        itemStackManager = null;
-        mobConfig = null;
-        randomItems = null;
-        playerManager = null;
-        arenaconfig = null;
-        killManager = null;
-        gameManager = null;
-        leaderboard = null;
+        PLUGIN_INSTANCE = null;
+        this.config = null;
+        this.metrics = null;
+        this.nbtApi = null;
+        this.mmMobManager = null;
+        this.lang = null;
+        this.kitManager = null;
+        this.itemStackManager = null;
+        this.mobConfig = null;
+        this.randomItems = null;
+        this.playerManager = null;
+        this.arenaconfig = null;
+        this.killManager = null;
+        this.gameManager = null;
+        this.leaderboard = null;
         HandlerList.unregisterAll(this);
         if (reload) {
             loadPlugin(false);
@@ -213,7 +205,7 @@ public class HungerGames extends JavaPlugin {
      * @return This plugin
      */
     public static HungerGames getPlugin() {
-        return plugin;
+        return PLUGIN_INSTANCE;
     }
 
     /**

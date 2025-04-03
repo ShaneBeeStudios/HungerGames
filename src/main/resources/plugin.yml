@@ -5,4 +5,4 @@ description: A Simple, fun, PvP arena plugin
 version: '${version}'
 website: https://github.com/ShaneBeeStudios/HungerGames
 api-version: '1.13'
-softdepend: [Multiverse-Core, MultiWorld, Vault, My_Worlds, GoldenEnchants, mcMMO, MythicMobs, PlaceholderAPI, XConomy]
+softdepend: [Multiverse-Core, MultiWorld, Vault, My_Worlds, GoldenEnchants, MythicMobs, PlaceholderAPI, XConomy]

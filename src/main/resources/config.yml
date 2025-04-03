@@ -187,8 +187,3 @@ sounds:
   # Played when a player dies in the game
   death: 'ui.toast.challenge_complete'
   open-chest-drop: 'block.ender_chest.open'
-mcmmo:
-  # If players in game can use mcMMO skills in game
-  use-skills: false
-  # If players can gain mcMMO experience ing ame
-  gain-experience: false

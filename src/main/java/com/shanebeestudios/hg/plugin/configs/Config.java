@@ -95,10 +95,6 @@ public class Config {
     public static String SOUNDS_DEATH;
     public static String SOUNDS_OPEN_CHEST_DROP;
 
-    //mcMMO
-    public static boolean mcmmoUseSkills;
-    public static boolean mcmmoGainExp;
-
     private final HungerGames plugin;
     private File configFile;
     private FileConfiguration config;
@@ -191,9 +187,6 @@ public class Config {
 
         SOUNDS_DEATH = config.getString("sounds.death");
         SOUNDS_OPEN_CHEST_DROP = config.getString("sounds.open-chest-drop");
-
-        mcmmoUseSkills = config.getBoolean("mcmmo.use-skills");
-        mcmmoGainExp = config.getBoolean("mcmmo.gain-experience");
 
         try {
             Vault.setupEconomy();
