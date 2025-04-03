@@ -202,7 +202,7 @@ public class MobEntry {
                 }
             });
         } else {
-            Optional<MythicMob> mythicMob = HungerGames.getPlugin().getMmMobManager().getMythicMob(this.mythicMob);
+            Optional<MythicMob> mythicMob = HungerGames.getPlugin().getMythicMobManager().getMythicMob(this.mythicMob);
             if (mythicMob.isPresent()) {
                 MythicMob mob = mythicMob.get();
                 ActiveMob activeMob = mob.spawn(BukkitAdapter.adapt(location), mythicLevel);

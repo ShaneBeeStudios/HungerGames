@@ -62,7 +62,7 @@ public class MobManager {
                 if (typeString == null) continue;
 
                 if (typeString.startsWith("MM:")) {
-                    if (HungerGames.getPlugin().getMmMobManager() == null) continue;
+                    if (HungerGames.getPlugin().getMythicMobManager() == null) continue;
 
                     String mythicMob = typeString.replace("MM:", "");
                     entry = new MobEntry(mythicMob, mobSection.getInt("level"));

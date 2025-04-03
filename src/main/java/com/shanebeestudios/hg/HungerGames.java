@@ -30,7 +30,6 @@ import dev.jorel.commandapi.CommandAPI;
 import dev.jorel.commandapi.CommandAPIBukkitConfig;
 import dev.jorel.commandapi.exceptions.UnsupportedVersionException;
 import io.lumine.mythic.api.MythicProvider;
-import io.lumine.mythic.api.mobs.MobManager;
 import org.bstats.bukkit.Metrics;
 import org.bukkit.Bukkit;
 import org.bukkit.event.HandlerList;
@@ -61,7 +60,7 @@ public class HungerGames extends JavaPlugin {
     private RandomItems randomItems;
     private KitManager kitManager;
     private SessionManager sessionManager;
-    private MobManager mmMobManager;
+    private io.lumine.mythic.api.mobs.MobManager mythicMobManager;
 
     //Mobs
     private MobConfig mobConfig;
@@ -106,10 +105,10 @@ public class HungerGames extends JavaPlugin {
 
         //MythicMob check
         if (Bukkit.getPluginManager().getPlugin("MythicMobs") != null) {
-            mmMobManager = MythicProvider.get().getMobManager();
+            this.mythicMobManager = MythicProvider.get().getMobManager();
             Util.log("<grey>MythicMobs found, MythicMobs hook <green>enabled");
         } else {
-            Util.log("<grey>MythicMobs not found, MythicMobs hooks have been <red>disabled");
+            Util.log("<grey>MythicMobs not found, MythicMobs hook <red>disabled");
         }
         this.lang = new Language(this);
         this.itemStackManager = new ItemStackManager(this);
@@ -153,7 +152,7 @@ public class HungerGames extends JavaPlugin {
         this.config = null;
         this.metrics = null;
         this.nbtApi = null;
-        this.mmMobManager = null;
+        this.mythicMobManager = null;
         this.lang = null;
         this.kitManager = null;
         this.itemStackManager = null;
@@ -325,8 +324,8 @@ public class HungerGames extends JavaPlugin {
      *
      * @return MythicMobs MobManager
      */
-    public MobManager getMmMobManager() {
-        return this.mmMobManager;
+    public io.lumine.mythic.api.mobs.MobManager getMythicMobManager() {
+        return this.mythicMobManager;
     }
 
     // Managers
