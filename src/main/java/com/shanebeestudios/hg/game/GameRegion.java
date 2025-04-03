@@ -1,14 +1,11 @@
 package com.shanebeestudios.hg.game;
 
-import com.shanebeestudios.hg.plugin.HungerGames;
 import org.bukkit.Bukkit;
 import org.bukkit.HeightMap;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.World;
 import org.bukkit.block.Block;
-import org.bukkit.entity.Entity;
-import org.bukkit.metadata.FixedMetadataValue;
 import org.bukkit.util.BoundingBox;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
@@ -23,11 +20,8 @@ import java.util.Random;
 @SuppressWarnings({"WeakerAccess", "unused"})
 public class GameRegion {
 
-    private static final FixedMetadataValue SPAWN_KEY = new FixedMetadataValue(HungerGames.getPlugin(), true);
-
     private final BoundingBox boundingBox;
     private final String world;
-    private final List<Entity> entities = new ArrayList<>();
 
     public static GameRegion createNew(@NotNull Block corner1, @NotNull Block corner2) {
         BoundingBox boundingBox = BoundingBox.of(corner1, corner2);
@@ -75,63 +69,6 @@ public class GameRegion {
         return this.boundingBox.contains(loc.toVector());
     }
 
-    /**
-     * Kill/Remove all entities in this bound
-     */
-    public void removeEntities() {
-        List<Entity> entitiesToRemove = new ArrayList<>(this.entities);
-        entitiesToRemove.forEach(Entity::remove);
-        this.entities.clear();
-    }
-
-    /**
-     * Remove an entity from this bound
-     *
-     * @param entity Entity to remove
-     */
-    public void removeEntity(Entity entity) {
-        this.entities.remove(entity);
-    }
-
-    /**
-     * Add an entity to the entity list
-     *
-     * @param entity The entity to add
-     */
-    public void addEntity(@NotNull Entity entity) {
-        if (this.entities.contains(entity)) return;
-        entity.setPersistent(false);
-        entity.setMetadata("hunger-games-spawned", SPAWN_KEY);
-        this.entities.add(entity);
-    }
-
-    /**
-     * Check if this bound already contains an entity
-     *
-     * @param entity Entity to check
-     * @return True if entity is already in this bound
-     */
-    public boolean hasEntity(Entity entity) {
-        return this.entities.contains(entity);
-    }
-
-    /**
-     * Get a list of all entities in this bound
-     *
-     * @return Entities in this bound
-     */
-    public List<Entity> getEntities() {
-        return this.entities;
-    }
-
-    /**
-     * Get amount of entities already in this bound
-     *
-     * @return Entities in this bound
-     */
-    public int getEntityCount() {
-        return this.entities.size();
-    }
 
     /**
      * Get location of all blocks of a type within a bound
@@ -139,7 +76,6 @@ public class GameRegion {
      * @param type Material type to check
      * @return ArrayList of locations of all blocks of this type in this bound
      */
-    @SuppressWarnings("unused")
     public List<Location> getBlocks(@Nullable Material type) {
         World world = Bukkit.getWorld(this.world);
         assert world != null;
@@ -204,7 +140,6 @@ public class GameRegion {
         return "Bound{" +
             "boundingBox=" + boundingBox +
             ", world='" + world + '\'' +
-            ", entities=" + entities +
             '}';
     }
 

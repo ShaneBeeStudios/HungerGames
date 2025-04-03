@@ -4,7 +4,6 @@ import com.shanebeestudios.hg.game.Game;
 import com.shanebeestudios.hg.game.GameArenaData;
 import com.shanebeestudios.hg.game.GameEntityData;
 import com.shanebeestudios.hg.game.GamePlayerData;
-import com.shanebeestudios.hg.game.GameRegion;
 import com.shanebeestudios.hg.plugin.configs.Config;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
@@ -20,7 +19,6 @@ public class MobSpawnerTask implements Runnable {
     private final GamePlayerData gamePlayerData;
     private final GameArenaData gameArenaData;
     private final GameEntityData gameEntityData;
-    private final GameRegion gameRegion;
     private final int taskId;
     private final Random random = new Random();
     private final World world;
@@ -30,14 +28,13 @@ public class MobSpawnerTask implements Runnable {
         this.gamePlayerData = game.getGamePlayerData();
         this.gameArenaData = game.getGameArenaData();
         this.gameEntityData = game.getGameEntityData();
-        this.gameRegion = game.getGameArenaData().getGameRegion();
         this.taskId = Bukkit.getScheduler().scheduleSyncRepeatingTask(game.getGameArenaData().getPlugin(), this, Config.MOBS_SPAWN_INTERVAL, Config.MOBS_SPAWN_INTERVAL);
         this.world = game.getGameArenaData().getGameRegion().getWorld();
     }
 
     @Override
     public void run() {
-        int entityCount = this.gameRegion.getEntityCount();
+        int entityCount = this.gameEntityData.getLoggedEntityCount();
         int playerCap = this.gamePlayerData.getPlayers().size() * this.cap;
         // Prevent spawning if cap already reached
         if (entityCount > playerCap) return;

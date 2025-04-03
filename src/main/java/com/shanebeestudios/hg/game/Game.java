@@ -251,7 +251,7 @@ public class Game {
      */
     public void startFreeRoam() {
         this.gameArenaData.setStatus(Status.FREE_ROAM);
-        this.gameArenaData.getGameRegion().removeEntities();
+        this.gameEntityData.removeEntities();
         this.freeRoamTask = new FreeRoamTask(this);
         this.gameCommandData.runCommands(CommandType.START, null);
     }
@@ -379,7 +379,7 @@ public class Game {
         if (Config.WORLD_BORDER_ENABLED) {
             this.gameBorderData.resetBorder();
         }
-        this.gameArenaData.gameRegion.removeEntities();
+        this.gameEntityData.removeEntities();
         this.gameScoreboard.resetSidebars();
 
         // TODO win list should be players

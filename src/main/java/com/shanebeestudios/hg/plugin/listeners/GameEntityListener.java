@@ -1,9 +1,8 @@
 package com.shanebeestudios.hg.plugin.listeners;
 
-import com.shanebeestudios.hg.plugin.HungerGames;
 import com.shanebeestudios.hg.api.status.Status;
 import com.shanebeestudios.hg.game.Game;
-import com.shanebeestudios.hg.game.GameRegion;
+import com.shanebeestudios.hg.plugin.HungerGames;
 import org.bukkit.Location;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.EntityType;
@@ -58,8 +57,7 @@ public class GameEntityListener extends GameListenerBase {
             }
 
             if (status.isActive()) {
-                GameRegion gameRegion = game.getGameArenaData().getGameRegion();
-                gameRegion.addEntity(entity);
+                game.getGameEntityData().logEntity(entity);
             }
         }
     }
@@ -84,8 +82,7 @@ public class GameEntityListener extends GameListenerBase {
         Game game = this.gameManager.getGame(entity.getLocation());
         if (game == null) return;
 
-        GameRegion gameRegion = game.getGameArenaData().getGameRegion();
-        gameRegion.removeEntity(entity);
+        game.getGameEntityData().removeEntityFromLog(entity);
     }
 
 }
