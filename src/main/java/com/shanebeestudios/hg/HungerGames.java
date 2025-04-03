@@ -109,9 +109,10 @@ public class HungerGames extends JavaPlugin {
         } else {
             Util.log("<grey>MythicMobs not found, MythicMobs hooks have been <red>disabled");
         }
-        lang = new Language(this);
-        kitManager = new KitManager();
-        itemStackManager = new ItemStackManager(this);
+        this.lang = new Language(this);
+        this.itemStackManager = new ItemStackManager(this);
+        this.kitManager = new KitManager(this);
+
         mobConfig = new MobConfig(this);
         randomItems = new RandomItems(this);
         playerManager = new PlayerManager();

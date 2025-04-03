@@ -37,21 +37,24 @@ public class Permissions {
     public static final Permission COMMAND_SPECTATE = getCommand("spectate", "Spectate a game", PermissionDefault.TRUE);
     public static final Permission COMMAND_STATUS = getCommand("status", "Show status of a game", PermissionDefault.TRUE);
     public static final Permission COMMAND_STOP = getCommand("stop", "Stop the game", PermissionDefault.OP);
-    public static final Permission COMMAND_STOP_ALL =  getCommand("stopallgames", "Stop all games", PermissionDefault.OP);
+    public static final Permission COMMAND_STOP_ALL = getCommand("stopallgames", "Stop all games", PermissionDefault.OP);
     public static final Permission COMMAND_TEAM = getCommand("team", "Create/join teams in a game", PermissionDefault.TRUE);
     public static final Permission COMMAND_TEAM_TELEPORT = getCommand("team.teleport", "Teleport to a team member", PermissionDefault.TRUE);
     public static final Permission COMMAND_TOGGLE = getCommand("toggle", "Toggle a game", PermissionDefault.OP);
 
+    // Other Permissions
+    public static final Permission KITS = getBase("kits", "Whether a player can use kits", PermissionDefault.TRUE);
+
     private static Permission getCommand(String perm, String description, PermissionDefault defaultPermission) {
-        return getBase("command", perm, description, defaultPermission);
+        return getBase("command." + perm, description, defaultPermission);
     }
 
-    public static void registerKitPermission(String kitName, String kitPermission) {
-        getBase("kit", kitPermission, "Permission for kit '" + kitName + "'", PermissionDefault.FALSE);
+    public static Permission registerKitPermission(String kitName, String kitPermission) {
+        return getBase("kit." + kitPermission, "Permission for kit '" + kitName + "'", PermissionDefault.FALSE);
     }
 
-    private static Permission getBase(String base, String perm, String description, PermissionDefault defaultPermission) {
-        String stringPerm = "hungergames." + base + "." + perm;
+    private static Permission getBase(String perm, String description, PermissionDefault defaultPermission) {
+        String stringPerm = "hungergames." + perm;
         org.bukkit.permissions.Permission bukkitPermission = DefaultPermissions.registerPermission(stringPerm, description, defaultPermission);
         PERMISSIONS.put(stringPerm, bukkitPermission);
         return new Permission(stringPerm, bukkitPermission);

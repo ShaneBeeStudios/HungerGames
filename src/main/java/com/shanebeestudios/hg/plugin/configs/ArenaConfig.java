@@ -8,7 +8,6 @@ import com.shanebeestudios.hg.game.GameBlockData.ChestType;
 import com.shanebeestudios.hg.game.GameBorderData;
 import com.shanebeestudios.hg.game.GameRegion;
 import com.shanebeestudios.hg.managers.ItemStackManager;
-import com.shanebeestudios.hg.managers.KitManager;
 import org.bukkit.Bukkit;
 import org.bukkit.Difficulty;
 import org.bukkit.Location;
@@ -100,7 +99,6 @@ public class ArenaConfig {
         Util.log("Loading arenas:");
 
         if (this.arenaConfigFile.exists()) {
-
             ConfigurationSection allArenasSection = this.arenaConfig.getConfigurationSection("arenas");
 
             if (allArenasSection != null) {
@@ -175,9 +173,7 @@ public class ArenaConfig {
                     }
 
                     // KITS
-                    KitManager kitManager = plugin.getItemStackManager().loadGameKits(game, arenaSection);
-                    if (kitManager != null)
-                        game.setKitManager(kitManager);
+                    this.plugin.getKitManager().loadGameKits(game, arenaSection);
 
                     // ITEMS
                     if (arenaSection.isSet("items")) {

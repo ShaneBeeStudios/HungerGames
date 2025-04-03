@@ -7,21 +7,20 @@ import com.shanebeestudios.hg.api.events.PlayerJoinGameEvent;
 import com.shanebeestudios.hg.api.status.Status;
 import com.shanebeestudios.hg.api.util.Util;
 import com.shanebeestudios.hg.api.util.Vault;
-import com.shanebeestudios.hg.plugin.configs.Config;
 import com.shanebeestudios.hg.data.Language;
 import com.shanebeestudios.hg.data.Leaderboard;
 import com.shanebeestudios.hg.data.PlayerData;
 import com.shanebeestudios.hg.game.GameCommandData.CommandType;
-import com.shanebeestudios.hg.managers.KitManager;
 import com.shanebeestudios.hg.managers.MobManager;
 import com.shanebeestudios.hg.managers.PlayerManager;
+import com.shanebeestudios.hg.plugin.configs.Config;
 import com.shanebeestudios.hg.plugin.permission.Permissions;
 import com.shanebeestudios.hg.plugin.tasks.ChestDropTask;
 import com.shanebeestudios.hg.plugin.tasks.ChestRefillRepeatTask;
-import com.shanebeestudios.hg.plugin.tasks.NearestPlayerCompassTask;
 import com.shanebeestudios.hg.plugin.tasks.FreeRoamTask;
 import com.shanebeestudios.hg.plugin.tasks.GameTimerTask;
 import com.shanebeestudios.hg.plugin.tasks.MobSpawnerTask;
+import com.shanebeestudios.hg.plugin.tasks.NearestPlayerCompassTask;
 import com.shanebeestudios.hg.plugin.tasks.RollbackTask;
 import com.shanebeestudios.hg.plugin.tasks.StartingTask;
 import org.bukkit.Bukkit;
@@ -43,7 +42,6 @@ public class Game {
     final Language lang;
 
     // Managers
-    KitManager kitManager;
     private final MobManager mobManager;
     private final PlayerManager playerManager;
 
@@ -89,7 +87,6 @@ public class Game {
         this.gameBlockData = new GameBlockData(this);
         this.gameScoreboard = new GameScoreboard(this);
         this.playerManager = HungerGames.getPlugin().getPlayerManager();
-        this.kitManager = plugin.getKitManager();
         this.mobManager = new MobManager(this);
         this.bar = new GameBarData(this);
         this.gameItemData = new GameItemData(this);
@@ -105,8 +102,6 @@ public class Game {
             isReady = false;
         }
         this.gameArenaData.setStatus(isReady ? Status.READY : Status.BROKEN);
-
-        this.kitManager = plugin.getKitManager();
     }
 
     /**
@@ -192,25 +187,6 @@ public class Game {
      */
     public Location getLobbyLocation() {
         return this.gameBlockData.getSignLocation();
-    }
-
-    /**
-     * Get the kits for this game
-     *
-     * @return The KitManager kit for this game
-     */
-    public KitManager getKitManager() {
-        return this.kitManager;
-    }
-
-    /**
-     * Set the kits for this game
-     *
-     * @param kit The KitManager kit to set
-     */
-    @SuppressWarnings("unused")
-    public void setKitManager(KitManager kit) {
-        this.kitManager = kit;
     }
 
     /**

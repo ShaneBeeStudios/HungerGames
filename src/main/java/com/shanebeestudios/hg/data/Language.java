@@ -173,6 +173,7 @@ public class Language {
     // Kit
     public String command_kit_game_running;
     public String command_kit_invalid_name;
+    public String command_kit_no_permission;
     // List
     public String command_list_players;
     public String command_list_players_delimiter;
@@ -439,8 +440,9 @@ public class Language {
         command_join_already_in_game_other = lang.getString("command.join-already-in-game-other");
         command_join_no_money = lang.getString("command.join-no-money");
         // Kit
-        this.command_kit_game_running = this.lang.getString("command.kit-game-running");
-        this.command_kit_invalid_name = lang.getString("command.kit-invalid-name");
+        this.command_kit_game_running = this.lang.getString("command.kit.game-running");
+        this.command_kit_invalid_name = this.lang.getString("command.kit.invalid-name");
+        this.command_kit_no_permission = this.lang.getString("command.kit.no-permission");
         // List
         command_list_players = lang.getString("command.list-players");
         command_list_players_delimiter = lang.getString("command.list-players-delimiter");

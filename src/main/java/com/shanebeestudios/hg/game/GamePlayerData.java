@@ -2,11 +2,13 @@ package com.shanebeestudios.hg.game;
 
 import com.shanebeestudios.hg.api.status.Status;
 import com.shanebeestudios.hg.api.util.Util;
+import com.shanebeestudios.hg.data.KitData;
 import com.shanebeestudios.hg.plugin.configs.Config;
 import com.shanebeestudios.hg.data.PlayerData;
 import com.shanebeestudios.hg.api.events.PlayerLeaveGameEvent;
 import com.shanebeestudios.hg.gui.SpectatorGUI;
 import com.shanebeestudios.hg.managers.PlayerManager;
+import com.shanebeestudios.hg.plugin.permission.Permissions;
 import org.bukkit.Bukkit;
 import org.bukkit.GameMode;
 import org.bukkit.Location;
@@ -93,21 +95,22 @@ public class GamePlayerData extends Data {
 
     // Utility methods
 
-    private void kitHelp(Player player) {
+    private void startMessage(Player player) {
+        KitData kitData = this.game.getGameItemData().getKitData();
         // Clear the chat a little bit, making this message easier to see
         for (int i = 0; i < 20; ++i)
             Util.sendMessage(player, " ");
-        String kit = game.kitManager.getKitListString();
+        String kitNames = kitData.getKitListString(player);
         Util.sendMessage(player, " ");
-        Util.sendMessage(player, lang.kit_join_header);
+        Util.sendMessage(player, this.lang.kit_join_header);
         Util.sendMessage(player, " ");
-        if (player.hasPermission("hg.kit") && game.kitManager.hasKits()) {
-            Util.sendMessage(player, lang.kit_join_msg);
+        if (Permissions.KITS.has(player) && kitData.hasKits()) {
+            Util.sendMessage(player, this.lang.kit_join_msg);
             Util.sendMessage(player, " ");
-            Util.sendMessage(player, lang.kit_join_avail + kit);
+            Util.sendMessage(player, this.lang.kit_join_avail + " " + kitNames);
             Util.sendMessage(player, " ");
         }
-        Util.sendMessage(player, lang.kit_join_footer);
+        Util.sendMessage(player, this.lang.kit_join_footer);
         Util.sendMessage(player, " ");
     }
 
@@ -236,7 +239,7 @@ public class GamePlayerData extends Data {
             heal(player);
             freeze(player);
             this.kills.put(player, 0);
-            kitHelp(player);
+            startMessage(player);
 
             this.game.getGameScoreboard().updateBoards();
             this.game.getGameCommandData().runCommands(GameCommandData.CommandType.JOIN, player);

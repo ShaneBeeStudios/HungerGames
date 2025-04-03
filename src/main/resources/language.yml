@@ -234,8 +234,10 @@ command:
   join-already-in-game-other: '<red><player> is already in a game!'
   join-no-money: '<red>You do not have enough money to join this game. Cost: <aqua>$<cost>'
   # Kit
-  kit-game-running: '<red>You cannot get a kit at this stage in the game!'
-  kit-invalid-name: '<red>Invalid kit name.'
+  kit:
+    game-running: '<red>You cannot get a kit at this stage in the game!'
+    invalid-name: '<red>Invalid kit name.'
+    no-permission: '<red>You do not have permission to use this kit!'
   # Leave
   leave-left: '<grey>You left <aqua><arena><grey>!'
   leave-refund: '<grey>You got a refund of <aqua>$<cost> <grey>for leaving the game before it started.'

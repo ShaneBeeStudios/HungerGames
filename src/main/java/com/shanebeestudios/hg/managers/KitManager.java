@@ -1,93 +1,105 @@
 package com.shanebeestudios.hg.managers;
 
 import com.shanebeestudios.hg.HungerGames;
+import com.shanebeestudios.hg.api.parsers.ItemParser;
 import com.shanebeestudios.hg.api.util.Util;
+import com.shanebeestudios.hg.data.KitData;
 import com.shanebeestudios.hg.data.KitEntry;
-import org.bukkit.ChatColor;
-import org.bukkit.entity.Player;
+import com.shanebeestudios.hg.game.Game;
+import org.bukkit.configuration.ConfigurationSection;
+import org.bukkit.configuration.file.YamlConfiguration;
+import org.bukkit.inventory.ItemStack;
+import org.bukkit.potion.PotionEffect;
+import org.jetbrains.annotations.Nullable;
 
+import java.io.File;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  * General manager for kits
  */
-@SuppressWarnings({"unused", "WeakerAccess"})
 public class KitManager {
 
-	private HashMap<String, KitEntry> kititems = new HashMap<>();
+    private final HungerGames plugin;
+    private final ItemStackManager itemStackManager;
+    private KitData defaultKitData;
 
-    /** Set a kit for a player
-	 * @param player The player to set the kit for
-	 * @param kitName The name of the kit to set
-	 */
-	public void setKit(Player player, String kitName) {
-		if (!kititems.containsKey(kitName)) {
-			Util.sendMessage(player, "<red>" + kitName + HungerGames.getPlugin().getLang().kit_doesnt_exist);
-			Util.sendMessage(player, "Available Kits:" + getKitListString());
-		} else if (!kititems.get(kitName).hasKitPermission(player))
-			Util.sendMessage(player, HungerGames.getPlugin().getLang().kit_no_perm);
-		else {
-			kititems.get(kitName).setInventoryContent(player);
-		}
-	}
-
-	/** Get a list of kits in this KitManager
-	 * @return A string of all kits
-	 */
-	public String getKitListString() {
-		StringBuilder kits = new StringBuilder();
-		if (!kititems.isEmpty()) {
-            for (String s : kititems.keySet()) {
-                kits.append(", ").append(s);
-            }
-            return kits.substring(1);
-        }
-		return null;
-	}
-
-	/** Get a list of kits in this KitManager
-	 * @return A list of all kit's names
-	 */
-	public List<String> getKitList() {
-		return new ArrayList<>(kititems.keySet());
-	}
-
-	/** Get the kits for this KitManager
-	 * @return A map of the kits
-	 */
-	public HashMap<String, KitEntry> getKits() {
-		return this.kititems;
-	}
-
-    /** Check if this KitManager actually has kits
-     * @return True if kits exist
-     */
-	public boolean hasKits() {
-	    return this.kititems.size() > 0;
+    public KitManager(HungerGames plugin) {
+        this.plugin = plugin;
+        this.itemStackManager = plugin.getItemStackManager();
+        loadDefaultKits();
     }
 
-	/** Add a kit to this KitManager
-	 * @param name The name of the kit
-	 * @param kit The KitEntry to add
-	 */
-	public void addKit(String name, KitEntry kit) {
-		kititems.put(name, kit);
-	}
+    private void loadDefaultKits() {
+        File kitFile = new File(this.plugin.getDataFolder(), "kits.yml");
 
-	/** Remove a kit entry from this KitManager
-	 * @param name The kit entry to remove
-	 */
-	public void removeKit(String name) {
-		kititems.remove(name);
-	}
+        if (!kitFile.exists()) {
+            this.plugin.saveResource("kits.yml", false);
+            Util.log("- New kits.yml file has been <green>successfully generated!");
+        }
+        YamlConfiguration kitConfig = YamlConfiguration.loadConfiguration(kitFile);
+        ConfigurationSection kitsSection = kitConfig.getConfigurationSection("kits");
+        assert kitsSection != null;
+        Util.log("Loading kits:");
+        this.defaultKitData = kitCreator(kitsSection, null);
+        Util.log("- Kits have been <green>successfully loaded!");
+    }
 
-	/**
-	 * Clear the kit entries in this KitManager
-	 */
-	public void clearKits() {
-		kititems.clear();
-	}
+    /**
+     * Set the kits for a game from a config
+     *
+     * @param game         The game to set the kits for
+     * @param arenaSection Config the kit is pulled from
+     */
+    public void loadGameKits(Game game, ConfigurationSection arenaSection) {
+        ConfigurationSection kitsSection = arenaSection.getConfigurationSection("kits");
+        if (kitsSection == null) {
+            game.getGameItemData().setKitData(this.defaultKitData);
+            return;
+        }
+
+        KitData kitData = kitCreator(kitsSection, game);
+        Util.log("- Loaded custom kits for arena: <aqua>" + game.getGameArenaData().getName());
+        game.getGameItemData().setKitData(kitData);
+    }
+
+    @SuppressWarnings({"ConstantConditions", "unchecked"})
+    private KitData kitCreator(ConfigurationSection kitsSection, @Nullable Game game) {
+        KitData kit = new KitData();
+        String gameName = game != null ? game.getGameArenaData().getName() + ":" : "";
+        for (String kitName : kitsSection.getKeys(false)) {
+            try {
+                ConfigurationSection kitSection = kitsSection.getConfigurationSection(kitName);
+                Map<Integer, ItemStack> items = new HashMap<>();
+                this.itemStackManager.loadItems(kitSection.getMapList("items"), items);
+
+                ItemStack helmet = ItemParser.parseItem(kitSection.getConfigurationSection("helmet"));
+                ItemStack chestplate = ItemParser.parseItem(kitSection.getConfigurationSection("chestplate"));
+                ItemStack leggings = ItemParser.parseItem(kitSection.getConfigurationSection("leggings"));
+                ItemStack boots = ItemParser.parseItem(kitSection.getConfigurationSection("boots"));
+
+                List<PotionEffect> potionEffects = new ArrayList<>();
+                List<Map<?, ?>> mapList = kitSection.getMapList("potion-effects");
+                mapList.forEach(map -> potionEffects.add(ItemParser.parsePotionEffect((Map<String, Object>) map)));
+
+                String permission = null;
+                if (kitSection.contains("permission") && !kitSection.getString("permission").equalsIgnoreCase("none"))
+                    permission = kitSection.getString("permission");
+
+                KitEntry kitEntry = new KitEntry(kitName, new ArrayList<>(items.values()), helmet, chestplate, leggings, boots, permission, potionEffects);
+                kit.addKitEntry(kitName, kitEntry);
+                Util.log("- Loaded kit <white>'<aqua>%s<white>'", gameName + kitName);
+            } catch (Exception e) {
+                Util.log("-------------------------------------------");
+                Util.log("<yellow>Unable to load kit " + gameName + kitName + "! (for a more detailed message enable 'debug' in config and reload)");
+                Util.log("-------------------------------------------");
+                Util.debug(e);
+            }
+        }
+        return kit;
+    }
 
 }

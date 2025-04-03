@@ -1,5 +1,6 @@
 package com.shanebeestudios.hg.game;
 
+import com.shanebeestudios.hg.data.KitData;
 import com.shanebeestudios.hg.data.RandomItems;
 import com.shanebeestudios.hg.game.GameBlockData.ChestType;
 import org.bukkit.inventory.ItemStack;
@@ -15,6 +16,7 @@ public class GameItemData extends Data {
 
     private final RandomItems randomItems;
     private final Map<ChestType, Map<Integer, ItemStack>> chestItems = new HashMap<>();
+    private KitData kitData;
 
     protected GameItemData(Game game) {
         super(game);
@@ -26,6 +28,14 @@ public class GameItemData extends Data {
         resetItemsDefault(ChestType.REGULAR);
         resetItemsDefault(ChestType.BONUS);
         resetItemsDefault(ChestType.CHEST_DROP);
+    }
+
+    public void setKitData(KitData kitData) {
+        this.kitData = kitData;
+    }
+
+    public KitData getKitData() {
+        return this.kitData;
     }
 
     /**
