@@ -1,5 +1,6 @@
 package com.shanebeestudios.hg.data;
 
+import com.shanebeestudios.hg.api.util.Util;
 import com.shanebeestudios.hg.plugin.HungerGames;
 import io.lumine.mythic.api.mobs.MythicMob;
 import io.lumine.mythic.bukkit.BukkitAdapter;
@@ -34,7 +35,7 @@ public class MobEntry {
     private final Map<EquipmentSlot, ItemStack> gear = new HashMap<>();
     private final List<PotionEffect> potionEffects = new ArrayList<>();
     private FixedMetadataValue deathMessageMeta = null;
-    private Component deathMessage = null;
+    private String deathMessage = null;
 
     // MythicMob
     private final MythicMob mythicMob;
@@ -151,7 +152,7 @@ public class MobEntry {
      *
      * @return Death message
      */
-    public @Nullable Component getDeathMessage() {
+    public @Nullable String getDeathMessage() {
         return this.deathMessage;
     }
 
@@ -161,7 +162,7 @@ public class MobEntry {
      *
      * @param message Message to set
      */
-    public void setDeathMessage(@Nullable Component message) {
+    public void setDeathMessage(@Nullable String message) {
         this.deathMessage = message;
         this.deathMessageMeta = new FixedMetadataValue(HungerGames.getPlugin(), message);
     }
@@ -240,6 +241,24 @@ public class MobEntry {
      */
     public double getMythicLevel() {
         return this.mythicLevel;
+    }
+
+    @Override
+    public String toString() {
+        if (this.mythicMob != null) {
+            return "MobEntry{" +
+                ", mythicMob=" + this.mythicMob +
+                ", mythicLevel=" + this.mythicLevel +
+                ", deathMessage='" + this.deathMessage + "'" +
+                '}';
+        }
+        return "MobEntry{" +
+            "type=" + this.type +
+            ", name=" + Util.unMini(this.name) +
+            ", gear=" + this.gear +
+            ", potionEffects=" + this.potionEffects +
+            ", deathMessage='" + this.deathMessage + "'" +
+            '}';
     }
 
 }

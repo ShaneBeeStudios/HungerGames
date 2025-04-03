@@ -1,12 +1,12 @@
 package com.shanebeestudios.hg.plugin.managers;
 
-import com.shanebeestudios.hg.plugin.HungerGames;
 import com.shanebeestudios.hg.api.parsers.ItemParser;
 import com.shanebeestudios.hg.api.registry.Registries;
 import com.shanebeestudios.hg.api.util.Util;
 import com.shanebeestudios.hg.data.MobData;
 import com.shanebeestudios.hg.data.MobEntry;
 import com.shanebeestudios.hg.game.Game;
+import com.shanebeestudios.hg.plugin.HungerGames;
 import io.lumine.mythic.api.mobs.MythicMob;
 import org.bukkit.NamespacedKey;
 import org.bukkit.configuration.ConfigurationSection;
@@ -148,7 +148,7 @@ public class MobManager {
                 }
                 String deathMessage = mobSection.getString("death_message", null);
                 if (deathMessage != null) {
-                    mobEntry.setDeathMessage(Util.getMini(deathMessage));
+                    mobEntry.setDeathMessage(deathMessage);
                 }
                 int weight = mobSection.getInt("weight", 1);
                 for (int i = 1; i <= weight; i++) {
