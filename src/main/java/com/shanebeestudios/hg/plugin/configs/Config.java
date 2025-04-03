@@ -1,5 +1,7 @@
 package com.shanebeestudios.hg.plugin.configs;
 
+import com.shanebeestudios.hg.api.parsers.LocationParser;
+import org.bukkit.Location;
 import org.bukkit.configuration.Configuration;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
@@ -31,6 +33,7 @@ public class Config {
     public static List<String> SETTINGS_BONUS_BLOCK_TYPES;
     public static boolean savePreviousLocation;
     public static int SETTINGS_FREE_ROAM_TIME;
+    public static Location GLOBAL_EXIT_LOCATION;
 
     // Scoreboard
     public static boolean SCOREBOARD_HIDE_NAMETAGS;
@@ -131,6 +134,10 @@ public class Config {
         SETTINGS_BONUS_BLOCK_TYPES = config.getStringList("settings.bonus-block-types");
         SETTINGS_TELEPORT_AT_END_TIME = config.getInt("settings.teleport-at-end-time");
         SETTINGS_FREE_ROAM_TIME = config.getInt("settings.free-room-time");
+        String locString = config.getString("settings.global-exit-location");
+        if (locString != null && locString.contains(":")) {
+            GLOBAL_EXIT_LOCATION = LocationParser.getLocFromString(locString);
+        }
 
         // Scoreboard
         SCOREBOARD_HIDE_NAMETAGS = config.getBoolean("scoreboard.hide-nametags");
@@ -206,7 +213,7 @@ public class Config {
     }
 
     // Used to update config
-    @SuppressWarnings("ConstantConditions")
+    @SuppressWarnings({"ConstantConditions", "CallToPrintStackTrace"})
     private void matchConfig(FileConfiguration config, File file) {
         try {
             boolean hasUpdated = false;
@@ -221,7 +228,7 @@ public class Config {
                 }
             }
             for (String key : config.getConfigurationSection("").getKeys(true)) {
-                if (!defConfig.contains(key) && !key.contains("kits.") && !key.contains("globalexit")) {
+                if (!defConfig.contains(key) && !key.contains("kits.")) {
                     config.set(key, null);
                     hasUpdated = true;
                 }
@@ -234,15 +241,27 @@ public class Config {
     }
 
     public Configuration getConfig() {
-        return config;
+        return this.config;
     }
 
+    @SuppressWarnings("CallToPrintStackTrace")
     public void save() {
         try {
-            config.save(configFile);
+            this.config.save(this.configFile);
         } catch (IOException e) {
             e.printStackTrace();
         }
+    }
+
+    /**
+     * Set and save the global exit location to config
+     *
+     * @param location Global exit location
+     */
+    public void setGlobalExitLocation(Location location) {
+        String locString = LocationParser.locToString(location);
+        this.config.set("settings.global-exit-location", locString);
+        save();
     }
 
 }

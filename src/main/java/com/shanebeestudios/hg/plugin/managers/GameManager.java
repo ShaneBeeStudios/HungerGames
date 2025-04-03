@@ -46,6 +46,7 @@ public class GameManager {
         this.plugin = plugin;
         this.lang = plugin.getLang();
         CustomArg.init(this);
+        this.globalExitLocation = Config.GLOBAL_EXIT_LOCATION;
     }
 
     /**
@@ -92,6 +93,7 @@ public class GameManager {
      */
     public void setGlobalExitLocation(Location location) {
         this.globalExitLocation = location;
+        this.plugin.getHGConfig().setGlobalExitLocation(location);
     }
 
     /**
@@ -281,7 +283,7 @@ public class GameManager {
     public void deleteGame(Game game) {
         String name = game.getGameArenaData().getName();
         this.games.remove(name);
-        this.plugin.getArenaConfig().removeArena(name);
+        this.plugin.getArenaConfig().removeArena(game);
     }
 
     /**

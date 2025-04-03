@@ -49,6 +49,11 @@ settings:
     - 'minecraft:barrel'
     - '#minecraft:shulker_boxes'
 
+  # The location players will teleport to after leaving a game
+  # This can be changed per arena
+  # If 'none', will use the player's respawn location or main world's spawn location
+  global-exit-location: 'none'
+
 # Settings for different scoreboard options
 # This doesn't necessarily mean the sidebar
 scoreboard:

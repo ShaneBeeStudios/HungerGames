@@ -5,14 +5,6 @@ import com.shanebeestudios.hg.api.util.Util;
 import com.shanebeestudios.hg.data.Language;
 import com.shanebeestudios.hg.data.Leaderboard;
 import com.shanebeestudios.hg.data.RandomItems;
-import com.shanebeestudios.hg.plugin.managers.GameManager;
-import com.shanebeestudios.hg.plugin.managers.ItemStackManager;
-import com.shanebeestudios.hg.plugin.managers.KillManager;
-import com.shanebeestudios.hg.plugin.managers.KitManager;
-import com.shanebeestudios.hg.plugin.managers.MobManager;
-import com.shanebeestudios.hg.plugin.managers.Placeholders;
-import com.shanebeestudios.hg.plugin.managers.PlayerManager;
-import com.shanebeestudios.hg.plugin.managers.SessionManager;
 import com.shanebeestudios.hg.plugin.commands.MainCommand;
 import com.shanebeestudios.hg.plugin.configs.ArenaConfig;
 import com.shanebeestudios.hg.plugin.configs.Config;
@@ -26,6 +18,14 @@ import com.shanebeestudios.hg.plugin.listeners.GameLobbyListener;
 import com.shanebeestudios.hg.plugin.listeners.GamePlayerListener;
 import com.shanebeestudios.hg.plugin.listeners.GameTrackingStickListener;
 import com.shanebeestudios.hg.plugin.listeners.SessionWandListener;
+import com.shanebeestudios.hg.plugin.managers.GameManager;
+import com.shanebeestudios.hg.plugin.managers.ItemStackManager;
+import com.shanebeestudios.hg.plugin.managers.KillManager;
+import com.shanebeestudios.hg.plugin.managers.KitManager;
+import com.shanebeestudios.hg.plugin.managers.MobManager;
+import com.shanebeestudios.hg.plugin.managers.Placeholders;
+import com.shanebeestudios.hg.plugin.managers.PlayerManager;
+import com.shanebeestudios.hg.plugin.managers.SessionManager;
 import dev.jorel.commandapi.CommandAPI;
 import dev.jorel.commandapi.CommandAPIBukkitConfig;
 import dev.jorel.commandapi.exceptions.UnsupportedVersionException;
@@ -50,7 +50,7 @@ public class HungerGames extends JavaPlugin {
     // Configs
     private Config config;
     private Language lang;
-    private ArenaConfig arenaconfig;
+    private ArenaConfig arenaConfig;
 
     // Managers
     private GameManager gameManager;
@@ -117,7 +117,7 @@ public class HungerGames extends JavaPlugin {
         this.randomItems = new RandomItems(this);
         this.playerManager = new PlayerManager();
         this.gameManager = new GameManager(this);
-        this.arenaconfig = new ArenaConfig(this);
+        this.arenaConfig = new ArenaConfig(this);
         this.leaderboard = new Leaderboard(this);
         this.killManager = new KillManager(this);
 
@@ -157,7 +157,7 @@ public class HungerGames extends JavaPlugin {
         this.itemStackManager = null;
         this.randomItems = null;
         this.playerManager = null;
-        this.arenaconfig = null;
+        this.arenaConfig = null;
         this.killManager = null;
         this.gameManager = null;
         this.leaderboard = null;
@@ -265,7 +265,7 @@ public class HungerGames extends JavaPlugin {
      * @return ArenaConfig
      */
     public ArenaConfig getArenaConfig() {
-        return this.arenaconfig;
+        return this.arenaConfig;
     }
 
     /**

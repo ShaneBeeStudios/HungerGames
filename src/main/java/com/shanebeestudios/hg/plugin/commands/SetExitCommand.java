@@ -45,7 +45,6 @@ public class SetExitCommand extends SubCommand {
         Location location = player.getLocation().clone();
         if (game == null) {
             this.gameManager.setGlobalExitLocation(location);
-            this.plugin.getArenaConfig().setGlobalExitLocation(location);
         } else {
             game.getGameArenaData().setExitLocation(location);
             this.plugin.getArenaConfig().saveGameToConfig(game);
