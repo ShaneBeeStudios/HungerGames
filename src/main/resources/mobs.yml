@@ -45,7 +45,6 @@ mobs:
 
 example:
   # Example setup for mobs (plugin will ignore these examples)
-  # Arena name
   night:
     # Example setup for vanilla mobs
     '1':
@@ -54,9 +53,10 @@ example:
       # The amount of times this mob will be added to the list to randomly pull from (optional - default = 1)
       weight: 3
       # The custom name that will appear above this mobs head (optional)
-      name: '<gray>Night Guard'
+      name: '<grey>Night Guard'
 
       # The gear this mob will be wearing
+      # This follows the same format as the items.yml file
       gear:
         # The item in this mob's hand
         hand:
@@ -88,7 +88,7 @@ example:
           dyed_color: 1908001
 
       # The death message that will be sent when a player is killed by this mob (optional)
-      death_message: '<red>\<player> was killed by a deadly Night Guard'
+      death_message: '<yellow><player> <red>was killed by a deadly <grey>Night Guard'
 
       # The potion effects to be applied to this mob (optional)
       potion_effects:
@@ -129,5 +129,5 @@ example:
       # The amount of times this mob will be added to the list to randomly pull from (optional - default = 1)
       weight: 3
       # The death message that will be sent when a player is killed by this mob (optional)
-      death: '<aqua><player> <red>was sliced in half by a <yellow>Skeleton King'
+      death_message: '<aqua><player> <red>was sliced in half by a <yellow>Skeleton King'
 
