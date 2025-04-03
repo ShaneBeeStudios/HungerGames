@@ -4,7 +4,6 @@ import com.shanebeestudios.hg.api.status.Status;
 import com.shanebeestudios.hg.api.util.Util;
 import net.kyori.adventure.text.Component;
 import org.bukkit.Location;
-import org.jetbrains.annotations.Nullable;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -23,7 +22,6 @@ public class GameArenaData extends Data {
     int cost;
     final List<Location> spawns;
     Location exit;
-    Location persistentExit;
     private Status status = Status.NOT_READY;
     int chestRefillTime = 0;
     int chestRefillRepeat = 0;
@@ -218,12 +216,8 @@ public class GameArenaData extends Data {
      *
      * @return Exit location
      */
-    public Location getExit() {
+    public Location getExitLocation() {
         return this.exit;
-    }
-
-    public @Nullable Location getPersistentExit() {
-        return this.persistentExit;
     }
 
     /**
@@ -231,9 +225,8 @@ public class GameArenaData extends Data {
      *
      * @param location Location where players will exit
      */
-    public void setExit(Location location, boolean persistent) {
+    public void setExitLocation(Location location) {
         this.exit = location;
-        if (persistent) this.persistentExit = location;
     }
 
     /**

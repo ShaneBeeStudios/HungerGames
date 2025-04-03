@@ -7,6 +7,7 @@ import com.shanebeestudios.hg.api.util.Util;
 import com.shanebeestudios.hg.data.KitData;
 import com.shanebeestudios.hg.data.PlayerData;
 import com.shanebeestudios.hg.plugin.configs.Config;
+import com.shanebeestudios.hg.plugin.managers.GameManager;
 import com.shanebeestudios.hg.plugin.managers.PlayerManager;
 import com.shanebeestudios.hg.plugin.permission.Permissions;
 import org.bukkit.Bukkit;
@@ -41,6 +42,7 @@ public class GamePlayerData extends Data {
     private static final @NotNull NamespacedKey MOVE_KEY = NamespacedKey.fromString("hg:freeze_move");
 
     private final PlayerManager playerManager;
+    private final GameManager gameManager;
     private final SpectatorGUI spectatorGUI;
 
     // Player Lists
@@ -56,7 +58,8 @@ public class GamePlayerData extends Data {
 
     protected GamePlayerData(Game game) {
         super(game);
-        this.playerManager = plugin.getPlayerManager();
+        this.playerManager = this.plugin.getPlayerManager();
+        this.gameManager = this.plugin.getGameManager();
         this.spectatorGUI = new SpectatorGUI(game);
     }
 
@@ -299,21 +302,12 @@ public class GamePlayerData extends Data {
         player.setInvulnerable(false);
         if (gameArenaData.getStatus() == Status.RUNNING)
             this.game.getGameBarData().removePlayer(player);
-        Location loc;
-        if (exitLocation != null) {
-            loc = exitLocation;
-        } else if (gameArenaData.getExit() != null && gameArenaData.getExit().getWorld() != null) {
-            loc = gameArenaData.getExit();
-        } else {
-            Location worldSpawn = Bukkit.getWorlds().getFirst().getSpawnLocation();
-            Location respawnLocation = player.getRespawnLocation();
-            loc = respawnLocation != null ? respawnLocation : worldSpawn;
-        }
+        Location location = exitLocation != null ? exitLocation : this.gameManager.getGlobalExitLocation(player);
         PlayerData playerData = this.playerManager.getData(player);
         if (playerData == null || playerData.isOnline()) {
-            player.teleportAsync(loc);
+            player.teleportAsync(location);
         } else {
-            player.teleport(loc);
+            player.teleport(location);
         }
     }
 

@@ -1,7 +1,6 @@
 package com.shanebeestudios.hg.plugin.managers;
 
 import com.google.common.collect.ImmutableList;
-import com.shanebeestudios.hg.plugin.HungerGames;
 import com.shanebeestudios.hg.api.command.CustomArg;
 import com.shanebeestudios.hg.api.status.Status;
 import com.shanebeestudios.hg.api.util.Util;
@@ -10,7 +9,9 @@ import com.shanebeestudios.hg.game.Game;
 import com.shanebeestudios.hg.game.GameArenaData;
 import com.shanebeestudios.hg.game.GameBlockData.ChestType;
 import com.shanebeestudios.hg.game.GameRegion;
+import com.shanebeestudios.hg.plugin.HungerGames;
 import com.shanebeestudios.hg.plugin.configs.Config;
+import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
@@ -19,6 +20,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.InventoryHolder;
 import org.bukkit.inventory.ItemStack;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -38,6 +40,7 @@ public class GameManager {
     private final Map<String, Game> games = new HashMap<>();
     private final Language lang;
     private final Random random = new Random();
+    private Location globalExitLocation;
 
     public GameManager(HungerGames plugin) {
         this.plugin = plugin;
@@ -61,6 +64,34 @@ public class GameManager {
      */
     public List<String> getGameNames() {
         return this.games.keySet().stream().sorted().collect(Collectors.toList());
+    }
+
+    /**
+     * Get the global exit location for games
+     * <p>If no location is set it will attempt to return the player's respawn location.
+     * If that fails it'll return the main world's spawn location.</p>
+     *
+     * @param player Player to check for respawn location
+     * @return Global location to exit
+     */
+    public Location getGlobalExitLocation(@Nullable Player player) {
+        if (this.globalExitLocation != null) return this.globalExitLocation;
+
+        if (player != null) {
+            Location respawnLocation = player.getRespawnLocation();
+            if (respawnLocation != null) return respawnLocation;
+        }
+
+        return Bukkit.getWorlds().getFirst().getSpawnLocation();
+    }
+
+    /**
+     * Set the global exit location for games
+     *
+     * @param location Global exit location
+     */
+    public void setGlobalExitLocation(Location location) {
+        this.globalExitLocation = location;
     }
 
     /**

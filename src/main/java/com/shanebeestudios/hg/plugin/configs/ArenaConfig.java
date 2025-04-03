@@ -1,12 +1,13 @@
 package com.shanebeestudios.hg.plugin.configs;
 
-import com.shanebeestudios.hg.plugin.HungerGames;
 import com.shanebeestudios.hg.api.util.Util;
 import com.shanebeestudios.hg.game.Game;
 import com.shanebeestudios.hg.game.GameArenaData;
 import com.shanebeestudios.hg.game.GameBlockData.ChestType;
 import com.shanebeestudios.hg.game.GameBorderData;
 import com.shanebeestudios.hg.game.GameRegion;
+import com.shanebeestudios.hg.plugin.HungerGames;
+import com.shanebeestudios.hg.plugin.managers.GameManager;
 import com.shanebeestudios.hg.plugin.managers.ItemStackManager;
 import org.bukkit.Bukkit;
 import org.bukkit.Difficulty;
@@ -34,6 +35,7 @@ public class ArenaConfig {
     private FileConfiguration arenaConfig = null;
     private File arenaConfigFile = null;
     private final HungerGames plugin;
+    private final GameManager gameManager;
     private final ItemStackManager itemStackManager;
 
     /**
@@ -42,6 +44,7 @@ public class ArenaConfig {
     @ApiStatus.Internal
     public ArenaConfig(HungerGames plugin) {
         this.plugin = plugin;
+        this.gameManager = plugin.getGameManager();
         this.itemStackManager = plugin.getItemStackManager();
         reloadCustomConfig();
         loadArenas();
@@ -103,174 +106,176 @@ public class ArenaConfig {
     public void loadArenas() {
         Util.log("Loading arenas:");
 
-        if (this.arenaConfigFile.exists()) {
-            ConfigurationSection allArenasSection = this.arenaConfig.getConfigurationSection("arenas");
-
-            if (allArenasSection != null) {
-                for (String arenaName : allArenasSection.getKeys(false)) {
-                    boolean isReady = true;
-                    List<Location> spawns = new ArrayList<>();
-                    Location lobbysign = null;
-                    int timer = 0;
-                    int cost = 0;
-                    int minPlayers = 0;
-                    int maxPlayers = 0;
-                    int freeRoamTime = 0;
-                    GameRegion gameRegion = null;
-                    List<String> commands;
-
-                    ConfigurationSection arenaSection = allArenasSection.getConfigurationSection(arenaName);
-
-                    // INFO
-                    ConfigurationSection infoSection = arenaSection.getConfigurationSection("info");
-                    try {
-                        timer = infoSection.getInt("timer");
-                        minPlayers = infoSection.getInt("min_players");
-                        maxPlayers = infoSection.getInt("max_players");
-                        freeRoamTime = infoSection.getInt("free_roam_time");
-                    } catch (Exception e) {
-                        Util.warning("Unable to load information for arena '" + arenaName + "'!");
-                        isReady = false;
-                    }
-                    try {
-                        cost = infoSection.getInt("cost");
-                    } catch (Exception ignore) {
-                    }
-
-                    // LOCATIONS
-                    ConfigurationSection locationsSection = arenaSection.getConfigurationSection("locations");
-                    try {
-                        lobbysign = getBlockLocFromString(locationsSection.getString("lobby_sign"));
-                    } catch (Exception e) {
-                        Util.warning("Unable to load lobby sign for arena '" + arenaName + "'!");
-                        Util.debug(e);
-                        isReady = false;
-                    }
-
-                    try {
-                        for (String location : locationsSection.getStringList("spawns")) {
-                            spawns.add(getLocFromString(location));
-                        }
-                    } catch (Exception e) {
-                        Util.warning("Unable to load random spawns for arena '" + arenaName + "'!");
-                        isReady = false;
-                    }
-
-                    // REGION
-                    try {
-                        ConfigurationSection regionSection = arenaSection.getConfigurationSection("region");
-                        String world = regionSection.getString("world");
-                        BoundingBox boundingBox = regionSection.getObject("bounding_box", BoundingBox.class);
-                        gameRegion = GameRegion.loadFromConfig(world, boundingBox);
-                    } catch (Exception e) {
-                        Util.warning("Unable to load region bounds for arena " + arenaName + "!");
-                        isReady = false;
-                    }
-
-                    Game game = new Game(arenaName, gameRegion, spawns, lobbysign, timer, minPlayers, maxPlayers, freeRoamTime, isReady, cost);
-                    this.plugin.getGameManager().loadGameFromConfig(arenaName, game);
-                    GameArenaData gameArenaData = game.getGameArenaData();
-
-                    World world = gameRegion.getWorld();
-                    if (world.getDifficulty() == Difficulty.PEACEFUL) {
-                        Util.warning("Difficulty in world '%s' for arena '%s' is set to PEACEFUL...", world.getName(), arenaName);
-                        Util.warning("This can have negative effects on the game, please consider raising the difficulty.");
-                    }
-
-                    // KITS
-                    this.plugin.getKitManager().loadGameKits(game, arenaSection);
-                    // MOBS
-                    this.plugin.getMobManager().loadGameMobs(game, arenaSection);
-
-                    // ITEMS
-                    if (arenaSection.isSet("items")) {
-                        ConfigurationSection itemsSection = arenaSection.getConfigurationSection("items");
-                        for (ChestType chestType : ChestType.values()) {
-                            String chestTypeName = chestType.getName();
-                            if (itemsSection.isSet(chestTypeName)) {
-                                HashMap<Integer, ItemStack> items = new HashMap<>();
-                                this.itemStackManager.loadItems(itemsSection.getMapList(chestTypeName), items);
-                                game.getGameItemData().setItems(chestType, items);
-                                Util.log("%s random %s have been loaded for arena <white>'<aqua>%s<white>'",
-                                    items.size(), chestTypeName, arenaName);
-                            }
-                        }
-                    }
-
-                    // BORDER
-                    if (arenaSection.isSet("game_border")) {
-                        ConfigurationSection borderSection = arenaSection.getConfigurationSection("game_border");
-                        GameBorderData gameBorderData = game.getGameBorderData();
-                        if (borderSection.isSet("center_location")) {
-                            Location borderCenter = getBlockLocFromString(borderSection.getString("center_location"));
-                            gameBorderData.setCenterLocation(borderCenter);
-                        }
-                        if (borderSection.isSet("final_size")) {
-                            int borderSize = borderSection.getInt("final_size");
-                            gameBorderData.setFinalBorderSize(borderSize);
-                        }
-                        if (borderSection.isSet("countdown_start") && borderSection.isSet("countdown_end")) {
-                            int countdownStart = borderSection.getInt("countdown_start");
-                            int countdownEnd = borderSection.getInt("countdown_end");
-                            gameBorderData.setBorderCountdownStart(countdownStart);
-                            gameBorderData.setBorderCountdownEnd(countdownEnd);
-                        }
-                    }
-
-                    // COMMANDS
-                    if (arenaSection.isSet("commands")) {
-                        commands = arenaSection.getStringList("commands");
-                    } else {
-                        //this.arenaConfig.set("arenas." + arenaName + ".commands", Collections.singletonList("none"));
-                        // TODO test that this works (not sure if it saves when just setting a section)
-                        arenaSection.set("commands", Collections.singletonList("none"));
-                        saveArenaConfig();
-                        commands = Collections.singletonList("none");
-                    }
-                    game.getGameCommandData().setCommands(commands);
-
-                    // CHEST REFILL
-                    if (arenaSection.isConfigurationSection("chest_refill")) {
-                        ConfigurationSection chestRefillSection = arenaSection.getConfigurationSection("chest_refill");
-                        if (chestRefillSection.isSet("time")) {
-                            int chestRefill = chestRefillSection.getInt("time");
-                            gameArenaData.setChestRefillTime(chestRefill);
-                        }
-                        if (chestRefillSection.isSet("repeat")) {
-                            int chestRefillRepeat = chestRefillSection.getInt("repeat");
-                            gameArenaData.setChestRefillRepeat(chestRefillRepeat);
-                        }
-                    }
-                    try {
-                        Location exitLocation;
-                        boolean persistent = false;
-                        if (locationsSection.isSet("exit")) {
-                            exitLocation = getLocFromString(locationsSection.getString("exit"));
-                            persistent = true;
-                        } else if (this.arenaConfig.isSet("global_exit_location")) {
-                            exitLocation = getLocFromString(this.arenaConfig.getString("global_exit_location"));
-                        } else {
-                            exitLocation = game.getLobbyLocation().getWorld().getSpawnLocation();
-                        }
-                        gameArenaData.setExit(exitLocation, persistent);
-                    } catch (Exception exception) {
-                        World mainWorld = Bukkit.getWorlds().getFirst();
-                        gameArenaData.setExit(mainWorld.getSpawnLocation(), false);
-                        Util.log("- <yellow>Failed to setup exit location for arena '%s', defaulting to spawn location of world '%s'",
-                            arenaName, world.getName());
-                        Util.debug(exception);
-                    }
-                    Util.log("- Loaded arena <white>'<aqua>%s<white>'<grey>", arenaName);
-
-                }
-                Util.log("- Arenas have been <green>successfully loaded!");
-            } else {
-                Util.log("- <red>No Arenas found. <grey>Time to create some!");
+        if (this.arenaConfig.isSet("global_exit_location")) {
+            Location location = getLocFromString(this.arenaConfig.getString("global_exit_location"));
+            if (location != null) {
+                this.gameManager.setGlobalExitLocation(location);
             }
+        }
+
+        ConfigurationSection allArenasSection = this.arenaConfig.getConfigurationSection("arenas");
+
+        if (allArenasSection != null) {
+            for (String arenaName : allArenasSection.getKeys(false)) {
+                boolean isReady = true;
+                List<Location> spawns = new ArrayList<>();
+                Location lobbysign = null;
+                int timer = 0;
+                int cost = 0;
+                int minPlayers = 0;
+                int maxPlayers = 0;
+                int freeRoamTime = 0;
+                GameRegion gameRegion = null;
+                List<String> commands;
+
+                ConfigurationSection arenaSection = allArenasSection.getConfigurationSection(arenaName);
+
+                // INFO
+                ConfigurationSection infoSection = arenaSection.getConfigurationSection("info");
+                try {
+                    timer = infoSection.getInt("timer");
+                    minPlayers = infoSection.getInt("min_players");
+                    maxPlayers = infoSection.getInt("max_players");
+                    freeRoamTime = infoSection.getInt("free_roam_time");
+                } catch (Exception e) {
+                    Util.warning("Unable to load information for arena '" + arenaName + "'!");
+                    isReady = false;
+                }
+                try {
+                    cost = infoSection.getInt("cost");
+                } catch (Exception ignore) {
+                }
+
+                // LOCATIONS
+                ConfigurationSection locationsSection = arenaSection.getConfigurationSection("locations");
+                try {
+                    lobbysign = getBlockLocFromString(locationsSection.getString("lobby_sign"));
+                } catch (Exception e) {
+                    Util.warning("Unable to load lobby sign for arena '" + arenaName + "'!");
+                    Util.debug(e);
+                    isReady = false;
+                }
+
+                try {
+                    for (String location : locationsSection.getStringList("spawns")) {
+                        spawns.add(getLocFromString(location));
+                    }
+                } catch (Exception e) {
+                    Util.warning("Unable to load random spawns for arena '" + arenaName + "'!");
+                    isReady = false;
+                }
+
+                // REGION
+                try {
+                    ConfigurationSection regionSection = arenaSection.getConfigurationSection("region");
+                    String world = regionSection.getString("world");
+                    BoundingBox boundingBox = regionSection.getObject("bounding_box", BoundingBox.class);
+                    gameRegion = GameRegion.loadFromConfig(world, boundingBox);
+                } catch (Exception e) {
+                    Util.warning("Unable to load region bounds for arena " + arenaName + "!");
+                    isReady = false;
+                }
+
+                Game game = new Game(arenaName, gameRegion, spawns, lobbysign, timer, minPlayers, maxPlayers, freeRoamTime, isReady, cost);
+                this.plugin.getGameManager().loadGameFromConfig(arenaName, game);
+                GameArenaData gameArenaData = game.getGameArenaData();
+
+                World world = gameRegion.getWorld();
+                if (world.getDifficulty() == Difficulty.PEACEFUL) {
+                    Util.warning("Difficulty in world '%s' for arena '%s' is set to PEACEFUL...", world.getName(), arenaName);
+                    Util.warning("This can have negative effects on the game, please consider raising the difficulty.");
+                }
+
+                // KITS
+                this.plugin.getKitManager().loadGameKits(game, arenaSection);
+                // MOBS
+                this.plugin.getMobManager().loadGameMobs(game, arenaSection);
+
+                // ITEMS
+                if (arenaSection.isSet("items")) {
+                    ConfigurationSection itemsSection = arenaSection.getConfigurationSection("items");
+                    for (ChestType chestType : ChestType.values()) {
+                        String chestTypeName = chestType.getName();
+                        if (itemsSection.isSet(chestTypeName)) {
+                            HashMap<Integer, ItemStack> items = new HashMap<>();
+                            this.itemStackManager.loadItems(itemsSection.getMapList(chestTypeName), items);
+                            game.getGameItemData().setItems(chestType, items);
+                            Util.log("%s random %s have been loaded for arena <white>'<aqua>%s<white>'",
+                                items.size(), chestTypeName, arenaName);
+                        }
+                    }
+                }
+
+                // BORDER
+                if (arenaSection.isSet("game_border")) {
+                    ConfigurationSection borderSection = arenaSection.getConfigurationSection("game_border");
+                    GameBorderData gameBorderData = game.getGameBorderData();
+                    if (borderSection.isSet("center_location")) {
+                        Location borderCenter = getBlockLocFromString(borderSection.getString("center_location"));
+                        gameBorderData.setCenterLocation(borderCenter);
+                    }
+                    if (borderSection.isSet("final_size")) {
+                        int borderSize = borderSection.getInt("final_size");
+                        gameBorderData.setFinalBorderSize(borderSize);
+                    }
+                    if (borderSection.isSet("countdown_start") && borderSection.isSet("countdown_end")) {
+                        int countdownStart = borderSection.getInt("countdown_start");
+                        int countdownEnd = borderSection.getInt("countdown_end");
+                        gameBorderData.setBorderCountdownStart(countdownStart);
+                        gameBorderData.setBorderCountdownEnd(countdownEnd);
+                    }
+                }
+
+                // COMMANDS
+                if (arenaSection.isSet("commands")) {
+                    commands = arenaSection.getStringList("commands");
+                } else {
+                    //this.arenaConfig.set("arenas." + arenaName + ".commands", Collections.singletonList("none"));
+                    // TODO test that this works (not sure if it saves when just setting a section)
+                    arenaSection.set("commands", Collections.singletonList("none"));
+                    saveArenaConfig();
+                    commands = Collections.singletonList("none");
+                }
+                game.getGameCommandData().setCommands(commands);
+
+                // CHEST REFILL
+                if (arenaSection.isConfigurationSection("chest_refill")) {
+                    ConfigurationSection chestRefillSection = arenaSection.getConfigurationSection("chest_refill");
+                    if (chestRefillSection.isSet("time")) {
+                        int chestRefill = chestRefillSection.getInt("time");
+                        gameArenaData.setChestRefillTime(chestRefill);
+                    }
+                    if (chestRefillSection.isSet("repeat")) {
+                        int chestRefillRepeat = chestRefillSection.getInt("repeat");
+                        gameArenaData.setChestRefillRepeat(chestRefillRepeat);
+                    }
+                }
+                try {
+                    if (locationsSection.isSet("exit")) {
+                        Location exitLocation = getLocFromString(locationsSection.getString("exit"));
+                        gameArenaData.setExitLocation(exitLocation);
+                    }
+
+                } catch (Exception exception) {
+                    Util.log("- <yellow>Failed to setup exit location for arena '%s', defaulting to spawn location of world '%s'",
+                        arenaName, world.getName());
+                    Util.debug(exception);
+                }
+                Util.log("- Loaded arena <white>'<aqua>%s<white>'<grey>", arenaName);
+
+            }
+            Util.log("- Arenas have been <green>successfully loaded!");
+        } else {
+            Util.log("- <red>No Arenas found. <grey>Time to create some!");
         }
     }
 
-    public void setGlobalExit(Location location) {
+    /**
+     * Set and save the global exit location to config
+     *
+     * @param location Global exit location
+     */
+    public void setGlobalExitLocation(Location location) {
         String locString = locToString(location);
         this.arenaConfig.set("global_exit_location", locString);
         saveArenaConfig();
@@ -310,7 +315,7 @@ public class ArenaConfig {
         gameArenaData.getSpawns().forEach(spawn -> spawns.add(locToString(spawn)));
         locationsSection.set("spawns", spawns);
 
-        Location exit = gameArenaData.getPersistentExit();
+        Location exit = gameArenaData.getExitLocation();
         if (exit != null) {
             locationsSection.set("exit", blockLocToString(exit));
         }
