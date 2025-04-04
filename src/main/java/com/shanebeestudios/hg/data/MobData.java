@@ -1,6 +1,7 @@
 package com.shanebeestudios.hg.data;
 
 import com.google.common.collect.ImmutableList;
+import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.ArrayList;
@@ -13,6 +14,7 @@ public class MobData {
     private final Random random = new Random();
     private final List<MobEntry> dayMobs = new ArrayList<>();
     private final List<MobEntry> nightMobs = new ArrayList<>();
+    private int mobCount;
 
     /**
      * Get list of MobEntries for daytime
@@ -71,12 +73,20 @@ public class MobData {
     }
 
     /**
+     * @hidden
+     */
+    @ApiStatus.Internal
+    public void setMobCount(int mobCount) {
+        this.mobCount = mobCount;
+    }
+
+    /**
      * Get a count of all mobs in this MobData
      *
      * @return Count of all mobs
      */
     public int getMobCount() {
-        return this.dayMobs.size() + this.nightMobs.size();
+        return this.mobCount;
     }
 
     /**

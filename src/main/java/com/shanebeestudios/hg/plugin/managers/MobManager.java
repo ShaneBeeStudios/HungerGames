@@ -86,6 +86,7 @@ public class MobManager {
     @SuppressWarnings("unchecked")
     private MobData createMobData(ConfigurationSection mobsSection, @Nullable Game game) {
         MobData mobData = new MobData();
+        int count = 0;
         String gameName = game != null ? game.getGameArenaData().getName() + ":" : "";
         for (String time : Arrays.asList("day", "night")) {
             if (!mobsSection.contains(time)) continue;
@@ -164,6 +165,7 @@ public class MobManager {
                     mobEntry.setDeathMessage(deathMessage);
                 }
                 int weight = mobSection.getInt("weight", 1);
+                count++;
                 for (int i = 1; i <= weight; i++) {
                     if (time.equalsIgnoreCase("day")) {
                         mobData.addDayMob(mobEntry);
@@ -173,6 +175,7 @@ public class MobManager {
                 }
             }
         }
+        mobData.setMobCount(count);
         return mobData;
     }
 
