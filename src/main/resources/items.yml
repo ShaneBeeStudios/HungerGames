@@ -1,3 +1,11 @@
+# Items.yml
+# Default items that will populate in chests in your arena
+# There are 3 categories:
+# - 'regular' = Will populate in regular chests
+# - 'bonus' = Will populate in bonus chests (you can change the chest type in the config.yml)
+# - 'chest-drop' = Will populate in chest drops
+#
+# See wiki for more details: https://github.com/ShaneBeeStudios/HungerGames/wiki/Items.yml
 items:
   regular:
     '1':
@@ -63,11 +71,11 @@ items:
     '17':
       id: minecraft:stick
       count: 1
-      custom_name: <gold>TrackingStick
+      custom_name: '<gold>TrackingStick'
       lore:
         - '<green>Uses: 5'
-        - <gray>Left click in the air
-        - <gray>To find nearby players
+        - '<gray>Left click in the air'
+        - '<gray>To find nearby players'
     '18':
       id: minecraft:golden_helmet
       count: 1
@@ -87,7 +95,7 @@ items:
     '23':
       id: minecraft:diamond_sword
       count: 1
-      custom_name: <gold>Death Dealer
+      custom_name: '<gold>Death Dealer'
       enchantments:
         - sharpness=1
     '24':
@@ -120,7 +128,7 @@ items:
     '31':
       id: minecraft:potion
       count: 1
-      custom_name: Potion of Swiftness
+      custom_name: 'Potion of Swiftness'
       potion_effects:
         - type: minecraft:speed
           duration: 3600
@@ -129,7 +137,7 @@ items:
     '32':
       id: minecraft:potion
       count: 1
-      custom_name: Potion of Healing
+      custom_name: 'Potion of Healing'
       potion_effects:
         - type: minecraft:instant_health
           duration: 1
@@ -138,7 +146,7 @@ items:
     '33':
       id: minecraft:splash_potion
       count: 1
-      custom_name: Splash Potion of Poison
+      custom_name: 'Splash Potion of Poison'
       potion_effects:
         - type: minecraft:poison
           duration: 320
@@ -146,7 +154,7 @@ items:
     '34':
       id: minecraft:splash_potion
       count: 1
-      custom_name: Splash Potion of Regeneration
+      custom_name: 'Splash Potion of Regeneration'
       potion_effects:
         - type: minecraft:regeneration
           duration: 660
@@ -172,12 +180,43 @@ items:
     '1':
       id: minecraft:diamond_sword
       count: 1
-      custom_name: <dark_aqua>Power Sword
+      custom_name: '<dark_aqua>Power Sword'
       enchantments:
         - sharpness=5
     '2':
       id: minecraft:diamond_chestplate
       count: 1
-      custom_name: <green>Life Saver
+      custom_name: '<green>Life Saver'
       enchantments:
         - protection=3
+    '3':
+      id: minecraft:cooked_beef
+      count: 6
+      weight: 3
+    '4':
+      id: minecraft:enchanted_golden_apple
+      count: 1
+    '5':
+      id: minecraft:suspicious_stew
+      count: 1
+      nbt: '{"minecraft:suspicious_stew_effects":[{duration:1200,id:"minecraft:night_vision"}]}'
+    '6':
+      id: minecraft:suspicious_stew
+      count: 1
+      nbt: '{"minecraft:suspicious_stew_effects":[{duration:1200,id:"minecraft:regeneration"}]}'
+  chest-drop:
+    '1':
+      id: minecraft:netherite_axe
+      enchantments:
+        - efficiency=5
+    '2':
+      id: minecraft:netherite_chestplate
+      enchantments:
+        - blast_projection=2
+    '3':
+      id: minecraft:cooked_mutton
+      custom_name: '<green>Power Mutton'
+      nbt: '{"minecraft:food":{nutrition:15,saturation:10.0f}}'
+    '4':
+      id: minecraft:shield
+      nbt: '{"minecraft:banner_patterns":[{color:"red",pattern:"minecraft:cross"}],"minecraft:base_color":"cyan"}'
