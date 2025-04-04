@@ -1,5 +1,6 @@
 package com.shanebeestudios.hg.plugin.commands;
 
+import com.shanebeestudios.hg.api.util.NBTApi;
 import com.shanebeestudios.hg.plugin.HungerGames;
 import dev.jorel.commandapi.CommandTree;
 
@@ -33,7 +34,7 @@ public class MainCommand {
         this.command.then(new TeamCommand(plugin).register());
         this.command.then(new ToggleCommand(plugin).register());
 
-        if (plugin.getNbtApi().isEnabled()) {
+        if (NBTApi.isEnabled()) {
             this.command.then(new NBTCommand(plugin).register());
         }
 

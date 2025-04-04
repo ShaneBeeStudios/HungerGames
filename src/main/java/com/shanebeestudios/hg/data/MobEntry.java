@@ -1,5 +1,6 @@
 package com.shanebeestudios.hg.data;
 
+import com.shanebeestudios.hg.api.util.NBTApi;
 import com.shanebeestudios.hg.api.util.Util;
 import com.shanebeestudios.hg.plugin.HungerGames;
 import io.lumine.mythic.api.mobs.MythicMob;
@@ -37,6 +38,7 @@ public class MobEntry {
     private final Map<EquipmentSlot, ItemStack> gear = new HashMap<>();
     private final List<PotionEffect> potionEffects = new ArrayList<>();
     private final Map<Attribute,Double> attributes = new HashMap<>();
+    private String nbt;
     private FixedMetadataValue deathMessageMeta = null;
     private String deathMessage = null;
 
@@ -157,6 +159,14 @@ public class MobEntry {
         this.attributes.put(attribute, value);
     }
 
+    public String getNbt() {
+        return this.nbt;
+    }
+
+    public void setNbt(String nbt) {
+        this.nbt = nbt;
+    }
+
     /**
      * Get the death message for this mob entry
      * <p>This is the message players will see when a player is killed by this mob type</p>
@@ -226,6 +236,9 @@ public class MobEntry {
                                 attributeInstance.setBaseValue(value);
                             }
                         });
+                    }
+                    if (this.nbt != null) {
+                        NBTApi.applyNBTToEntity(entity, this.nbt);
                     }
                     if (this.deathMessageMeta != null) {
                         livingEntity.setMetadata("death-message", this.deathMessageMeta);

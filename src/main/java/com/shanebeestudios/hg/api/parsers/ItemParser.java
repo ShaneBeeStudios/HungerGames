@@ -3,7 +3,6 @@ package com.shanebeestudios.hg.api.parsers;
 import com.shanebeestudios.hg.api.registry.Registries;
 import com.shanebeestudios.hg.api.util.NBTApi;
 import com.shanebeestudios.hg.api.util.Util;
-import com.shanebeestudios.hg.plugin.HungerGames;
 import io.papermc.paper.datacomponent.DataComponentTypes;
 import io.papermc.paper.datacomponent.item.DyedItemColor;
 import io.papermc.paper.datacomponent.item.ItemEnchantments;
@@ -27,8 +26,6 @@ import java.util.Map;
 import java.util.concurrent.atomic.AtomicInteger;
 
 public class ItemParser {
-
-    private static final NBTApi NBT_API = HungerGames.getPlugin().getNbtApi();
 
     @SuppressWarnings({"UnstableApiUsage", "unchecked"})
     public static @Nullable ItemStack parseItem(@Nullable ConfigurationSection config) {
@@ -159,7 +156,7 @@ public class ItemParser {
         // NBT
         if (config.contains("nbt")) {
             String nbtString = config.getString("nbt");
-            NBT_API.applyNBTToItem(itemStack, nbtString);
+            NBTApi.applyNBTToItem(itemStack, nbtString);
         }
 
         return itemStack;

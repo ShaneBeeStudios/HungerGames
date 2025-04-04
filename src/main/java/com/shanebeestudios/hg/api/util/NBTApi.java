@@ -6,6 +6,7 @@ import de.tr7zw.changeme.nbtapi.NBTContainer;
 import de.tr7zw.changeme.nbtapi.NbtApiException;
 import de.tr7zw.changeme.nbtapi.iface.ReadWriteNBT;
 import de.tr7zw.changeme.nbtapi.utils.MinecraftVersion;
+import org.bukkit.entity.Entity;
 import org.bukkit.inventory.ItemStack;
 import org.jetbrains.annotations.Nullable;
 
@@ -19,24 +20,50 @@ import java.lang.reflect.Method;
 @SuppressWarnings("CallToPrintStackTrace")
 public class NBTApi {
 
-    private final boolean enabled;
+    private static boolean ENABLED;
 
-    public NBTApi() {
+    public static void initializeNBTApi() {
         MinecraftVersion.replaceLogger(HgLogger.getLogger());
         if (!NBT.preloadApi()) {
             Util.warning("NBT-API unavailable for your server version.");
             Util.warning(" - Some items may not be loaded correctly if you are using the 'data' option");
-            this.enabled = false;
+            ENABLED = false;
         } else {
-            this.enabled = true;
+            ENABLED = true;
         }
     }
 
-    public boolean isEnabled() {
-        return this.enabled;
+    /**
+     * Check if the NBT-API is enabled
+     *
+     * @return Whether enabled
+     */
+    public static boolean isEnabled() {
+        return ENABLED;
     }
 
-    public void applyNBTToItem(ItemStack itemStack, String nbtString) {
+    /**
+     * Validate an NBT string
+     *
+     * @param nbtString String to validate
+     * @return Error if validation failed
+     */
+    public static String validateNBT(String nbtString) {
+        try {
+            NBT.parseNBT(nbtString);
+            return null;
+        } catch (NbtApiException ex) {
+            return ex.getMessage();
+        }
+    }
+
+    /**
+     * Apply NBT to an item
+     *
+     * @param itemStack Item to add NBT to
+     * @param nbtString NBT string to add
+     */
+    public static void applyNBTToItem(ItemStack itemStack, String nbtString) {
         if (!isEnabled()) {
             Util.warning("NBT API is not enabled and cannot apply NBT to item.");
             return;
@@ -44,6 +71,28 @@ public class NBTApi {
         try {
             ReadWriteNBT nbt = NBT.parseNBT(nbtString);
             NBT.modifyComponents(itemStack, itemNbt -> {
+                itemNbt.mergeCompound(nbt);
+            });
+        } catch (NbtApiException ex) {
+            Util.warning("Invalid NBT '%s'", nbtString);
+            Util.warning("Error: %s", ex.getMessage());
+        }
+    }
+
+    /**
+     * Apply NBT to an entity
+     *
+     * @param entity    Entity to add NBT to
+     * @param nbtString NBT string to add
+     */
+    public static void applyNBTToEntity(Entity entity, String nbtString) {
+        if (!isEnabled()) {
+            Util.warning("NBT API is not enabled and cannot apply NBT to entity.");
+            return;
+        }
+        try {
+            ReadWriteNBT nbt = NBT.parseNBT(nbtString);
+            NBT.modify(entity, itemNbt -> {
                 itemNbt.mergeCompound(nbt);
             });
         } catch (NbtApiException ex) {

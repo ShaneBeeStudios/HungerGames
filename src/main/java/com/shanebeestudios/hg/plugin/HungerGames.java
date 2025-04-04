@@ -61,9 +61,6 @@ public class HungerGames extends JavaPlugin {
     private MobManager mobManager;
     private io.lumine.mythic.api.mobs.MobManager mythicMobManager;
 
-    //NMS Nbt
-    private NBTApi nbtApi;
-
     /**
      * @hidden
      */
@@ -88,6 +85,7 @@ public class HungerGames extends JavaPlugin {
             Bukkit.getPluginManager().disablePlugin(this);
             return;
         }
+        NBTApi.initializeNBTApi();
         loadPlugin(true);
     }
 
@@ -97,7 +95,6 @@ public class HungerGames extends JavaPlugin {
 
         this.config = new Config(this);
         this.metrics = new Metrics(this, 25144);
-        this.nbtApi = new NBTApi();
 
         //MythicMob check
         if (Bukkit.getPluginManager().getPlugin("MythicMobs") != null) {
@@ -146,7 +143,6 @@ public class HungerGames extends JavaPlugin {
         PLUGIN_INSTANCE = null;
         this.config = null;
         this.metrics = null;
-        this.nbtApi = null;
         this.mobManager = null;
         this.mythicMobManager = null;
         this.lang = null;
@@ -289,15 +285,6 @@ public class HungerGames extends JavaPlugin {
      */
     public MobManager getMobManager() {
         return this.mobManager;
-    }
-
-    /**
-     * Get the NBT API
-     *
-     * @return NBT API
-     */
-    public NBTApi getNbtApi() {
-        return this.nbtApi;
     }
 
     public Metrics getMetrics() {

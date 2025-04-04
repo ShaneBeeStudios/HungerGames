@@ -2,6 +2,7 @@ package com.shanebeestudios.hg.plugin.managers;
 
 import com.shanebeestudios.hg.api.parsers.ItemParser;
 import com.shanebeestudios.hg.api.registry.Registries;
+import com.shanebeestudios.hg.api.util.NBTApi;
 import com.shanebeestudios.hg.api.util.Util;
 import com.shanebeestudios.hg.data.MobData;
 import com.shanebeestudios.hg.data.MobEntry;
@@ -185,6 +186,20 @@ public class MobManager {
 
                         double value = Double.parseDouble(split[1]);
                         mobEntry.addAttribute(attribute, value);
+                    }
+                }
+
+                // NBT
+                if (mobSection.contains("nbt")) {
+                    String nbtString = mobSection.getString("nbt");
+                    if (nbtString != null) {
+                        String validated = NBTApi.validateNBT(nbtString);
+                        if (validated != null) {
+                            Util.warning("Invalid NBT '%s' for mob entry '%s:%s'",
+                                nbtString, time, sectionKey);
+                        } else {
+                            mobEntry.setNbt(nbtString);
+                        }
                     }
                 }
 
