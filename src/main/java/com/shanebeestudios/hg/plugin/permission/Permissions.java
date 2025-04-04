@@ -51,7 +51,7 @@ public class Permissions {
     }
 
     public static Permission registerKitPermission(String kitName, String kitPermission) {
-        return getBase("kit." + kitPermission, "Permission for kit '" + kitName + "'", PermissionDefault.FALSE);
+        return getBase("kit." + kitPermission, "Permission for kit '" + kitName + "'", PermissionDefault.OP);
     }
 
     private static Permission getBase(String perm, String description, PermissionDefault defaultPermission) {
