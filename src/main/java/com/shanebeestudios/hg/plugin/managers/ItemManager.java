@@ -51,7 +51,7 @@ public class ItemManager {
         if (itemsSection == null) return;
 
         ItemData itemData = createItemData(itemsSection, game);
-        Util.log("- Loaded <aqua>%s <grey>items for arena: <aqua>%s",
+        Util.log("- Loaded <aqua>%s <grey>items for arena <white>'<aqua>%s<white>'",
             itemData.getTotalItemCount(), game.getGameArenaData().getName());
         game.getGameItemData().setItemData(itemData);
     }

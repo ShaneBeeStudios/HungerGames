@@ -67,7 +67,7 @@ public class KitManager {
         if (kitsSection == null) return;
 
         KitData kitData = kitCreator(kitsSection, game);
-        Util.log("- Loaded custom kits for arena: <aqua>" + game.getGameArenaData().getName());
+        Util.log("- Loaded custom kits for arena <white>'<aqua>%s<white>'", game.getGameArenaData().getName());
         game.getGameItemData().setKitData(kitData);
     }
 

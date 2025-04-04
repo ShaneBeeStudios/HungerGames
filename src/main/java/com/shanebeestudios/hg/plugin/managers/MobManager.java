@@ -79,7 +79,7 @@ public class MobManager {
         if (mobsSection == null) return;
 
         MobData mobData = createMobData(mobsSection, game);
-        Util.log("- Loaded <aqua>%s <grey>custom mobs for arena: <aqua>%s",
+        Util.log("- Loaded <aqua>%s <grey>custom mobs for arena <white>'<aqua>%s<white>'",
             mobData.getMobCount(), game.getGameArenaData().getName());
         game.getGameEntityData().setMobData(mobData);
     }
