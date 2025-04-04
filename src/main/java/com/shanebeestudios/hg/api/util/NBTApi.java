@@ -137,8 +137,8 @@ public class NBTApi {
      * @return Pretty string of NBTCompound
      */
     @SuppressWarnings("deprecation")
-    public static @Nullable String getPrettyNBT(NBTCompound compound, String split) {
-        Object nmsNBT = new NBTContainer(compound.toString()).getCompound();
+    public static @Nullable String getPrettyNBT(String nbtString, String split) {
+        Object nmsNBT = new NBTContainer(nbtString).getCompound();
         String s = split != null ? split : "";
         try {
             Object tagVisitorInstance;
