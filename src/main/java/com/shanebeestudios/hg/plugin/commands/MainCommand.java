@@ -27,6 +27,7 @@ public class MainCommand {
         this.command.then(new RefillChestNowCommand(plugin).register());
         this.command.then(new ReloadCommand(plugin).register());
         this.command.then(new SetExitCommand(plugin).register());
+        this.command.then(new SettingsCommand(plugin).register());
         this.command.then(new SpectateCommand(plugin).register());
         this.command.then(new StatusCommand(plugin).register());
         this.command.then(new StopCommand(plugin).register());
