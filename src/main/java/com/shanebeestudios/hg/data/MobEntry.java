@@ -7,6 +7,8 @@ import io.lumine.mythic.bukkit.BukkitAdapter;
 import io.lumine.mythic.core.mobs.ActiveMob;
 import net.kyori.adventure.text.Component;
 import org.bukkit.Location;
+import org.bukkit.attribute.Attribute;
+import org.bukkit.attribute.AttributeInstance;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.LivingEntity;
@@ -34,6 +36,7 @@ public class MobEntry {
     private Component name;
     private final Map<EquipmentSlot, ItemStack> gear = new HashMap<>();
     private final List<PotionEffect> potionEffects = new ArrayList<>();
+    private final Map<Attribute,Double> attributes = new HashMap<>();
     private FixedMetadataValue deathMessageMeta = null;
     private String deathMessage = null;
 
@@ -146,6 +149,14 @@ public class MobEntry {
         this.potionEffects.addAll(potionEffects);
     }
 
+    public Map<Attribute, Double> getAttributes() {
+        return this.attributes;
+    }
+
+    public void addAttribute(Attribute attribute, double value) {
+        this.attributes.put(attribute, value);
+    }
+
     /**
      * Get the death message for this mob entry
      * <p>This is the message players will see when a player is killed by this mob type</p>
@@ -207,6 +218,14 @@ public class MobEntry {
                         for (PotionEffect effect : this.potionEffects) {
                             livingEntity.addPotionEffect(effect);
                         }
+                    }
+                    if (!this.attributes.isEmpty()) {
+                        this.attributes.forEach((attribute, value) -> {
+                            AttributeInstance attributeInstance = livingEntity.getAttribute(attribute);
+                            if (attributeInstance != null) {
+                                attributeInstance.setBaseValue(value);
+                            }
+                        });
                     }
                     if (this.deathMessageMeta != null) {
                         livingEntity.setMetadata("death-message", this.deathMessageMeta);

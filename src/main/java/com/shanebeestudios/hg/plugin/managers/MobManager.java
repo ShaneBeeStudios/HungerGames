@@ -9,6 +9,7 @@ import com.shanebeestudios.hg.game.Game;
 import com.shanebeestudios.hg.plugin.HungerGames;
 import io.lumine.mythic.api.mobs.MythicMob;
 import org.bukkit.NamespacedKey;
+import org.bukkit.attribute.Attribute;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.entity.EntityType;
@@ -94,8 +95,8 @@ public class MobManager {
             ConfigurationSection timeSection = mobsSection.getConfigurationSection(time);
             assert timeSection != null;
 
-            for (String key : timeSection.getKeys(false)) {
-                ConfigurationSection mobSection = timeSection.getConfigurationSection(key);
+            for (String sectionKey : timeSection.getKeys(false)) {
+                ConfigurationSection mobSection = timeSection.getConfigurationSection(sectionKey);
                 assert mobSection != null;
 
                 String typeString = mobSection.getString("type");
@@ -120,6 +121,7 @@ public class MobManager {
                 }
                 // REGULAR MOB
                 else {
+                    // TYPE
                     NamespacedKey namespacedKey = NamespacedKey.fromString(typeString);
                     if (namespacedKey == null) {
                         Util.log("<red>Invalid entity type <white>'<yellow>%s<white>'", typeString);
@@ -137,6 +139,7 @@ public class MobManager {
                         mobEntry.setName(Util.getMini(name));
                     }
 
+                    // GEAR
                     ConfigurationSection gearSection = mobSection.getConfigurationSection("gear");
                     if (gearSection != null) {
                         for (EquipmentSlot slot : EquipmentSlot.values()) {
@@ -151,6 +154,7 @@ public class MobManager {
                         }
                     }
 
+                    // POTION EFFECTS
                     if (mobSection.contains("potion_effects")) {
                         List<PotionEffect> potionEffects = new ArrayList<>();
                         List<Map<?, ?>> potionEffectsMapList = mobSection.getMapList("potion_effects");
@@ -161,6 +165,30 @@ public class MobManager {
                         mobEntry.addPotionEffects(potionEffects);
                     }
                 }
+                // ATTRIBUTES
+                if (mobSection.contains("attributes")) {
+                    for (String attributeString : mobSection.getStringList("attributes")) {
+                        Util.log("Creating attribute: %s", attributeString);
+                        String[] split = attributeString.split("=");
+                        NamespacedKey attributeKey = NamespacedKey.fromString(split[0]);
+                        if (attributeKey == null) {
+                            Util.warning("Attribute key isn't valid '%s' for mob entry '%s:%s'",
+                                attributeString, time, sectionKey);
+                            continue;
+                        }
+                        Attribute attribute = Registries.ATTRIBUTE_REGISTRY.get(attributeKey);
+                        if (attribute == null) {
+                            Util.warning("Invalid attribute '%s' for mob entry '%s:%s'",
+                                attributeKey.toString(), time, sectionKey);
+                            continue;
+                        }
+
+                        double value = Double.parseDouble(split[1]);
+                        mobEntry.addAttribute(attribute, value);
+                    }
+                }
+
+                // DEATH MESSAGE
                 String deathMessage = mobSection.getString("death_message", null);
                 if (deathMessage != null) {
                     mobEntry.setDeathMessage(deathMessage);

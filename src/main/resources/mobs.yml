@@ -86,6 +86,9 @@ example:
           id: minecraft:leather_boots
           count: 1
           dyed_color: 1908001
+      # Modify attributes of a mob
+      attributes:
+        - 'minecraft:scale=1.2'
 
       # The death message that will be sent when a player is killed by this mob (optional)
       death_message: '<yellow><player> <red>was killed by a deadly <grey>Night Guard'
