@@ -1,95 +1,124 @@
-# This file stores items which will appear in chests/bonus chests in your arenas
-# For info on setup, check the wiki https://github.com/ShaneBeeStudios/HungerGames/wiki/Items.yml
 items:
   regular:
-    - id: minecraft:stone_sword
+    '1':
+      id: minecraft:stone_sword
       count: 1
       weight: 5
-    - id: minecraft:golden_sword
+    '2':
+      id: minecraft:golden_sword
       count: 1
-    - id: minecraft:mushroom_stew
-      count: 1
-      weight: 2
-    - id: minecraft:stone_hoe
-      count: 1
-    - id: minecraft:leather_helmet
+    '3':
+      id: minecraft:mushroom_stew
       count: 1
       weight: 2
-    - id: minecraft:leather_chestplate
+    '4':
+      id: minecraft:stone_hoe
+      count: 1
+    '5':
+      id: minecraft:leather_helmet
       count: 1
       weight: 2
-    - id: minecraft:leather_leggings
+    '6':
+      id: minecraft:leather_chestplate
       count: 1
       weight: 2
-    - id: minecraft:iron_helmet
+    '7':
+      id: minecraft:leather_leggings
       count: 1
       weight: 2
-    - id: minecraft:iron_chestplate
+    '8':
+      id: minecraft:iron_helmet
       count: 1
       weight: 2
-    - id: minecraft:iron_leggings
+    '9':
+      id: minecraft:iron_chestplate
       count: 1
       weight: 2
-    - id: minecraft:iron_boots
+    '10':
+      id: minecraft:iron_leggings
       count: 1
       weight: 2
-    - id: minecraft:bow
+    '11':
+      id: minecraft:iron_boots
+      count: 1
+      weight: 2
+    '12':
+      id: minecraft:bow
       count: 1
       weight: 3
-    - id: minecraft:arrow
+    '13':
+      id: minecraft:arrow
       count: 20
       weight: 2
-    - id: minecraft:milk_bucket
+    '14':
+      id: minecraft:milk_bucket
       count: 1
       weight: 2
-    - id: minecraft:fishing_rod
+    '15':
+      id: minecraft:fishing_rod
       count: 1
-    - id: minecraft:compass
+    '16':
+      id: minecraft:compass
       count: 1
-    - id: minecraft:stick
+    '17':
+      id: minecraft:stick
       count: 1
-      custom_name: '<gold>TrackingStick'
+      custom_name: <gold>TrackingStick
       lore:
         - '<green>Uses: 5'
-        - '<gray>Left click in the air'
-        - '<gray>To find nearby players'
-    - id: minecraft:golden_helmet
+        - <gray>Left click in the air
+        - <gray>To find nearby players
+    '18':
+      id: minecraft:golden_helmet
       count: 1
-    - id: minecraft:golden_chestplate
+    '19':
+      id: minecraft:golden_chestplate
       count: 1
-    - id: minecraft:bone
+    '20':
+      id: minecraft:bone
       count: 1
       weight: 2
-    - id: minecraft:golden_leggings
+    '21':
+      id: minecraft:golden_leggings
       count: 1
-    - id: minecraft:golden_boots
+    '22':
+      id: minecraft:golden_boots
       count: 1
-    - id: minecraft:diamond_sword
+    '23':
+      id: minecraft:diamond_sword
       count: 1
       custom_name: <gold>Death Dealer
       enchantments:
         - sharpness=1
-    - id: minecraft:golden_apple
+    '24':
+      id: minecraft:golden_apple
       count: 1
-    - id: minecraft:chainmail_chestplate
+    '25':
+      id: minecraft:chainmail_chestplate
       count: 1
       weight: 1
-    - id: minecraft:chainmail_leggings
+    '26':
+      id: minecraft:chainmail_leggings
       count: 1
       weight: 1
-    - id: minecraft:cookie
+    '27':
+      id: minecraft:cookie
       count: 2
       weight: 3
-    - id: minecraft:melon_slice
+    '28':
+      id: minecraft:melon_slice
       count: 1
       weight: 4
-    - id: minecraft:cooked_beef
+    '29':
+      id: minecraft:cooked_beef
       count: 1
       weight: 2
-    - id: minecraft:ender_pearl
+    '30':
+      id: minecraft:ender_pearl
       count: 1
       weight: 2
-    - id: minecraft:potion
+    '31':
+      id: minecraft:potion
       count: 1
       custom_name: Potion of Swiftness
       potion_effects:
@@ -97,7 +126,8 @@ items:
           duration: 3600
           amplifier: 1
       weight: 2
-    - id: minecraft:potion
+    '32':
+      id: minecraft:potion
       count: 1
       custom_name: Potion of Healing
       potion_effects:
@@ -105,14 +135,16 @@ items:
           duration: 1
           amplifier: 1
       weight: 2
-    - id: minecraft:splash_potion
+    '33':
+      id: minecraft:splash_potion
       count: 1
       custom_name: Splash Potion of Poison
       potion_effects:
         - type: minecraft:poison
           duration: 320
           amplifier: 2
-    - id: minecraft:splash_potion
+    '34':
+      id: minecraft:splash_potion
       count: 1
       custom_name: Splash Potion of Regeneration
       potion_effects:
@@ -120,25 +152,31 @@ items:
           duration: 660
           amplifier: 1
       weight: 2
-    - id: minecraft:tipped_arrow
+    '35':
+      id: minecraft:tipped_arrow
       count: 1
       potion: minecraft:long_poison
-    - id: minecraft:tipped_arrow
+    '36':
+      id: minecraft:tipped_arrow
       count: 1
       potion: minecraft:strong_slowness
-    - id: minecraft:lingering_potion
+    '37':
+      id: minecraft:lingering_potion
       count: 1
       potion: minecraft:harming
-    - id: minecraft:apple
+    '38':
+      id: minecraft:apple
       count: 2
       weight: 5
   bonus:
-    - id: minecraft:diamond_sword
+    '1':
+      id: minecraft:diamond_sword
       count: 1
       custom_name: <dark_aqua>Power Sword
       enchantments:
         - sharpness=5
-    - id: minecraft:diamond_chestplate
+    '2':
+      id: minecraft:diamond_chestplate
       count: 1
       custom_name: <green>Life Saver
       enchantments:

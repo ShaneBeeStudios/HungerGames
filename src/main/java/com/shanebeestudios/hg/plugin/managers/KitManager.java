@@ -14,7 +14,6 @@ import org.jetbrains.annotations.Nullable;
 
 import java.io.File;
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -24,16 +23,17 @@ import java.util.Map;
 public class KitManager {
 
     private final HungerGames plugin;
-    private final ItemStackManager itemStackManager;
+    private final ItemManager itemManager;
     private KitData defaultKitData;
 
     public KitManager(HungerGames plugin) {
         this.plugin = plugin;
-        this.itemStackManager = plugin.getItemStackManager();
+        this.itemManager = plugin.getItemManager();
         loadDefaultKits();
     }
 
     private void loadDefaultKits() {
+        Util.log("Loading kits:");
         File kitFile = new File(this.plugin.getDataFolder(), "kits.yml");
 
         if (!kitFile.exists()) {
@@ -43,7 +43,6 @@ public class KitManager {
         YamlConfiguration kitConfig = YamlConfiguration.loadConfiguration(kitFile);
         ConfigurationSection kitsSection = kitConfig.getConfigurationSection("kits");
         assert kitsSection != null;
-        Util.log("Loading kits:");
         this.defaultKitData = kitCreator(kitsSection, null);
         Util.log("- Kits have been <green>successfully loaded!");
     }
@@ -60,11 +59,11 @@ public class KitManager {
     /**
      * Set the kits for a game from a config
      *
-     * @param game         The game to set the kits for
-     * @param arenaSection Config the kit is pulled from
+     * @param game        The game to set the kits for
+     * @param arenaConfig Config the kit is pulled from
      */
-    public void loadGameKits(Game game, ConfigurationSection arenaSection) {
-        ConfigurationSection kitsSection = arenaSection.getConfigurationSection("kits");
+    public void loadGameKits(Game game, ConfigurationSection arenaConfig) {
+        ConfigurationSection kitsSection = arenaConfig.getConfigurationSection("kits");
         if (kitsSection == null) return;
 
         KitData kitData = kitCreator(kitsSection, game);
@@ -79,8 +78,7 @@ public class KitManager {
         for (String kitName : kitsSection.getKeys(false)) {
             try {
                 ConfigurationSection kitSection = kitsSection.getConfigurationSection(kitName);
-                Map<Integer, ItemStack> items = new HashMap<>();
-                this.itemStackManager.loadItems(kitSection.getMapList("items"), items);
+                List<ItemStack> inventoryContent = this.itemManager.loadItems(kitSection);
 
                 ItemStack helmet = ItemParser.parseItem(kitSection.getConfigurationSection("helmet"));
                 ItemStack chestplate = ItemParser.parseItem(kitSection.getConfigurationSection("chestplate"));
@@ -95,7 +93,7 @@ public class KitManager {
                 if (kitSection.contains("permission") && !kitSection.getString("permission").equalsIgnoreCase("none"))
                     permission = kitSection.getString("permission");
 
-                KitEntry kitEntry = new KitEntry(kitName, new ArrayList<>(items.values()), helmet, chestplate, leggings, boots, permission, potionEffects);
+                KitEntry kitEntry = new KitEntry(kitName, inventoryContent, helmet, chestplate, leggings, boots, permission, potionEffects);
                 kit.addKitEntry(kitName, kitEntry);
                 Util.log("- Loaded kit <white>'<aqua>%s<white>'", gameName + kitName);
             } catch (Exception e) {

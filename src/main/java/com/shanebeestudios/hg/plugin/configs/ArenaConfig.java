@@ -5,19 +5,16 @@ import com.shanebeestudios.hg.api.util.Pair;
 import com.shanebeestudios.hg.api.util.Util;
 import com.shanebeestudios.hg.game.Game;
 import com.shanebeestudios.hg.game.GameArenaData;
-import com.shanebeestudios.hg.game.GameBlockData.ChestType;
 import com.shanebeestudios.hg.game.GameBorderData;
 import com.shanebeestudios.hg.game.GameRegion;
 import com.shanebeestudios.hg.plugin.HungerGames;
 import com.shanebeestudios.hg.plugin.managers.GameManager;
-import com.shanebeestudios.hg.plugin.managers.ItemStackManager;
 import org.bukkit.Difficulty;
 import org.bukkit.Location;
 import org.bukkit.World;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
-import org.bukkit.inventory.ItemStack;
 import org.bukkit.util.BoundingBox;
 import org.jetbrains.annotations.ApiStatus;
 
@@ -36,7 +33,6 @@ public class ArenaConfig {
 
     private final HungerGames plugin;
     private final GameManager gameManager;
-    private final ItemStackManager itemStackManager;
     private File arenaDirectory;
     private final Map<String, Pair<File, FileConfiguration>> fileConfigMap = new HashMap<>();
 
@@ -47,7 +43,6 @@ public class ArenaConfig {
     public ArenaConfig(HungerGames plugin) {
         this.plugin = plugin;
         this.gameManager = plugin.getGameManager();
-        this.itemStackManager = plugin.getItemStackManager();
         loadAllArenas();
     }
 
@@ -180,21 +175,8 @@ public class ArenaConfig {
         this.plugin.getKitManager().loadGameKits(game, arenaConfig);
         // MOBS
         this.plugin.getMobManager().loadGameMobs(game, arenaConfig);
-
         // ITEMS
-        if (arenaConfig.isSet("items")) {
-            ConfigurationSection itemsSection = arenaConfig.getConfigurationSection("items");
-            for (ChestType chestType : ChestType.values()) {
-                String chestTypeName = chestType.getName();
-                if (itemsSection.isSet(chestTypeName)) {
-                    HashMap<Integer, ItemStack> items = new HashMap<>();
-                    this.itemStackManager.loadItems(itemsSection.getMapList(chestTypeName), items);
-                    game.getGameItemData().setItems(chestType, items);
-                    Util.log("%s random %s have been loaded for arena <white>'<aqua>%s<white>'",
-                        items.size(), chestTypeName, arenaName);
-                }
-            }
-        }
+        this.plugin.getItemManager().loadGameItems(game, arenaConfig);
 
         // BORDER
         if (arenaConfig.isSet("game_border")) {

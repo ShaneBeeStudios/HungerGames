@@ -55,6 +55,7 @@ public class MobManager {
         assert mobsSection != null;
         this.defaultMobData = createMobData(mobsSection, null);
         Util.log("- <aqua>%s <grey>mobs have been <green>successfully loaded!", this.defaultMobData.getMobCount());
+
     }
 
     /**
@@ -70,11 +71,11 @@ public class MobManager {
     /**
      * Load MobData from an arena config
      *
-     * @param game         Game to add data to
-     * @param arenaSection Section of config to grab data from
+     * @param game        Game to add data to
+     * @param arenaConfig Section of config to grab data from
      */
-    public void loadGameMobs(Game game, ConfigurationSection arenaSection) {
-        ConfigurationSection mobsSection = arenaSection.getConfigurationSection("mobs");
+    public void loadGameMobs(Game game, ConfigurationSection arenaConfig) {
+        ConfigurationSection mobsSection = arenaConfig.getConfigurationSection("mobs");
         if (mobsSection == null) return;
 
         MobData mobData = createMobData(mobsSection, game);

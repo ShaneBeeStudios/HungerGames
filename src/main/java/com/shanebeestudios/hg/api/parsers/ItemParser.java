@@ -1,9 +1,9 @@
 package com.shanebeestudios.hg.api.parsers;
 
-import com.shanebeestudios.hg.plugin.HungerGames;
 import com.shanebeestudios.hg.api.registry.Registries;
 import com.shanebeestudios.hg.api.util.NBTApi;
 import com.shanebeestudios.hg.api.util.Util;
+import com.shanebeestudios.hg.plugin.HungerGames;
 import io.papermc.paper.datacomponent.DataComponentTypes;
 import io.papermc.paper.datacomponent.item.DyedItemColor;
 import io.papermc.paper.datacomponent.item.ItemEnchantments;
@@ -18,8 +18,8 @@ import org.bukkit.inventory.ItemType;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 import org.bukkit.potion.PotionType;
-import org.jetbrains.annotations.Nullable;
 
+import javax.annotation.Nullable;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
@@ -30,115 +30,13 @@ public class ItemParser {
 
     private static final NBTApi NBT_API = HungerGames.getPlugin().getNbtApi();
 
-    public static abstract class General<T> {
-        T object;
-
-        public General(T object) {
-            this.object = object;
-        }
-
-        public abstract boolean containsKey(String key);
-
-        public abstract List<?> getList(String key);
-
-        public abstract String getString(String key);
-
-        public abstract List<String> getStringList(String key);
-
-        public abstract int getInt(String key);
-
-        public abstract double getDouble(String key);
-    }
-
-    @SuppressWarnings("unchecked")
-    public static class GeneralMap extends General<Map<String, Object>> {
-
-        public GeneralMap(Map<String, Object> object) {
-            super(object);
-        }
-
-        @Override
-        public boolean containsKey(String key) {
-            return this.object.containsKey(key);
-        }
-
-        @Override
-        public List<?> getList(String key) {
-            return (List<?>) this.object.get(key);
-        }
-
-        @Override
-        public String getString(String key) {
-            return (String) this.object.get(key);
-        }
-
-        @Override
-        public List<String> getStringList(String key) {
-            return (List<String>) this.object.get(key);
-        }
-
-        @Override
-        public int getInt(String key) {
-            return (int) this.object.get(key);
-        }
-
-        @Override
-        public double getDouble(String key) {
-            return (double) this.object.get(key);
-        }
-    }
-
-    public static class GeneralConfigSection extends General<ConfigurationSection> {
-
-        public GeneralConfigSection(ConfigurationSection object) {
-            super(object);
-        }
-
-        @Override
-        public boolean containsKey(String key) {
-            return this.object.contains(key);
-        }
-
-        @Override
-        public List<?> getList(String key) {
-            return this.object.getList(key);
-        }
-
-        @Override
-        public String getString(String key) {
-            return this.object.getString(key);
-        }
-
-        @Override
-        public List<String> getStringList(String key) {
-            return this.object.getStringList(key);
-        }
-
-        @Override
-        public int getInt(String key) {
-            return this.object.getInt(key);
-        }
-
-        @Override
-        public double getDouble(String key) {
-            return this.object.getDouble(key);
-        }
-    }
-
-    public static @Nullable ItemStack parseItem(@Nullable Map<String, Object> map) {
-        if (map == null) return null;
-        return parseItem(new GeneralMap(map));
-    }
-
-    public static @Nullable ItemStack parseItem(@Nullable ConfigurationSection section) {
-        if (section == null) return null;
-        return parseItem(new GeneralConfigSection(section));
-    }
-
     @SuppressWarnings({"UnstableApiUsage", "unchecked"})
-    private static ItemStack parseItem(General<?> map) {
+    public static @Nullable ItemStack parseItem(ConfigurationSection config) {
         // ID
-        NamespacedKey key = NamespacedKey.fromString(map.getString("id").toLowerCase(Locale.ROOT));
+        String stringId = config.getString("id");
+        if (stringId == null) return null;
+
+        NamespacedKey key = NamespacedKey.fromString(stringId.toLowerCase(Locale.ROOT));
         if (key == null) return null;
 
         ItemType itemType = Registries.ITEM_TYPE_REGISTRY.get(key);
@@ -146,29 +44,30 @@ public class ItemParser {
 
         // COUNT
         int count = 1;
-        if (map.containsKey("count")) {
-            count = map.getInt("count");
+        if (config.contains("count")) {
+            count = config.getInt("count");
         }
         ItemStack itemStack = itemType.createItemStack(count);
 
         // MAX_STACK_SIZE
-        if (map.containsKey("max_stack_size")) {
-            int maxStackSize = map.getInt("max_stack_size");
+        if (config.contains("max_stack_size")) {
+            int maxStackSize = config.getInt("max_stack_size");
             itemStack.setData(DataComponentTypes.MAX_STACK_SIZE, Math.clamp(maxStackSize, 1, 99));
         }
 
         // NAME
-        if (map.containsKey("custom_name")) {
-            String name = map.getString("custom_name");
+        if (config.contains("custom_name")) {
+            String name = config.getString("custom_name");
             itemStack.setData(DataComponentTypes.CUSTOM_NAME, Util.getMini(name));
-        } else if (map.containsKey("item_name")) {
-            String name = map.getString("item_name");
+        } else if (config.contains("item_name")) {
+            String name = config.getString("item_name");
             itemStack.setData(DataComponentTypes.ITEM_NAME, Util.getMini(name));
         }
 
         // MODEL
-        if (map.containsKey("item_model")) {
-            String model = map.getString("item_model");
+        if (config.contains("item_model")) {
+            String model = config.getString("item_model");
+            assert model != null;
             NamespacedKey modelKey = NamespacedKey.fromString(model);
             if (modelKey == null) {
                 Util.warning("Invalid item model: " + model);
@@ -178,16 +77,16 @@ public class ItemParser {
         }
 
         // LORE
-        if (map.containsKey("lore")) {
-            List<String> lore = map.getStringList("lore");
+        if (config.contains("lore")) {
+            List<String> lore = config.getStringList("lore");
             List<Component> loreComponents = new ArrayList<>();
             lore.forEach(l -> loreComponents.add(Util.getMini(l)));
             itemStack.lore(loreComponents);
         }
 
         // ENCHANTMENTS
-        if (map.containsKey("enchantments")) {
-            List<String> enchantmentList = map.getStringList("enchantments");
+        if (config.contains("enchantments")) {
+            List<String> enchantmentList = config.getStringList("enchantments");
             for (String string : enchantmentList) {
                 String[] split = string.split("=");
                 NamespacedKey namespacedKey = NamespacedKey.fromString(split[0]);
@@ -204,20 +103,21 @@ public class ItemParser {
         }
 
         // MAX_DAMAGE
-        if (map.containsKey("max_damage")) {
-            int maxDamage = map.getInt("max_damage");
+        if (config.contains("max_damage")) {
+            int maxDamage = config.getInt("max_damage");
             itemStack.setData(DataComponentTypes.MAX_DAMAGE, maxDamage);
         }
 
         // DAMAGE
-        if (map.containsKey("damage")) {
-            int damage = map.getInt("damage");
+        if (config.contains("damage")) {
+            int damage = config.getInt("damage");
             itemStack.setData(DataComponentTypes.DAMAGE, damage);
         }
 
         // POTION
-        if (map.containsKey("potion")) {
-            String string = map.getString("potion");
+        if (config.contains("potion")) {
+            String string = config.getString("potion");
+            assert string != null;
             NamespacedKey namespacedKey = NamespacedKey.fromString(string);
             if (namespacedKey != null) {
                 PotionType potionType = Registries.POTION_TYPE_REGISTRY.get(namespacedKey);
@@ -230,8 +130,9 @@ public class ItemParser {
         }
 
         // POTION_EFFECT
-        if (map.containsKey("potion_effects")) {
-            List<Map<String, Object>> potionEffectsList = (List<Map<String, Object>>) map.getList("potion_effects");
+        if (config.contains("potion_effects")) {
+            List<Map<String, Object>> potionEffectsList = (List<Map<String, Object>>) config.getList("potion_effects");
+            assert potionEffectsList != null;
             PotionContents.Builder builder = PotionContents.potionContents();
             AtomicInteger color = new AtomicInteger(-1);
             potionEffectsList.forEach(entry -> {
@@ -248,14 +149,14 @@ public class ItemParser {
         }
 
         // DYED_COLOR
-        if (map.containsKey("dyed_color")) {
-            int color = map.getInt("dyed_color");
+        if (config.contains("dyed_color")) {
+            int color = config.getInt("dyed_color");
             itemStack.setData(DataComponentTypes.DYED_COLOR, DyedItemColor.dyedItemColor(Color.fromRGB(color), false));
         }
 
         // NBT
-        if (map.containsKey("nbt")) {
-            String nbtString = map.getString("nbt");
+        if (config.contains("nbt")) {
+            String nbtString = config.getString("nbt");
             NBT_API.applyNBTToItem(itemStack, nbtString);
         }
 
@@ -278,6 +179,5 @@ public class ItemParser {
         }
         return null;
     }
-
 
 }

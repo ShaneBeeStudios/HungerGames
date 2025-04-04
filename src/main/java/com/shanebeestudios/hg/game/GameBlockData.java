@@ -1,5 +1,6 @@
 package com.shanebeestudios.hg.game;
 
+import com.shanebeestudios.hg.data.ItemData;
 import com.shanebeestudios.hg.data.ItemFrameData;
 import org.bukkit.Location;
 import org.bukkit.block.BlockState;
@@ -21,7 +22,7 @@ import java.util.UUID;
 @SuppressWarnings("MismatchedQueryAndUpdateOfCollection")
 public class GameBlockData extends Data {
 
-    private final Map<ChestType, List<Location>> chests = new HashMap<>();
+    private final Map<ItemData.ChestType, List<Location>> chests = new HashMap<>();
     private final List<BlockState> blocks = new ArrayList<>();
     private final Map<UUID, ItemFrameData> itemFrameData = new HashMap<>();
     private final GameLobbyWall gameLobbyWall;
@@ -29,7 +30,7 @@ public class GameBlockData extends Data {
     GameBlockData(Game game) {
         super(game);
         this.gameLobbyWall = new GameLobbyWall(game);
-        for (ChestType value : ChestType.values()) {
+        for (ItemData.ChestType value : ItemData.ChestType.values()) {
             this.chests.put(value, new ArrayList<>());
         }
     }
@@ -69,8 +70,8 @@ public class GameBlockData extends Data {
         return this.gameLobbyWall.isLobbyValid();
     }
 
-    private void clearChestMaps(ChestType... type) {
-        for (ChestType chestType : type) {
+    private void clearChestMaps(ItemData.ChestType... type) {
+        for (ItemData.ChestType chestType : type) {
             this.chests.get(chestType).clear();
         }
     }
@@ -80,7 +81,7 @@ public class GameBlockData extends Data {
      */
     public void markChestForRefill() {
         this.chests.forEach((chestType, locations) -> {
-            if (chestType == ChestType.REGULAR || chestType == ChestType.CHEST_DROP) {
+            if (chestType == ItemData.ChestType.REGULAR || chestType == ItemData.ChestType.CHEST_DROP) {
                 locations.forEach(location -> {
                     if (location.getBlock().getState() instanceof InventoryHolder inventoryHolder) {
                         inventoryHolder.getInventory().clear();
@@ -88,8 +89,8 @@ public class GameBlockData extends Data {
                 });
             }
         });
-        clearChestMaps(ChestType.REGULAR);
-        clearChestMaps(ChestType.BONUS);
+        clearChestMaps(ItemData.ChestType.REGULAR);
+        clearChestMaps(ItemData.ChestType.BONUS);
     }
 
     /**
@@ -102,7 +103,7 @@ public class GameBlockData extends Data {
                     inventoryHolder.getInventory().clear();
                 }
             }));
-        clearChestMaps(ChestType.values());
+        clearChestMaps(ItemData.ChestType.values());
     }
 
     /**
@@ -111,7 +112,7 @@ public class GameBlockData extends Data {
      * @param chestType Type of chest to log
      * @param location  Location of the chest to log
      */
-    public void logChest(ChestType chestType, Location location) {
+    public void logChest(ItemData.ChestType chestType, Location location) {
         if (this.chests.get(chestType).contains(location)) return;
         this.chests.get(chestType).add(location);
     }
@@ -123,7 +124,7 @@ public class GameBlockData extends Data {
      * @param location Location of the chest to remove
      */
     public void removeChest(Location location) {
-        for (ChestType value : ChestType.values()) {
+        for (ItemData.ChestType value : ItemData.ChestType.values()) {
             this.chests.get(value).remove(location);
         }
     }
@@ -134,7 +135,7 @@ public class GameBlockData extends Data {
      * @param chestType Type of chest to remove
      * @param location  Location of the chest to remove
      */
-    public void removeChest(@NotNull ChestType chestType, Location location) {
+    public void removeChest(@NotNull ItemData.ChestType chestType, Location location) {
         this.chests.get(chestType).remove(location);
     }
 
@@ -219,45 +220,6 @@ public class GameBlockData extends Data {
      */
     public void resetItemFrames() {
         this.itemFrameData.clear();
-    }
-
-    /**
-     * Represents the type of chests in game
-     * <p>Used for logging and refilling</p>
-     */
-    public enum ChestType {
-        /**
-         * A chest holding regular items
-         */
-        REGULAR("regular"),
-        /**
-         * A chest holding bonus items
-         */
-        BONUS("bonus"),
-        /**
-         * A player placed chest which cannot be refilled
-         */
-        PLAYER_PLACED("player-placed"),
-        /**
-         * A chest that has dropped
-         */
-        CHEST_DROP("chest-drop"),
-        ;
-
-        private final String name;
-
-        ChestType(String name) {
-            this.name = name;
-        }
-
-        /**
-         * Get the name of this chest type
-         *
-         * @return Name of chest type
-         */
-        public String getName() {
-            return this.name;
-        }
     }
 
 }

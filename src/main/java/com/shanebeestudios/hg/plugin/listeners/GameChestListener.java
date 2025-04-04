@@ -1,5 +1,6 @@
 package com.shanebeestudios.hg.plugin.listeners;
 
+import com.shanebeestudios.hg.data.ItemData;
 import com.shanebeestudios.hg.plugin.HungerGames;
 import com.shanebeestudios.hg.api.events.ChestOpenEvent;
 import com.shanebeestudios.hg.api.util.BlockUtils;
@@ -7,7 +8,7 @@ import com.shanebeestudios.hg.api.util.Constants;
 import com.shanebeestudios.hg.data.PlayerData;
 import com.shanebeestudios.hg.game.Game;
 import com.shanebeestudios.hg.game.GameBlockData;
-import com.shanebeestudios.hg.game.GameBlockData.ChestType;
+import com.shanebeestudios.hg.data.ItemData.ChestType;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
@@ -45,7 +46,7 @@ public class GameChestListener extends GameListenerBase {
                 if (game != null) {
                     chest.getBlock().setType(Material.AIR);
                     chest.getWorld().createExplosion(chest.getLocation().add(0.5, 0.5, 0.5), 1, false, false);
-                    game.getGameBlockData().removeChest(ChestType.CHEST_DROP, chest.getLocation());
+                    game.getGameBlockData().removeChest(ItemData.ChestType.CHEST_DROP, chest.getLocation());
                 }
             }
         }
@@ -62,13 +63,13 @@ public class GameChestListener extends GameListenerBase {
 
             Game game = playerData.getGame();
             if (block.getType() == Material.CHEST) {
-                ChestType chestType = GameBlockData.ChestType.REGULAR;
+                ChestType chestType = ItemData.ChestType.REGULAR;
                 if (((Chest) block.getState()).getPersistentDataContainer().has(Constants.CHEST_DROP_BLOCK, PersistentDataType.BOOLEAN)) {
-                    chestType = GameBlockData.ChestType.CHEST_DROP;
+                    chestType = ItemData.ChestType.CHEST_DROP;
                 }
                 Bukkit.getServer().getPluginManager().callEvent(new ChestOpenEvent(game, block, chestType));
             } else if (BlockUtils.isBonusBlock(block)) {
-                Bukkit.getServer().getPluginManager().callEvent(new ChestOpenEvent(game, block, GameBlockData.ChestType.BONUS));
+                Bukkit.getServer().getPluginManager().callEvent(new ChestOpenEvent(game, block, ItemData.ChestType.BONUS));
             }
         }
     }

@@ -343,7 +343,7 @@ public class GamePlayerData extends Data {
         }
         this.game.getGameBarData().addPlayer(spectator);
         this.game.getGameScoreboard().setupBoard(spectator);
-        spectator.getInventory().setItem(0, this.plugin.getItemStackManager().getSpectatorCompass());
+        spectator.getInventory().setItem(0, this.plugin.getItemManager().getSpectatorCompass());
     }
 
     /**

@@ -4,7 +4,6 @@ import com.shanebeestudios.hg.api.util.NBTApi;
 import com.shanebeestudios.hg.api.util.Util;
 import com.shanebeestudios.hg.data.Language;
 import com.shanebeestudios.hg.data.Leaderboard;
-import com.shanebeestudios.hg.data.RandomItems;
 import com.shanebeestudios.hg.plugin.commands.MainCommand;
 import com.shanebeestudios.hg.plugin.configs.ArenaConfig;
 import com.shanebeestudios.hg.plugin.configs.Config;
@@ -19,7 +18,7 @@ import com.shanebeestudios.hg.plugin.listeners.GamePlayerListener;
 import com.shanebeestudios.hg.plugin.listeners.GameTrackingStickListener;
 import com.shanebeestudios.hg.plugin.listeners.SessionWandListener;
 import com.shanebeestudios.hg.plugin.managers.GameManager;
-import com.shanebeestudios.hg.plugin.managers.ItemStackManager;
+import com.shanebeestudios.hg.plugin.managers.ItemManager;
 import com.shanebeestudios.hg.plugin.managers.KillManager;
 import com.shanebeestudios.hg.plugin.managers.KitManager;
 import com.shanebeestudios.hg.plugin.managers.MobManager;
@@ -56,8 +55,7 @@ public class HungerGames extends JavaPlugin {
     private GameManager gameManager;
     private PlayerManager playerManager;
     private KillManager killManager;
-    private ItemStackManager itemStackManager;
-    private RandomItems randomItems;
+    private ItemManager itemManager;
     private KitManager kitManager;
     private SessionManager sessionManager;
     private MobManager mobManager;
@@ -109,12 +107,11 @@ public class HungerGames extends JavaPlugin {
             Util.log("<grey>MythicMobs not found, MythicMobs hook <red>disabled");
         }
         this.lang = new Language(this);
-        this.itemStackManager = new ItemStackManager(this);
+        this.itemManager = new ItemManager(this);
         this.kitManager = new KitManager(this);
         this.sessionManager = new SessionManager();
 
         this.mobManager = new MobManager(this);
-        this.randomItems = new RandomItems(this);
         this.playerManager = new PlayerManager();
         this.gameManager = new GameManager(this);
         this.arenaConfig = new ArenaConfig(this);
@@ -153,9 +150,8 @@ public class HungerGames extends JavaPlugin {
         this.mobManager = null;
         this.mythicMobManager = null;
         this.lang = null;
+        this.itemManager = null;
         this.kitManager = null;
-        this.itemStackManager = null;
-        this.randomItems = null;
         this.playerManager = null;
         this.arenaConfig = null;
         this.killManager = null;
@@ -206,15 +202,6 @@ public class HungerGames extends JavaPlugin {
     }
 
     /**
-     * Get an instance of the RandomItems manager
-     *
-     * @return RandomItems manager
-     */
-    public RandomItems getRandomItems() {
-        return this.randomItems;
-    }
-
-    /**
      * Get an instance of the KillManager
      *
      * @return KillManager
@@ -224,21 +211,21 @@ public class HungerGames extends JavaPlugin {
     }
 
     /**
+     * Get an instance of the plugins main item manager
+     *
+     * @return The item manager
+     */
+    public ItemManager getItemManager() {
+        return this.itemManager;
+    }
+
+    /**
      * Get an instance of the plugins main kit manager
      *
      * @return The kit manager
      */
     public KitManager getKitManager() {
         return this.kitManager;
-    }
-
-    /**
-     * Get an instance of the ItemStackManager
-     *
-     * @return ItemStackManager
-     */
-    public ItemStackManager getItemStackManager() {
-        return this.itemStackManager;
     }
 
     /**

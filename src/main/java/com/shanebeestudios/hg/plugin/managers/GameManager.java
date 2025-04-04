@@ -7,7 +7,7 @@ import com.shanebeestudios.hg.api.util.Util;
 import com.shanebeestudios.hg.data.Language;
 import com.shanebeestudios.hg.game.Game;
 import com.shanebeestudios.hg.game.GameArenaData;
-import com.shanebeestudios.hg.game.GameBlockData.ChestType;
+import com.shanebeestudios.hg.data.ItemData.ChestType;
 import com.shanebeestudios.hg.game.GameRegion;
 import com.shanebeestudios.hg.plugin.HungerGames;
 import com.shanebeestudios.hg.plugin.configs.Config;
@@ -229,10 +229,10 @@ public class GameManager {
      * @return Random ItemStack
      */
     public ItemStack randomItem(Game game, ChestType chestType) {
-        Map<Integer, ItemStack> items = game.getGameItemData().getItems(chestType);
+        List<ItemStack> items = game.getGameItemData().getItemData().getItems(chestType);
         int r = items.size();
         if (r == 0) return new ItemStack(Material.AIR);
-        int i = this.random.nextInt(r) + 1;
+        int i = this.random.nextInt(r);
         return items.get(i);
 
     }
