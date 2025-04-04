@@ -1,27 +1,32 @@
 package com.shanebeestudios.hg.game;
 
+import com.shanebeestudios.hg.api.events.PlayerLeaveGameEvent;
+import com.shanebeestudios.hg.api.gui.SpectatorGUI;
+import com.shanebeestudios.hg.api.status.Status;
+import com.shanebeestudios.hg.api.util.Util;
+import com.shanebeestudios.hg.data.KitData;
+import com.shanebeestudios.hg.data.PlayerData;
+import com.shanebeestudios.hg.plugin.configs.Config;
+import com.shanebeestudios.hg.plugin.managers.GameManager;
+import com.shanebeestudios.hg.plugin.managers.PlayerManager;
+import com.shanebeestudios.hg.plugin.permission.Permissions;
+import net.kyori.adventure.title.Title;
+import net.kyori.adventure.title.Title.Times;
 import org.bukkit.Bukkit;
 import org.bukkit.GameMode;
 import org.bukkit.Location;
 import org.bukkit.Material;
-import org.bukkit.Sound;
+import org.bukkit.NamespacedKey;
+import org.bukkit.attribute.Attribute;
+import org.bukkit.attribute.AttributeInstance;
+import org.bukkit.attribute.AttributeModifier;
+import org.bukkit.attribute.AttributeModifier.Operation;
 import org.bukkit.block.BlockFace;
 import org.bukkit.entity.Player;
-import org.bukkit.plugin.IllegalPluginAccessException;
-import org.bukkit.potion.PotionEffect;
-import org.bukkit.potion.PotionEffectType;
+import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
-import com.shanebeestudios.hg.Status;
-import com.shanebeestudios.hg.data.Config;
-import com.shanebeestudios.hg.data.PlayerData;
-import com.shanebeestudios.hg.events.PlayerJoinGameEvent;
-import com.shanebeestudios.hg.events.PlayerLeaveGameEvent;
-import com.shanebeestudios.hg.game.GameCommandData.CommandType;
-import com.shanebeestudios.hg.gui.SpectatorGUI;
-import com.shanebeestudios.hg.managers.PlayerManager;
-import com.shanebeestudios.hg.util.Util;
-import com.shanebeestudios.hg.util.Vault;
 
+import java.time.Duration;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.HashMap;
@@ -34,23 +39,30 @@ import java.util.UUID;
  */
 public class GamePlayerData extends Data {
 
+    @SuppressWarnings("DataFlowIssue")
+    private static final @NotNull NamespacedKey JUMP_KEY = NamespacedKey.fromString("hg:freeze_jump");
+    @SuppressWarnings("DataFlowIssue")
+    private static final @NotNull NamespacedKey MOVE_KEY = NamespacedKey.fromString("hg:freeze_move");
+
     private final PlayerManager playerManager;
+    private final GameManager gameManager;
     private final SpectatorGUI spectatorGUI;
 
     // Player Lists
-    final List<UUID> players = new ArrayList<>();
-    final List<UUID> spectators = new ArrayList<>();
+    final List<Player> players = new ArrayList<>();
+    final List<Player> spectators = new ArrayList<>();
     // This list contains all players who have joined the arena
     // Will be used to broadcast messages even if a player is no longer in the game
-    final List<UUID> allPlayers = new ArrayList<>();
+    final List<Player> allPlayers = new ArrayList<>();
 
     // Data lists
     final Map<Player, Integer> kills = new HashMap<>();
-    final Map<String, Team> teams = new HashMap<>();
+    private final List<Location> randomizedSpawns = new ArrayList<>();
 
     protected GamePlayerData(Game game) {
         super(game);
-        this.playerManager = plugin.getPlayerManager();
+        this.playerManager = this.plugin.getPlayerManager();
+        this.gameManager = this.plugin.getGameManager();
         this.spectatorGUI = new SpectatorGUI(game);
     }
 
@@ -61,13 +73,13 @@ public class GamePlayerData extends Data {
      *
      * @return UUID list of all players in game
      */
-    public List<UUID> getPlayers() {
-        return players;
+    public List<Player> getPlayers() {
+        return this.players;
     }
 
     void clearPlayers() {
-        players.clear();
-        allPlayers.clear();
+        this.players.clear();
+        this.allPlayers.clear();
     }
 
     /**
@@ -75,7 +87,7 @@ public class GamePlayerData extends Data {
      *
      * @return List of spectators
      */
-    public List<UUID> getSpectators() {
+    public List<Player> getSpectators() {
         return new ArrayList<>(this.spectators);
     }
 
@@ -89,46 +101,41 @@ public class GamePlayerData extends Data {
 
     // Utility methods
 
-    private void kitHelp(Player player) {
+    private void startMessage(Player player) {
+        KitData kitData = this.game.getGameItemData().getKitData();
         // Clear the chat a little bit, making this message easier to see
         for (int i = 0; i < 20; ++i)
-            Util.scm(player, " ");
-        String kit = game.kitManager.getKitListString();
-        Util.scm(player, " ");
-        Util.scm(player, lang.kit_join_header);
-        Util.scm(player, " ");
-        if (player.hasPermission("hg.kit") && game.kitManager.hasKits()) {
-            Util.scm(player, lang.kit_join_msg);
-            Util.scm(player, " ");
-            Util.scm(player, lang.kit_join_avail + kit);
-            Util.scm(player, " ");
+            Util.sendMessage(player, " ");
+        String kitNames = kitData.getKitListString(player);
+        Util.sendMessage(player, " ");
+        Util.sendMessage(player, this.lang.kit_join_header);
+        Util.sendMessage(player, " ");
+        if (Permissions.KITS.has(player) && kitData.hasKits()) {
+            Util.sendMessage(player, this.lang.kit_join_msg);
+            Util.sendMessage(player, " ");
+            Util.sendMessage(player, this.lang.kit_join_avail + " " + kitNames);
+            Util.sendMessage(player, " ");
         }
-        Util.scm(player, lang.kit_join_footer);
-        Util.scm(player, " ");
+        Util.sendMessage(player, this.lang.kit_join_footer);
+        Util.sendMessage(player, " ");
     }
 
     /**
      * Respawn all players in the game back to spawn points
      */
     public void respawnAll() {
-        for (UUID u : players) {
-            Player p = Bukkit.getPlayer(u);
-            if (p != null)
-                p.teleport(pickSpawn());
+        this.randomizedSpawns.clear();
+        for (Player player : this.players) {
+            player.teleport(pickRandomSpawn());
         }
     }
 
     void heal(Player player) {
-        for (PotionEffect ef : player.getActivePotionEffects()) {
-            player.removePotionEffect(ef.getType());
-        }
+        player.clearActivePotionEffects();
         player.closeInventory();
         player.setHealth(20);
         player.setFoodLevel(20);
-        try {
-            Bukkit.getScheduler().scheduleSyncDelayedTask(plugin, () -> player.setFireTicks(0), 1);
-        } catch (IllegalPluginAccessException ignore) {
-        }
+        Bukkit.getScheduler().scheduleSyncDelayedTask(this.plugin, () -> player.setFireTicks(0), 1);
     }
 
     /**
@@ -138,9 +145,19 @@ public class GamePlayerData extends Data {
      */
     public void freeze(Player player) {
         player.setGameMode(GameMode.SURVIVAL);
-        player.addPotionEffect(new PotionEffect(PotionEffectType.JUMP_BOOST, 23423525, -10, false, false));
-        player.setWalkSpeed(0.0001F);
-        player.setFoodLevel(1);
+
+        // Freeze movement
+        AttributeInstance movementSpeed = player.getAttribute(Attribute.MOVEMENT_SPEED);
+        assert movementSpeed != null;
+        AttributeModifier moveMod = new AttributeModifier(MOVE_KEY, -movementSpeed.getValue(), Operation.ADD_NUMBER);
+        movementSpeed.addTransientModifier(moveMod);
+
+        // Freeze jumping
+        AttributeInstance jumpStrength = player.getAttribute(Attribute.JUMP_STRENGTH);
+        assert jumpStrength != null;
+        AttributeModifier jumpMod = new AttributeModifier(JUMP_KEY, -jumpStrength.getValue(), Operation.ADD_NUMBER);
+        jumpStrength.addTransientModifier(jumpMod);
+
         player.setAllowFlight(false);
         player.setFlying(false);
         player.setInvulnerable(true);
@@ -151,81 +168,88 @@ public class GamePlayerData extends Data {
      *
      * @param player Player to unfreeze
      */
+    @SuppressWarnings("DataFlowIssue")
     public void unFreeze(Player player) {
-        player.removePotionEffect(PotionEffectType.JUMP_BOOST);
-        player.setWalkSpeed(0.2F);
+        player.getAttribute(Attribute.MOVEMENT_SPEED).removeModifier(MOVE_KEY);
+        player.getAttribute(Attribute.JUMP_STRENGTH).removeModifier(JUMP_KEY);
     }
 
     /**
-     * Send a message to all players/spectators in the game
+     * Send a message to all active players/spectators in the game
      *
      * @param message Message to send
      */
-    public void msgAll(String message) {
-        List<UUID> allPlayers = new ArrayList<>();
-        allPlayers.addAll(players);
-        allPlayers.addAll(spectators);
-        for (UUID u : allPlayers) {
-            Player p = Bukkit.getPlayer(u);
-            if (p != null)
-                Util.scm(p, message);
+    public void messageAllActivePlayers(String message) {
+        List<Player> allPlayers = new ArrayList<>();
+        allPlayers.addAll(this.players);
+        allPlayers.addAll(this.spectators);
+        for (Player player : allPlayers) {
+            Util.sendMessage(player, message);
         }
     }
 
     /**
      * Sends a message to all players/spectators
-     * <b>Includes players who have died and left the game.
-     * Used for broadcasting win messages</b>
+     * <br>Includes players who have died and left the game.
+     * Used for broadcasting win messages
      *
      * @param message Message to send
      */
-    public void msgAllPlayers(String message) {
-        List<UUID> allPlayers = new ArrayList<>(this.allPlayers);
+    public void messageAllPlayers(String message) {
+        List<Player> allPlayers = new ArrayList<>(this.allPlayers);
         allPlayers.addAll(this.spectators);
-        for (UUID u : allPlayers) {
-            Player p = Bukkit.getPlayer(u);
-            if (p != null)
-                Util.scm(p, lang.prefix + message);
+        for (Player player : allPlayers) {
+            Util.sendPrefixedMessage(player, message);
         }
     }
 
-    Location pickSpawn() {
-        GameArenaData gameArenaData = game.getGameArenaData();
-        double spawn = getRandomIntegerBetweenRange(gameArenaData.maxPlayers - 1);
-        if (containsPlayer(gameArenaData.spawns.get(((int) spawn)))) {
-            Collections.shuffle(gameArenaData.spawns);
-            for (Location l : gameArenaData.spawns) {
-                if (!containsPlayer(l)) {
-                    return l;
-                }
+    private Location pickRandomSpawn() {
+        if (this.randomizedSpawns.isEmpty()) {
+            this.randomizedSpawns.addAll(this.game.getGameArenaData().getSpawns());
+        }
+        Collections.shuffle(this.randomizedSpawns);
+        Location spawn = this.randomizedSpawns.getFirst();
+        this.randomizedSpawns.remove(spawn);
+        return spawn;
+    }
+
+    void addPlayerData(Player player) {
+        this.players.add(player);
+        this.allPlayers.add(player);
+        this.game.getGameBlockData().updateLobbyBlock();
+    }
+
+    void putPlayerIntoArena(Player player, boolean savePreviousLocation) {
+        Location loc = pickRandomSpawn();
+        if (loc.getBlock().getRelative(BlockFace.DOWN).getType() == Material.AIR) {
+            while (loc.getBlock().getRelative(BlockFace.DOWN).getType() == Material.AIR) {
+                loc.setY(loc.getY() - 1);
             }
         }
-        return gameArenaData.spawns.get((int) spawn);
-    }
 
-    boolean containsPlayer(Location location) {
-        if (location == null) return false;
-
-        for (UUID u : players) {
-            Player p = Bukkit.getPlayer(u);
-            if (p != null && p.getLocation().getBlock().equals(location.getBlock()))
-                return true;
+        if (player.isInsideVehicle()) {
+            player.leaveVehicle();
         }
-        return false;
-    }
 
-    boolean vaultCheck(Player player) {
-        if (Config.economy) {
-            int cost = game.gameArenaData.cost;
-            if (Vault.economy.getBalance(player) >= cost) {
-                Vault.economy.withdrawPlayer(player, cost);
-                return true;
-            } else {
-                Util.scm(player, lang.prefix + lang.cmd_join_no_money.replace("<cost>", String.valueOf(cost)));
-                return false;
+        Location previousLocation = player.getLocation();
+
+        // Teleport async into the arena so it loads a little more smoothly
+        player.teleportAsync(loc).thenAccept(a -> {
+            PlayerData playerData = new PlayerData(player, this.game);
+            if (savePreviousLocation && Config.savePreviousLocation) {
+                playerData.setPreviousLocation(previousLocation);
             }
-        }
-        return true;
+            this.playerManager.addPlayerData(playerData);
+            this.game.getGameScoreboard().setupBoard(player);
+
+            heal(player);
+            freeze(player);
+            this.kills.put(player, 0);
+            startMessage(player);
+
+            this.game.getGameScoreboard().updateBoards();
+            this.game.getGameCommandData().runCommands(GameCommandData.CommandType.JOIN, player);
+        });
     }
 
     /**
@@ -237,152 +261,56 @@ public class GamePlayerData extends Data {
         this.kills.put(player, this.kills.get(player) + 1);
     }
 
-    // TODO Game methods
-
-    /**
-     * Join a player to the game
-     *
-     * @param player Player to join the game
-     */
-    public void join(Player player) {
-        join(player, false);
-    }
-
-    /**
-     * Join a player to the game
-     *
-     * @param player  Player to join the game
-     * @param command Whether joined using by using a command
-     */
-    public void join(Player player, boolean command) {
-        GameArenaData gameArenaData = game.getGameArenaData();
-        Status status = gameArenaData.getStatus();
-        if (status != Status.WAITING && status != Status.STOPPED && status != Status.COUNTDOWN && status != Status.READY) {
-            Util.scm(player, lang.arena_not_ready);
-            if ((status == Status.RUNNING || status == Status.BEGINNING) && Config.spectateEnabled) {
-                Util.scm(player, lang.arena_spectate.replace("<arena>", game.gameArenaData.getName()));
-            }
-        } else if (gameArenaData.maxPlayers <= players.size()) {
-            Util.scm(player, "&c" + gameArenaData.getName() + " " + lang.game_full);
-        } else if (!players.contains(player.getUniqueId())) {
-            if (!vaultCheck(player)) {
-                return;
-            }
-            // Call PlayerJoinGameEvent
-            PlayerJoinGameEvent event = new PlayerJoinGameEvent(game, player);
-            Bukkit.getPluginManager().callEvent(event);
-            // If cancelled, stop the player from joining the game
-            if (event.isCancelled()) return;
-
-            if (player.isInsideVehicle()) {
-                player.leaveVehicle();
-            }
-
-            UUID uuid = player.getUniqueId();
-            players.add(uuid);
-            allPlayers.add(uuid);
-
-            Location loc = pickSpawn();
-            if (loc.getBlock().getRelative(BlockFace.DOWN).getType() == Material.AIR) {
-                while (loc.getBlock().getRelative(BlockFace.DOWN).getType() == Material.AIR) {
-                    loc.setY(loc.getY() - 1);
-                }
-            }
-            Location previousLocation = player.getLocation();
-
-            // Teleport async into the arena so it loads a little more smoothly
-            player.teleportAsync(loc).thenAccept(a -> {
-
-                PlayerData playerData = new PlayerData(player, game);
-                if (command && Config.savePreviousLocation) {
-                    playerData.setPreviousLocation(previousLocation);
-                }
-                playerManager.addPlayerData(playerData);
-                gameArenaData.board.setBoard(player);
-
-                heal(player);
-                freeze(player);
-                kills.put(player, 0);
-
-                if (players.size() == 1 && status == Status.READY)
-                    gameArenaData.setStatus(Status.WAITING);
-                if (players.size() >= game.gameArenaData.minPlayers && (status == Status.WAITING || status == Status.READY)) {
-                    game.startPreGame();
-                } else if (status == Status.WAITING) {
-                    String broadcast = lang.player_joined_game
-                            .replace("<arena>", gameArenaData.getName())
-                            .replace("<player>", player.getName()) + (gameArenaData.minPlayers - players.size() <= 0 ? "!" : ":" +
-                            lang.players_to_start.replace("<amount>", String.valueOf((gameArenaData.minPlayers - players.size()))));
-                    if (Config.broadcastJoinMessages) {
-                        Util.broadcast(broadcast);
-                    } else {
-                        msgAll(broadcast);
-                    }
-                }
-                kitHelp(player);
-
-                game.gameBlockData.updateLobbyBlock();
-                game.gameArenaData.updateBoards();
-                game.gameCommandData.runCommands(CommandType.JOIN, player);
-            });
-        }
-    }
-
     /**
      * Make a player leave the game
      *
      * @param player Player to leave the game
      * @param death  Whether the player has died or not (Generally should be false)
      */
-    public void leave(Player player, Boolean death) {
-        Bukkit.getPluginManager().callEvent(new PlayerLeaveGameEvent(game, player, death));
+    public void leaveGame(Player player, boolean death) {
+        new PlayerLeaveGameEvent(this.game, player, death).callEvent();
         UUID uuid = player.getUniqueId();
-        players.remove(uuid);
-        if (!death) allPlayers.remove(uuid); // Only remove the player if they voluntarily left the game
+        this.players.remove(player);
+        if (!death) this.allPlayers.remove(player); // Only remove the player if they voluntarily left the game
         unFreeze(player);
         if (death) {
-            if (Config.spectateEnabled && Config.spectateOnDeath && !game.isGameOver()) {
+            if (Config.SPECTATE_ENABLED && Config.spectateOnDeath && !game.isGameOver()) {
                 spectate(player);
-                player.playSound(player.getLocation(), Sound.UI_TOAST_CHALLENGE_COMPLETE, 5, 1);
-                player.sendTitle(game.gameArenaData.getName(), Util.getColString(lang.spectator_start_title), 10, 100, 10);
-                game.updateAfterDeath(player, true);
+                player.playSound(player.getLocation(), Config.SOUNDS_DEATH, 5, 1);
+                player.showTitle(createTitle());
+                this.game.updateAfterDeath(player, true);
                 return;
-            } else if (game.gameArenaData.getStatus() == Status.RUNNING)
-                game.getGameBarData().removePlayer(player);
+            } else if (this.game.getGameArenaData().getStatus() == Status.RUNNING) {
+                this.game.getGameBarData().removePlayer(player);
+            }
         }
         heal(player);
-        PlayerData playerData = playerManager.getPlayerData(uuid);
+        PlayerData playerData = this.playerManager.getPlayerData(uuid);
+        assert playerData != null;
         Location previousLocation = playerData.getPreviousLocation();
 
+        this.game.getGameScoreboard().removePlayerFromSidebar(player);
         playerData.restore(player);
         exit(player, previousLocation);
-        playerManager.removePlayerData(player);
+        this.playerManager.removePlayerData(player);
         if (death) {
-            player.playSound(player.getLocation(), Sound.UI_TOAST_CHALLENGE_COMPLETE, 5, 1);
+            player.playSound(player.getLocation(), Config.SOUNDS_DEATH, 5, 1);
         }
-        game.updateAfterDeath(player, death);
+        this.game.updateAfterDeath(player, death);
     }
 
     void exit(Player player, @Nullable Location exitLocation) {
+        unFreeze(player);
         GameArenaData gameArenaData = game.getGameArenaData();
         player.setInvulnerable(false);
         if (gameArenaData.getStatus() == Status.RUNNING)
-            game.getGameBarData().removePlayer(player);
-        Location loc;
-        if (exitLocation != null) {
-            loc = exitLocation;
-        } else if (gameArenaData.exit != null && gameArenaData.exit.getWorld() != null) {
-            loc = gameArenaData.exit;
-        } else {
-            Location worldSpawn = Bukkit.getWorlds().get(0).getSpawnLocation();
-            Location bedLocation = player.getBedSpawnLocation();
-            loc = bedLocation != null ? bedLocation : worldSpawn;
-        }
-        PlayerData playerData = playerManager.getData(player);
+            this.game.getGameBarData().removePlayer(player);
+        Location location = exitLocation != null ? exitLocation : this.gameManager.getGlobalExitLocation(player);
+        PlayerData playerData = this.playerManager.getData(player);
         if (playerData == null || playerData.isOnline()) {
-            player.teleportAsync(loc);
+            player.teleportAsync(location);
         } else {
-            player.teleport(loc);
+            player.teleport(location);
         }
     }
 
@@ -393,33 +321,29 @@ public class GamePlayerData extends Data {
      */
     public void spectate(Player spectator) {
         UUID uuid = spectator.getUniqueId();
-        spectator.teleport(game.gameArenaData.getSpawns().get(0));
-        if (playerManager.hasPlayerData(uuid)) {
-            playerManager.transferPlayerDataToSpectator(uuid);
+        spectator.teleport(this.game.getGameArenaData().getSpawns().getFirst());
+        if (this.playerManager.hasPlayerData(uuid)) {
+            this.playerManager.transferPlayerDataToSpectator(uuid);
         } else {
-            playerManager.addSpectatorData(new PlayerData(spectator, game));
+            this.playerManager.addSpectatorData(new PlayerData(spectator, game));
         }
-        this.spectators.add(uuid);
+        this.spectators.add(spectator);
         spectator.setGameMode(GameMode.SURVIVAL);
         spectator.setCollidable(false);
-        if (Config.spectateFly)
+        if (Config.SPECTATE_FLY)
             spectator.setAllowFlight(true);
 
-        if (Config.spectateHide) {
-            for (UUID u : players) {
-                Player player = Bukkit.getPlayer(u);
-                if (player == null) continue;
-                player.hidePlayer(plugin, spectator);
+        if (Config.SPECTATE_HIDE) {
+            for (Player player : this.players) {
+                player.hidePlayer(this.plugin, spectator);
             }
-            for (UUID u : spectators) {
-                Player player = Bukkit.getPlayer(u);
-                if (player == null) continue;
-                player.hidePlayer(plugin, spectator);
+            for (Player player : this.spectators) {
+                player.hidePlayer(this.plugin, spectator);
             }
         }
-        game.getGameBarData().addPlayer(spectator);
-        game.gameArenaData.board.setBoard(spectator);
-        spectator.getInventory().setItem(0, plugin.getItemStackManager().getSpectatorCompass());
+        this.game.getGameBarData().addPlayer(spectator);
+        this.game.getGameScoreboard().setupBoard(spectator);
+        spectator.getInventory().setItem(0, this.plugin.getItemManager().getSpectatorCompass());
     }
 
     /**
@@ -429,21 +353,23 @@ public class GamePlayerData extends Data {
      */
     public void leaveSpectate(Player spectator) {
         UUID uuid = spectator.getUniqueId();
-        PlayerData playerData = playerManager.getSpectatorData(uuid);
+        PlayerData playerData = this.playerManager.getSpectatorData(uuid);
+        if (playerData == null) return;
+
         Location previousLocation = playerData.getPreviousLocation();
 
         playerData.restore(spectator);
-        spectators.remove(spectator.getUniqueId());
+        this.spectators.remove(spectator);
         spectator.setCollidable(true);
-        if (Config.spectateFly) {
+        if (Config.SPECTATE_FLY) {
             GameMode mode = spectator.getGameMode();
             if (mode == GameMode.SURVIVAL || mode == GameMode.ADVENTURE)
                 spectator.setAllowFlight(false);
         }
-        if (Config.spectateHide)
+        if (Config.SPECTATE_HIDE)
             revealPlayer(spectator);
         exit(spectator, previousLocation);
-        playerManager.removeSpectatorData(uuid);
+        this.playerManager.removeSpectatorData(uuid);
     }
 
     void revealPlayer(Player hidden) {
@@ -452,21 +378,10 @@ public class GamePlayerData extends Data {
         }
     }
 
-    public void addTeam(Team team) {
-        teams.put(team.getName(), team);
-    }
-
-    public void clearTeams() {
-        teams.clear();
-    }
-
-    public boolean hasTeam(String name) {
-        return teams.containsKey(name);
-    }
-
-    // UTIL
-    private static double getRandomIntegerBetweenRange(double max) {
-        return (int) (Math.random() * ((max - (double) 0) + 1)) + (double) 0;
+    private Title createTitle() {
+        return Title.title(this.game.getGameArenaData().getNameComponent(),
+            Util.getMini(this.lang.spectator_start_title),
+            Times.times(Duration.ofMillis(500), Duration.ofSeconds(5), Duration.ofMillis(500)));
     }
 
 }

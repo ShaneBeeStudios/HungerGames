@@ -1,6 +1,6 @@
 package com.shanebeestudios.hg.game;
 
-import com.shanebeestudios.hg.HG;
+import com.shanebeestudios.hg.plugin.HungerGames;
 import com.shanebeestudios.hg.data.Language;
 
 /**
@@ -9,10 +9,10 @@ import com.shanebeestudios.hg.data.Language;
 public abstract class Data {
 
     final Game game;
-    final HG plugin;
+    final HungerGames plugin;
     final Language lang;
 
-    protected Data(Game game) {
+    Data(Game game) {
         this.game = game;
         this.plugin = game.plugin;
         this.lang = game.lang;
@@ -30,9 +30,9 @@ public abstract class Data {
     /**
      * Quick method to access the main plugin
      *
-     * @return Instance of {@link HG plugin}
+     * @return Instance of {@link HungerGames plugin}
      */
-    public HG getPlugin() {
+    public HungerGames getPlugin() {
         return plugin;
     }
 

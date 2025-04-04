@@ -1,93 +1,182 @@
 package com.shanebeestudios.hg.game;
 
+import com.shanebeestudios.hg.plugin.configs.Config;
+import com.shanebeestudios.hg.plugin.tasks.WorldBorderTask;
+import org.bukkit.Bukkit;
 import org.bukkit.Location;
-import org.bukkit.World;
 import org.bukkit.WorldBorder;
-import com.shanebeestudios.hg.data.Config;
-
-import java.util.Arrays;
-import java.util.List;
+import org.bukkit.util.BoundingBox;
+import org.jetbrains.annotations.Nullable;
 
 /**
  * Data class for holding a {@link Game Game's} world border
  */
 public class GameBorderData extends Data {
 
-    private Location borderCenter = null;
-    private int borderSize;
+    private boolean isDefault;
+    private Location centerLocation;
+    private int finalBorderSize;
     private int borderCountdownStart;
     private int borderCountdownEnd;
 
-    protected GameBorderData(Game game) {
-        super(game);
+    private final GamePlayerData gamePlayerData;
+    private final WorldBorder worldBorder;
+    private WorldBorderTask worldBorderTask;
+
+    GameBorderData(Game game) {
+        this(game, null, Config.WORLD_BORDER_FINAL_SIZE, Config.WORLD_BORDER_COUNTDOWN_START, Config.WORLD_BORDER_COUNTDOWN_END);
+        this.isDefault = true;
     }
 
-    private double getBorderSize(Location center) {
-        Bound bound = game.gameArenaData.getBound();
-        double x1 = Math.abs(bound.getGreaterCorner().getX() - center.getX());
-        double x2 = Math.abs(bound.getLesserCorner().getX() - center.getX());
-        double z1 = Math.abs(bound.getGreaterCorner().getZ() - center.getZ());
-        double z2 = Math.abs(bound.getLesserCorner().getZ() - center.getZ());
+    GameBorderData(Game game, Location centerLocation, int finalSize, int start, int end) {
+        super(game);
+        this.gamePlayerData = game.getGamePlayerData();
+        this.worldBorder = Bukkit.createWorldBorder();
+        this.centerLocation = centerLocation;
+        this.finalBorderSize = finalSize;
+        this.borderCountdownStart = start;
+        this.borderCountdownEnd = end;
+        this.isDefault = false;
+    }
 
-        double x = Math.max(x1, x2);
-        double z = Math.max(z1, z2);
-        double r = Math.max(x, z);
+    /**
+     * Get the {@link WorldBorder} of this game
+     *
+     * @return WorldBorder of game
+     */
+    public WorldBorder getWorldBorder() {
+        return this.worldBorder;
+    }
 
-        return (r * 2) + 10;
+    /**
+     * Initialize the {@link WorldBorder} of this game
+     */
+    public void initialize() {
+        resetBorder();
+        this.gamePlayerData.getPlayers().forEach(player -> player.setWorldBorder(this.worldBorder));
+        this.worldBorderTask = new WorldBorderTask(this.game);
+    }
+
+    /**
+     * Reset the {@link WorldBorder} of this game
+     */
+    public void resetBorder() {
+        Location center;
+        if (this.centerLocation != null) {
+            center = this.centerLocation;
+        } else if (Config.WORLD_BORDER_CENTER_ON_FIRST_SPAWN) {
+            center = this.game.getGameArenaData().getSpawns().getFirst();
+        } else {
+            center = this.game.getGameArenaData().getGameRegion().getCenter();
+        }
+        this.worldBorder.setCenter(center);
+
+        GameRegion bound = this.game.getGameArenaData().getGameRegion();
+        BoundingBox boundingBox = bound.getBoundingBox();
+
+        double x = Math.max(center.getX() - boundingBox.getMinX(), boundingBox.getMaxX() - center.getX());
+        double z = Math.max(center.getZ() - boundingBox.getMinZ(), boundingBox.getMaxZ() - center.getZ());
+        double size = Math.max(x, z);
+        this.worldBorder.setSize((size + 5) * 2);
+
+        if (this.worldBorderTask != null) {
+            this.worldBorderTask.stop();
+            this.worldBorderTask = null;
+        }
+    }
+
+    /**
+     * Start the shrinking process of the {@link WorldBorder}
+     *
+     * @param closingIn How long for the border to take to shrink (in seconds)
+     */
+    public void startShrinking(int closingIn) {
+        this.worldBorder.setSize(this.finalBorderSize, closingIn);
     }
 
     /**
      * Set the center of the border of this game
      *
-     * @param borderCenter Location of the center
+     * @param centerLocation Location of the center
      */
-    public void setBorderCenter(Location borderCenter) {
-        this.borderCenter = borderCenter;
+    public void setCenterLocation(Location centerLocation) {
+        this.centerLocation = centerLocation;
+        this.isDefault = false;
+    }
+
+    /**
+     * Get the center location of the border
+     *
+     * @return Center location
+     */
+    public @Nullable Location getCenterLocation() {
+        return this.centerLocation;
     }
 
     /**
      * Set the final size for the border of this game
      *
-     * @param borderSize The final size of the border
+     * @param finalBorderSize The final size of the border
      */
-    public void setBorderSize(int borderSize) {
-        this.borderSize = borderSize;
+    public void setFinalBorderSize(int finalBorderSize) {
+        this.finalBorderSize = finalBorderSize;
+        this.isDefault = false;
     }
 
-    public void setBorderTimer(int start, int end) {
-        this.borderCountdownStart = start;
-        this.borderCountdownEnd = end;
+    /**
+     * Get the final size for the border
+     *
+     * @return Final size
+     */
+    public int getFinalBorderSize() {
+        return this.finalBorderSize;
     }
 
-    public List<Integer> getBorderTimer() {
-        return Arrays.asList(borderCountdownStart, borderCountdownEnd);
+    /**
+     * Get when the border will start to countdown
+     *
+     * @return Start countdown
+     */
+    public int getBorderCountdownStart() {
+        return this.borderCountdownStart;
     }
 
-    public void setBorder(int time) {
-        Location center;
-        if (Config.centerSpawn && borderCenter == null) {
-            center = game.gameArenaData.spawns.get(0);
-        } else if (borderCenter != null) {
-            center = borderCenter;
-        } else {
-            center = game.gameArenaData.bound.getCenter();
-        }
-        World world = center.getWorld();
-        assert world != null;
-        WorldBorder border = world.getWorldBorder();
-        double size = Math.min(border.getSize(), getBorderSize(center));
-
-        border.setCenter(center);
-        border.setSize(((int) size));
-        border.setWarningTime(5);
-        border.setDamageBuffer(2);
-        border.setSize(Math.min(size, borderSize), time);
+    /**
+     * Set when the border will start to countdown
+     *
+     * @param borderCountdownStart When to countdown
+     */
+    public void setBorderCountdownStart(int borderCountdownStart) {
+        this.borderCountdownStart = borderCountdownStart;
+        this.isDefault = false;
     }
 
-    void resetBorder() {
-        World world = game.gameArenaData.getBound().getWorld();
-        assert world != null;
-        world.getWorldBorder().reset();
+    /**
+     * Get when the border countdown will stop
+     *
+     * @return When countdown stops
+     */
+    public int getBorderCountdownEnd() {
+        return this.borderCountdownEnd;
+    }
+
+    /**
+     * Set when the border countdown will stop
+     *
+     * @param borderCountdownEnd When to stop
+     */
+    public void setBorderCountdownEnd(int borderCountdownEnd) {
+        this.borderCountdownEnd = borderCountdownEnd;
+        this.isDefault = false;
+    }
+
+    /**
+     * Whether this border uses default values from config
+     *
+     * @return Uses default values from config
+     */
+    public boolean isDefault() {
+        return this.isDefault;
     }
 
 }

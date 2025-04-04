@@ -1,7 +1,9 @@
 package com.shanebeestudios.hg.game;
 
+import com.shanebeestudios.hg.api.status.Status;
+import com.shanebeestudios.hg.api.util.Util;
+import net.kyori.adventure.text.Component;
 import org.bukkit.Location;
-import com.shanebeestudios.hg.Status;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -12,39 +14,28 @@ import java.util.List;
 public class GameArenaData extends Data {
 
     final String name;
-    final Bound bound;
-    final int timer;
-    final int minPlayers;
-    final int maxPlayers;
-    private final int roamTime;
+    final GameRegion gameRegion;
+    int timer;
+    int minPlayers;
+    int maxPlayers;
+    private int freeRoamTime;
     int cost;
     final List<Location> spawns;
     Location exit;
-    Status status;
+    private Status status = Status.NOT_READY;
     int chestRefillTime = 0;
     int chestRefillRepeat = 0;
-    final Board board;
 
-    public GameArenaData(Game game, String name, Bound bound, int timer, int minPlayers, int maxPlayers, int roamTime, int cost) {
+    GameArenaData(Game game, String name, GameRegion gameRegion, int timer, int minPlayers, int maxPlayers, int freeRoamTime, int cost) {
         super(game);
         this.name = name;
-        this.bound = bound;
+        this.gameRegion = gameRegion;
         this.timer = timer;
         this.minPlayers = minPlayers;
         this.maxPlayers = maxPlayers;
-        this.roamTime = roamTime;
+        this.freeRoamTime = freeRoamTime;
         this.cost = cost;
         this.spawns = new ArrayList<>();
-        this.board = new Board(game);
-    }
-
-    /**
-     * Get the board of this game
-     *
-     * @return Board of game
-     */
-    public Board getBoard() {
-        return board;
     }
 
     /**
@@ -52,8 +43,8 @@ public class GameArenaData extends Data {
      *
      * @return Bound of this game
      */
-    public Bound getBound() {
-        return this.bound;
+    public GameRegion getGameRegion() {
+        return this.gameRegion;
     }
 
     /**
@@ -66,22 +57,58 @@ public class GameArenaData extends Data {
     }
 
     /**
+     * Get the name of this game as a {@link Component}
+     *
+     * @return Name of this game
+     */
+    public Component getNameComponent() {
+        return Util.getMini(this.name);
+    }
+
+    /**
      * Check if a location is within the games arena
      *
      * @param location Location to be checked
      * @return True if location is within the arena bounds
      */
     public boolean isInRegion(Location location) {
-        return bound.isInRegion(location);
+        return gameRegion.isInRegion(location);
     }
 
     /**
-     * Get the roam time of the game
+     * Get the free roam time of the game
      *
-     * @return The roam time
+     * @return Free roam time
      */
-    public int getRoamTime() {
-        return this.roamTime;
+    public int getFreeRoamTime() {
+        return this.freeRoamTime;
+    }
+
+    /**
+     * Set the free roam time of the game
+     *
+     * @param freeRoamTime Free roam time
+     */
+    public void setFreeRoamTime(int freeRoamTime) {
+        this.freeRoamTime = freeRoamTime;
+    }
+
+    /**
+     * Get the timer of this game
+     *
+     * @return How many seconds this game will run for
+     */
+    public int getTimer() {
+        return this.timer;
+    }
+
+    /**
+     * Set the timer for this game
+     *
+     * @param timer How many seconds this game will run for
+     */
+    public void setTimer(int timer) {
+        this.timer = timer;
     }
 
     /**
@@ -90,7 +117,16 @@ public class GameArenaData extends Data {
      * @return Max amount of players for this game
      */
     public int getMaxPlayers() {
-        return maxPlayers;
+        return this.maxPlayers;
+    }
+
+    /**
+     * Set max players for this game
+     *
+     * @param maxPlayers Max players
+     */
+    public void setMaxPlayers(int maxPlayers) {
+        this.maxPlayers = maxPlayers;
     }
 
     /**
@@ -99,7 +135,16 @@ public class GameArenaData extends Data {
      * @return Min amount of players for this game
      */
     public int getMinPlayers() {
-        return minPlayers;
+        return this.minPlayers;
+    }
+
+    /**
+     * Set min players for this game
+     *
+     * @param minPlayers Min players
+     */
+    public void setMinPlayers(int minPlayers) {
+        this.minPlayers = minPlayers;
     }
 
     /**
@@ -132,6 +177,13 @@ public class GameArenaData extends Data {
     }
 
     /**
+     * Clear all spawns
+     */
+    public void clearSpawns() {
+        this.spawns.clear();
+    }
+
+    /**
      * Add a spawn location to the game
      *
      * @param location The location to add
@@ -147,7 +199,7 @@ public class GameArenaData extends Data {
      */
     public void setStatus(Status status) {
         this.status = status;
-        game.gameBlockData.updateLobbyBlock();
+        this.game.getGameBlockData().updateLobbyBlock();
     }
 
     /**
@@ -164,7 +216,7 @@ public class GameArenaData extends Data {
      *
      * @return Exit location
      */
-    public Location getExit() {
+    public Location getExitLocation() {
         return this.exit;
     }
 
@@ -173,7 +225,7 @@ public class GameArenaData extends Data {
      *
      * @param location Location where players will exit
      */
-    public void setExit(Location location) {
+    public void setExitLocation(Location location) {
         this.exit = location;
     }
 
@@ -212,13 +264,6 @@ public class GameArenaData extends Data {
      */
     public int getChestRefillRepeat() {
         return chestRefillRepeat;
-    }
-
-    /**
-     * Update scoreboards for players (including team scoreboards)
-     */
-    public void updateBoards() {
-        game.gameArenaData.board.updateBoard();
     }
 
 }
