@@ -18,8 +18,8 @@ import org.bukkit.inventory.ItemType;
 import org.bukkit.potion.PotionEffect;
 import org.bukkit.potion.PotionEffectType;
 import org.bukkit.potion.PotionType;
+import org.jetbrains.annotations.Nullable;
 
-import javax.annotation.Nullable;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
@@ -31,7 +31,9 @@ public class ItemParser {
     private static final NBTApi NBT_API = HungerGames.getPlugin().getNbtApi();
 
     @SuppressWarnings({"UnstableApiUsage", "unchecked"})
-    public static @Nullable ItemStack parseItem(ConfigurationSection config) {
+    public static @Nullable ItemStack parseItem(@Nullable ConfigurationSection config) {
+        if (config == null) return null;
+
         // ID
         String stringId = config.getString("id");
         if (stringId == null) return null;
