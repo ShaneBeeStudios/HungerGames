@@ -20,7 +20,7 @@ import java.util.List;
  */
 public class Config {
 
-    public static boolean debug;
+    public static boolean SETTINGS_DEBUG;
 
     //Basic settings
     public static boolean broadcastJoinMessages;
@@ -124,7 +124,7 @@ public class Config {
 
     private void loadConfig() {
         // Settings
-        debug = config.getBoolean("settings.debug");
+        SETTINGS_DEBUG = config.getBoolean("settings.debug");
         broadcastJoinMessages = config.getBoolean("settings.broadcast-join-messages");
         broadcastWinMessages = config.getBoolean("settings.broadcast-win-messages");
         bossbar = config.getBoolean("settings.bossbar-countdown");

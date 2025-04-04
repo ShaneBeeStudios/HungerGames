@@ -111,7 +111,7 @@ public class Util {
      * @param debug Debug message to log
      */
     public static void debug(String debug) {
-        if (Config.debug) {
+        if (Config.SETTINGS_DEBUG) {
             log(debug);
         }
     }
@@ -123,7 +123,7 @@ public class Util {
      * @param exception Exception to log
      */
     public static void debug(@NotNull Exception exception) {
-        if (Config.debug) {
+        if (Config.SETTINGS_DEBUG) {
             log("<red>ERROR: (please report to dev):");
             CONSOLE.sendMessage(getMini("<yellow>%s", exception.getMessage()));
             for (StackTraceElement element : exception.getStackTrace()) {

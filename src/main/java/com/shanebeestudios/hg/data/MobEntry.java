@@ -33,11 +33,12 @@ import java.util.Map;
 public class MobEntry {
 
     // Normal Mob
+    private final String key;
     private EntityType type;
     private Component name;
     private final Map<EquipmentSlot, ItemStack> gear = new HashMap<>();
     private final List<PotionEffect> potionEffects = new ArrayList<>();
-    private final Map<Attribute,Double> attributes = new HashMap<>();
+    private final Map<Attribute, Double> attributes = new HashMap<>();
     private String nbt;
     private FixedMetadataValue deathMessageMeta = null;
     private String deathMessage = null;
@@ -51,7 +52,8 @@ public class MobEntry {
      *
      * @param type Type of new mob
      */
-    public MobEntry(EntityType type) {
+    public MobEntry(String key, EntityType type) {
+        this.key = key;
         this.type = type;
         this.mythicMob = null;
         this.mythicLevel = 0;
@@ -63,9 +65,19 @@ public class MobEntry {
      * @param mythicMob   MythicMob to create
      * @param mythicLevel Level of MythicMob
      */
-    public MobEntry(MythicMob mythicMob, double mythicLevel) {
+    public MobEntry(String key, MythicMob mythicMob, double mythicLevel) {
+        this.key = key;
         this.mythicLevel = mythicLevel;
         this.mythicMob = mythicMob;
+    }
+
+    /**
+     * Get the key of this mob entry
+     *
+     * @return Key of entry
+     */
+    public String getKey() {
+        return this.key;
     }
 
     /**

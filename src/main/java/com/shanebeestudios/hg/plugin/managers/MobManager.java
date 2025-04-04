@@ -8,6 +8,7 @@ import com.shanebeestudios.hg.data.MobData;
 import com.shanebeestudios.hg.data.MobEntry;
 import com.shanebeestudios.hg.game.Game;
 import com.shanebeestudios.hg.plugin.HungerGames;
+import com.shanebeestudios.hg.plugin.configs.Config;
 import io.lumine.mythic.api.mobs.MythicMob;
 import org.bukkit.NamespacedKey;
 import org.bukkit.attribute.Attribute;
@@ -97,6 +98,7 @@ public class MobManager {
             assert timeSection != null;
 
             for (String sectionKey : timeSection.getKeys(false)) {
+                String mobEntryKey = gameName + time + ":" + sectionKey;
                 ConfigurationSection mobSection = timeSection.getConfigurationSection(sectionKey);
                 assert mobSection != null;
 
@@ -113,7 +115,7 @@ public class MobManager {
 
                     Optional<MythicMob> mob = this.plugin.getMythicMobManager().getMythicMob(mythicMob);
                     if (mob.isPresent()) {
-                        mobEntry = new MobEntry(mob.get(), level);
+                        mobEntry = new MobEntry(mobEntryKey, mob.get(), level);
                     } else {
                         Util.warning("Invalid MythicMob: %s", mythicMob);
                         continue;
@@ -134,7 +136,7 @@ public class MobManager {
                         continue;
                     }
 
-                    mobEntry = new MobEntry(entityType);
+                    mobEntry = new MobEntry(mobEntryKey, entityType);
                     if (mobSection.contains("name")) {
                         String name = mobSection.getString("name");
                         mobEntry.setName(Util.getMini(name));
@@ -216,6 +218,9 @@ public class MobManager {
                     } else {
                         mobData.addNightMob(mobEntry);
                     }
+                }
+                if (Config.SETTINGS_DEBUG) {
+                    Util.log("- Loaded mob entry <white>'<aqua>%s<white>'", mobEntryKey);
                 }
             }
         }
