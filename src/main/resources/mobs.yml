@@ -4,42 +4,63 @@
 mobs:
   # These mobs will only spawn during daytime
   day:
-    '1':
+    'sheep':
       type: minecraft:sheep
       weight: 2
-    '2':
+    'baby_sheep':
+      type: minecraft:sheep
+      nbt: '{Age:-12000}'
+      weight: 2
+    'warm_cow':
       type: minecraft:cow
       weight: 3
-    '3':
+      nbt: '{variant:"minecraft:warm"}'
+    'cold_cow':
+      type: minecraft:cow
+      weight: 3
+      nbt: '{variant:"minecraft:cold"}'
+    'pig':
       type: minecraft:pig
       weight: 3
-    '4':
+    'chicken':
       type: minecraft:chicken
       weight: 1
-    '5':
+    'parrot':
       type: minecraft:parrot
       weight: 2
-    '6':
+    'spider':
       type: minecraft:spider
       weight: 1
-    '7':
+    'creeper':
       type: minecraft:creeper
+      nbt: '{ExplosionRadius:2}'
       weight: 1
   # These mobs will only spawn during nighttime
   night:
-    '1':
+    'wolf':
+      type: minecraft:wolf
+      weight: 3
+      nbt: '{variant:"minecraft:ashen",sound_variant:"minecraft:angry"}'
+    'zombie':
       type: minecraft:zombie
       weight: 4
-    '2':
+    'baby_zombie':
+      type: minecraft:zombie
+      nbt: '{IsBaby:1b}'
+      weight: 2
+    'drowned':
       type: minecraft:drowned
       weight: 2
-    '3':
+    'skeleton':
       type: minecraft:skeleton
       weight: 2
-    '4':
+    'stray':
       type: minecraft:stray
       weight: 1
-    '5':
+    'bogged':
+      type: minecraft:bogged
+      weight: 2
+    'creeper':
       type: minecraft:creeper
       weight: 1
 
@@ -47,7 +68,7 @@ example:
   # Example setup for mobs (plugin will ignore these examples)
   night:
     # Example setup for vanilla mobs
-    '1':
+    'night_guard':
       # Minecraft ID of entity type
       type: minecraft:skeleton
       # The amount of times this mob will be added to the list to randomly pull from (optional - default = 1)
@@ -98,7 +119,7 @@ example:
         - type: minecraft:speed
           duration: -1
           amplifier: 1
-    '2':
+    'the_beast':
       type: minecraft:zombie
       weight: 10
       name: '<dark_aqua>The Beast'
@@ -124,7 +145,7 @@ example:
           duration: -1
           amplifier: 1
     # Example setup for MythicMobs
-    '3':
+    'skeleton_king':
       # Preface your MythicMob with "MM:"
       type: MM:SkeletonKing
       # I have no clue what level is for (optional - default = 1)
