@@ -16,7 +16,6 @@ import org.jetbrains.annotations.Nullable;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 
 public class ItemManager {
 
@@ -44,7 +43,7 @@ public class ItemManager {
         ConfigurationSection itemsSection = itemsConfig.getConfigurationSection("items");
         assert itemsSection != null;
         this.defaultItemData = createItemData(itemsSection, null);
-        Util.log("- <aqua>%s <grey>items have been <green>successfully loaded!", this.defaultItemData.getItemCount());
+        Util.log("- <aqua>%s <grey>items have been <green>successfully loaded!", this.defaultItemData.getTotalItemCount());
     }
 
     public void loadGameItems(Game game, ConfigurationSection arenaConfig) {
@@ -53,21 +52,21 @@ public class ItemManager {
 
         ItemData itemData = createItemData(itemsSection, game);
         Util.log("- Loaded <aqua>%s <grey>items for arena: <aqua>%s",
-            itemData.getItemCount(), game.getGameArenaData().getName());
+            itemData.getTotalItemCount(), game.getGameArenaData().getName());
         game.getGameItemData().setItemData(itemData);
     }
 
     private ItemData createItemData(ConfigurationSection itemsSection, @Nullable Game game) {
         ItemData itemData = new ItemData();
-        int count = 0;
 
         for (ChestType chestType : ChestType.values()) {
+            int count = 0;
             ConfigurationSection chestTypeSection = itemsSection.getConfigurationSection(chestType.getName());
             if (chestTypeSection == null) {
                 // If the section does not exist in a game, use defaults
                 if (game != null && this.defaultItemData != null) {
                     itemData.setItems(chestType, this.defaultItemData.getItems(chestType));
-                    count += this.defaultItemData.getItemCount();
+                    count += this.defaultItemData.getItemCount(chestType);
                 }
             } else {
                 List<ItemStack> items = new ArrayList<>();
@@ -84,8 +83,8 @@ public class ItemManager {
                 }
                 itemData.setItems(chestType, items);
             }
+            itemData.setItemCount(chestType, count);
         }
-        itemData.setItemCount(count);
         return itemData;
     }
 

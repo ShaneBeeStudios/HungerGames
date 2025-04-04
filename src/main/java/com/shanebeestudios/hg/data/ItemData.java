@@ -9,8 +9,8 @@ import java.util.Map;
 
 public class ItemData {
 
-    private int itemCount;
     private final Map<ChestType, List<ItemStack>> items = new HashMap<>();
+    private final Map<ChestType, Integer> count = new HashMap<>();
 
     public ItemData() {
         for (ChestType chestType : ChestType.values()) {
@@ -26,12 +26,37 @@ public class ItemData {
         return this.items.get(type);
     }
 
-    public void setItemCount(int itemCount) {
-        this.itemCount = itemCount;
+    /**
+     * Set item count
+     *
+     * @param chestType ChestType to count
+     * @param itemCount Amount of items
+     */
+    public void setItemCount(ChestType chestType, int itemCount) {
+        this.count.put(chestType, itemCount);
     }
 
-    public int getItemCount() {
-        return this.itemCount;
+    /**
+     * Get item count by ChestType
+     *
+     * @param chestType ChestType to get count from
+     * @return AMount of items by ChestType
+     */
+    public int getItemCount(ChestType chestType) {
+        return this.count.get(chestType);
+    }
+
+    /**
+     * Get total item count for all chest types
+     *
+     * @return Total item count
+     */
+    public int getTotalItemCount() {
+        int count = 0;
+        for (int value : this.count.values()) {
+            count += value;
+        }
+        return count;
     }
 
     /**
