@@ -25,7 +25,9 @@ repositories {
     maven("https://jitpack.io")
 
     // MythicMobs
-    maven("https://mvn.lumine.io/repository/maven-public/")
+    maven("https://mvn.lumine.io/repository/maven-public/") {
+        content { includeGroup("io.lumine")  }
+    }
 
     // Papi
     maven("https://repo.extendedclip.com/content/repositories/placeholderapi/")
