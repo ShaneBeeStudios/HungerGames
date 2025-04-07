@@ -1,7 +1,7 @@
-package com.shanebeestudios.hg.game;
+package com.shanebeestudios.hg.api.game;
 
-import com.shanebeestudios.hg.data.ItemData;
-import com.shanebeestudios.hg.data.KitData;
+import com.shanebeestudios.hg.api.data.ItemData;
+import com.shanebeestudios.hg.api.data.KitData;
 
 /**
  * Data holder for a {@link Game Game's} items

@@ -2,8 +2,8 @@ package com.shanebeestudios.hg.plugin.managers;
 
 import com.shanebeestudios.hg.plugin.HungerGames;
 import com.shanebeestudios.hg.api.status.PlayerStatus;
-import com.shanebeestudios.hg.data.PlayerData;
-import com.shanebeestudios.hg.game.Game;
+import com.shanebeestudios.hg.api.data.PlayerData;
+import com.shanebeestudios.hg.api.game.Game;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.Nullable;
 

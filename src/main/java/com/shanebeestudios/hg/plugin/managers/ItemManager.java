@@ -2,9 +2,9 @@ package com.shanebeestudios.hg.plugin.managers;
 
 import com.shanebeestudios.hg.api.parsers.ItemParser;
 import com.shanebeestudios.hg.api.util.Util;
-import com.shanebeestudios.hg.data.ItemData;
-import com.shanebeestudios.hg.data.ItemData.ChestType;
-import com.shanebeestudios.hg.game.Game;
+import com.shanebeestudios.hg.api.data.ItemData;
+import com.shanebeestudios.hg.api.data.ItemData.ChestType;
+import com.shanebeestudios.hg.api.game.Game;
 import com.shanebeestudios.hg.plugin.HungerGames;
 import org.bukkit.Material;
 import org.bukkit.configuration.ConfigurationSection;

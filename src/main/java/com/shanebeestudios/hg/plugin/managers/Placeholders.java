@@ -1,8 +1,8 @@
 package com.shanebeestudios.hg.plugin.managers;
 
 import com.shanebeestudios.hg.plugin.HungerGames;
-import com.shanebeestudios.hg.data.Language;
-import com.shanebeestudios.hg.data.Leaderboard;
+import com.shanebeestudios.hg.api.data.Language;
+import com.shanebeestudios.hg.api.data.Leaderboard;
 import me.clip.placeholderapi.expansion.PlaceholderExpansion;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.entity.Player;

@@ -1,7 +1,7 @@
-package com.shanebeestudios.hg.game;
+package com.shanebeestudios.hg.api.game;
 
 import com.shanebeestudios.hg.api.util.Util;
-import com.shanebeestudios.hg.data.Language;
+import com.shanebeestudios.hg.api.data.Language;
 import fr.mrmicky.fastboard.adventure.FastBoard;
 import net.kyori.adventure.text.Component;
 import org.bukkit.entity.Player;

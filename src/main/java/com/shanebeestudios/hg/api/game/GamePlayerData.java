@@ -1,11 +1,11 @@
-package com.shanebeestudios.hg.game;
+package com.shanebeestudios.hg.api.game;
 
 import com.shanebeestudios.hg.api.events.PlayerLeaveGameEvent;
 import com.shanebeestudios.hg.api.gui.SpectatorGUI;
 import com.shanebeestudios.hg.api.status.Status;
 import com.shanebeestudios.hg.api.util.Util;
-import com.shanebeestudios.hg.data.KitData;
-import com.shanebeestudios.hg.data.PlayerData;
+import com.shanebeestudios.hg.api.data.KitData;
+import com.shanebeestudios.hg.api.data.PlayerData;
 import com.shanebeestudios.hg.plugin.configs.Config;
 import com.shanebeestudios.hg.plugin.managers.GameManager;
 import com.shanebeestudios.hg.plugin.managers.PlayerManager;

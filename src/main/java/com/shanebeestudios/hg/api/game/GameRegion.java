@@ -1,4 +1,4 @@
-package com.shanebeestudios.hg.game;
+package com.shanebeestudios.hg.api.game;
 
 import org.bukkit.Bukkit;
 import org.bukkit.HeightMap;

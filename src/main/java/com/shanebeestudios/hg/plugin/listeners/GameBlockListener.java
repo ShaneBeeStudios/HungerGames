@@ -1,13 +1,13 @@
 package com.shanebeestudios.hg.plugin.listeners;
 
-import com.shanebeestudios.hg.data.ItemData;
+import com.shanebeestudios.hg.api.data.ItemData;
 import com.shanebeestudios.hg.plugin.HungerGames;
 import com.shanebeestudios.hg.api.status.Status;
 import com.shanebeestudios.hg.api.util.BlockUtils;
 import com.shanebeestudios.hg.api.util.Util;
-import com.shanebeestudios.hg.game.Game;
-import com.shanebeestudios.hg.game.GameArenaData;
-import com.shanebeestudios.hg.game.GameBlockData;
+import com.shanebeestudios.hg.api.game.Game;
+import com.shanebeestudios.hg.api.game.GameArenaData;
+import com.shanebeestudios.hg.api.game.GameBlockData;
 import com.shanebeestudios.hg.plugin.configs.Config;
 import com.shanebeestudios.hg.plugin.permission.Permissions;
 import org.bukkit.Material;

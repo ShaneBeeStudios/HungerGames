@@ -2,7 +2,7 @@ package com.shanebeestudios.hg.api.util;
 
 import com.shanebeestudios.hg.plugin.HungerGames;
 import com.shanebeestudios.hg.plugin.configs.Config;
-import com.shanebeestudios.hg.data.Language;
+import com.shanebeestudios.hg.api.data.Language;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.minimessage.MiniMessage;
 import net.md_5.bungee.api.ChatColor;

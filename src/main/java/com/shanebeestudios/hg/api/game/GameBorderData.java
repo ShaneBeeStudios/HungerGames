@@ -1,4 +1,4 @@
-package com.shanebeestudios.hg.game;
+package com.shanebeestudios.hg.api.game;
 
 import com.shanebeestudios.hg.plugin.configs.Config;
 import com.shanebeestudios.hg.plugin.tasks.WorldBorderTask;

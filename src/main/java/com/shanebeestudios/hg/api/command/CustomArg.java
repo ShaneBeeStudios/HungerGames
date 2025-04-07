@@ -1,6 +1,6 @@
 package com.shanebeestudios.hg.api.command;
 
-import com.shanebeestudios.hg.game.Game;
+import com.shanebeestudios.hg.api.game.Game;
 import com.shanebeestudios.hg.plugin.managers.GameManager;
 import dev.jorel.commandapi.CommandAPI;
 import dev.jorel.commandapi.arguments.Argument;

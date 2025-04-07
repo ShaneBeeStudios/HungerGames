@@ -1,4 +1,4 @@
-package com.shanebeestudios.hg.data;
+package com.shanebeestudios.hg.api.data;
 
 import com.shanebeestudios.hg.api.util.NBTApi;
 import com.shanebeestudios.hg.api.util.Util;

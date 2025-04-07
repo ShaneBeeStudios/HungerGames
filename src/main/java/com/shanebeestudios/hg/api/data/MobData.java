@@ -1,4 +1,4 @@
-package com.shanebeestudios.hg.data;
+package com.shanebeestudios.hg.api.data;
 
 import com.google.common.collect.ImmutableList;
 import org.jetbrains.annotations.ApiStatus;

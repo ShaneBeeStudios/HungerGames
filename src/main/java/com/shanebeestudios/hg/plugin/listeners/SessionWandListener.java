@@ -2,9 +2,9 @@ package com.shanebeestudios.hg.plugin.listeners;
 
 import com.shanebeestudios.hg.plugin.HungerGames;
 import com.shanebeestudios.hg.api.util.Util;
-import com.shanebeestudios.hg.data.Language;
-import com.shanebeestudios.hg.data.PlayerSession;
-import com.shanebeestudios.hg.game.Game;
+import com.shanebeestudios.hg.api.data.Language;
+import com.shanebeestudios.hg.api.data.PlayerSession;
+import com.shanebeestudios.hg.api.game.Game;
 import com.shanebeestudios.hg.plugin.managers.GameManager;
 import com.shanebeestudios.hg.plugin.managers.SessionManager;
 import org.bukkit.Location;

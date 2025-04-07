@@ -3,7 +3,7 @@ package com.shanebeestudios.hg.api.events;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Event;
 import org.bukkit.event.HandlerList;
-import com.shanebeestudios.hg.game.Game;
+import com.shanebeestudios.hg.api.game.Game;
 
 /**
  * Called when a player leaves a game

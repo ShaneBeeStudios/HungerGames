@@ -1,4 +1,4 @@
-package com.shanebeestudios.hg.data;
+package com.shanebeestudios.hg.api.data;
 
 import org.bukkit.Bukkit;
 import org.bukkit.Location;

@@ -1,4 +1,4 @@
-package com.shanebeestudios.hg.data;
+package com.shanebeestudios.hg.api.data;
 
 import org.bukkit.Bukkit;
 import org.bukkit.GameMode;
@@ -9,8 +9,8 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.scoreboard.Scoreboard;
 import org.jetbrains.annotations.Nullable;
 import com.shanebeestudios.hg.plugin.HungerGames;
-import com.shanebeestudios.hg.game.Game;
-import com.shanebeestudios.hg.game.GameTeam;
+import com.shanebeestudios.hg.api.game.Game;
+import com.shanebeestudios.hg.api.game.GameTeam;
 import com.shanebeestudios.hg.api.util.Util;
 
 import java.util.Arrays;

@@ -1,6 +1,6 @@
 package com.shanebeestudios.hg.api.events;
 
-import com.shanebeestudios.hg.game.Game;
+import com.shanebeestudios.hg.api.game.Game;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Event;
 import org.bukkit.event.HandlerList;

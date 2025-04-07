@@ -2,9 +2,9 @@ package com.shanebeestudios.hg.plugin.managers;
 
 import com.shanebeestudios.hg.api.parsers.ItemParser;
 import com.shanebeestudios.hg.api.util.Util;
-import com.shanebeestudios.hg.data.KitData;
-import com.shanebeestudios.hg.data.KitEntry;
-import com.shanebeestudios.hg.game.Game;
+import com.shanebeestudios.hg.api.data.KitData;
+import com.shanebeestudios.hg.api.data.KitEntry;
+import com.shanebeestudios.hg.api.game.Game;
 import com.shanebeestudios.hg.plugin.HungerGames;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.file.YamlConfiguration;

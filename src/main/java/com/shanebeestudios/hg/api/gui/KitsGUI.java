@@ -2,10 +2,10 @@ package com.shanebeestudios.hg.api.gui;
 
 import com.shanebeestudios.hg.api.registry.Registries;
 import com.shanebeestudios.hg.api.util.Util;
-import com.shanebeestudios.hg.data.KitData;
-import com.shanebeestudios.hg.data.KitEntry;
-import com.shanebeestudios.hg.data.Language;
-import com.shanebeestudios.hg.game.Game;
+import com.shanebeestudios.hg.api.data.KitData;
+import com.shanebeestudios.hg.api.data.KitEntry;
+import com.shanebeestudios.hg.api.data.Language;
+import com.shanebeestudios.hg.api.game.Game;
 import com.shanebeestudios.hg.plugin.HungerGames;
 import io.papermc.paper.datacomponent.DataComponentTypes;
 import io.papermc.paper.registry.TypedKey;

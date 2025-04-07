@@ -4,7 +4,7 @@ import com.shanebeestudios.hg.plugin.HungerGames;
 import com.shanebeestudios.hg.api.status.Status;
 import com.shanebeestudios.hg.api.command.CustomArg;
 import com.shanebeestudios.hg.api.util.Util;
-import com.shanebeestudios.hg.game.Game;
+import com.shanebeestudios.hg.api.game.Game;
 import com.shanebeestudios.hg.plugin.permission.Permissions;
 import dev.jorel.commandapi.arguments.Argument;
 import dev.jorel.commandapi.arguments.LiteralArgument;

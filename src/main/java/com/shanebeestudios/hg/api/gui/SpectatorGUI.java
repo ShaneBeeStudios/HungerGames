@@ -14,7 +14,7 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.SkullMeta;
 import org.jetbrains.annotations.NotNull;
 import com.shanebeestudios.hg.plugin.HungerGames;
-import com.shanebeestudios.hg.game.Game;
+import com.shanebeestudios.hg.api.game.Game;
 import com.shanebeestudios.hg.api.util.Util;
 
 import java.util.ArrayList;

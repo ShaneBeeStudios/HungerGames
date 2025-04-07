@@ -1,8 +1,8 @@
-package com.shanebeestudios.hg.game;
+package com.shanebeestudios.hg.api.game;
 
 import com.shanebeestudios.hg.api.util.Util;
-import com.shanebeestudios.hg.data.Language;
-import com.shanebeestudios.hg.data.PlayerData;
+import com.shanebeestudios.hg.api.data.Language;
+import com.shanebeestudios.hg.api.data.PlayerData;
 import com.shanebeestudios.hg.plugin.configs.Config;
 import com.shanebeestudios.hg.plugin.managers.PlayerManager;
 import org.bukkit.entity.Player;

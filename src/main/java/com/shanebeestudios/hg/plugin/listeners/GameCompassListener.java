@@ -2,7 +2,7 @@ package com.shanebeestudios.hg.plugin.listeners;
 
 import com.shanebeestudios.hg.plugin.HungerGames;
 import com.shanebeestudios.hg.api.util.Util;
-import com.shanebeestudios.hg.game.GamePlayerData;
+import com.shanebeestudios.hg.api.game.GamePlayerData;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;

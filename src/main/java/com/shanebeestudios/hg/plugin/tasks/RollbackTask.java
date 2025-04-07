@@ -6,10 +6,10 @@ import org.bukkit.Bukkit;
 import org.bukkit.block.BlockState;
 import com.shanebeestudios.hg.plugin.HungerGames;
 import com.shanebeestudios.hg.plugin.configs.Config;
-import com.shanebeestudios.hg.data.ItemFrameData;
-import com.shanebeestudios.hg.game.Game;
+import com.shanebeestudios.hg.api.data.ItemFrameData;
+import com.shanebeestudios.hg.api.game.Game;
 import com.shanebeestudios.hg.api.status.Status;
-import com.shanebeestudios.hg.game.GameBlockData;
+import com.shanebeestudios.hg.api.game.GameBlockData;
 
 /**
  * Rollback task for resetting blocks after a game finishes

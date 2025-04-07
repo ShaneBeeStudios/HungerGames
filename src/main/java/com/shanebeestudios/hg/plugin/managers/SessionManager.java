@@ -1,6 +1,6 @@
 package com.shanebeestudios.hg.plugin.managers;
 
-import com.shanebeestudios.hg.data.PlayerSession;
+import com.shanebeestudios.hg.api.data.PlayerSession;
 import org.bukkit.entity.Player;
 
 import java.util.HashMap;

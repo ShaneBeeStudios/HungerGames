@@ -1,7 +1,6 @@
-package com.shanebeestudios.hg.data;
+package com.shanebeestudios.hg.api.data;
 
 import com.google.common.collect.ImmutableMap;
-import com.shanebeestudios.hg.api.gui.KitsGUI;
 import com.shanebeestudios.hg.api.util.Util;
 import com.shanebeestudios.hg.plugin.HungerGames;
 import org.bukkit.entity.Player;

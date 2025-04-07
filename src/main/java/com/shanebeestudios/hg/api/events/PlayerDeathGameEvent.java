@@ -1,7 +1,7 @@
 package com.shanebeestudios.hg.api.events;
 
 import com.shanebeestudios.hg.api.util.Util;
-import com.shanebeestudios.hg.game.Game;
+import com.shanebeestudios.hg.api.game.Game;
 import org.bukkit.damage.DamageSource;
 import org.bukkit.entity.Player;
 import org.bukkit.event.HandlerList;
