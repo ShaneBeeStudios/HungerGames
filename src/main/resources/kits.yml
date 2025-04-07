@@ -29,7 +29,8 @@ kits:
     # Whether or not this kit requires a permission
     # none = no permission
     # You can use any permission string you'd like
-    # Note: The permission will be prefixed with `hungergames.kit.`
+    # Note: The permission will be prefixed with `hungergames.kit.kits.`
+    # If these kits are in an arena yml file, it'll prefix with `hungergames.kit.<arena name>.`
     permission: 'none'
     helmet:
       id: 'minecraft:leather_helmet'

@@ -1,6 +1,7 @@
 package com.shanebeestudios.hg.data;
 
 import com.shanebeestudios.hg.api.util.Util;
+import com.shanebeestudios.hg.game.Game;
 import com.shanebeestudios.hg.plugin.permission.Permissions;
 import com.shanebeestudios.hg.plugin.permission.Permissions.Permission;
 import org.bukkit.entity.Player;
@@ -43,7 +44,7 @@ public class KitEntry {
      * @param permission        Permission for this kit
      * @param potionEffects     Potion effects to add
      */
-    public KitEntry(String name, List<ItemStack> inventoryContents,
+    public KitEntry(@Nullable Game game, String name, List<ItemStack> inventoryContents,
                     ItemStack helmet, ItemStack chestplate, ItemStack leggings, ItemStack boots,
                     @Nullable String permission, List<PotionEffect> potionEffects) {
         this.name = name;
@@ -54,7 +55,8 @@ public class KitEntry {
         this.boots = boots;
         this.potionEffects = potionEffects;
         if (permission != null && !permission.isEmpty()) {
-            this.permission = Permissions.registerKitPermission(name, permission);
+            String arenaName = game != null ? game.getGameArenaData().getName() : null;
+            this.permission = Permissions.registerKitPermission(arenaName, name, permission);
         }
     }
 
@@ -170,10 +172,11 @@ public class KitEntry {
     /**
      * Set the permission for this kit entry
      *
+     * @param arenaName  Name of arena to link this kit to, null to use default file
      * @param permission The permission (Will be prefixed with 'hungergames.kit.')
      */
-    public void setPermission(String permission) {
-        this.permission = Permissions.registerKitPermission(this.name, permission);
+    public void setPermission(@Nullable String arenaName, String permission) {
+        this.permission = Permissions.registerKitPermission(arenaName, this.name, permission);
     }
 
     /**

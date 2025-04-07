@@ -93,7 +93,7 @@ public class KitManager {
                 if (kitSection.contains("permission") && !kitSection.getString("permission").equalsIgnoreCase("none"))
                     permission = kitSection.getString("permission");
 
-                KitEntry kitEntry = new KitEntry(kitName, inventoryContent, helmet, chestplate, leggings, boots, permission, potionEffects);
+                KitEntry kitEntry = new KitEntry(game, kitName, inventoryContent, helmet, chestplate, leggings, boots, permission, potionEffects);
                 kit.addKitEntry(kitName, kitEntry);
                 Util.log("- Loaded kit <white>'<aqua>%s<white>'", gameName + kitName);
             } catch (Exception e) {

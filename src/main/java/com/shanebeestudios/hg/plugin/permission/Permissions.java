@@ -4,6 +4,7 @@ import com.shanebeestudios.hg.api.util.Util;
 import org.bukkit.command.CommandSender;
 import org.bukkit.permissions.PermissionDefault;
 import org.bukkit.util.permissions.DefaultPermissions;
+import org.jetbrains.annotations.Nullable;
 
 import java.util.LinkedHashMap;
 import java.util.Map;
@@ -50,8 +51,15 @@ public class Permissions {
         return getBase("command." + perm, description, defaultPermission);
     }
 
-    public static Permission registerKitPermission(String kitName, String kitPermission) {
-        return getBase("kit." + kitPermission, "Permission for kit '" + kitName + "'", PermissionDefault.OP);
+    public static Permission registerKitPermission(@Nullable String arenaName, String kitName, String kitPermission) {
+        String message;
+        if (arenaName != null) {
+            message = "Permission for kit '" + kitName + "' in arena '" + arenaName + "'";
+        } else {
+            arenaName = "kits";
+            message = "Permission for kit '" + kitName + "' in kits.yml";
+        }
+        return getBase("kit." + arenaName + "." + kitPermission, message, PermissionDefault.OP);
     }
 
     private static Permission getBase(String perm, String description, PermissionDefault defaultPermission) {
