@@ -178,9 +178,10 @@ world-border:
   countdown-end: 30
   # Final border size from the centre outward
   final-border-size: 30
-  # If true, the centre of the arena will be based on the first spawn location you set
-  # If false, the centre will be calculated by the centre of the arena's bounds
-  center-on-first-spawn: true
+  # How to center the world border
+  # Options are 'first-spawn', 'random-spawn' and 'arena-center'
+  # You can also define a specific center for each arena with the '/hg edit' command
+  center: 'arena-center'
 ## SPECTATE
 # When enabled players can spectate games without interfering with players in the game
 spectate:

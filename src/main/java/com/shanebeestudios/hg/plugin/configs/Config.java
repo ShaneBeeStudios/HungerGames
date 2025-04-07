@@ -86,7 +86,7 @@ public class Config {
     //World border
     public static boolean WORLD_BORDER_ENABLED;
     public static boolean WORLD_BORDER_INITIATE_ON_START;
-    public static boolean WORLD_BORDER_CENTER_ON_FIRST_SPAWN;
+    public static String WORLD_BORDER_CENTER;
     public static int WORLD_BORDER_COUNTDOWN_START;
     public static int WORLD_BORDER_COUNTDOWN_END;
     public static int WORLD_BORDER_FINAL_SIZE;
@@ -188,7 +188,7 @@ public class Config {
 
         WORLD_BORDER_ENABLED = config.getBoolean("world-border.enabled");
         WORLD_BORDER_INITIATE_ON_START = config.getBoolean("world-border.initiate-on-start");
-        WORLD_BORDER_CENTER_ON_FIRST_SPAWN = config.getBoolean("world-border.center-on-first-spawn");
+        WORLD_BORDER_CENTER = config.getString("world-border.center");
         WORLD_BORDER_COUNTDOWN_START = config.getInt("world-border.countdown-start");
         WORLD_BORDER_COUNTDOWN_END = config.getInt("world-border.countdown-end");
         WORLD_BORDER_FINAL_SIZE = config.getInt("world-border.final-border-size");

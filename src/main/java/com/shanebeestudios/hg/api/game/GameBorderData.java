@@ -8,11 +8,15 @@ import org.bukkit.WorldBorder;
 import org.bukkit.util.BoundingBox;
 import org.jetbrains.annotations.Nullable;
 
+import java.util.List;
+import java.util.Random;
+
 /**
  * Data class for holding a {@link Game Game's} world border
  */
 public class GameBorderData extends Data {
 
+    private final Random random = new Random();
     private boolean isDefault;
     private Location centerLocation;
     private int finalBorderSize;
@@ -62,16 +66,20 @@ public class GameBorderData extends Data {
      */
     public void resetBorder() {
         Location center;
+        GameArenaData gameArenaData = this.game.getGameArenaData();
+        List<Location> spawns = gameArenaData.getSpawns();
         if (this.centerLocation != null) {
             center = this.centerLocation;
-        } else if (Config.WORLD_BORDER_CENTER_ON_FIRST_SPAWN) {
-            center = this.game.getGameArenaData().getSpawns().getFirst();
         } else {
-            center = this.game.getGameArenaData().getGameRegion().getCenter();
+            switch (Config.WORLD_BORDER_CENTER) { // 'first-spawn', 'random-spawn' and 'arena-center'
+                case "first-spawn" -> center = spawns.getFirst();
+                case "random-spawn" -> center = spawns.get(this.random.nextInt(spawns.size()));
+                default -> center = gameArenaData.getGameRegion().getCenter();
+            }
         }
         this.worldBorder.setCenter(center);
 
-        GameRegion bound = this.game.getGameArenaData().getGameRegion();
+        GameRegion bound = gameArenaData.getGameRegion();
         BoundingBox boundingBox = bound.getBoundingBox();
 
         double x = Math.max(center.getX() - boundingBox.getMinX(), boundingBox.getMaxX() - center.getX());
