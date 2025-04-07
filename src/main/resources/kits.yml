@@ -2,6 +2,28 @@
 # Create new ones, rename the current ones, delete them, go nuts
 # See KITS section in wiki for more info (https://github.com/ShaneBeeStudios/HungerGames/wiki/Kits)
 kits:
+  # This kit will be given to players automatically when they join
+  # If you don't want that, just delete this kit
+  default:
+    helmet:
+      id: 'minecraft:leather_helmet'
+      count: 1
+    chestplate:
+      id: 'minecraft:leather_chestplate'
+      count: 1
+    leggings:
+      id: 'minecraft:leather_leggings'
+      count: 1
+    boots:
+      id: 'minecraft:leather_boots'
+      count: 1
+    items:
+      '1':
+        id: 'minecraft:wooden_sword'
+      '2':
+        id: 'minecraft:bread'
+        count: 6
+
   # The name of the kit, change to whatever you would like
   bowman:
     # Whether or not this kit requires a permission

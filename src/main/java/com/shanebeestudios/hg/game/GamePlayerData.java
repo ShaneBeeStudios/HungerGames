@@ -108,15 +108,15 @@ public class GamePlayerData extends Data {
             Util.sendMessage(player, " ");
         String kitNames = kitData.getKitListString(player);
         Util.sendMessage(player, " ");
-        Util.sendMessage(player, this.lang.kit_join_header);
+        Util.sendMessage(player, this.lang.kits_join_header);
         Util.sendMessage(player, " ");
         if (Permissions.KITS.has(player) && kitData.hasKits()) {
-            Util.sendMessage(player, this.lang.kit_join_msg);
+            Util.sendMessage(player, this.lang.kits_join_msg);
             Util.sendMessage(player, " ");
-            Util.sendMessage(player, this.lang.kit_join_avail + " " + kitNames);
+            Util.sendMessage(player, this.lang.kits_join_avail + " " + kitNames);
             Util.sendMessage(player, " ");
         }
-        Util.sendMessage(player, this.lang.kit_join_footer);
+        Util.sendMessage(player, this.lang.kits_join_footer);
         Util.sendMessage(player, " ");
     }
 
@@ -249,6 +249,7 @@ public class GamePlayerData extends Data {
 
             this.game.getGameScoreboard().updateBoards();
             this.game.getGameCommandData().runCommands(GameCommandData.CommandType.JOIN, player);
+            this.game.getGameItemData().getKitData().giveDefaultKit(player);
         });
     }
 

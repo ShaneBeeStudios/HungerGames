@@ -42,13 +42,6 @@ public class Language {
     public String game_full;
     public String player_won;
     public String winning_amount;
-    public String kit_join_header;
-    public String kit_join_footer;
-    public String kit_join_msg;
-    public String kit_join_avail;
-    public String kit_no_perm;
-    public String kit_doesnt_exist;
-    public String kit_disabled;
     public String team_invite_1;
     public String team_invite_2;
     public String team_invite_3;
@@ -209,6 +202,16 @@ public class Language {
     public String death_messages_prefix;
     public String death_messages_other;
 
+    // Kits
+    public String kits_join_header;
+    public String kits_join_footer;
+    public String kits_join_msg;
+    public String kits_join_avail;
+    public String kits_no_perm;
+    public String kits_doesnt_exist;
+    public String kits_disabled;
+    public String kits_give_default;
+
     // Scoreboard
     public String scoreboard_sidebar_title;
     public String scoreboard_sidebar_arena;
@@ -301,13 +304,6 @@ public class Language {
         game_full = lang.getString("game-full");
         player_won = lang.getString("player-won");
 
-        kit_join_header = lang.getString("kit-join-header");
-        kit_join_footer = lang.getString("kit-join-footer");
-        kit_join_msg = lang.getString("kit-join-msg");
-        kit_join_avail = lang.getString("kit-join-available");
-        kit_no_perm = lang.getString("kit-no-perm");
-        kit_doesnt_exist = lang.getString("kit-doesnt-exist");
-        kit_disabled = lang.getString("kit-disabled");
         winning_amount = lang.getString("winning-amount");
         team_invite_1 = lang.getString("team.invite-1");
         team_invite_2 = lang.getString("team.invite-2");
@@ -328,7 +324,7 @@ public class Language {
 
         cmd_spawn_same = lang.getString("cmd-spawn-same");
         cmd_spawn_set = lang.getString("cmd-spawn-set");
-        cmd_kit_no_change = lang.getString("cmd-kit-no-change");
+        cmd_kit_no_change = lang.getString("cmd-kits.no-change");
         cmd_reload_attempt = lang.getString("cmd-reload-attempt");
         cmd_reload_reloaded_arena = lang.getString("cmd-reload-reloaded-arena");
         cmd_reload_reloaded_config = lang.getString("cmd-reload-reloaded-config");
@@ -489,6 +485,16 @@ public class Language {
         }
         this.death_messages_prefix = this.lang.getString("death-messages.prefix");
         this.death_messages_other = this.lang.getString("death-messages.other");
+
+        // Kits
+        this.kits_join_header = this.lang.getString("kits.join-header");
+        this.kits_join_footer = this.lang.getString("kits.join-footer");
+        this.kits_join_msg = this.lang.getString("kits.join-msg");
+        this.kits_join_avail = this.lang.getString("kits.join-available");
+        this.kits_no_perm = this.lang.getString("kits.no-perm");
+        this.kits_doesnt_exist = this.lang.getString("kits.doesnt-exist");
+        this.kits_disabled = this.lang.getString("kits.disabled");
+        this.kits_give_default = this.lang.getString("kits.give-default");
 
         // Scoreboard
         this.scoreboard_sidebar_title = this.lang.getString("scoreboard.sidebar.title");

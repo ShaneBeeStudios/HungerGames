@@ -46,13 +46,15 @@ spectator-head-lore: '<grey>Click to TP to player'
 spectator-start-title: 'You are now spectating!'
 
 #  KIT MESSAGES
-kit-join-header: '<red>><grey>----------[<white>Welcome to Hunger<white>Games<grey>]<grey>----------<red><'
-kit-join-msg: '<grey>           - <dark_aqua>Pick a kit using <aqua>/hg kit <grey><<reset>kit-name<grey>>'
-kit-join-available: '<dark_aqua>  Available Kits:<aqua>'
-kit-join-footer: '<red>><grey>------------------------------------------<red><'
-kit-no-perm: '<red>You do not have permission to use this kit!'
-kit-doesnt-exist: '<red>Does not exist'
-kit-disabled: '<red>Kits disabled in this game.'
+kits:
+  join-header: '<red>><grey>----------[<white>Welcome to Hunger<white>Games<grey>]<grey>----------<red><'
+  join-msg: '<grey>           - <dark_aqua>Pick a kit using <aqua>/hg kit <grey><<reset>name<grey>>'
+  join-available: '<dark_aqua>  Available Kits:<aqua>'
+  join-footer: '<red>><grey>------------------------------------------<red><'
+  no-perm: '<red>You do not have permission to use this kit!'
+  doesnt-exist: '<red>Does not exist'
+  disabled: '<red>Kits disabled in this game.'
+  give-default: 'You have been given the default kit'
 
 #  SCOREBOARD
 scoreboard:
@@ -168,7 +170,7 @@ cmd-spawn-same: '<red>You cannot have two spawns in the same location!'
 cmd-spawn-set: '<green>You set HungerGames spawn <grey>#<number><green>!'
 
 ## Kit
-cmd-kit-no-change: '<red>You can not change your kit while the game is running!'
+cmd-no-change: '<red>You can not change your kit while the game is running!'
 
 ## Reload
 cmd-reload-attempt: '<green>Attempting to reload HungerGames!'

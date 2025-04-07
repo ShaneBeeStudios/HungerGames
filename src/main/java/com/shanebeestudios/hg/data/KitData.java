@@ -1,8 +1,8 @@
 package com.shanebeestudios.hg.data;
 
 import com.google.common.collect.ImmutableMap;
-import com.shanebeestudios.hg.plugin.HungerGames;
 import com.shanebeestudios.hg.api.util.Util;
+import com.shanebeestudios.hg.plugin.HungerGames;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.Nullable;
 
@@ -26,6 +26,18 @@ public class KitData {
     }
 
     /**
+     * Give a player the default kit
+     *
+     * @param player Player to give kit to
+     */
+    public void giveDefaultKit(Player player) {
+        if (this.kitEntries.containsKey("default")) {
+            setKit(player, "default");
+            Util.sendPrefixedMessage(player, this.lang.kits_give_default);
+        }
+    }
+
+    /**
      * Set a kit for a player
      *
      * @param player  The player to set the kit for
@@ -33,7 +45,7 @@ public class KitData {
      */
     public void setKit(Player player, String kitName) {
         if (!this.kitEntries.containsKey(kitName)) {
-            Util.sendMessage(player, "<red>" + kitName + this.lang.kit_doesnt_exist);
+            Util.sendMessage(player, "<red>" + kitName + this.lang.kits_doesnt_exist);
             Util.sendMessage(player, "Available Kits:" + getKitListString(player));
         } else {
             this.kitEntries.get(kitName).setInventoryContent(player);
