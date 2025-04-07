@@ -1,29 +1,36 @@
 package com.shanebeestudios.hg.plugin.managers;
 
-import com.shanebeestudios.hg.api.parsers.ItemParser;
-import com.shanebeestudios.hg.api.util.Util;
 import com.shanebeestudios.hg.api.data.ItemData;
 import com.shanebeestudios.hg.api.data.ItemData.ChestType;
+import com.shanebeestudios.hg.api.data.Language;
 import com.shanebeestudios.hg.api.game.Game;
+import com.shanebeestudios.hg.api.parsers.ItemParser;
+import com.shanebeestudios.hg.api.util.Constants;
+import com.shanebeestudios.hg.api.util.Util;
 import com.shanebeestudios.hg.plugin.HungerGames;
+import io.papermc.paper.datacomponent.DataComponentTypes;
 import org.bukkit.Material;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.inventory.ItemStack;
-import org.bukkit.inventory.meta.ItemMeta;
+import org.bukkit.persistence.PersistentDataContainer;
+import org.bukkit.persistence.PersistentDataType;
 import org.jetbrains.annotations.Nullable;
 
 import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
+@SuppressWarnings("UnstableApiUsage")
 public class ItemManager {
 
     private final HungerGames plugin;
+    private final Language lang;
     private ItemData defaultItemData;
 
     public ItemManager(HungerGames plugin) {
         this.plugin = plugin;
+        this.lang = plugin.getLang();
         loadDefaultItems();
     }
 
@@ -108,10 +115,11 @@ public class ItemManager {
 
     public ItemStack getSpectatorCompass() {
         ItemStack compass = new ItemStack(Material.COMPASS);
-        ItemMeta meta = compass.getItemMeta();
-        assert meta != null;
-        meta.displayName(Util.getMini(plugin.getLang().spectator_compass));
-        compass.setItemMeta(meta);
+        compass.setData(DataComponentTypes.ITEM_NAME, Util.getMini(this.lang.spectate_compass_name));
+        compass.editMeta(itemMeta -> {
+            PersistentDataContainer pdc = itemMeta.getPersistentDataContainer();
+            pdc.set(Constants.SPECTATOR_COMPASS_KEY, PersistentDataType.BOOLEAN, true);
+        });
         return compass;
     }
 

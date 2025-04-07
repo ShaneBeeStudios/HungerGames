@@ -20,4 +20,9 @@ public class Constants {
 
     public static NamespacedKey CHEST_DROP_BLOCK = Util.getPluginKey("chest_drop");
 
+    /**
+     * Key used for spectator compass
+     */
+    public static NamespacedKey SPECTATOR_COMPASS_KEY = Util.getPluginKey("spectator_compass");
+
 }

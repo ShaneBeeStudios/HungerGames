@@ -1,11 +1,10 @@
 package com.shanebeestudios.hg.api.game;
 
-import com.shanebeestudios.hg.api.events.PlayerLeaveGameEvent;
-import com.shanebeestudios.hg.api.gui.SpectatorGUI;
-import com.shanebeestudios.hg.api.status.Status;
-import com.shanebeestudios.hg.api.util.Util;
 import com.shanebeestudios.hg.api.data.KitData;
 import com.shanebeestudios.hg.api.data.PlayerData;
+import com.shanebeestudios.hg.api.events.PlayerLeaveGameEvent;
+import com.shanebeestudios.hg.api.status.Status;
+import com.shanebeestudios.hg.api.util.Util;
 import com.shanebeestudios.hg.plugin.configs.Config;
 import com.shanebeestudios.hg.plugin.managers.GameManager;
 import com.shanebeestudios.hg.plugin.managers.PlayerManager;
@@ -46,7 +45,6 @@ public class GamePlayerData extends Data {
 
     private final PlayerManager playerManager;
     private final GameManager gameManager;
-    private final SpectatorGUI spectatorGUI;
 
     // Player Lists
     final List<Player> players = new ArrayList<>();
@@ -63,7 +61,6 @@ public class GamePlayerData extends Data {
         super(game);
         this.playerManager = this.plugin.getPlayerManager();
         this.gameManager = this.plugin.getGameManager();
-        this.spectatorGUI = new SpectatorGUI(game);
     }
 
     // TODO Data methods
@@ -93,10 +90,6 @@ public class GamePlayerData extends Data {
 
     void clearSpectators() {
         spectators.clear();
-    }
-
-    public SpectatorGUI getSpectatorGUI() {
-        return spectatorGUI;
     }
 
     // Utility methods
@@ -383,7 +376,7 @@ public class GamePlayerData extends Data {
 
     private Title createTitle() {
         return Title.title(this.game.getGameArenaData().getNameComponent(),
-            Util.getMini(this.lang.spectator_start_title),
+            Util.getMini(this.lang.spectate_start_title),
             Times.times(Duration.ofMillis(500), Duration.ofSeconds(5), Duration.ofMillis(500)));
     }
 

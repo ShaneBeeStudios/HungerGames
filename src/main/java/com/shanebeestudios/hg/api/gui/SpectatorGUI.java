@@ -1,92 +1,81 @@
 package com.shanebeestudios.hg.api.gui;
 
+import com.shanebeestudios.hg.api.data.Language;
+import com.shanebeestudios.hg.api.game.Game;
+import com.shanebeestudios.hg.api.util.Util;
+import com.shanebeestudios.hg.plugin.HungerGames;
 import net.kyori.adventure.text.Component;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.entity.Player;
-import org.bukkit.event.EventHandler;
-import org.bukkit.event.Listener;
-import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.InventoryHolder;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.SkullMeta;
 import org.jetbrains.annotations.NotNull;
-import com.shanebeestudios.hg.plugin.HungerGames;
-import com.shanebeestudios.hg.api.game.Game;
-import com.shanebeestudios.hg.api.util.Util;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
-public class SpectatorGUI implements InventoryHolder, Listener {
+public class SpectatorGUI implements InventoryHolder {
 
-    private final Inventory inv;
-    private final Game game;
+    private final Language lang = HungerGames.getPlugin().getLang();
+    private final Player player;
+    private final Inventory inventory;
+    private final Map<Integer, Player> activePlayers = new HashMap<>();
 
-    public SpectatorGUI(Game game) {
-        this.game = game;
-        int size = (game.getGameArenaData().getMaxPlayers() / 9) + 1;
-        this.inv = Bukkit.createInventory(this, 9 * Math.min(size, 6), game.getGameArenaData().getNameComponent());
-        Bukkit.getPluginManager().registerEvents(this, HungerGames.getPlugin());
+    public SpectatorGUI(Game game, Player player) {
+        this.player = player;
+        List<Player> gamePlayers = game.getGamePlayerData().getPlayers();
+
+        int size = ((gamePlayers.size() / 9) + 1) * 9;
+        String name = game.getGameArenaData().getName();
+        this.inventory = Bukkit.createInventory(this, size,
+            Util.getMini(this.lang.spectate_gui_title.replace("<arena>", name)));
+
+        int slot = 0;
+        for (Player activePlayer : gamePlayers) {
+            ItemStack head = getPlayerHead(activePlayer);
+            this.inventory.setItem(slot, head);
+            this.activePlayers.put(slot, activePlayer);
+            slot++;
+        }
     }
 
     @NotNull
     @Override
     public Inventory getInventory() {
-        return inv;
+        return this.inventory;
     }
 
-    private void initializeItems() {
-        inv.clear();
-        int i = 0;
-        for (Player player : game.getGamePlayerData().getPlayers()) {
-            inv.setItem(i, getHead(player));
-            i++;
-        }
-    }
-
-    private ItemStack getHead(OfflinePlayer player) {
-        ItemStack head = new ItemStack(Material.PLAYER_HEAD);
-        SkullMeta meta = ((SkullMeta) head.getItemMeta());
+    private ItemStack getPlayerHead(OfflinePlayer player) {
+        ItemStack itemStack = new ItemStack(Material.PLAYER_HEAD);
+        SkullMeta meta = ((SkullMeta) itemStack.getItemMeta());
         assert meta != null;
         meta.setOwningPlayer(player);
         meta.displayName(Util.getMini(player.getName()));
-        List<Component> lores = new ArrayList<>();
-        for (String s : HungerGames.getPlugin().getLang().spectator_compass_head_lore.split(";")) {
-            lores.add(Util.getMini(s));
+        List<Component> lore = new ArrayList<>();
+        for (String line : this.lang.spectate_compass_head_lore) {
+            lore.add(Util.getMini(line));
         }
-        meta.lore(lores);
-        head.setItemMeta(meta);
-        return head;
+        meta.lore(lore);
+        itemStack.setItemMeta(meta);
+        return itemStack;
     }
 
-    public void openInventory(Player player) {
-        player.openInventory(inv);
-        initializeItems();
+    public void open() {
+        this.player.openInventory(this.inventory);
     }
 
-    @EventHandler
-    private void onClick(InventoryClickEvent event) {
-        if (inv.getHolder() != this) return;
-        if (!game.getGamePlayerData().getSpectators().contains(event.getWhoClicked().getUniqueId())) return;
-
-        event.setCancelled(true);
-        Player player = ((Player) event.getWhoClicked());
-        ItemStack clickedItem = event.getCurrentItem();
-
-        if (clickedItem == null || clickedItem.getType() == Material.AIR) return;
-        if (!(clickedItem.getItemMeta() instanceof SkullMeta)) return;
-        Player clicked = getClicked(((SkullMeta) clickedItem.getItemMeta()));
-        if (clicked == null) return;
-        player.teleport(clicked);
-    }
-
-    private Player getClicked(SkullMeta meta) {
-        OfflinePlayer player = meta.getOwningPlayer();
-        if (player == null || !player.isOnline() || !game.getGamePlayerData().getPlayers().contains(player.getUniqueId())) return null;
-        return ((Player) player);
+    public void click(int slot) {
+        Player player = this.activePlayers.get(slot);
+        if (player != null) {
+            this.player.closeInventory();
+            this.player.teleport(player.getLocation());
+        }
     }
 
 }

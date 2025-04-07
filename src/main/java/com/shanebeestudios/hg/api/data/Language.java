@@ -1,7 +1,7 @@
 package com.shanebeestudios.hg.api.data;
 
-import com.shanebeestudios.hg.plugin.HungerGames;
 import com.shanebeestudios.hg.api.util.Util;
+import com.shanebeestudios.hg.plugin.HungerGames;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
@@ -90,9 +90,6 @@ public class Language {
     public String lobby_sign_1_3;
     public String lobby_sign_2_1;
     public String lobby_sign_3_1;
-    public String spectator_compass;
-    public String spectator_compass_head_lore;
-    public String spectator_start_title;
 
     // Tracking Stick
     public String tracking_stick_name;
@@ -232,6 +229,12 @@ public class Language {
     public String scoreboard_sidebar_players_alive;
     public String scoreboard_sidebar_players_alive_num;
     public String scoreboard_show_health_name;
+
+    // Spectator
+    public String spectate_gui_title;
+    public String spectate_compass_name;
+    public List<String> spectate_compass_head_lore;
+    public String spectate_start_title;
 
     // Status
     public String game_status_running;
@@ -375,10 +378,6 @@ public class Language {
         lobby_sign_cost = lang.getString("lobby-signs.sign-1.line-4");
         lobby_sign_2_1 = lang.getString("lobby-signs.sign-2.line-1");
         lobby_sign_3_1 = lang.getString("lobby-signs.sign-3.line-1");
-
-        spectator_compass = lang.getString("spectator-compass");
-        spectator_compass_head_lore = lang.getString("spectator-head-lore");
-        spectator_start_title = lang.getString("spectator-start-title");
 
         // ARENA DEBUG
         arena_debug_need_more_spawns = lang.getString("arena-debug.need-more-spawns");
@@ -528,6 +527,12 @@ public class Language {
         this.scoreboard_sidebar_players_alive = this.lang.getString("scoreboard.sidebar.players-alive");
         this.scoreboard_sidebar_players_alive_num = this.lang.getString("scoreboard.sidebar.players-alive-num");
         this.scoreboard_show_health_name = this.lang.getString("scoreboard.show-health.name");
+
+        // Spectator
+        this.spectate_gui_title = this.lang.getString("spectate.gui.title");
+        this.spectate_compass_name = this.lang.getString("spectate.compass.name");
+        this.spectate_compass_head_lore = this.lang.getStringList("spectate.compass.head-lore");
+        this.spectate_start_title = this.lang.getString("spectate.start-title");
 
         // Status
         this.game_status_running = this.lang.getString("game-status.running");

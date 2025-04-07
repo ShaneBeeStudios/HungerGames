@@ -41,9 +41,14 @@ player-won: '<aqua><winner> <gold>won HungerGames at arena <aqua><arena><grey>!'
 winning-amount: '<grey>You received <aqua>$<amount> <grey>for winning <dark_aqua>Hunger<aqua>Games!'
 
 #  SPECTATOR
-spectator-compass: '<dark_aqua>Spectator Compass'
-spectator-head-lore: '<grey>Click to TP to player'
-spectator-start-title: 'You are now spectating!'
+spectate:
+  gui:
+    title: '<grey>Spectators of <aqua><arena>'
+  compass:
+    name: '<#0EE7CD>Spectator Compass'
+    head-lore:
+      - '<!italic><grey>Click to teleport to player'
+  start-title: 'You are now spectating!'
 
 #  KIT MESSAGES
 kits:
