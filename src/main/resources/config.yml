@@ -42,12 +42,6 @@ settings:
   # be teleported back to their previous location (ie: where they ran the command)
   # This value will be ignored when clicking lobby signs
   save-previous-location: true
-  # Blocks that will be represented as bonus chests
-  # prefix with '#' to use a block tag
-  bonus-block-types:
-    - 'minecraft:trapped_chest'
-    - 'minecraft:barrel'
-    - '#minecraft:shulker_boxes'
 
   # The location players will teleport to after leaving a game
   # This can be changed per arena
@@ -118,6 +112,20 @@ chests:
   bonus:
     min-content: 1
     max-content: 5
+    # Blocks that will be represented as bonus chests
+    # prefix with '#' to use a block tag
+    block-types:
+      - 'minecraft:barrel'
+      - 'minecraft:trapped_chest'
+      - '#minecraft:shulker_boxes'
+    randomize:
+      # When enabled, the placed blocks will be replaced when the game starts
+      # The blocks will be replaced with the first element of 'chests.bonus.block-types' from above
+      enabled: true
+      # Place this block randomly around your arena to be replaced when a game starts
+      block: 'minecraft:pink_wool'
+      # Chance a block will be replaced (out of 100)
+      chance: 50
   # Chest drops
   chest-drop:
     # Whether to enable chest drops

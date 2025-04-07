@@ -30,7 +30,6 @@ public class Config {
     public static int TRACKING_STICK_USES;
     public static int PLAYERS_FOR_TRACKING_STICK;
     public static int SETTINGS_TELEPORT_AT_END_TIME;
-    public static List<String> SETTINGS_BONUS_BLOCK_TYPES;
     public static boolean savePreviousLocation;
     public static int SETTINGS_FREE_ROAM_TIME;
     public static Location GLOBAL_EXIT_LOCATION;
@@ -65,15 +64,20 @@ public class Config {
     public static boolean ROLLBACK_ALLOW_ITEMFRAME_TAKE;
 
     // Chests
-    // Regular
+    // Chests - Regular
     public static int CHESTS_REGULAR_MIN_CONTENT;
     public static int CHESTS_REGULAR_MAX_CONTENT;
 
-    // Bonus
+    // Chests - Bonus
     public static int CHESTS_BONUS_MIN_CONTENT;
     public static int CHESTS_BONUS_MAX_CONTENT;
+    public static List<String> CHESTS_BONUS_BLOCK_TYPES;
+    // Chests - Bonus - Randomize
+    public static boolean CHESTS_BONUS_RANDOMIZE_ENABLED;
+    public static int CHESTS_BONUS_RANDOMIZE_CHANCE;
+    public static String CHESTS_BONUS_RANDOMIZE_BLOCK;
 
-    // Chest Drops
+    // Chests - Drops
     public static boolean CHESTS_CHEST_DROP_ENABLED;
     public static int CHESTS_CHEST_DROP_INTERVAL;
     public static int CHESTS_CHEST_DROP_MIN_CONTENT;
@@ -131,7 +135,6 @@ public class Config {
         TRACKING_STICK_USES = config.getInt("settings.trackingstick-uses");
         PLAYERS_FOR_TRACKING_STICK = config.getInt("settings.players-for-trackingstick");
         savePreviousLocation = config.getBoolean("settings.save-previous-location");
-        SETTINGS_BONUS_BLOCK_TYPES = config.getStringList("settings.bonus-block-types");
         SETTINGS_TELEPORT_AT_END_TIME = config.getInt("settings.teleport-at-end-time");
         SETTINGS_FREE_ROAM_TIME = config.getInt("settings.free-room-time");
         String locString = config.getString("settings.global-exit-location");
@@ -174,6 +177,10 @@ public class Config {
         CHESTS_REGULAR_MAX_CONTENT = config.getInt("chests.regular.max-content");
         CHESTS_BONUS_MIN_CONTENT = config.getInt("chests.bonus.min-content");
         CHESTS_BONUS_MAX_CONTENT = config.getInt("chests.bonus.max-content");
+        CHESTS_BONUS_BLOCK_TYPES = config.getStringList("chests.bonus.block-types");
+        CHESTS_BONUS_RANDOMIZE_ENABLED = config.getBoolean("chests.bonus.randomize.enabled");
+        CHESTS_BONUS_RANDOMIZE_CHANCE = config.getInt("chests.bonus.randomize.chance");
+        CHESTS_BONUS_RANDOMIZE_BLOCK = config.getString("chests.bonus.randomize.block");
         CHESTS_CHEST_DROP_ENABLED = config.getBoolean("chests.chest-drop.enabled");
         CHESTS_CHEST_DROP_INTERVAL = config.getInt("chests.chest-drop.interval");
         CHESTS_CHEST_DROP_MIN_CONTENT = config.getInt("chests.chest-drop.min-content");

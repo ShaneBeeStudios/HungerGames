@@ -1,9 +1,15 @@
 package com.shanebeestudios.hg.game;
 
+import com.shanebeestudios.hg.api.util.BlockUtils;
 import com.shanebeestudios.hg.data.ItemData;
 import com.shanebeestudios.hg.data.ItemFrameData;
+import com.shanebeestudios.hg.plugin.configs.Config;
 import org.bukkit.Location;
+import org.bukkit.Material;
+import org.bukkit.block.Block;
 import org.bukkit.block.BlockState;
+import org.bukkit.block.BlockType;
+import org.bukkit.block.data.BlockData;
 import org.bukkit.entity.ItemFrame;
 import org.bukkit.inventory.InventoryHolder;
 import org.jetbrains.annotations.NotNull;
@@ -14,6 +20,8 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
+import java.util.Random;
 import java.util.UUID;
 
 /**
@@ -22,8 +30,10 @@ import java.util.UUID;
 @SuppressWarnings("MismatchedQueryAndUpdateOfCollection")
 public class GameBlockData extends Data {
 
+    private final Random random = new Random();
     private final Map<ItemData.ChestType, List<Location>> chests = new HashMap<>();
     private final List<BlockState> blocks = new ArrayList<>();
+    private final List<Block> randomBonusChests = new ArrayList<>();
     private final Map<UUID, ItemFrameData> itemFrameData = new HashMap<>();
     private final GameLobbyWall gameLobbyWall;
 
@@ -159,7 +169,27 @@ public class GameBlockData extends Data {
      */
     public void logBlocksForRollback() {
         for (Location location : this.getGame().getGameArenaData().getGameRegion().getBlocks(null)) {
-            this.blocks.add(location.getBlock().getState());
+            Block block = location.getBlock();
+            this.blocks.add(block.getState());
+            if (Config.CHESTS_BONUS_RANDOMIZE_ENABLED && BlockUtils.isBonusBlockReplacement(block)) {
+                this.randomBonusChests.add(block);
+                block.setType(Material.AIR);
+            }
+        }
+    }
+
+    @SuppressWarnings("UnstableApiUsage")
+    public void setupRandomizedBonusChests() {
+        Optional<BlockType> first = BlockUtils.getBonusBlockTypes().stream().findFirst();
+        if (first.isEmpty()) return;
+        BlockData blockData = first.get().createBlockData();
+
+        if (Config.CHESTS_BONUS_RANDOMIZE_ENABLED) {
+            this.randomBonusChests.forEach(bonusChest -> {
+               if (this.random.nextInt(100) < Config.CHESTS_BONUS_RANDOMIZE_CHANCE) {
+                   bonusChest.setBlockData(blockData);
+               }
+            });
         }
     }
 
@@ -213,6 +243,7 @@ public class GameBlockData extends Data {
      */
     public void resetBlocks() {
         this.blocks.clear();
+        this.randomBonusChests.clear();
     }
 
     /**

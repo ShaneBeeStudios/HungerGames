@@ -231,6 +231,7 @@ public class Game {
         // TODO Broadcast?!?!?
         long start = System.currentTimeMillis();
         this.gameBlockData.logBlocksForRollback();
+        this.gameBlockData.setupRandomizedBonusChests();
         long fin = System.currentTimeMillis() - start;
         Util.log("Logged blocks in %s ms", fin);
     }

@@ -19,6 +19,7 @@ public class BlockUtils {
 
     // Preset to empty lists, just in case
     private static ImmutableSet<BlockType> BONUS_BLOCK_TYPES = ImmutableSet.of();
+    private static BlockType BONUS_BLOCK_REPLACEMENT_TYPE;
     private static ImmutableSet<BlockType> BREAKABLE_BLOCK_TYPES = ImmutableSet.of();
     private static boolean BREAKABLE_BLOCK_ALL = false;
 
@@ -27,13 +28,18 @@ public class BlockUtils {
      * <p>Should only be used internally</p>
      */
     public static void setupBuilder() {
-        BONUS_BLOCK_TYPES = setup(Config.SETTINGS_BONUS_BLOCK_TYPES).build();
+        BONUS_BLOCK_TYPES = setup(Config.CHESTS_BONUS_BLOCK_TYPES).build();
+        BONUS_BLOCK_REPLACEMENT_TYPE = parseBlockType(Config.CHESTS_BONUS_RANDOMIZE_BLOCK);
 
         if (Config.ROLLBACK_EDITABLE_BLOCKS.contains("all")) {
             BREAKABLE_BLOCK_ALL = true;
         } else {
             BREAKABLE_BLOCK_TYPES = setup(Config.ROLLBACK_EDITABLE_BLOCKS).build();
         }
+    }
+
+    public static ImmutableSet<BlockType> getBonusBlockTypes() {
+        return BONUS_BLOCK_TYPES;
     }
 
     /**
@@ -46,6 +52,17 @@ public class BlockUtils {
         Material blockMaterial = block.getType();
         // No mater what is put in the config, a chest will never be a bonus block
         return blockMaterial != Material.CHEST && BONUS_BLOCK_TYPES.contains(blockMaterial.asBlockType());
+    }
+
+    /**
+     * Check if a block can be replaced as a bonus block
+     *
+     * @param block Block to check
+     * @return Whether the block can be replaced as a bonus block
+     */
+    public static boolean isBonusBlockReplacement(Block block) {
+        if (BONUS_BLOCK_REPLACEMENT_TYPE == null) return false;
+        return BONUS_BLOCK_REPLACEMENT_TYPE.equals(block.getType().asBlockType());
     }
 
     /**
@@ -85,20 +102,28 @@ public class BlockUtils {
                 }
 
             } else {
-                NamespacedKey key = NamespacedKey.fromString(blockTypeString);
-                if (key != null) {
-                    BlockType blockType = Registries.BLOCK_TYPE_REGISTRY.get(key);
-                    if (blockType != null) {
-                        builder.add(blockType);
-                    } else {
-                        Util.warning("Unknown block type: <red>" + blockTypeString);
-                    }
-                } else {
-                    Util.warning("Unknown block type: <red>" + blockTypeString);
+                BlockType blockType = parseBlockType(blockTypeString);
+                if (blockType != null) {
+                    builder.add(blockType);
                 }
             }
         }
         return builder;
+    }
+
+    private static BlockType parseBlockType(String blockTypeString) {
+        NamespacedKey key = NamespacedKey.fromString(blockTypeString);
+        if (key != null) {
+            BlockType blockType = Registries.BLOCK_TYPE_REGISTRY.get(key);
+            if (blockType != null) {
+                return blockType;
+            } else {
+                Util.warning("Unknown block type: <red>" + blockTypeString);
+            }
+        } else {
+            Util.warning("Unknown block type: <red>" + blockTypeString);
+        }
+        return null;
     }
 
 }
