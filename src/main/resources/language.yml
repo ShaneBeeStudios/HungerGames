@@ -50,11 +50,31 @@ kits:
   join-header: '<red>><grey>----------[<white>Welcome to Hunger<white>Games<grey>]<grey>----------<red><'
   join-msg: '<grey>           - <dark_aqua>Pick a kit using <aqua>/hg kit <grey><<reset>name<grey>>'
   join-available: '<dark_aqua>  Available Kits:<aqua>'
+  join-kits-command: '<grey>  You can also run <aqua>/hg kits<grey> to open the kits GUI.'
   join-footer: '<red>><grey>------------------------------------------<red><'
   no-perm: '<red>You do not have permission to use this kit!'
   doesnt-exist: '<red>Does not exist'
   disabled: '<red>Kits disabled in this game.'
   give-default: 'You have been given the default kit'
+
+  # Main kits GUI
+  kits-gui:
+    title: '<green>Available Kits'
+
+  # GUI for individual kits
+  kit-gui:
+    title: '<grey>Kit: <aqua><name>'
+    exit: '<red>Exit'
+    apply: '<green>Apply'
+    helmet-none: '<red>No Helmet'
+    chestplate-none: '<red>No Chestplate'
+    leggings-none: '<red>No Leggings'
+    boots-none: '<red>No Boots'
+    potion-effects: '<aqua><!italic>Potion Effects'
+    potion-effect-none: '<red>No potion effects!'
+    # <type> will be used as a translation key to translate to the client's language
+    potion-effect-lore: '<!italic>- <yellow><lang:<type>>'
+
 
 #  SCOREBOARD
 scoreboard:

@@ -13,6 +13,7 @@ import com.shanebeestudios.hg.plugin.listeners.GameCommandListener;
 import com.shanebeestudios.hg.plugin.listeners.GameCompassListener;
 import com.shanebeestudios.hg.plugin.listeners.GameDamageListenerBase;
 import com.shanebeestudios.hg.plugin.listeners.GameEntityListener;
+import com.shanebeestudios.hg.plugin.listeners.GameKitGuiListener;
 import com.shanebeestudios.hg.plugin.listeners.GameLobbyListener;
 import com.shanebeestudios.hg.plugin.listeners.GamePlayerListener;
 import com.shanebeestudios.hg.plugin.listeners.GameTrackingStickListener;
@@ -175,6 +176,7 @@ public class HungerGames extends JavaPlugin {
         pluginManager.registerEvents(new GameCompassListener(this), this);
         pluginManager.registerEvents(new GameDamageListenerBase(this), this);
         pluginManager.registerEvents(new GameEntityListener(this), this);
+        pluginManager.registerEvents(new GameKitGuiListener(this), this);
         pluginManager.registerEvents(new GameLobbyListener(this), this);
         pluginManager.registerEvents(new GamePlayerListener(this), this);
         pluginManager.registerEvents(new GameTrackingStickListener(this), this);

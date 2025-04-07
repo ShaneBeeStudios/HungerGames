@@ -115,6 +115,8 @@ public class GamePlayerData extends Data {
             Util.sendMessage(player, " ");
             Util.sendMessage(player, this.lang.kits_join_avail + " " + kitNames);
             Util.sendMessage(player, " ");
+            Util.sendMessage(player, this.lang.kits_join_kits_command);
+            Util.sendMessage(player, " ");
         }
         Util.sendMessage(player, this.lang.kits_join_footer);
         Util.sendMessage(player, " ");

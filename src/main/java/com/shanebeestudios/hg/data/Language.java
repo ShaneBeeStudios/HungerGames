@@ -207,10 +207,24 @@ public class Language {
     public String kits_join_footer;
     public String kits_join_msg;
     public String kits_join_avail;
+    public String kits_join_kits_command;
     public String kits_no_perm;
     public String kits_doesnt_exist;
     public String kits_disabled;
     public String kits_give_default;
+    // Kits - Kits GUI
+    public String kits_kits_gui_title;
+    // Kits - Kit GUI
+    public String kits_kit_gui_title;
+    public String kits_kit_gui_exit;
+    public String kits_kit_gui_apply;
+    public String kits_kit_gui_no_helmet;
+    public String kits_kit_gui_no_chestplate;
+    public String kits_kit_gui_no_leggings;
+    public String kits_kit_gui_no_boots;
+    public String kits_kit_gui_potion_effects;
+    public String kits_kit_gui_potion_effect_lore;
+    public String kits_kit_gui_potion_effect_none;
 
     // Scoreboard
     public String scoreboard_sidebar_title;
@@ -491,10 +505,22 @@ public class Language {
         this.kits_join_footer = this.lang.getString("kits.join-footer");
         this.kits_join_msg = this.lang.getString("kits.join-msg");
         this.kits_join_avail = this.lang.getString("kits.join-available");
+        this.kits_join_kits_command = this.lang.getString("kits.join-kits-command");
         this.kits_no_perm = this.lang.getString("kits.no-perm");
         this.kits_doesnt_exist = this.lang.getString("kits.doesnt-exist");
         this.kits_disabled = this.lang.getString("kits.disabled");
         this.kits_give_default = this.lang.getString("kits.give-default");
+        this.kits_kits_gui_title = this.lang.getString("kits.kits-gui.title");
+        this.kits_kit_gui_apply = this.lang.getString("kits.kit-gui.apply");
+        this.kits_kit_gui_exit = this.lang.getString("kits.kit-gui.exit");
+        this.kits_kit_gui_title = this.lang.getString("kits.kit-gui.title");
+        this.kits_kit_gui_no_helmet = this.lang.getString("kits.kit-gui.helmet-none");
+        this.kits_kit_gui_no_chestplate = this.lang.getString("kits.kit-gui.chestplate-none");
+        this.kits_kit_gui_no_leggings = this.lang.getString("kits.kit-gui.leggings-none");
+        this.kits_kit_gui_no_boots = this.lang.getString("kits.kit-gui.boots-none");
+        this.kits_kit_gui_potion_effects = this.lang.getString("kits.kit-gui.potion-effects");
+        this.kits_kit_gui_potion_effect_lore = this.lang.getString("kits.kit-gui.potion-effect-lore");
+        this.kits_kit_gui_potion_effect_none = this.lang.getString("kits.kit-gui.potion-effect-none");
 
         // Scoreboard
         this.scoreboard_sidebar_title = this.lang.getString("scoreboard.sidebar.title");

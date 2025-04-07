@@ -60,6 +60,10 @@ public class KitEntry {
         }
     }
 
+    public String getName() {
+        return this.name;
+    }
+
     /**
      * Check if a player has permission for this kit
      *

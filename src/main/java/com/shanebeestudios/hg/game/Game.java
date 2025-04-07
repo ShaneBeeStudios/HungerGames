@@ -24,6 +24,7 @@ import com.shanebeestudios.hg.plugin.tasks.RollbackTask;
 import com.shanebeestudios.hg.plugin.tasks.StartingTask;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
+import org.bukkit.entity.HumanEntity;
 import org.bukkit.entity.Player;
 
 import java.util.ArrayList;
@@ -250,6 +251,8 @@ public class Game {
      * Start the free roam state of the game
      */
     public void startFreeRoam() {
+        // Close possible Kit GUIs
+        this.gamePlayerData.getPlayers().forEach(HumanEntity::closeInventory);
         this.gameArenaData.setStatus(Status.FREE_ROAM);
         this.gameEntityData.removeEntities();
         this.freeRoamTask = new FreeRoamTask(this);

@@ -1,6 +1,7 @@
 package com.shanebeestudios.hg.data;
 
 import com.google.common.collect.ImmutableMap;
+import com.shanebeestudios.hg.api.gui.KitsGUI;
 import com.shanebeestudios.hg.api.util.Util;
 import com.shanebeestudios.hg.plugin.HungerGames;
 import org.bukkit.entity.Player;
@@ -90,6 +91,10 @@ public class KitData {
      */
     public ImmutableMap<String, KitEntry> getKitEntries() {
         return ImmutableMap.copyOf(this.kitEntries);
+    }
+
+    public KitEntry getKitEntry(String kitName) {
+        return this.kitEntries.get(kitName);
     }
 
     /**
