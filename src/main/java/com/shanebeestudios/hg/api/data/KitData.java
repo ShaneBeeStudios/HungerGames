@@ -3,6 +3,7 @@ package com.shanebeestudios.hg.api.data;
 import com.google.common.collect.ImmutableMap;
 import com.shanebeestudios.hg.api.util.Util;
 import com.shanebeestudios.hg.plugin.HungerGames;
+import com.shanebeestudios.hg.plugin.configs.Language;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.Nullable;
 

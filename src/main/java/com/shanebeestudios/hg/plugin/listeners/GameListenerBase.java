@@ -1,7 +1,7 @@
 package com.shanebeestudios.hg.plugin.listeners;
 
 import com.shanebeestudios.hg.plugin.HungerGames;
-import com.shanebeestudios.hg.api.data.Language;
+import com.shanebeestudios.hg.plugin.configs.Language;
 import com.shanebeestudios.hg.api.data.Leaderboard;
 import com.shanebeestudios.hg.plugin.managers.GameManager;
 import com.shanebeestudios.hg.plugin.managers.KillManager;

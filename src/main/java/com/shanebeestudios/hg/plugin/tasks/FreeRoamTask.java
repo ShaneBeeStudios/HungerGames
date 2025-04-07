@@ -3,7 +3,7 @@ package com.shanebeestudios.hg.plugin.tasks;
 import com.shanebeestudios.hg.plugin.HungerGames;
 import com.shanebeestudios.hg.api.util.Util;
 import com.shanebeestudios.hg.plugin.configs.Config;
-import com.shanebeestudios.hg.api.data.Language;
+import com.shanebeestudios.hg.plugin.configs.Language;
 import com.shanebeestudios.hg.api.game.Game;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;

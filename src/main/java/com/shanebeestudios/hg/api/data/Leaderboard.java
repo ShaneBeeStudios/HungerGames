@@ -1,5 +1,6 @@
 package com.shanebeestudios.hg.api.data;
 
+import com.shanebeestudios.hg.plugin.configs.Language;
 import org.bukkit.Bukkit;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;

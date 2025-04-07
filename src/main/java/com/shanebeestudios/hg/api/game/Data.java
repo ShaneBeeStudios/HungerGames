@@ -1,7 +1,7 @@
 package com.shanebeestudios.hg.api.game;
 
 import com.shanebeestudios.hg.plugin.HungerGames;
-import com.shanebeestudios.hg.api.data.Language;
+import com.shanebeestudios.hg.plugin.configs.Language;
 
 /**
  * General class for storing different aspects of data for {@link Game Games}

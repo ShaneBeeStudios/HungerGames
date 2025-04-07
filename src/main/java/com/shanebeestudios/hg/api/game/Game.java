@@ -6,7 +6,7 @@ import com.shanebeestudios.hg.api.events.PlayerJoinGameEvent;
 import com.shanebeestudios.hg.api.status.Status;
 import com.shanebeestudios.hg.api.util.Util;
 import com.shanebeestudios.hg.api.util.Vault;
-import com.shanebeestudios.hg.api.data.Language;
+import com.shanebeestudios.hg.plugin.configs.Language;
 import com.shanebeestudios.hg.api.data.Leaderboard;
 import com.shanebeestudios.hg.api.data.PlayerData;
 import com.shanebeestudios.hg.api.game.GameCommandData.CommandType;

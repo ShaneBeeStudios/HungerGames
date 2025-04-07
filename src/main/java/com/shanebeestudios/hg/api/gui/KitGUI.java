@@ -2,7 +2,7 @@ package com.shanebeestudios.hg.api.gui;
 
 import com.shanebeestudios.hg.api.util.Util;
 import com.shanebeestudios.hg.api.data.KitEntry;
-import com.shanebeestudios.hg.api.data.Language;
+import com.shanebeestudios.hg.plugin.configs.Language;
 import com.shanebeestudios.hg.plugin.HungerGames;
 import io.papermc.paper.datacomponent.DataComponentTypes;
 import io.papermc.paper.datacomponent.item.ItemLore;

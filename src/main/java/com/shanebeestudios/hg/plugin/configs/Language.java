@@ -1,4 +1,4 @@
-package com.shanebeestudios.hg.api.data;
+package com.shanebeestudios.hg.plugin.configs;
 
 import com.shanebeestudios.hg.api.util.Util;
 import com.shanebeestudios.hg.plugin.HungerGames;
