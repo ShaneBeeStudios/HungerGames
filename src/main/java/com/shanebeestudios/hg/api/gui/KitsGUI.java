@@ -53,7 +53,10 @@ public class KitsGUI implements InventoryHolder {
         this.inventory = Bukkit.createInventory(this, size, Util.getMini(lang.kits_kits_gui_title));
         int slot = 0;
         for (String kitName : this.kitData.getKitEntries().keySet()) {
-            this.kitEntries.put(slot, this.kitData.getKitEntry(kitName));
+            KitEntry kitEntry = this.kitData.getKitEntry(kitName);
+            if (!kitEntry.hasKitPermission(player)) continue;
+
+            this.kitEntries.put(slot, kitEntry);
             ItemStack itemStack = getRandomShulkerBox();
             itemStack.setData(DataComponentTypes.ITEM_NAME, Util.getMini(kitName));
             this.inventory.setItem(slot, itemStack);
