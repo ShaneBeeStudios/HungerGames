@@ -9,67 +9,67 @@
 items:
   regular:
     '1':
-      id: minecraft:stone_sword
+      id: 'minecraft:stone_sword'
       count: 1
       weight: 5
     '2':
-      id: minecraft:golden_sword
+      id: 'minecraft:golden_sword'
       count: 1
     '3':
-      id: minecraft:mushroom_stew
+      id: 'minecraft:mushroom_stew'
       count: 1
       weight: 2
     '4':
-      id: minecraft:stone_hoe
+      id: 'minecraft:stone_hoe'
       count: 1
     '5':
-      id: minecraft:leather_helmet
+      id: 'minecraft:leather_helmet'
       count: 1
       weight: 2
     '6':
-      id: minecraft:leather_chestplate
+      id: 'minecraft:leather_chestplate'
       count: 1
       weight: 2
     '7':
-      id: minecraft:leather_leggings
+      id: 'minecraft:leather_leggings'
       count: 1
       weight: 2
     '8':
-      id: minecraft:iron_helmet
+      id: 'minecraft:iron_helmet'
       count: 1
       weight: 2
     '9':
-      id: minecraft:iron_chestplate
+      id: 'minecraft:iron_chestplate'
       count: 1
       weight: 2
     '10':
-      id: minecraft:iron_leggings
+      id: 'minecraft:iron_leggings'
       count: 1
       weight: 2
     '11':
-      id: minecraft:iron_boots
+      id: 'minecraft:iron_boots'
       count: 1
       weight: 2
     '12':
-      id: minecraft:bow
+      id: 'minecraft:bow'
       count: 1
       weight: 3
     '13':
-      id: minecraft:arrow
+      id: 'minecraft:arrow'
       count: 20
       weight: 2
     '14':
-      id: minecraft:milk_bucket
+      id: 'minecraft:milk_bucket'
       count: 1
       weight: 2
     '15':
-      id: minecraft:fishing_rod
+      id: 'minecraft:fishing_rod'
       count: 1
     '16':
-      id: minecraft:compass
+      id: 'minecraft:compass'
       count: 1
     '17':
-      id: minecraft:stick
+      id: 'minecraft:stick'
       count: 1
       custom_name: '<gold>TrackingStick'
       lore:
@@ -77,74 +77,74 @@ items:
         - '<gray>Left click in the air'
         - '<gray>To find nearby players'
     '18':
-      id: minecraft:golden_helmet
+      id: 'minecraft:golden_helmet'
       count: 1
     '19':
-      id: minecraft:golden_chestplate
+      id: 'minecraft:golden_chestplate'
       count: 1
     '20':
-      id: minecraft:bone
+      id: 'minecraft:bone'
       count: 1
       weight: 2
     '21':
-      id: minecraft:golden_leggings
+      id: 'minecraft:golden_leggings'
       count: 1
     '22':
-      id: minecraft:golden_boots
+      id: 'minecraft:golden_boots'
       count: 1
     '23':
-      id: minecraft:diamond_sword
+      id: 'minecraft:diamond_sword'
       count: 1
       custom_name: '<gold>Death Dealer'
       enchantments:
-        - sharpness=1
+        - 'sharpness=1'
     '24':
-      id: minecraft:golden_apple
+      id: 'minecraft:golden_apple'
       count: 1
     '25':
-      id: minecraft:chainmail_chestplate
+      id: 'minecraft:chainmail_chestplate'
       count: 1
       weight: 1
     '26':
-      id: minecraft:chainmail_leggings
+      id: 'minecraft:chainmail_leggings'
       count: 1
       weight: 1
     '27':
-      id: minecraft:cookie
+      id: 'minecraft:cookie'
       count: 2
       weight: 3
     '28':
-      id: minecraft:melon_slice
+      id: 'minecraft:melon_slice'
       count: 1
       weight: 4
     '29':
-      id: minecraft:cooked_beef
+      id: 'minecraft:cooked_beef'
       count: 1
       weight: 2
     '30':
-      id: minecraft:ender_pearl
+      id: 'minecraft:ender_pearl'
       count: 1
       weight: 2
     '31':
-      id: minecraft:potion
+      id: 'minecraft:potion'
       count: 1
       custom_name: 'Potion of Swiftness'
       potion_effects:
-        - type: minecraft:speed
+        - type: 'minecraft:speed'
           duration: 3600
           amplifier: 1
       weight: 2
     '32':
-      id: minecraft:potion
+      id: 'minecraft:potion'
       count: 1
       custom_name: 'Potion of Healing'
       potion_effects:
-        - type: minecraft:instant_health
+        - type: 'minecraft:instant_health'
           duration: 1
           amplifier: 1
       weight: 2
     '33':
-      id: minecraft:splash_potion
+      id: 'minecraft:splash_potion'
       count: 1
       custom_name: 'Splash Potion of Poison'
       potion_effects:
@@ -152,71 +152,71 @@ items:
           duration: 320
           amplifier: 2
     '34':
-      id: minecraft:splash_potion
+      id: 'minecraft:splash_potion'
       count: 1
       custom_name: 'Splash Potion of Regeneration'
       potion_effects:
-        - type: minecraft:regeneration
+        - type: 'minecraft:regeneration'
           duration: 660
           amplifier: 1
       weight: 2
     '35':
-      id: minecraft:tipped_arrow
+      id: 'minecraft:tipped_arrow'
       count: 1
-      potion: minecraft:long_poison
+      potion: 'minecraft:long_poison'
     '36':
-      id: minecraft:tipped_arrow
+      id: 'minecraft:tipped_arrow'
       count: 1
-      potion: minecraft:strong_slowness
+      potion: 'minecraft:strong_slowness'
     '37':
-      id: minecraft:lingering_potion
+      id: 'minecraft:lingering_potion'
       count: 1
-      potion: minecraft:harming
+      potion: 'minecraft:harming'
     '38':
-      id: minecraft:apple
+      id: 'minecraft:apple'
       count: 2
       weight: 5
   bonus:
     '1':
-      id: minecraft:diamond_sword
+      id: 'minecraft:diamond_sword'
       count: 1
       custom_name: '<dark_aqua>Power Sword'
       enchantments:
-        - sharpness=5
+        - 'sharpness=5'
     '2':
-      id: minecraft:diamond_chestplate
+      id: 'minecraft:diamond_chestplate'
       count: 1
       custom_name: '<green>Life Saver'
       enchantments:
-        - protection=3
+        - 'protection=3'
     '3':
-      id: minecraft:cooked_beef
+      id: 'minecraft:cooked_beef'
       count: 6
       weight: 3
     '4':
-      id: minecraft:enchanted_golden_apple
+      id: 'minecraft:enchanted_golden_apple'
       count: 1
     '5':
-      id: minecraft:suspicious_stew
+      id: 'minecraft:suspicious_stew'
       count: 1
       nbt: '{"minecraft:suspicious_stew_effects":[{duration:1200,id:"minecraft:night_vision"}]}'
     '6':
-      id: minecraft:suspicious_stew
+      id: 'minecraft:suspicious_stew'
       count: 1
       nbt: '{"minecraft:suspicious_stew_effects":[{duration:1200,id:"minecraft:regeneration"}]}'
   chest-drop:
     '1':
-      id: minecraft:netherite_axe
+      id: 'minecraft:netherite_axe'
       enchantments:
-        - efficiency=5
+        - 'efficiency=5'
     '2':
-      id: minecraft:netherite_chestplate
+      id: 'minecraft:netherite_chestplate'
       enchantments:
-        - blast_projection=2
+        - 'blast_projection=2'
     '3':
-      id: minecraft:cooked_mutton
+      id: 'minecraft:cooked_mutton'
       custom_name: '<green>Power Mutton'
       nbt: '{"minecraft:food":{nutrition:15,saturation:10.0f}}'
     '4':
-      id: minecraft:shield
+      id: 'minecraft:shield'
       nbt: '{"minecraft:banner_patterns":[{color:"red",pattern:"minecraft:cross"}],"minecraft:base_color":"cyan"}'
