@@ -1,10 +1,10 @@
 package com.shanebeestudios.hg.plugin.managers;
 
-import com.shanebeestudios.hg.api.parsers.ItemParser;
-import com.shanebeestudios.hg.api.util.Util;
 import com.shanebeestudios.hg.api.data.KitData;
 import com.shanebeestudios.hg.api.data.KitEntry;
 import com.shanebeestudios.hg.api.game.Game;
+import com.shanebeestudios.hg.api.parsers.ItemParser;
+import com.shanebeestudios.hg.api.util.Util;
 import com.shanebeestudios.hg.plugin.HungerGames;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.file.YamlConfiguration;
@@ -15,7 +15,6 @@ import org.jetbrains.annotations.Nullable;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 
 /**
  * General manager for kits
@@ -71,26 +70,36 @@ public class KitManager {
         game.getGameItemData().setKitData(kitData);
     }
 
-    @SuppressWarnings({"ConstantConditions", "unchecked"})
     private KitData kitCreator(ConfigurationSection kitsSection, @Nullable Game game) {
         KitData kit = new KitData();
         String gameName = game != null ? game.getGameArenaData().getName() + ":" : "";
         for (String kitName : kitsSection.getKeys(false)) {
             try {
                 ConfigurationSection kitSection = kitsSection.getConfigurationSection(kitName);
+                assert kitSection != null;
+                // ITEMS
                 List<ItemStack> inventoryContent = this.itemManager.loadItems(kitSection);
 
+                // GEAR
                 ItemStack helmet = ItemParser.parseItem(kitSection.getConfigurationSection("helmet"));
                 ItemStack chestplate = ItemParser.parseItem(kitSection.getConfigurationSection("chestplate"));
                 ItemStack leggings = ItemParser.parseItem(kitSection.getConfigurationSection("leggings"));
                 ItemStack boots = ItemParser.parseItem(kitSection.getConfigurationSection("boots"));
 
+                // POTION_EFFECTS
                 List<PotionEffect> potionEffects = new ArrayList<>();
-                List<Map<?, ?>> mapList = kitSection.getMapList("potion-effects");
-                mapList.forEach(map -> potionEffects.add(ItemParser.parsePotionEffect((Map<String, Object>) map)));
+                if (kitSection.isConfigurationSection("potion_effects")) {
+                    ConfigurationSection potionEffectsSection = kitSection.getConfigurationSection("potion_effects");
+                    assert potionEffectsSection != null;
+                    for (String key : potionEffectsSection.getKeys(false)) {
+                        PotionEffect potionEffect = ItemParser.parsePotionEffect(key, potionEffectsSection);
+                        potionEffects.add(potionEffect);
+                    }
+                }
 
+                // PERMISSION
                 String permission = null;
-                if (kitSection.contains("permission") && !kitSection.getString("permission").equalsIgnoreCase("none"))
+                if (kitSection.contains("permission") && !kitSection.getString("permission", "none").equalsIgnoreCase("none"))
                     permission = kitSection.getString("permission");
 
                 KitEntry kitEntry = new KitEntry(game, kitName, inventoryContent, helmet, chestplate, leggings, boots, permission, potionEffects);

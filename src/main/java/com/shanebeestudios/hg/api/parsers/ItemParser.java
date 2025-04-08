@@ -134,23 +134,42 @@ public class ItemParser {
         }
 
         // POTION_EFFECT
-        if (config.contains("potion_effects")) {
-            List<Map<String, Object>> potionEffectsList = (List<Map<String, Object>>) config.getList("potion_effects");
-            assert potionEffectsList != null;
+//        if (config.contains("potion_effects")) {
+//            List<Map<String, Object>> potionEffectsList = (List<Map<String, Object>>) config.getList("potion_effects");
+//            assert potionEffectsList != null;
+//            PotionContents.Builder builder = PotionContents.potionContents();
+//            AtomicInteger color = new AtomicInteger(-1);
+//            potionEffectsList.forEach(entry -> {
+//                PotionEffect potionEffect = parsePotionEffect(entry);
+//                if (potionEffect != null) {
+//                    builder.addCustomEffect(potionEffect);
+//                    if (entry.containsKey("custom_color")) {
+//                        color.set((int) entry.get("custom_color"));
+//                    }
+//                }
+//            });
+//            if (color.get() != -1) builder.customColor(Color.fromRGB(color.get()));
+//            itemStack.setData(DataComponentTypes.POTION_CONTENTS, builder.build());
+//        }
+
+        // POTION_EFFECT
+        if (config.isConfigurationSection("potion_effects")) {
+            ConfigurationSection potionEffectsSection = config.getConfigurationSection("potion_effects");
+            assert potionEffectsSection != null;
             PotionContents.Builder builder = PotionContents.potionContents();
-            AtomicInteger color = new AtomicInteger(-1);
-            potionEffectsList.forEach(entry -> {
-                PotionEffect potionEffect = parsePotionEffect(entry);
+            for (String peKey : potionEffectsSection.getKeys(false)) {
+                PotionEffect potionEffect = parsePotionEffect(peKey, potionEffectsSection);
                 if (potionEffect != null) {
                     builder.addCustomEffect(potionEffect);
-                    if (entry.containsKey("custom_color")) {
-                        color.set((int) entry.get("custom_color"));
-                    }
                 }
-            });
-            if (color.get() != -1) builder.customColor(Color.fromRGB(color.get()));
+            }
+            if (config.isInt("custom_color")) {
+                int color = config.getInt("custom_color");
+                builder.customColor(Color.fromRGB(color));
+            }
             itemStack.setData(DataComponentTypes.POTION_CONTENTS, builder.build());
         }
+
 
         // DYED_COLOR
         if (config.contains("dyed_color")) {
@@ -167,17 +186,18 @@ public class ItemParser {
         return itemStack;
     }
 
-    public static PotionEffect parsePotionEffect(Map<String, Object> entry) {
-        String string = (String) entry.get("type");
-        NamespacedKey namespacedKey = NamespacedKey.fromString(string);
+    public static PotionEffect parsePotionEffect(String key, ConfigurationSection potionEffectsSection) {
+        NamespacedKey namespacedKey = NamespacedKey.fromString(key);
         if (namespacedKey != null) {
             PotionEffectType potionEffectType = Registries.POTION_EFFECT_TYPE_REGISTRY.get(namespacedKey);
+            ConfigurationSection potionEffectSection = potionEffectsSection.getConfigurationSection(key);
+            assert potionEffectSection != null;
             if (potionEffectType != null) {
-                int duration = (int) entry.getOrDefault("duration", 300); // Default to 15 seconds
-                int amplifier = (int) entry.getOrDefault("amplifier", 0);
-                boolean ambient = (boolean) entry.getOrDefault("ambient", false);
-                boolean show_icon = (boolean) entry.getOrDefault("show_icon", true);
-                boolean show_particles = (boolean) entry.getOrDefault("show_particles", true);
+                int duration = potionEffectSection.getInt("duration", 300); // Default to 15 seconds
+                int amplifier = potionEffectSection.getInt("amplifier", 0);
+                boolean ambient = potionEffectSection.getBoolean("ambient", false);
+                boolean show_icon = potionEffectSection.getBoolean("show_icon", true);
+                boolean show_particles = potionEffectSection.getBoolean("show_particles", true);
                 return new PotionEffect(potionEffectType, duration, amplifier, ambient, show_particles, show_icon);
             }
         }

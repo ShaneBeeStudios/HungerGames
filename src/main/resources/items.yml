@@ -130,7 +130,7 @@ items:
       count: 1
       custom_name: 'Potion of Swiftness'
       potion_effects:
-        - type: 'minecraft:speed'
+        'minecraft:speed':
           duration: 3600
           amplifier: 1
       weight: 2
@@ -139,7 +139,7 @@ items:
       count: 1
       custom_name: 'Potion of Healing'
       potion_effects:
-        - type: 'minecraft:instant_health'
+        'minecraft:instant_health':
           duration: 1
           amplifier: 1
       weight: 2
@@ -148,7 +148,7 @@ items:
       count: 1
       custom_name: 'Splash Potion of Poison'
       potion_effects:
-        - type: minecraft:poison
+        'minecraft:poison':
           duration: 320
           amplifier: 2
     '34':
@@ -156,7 +156,7 @@ items:
       count: 1
       custom_name: 'Splash Potion of Regeneration'
       potion_effects:
-        - type: 'minecraft:regeneration'
+        'minecraft:regeneration':
           duration: 660
           amplifier: 1
       weight: 2
@@ -212,7 +212,7 @@ items:
     '2':
       id: 'minecraft:netherite_chestplate'
       enchantments:
-        'minecraft:blast_projection': 2
+        'minecraft:blast_protection': 2
     '3':
       id: 'minecraft:cooked_mutton'
       custom_name: '<green>Power Mutton'

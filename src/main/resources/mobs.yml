@@ -116,7 +116,7 @@ example:
 
       # The potion effects to be applied to this mob (optional)
       potion_effects:
-        - type: minecraft:speed
+        'minecraft:speed':
           duration: -1
           amplifier: 1
     'the_beast':
@@ -141,7 +141,7 @@ example:
           count: 1
       death_message: '<aqua><player> <red>was slaughtered by <aqua>The Beast'
       potion_effects:
-        - type: minecraft:health_boost
+        'minecraft:health_boost':
           duration: -1
           amplifier: 1
     # Example setup for MythicMobs

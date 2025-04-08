@@ -62,7 +62,7 @@ kits:
         count: 1
         custom_name: '<aqua>Healing'
         potion_effects:
-          - type: 'minecraft:instant_health'
+          'minecraft:instant_health':
             duration: 60
             amplifier: 0
       '4':
@@ -70,10 +70,10 @@ kits:
         count: 1
         custom_name: '<dark_aqua>Lucky Healing'
         potion_effects:
-          - type: 'minecraft:instant_health'
+          'minecraft:instant_health':
             duration: 80
             amplifier: 1
-          - type: 'minecraft:luck'
+          'minecraft:luck':
             duration: 100
             amplifier: 1
       '5':
@@ -85,8 +85,8 @@ kits:
         count: 1
         potion: 'minecraft:harming'
     # Potion effects to be applied to the player
-    potion-effects:
-      - type: 'minecraft:fire_resistance'
+    potion_effects:
+      'minecraft:fire_resistance':
         duration: -1
         amplifier: 2
   survivor:
@@ -119,10 +119,10 @@ kits:
         count: 1
         custom_name: '<aqua>Healing'
         potion_effects:
-          - type: 'minecraft:instant_health'
+          'minecraft:instant_health':
             duration: 60
             amplifier: 0
-    potion-effects: [ ]
+    potion_effects: [ ]
   pro:
     permission: 'none'
     helmet:
@@ -145,10 +145,10 @@ kits:
         count: 1
         custom_name: '<aqua>Super Healing'
         potion_effects:
-          - type: 'minecraft:instant_health'
+          'minecraft:instant_health':
             duration: 60
             amplifier: 1
-    potion-effects: [ ]
+    potion_effects: [ ]
   ninja:
     permission: 'none'
     helmet:
@@ -181,11 +181,11 @@ kits:
         count: 1
         custom_name: '<aqua>Super Healing'
         potion_effects:
-          - type: 'minecraft:instant_health'
+          'minecraft:instant_health':
             duration: 60
             amplifier: 1
-    potion-effects:
-      - type: 'minecraft:speed'
+    potion_effects:
+      'minecraft:speed':
         duration: -1
         amplifier: 1
   stupid_class:
@@ -210,14 +210,14 @@ kits:
         count: 1
         custom_name: '<aqua>Super Duper Healing'
         potion_effects:
-          - type: 'minecraft:instant_health'
+          'minecraft:instant_health':
             duration: 60
             amplifier: 2
       '4':
         id: 'minecraft:potion'
         count: 1
         potion: 'minecraft:strong_turtle_master'
-    potion-effects:
-      - type: 'minecraft:fire_resistance'
+    potion_effects:
+      'minecraft:fire_resistance':
         duration: -1
         amplifier: 2

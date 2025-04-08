@@ -1,12 +1,12 @@
 package com.shanebeestudios.hg.plugin.managers;
 
+import com.shanebeestudios.hg.api.data.MobData;
+import com.shanebeestudios.hg.api.data.MobEntry;
+import com.shanebeestudios.hg.api.game.Game;
 import com.shanebeestudios.hg.api.parsers.ItemParser;
 import com.shanebeestudios.hg.api.registry.Registries;
 import com.shanebeestudios.hg.api.util.NBTApi;
 import com.shanebeestudios.hg.api.util.Util;
-import com.shanebeestudios.hg.api.data.MobData;
-import com.shanebeestudios.hg.api.data.MobEntry;
-import com.shanebeestudios.hg.api.game.Game;
 import com.shanebeestudios.hg.plugin.HungerGames;
 import com.shanebeestudios.hg.plugin.configs.Config;
 import io.lumine.mythic.api.mobs.MythicMob;
@@ -25,7 +25,6 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Locale;
-import java.util.Map;
 import java.util.Optional;
 import java.util.Random;
 
@@ -87,7 +86,6 @@ public class MobManager {
         game.getGameEntityData().setMobData(mobData);
     }
 
-    @SuppressWarnings("unchecked")
     private MobData createMobData(ConfigurationSection mobsSection, @Nullable Game game) {
         MobData mobData = new MobData();
         int count = 0;
@@ -157,14 +155,17 @@ public class MobManager {
                         }
                     }
 
-                    // POTION EFFECTS
+                    // POTION_EFFECTS
                     if (mobSection.contains("potion_effects")) {
                         List<PotionEffect> potionEffects = new ArrayList<>();
-                        List<Map<?, ?>> potionEffectsMapList = mobSection.getMapList("potion_effects");
-                        potionEffectsMapList.forEach(map -> {
-                            PotionEffect potionEffect = ItemParser.parsePotionEffect((Map<String, Object>) map);
-                            potionEffects.add(potionEffect);
-                        });
+                        if (mobSection.isConfigurationSection("potion_effects")) {
+                            ConfigurationSection potionEffectsSection = mobSection.getConfigurationSection("potion_effects");
+                            assert potionEffectsSection != null;
+                            for (String key : potionEffectsSection.getKeys(false)) {
+                                PotionEffect potionEffect = ItemParser.parsePotionEffect(key, potionEffectsSection);
+                                potionEffects.add(potionEffect);
+                            }
+                        }
                         mobEntry.addPotionEffects(potionEffects);
                     }
                 }
