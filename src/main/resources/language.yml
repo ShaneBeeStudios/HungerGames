@@ -6,25 +6,10 @@
 #  To restore these messages, backup this file, delete it, and restart your server, this will create a new lang file with all the notes
 
 #  GENERAL PLUGIN MESSAGES
-prefix: '<grey>[<aqua>Hunger<dark_aqua>Games<grey>] '
-
-#  GAME MESSAGES
-#  <player> will be replaced with name of player
-player-joined-game: '<aqua><player> <grey>Has joined the game'
-player-left-game: '<aqua><player> <red>Has left the game'
-
-
-# <min>/<sec> will be replaced with the remaining minutes and seconds in a game
-game-bossbar: '<gold>Game Ends In: <aqua><min> <grey>min <aqua><sec> <grey>sec'
+prefix: '<grey>[<aqua>Hunger<dark_aqua>Games<grey>]'
 
 #  <amount> will be replaced with amount of players left to start a game
 players-to-start: '<aqua><amount> <gold>players to start!'
-arena-not-ready: '<red>This arena is not ready! Please wait before joining!'
-arena-spectate: '<gold>You can spectate this arena by running <dark_aqua>/hg spectate <arena>'
-
-#  <arena> will be replaced with name of arena the player won in
-#  <winner> will be replaced with name of winner
-player-won: '<aqua><winner> <gold>won HungerGames at arena <aqua><arena><grey>!'
 
 #  <amount> will be replaced with the amount the player will receive on win
 winning-amount: '<grey>You received <aqua>$<amount> <grey>for winning <dark_aqua>Hunger<aqua>Games!'
@@ -41,14 +26,6 @@ chest-drop-2: '"<aqua>| <dark_aqua>A Care-Package was just dropped near: <white>
 #  <distance> will be replaced with the distance of the nearest player
 compass-nearest-player: '<grey>Nearest Player: <aqua><player> <grey>Distance: <green><distance>'
 
-#  FREE ROAM
-roam-game-started: '<dark_red>[]---------[ <gold>The game has started! <dark_red>]---------[]'
-#  <roam> will be replaced with the time the players can roam for
-roam-time: ' <yellow> You have <roam> seconds to roam without taking damage!'
-roam-finished: '<red>Free-Roam is over, PVP is now enabled!'
-
-## Kit
-cmd-no-change: '<red>You can not change your kit while the game is running!'
 
 # ARENA DEBUG
 arena-debug:
@@ -204,17 +181,29 @@ death-messages:
 # GAME
 ##  <arena> will be replaced with the name of the arena
 game:
-  started: 'Arena <aqua><arena> <grey>will begin in <green>30 seconds<grey>!'
-  running: '<red>The game <aqua><arena> <red>is already running and cannot be joined!'
-  join: 'Use: <aqua>/hg join <arena><grey> to join!'
-  countdown: 'The game will start in <timer> seconds..'
+  running: "<red>The game <white>'<aqua><arena><white>' <red>is already running and cannot be joined!"
+  join: "Use: <aqua>/hg join <arena><grey> to join!"
+  countdown-started: "Arena <white>'<aqua><arena><white>' <grey>will begin in <green>30 seconds<grey>!"
+  countdown-timer: 'The game will start in <timer> seconds..'
   almost-over: '<red>The game is almost over, fight to the death!'
   ending-min-sec: '<green>The game is ending in <minutes> minute(s), and <seconds> second(s)!'
   ending-min: '<green>The game is ending in <minutes> minute(s)!'
   ending-sec: '<green>the game is ending in <seconds> second(s)!'
-  border-closing: '<gold>The border is coming, you have <seconds> seconds to get to the center of the arena!'
-  chests-refill: '<gold>Chests have been refilled'
-  full: '<aqua><arena> <red>is currently full!'
+  border-closing: '<yellow>The border is coming, you have <seconds> seconds to get to the center of the arena!'
+  chests-refill: '<green>Chests have been refilled'
+  full: "<white>'<aqua><arena><white>' <red>is currently full!"
+  player-joined-game: '<aqua><player> <green>has joined the game'
+  player-left-game: '<aqua><player> <red>has left the game'
+  # <min>/<sec> will be replaced with the remaining minutes and seconds in a game
+  bossbar-title: '<gold>Game Ends In: <aqua><min> <grey>min <aqua><sec> <grey>sec'
+  # <winner> will be replaced with name of winner
+  player-won: '<aqua><winner> <gold>won HungerGames at arena <aqua><arena><grey>!'
+  arena-not-ready: '<red>This arena is not ready! Please wait before joining!'
+  arena-spectate: '<grey>You can spectate this arena by running <aqua>/hg spectate <arena>'
+  roam-game-started: '<dark_red>[]---------[ <gold>The game has started! <dark_red>]---------[]'
+  #  <roam> will be replaced with the time the players can roam for
+  roam-time: ' <yellow> You have <roam> seconds to roam without taking damage!'
+  roam-finished: '<red>Free-Roam is over, PVP is now enabled!'
 
 # KIT MESSAGES
 kits:

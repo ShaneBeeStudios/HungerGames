@@ -7,17 +7,10 @@ import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.minimessage.MiniMessage;
 import net.md_5.bungee.api.ChatColor;
 import org.bukkit.Bukkit;
-import org.bukkit.Color;
-import org.bukkit.FireworkEffect;
-import org.bukkit.FireworkEffect.Type;
-import org.bukkit.Location;
 import org.bukkit.NamespacedKey;
-import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
 import org.bukkit.command.CommandSender;
-import org.bukkit.entity.Firework;
 import org.bukkit.entity.Player;
-import org.bukkit.inventory.meta.FireworkMeta;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -46,7 +39,7 @@ public class Util {
             if (lang != null) {
                 PREFIX = lang.prefix;
             } else {
-                return "<grey>[<aqua>Hunger<dark_aqua>Games<grey>] ";
+                return "<grey>[<aqua>Hunger<dark_aqua>Games<grey>]";
             }
         }
         return PREFIX;
@@ -74,7 +67,7 @@ public class Util {
     public static void sendPrefixedMessage(@Nullable CommandSender sender, @NotNull String format, Object... args) {
         if (sender == null) return;
         String s = String.format(format, args);
-        Component mini = getMini(getPrefix() + s);
+        Component mini = getMini(getPrefix() + " " + s);
         sender.sendMessage(mini);
     }
 
@@ -254,35 +247,6 @@ public class Util {
             return builder.toString();
         else
             return "No one";
-    }
-
-    public static void shootFirework(Location l) {
-        assert l.getWorld() != null;
-        Firework fw = l.getWorld().spawn(l, Firework.class);
-        FireworkMeta fm = fw.getFireworkMeta();
-        List<Color> c = new ArrayList<>();
-        c.add(Color.GREEN);
-        c.add(Color.BLUE);
-        FireworkEffect e = FireworkEffect.builder().flicker(true).withColor(c).withFade(c).with(Type.BALL_LARGE).trail(true).build();
-        fm.addEffect(e);
-        fm.setPower(2);
-        fw.setFireworkMeta(fm);
-    }
-
-    public static boolean isAttached(Block base, Block attached) {
-//        if (attached.getType() == Material.AIR) return false;
-//
-//        MaterialData bs = attached.getState().getData();
-//        //BlockData bs = attached.getBlockData();
-//
-//        if (!(bs instanceof Attachable)) return false;
-//
-//        Attachable at = (Attachable) bs;
-//        BlockFace face = at.getAttachedFace();
-//
-//        return attached.getRelative(face).equals(base);
-        // TODO figure out a replacement
-        return true;
     }
 
     @SuppressWarnings("DataFlowIssue")

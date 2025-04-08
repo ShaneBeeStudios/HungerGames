@@ -335,13 +335,13 @@ public class Game {
 
         switch (this.gameArenaData.getStatus()) {
             case NOT_READY, ROLLBACK, STOPPED, BROKEN -> {
-                Util.sendPrefixedMessage(player, this.lang.arena_not_ready);
+                Util.sendPrefixedMessage(player, this.lang.game_arena_not_ready);
                 return false;
             }
             case RUNNING, FREE_ROAM -> {
                 Util.sendPrefixedMessage(player, this.lang.game_running.replace("<arena>", arenaName), arenaName);
                 if (Config.SPECTATE_ENABLED) {
-                    Util.sendPrefixedMessage(player, this.lang.arena_spectate.replace("<arena>", arenaName));
+                    Util.sendPrefixedMessage(player, this.lang.game_arena_spectate.replace("<arena>", arenaName));
                 }
                 return false;
             }
@@ -433,8 +433,8 @@ public class Game {
                         Util.sendMessage(p, lang.winning_amount.replace("<amount>", String.valueOf(db)));
                     }
                 }
-                plugin.getLeaderboard().addStat(u, Leaderboard.Stats.WINS);
-                plugin.getLeaderboard().addStat(u, Leaderboard.Stats.GAMES);
+                this.plugin.getLeaderboard().addStat(u, Leaderboard.Stats.WINS);
+                this.plugin.getLeaderboard().addStat(u, Leaderboard.Stats.GAMES);
             }
         }
         this.gameBlockData.clearChests();
@@ -442,11 +442,11 @@ public class Game {
 
         // Broadcast wins
         if (death) {
-            String broadcast = lang.player_won.replace("<arena>", gameArenaData.name).replace("<winner>", winner);
+            String broadcast = this.lang.game_player_won.replace("<arena>", this.gameArenaData.name).replace("<winner>", winner);
             if (Config.broadcastWinMessages) {
                 Util.broadcast(broadcast);
             } else {
-                gamePlayerData.messageAllPlayers(broadcast);
+                this.gamePlayerData.messageAllPlayers(broadcast);
             }
         }
         if (this.gameBlockData.requiresRollback()) {
@@ -497,7 +497,7 @@ public class Game {
 
             }
         } else if (status == Status.WAITING) {
-            this.gamePlayerData.messageAllActivePlayers(lang.player_left_game
+            this.gamePlayerData.messageAllActivePlayers(this.lang.game_player_left_game
                 .replace("<arena>", this.gameArenaData.getName())
                 .replace("<player>", player.getName()) +
                 (this.gameArenaData.getMinPlayers() - this.gamePlayerData.getPlayers().size() <= 0 ? "!" : ": " + this.lang.players_to_start

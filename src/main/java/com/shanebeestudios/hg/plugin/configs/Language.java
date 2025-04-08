@@ -24,21 +24,12 @@ public class Language {
     private final HungerGames plugin;
 
     public String prefix;
-    public String player_joined_game;
-    public String player_left_game;
     public String players_to_start;
-    public String arena_not_ready;
-    public String arena_spectate;
-    public String player_won;
     public String winning_amount;
     public String chest_drop_1;
     public String chest_drop_2;
     public String compass_nearest_player;
-    public String roam_game_started;
-    public String roam_time;
-    public String roam_finished;
     public String cmd_start_starting;
-    public String bossbar;
 
     // ARENA DEBUG
     public String arena_debug_need_more_spawns;
@@ -138,9 +129,9 @@ public class Language {
     public String death_messages_other;
 
     // GAME
-    public String game_started;
     public String game_join;
-    public String game_countdown;
+    public String game_countdown_started;
+    public String game_countdown_timer;
     public String game_almost_over;
     public String game_ending_min_sec;
     public String game_ending_min;
@@ -149,6 +140,15 @@ public class Language {
     public String game_chest_refill;
     public String game_running;
     public String game_full;
+    public String game_player_joined_game;
+    public String game_player_left_game;
+    public String game_bossbar_title;
+    public String game_player_won;
+    public String game_arena_not_ready;
+    public String game_arena_spectate;
+    public String game_roam_game_started;
+    public String game_roam_time;
+    public String game_roam_finished;
 
     // KITS
     public String kits_join_header;
@@ -290,13 +290,8 @@ public class Language {
 
     private void loadLang() {
         this.prefix = this.lang.getString("prefix");
-        player_joined_game = this.lang.getString("player-joined-game");
-        player_left_game = this.lang.getString("player-left-game");
 
         players_to_start = this.lang.getString("players-to-start");
-        this.arena_not_ready = this.lang.getString("arena-not-ready");
-        this.arena_spectate = this.lang.getString("arena-spectate");
-        player_won = this.lang.getString("player-won");
 
         winning_amount = this.lang.getString("winning-amount");
 
@@ -305,12 +300,7 @@ public class Language {
 
         compass_nearest_player = this.lang.getString("compass-nearest-player");
 
-        roam_game_started = this.lang.getString("roam-game-started");
-        roam_time = this.lang.getString("roam-time");
-        roam_finished = this.lang.getString("roam-finished");
-
         cmd_start_starting = this.lang.getString("cmd-start-starting");
-        bossbar = this.lang.getString("game-bossbar");
 
         this.game_chest_refill = this.lang.getString("game-chests-refill");
 
@@ -424,9 +414,9 @@ public class Language {
         this.death_messages_other = this.lang.getString("death-messages.other");
 
         // GAME
-        this.game_started = this.lang.getString("game.started");
         this.game_join = this.lang.getString("game.join");
-        this.game_countdown = this.lang.getString("game.countdown");
+        this.game_countdown_started = this.lang.getString("game.countdown-started");
+        this.game_countdown_timer = this.lang.getString("game.countdown-timer");
         this.game_almost_over = this.lang.getString("game.almost-over");
         this.game_ending_min_sec = this.lang.getString("game.ending-min-sec");
         this.game_ending_min = this.lang.getString("game.ending-min");
@@ -434,6 +424,15 @@ public class Language {
         this.game_border_closing = this.lang.getString("game.border-closing");
         this.game_running = this.lang.getString("game.running");
         this.game_full = this.lang.getString("game.full");
+        this.game_player_joined_game = this.lang.getString("game.player-joined-game");
+        this.game_player_left_game = this.lang.getString("game.player-left-game");
+        this.game_bossbar_title = this.lang.getString("game.bossbar-title");
+        this.game_player_won = this.lang.getString("game.player-won");
+        this.game_arena_not_ready = this.lang.getString("game.arena-not-ready");
+        this.game_arena_spectate = this.lang.getString("game.arena-spectate");
+        this.game_roam_game_started = this.lang.getString("game.roam-game-started");
+        this.game_roam_time = this.lang.getString("game.roam-time");
+        this.game_roam_finished = this.lang.getString("game.roam-finished");
 
         // KITS
         this.kits_join_header = this.lang.getString("kits.join-header");

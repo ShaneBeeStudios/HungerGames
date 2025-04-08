@@ -25,8 +25,8 @@ public class FreeRoamTask implements Runnable {
         }
         this.roamTime = Math.max(roamTime, 0);
 
-        String gameStarted = this.lang.roam_game_started;
-        String roamTimeString = this.lang.roam_time.replace("<roam>", "" + this.roamTime);
+        String gameStarted = this.lang.game_roam_game_started;
+        String roamTimeString = this.lang.game_roam_time.replace("<roam>", "" + this.roamTime);
 
         for (Player player : game.getGamePlayerData().getPlayers()) {
             Util.sendMessage(player, gameStarted);
@@ -43,7 +43,7 @@ public class FreeRoamTask implements Runnable {
     @Override
     public void run() {
         if (this.roamTime > 0) {
-            this.game.getGamePlayerData().messageAllActivePlayers(this.lang.roam_finished);
+            this.game.getGamePlayerData().messageAllActivePlayers(this.lang.game_roam_finished);
         }
         this.game.startRunningGame();
     }
