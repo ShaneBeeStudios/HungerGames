@@ -57,9 +57,7 @@ kits:
   join-available: '<dark_aqua>  Available Kits:<aqua>'
   join-kits-command: '<grey>  You can also run <aqua>/hg kits<grey> to open the kits GUI.'
   join-footer: '<red>><grey>------------------------------------------<red><'
-  no-perm: '<red>You do not have permission to use this kit!'
   doesnt-exist: '<red>Does not exist'
-  disabled: '<red>Kits disabled in this game.'
   give-default: 'You have been given the default kit'
 
   # Main kits GUI
@@ -190,20 +188,9 @@ death-messages:
     minecraft:wind_charge: '<player> was blown away by a wind charge'
 
 #  COMMANDS
-## Spawn
-cmd-spawn-same: '<red>You cannot have two spawns in the same location!'
-cmd-spawn-set: '<green>You set HungerGames spawn <grey>#<number><green>!'
 
 ## Kit
 cmd-no-change: '<red>You can not change your kit while the game is running!'
-
-## Reload
-cmd-reload-attempt: '<green>Attempting to reload HungerGames!'
-cmd-reload-reloaded-arena: '<gold> - <yellow>Arenas have been reloaded!'
-cmd-reload-reloaded-kit: '<gold> - <yellow>Kits have been reloaded!'
-cmd-reload-reloaded-items: '<gold> - <yellow>RandomItems have been reloaded!'
-cmd-reload-reloaded-config: '<gold> - <yellow>Config values have been reloaded!'
-cmd-reload-reloaded-success: '<green>- Successfully reloaded HungerGames'
 
 ## COMMANDS
 command:
@@ -220,8 +207,6 @@ command:
   create-divisible-1: '<red>Time-in-seconds must be divisible by 30!'
   create-divisible-2: '<red>Ex: 90 is divisible by 30'
   create-minmax: '<red>min-players cannot be more then max-players!'
-  create-created: '<green>You created HungerGames arena <aqua><arena><green>!'
-  create-add-spawns: "<gold>You're now ready to set some spawns with '<green>/hg addspawn<gold>'"
   create-session-stick-name: '<aqua><!italic>HungerGames Selection Stick'
   create-session-start: '<aqua>You are now ready to create your area, click the first corner of your area with the stick.'
   create-session-next-corner: '<green>First corner selected! <aqua>Now select your second corner.'
@@ -307,31 +292,16 @@ lobby-signs:
 ## Start
 cmd-start-starting: '<aqua><arena><gold> is now starting!'
 
-## Stop
-cmd-stop-all: '<green>Stopped all games'
-cmd-stop-arena: '<aqua><arena><red> Has been stopped!'
-cmd-stop-noexist: '<red>The game <aqua><arena><red> does not exist!'
-
 ## Handler
 cmd-handler-nokit: '<red>You can not choose a kit while the game is running!'
 cmd-handler-nocmd: '<red>You can not use non-HungerGames commands while in-game!'
 cmd-handler-playing: '<red>This player is currently playing <dark_aqua>HungerGames!'
-
-## Border
-cmd-border-size: '<gold>Border size for <aqua><arena> <gold>has been set to <aqua><size>'
-cmd-border-center: '<gold>Border center for <aqua><arena> <gold>has been set at your location'
-cmd-border-timer: '<gold>Border time for <aqua><arena> <gold>has been set to start at remaining <aqua><start> seconds <gold>and stop at <aqua><end> seconds'
 
 #  LISTENER
 listener-not-running: '<red>The game is not running!'
 listener-no-edit-block: '<red>You cannot edit this block type!'
 listener-no-interact: '<red>You cannot interact until the game has started!'
 listener-sign-click-hand: '<red>Click the sign with your hand!'
-
-#  WAND LISTENER
-listener-wand-create-arena: "<gold>You're now ready to create your arena with '<green>/hg create<gold>'"
-listener-wand-set-pos-2: '<gold>Now you need to set position 2!'
-listener-wand-big-enough: '<red>An arena needs to be a cuboid of at least 5x5x5 in size.'
 
 #  ARENA DEBUG
 arena-debug:

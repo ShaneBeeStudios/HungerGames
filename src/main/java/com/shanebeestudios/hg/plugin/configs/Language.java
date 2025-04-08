@@ -55,31 +55,13 @@ public class Language {
     public String roam_game_started;
     public String roam_time;
     public String roam_finished;
-    public String cmd_spawn_same;
-    public String cmd_spawn_set;
-    public String cmd_kit_no_change;
-    public String cmd_reload_attempt;
-    public String cmd_reload_reloaded_arena;
-    public String cmd_reload_reloaded_kit;
-    public String cmd_reload_reloaded_items;
-    public String cmd_reload_reloaded_config;
-    public String cmd_reload_reloaded_success;
     public String cmd_start_starting;
-    public String cmd_stop_all;
-    public String cmd_stop_arena;
-    public String cmd_stop_noexist;
     public String cmd_handler_nokit;
     public String cmd_handler_nocmd;
     public String cmd_handler_playing;
-    public String cmd_border_size;
-    public String cmd_border_center;
-    public String cmd_border_timer;
     public String listener_not_running;
     public String listener_no_edit_block;
     public String listener_no_interact;
-    public String listener_wand_create_arena;
-    public String listener_wand_set_pos_2;
-    public String listener_wand_big_enough;
     public String listener_sign_click_hand;
     public String bossbar;
     public String lb_blank_space;
@@ -121,8 +103,6 @@ public class Language {
     public String command_create_divisible_1;
     public String command_create_divisible_2;
     public String command_create_minmax;
-    public String command_create_add_spawn;
-    public String command_create_created;
     public String command_create_session_stick_name;
     public String command_create_session_start;
     public String command_create_session_next_corner;
@@ -205,9 +185,7 @@ public class Language {
     public String kits_join_msg;
     public String kits_join_avail;
     public String kits_join_kits_command;
-    public String kits_no_perm;
     public String kits_doesnt_exist;
-    public String kits_disabled;
     public String kits_give_default;
     // Kits - Kits GUI
     public String kits_kits_gui_title;
@@ -257,23 +235,23 @@ public class Language {
     }
 
     private void loadLangFile() {
-        if (customLangFile == null) {
-            customLangFile = new File(plugin.getDataFolder(), "language.yml");
+        if (this.customLangFile == null) {
+            this.customLangFile = new File(this.plugin.getDataFolder(), "language.yml");
         }
-        if (!customLangFile.exists()) {
-            plugin.saveResource("language.yml", false);
-            lang = YamlConfiguration.loadConfiguration(customLangFile);
+        if (!this.customLangFile.exists()) {
+            this.plugin.saveResource("language.yml", false);
+            this.lang = YamlConfiguration.loadConfiguration(this.customLangFile);
             Util.log("New language.yml <green>created");
         } else {
-            lang = YamlConfiguration.loadConfiguration(customLangFile);
+            this.lang = YamlConfiguration.loadConfiguration(this.customLangFile);
         }
-        matchConfig(lang, customLangFile);
+        matchConfig(this.lang, this.customLangFile);
         loadLang();
         Util.log("language.yml <green>successfully loaded");
     }
 
     // Used to update config
-    @SuppressWarnings("ConstantConditions")
+    @SuppressWarnings({"ConstantConditions", "CallToPrintStackTrace"})
     private void matchConfig(FileConfiguration config, File file) {
         try {
             boolean hasUpdated = false;
@@ -302,91 +280,73 @@ public class Language {
     }
 
     private void loadLang() {
-        prefix = lang.getString("prefix");
-        player_joined_game = lang.getString("player-joined-game");
-        player_left_game = lang.getString("player-left-game");
-        game_started = lang.getString("game-started");
-        game_join = lang.getString("game-join");
-        game_countdown = lang.getString("game-countdown");
-        game_almost_over = lang.getString("game-almost-over");
-        game_ending_minsec = lang.getString("game-ending-minsec");
-        game_ending_min = lang.getString("game-ending-min");
-        game_ending_sec = lang.getString("game-ending-sec");
-        game_border_closing = lang.getString("game-border-closing");
-        game_running = lang.getString("game-running");
+        this.prefix = this.lang.getString("prefix");
+        player_joined_game = this.lang.getString("player-joined-game");
+        player_left_game = this.lang.getString("player-left-game");
+        this.game_started = this.lang.getString("game-started");
+        this.game_join = this.lang.getString("game-join");
+        this.game_countdown = this.lang.getString("game-countdown");
+        this.game_almost_over = this.lang.getString("game-almost-over");
+        this.game_ending_minsec = this.lang.getString("game-ending-minsec");
+        this.game_ending_min = this.lang.getString("game-ending-min");
+        this.game_ending_sec = this.lang.getString("game-ending-sec");
+        this.game_border_closing = this.lang.getString("game-border-closing");
+        this.game_running = this.lang.getString("game-running");
 
-        players_to_start = lang.getString("players-to-start");
-        arena_not_ready = lang.getString("arena-not-ready");
-        arena_spectate = lang.getString("arena-spectate");
-        game_full = lang.getString("game-full");
-        player_won = lang.getString("player-won");
+        players_to_start = this.lang.getString("players-to-start");
+        this.arena_not_ready = this.lang.getString("arena-not-ready");
+        this.arena_spectate = this.lang.getString("arena-spectate");
+        this.game_full = this.lang.getString("game-full");
+        player_won = this.lang.getString("player-won");
 
-        winning_amount = lang.getString("winning-amount");
-        team_invite_1 = lang.getString("team.invite-1");
-        team_invite_2 = lang.getString("team.invite-2");
-        team_invite_3 = lang.getString("team.invite-3");
-        team_invite_4 = lang.getString("team.invite-4");
-        team_prefix = lang.getString("team.prefix");
-        team_suffix = lang.getString("team.suffix");
-        team_joined = lang.getString("team.joined");
+        winning_amount = this.lang.getString("winning-amount");
+        team_invite_1 = this.lang.getString("team.invite-1");
+        team_invite_2 = this.lang.getString("team.invite-2");
+        team_invite_3 = this.lang.getString("team.invite-3");
+        team_invite_4 = this.lang.getString("team.invite-4");
+        team_prefix = this.lang.getString("team.prefix");
+        team_suffix = this.lang.getString("team.suffix");
+        team_joined = this.lang.getString("team.joined");
 
-        chest_drop_1 = lang.getString("chest-drop-1");
-        chest_drop_2 = lang.getString("chest-drop-2");
+        chest_drop_1 = this.lang.getString("chest-drop-1");
+        chest_drop_2 = this.lang.getString("chest-drop-2");
 
-        compass_nearest_player = lang.getString("compass-nearest-player");
+        compass_nearest_player = this.lang.getString("compass-nearest-player");
 
-        roam_game_started = lang.getString("roam-game-started");
-        roam_time = lang.getString("roam-time");
-        roam_finished = lang.getString("roam-finished");
+        roam_game_started = this.lang.getString("roam-game-started");
+        roam_time = this.lang.getString("roam-time");
+        roam_finished = this.lang.getString("roam-finished");
 
-        cmd_spawn_same = lang.getString("cmd-spawn-same");
-        cmd_spawn_set = lang.getString("cmd-spawn-set");
-        cmd_kit_no_change = lang.getString("cmd-kits.no-change");
-        cmd_reload_attempt = lang.getString("cmd-reload-attempt");
-        cmd_reload_reloaded_arena = lang.getString("cmd-reload-reloaded-arena");
-        cmd_reload_reloaded_config = lang.getString("cmd-reload-reloaded-config");
-        cmd_reload_reloaded_items = lang.getString("cmd-reload-reloaded-items");
-        cmd_reload_reloaded_kit = lang.getString("cmd-reload-reloaded-kit");
-        cmd_reload_reloaded_success = lang.getString("cmd-reload-reloaded-success");
-        cmd_start_starting = lang.getString("cmd-start-starting");
-        cmd_stop_all = lang.getString("cmd-stop-all");
-        cmd_stop_arena = lang.getString("cmd-stop-arena");
-        cmd_stop_noexist = lang.getString("cmd-stop-noexist");
-        cmd_handler_nokit = lang.getString("cmd-handler-nokit");
-        cmd_handler_nocmd = lang.getString("cmd-handler-nocmd");
-        cmd_handler_playing = lang.getString("cmd-handler-playing");
-        listener_not_running = lang.getString("listener-not-running");
-        listener_no_edit_block = lang.getString("listener-no-edit-block");
-        listener_no_interact = lang.getString("listener-no-interact");
-        listener_sign_click_hand = lang.getString("listener-sign-click-hand");
-        listener_wand_create_arena = lang.getString("listener-wand-create-arena");
-        listener_wand_set_pos_2 = lang.getString("listener-wand-set-pos-2");
-        listener_wand_big_enough = lang.getString("listener-wand-big-enough");
-        bossbar = lang.getString("game-bossbar");
+        cmd_start_starting = this.lang.getString("cmd-start-starting");
+        cmd_handler_nokit = this.lang.getString("cmd-handler-nokit");
+        cmd_handler_nocmd = this.lang.getString("cmd-handler-nocmd");
+        cmd_handler_playing = this.lang.getString("cmd-handler-playing");
+        listener_not_running = this.lang.getString("listener-not-running");
+        listener_no_edit_block = this.lang.getString("listener-no-edit-block");
+        listener_no_interact = this.lang.getString("listener-no-interact");
+        listener_sign_click_hand = this.lang.getString("listener-sign-click-hand");
+        bossbar = this.lang.getString("game-bossbar");
 
-        game_chest_refill = lang.getString("game-chests-refill");
-        cmd_border_center = lang.getString("cmd-border-center");
-        cmd_border_size = lang.getString("cmd-border-size");
-        cmd_border_timer = lang.getString("cmd-border-timer");
+        this.game_chest_refill = this.lang.getString("game-chests-refill");
 
-        lb_blank_space = lang.getString("lb-blank-space");
-        lb_combined_separator = lang.getString("lb-combined-separator");
-        lb_missing_player = lang.getString("lb-missing-player");
+        lb_blank_space = this.lang.getString("lb-blank-space");
+        lb_combined_separator = this.lang.getString("lb-combined-separator");
+        lb_missing_player = this.lang.getString("lb-missing-player");
 
-        lobby_sign_1_1 = lang.getString("lobby-signs.sign-1.line-1");
-        lobby_sign_1_3 = lang.getString("lobby-signs.sign-1.line-3");
-        lobby_sign_cost = lang.getString("lobby-signs.sign-1.line-4");
-        lobby_sign_2_1 = lang.getString("lobby-signs.sign-2.line-1");
-        lobby_sign_3_1 = lang.getString("lobby-signs.sign-3.line-1");
+        this.lobby_sign_1_1 = this.lang.getString("lobby-signs.sign-1.line-1");
+        this.lobby_sign_1_3 = this.lang.getString("lobby-signs.sign-1.line-3");
+        this.lobby_sign_cost = this.lang.getString("lobby-signs.sign-1.line-4");
+        this.lobby_sign_2_1 = this.lang.getString("lobby-signs.sign-2.line-1");
+        this.lobby_sign_3_1 = this.lang.getString("lobby-signs.sign-3.line-1");
 
         // ARENA DEBUG
-        arena_debug_need_more_spawns = lang.getString("arena-debug.need-more-spawns");
-        arena_debug_min_max_players = lang.getString("arena-debug.min-max-players");
-        arena_debug_broken_debug = lang.getString("arena-debug.broken-debug");
-        arena_debug_broken_debug_2 = lang.getString("arena-debug.broken-debug-2");
-        arena_debug_invalid_lobby = lang.getString("arena-debug.invalid-lobby");
-        arena_debug_set_lobby = lang.getString("arena-debug.set-lobby");
-        arena_debug_ready_run = lang.getString("arena-debug.ready-run");
+        this.arena_debug_need_more_spawns = this.lang.getString("arena-debug.need-more-spawns");
+        this.arena_debug_min_max_players = this.lang.getString("arena-debug.min-max-players");
+        this.arena_debug_broken_debug = this.lang.getString("arena-debug.broken-debug");
+        this.arena_debug_broken_debug_2 = this.lang.getString("arena-debug.broken-debug-2");
+        this.arena_debug_invalid_lobby = this.lang.getString("arena-debug.invalid-lobby");
+        this.arena_debug_set_lobby = this.lang.getString("arena-debug.set-lobby");
+        this.arena_debug_ready_run = this.lang.getString("arena-debug.ready-run");
 
         // Tracking Stick
         this.tracking_stick_name = this.lang.getString("tracking-stick.name");
@@ -399,87 +359,85 @@ public class Language {
 
         // COMMANDS
         // Base
-        command_base_not_in_valid_game = lang.getString("command.base-not-in-valid-game");
-        command_base_no_region = lang.getString("command.base-no-region");
-        command_base_status = lang.getString("command.base-status");
+        this.command_base_not_in_valid_game = this.lang.getString("command.base-not-in-valid-game");
+        this.command_base_no_region = this.lang.getString("command.base-no-region");
+        this.command_base_status = this.lang.getString("command.base-status");
         // ChestRefill
-        command_chest_refill_now = lang.getString("command.chest-refill-now");
+        this.command_chest_refill_now = this.lang.getString("command.chest-refill-now");
         // Create
-        command_create_error_arguments = lang.getString("command.create-error-arguments");
-        command_create_error_already_exists = lang.getString("command.create-error-already-exists");
-        command_create_error_session_exists = lang.getString("command.create-error-session-exists");
-        command_create_divisible_1 = lang.getString("command.create-divisible-1");
-        command_create_divisible_2 = lang.getString("command.create-divisible-2");
-        command_create_minmax = lang.getString("command.create-minmax");
-        command_create_created = lang.getString("command.create-created");
-        command_create_add_spawn = lang.getString("command.create-add-spawns");
-        command_create_session_stick_name = lang.getString("command.create-session-stick-name");
-        command_create_session_start = lang.getString("command.create-session-start");
-        command_create_session_next_corner = lang.getString("command.create-session-next-corner");
-        command_create_session_select_spawns = lang.getString("command.create-session-select-spawns");
-        command_create_session_select_spawns_next = lang.getString("command.create-session-select-spawns-next");
-        command_create_session_error_too_small = lang.getString("command.create-session-error-too-small");
-        command_create_session_already_in_arena = lang.getString("command.create-session-already-in-arena");
-        command_create_session_select_sign = lang.getString("command.create-session-select-sign");
-        command_create_session_sign_invalid = lang.getString("command.create-session-sign-invalid");
-        command_create_session_done = lang.getString("command.create-session-done");
+        this.command_create_error_arguments = this.lang.getString("command.create-error-arguments");
+        this.command_create_error_already_exists = this.lang.getString("command.create-error-already-exists");
+        this.command_create_error_session_exists = this.lang.getString("command.create-error-session-exists");
+        this.command_create_divisible_1 = this.lang.getString("command.create-divisible-1");
+        this.command_create_divisible_2 = this.lang.getString("command.create-divisible-2");
+        this.command_create_minmax = this.lang.getString("command.create-minmax");
+        this.command_create_session_stick_name = this.lang.getString("command.create-session-stick-name");
+        this.command_create_session_start = this.lang.getString("command.create-session-start");
+        this.command_create_session_next_corner = this.lang.getString("command.create-session-next-corner");
+        this.command_create_session_select_spawns = this.lang.getString("command.create-session-select-spawns");
+        this.command_create_session_select_spawns_next = this.lang.getString("command.create-session-select-spawns-next");
+        this.command_create_session_error_too_small = this.lang.getString("command.create-session-error-too-small");
+        this.command_create_session_already_in_arena = this.lang.getString("command.create-session-already-in-arena");
+        this.command_create_session_select_sign = this.lang.getString("command.create-session-select-sign");
+        this.command_create_session_sign_invalid = this.lang.getString("command.create-session-sign-invalid");
+        this.command_create_session_done = this.lang.getString("command.create-session-done");
         // Delete
-        command_delete_attempt = lang.getString("command.delete-attempt");
-        command_delete_kicking = lang.getString("command.delete-kicking");
-        command_delete_stopping = lang.getString("command.delete-stopping");
-        command_delete_deleted = lang.getString("command.delete-deleted");
-        command_delete_failed = lang.getString("command.delete-failed");
-        command_delete_rollback = lang.getString("command.delete-rollback");
-        command_delete_noexist = lang.getString("command.delete-noexist");
+        this.command_delete_attempt = this.lang.getString("command.delete-attempt");
+        this.command_delete_kicking = this.lang.getString("command.delete-kicking");
+        this.command_delete_stopping = this.lang.getString("command.delete-stopping");
+        this.command_delete_deleted = this.lang.getString("command.delete-deleted");
+        this.command_delete_failed = this.lang.getString("command.delete-failed");
+        this.command_delete_rollback = this.lang.getString("command.delete-rollback");
+        this.command_delete_noexist = this.lang.getString("command.delete-noexist");
         // Edit
         // - ChestRefill
-        command_edit_chest_refill_time_set = lang.getString("command.edit.chest-refill-time-set");
-        command_edit_chest_refill_repeat_set = lang.getString("command.edit.chest-refill-repeat-set");
+        this.command_edit_chest_refill_time_set = this.lang.getString("command.edit.chest-refill-time-set");
+        this.command_edit_chest_refill_repeat_set = this.lang.getString("command.edit.chest-refill-repeat-set");
         // - LobbyWall
-        command_edit_lobbywall_set = lang.getString("command.edit.lobbywall-set");
-        command_edit_lobbywall_incorrect = lang.getString("command.edit.lobbywall-incorrect");
-        command_edit_lobbywall_format = lang.getString("command.edit.lobbywall-format");
+        this.command_edit_lobbywall_set = this.lang.getString("command.edit.lobbywall-set");
+        this.command_edit_lobbywall_incorrect = this.lang.getString("command.edit.lobbywall-incorrect");
+        this.command_edit_lobbywall_format = this.lang.getString("command.edit.lobbywall-format");
 
         // Exit
-        command_exit_set_global = lang.getString("command.exit-set-global");
-        command_exit_set_all = lang.getString("command.exit-set-all");
-        command_exit_set_arena = lang.getString("command.exit-set-arena");
+        this.command_exit_set_global = this.lang.getString("command.exit-set-global");
+        this.command_exit_set_all = this.lang.getString("command.exit-set-all");
+        this.command_exit_set_arena = this.lang.getString("command.exit-set-arena");
         // Join
-        command_join_already_in_game = lang.getString("command.join-already-in-game");
-        command_join_already_in_game_other = lang.getString("command.join-already-in-game-other");
-        command_join_no_money = lang.getString("command.join-no-money");
+        this.command_join_already_in_game = this.lang.getString("command.join-already-in-game");
+        this.command_join_already_in_game_other = this.lang.getString("command.join-already-in-game-other");
+        this.command_join_no_money = this.lang.getString("command.join-no-money");
         // Kit
         this.command_kit_game_running = this.lang.getString("command.kit.game-running");
         this.command_kit_invalid_name = this.lang.getString("command.kit.invalid-name");
         this.command_kit_no_permission = this.lang.getString("command.kit.no-permission");
         // List
-        command_list_players = lang.getString("command.list-players");
-        command_list_players_delimiter = lang.getString("command.list-players-delimiter");
+        this.command_list_players = this.lang.getString("command.list-players");
+        this.command_list_players_delimiter = this.lang.getString("command.list-players-delimiter");
         // Leave
-        command_leave_left = lang.getString("command.leave-left");
-        command_leave_refund = lang.getString("command.leave-refund");
+        this.command_leave_left = this.lang.getString("command.leave-left");
+        this.command_leave_refund = this.lang.getString("command.leave-refund");
         // Team
-        command_team_player_not_available = lang.getString("command.team-player-not-available");
-        command_team_only_leader = lang.getString("command.team-only-leader");
-        command_team_on_team = lang.getString("command.team-on-team");
-        command_team_max = lang.getString("command.team-max");
-        command_team_invited = lang.getString("command.team-invited");
-        command_team_wrong = lang.getString("command.team-wrong");
-        command_team_no_pend = lang.getString("command.team-no-pending");
-        command_team_joined = lang.getString("command.team-joined");
-        command_team_deny = lang.getString("command.team-deny");
-        command_team_no_team = lang.getString("command.team-no-team");
-        command_team_not_on_team = lang.getString("command.team-not-on-team");
-        command_team_tp = lang.getString("command.team-tp");
-        command_team_self = lang.getString("command.team-self");
-        command_team_created = lang.getString("command.team-created");
-        command_team_already_exists = lang.getString("command.team-already-exists");
-        command_team_already_have = lang.getString("command.team-already-have");
-        command_team_none = lang.getString("command.team-none");
+        this.command_team_player_not_available = this.lang.getString("command.team-player-not-available");
+        this.command_team_only_leader = this.lang.getString("command.team-only-leader");
+        this.command_team_on_team = this.lang.getString("command.team-on-team");
+        this.command_team_max = this.lang.getString("command.team-max");
+        this.command_team_invited = this.lang.getString("command.team-invited");
+        this.command_team_wrong = this.lang.getString("command.team-wrong");
+        this.command_team_no_pend = this.lang.getString("command.team-no-pending");
+        this.command_team_joined = this.lang.getString("command.team-joined");
+        this.command_team_deny = this.lang.getString("command.team-deny");
+        this.command_team_no_team = this.lang.getString("command.team-no-team");
+        this.command_team_not_on_team = this.lang.getString("command.team-not-on-team");
+        this.command_team_tp = this.lang.getString("command.team-tp");
+        this.command_team_self = this.lang.getString("command.team-self");
+        this.command_team_created = this.lang.getString("command.team-created");
+        this.command_team_already_exists = this.lang.getString("command.team-already-exists");
+        this.command_team_already_have = this.lang.getString("command.team-already-have");
+        this.command_team_none = this.lang.getString("command.team-none");
         // Toggle
-        command_toggle_unlocked = lang.getString("command.toggle-unlocked");
-        command_toggle_locked = lang.getString("command.toggle-locked");
-        command_toggle_running = lang.getString("command.toggle-running");
+        this.command_toggle_unlocked = this.lang.getString("command.toggle-unlocked");
+        this.command_toggle_locked = this.lang.getString("command.toggle-locked");
+        this.command_toggle_running = this.lang.getString("command.toggle-running");
 
         // Death Messages
         ConfigurationSection entityTypeSection = this.lang.getConfigurationSection("death-messages.entity-types");
@@ -505,9 +463,7 @@ public class Language {
         this.kits_join_msg = this.lang.getString("kits.join-msg");
         this.kits_join_avail = this.lang.getString("kits.join-available");
         this.kits_join_kits_command = this.lang.getString("kits.join-kits-command");
-        this.kits_no_perm = this.lang.getString("kits.no-perm");
         this.kits_doesnt_exist = this.lang.getString("kits.doesnt-exist");
-        this.kits_disabled = this.lang.getString("kits.disabled");
         this.kits_give_default = this.lang.getString("kits.give-default");
         this.kits_kits_gui_title = this.lang.getString("kits.kits-gui.title");
         this.kits_kit_gui_apply = this.lang.getString("kits.kit-gui.apply");
