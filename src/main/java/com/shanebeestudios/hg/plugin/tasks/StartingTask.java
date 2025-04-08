@@ -21,7 +21,7 @@ public class StartingTask implements Runnable {
         String broadcast = this.lang.game_countdown_started
                 .replace("<arena>", name)
                 .replace("<seconds>", "" + this.timer);
-        if (Config.broadcastJoinMessages) {
+        if (Config.BROADCAST_JOIN_MESSAGES) {
             Util.broadcast(broadcast);
             Util.broadcast(this.lang.game_join.replace("<arena>", name));
         } else {

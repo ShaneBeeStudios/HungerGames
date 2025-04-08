@@ -8,9 +8,6 @@
 #  GENERAL PLUGIN MESSAGES
 prefix: '<grey>[<aqua>Hunger<dark_aqua>Games<grey>]'
 
-#  <amount> will be replaced with amount of players left to start a game
-players-to-start: '<aqua><amount> <gold>players to start!'
-
 #  <amount> will be replaced with the amount the player will receive on win
 winning-amount: '<grey>You received <aqua>$<amount> <grey>for winning <dark_aqua>Hunger<aqua>Games!'
 
@@ -181,6 +178,10 @@ death-messages:
 # GAME
 ##  <arena> will be replaced with the name of the arena
 game:
+  waiting-join: "<aqua><player> <grey>joined arena <white>'<aqua><arena><white>'"
+  #  <amount> will be replaced with amount of players left to start a game
+  waiting-players-to-start: '<aqua><amount> <gold>players to start!'
+
   running: "<red>The game <white>'<aqua><arena><white>' <red>is already running and cannot be joined!"
   join: "Use: <aqua>/hg join <arena><grey> to join!"
   countdown-started: "Arena <white>'<aqua><arena><white>' <grey>will begin in <green>30 seconds<grey>!"

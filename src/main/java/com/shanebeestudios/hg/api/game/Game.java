@@ -1,17 +1,17 @@
 package com.shanebeestudios.hg.api.game;
 
+import com.shanebeestudios.hg.api.data.Leaderboard;
+import com.shanebeestudios.hg.api.data.PlayerData;
 import com.shanebeestudios.hg.api.events.GameEndEvent;
 import com.shanebeestudios.hg.api.events.GameStartEvent;
 import com.shanebeestudios.hg.api.events.PlayerJoinGameEvent;
+import com.shanebeestudios.hg.api.game.GameCommandData.CommandType;
 import com.shanebeestudios.hg.api.status.Status;
 import com.shanebeestudios.hg.api.util.Util;
 import com.shanebeestudios.hg.api.util.Vault;
-import com.shanebeestudios.hg.plugin.configs.Language;
-import com.shanebeestudios.hg.api.data.Leaderboard;
-import com.shanebeestudios.hg.api.data.PlayerData;
-import com.shanebeestudios.hg.api.game.GameCommandData.CommandType;
 import com.shanebeestudios.hg.plugin.HungerGames;
 import com.shanebeestudios.hg.plugin.configs.Config;
+import com.shanebeestudios.hg.plugin.configs.Language;
 import com.shanebeestudios.hg.plugin.managers.PlayerManager;
 import com.shanebeestudios.hg.plugin.permission.Permissions;
 import com.shanebeestudios.hg.plugin.tasks.ChestDropTask;
@@ -228,7 +228,6 @@ public class Game {
      */
     public void startWaitingPeriod() {
         this.gameArenaData.setStatus(Status.WAITING);
-        // TODO Broadcast?!?!?
         long start = System.currentTimeMillis();
         this.gameBlockData.logBlocksForRollback();
         this.gameBlockData.setupRandomizedBonusChests();
@@ -295,6 +294,26 @@ public class Game {
     }
 
     /**
+     * Broadcast a message to all players on the server
+     * that someone joined a game, how many more to start
+     * and the command to join
+     *
+     * @param player Player who joined
+     */
+    private void broadcastJoin(Player player) {
+        if (!Config.BROADCAST_JOIN_MESSAGES) return;
+        String name = this.getGameArenaData().getName();
+        Util.broadcast(this.lang.game_waiting_join
+            .replace("<arena>", name)
+            .replace("<player>", player.getName()));
+
+        int toStart = this.gameArenaData.getMinPlayers() - this.gamePlayerData.getPlayers().size();
+        Util.broadcast(this.lang.game_waiting_players_to_start
+            .replace("<amount>", "" + toStart));
+        Util.broadcast(this.lang.game_join.replace("<arena>", name));
+    }
+
+    /**
      * Join a player to the game
      *
      * @param player Player to join the game
@@ -349,12 +368,15 @@ public class Game {
                 if (!canJoin(player)) return false;
                 this.gamePlayerData.addPlayerData(player);
                 startWaitingPeriod();
+                broadcastJoin(player);
             }
             case WAITING -> {
                 if (!canJoin(player)) return false;
                 this.gamePlayerData.addPlayerData(player);
                 if (this.gamePlayerData.getPlayers().size() >= this.gameArenaData.getMinPlayers()) {
                     startPreGameCountdown();
+                } else {
+                    broadcastJoin(player);
                 }
             }
             case COUNTDOWN -> {
@@ -500,7 +522,7 @@ public class Game {
             this.gamePlayerData.messageAllActivePlayers(this.lang.game_player_left_game
                 .replace("<arena>", this.gameArenaData.getName())
                 .replace("<player>", player.getName()) +
-                (this.gameArenaData.getMinPlayers() - this.gamePlayerData.getPlayers().size() <= 0 ? "!" : ": " + this.lang.players_to_start
+                (this.gameArenaData.getMinPlayers() - this.gamePlayerData.getPlayers().size() <= 0 ? "!" : ": " + this.lang.game_waiting_players_to_start
                     .replace("<amount>", String.valueOf((this.gameArenaData.getMinPlayers() - this.gamePlayerData.getPlayers().size())))));
         }
         this.gameBlockData.updateLobbyBlock();

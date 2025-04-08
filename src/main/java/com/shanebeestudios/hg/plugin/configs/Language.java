@@ -24,7 +24,6 @@ public class Language {
     private final HungerGames plugin;
 
     public String prefix;
-    public String players_to_start;
     public String winning_amount;
     public String chest_drop_1;
     public String chest_drop_2;
@@ -129,6 +128,8 @@ public class Language {
     public String death_messages_other;
 
     // GAME
+    public String game_waiting_join;
+    public String game_waiting_players_to_start;
     public String game_join;
     public String game_countdown_started;
     public String game_countdown_timer;
@@ -291,8 +292,6 @@ public class Language {
     private void loadLang() {
         this.prefix = this.lang.getString("prefix");
 
-        players_to_start = this.lang.getString("players-to-start");
-
         winning_amount = this.lang.getString("winning-amount");
 
         chest_drop_1 = this.lang.getString("chest-drop-1");
@@ -414,6 +413,8 @@ public class Language {
         this.death_messages_other = this.lang.getString("death-messages.other");
 
         // GAME
+        this.game_waiting_join = this.lang.getString("game.waiting-join");
+        this.game_waiting_players_to_start = this.lang.getString("game.waiting-players-to-start");
         this.game_join = this.lang.getString("game.join");
         this.game_countdown_started = this.lang.getString("game.countdown-started");
         this.game_countdown_timer = this.lang.getString("game.countdown-timer");

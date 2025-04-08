@@ -23,7 +23,7 @@ public class Config {
     public static boolean SETTINGS_DEBUG;
 
     //Basic settings
-    public static boolean broadcastJoinMessages;
+    public static boolean BROADCAST_JOIN_MESSAGES;
     public static boolean broadcastWinMessages;
     public static boolean economy = true;
     public static boolean bossbar;
@@ -129,7 +129,7 @@ public class Config {
     private void loadConfig() {
         // Settings
         SETTINGS_DEBUG = config.getBoolean("settings.debug");
-        broadcastJoinMessages = config.getBoolean("settings.broadcast-join-messages");
+        BROADCAST_JOIN_MESSAGES = config.getBoolean("settings.broadcast-join-messages");
         broadcastWinMessages = config.getBoolean("settings.broadcast-win-messages");
         bossbar = config.getBoolean("settings.bossbar-countdown");
         TRACKING_STICK_USES = config.getInt("settings.trackingstick-uses");
