@@ -50,6 +50,7 @@ public class EditCommand extends SubCommand {
                         int finalSize = info.args().getByClass("final_size", Integer.class);
                         GameBorderData gameBorderData = game.getGameBorderData();
                         gameBorderData.setFinalBorderSize(finalSize);
+                        Util.sendPrefixedMessage(info.sender(), "Border final size set to %s", finalSize);
                         saveGame(game);
                     })))
             .then(LiteralArgument.literal("countdown_start")
@@ -59,6 +60,7 @@ public class EditCommand extends SubCommand {
                         int countdownStart = info.args().getByClass("countdown_start", Integer.class);
                         GameBorderData gameBorderData = game.getGameBorderData();
                         gameBorderData.setBorderCountdownStart(countdownStart);
+                        Util.sendPrefixedMessage(info.sender(), "Border countdown start set to %s", countdownStart);
                         saveGame(game);
                     })))
             .then(LiteralArgument.literal("countdown_end")
@@ -68,6 +70,8 @@ public class EditCommand extends SubCommand {
                         int countdownEnd = info.args().getByClass("countdown_end", Integer.class);
                         GameBorderData gameBorderData = game.getGameBorderData();
                         gameBorderData.setBorderCountdownEnd(countdownEnd);
+                        Util.sendPrefixedMessage(info.sender(), "Border countdown end set to %s", countdownEnd);
+
                         saveGame(game);
                     })))
             .then(LiteralArgument.literal("center_location")
@@ -77,6 +81,7 @@ public class EditCommand extends SubCommand {
                         Location2D centerLocation = info.args().getByClass("center_location", Location2D.class);
                         GameBorderData gameBorderData = game.getGameBorderData();
                         gameBorderData.setCenterLocation(convert(centerLocation));
+                        Util.sendPrefixedMessage(info.sender(), "Border center location set to %s", centerLocation);
                         saveGame(game);
                     })));
     }
@@ -133,6 +138,7 @@ public class EditCommand extends SubCommand {
                         Game game = CustomArg.getGame(info);
                         int freeRoamTime = info.args().getByClass("seconds", Integer.class);
                         game.getGameArenaData().setFreeRoamTime(freeRoamTime);
+                        Util.sendPrefixedMessage(info.sender(), "Free roam time set to %s", freeRoamTime);
                         saveGame(game);
                     })))
             .then(LiteralArgument.literal("cost")
@@ -141,6 +147,7 @@ public class EditCommand extends SubCommand {
                         Game game = CustomArg.getGame(info);
                         int cost = info.args().getByClass("dollars", Integer.class);
                         game.getGameArenaData().setCost(cost);
+                        Util.sendPrefixedMessage(info.sender(), "Cost set to %s", cost);
                         saveGame(game);
                     })))
             .then(LiteralArgument.literal("timer")
@@ -149,6 +156,7 @@ public class EditCommand extends SubCommand {
                         Game game = CustomArg.getGame(info);
                         int timerSeconds = info.args().getByClass("seconds", Integer.class);
                         game.getGameArenaData().setTimer(timerSeconds);
+                        Util.sendPrefixedMessage(info.sender(), "Timer set to %s", timerSeconds);
                         saveGame(game);
                     })))
             .then(LiteralArgument.literal("min_players")
@@ -160,6 +168,7 @@ public class EditCommand extends SubCommand {
                             throw CommandAPI.failWithString("Min players cannot be greater than max players");
                         }
                         game.getGameArenaData().setMinPlayers(minPlayers);
+                        Util.sendPrefixedMessage(info.sender(), "Min players set to %s", minPlayers);
                         saveGame(game);
                     })))
             .then(LiteralArgument.literal("max_players")
@@ -171,6 +180,7 @@ public class EditCommand extends SubCommand {
                             throw CommandAPI.failWithString("Max players cannot be less than min players");
                         }
                         game.getGameArenaData().setMaxPlayers(maxPlayers);
+                        Util.sendPrefixedMessage(info.sender(), "Max players set to %s", maxPlayers);
                         saveGame(game);
                     })));
     }
