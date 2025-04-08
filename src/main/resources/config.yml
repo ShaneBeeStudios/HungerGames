@@ -11,53 +11,61 @@
 # Bukkit Tags: https://hub.spigotmc.org/javadocs/spigot/org/bukkit/Tag.html
 
 settings:
-    # When enabled, more informative debug messages will be sent when errors occur
-    debug: false
-    # When enabled, if a player joins an arena, a message will broadcast to all players on the server that a game is available to
-    # join and how many players til it can start. Also a message will broadcast that a game has started, and that you can still join.
-    # If disabled, this will only broadcast to players in that specific game
-    broadcast-join-messages: true
-    # When enabled, winners will be broadcast to the whole server
-    # If disable, winners will only broadcast to players who played that specific game
-    broadcast-win-messages: true
-    # If mobs will spawn in the arena, and their interval
-    spawn-mobs: true
-    spawn-mobs-interval: 35
-    # The time once the game starts, how long they are safe from PvP (In seconds)
-    free-roam: 25
-    # Whether or not to show a countdown bossbar in game
-    bossbar-countdown: true
-    # The amount of uses a tracking stick will have
-    trackingstick-uses: 8
-    # Minimum amount of players required in a game for a tracking stick to work
-    players-for-trackingstick: 5
-    # Maximum/Minimum amount of items that will spawn in chests
-    max-chestcontent: 5
-    min-chestcontent: 1
-    # Maximum/Minimum amount of items that will spawn in bonus chests
-    max-bonus-chestcontent: 5
-    min-bonus-chestcontent: 1
-    # When the game has x seconds left, teleport the players back to their starting point
-    teleport-at-end: false
-    # The time in seconds to teleport players back to their starting point
-    # (note: increments of 30, ex: 30, 60, 90, 120, etc)
-    teleport-at-end-time: 30
-    # When enabled, if a player joins a game via command, when they leave they will
-    # be teleported back to their previous location (ie: where they ran the command)
-    # This value will be ignored when clicking lobby signs
-    save-previous-location: true
-    # Blocks that will be represented as bonus chests
-    # Supports Bukkit material enums and block tags
-    # `tag:shulker_boxes` was added in 1.15, for versions below this use `SHULKER_BOX` instead (which will cover all shulker boxes)
-    bonus-block-types:
-        - TRAPPED_CHEST
-        - BARREL
-        - tag:shulker_boxes
-    # When enabled, name tags will be hidden from all players in the game
-    hide-nametags: true
-team:
+  # When enabled, more informative debug messages will be sent when errors occur
+  debug: false
+  # When enabled, if a player joins an arena, a message will broadcast to all players on the server that a game is available to
+  # join and how many players til it can start.
+  # A message will broadcast that a game has started, and that you can still join.
+  # If disabled, this will only broadcast to players in that specific game
+  broadcast-join-messages: true
+  # When enabled, winners will be broadcast to the whole server
+  # If disabled, winners will only broadcast to players who played that specific game
+  broadcast-win-messages: true
+  # The time once the game starts, how long players are safe from PvP (In seconds)
+  # Set to 0 to disable
+  free-roam-time: 25
+  # Whether or not to show a countdown bossbar in game
+  bossbar-countdown: true
+  # The amount of uses a tracking stick will have
+  trackingstick-uses: 8
+  # Minimum amount of players required in a game for a tracking stick to work
+  players-for-trackingstick: 5
+  # Maximum/Minimum amount of items that will spawn in chests
+  max-chestcontent: 5
+  min-chestcontent: 1
+  # Maximum/Minimum amount of items that will spawn in bonus chests
+  max-bonus-chestcontent: 5
+  min-bonus-chestcontent: 1
+  # When the game has x seconds left, teleport the players back to their starting point
+  # If set to '0' players will not teleport
+  teleport-at-end-time: 30
+  # When enabled, if a player joins a game via command, when they leave they will
+  # be teleported back to their previous location (ie: where they ran the command)
+  # This value will be ignored when clicking lobby signs
+  save-previous-location: true
+
+  # The location players will teleport to after leaving a game
+  # This can be changed per arena
+  # If 'none', will use the player's respawn location or main world's spawn location
+  global-exit-location: 'none'
+
+# Settings for different scoreboard options
+# This doesn't necessarily mean the sidebar
+scoreboard:
+  # When enabled, name tags will be hidden from all players in the game
+  hide-nametags: true
+  show-health:
+    enabled: true
+    # Where to show health
+    # Options are 'player_list' or 'below_name'
+    # Note: 'below_name' won't work if 'hide-nametags' is enabled
+    display-slot: player_list
+    # How to render health
+    # Options are 'hearts' or 'integer'
+    render-type: hearts
+  teams:
     # When enabled, players will see nametags of other players on their team
-    # if 'hide-nametags' is disabled, this option is ignored and names will show regardless
+    # if 'hide-nametags' is disabled, this option is ignored and names will be shown regardless
     show-team-nametags: true
     # Maximum amount of players allowed on a team
     max-team-size: 3
@@ -65,165 +73,132 @@ team:
     allow-friendly-fire: false
     # When enabled, teammates can see each other if using invisibility potion
     can-see-friendly-invisibles: true
+mob-spawning:
+  # If mobs will spawn in game arenas
+  # Mobs are defined in the mobs.yml file
+  enabled: true
+  # How often mobs should spawn (in seconds)
+  interval: 35
+  # Limit how many mobs can spawn per player
+  cap-per-player: 5
 reward:
-    # Whether players get a reward when the game is done!
-    enabled: true
-    # The cash prize the winner receives. (Set to 0 if you would prefer to use commands instead of money)
-    cash: 500
-    # You can have the game run commands when a player wins
-    # Can be used for things like vote crate keys, GriefPrevention claim blocks, etc.
-    # Examples:     <player> will be replaced by winner
-    #commands:
-    #  - 'say Hi <player>'
-    #  - 'crates key give <player> vote 1'
-    commands:
-        - none
-    # You can send messages to the winner when they win
-    #Examples:     <player> will be replaced by winner, supports color codes
-    #messages:
-    #  - '&7Congrats &b<player> &7you won a vote key for winning &3Hunger&bGames'
-    messages:
-        - none
-random-chest:
+  # Whether players get a reward when the game is done!
+  enabled: true
+  # The cash prize the winner receives. (Set to 0 if you would prefer to use commands instead of money)
+  cash: 500
+  # You can have the game run commands when a player wins
+  # Can be used for things like vote crate keys, GriefPrevention claim blocks, etc.
+  # Examples:     <player> will be replaced by winner
+  #commands:
+  #  - 'say Hi <player>'
+  #  - 'crates key give <player> vote 1'
+  commands:
+    - none
+  # You can send messages to the winner when they win
+  #Examples:     <player> will be replaced by winner, supports color codes
+  #messages:
+  #  - '&7Congrats &b<player> &7you won a vote key for winning &3Hunger&bGames'
+  messages:
+    - none
+
+# Settings for chests in game
+chests:
+  # Regular chests
+  regular:
+    # Min amount of items to appear in a chest
+    min-content: 3
+    # Max amount of items to appear in a chest
+    max-content: 7
+  # Bonus chests
+  bonus:
+    min-content: 1
+    max-content: 5
+    # Blocks that will be represented as bonus chests
+    # prefix with '#' to use a block tag
+    block-types:
+      - 'minecraft:barrel'
+      - 'minecraft:trapped_chest'
+      - '#minecraft:shulker_boxes'
+    randomize:
+      # When enabled, the placed blocks will be replaced when the game starts
+      # The blocks will be replaced with the first element of 'chests.bonus.block-types' from above
+      enabled: true
+      # Place this block randomly around your arena to be replaced when a game starts
+      block: 'minecraft:pink_wool'
+      # Chance a block will be replaced (out of 100)
+      chance: 50
+  # Chest drops
+  chest-drop:
+    # Whether to enable chest drops
     enabled: false
+    # Interval for chest drops in seconds
     interval: 30
-    max-chestcontent: 9
+    min-content: 1
+    max-content: 5
 rollback:
-    # Let players break blocks in the arena, and restore when the game is done
-    allow-block-break: false
-    # Allow players to take items out of item frames (will be rolled back)
-    allow-itemframe-take: false
-    # The amount of blocks that will be restored during rollback per second (this number is actually divided by 10 and restored in 2 tick intervals)
-    blocks-per-second: 500
-    # When enabled, will not allow players to break blocks during the free-roam time
-    protect-during-cooldown: true
-    # If allow-block-break is true, this will fix leaves that decay if a tree is broken
-    fix-leaves: true
-    # Prevent players from trampling crops in your arenas
-    prevent-trampling: true
-    # List of blocks players can break (use ALL for all blocks)
-    editable-blocks:
-        - GRASS
-        - TALL_GRASS
-        - GRASS_BLOCK
-        - DIRT
-        - COBBLESTONE
-        - OAK_PLANKS
-        - SANDSTONE
-        - WHITE_WOOL
-        - STONE_BRICKS
-        - GLASS_PANE
+  # Let players break blocks in the arena, and restore when the game is done
+  allow-block-break: false
+  # Allow players to take items out of item frames (will be rolled back)
+  allow-itemframe-take: false
+  # The amount of blocks that will be restored during rollback per second (this number is actually divided by 20 and restored in 1 tick intervals)
+  blocks-per-second: 500
+  # When enabled, will not allow players to break blocks during the free-roam time
+  protect-during-free-roam: true
+  # Prevent players from trampling crops in your arenas
+  prevent-trampling: true
+  # List of blocks players can break (use 'all' for all blocks)
+  # prefix with '#' to use a block tag
+  editable-blocks:
+    - '#minecraft:wool'
+    - '#minecraft:dirt'
+    - 'minecraft:short_grass'
+    - 'minecraft:tall_grass'
+    - 'minecraft:cobblestone'
+    - 'minecraft:oak_planks'
+    - 'minecraft:sandstone'
+    - 'minecraft:stone_bricks'
+    - 'minecraft:glass_pane'
 
 ## WORLD BORDER
-# (Note) ONLY use this if you have a world dedicated to 1 arena.
-# - Will not work if more than 1 arena is in a world, will screw up other arenas
-# - Will not work if the world is used for other purposes - Will kill players outside of the arena
+# Default world border data for arenas
+# Each arena can change some of these values with the `/hg edit` command
+# Borders are client side, and will not harm other players outside the arena
 world-border:
-    # Enable the world borders for arenas
-    enabled: false
-    # If true, when the game starts a world border will start just outside of the arena
-    # It will count down based on the time of the arena
-    initiate-on-start: true
-    # When the countdown for the arena will start
-    # If `initiate-on-start` is true, the border will just countdown quicker at this time
-    # (ex: 60 = 60 seconds left in the game)(needs to be in increments of 30)
-    countdown-start: 60
-    # The time left for the border to stop (any amount, must be less than countdown-start)
-    # (ex: if countdown-start = 60 and countdown-end = 30, once the border starts, the border will shrink to the centre in 30 seconds)
-    # (ex: if countdown-start = 60 and countdown-end = 55, once the border starts, the border will shrink to the centre in 5 seconds)
-    countdown-end: 30
-    # Final border size from the centre outward
-    final-border-size: 30
-    # If true, the centre of the arena will be based on the first spawn location you set
-    # If false, the centre will be calculated by the centre of the arena
-    center-on-first-spawn: true
+  # Enable the world borders for arenas
+  enabled: false
+  # If true, when the game starts a world border will start just outside the arena
+  # It will count down based on the time of the arena
+  initiate-on-start: true
+  # When the countdown for the arena will start
+  # If `initiate-on-start` is true, the border will just countdown quicker at this time
+  # (ex: 60 = 60 seconds left in the game)(needs to be in increments of 30)
+  countdown-start: 60
+  # The time left for the border to stop (any amount, must be less than countdown-start)
+  # (ex: if countdown-start = 60 and countdown-end = 30, once the border starts, the border will shrink to the centre in 30 seconds)
+  # (ex: if countdown-start = 60 and countdown-end = 55, once the border starts, the border will shrink to the centre in 5 seconds)
+  countdown-end: 30
+  # Final border size from the centre outward
+  final-border-size: 30
+  # How to center the world border
+  # Options are 'first-spawn', 'random-spawn' and 'arena-center'
+  # You can also define a specific center for each arena with the '/hg edit' command
+  center: 'arena-center'
 ## SPECTATE
 # When enabled players can spectate games without interfering with players in the game
 spectate:
-    # Disabled by default
-    enabled: false
-    # When a player dies, they will automatically be put into spectator
-    death-to-spectate: true
-    # Hide spectating players from other players
-    hide-spectators: true
-    # Allow spectators to fly in the arena
-    fly: true
-    # Allow spectators to chat
-    chat: false
+  # Disabled by default
+  enabled: false
+  # When a player dies, they will automatically be put into spectator
+  death-to-spectate: true
+  # Hide spectating players from other players
+  hide-spectators: true
+  # Allow spectators to fly in the arena
+  fly: true
+  # Allow spectators to chat
+  chat: false
 
-mcmmo:
-    # If players in game can use mcMMO skills in game
-    use-skills: false
-    # If players can gain mcMMO experience ing ame
-    gain-experience: false
-
-## KITS
-# Create new ones, rename the current ones, delete them, go nuts
-# See KITS section in wiki for more info (https://github.com/ShaneBeeStudios/HungerGames/wiki/Config.yml#kits)
-kits:
-    # the name of the kit, change to whatever you would like
-    bowman:
-        # whether or not this kit requires a permission
-        permission: none
-        # armor, support color (leather only), name, lore and enchantments
-        helmet: LEATHER_HELMET color:red
-        chestplate: LEATHER_CHESTPLATE color:red
-        leggings: LEATHER_LEGGINGS color:red
-        boots: LEATHER_BOOTS color:red
-        # Items player's will receive in the kit, supports amount, name, lore and enchantments
-        # In MC 1.16+ HEX color codes are supported in names/lore, ex: <#08BA6C>
-        items:
-            - BOW name:&2Lucky_Bow
-            - ARROW 64 name:&aLucky_Arrow
-            - POTION potion-type:HEAL:60:0 2 name:&bHealing
-            - POTION potion-type:HEAL:80:1;LUCK:100:1 name:&3Lucky_Healing
-            - POTION potion-base:LONG_STRENGTH
-            - TIPPED_ARROW potion-base:HARMING:true:false
-        # Potion effects to be applied to the player, supports timed and "forever"
-        potion-effects:
-            - FIRE_RESISTANCE:2:forever
-    survivor:
-        permission: none
-        helmet: LEATHER_HELMET
-        chestplate: LEATHER_CHESTPLATE color:green
-        leggings: LEATHER_LEGGINGS color:green
-        boots: LEATHER_BOOTS
-        items:
-            - STONE_SWORD 1 name:&7Survival_Sword
-            - BREAD 4 name:&6Peasant's_Bread
-            - POTION potion-type:HEAL:60:0 2 name:&bHealing
-        potion-effects:
-    pro:
-        permission: none
-        helmet: TURTLE_HELMET name:&2Turtle_Shell
-        chestplate:
-        leggings:
-        boots:
-        items:
-            - IRON_SWORD 1
-            - BREAD 4 name:&8Pro_Bread
-            - POTION potion-type:HEAL:60:1 2 name:&bSuper_Healing
-        potion-effects:
-    ninja:
-        permission: none
-        helmet: LEATHER_HELMET color:black
-        chestplate: LEATHER_CHESTPLATE color:black name:&7Ninja-Jacket lore:&6Ninja-Stealth-Suit:&4------------- enchant:fire_protection
-        leggings: LEATHER_LEGGINGS color:black
-        boots: LEATHER_BOOTS color:black enchant:feather_falling
-        items:
-            - POTION potion-type:HEAL:60:1 2 name:&bSuper_Healing
-        potion-effects:
-            - SPEED:1:forever
-    stupidclass:
-        permission: hg.vip
-        helmet:
-        chestplate:
-        leggings:
-        boots:
-        items:
-            - IRON_SWORD 1 enchant:sharpness:2 enchant:smite:2 name:&bOP_&6Sword?
-            - BREAD 4
-            - POTION potion-type:HEAL:60:2 2 name:&bSuper_Duper_Healing
-            - POTION potion-base:STRONG_TURTLE_MASTER
-        potion-effects:
-            - FIRE_RESISTANCE:2:forever
+# Different sounds played in the game
+sounds:
+  # Played when a player dies in the game
+  death: 'ui.toast.challenge_complete'
+  open-chest-drop: 'block.ender_chest.open'

@@ -1,95 +1,157 @@
 # Mob Manager
 # Customize the mobs that spawn in your games
-
+# Default mobs which will apply to all arenas which don't have a custom mob setup
 mobs:
-  # These mobs will only spawn during day time
+  # These mobs will only spawn during daytime
   day:
-    # Default will apply to all arenas which don't have a custom mob setup
-    default:
-      1:
-        type: SHEEP
-        chance: 2
-      2:
-        type: COW
-        chance: 3
-      3:
-        type: PIG
-        chance: 3
-      4:
-        type: CHICKEN
-      5:
-        type: PARROT
-        chance: 2
-      6:
-        type: SPIDER
-      7:
-        type: CREEPER
-
-  # These mobs will only spawn during night time
+    'sheep':
+      type: minecraft:sheep
+      weight: 2
+    'baby_sheep':
+      type: minecraft:sheep
+      nbt: '{Age:-12000}'
+      weight: 2
+    'warm_cow':
+      type: minecraft:cow
+      weight: 3
+      nbt: '{variant:"minecraft:warm"}'
+    'cold_cow':
+      type: minecraft:cow
+      weight: 3
+      nbt: '{variant:"minecraft:cold"}'
+    'pig':
+      type: minecraft:pig
+      weight: 3
+    'chicken':
+      type: minecraft:chicken
+      weight: 1
+    'parrot':
+      type: minecraft:parrot
+      weight: 2
+    'spider':
+      type: minecraft:spider
+      weight: 1
+    'creeper':
+      type: minecraft:creeper
+      nbt: '{ExplosionRadius:2}'
+      weight: 1
+  # These mobs will only spawn during nighttime
   night:
-    # Default will apply to all arenas which don't have a custom mob setup
-    default:
-      1:
-        type: ZOMBIE
-        chance: 4
-      2:
-        type: DROWNED
-        chance: 2
-      3:
-        type: SKELETON
-        chance: 2
-      4:
-        type: STRAY
-      5:
-        type: CREEPER
+    'wolf':
+      type: minecraft:wolf
+      weight: 3
+      nbt: '{variant:"minecraft:ashen",sound_variant:"minecraft:angry"}'
+    'zombie':
+      type: minecraft:zombie
+      weight: 4
+    'baby_zombie':
+      type: minecraft:zombie
+      nbt: '{IsBaby:1b}'
+      weight: 2
+    'drowned':
+      type: minecraft:drowned
+      weight: 2
+    'skeleton':
+      type: minecraft:skeleton
+      weight: 2
+    'stray':
+      type: minecraft:stray
+      weight: 1
+    'bogged':
+      type: minecraft:bogged
+      weight: 2
+    'creeper':
+      type: minecraft:creeper
+      weight: 1
 
-    # Example setup for mobs (plugin will ignore these examples)
-    # Arena name
-    example-night:
-      # Example setup for vanilla mobs
-      1:
-        # Bukkit enum for EntityType (required)
-        type: SKELETON
-        # The amount of times this mob will be added to the list to randomly pull from (optional - default = 1)
-        chance: 3
-        # The custom name that will appear above this mobs head (optional)
-        name: '&7Night Guard'
-        # The item in this mobs hand
-        hand: DIAMOND_SWORD
-        # The item in this mobs off hand
-        off-hand: DIAMOND_AXE
+example:
+  # Example setup for mobs (plugin will ignore these examples)
+  night:
+    # Example setup for vanilla mobs
+    'night_guard':
+      # Minecraft ID of entity type
+      type: minecraft:skeleton
+      # The amount of times this mob will be added to the list to randomly pull from (optional - default = 1)
+      weight: 3
+      # The custom name that will appear above this mobs head (optional)
+      name: '<grey>Night Guard'
+
+      # The gear this mob will be wearing
+      # This follows the same format as the items.yml file
+      gear:
+        # The item in this mob's hand
+        hand:
+          id: minecraft:diamond_sword
+          count: 1
+        # The item in this mob's offhand
+        off_hand:
+          id: minecraft:diamond_axe
+          count: 1
         # The helmet this mob will be wearing (optional)
-        helmet: LEATHER_HELMET color:black
+        head:
+          id: minecraft:leather_helmet
+          count: 1
+          dyed_color: 1908001
         # The chestplate this mob will be wearing (optional)
-        chestplate: LEATHER_CHESTPLATE color:black
+        chest:
+          id: minecraft:leather_chestplate
+          count: 1
+          dyed_color: 1908001
         # The leggings this mob will be wearing (optional)
-        leggings: LEATHER_LEGGINGS color:black
+        legs:
+          id: minecraft:leather_leggings
+          count: 1
+          dyed_color: 1908001
         # The boots this mob will be wearing (optional)
-        boots: LEATHER_BOOTS color:black
-        # The death message that will be sent when a player is killed by this mob (optional)
-        death: '&c<player> was killed by a deadly Night Guard'
-        # The potion effects to be applied to this mob (optional)
-        potion-effects:
-          - SPEED:1:forever
-      2:
-        type: ZOMBIE
-        chance: 10
-        name: '&3The Beast'
-        helmet: GOLDEN_HELMET
-        chestplate: LEATHER_CHESTPLATE color:green
-        leggings: LEATHER_LEGGINGS color:green
-        boots: LEATHER_BOOTS color:green
-        death: '&b<player> &cwas slaughtered by &bThe Beast'
-        potion-effects:
-          - HEALTH_BOOST:1:forever
+        feet:
+          id: minecraft:leather_boots
+          count: 1
+          dyed_color: 1908001
+      # Modify attributes of a mob
+      attributes:
+        'minecraft:scale': 1.2
 
-      # Example setup for MythicMobs
-      3:
-        # Preface your MythicMob with "MM:"
-        type: MM:SkeletonKing
-        # I have no clue what level is for (optional - default = 1)
-        level: 1
-        # The amount of times this mob will be added to the list to randomly pull from (optional - default = 1)
-        chance: 3
-        # The death message that will be sent when a player is killed by this mob (optional)
-        death: '&b<player> &cwas sliced in half by a &eSkeleton King'
+      # The death message that will be sent when a player is killed by this mob (optional)
+      death_message: '<yellow><player> <red>was killed by a deadly <grey>Night Guard'
+
+      # The potion effects to be applied to this mob (optional)
+      potion_effects:
+        'minecraft:speed':
+          duration: -1
+          amplifier: 1
+    'the_beast':
+      type: minecraft:zombie
+      weight: 10
+      name: '<dark_aqua>The Beast'
+      gear:
+        feet:
+          id: minecraft:leather_boots
+          count: 1
+          dyed_color: 6192150
+        legs:
+          id: minecraft:leather_leggings
+          count: 1
+          dyed_color: 6192150
+        chest:
+          id: minecraft:leather_chestplate
+          count: 1
+          dyed_color: 6192150
+        head:
+          id: minecraft:golden_helmet
+          count: 1
+      death_message: '<aqua><player> <red>was slaughtered by <aqua>The Beast'
+      potion_effects:
+        'minecraft:health_boost':
+          duration: -1
+          amplifier: 1
+    # Example setup for MythicMobs
+    'skeleton_king':
+      # Preface your MythicMob with "MM:"
+      type: MM:SkeletonKing
+      # I have no clue what level is for (optional - default = 1)
+      level: 1
+      # The amount of times this mob will be added to the list to randomly pull from (optional - default = 1)
+      weight: 3
+      # The death message that will be sent when a player is killed by this mob (optional)
+      death_message: '<aqua><player> <red>was sliced in half by a <yellow>Skeleton King'
+

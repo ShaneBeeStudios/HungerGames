@@ -1,44 +1,222 @@
-# This file stores items which will appear in chests/bonus chests in your arenas
-# For info on setup, check the wiki https://github.com/ShaneBeeStudios/HungerGames/wiki/Items.yml
+# Items.yml
+# Default items that will populate in chests in your arena
+# There are 3 categories:
+# - 'regular' = Will populate in regular chests
+# - 'bonus' = Will populate in bonus chests (you can change the chest type in the config.yml)
+# - 'chest-drop' = Will populate in chest drops
+#
+# See wiki for more details: https://github.com/ShaneBeeStudios/HungerGames/wiki/Items.yml
 items:
-    - STONE_SWORD 1 x:5
-    - GOLDEN_SWORD 1
-    - MUSHROOM_STEW 1 x:2
-    - STONE_HOE 1
-    - LEATHER_HELMET 1 x:2
-    - LEATHER_CHESTPLATE 1 x:2
-    - LEATHER_LEGGINGS 1 x:2
-    - IRON_HELMET 1 x:2
-    - IRON_CHESTPLATE 1 x:2
-    - IRON_LEGGINGS 1 x:2
-    - IRON_BOOTS 1 x:2
-    - BOW 1 x:3
-    - ARROW 20 x:2
-    - MILK_BUCKET 1 x:2
-    - FISHING_ROD 1
-    - COMPASS 1
-    - STICK 1 name:&6TrackingStick_&aUses:_5 lore:&7Left_click_in_the_air:&7To_find_nearby_players
-    - GOLDEN_HELMET 1
-    - GOLDEN_CHESTPLATE 1
-    - BONE 1 x:2
-    - GOLDEN_LEGGINGS 1
-    - GOLDEN_BOOTS 1
-    - DIAMOND_SWORD 1 enchant:sharpness:1 name:&6Death_Dealer
-    - GOLDEN_APPLE 1
-    - CHAINMAIL_CHESTPLATE 1 x:1
-    - CHAINMAIL_LEGGINGS 1 x:1
-    - COOKIE 2 x:3
-    - MELON_SLICE 1 x:4
-    - COOKED_BEEF 1 x:2
-    - ENDER_PEARL 1 x:2
-    - POTION potion-type:SPEED:3600:1 1 x:2 name:&rPotion_of_Swiftness
-    - POTION potion-type:HEAL:1:1 1 x:2 name:&rPotion_of_Healing
-    - SPLASH_POTION potion-type:POISON:320:2 1 color:green name:&rSplash_Potion_of_Poison
-    - SPLASH_POTION potion-type:REGENERATION:660:1 1 x:2 name:&rSplash_Potion_of_Regeneration
-    - TIPPED_ARROW potion-base:long_poison
-    - TIPPED_ARROW potion-base:strong_slowness
-    - LINGERING_POTION potion-base:harming:false:false
-    - APPLE 2 x:5
-bonus:
-    - DIAMOND_SWORD 1 enchant:sharpness:5 name:&3Power_Sword
-    - DIAMOND_CHESTPLATE 1 enchant:protection:3 name:&aLife_Saver
+  regular:
+    '1':
+      id: 'minecraft:stone_sword'
+      count: 1
+      weight: 5
+    '2':
+      id: 'minecraft:golden_sword'
+      count: 1
+    '3':
+      id: 'minecraft:mushroom_stew'
+      count: 1
+      weight: 2
+    '4':
+      id: 'minecraft:stone_hoe'
+      count: 1
+    '5':
+      id: 'minecraft:leather_helmet'
+      count: 1
+      weight: 2
+    '6':
+      id: 'minecraft:leather_chestplate'
+      count: 1
+      weight: 2
+    '7':
+      id: 'minecraft:leather_leggings'
+      count: 1
+      weight: 2
+    '8':
+      id: 'minecraft:iron_helmet'
+      count: 1
+      weight: 2
+    '9':
+      id: 'minecraft:iron_chestplate'
+      count: 1
+      weight: 2
+    '10':
+      id: 'minecraft:iron_leggings'
+      count: 1
+      weight: 2
+    '11':
+      id: 'minecraft:iron_boots'
+      count: 1
+      weight: 2
+    '12':
+      id: 'minecraft:bow'
+      count: 1
+      weight: 3
+    '13':
+      id: 'minecraft:arrow'
+      count: 20
+      weight: 2
+    '14':
+      id: 'minecraft:milk_bucket'
+      count: 1
+      weight: 2
+    '15':
+      id: 'minecraft:fishing_rod'
+      count: 1
+    '16':
+      id: 'minecraft:compass'
+      count: 1
+    '17':
+      id: 'minecraft:stick'
+      count: 1
+      custom_name: '<gold>TrackingStick'
+      lore:
+        - '<green>Uses: 5'
+        - '<gray>Left click in the air'
+        - '<gray>To find nearby players'
+    '18':
+      id: 'minecraft:golden_helmet'
+      count: 1
+    '19':
+      id: 'minecraft:golden_chestplate'
+      count: 1
+    '20':
+      id: 'minecraft:bone'
+      count: 1
+      weight: 2
+    '21':
+      id: 'minecraft:golden_leggings'
+      count: 1
+    '22':
+      id: 'minecraft:golden_boots'
+      count: 1
+    '23':
+      id: 'minecraft:diamond_sword'
+      count: 1
+      custom_name: '<gold>Death Dealer'
+      enchantments:
+        'minecraft:sharpness': 1
+    '24':
+      id: 'minecraft:golden_apple'
+      count: 1
+    '25':
+      id: 'minecraft:chainmail_chestplate'
+      count: 1
+      weight: 1
+    '26':
+      id: 'minecraft:chainmail_leggings'
+      count: 1
+      weight: 1
+    '27':
+      id: 'minecraft:cookie'
+      count: 2
+      weight: 3
+    '28':
+      id: 'minecraft:melon_slice'
+      count: 1
+      weight: 4
+    '29':
+      id: 'minecraft:cooked_beef'
+      count: 1
+      weight: 2
+    '30':
+      id: 'minecraft:ender_pearl'
+      count: 1
+      weight: 2
+    '31':
+      id: 'minecraft:potion'
+      count: 1
+      custom_name: 'Potion of Swiftness'
+      potion_effects:
+        'minecraft:speed':
+          duration: 3600
+          amplifier: 1
+      weight: 2
+    '32':
+      id: 'minecraft:potion'
+      count: 1
+      custom_name: 'Potion of Healing'
+      potion_effects:
+        'minecraft:instant_health':
+          duration: 1
+          amplifier: 1
+      weight: 2
+    '33':
+      id: 'minecraft:splash_potion'
+      count: 1
+      custom_name: 'Splash Potion of Poison'
+      potion_effects:
+        'minecraft:poison':
+          duration: 320
+          amplifier: 2
+    '34':
+      id: 'minecraft:splash_potion'
+      count: 1
+      custom_name: 'Splash Potion of Regeneration'
+      potion_effects:
+        'minecraft:regeneration':
+          duration: 660
+          amplifier: 1
+      weight: 2
+    '35':
+      id: 'minecraft:tipped_arrow'
+      count: 1
+      potion: 'minecraft:long_poison'
+    '36':
+      id: 'minecraft:tipped_arrow'
+      count: 1
+      potion: 'minecraft:strong_slowness'
+    '37':
+      id: 'minecraft:lingering_potion'
+      count: 1
+      potion: 'minecraft:harming'
+    '38':
+      id: 'minecraft:apple'
+      count: 2
+      weight: 5
+  bonus:
+    '1':
+      id: 'minecraft:diamond_sword'
+      count: 1
+      custom_name: '<dark_aqua>Power Sword'
+      enchantments:
+        'minecraft:sharpness': 5
+    '2':
+      id: 'minecraft:diamond_chestplate'
+      count: 1
+      custom_name: '<green>Life Saver'
+      enchantments:
+        'minecraft:protection': 3
+    '3':
+      id: 'minecraft:cooked_beef'
+      count: 6
+      weight: 3
+    '4':
+      id: 'minecraft:enchanted_golden_apple'
+      count: 1
+    '5':
+      id: 'minecraft:suspicious_stew'
+      count: 1
+      nbt: '{"minecraft:suspicious_stew_effects":[{duration:1200,id:"minecraft:night_vision"}]}'
+    '6':
+      id: 'minecraft:suspicious_stew'
+      count: 1
+      nbt: '{"minecraft:suspicious_stew_effects":[{duration:1200,id:"minecraft:regeneration"}]}'
+  chest-drop:
+    '1':
+      id: 'minecraft:netherite_axe'
+      enchantments:
+        'minecraft:efficiency': 5
+    '2':
+      id: 'minecraft:netherite_chestplate'
+      enchantments:
+        'minecraft:blast_protection': 2
+    '3':
+      id: 'minecraft:cooked_mutton'
+      custom_name: '<green>Power Mutton'
+      nbt: '{"minecraft:food":{nutrition:15,saturation:10.0f}}'
+    '4':
+      id: 'minecraft:shield'
+      nbt: '{"minecraft:banner_patterns":[{color:"red",pattern:"minecraft:cross"}],"minecraft:base_color":"cyan"}'

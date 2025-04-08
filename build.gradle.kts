@@ -25,7 +25,9 @@ repositories {
     maven("https://jitpack.io")
 
     // MythicMobs
-    maven("https://mvn.lumine.io/repository/maven-public/")
+    maven("https://mvn.lumine.io/repository/maven-public/") {
+        content { includeGroup("io.lumine")  }
+    }
 
     // Papi
     maven("https://repo.extendedclip.com/content/repositories/placeholderapi/")
@@ -51,7 +53,7 @@ dependencies {
     compileOnly("me.clip:placeholderapi:2.11.6")
 
     // NBT-API
-    implementation("de.tr7zw:item-nbt-api:2.14.1") {
+    implementation("de.tr7zw:item-nbt-api:2.14.2-SNAPSHOT") {
         isTransitive = false
     }
 
@@ -59,6 +61,9 @@ dependencies {
     compileOnly("com.github.MilkBowl:VaultAPI:1.7") {
         isTransitive = false
     }
+
+    // FastBoard
+    implementation("fr.mrmicky:fastboard:2.1.4")
 }
 
 tasks {
@@ -71,8 +76,10 @@ tasks {
 
     }
     processResources {
-        exclude("language.yml")
-        expand("version" to projectVersion)
+        val prop = ("version" to projectVersion)
+        filesMatching("plugin.yml") {
+            expand(prop)
+        }
     }
     compileJava {
         options.release = 21
@@ -81,7 +88,8 @@ tasks {
     }
     javadoc {
         options.encoding = Charsets.UTF_8.name()
-        exclude("com/shanebeestudios/core/plugin")
+        exclude("com/shanebeestudios/hg/plugin/commands")
+        exclude("com/shanebeestudios/hg/plugin/listeners")
         (options as StandardJavadocDocletOptions).links(
             "https://jd.papermc.io/paper/1.21.1/",
             "https://jd.advntr.dev/api/4.17.0/",

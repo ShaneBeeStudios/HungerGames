@@ -1,0 +1,223 @@
+## KITS
+# Create new ones, rename the current ones, delete them, go nuts
+# See KITS section in wiki for more info (https://github.com/ShaneBeeStudios/HungerGames/wiki/Kits)
+kits:
+  # This kit will be given to players automatically when they join
+  # If you don't want that, just delete this kit
+  default:
+    helmet:
+      id: 'minecraft:leather_helmet'
+      count: 1
+    chestplate:
+      id: 'minecraft:leather_chestplate'
+      count: 1
+    leggings:
+      id: 'minecraft:leather_leggings'
+      count: 1
+    boots:
+      id: 'minecraft:leather_boots'
+      count: 1
+    items:
+      '1':
+        id: 'minecraft:wooden_sword'
+      '2':
+        id: 'minecraft:bread'
+        count: 6
+
+  # The name of the kit, change to whatever you would like
+  bowman:
+    # Whether or not this kit requires a permission
+    # none = no permission
+    # You can use any permission string you'd like
+    # Note: The permission will be prefixed with `hungergames.kit.kits.`
+    # If these kits are in an arena yml file, it'll prefix with `hungergames.kit.<arena name>.`
+    permission: 'none'
+    helmet:
+      id: 'minecraft:leather_helmet'
+      count: 1
+      dyed_color: 11546150
+    chestplate:
+      id: 'minecraft:leather_chestplate'
+      count: 1
+      dyed_color: 11546150
+    leggings:
+      id: 'minecraft:leather_leggings'
+      count: 1
+      dyed_color: 11546150
+    boots:
+      id: 'minecraft:leather_boots'
+      count: 1
+      dyed_color: 11546150
+    items:
+      '1':
+        id: 'minecraft:bow'
+        count: 1
+        custom_name: '<dark_green>Lucky Bow'
+      '2':
+        id: 'minecraft:arrow'
+        count: 64
+        custom_name: '<green>Lucky Arrow'
+      '3':
+        id: 'minecraft:potion'
+        count: 1
+        custom_name: '<aqua>Healing'
+        potion_effects:
+          'minecraft:instant_health':
+            duration: 60
+            amplifier: 0
+      '4':
+        id: 'minecraft:potion'
+        count: 1
+        custom_name: '<dark_aqua>Lucky Healing'
+        potion_effects:
+          'minecraft:instant_health':
+            duration: 80
+            amplifier: 1
+          'minecraft:luck':
+            duration: 100
+            amplifier: 1
+      '5':
+        id: 'minecraft:potion'
+        count: 1
+        potion: 'minecraft:long_strength'
+      '6':
+        id: 'minecraft:tipped_arrow'
+        count: 1
+        potion: 'minecraft:harming'
+    # Potion effects to be applied to the player
+    potion_effects:
+      'minecraft:fire_resistance':
+        duration: -1
+        amplifier: 2
+  survivor:
+    permission: 'none'
+    helmet:
+      id: 'minecraft:leather_helmet'
+      count: 1
+    chestplate:
+      id: 'minecraft:leather_chestplate'
+      count: 1
+      dyed_color: 6192150
+    leggings:
+      id: 'minecraft:leather_leggings'
+      count: 1
+      dyed_color: 6192150
+    boots:
+      id: 'minecraft:leather_boots'
+      count: 1
+    items:
+      '1':
+        id: 'minecraft:stone_sword'
+        count: 1
+        custom_name: '<gray>Survival Sword'
+      '2':
+        id: 'minecraft:bread'
+        count: 4
+        custom_name: "<gold>Peasant's Bread"
+      '3':
+        id: 'minecraft:potion'
+        count: 1
+        custom_name: '<aqua>Healing'
+        potion_effects:
+          'minecraft:instant_health':
+            duration: 60
+            amplifier: 0
+    potion_effects: [ ]
+  pro:
+    permission: 'none'
+    helmet:
+      id: 'minecraft:turtle_helmet'
+      count: 1
+      custom_name: '<dark_green>Turtle Shell'
+    chestplate: ''
+    leggings: ''
+    boots: ''
+    items:
+      '1':
+        id: 'minecraft:iron_sword'
+        count: 1
+      '2':
+        id: 'minecraft:bread'
+        count: 4
+        custom_name: '<dark_gray>Pro Bread'
+      '3':
+        id: 'minecraft:potion'
+        count: 1
+        custom_name: '<aqua>Super Healing'
+        potion_effects:
+          'minecraft:instant_health':
+            duration: 60
+            amplifier: 1
+    potion_effects: [ ]
+  ninja:
+    permission: 'none'
+    helmet:
+      id: 'minecraft:leather_helmet'
+      count: 1
+      dyed_color: 1908001
+    chestplate:
+      id: 'minecraft:leather_chestplate'
+      count: 1
+      custom_name: '<gray>Ninja-Jacket'
+      lore:
+        - '<gold>Ninja-Stealth-Suit'
+        - '<dark_red>-------------'
+      enchantments:
+        'minecraft:fire_protection': 1
+      dyed_color: 1908001
+    leggings:
+      id: 'minecraft:leather_leggings'
+      count: 1
+      dyed_color: 1908001
+    boots:
+      id: 'minecraft:leather_boots'
+      count: 1
+      enchantments:
+        'minecraft:feather_falling': 1
+      dyed_color: 1908001
+    items:
+      '1':
+        id: 'minecraft:potion'
+        count: 1
+        custom_name: '<aqua>Super Healing'
+        potion_effects:
+          'minecraft:instant_health':
+            duration: 60
+            amplifier: 1
+    potion_effects:
+      'minecraft:speed':
+        duration: -1
+        amplifier: 1
+  stupid_class:
+    permission: 'stupid_class'
+    helmet: ''
+    chestplate: ''
+    leggings: ''
+    boots: ''
+    items:
+      '1':
+        id: 'minecraft:iron_sword'
+        count: 1
+        custom_name: '<aqua>OP <gold>Sword?'
+        enchantments:
+          'minecraft:sharpness': 2
+          'minecraft:smite': 2
+      '2':
+        id: 'minecraft:bread'
+        count: 4
+      '3':
+        id: 'minecraft:potion'
+        count: 1
+        custom_name: '<aqua>Super Duper Healing'
+        potion_effects:
+          'minecraft:instant_health':
+            duration: 60
+            amplifier: 2
+      '4':
+        id: 'minecraft:potion'
+        count: 1
+        potion: 'minecraft:strong_turtle_master'
+    potion_effects:
+      'minecraft:fire_resistance':
+        duration: -1
+        amplifier: 2
