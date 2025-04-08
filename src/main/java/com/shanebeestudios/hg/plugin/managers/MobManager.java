@@ -169,15 +169,16 @@ public class MobManager {
                         mobEntry.addPotionEffects(potionEffects);
                     }
                 }
+
                 // ATTRIBUTES
-                if (mobSection.contains("attributes")) {
-                    for (String attributeString : mobSection.getStringList("attributes")) {
-                        Util.log("Creating attribute: %s", attributeString);
-                        String[] split = attributeString.split("=");
-                        NamespacedKey attributeKey = NamespacedKey.fromString(split[0]);
+                if (mobSection.isConfigurationSection("attributes")) {
+                    ConfigurationSection attributesSection = mobSection.getConfigurationSection("attributes");
+                    assert attributesSection != null;
+                    for (String key : attributesSection.getKeys(false)) {
+                        NamespacedKey attributeKey = NamespacedKey.fromString(key);
                         if (attributeKey == null) {
                             Util.warning("Attribute key isn't valid '%s' for mob entry '%s:%s'",
-                                attributeString, time, sectionKey);
+                                key, time, sectionKey);
                             continue;
                         }
                         Attribute attribute = Registries.ATTRIBUTE_REGISTRY.get(attributeKey);
@@ -186,8 +187,7 @@ public class MobManager {
                                 attributeKey.toString(), time, sectionKey);
                             continue;
                         }
-
-                        double value = Double.parseDouble(split[1]);
+                        double value = attributesSection.getDouble(key);
                         mobEntry.addAttribute(attribute, value);
                     }
                 }
