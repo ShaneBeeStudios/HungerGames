@@ -12,17 +12,7 @@ prefix: '<grey>[<aqua>Hunger<dark_aqua>Games<grey>] '
 #  <player> will be replaced with name of player
 player-joined-game: '<aqua><player> <grey>Has joined the game'
 player-left-game: '<aqua><player> <red>Has left the game'
-#  <arena> will be replaced with the name of the arena
-game-started: '<gold> Arena <red><arena> <gold>will begin in 30 seconds!'
-game-running: 'The game <arena> is already running and cannot be joined!'
-game-join: '<gold> Use:<red> /hg join <arena><gold> to join!'
-game-countdown: 'The game will start in <timer> seconds..'
-game-almost-over: '<red>The game is almost over, fight to the death!'
-game-ending-minsec: '<green>The game is ending in <minutes> minute(s), and <seconds> second(s)!'
-game-ending-min: '<green>The game is ending in <minutes> minute(s)!'
-game-ending-sec: '<green>the game is ending in <seconds> second(s)!'
-game-border-closing: '<gold>The border is coming, you have <seconds> seconds to get to the center of the arena!'
-game-chests-refill: '<gold>Chests have been refilled'
+
 
 # <min>/<sec> will be replaced with the remaining minutes and seconds in a game
 game-bossbar: '<gold>Game Ends In: <aqua><min> <grey>min <aqua><sec> <grey>sec'
@@ -31,7 +21,6 @@ game-bossbar: '<gold>Game Ends In: <aqua><min> <grey>min <aqua><sec> <grey>sec'
 players-to-start: '<aqua><amount> <gold>players to start!'
 arena-not-ready: '<red>This arena is not ready! Please wait before joining!'
 arena-spectate: '<gold>You can spectate this arena by running <dark_aqua>/hg spectate <arena>'
-game-full: '<red>is currently full!'
 
 #  <arena> will be replaced with name of arena the player won in
 #  <winner> will be replaced with name of winner
@@ -40,67 +29,8 @@ player-won: '<aqua><winner> <gold>won HungerGames at arena <aqua><arena><grey>!'
 #  <amount> will be replaced with the amount the player will receive on win
 winning-amount: '<grey>You received <aqua>$<amount> <grey>for winning <dark_aqua>Hunger<aqua>Games!'
 
-#  SPECTATOR
-spectate:
-  gui:
-    title: '<grey>Spectators of <aqua><arena>'
-  compass:
-    name: '<#0EE7CD>Spectator Compass'
-    head-lore:
-      - '<!italic><grey>Click to teleport to player'
-  start-title: 'You are now spectating!'
-
-#  KIT MESSAGES
-kits:
-  join-header: '<red>><grey>----------[<white>Welcome to Hunger<white>Games<grey>]<grey>----------<red><'
-  join-msg: '<grey>           - <dark_aqua>Pick a kit using <aqua>/hg kit <grey><<reset>name<grey>>'
-  join-available: '<dark_aqua>  Available Kits:<aqua>'
-  join-kits-command: '<grey>  You can also run <aqua>/hg kits<grey> to open the kits GUI.'
-  join-footer: '<red>><grey>------------------------------------------<red><'
-  doesnt-exist: '<red>Does not exist'
-  give-default: 'You have been given the default kit'
-
-  # Main kits GUI
-  kits-gui:
-    title: '<green>Available Kits'
-
-  # GUI for individual kits
-  kit-gui:
-    title: '<grey>Kit: <aqua><name>'
-    exit: '<red>Exit'
-    apply: '<green>Apply'
-    helmet-none: '<red>No Helmet'
-    chestplate-none: '<red>No Chestplate'
-    leggings-none: '<red>No Leggings'
-    boots-none: '<red>No Boots'
-    potion-effects: '<aqua><!italic>Potion Effects'
-    potion-effect-none: '<red>No potion effects!'
-    # <type> will be used as a translation key to translate to the client's language
-    potion-effect-lore: '<!italic>- <yellow><lang:<type>>'
-
-
-#  SCOREBOARD
-scoreboard:
-  sidebar:
-    title: '<gold>HungerGames'
-    arena: "<green>Arena: <aqua>"
-    players-alive: '<light_purple>Tributes:'
-    # <num> will be replaced by the number of remaining players in the game
-    players-alive-num: '<yellow><num> alive'
-  show-health:
-    # This is the name that will show for the health objective
-    name: '<aqua>Health'
-
-#  TEAMS
-team:
-  invite-1: '<gold>*<aqua><strikethrough>                                                                             <gold>*'
-  invite-2: '| <white><inviter> <dark_aqua>just invited you to a <white>Team<dark_aqua>!'
-  invite-3: '| <dark_aqua>Type <white>/hg team accept <dark_aqua>To join!'
-  invite-4: '<gold>*<aqua><strikethrough>                                                                             <gold>*'
-  joined: '<dark_aqua>You successfully joined this team!'
-  # <name> will be replaced with team name
-  prefix: "<grey>[<green>Team-<name><grey>]"
-  suffix: ""
+## Start
+cmd-start-starting: '<aqua><arena><gold> is now starting!'
 
 #  CHEST DROPS
 chest-drop-1: '<gold>*<aqua><strikethrough>                                                                                   <gold>*'
@@ -117,82 +47,20 @@ roam-game-started: '<dark_red>[]---------[ <gold>The game has started! <dark_red
 roam-time: ' <yellow> You have <roam> seconds to roam without taking damage!'
 roam-finished: '<red>Free-Roam is over, PVP is now enabled!'
 
-# GAME STATUSES
-game-status:
-  running: '<green>Running'
-  stopped: '<dark_red>Stopped'
-  ready: '<dark_purple>Ready'
-  waiting: '<aqua>Waiting...'
-  broken: '<dark_red>BROKEN'
-  rollback: '<red>Restoring...'
-  not-ready: '<dark_blue>NotReady'
-  beginning: '<green>Running'
-  countdown: '<aqua>Starting...'
-player-status:
-  in-game: 'In Game'
-  spectator: 'Spectator'
-  not-in-game: 'Not In Game'
-
-# DEATH MESSAGES
-death-messages:
-  # Prefix used when a player dies in an arena
-  prefix: '<grey>[<dark_aqua>HungerGames Fallen<grey>]'
-  # Fallback message when no other specific message is provided
-  other: '<player> was killed by <cause>'
-  # Death messages for different entity types
-  # These are used when a player directly dies by another entity
-  entity-types:
-    minecraft:player: '<player> was killed by <killer> using <aqua><weapon>!'
-    minecraft:stray: '<player> was shot in the face by a Stray!'
-    minecraft:drowned: '<player> was ripped apart by a Drowned!'
-    minecraft:spider: '<player> was eaten alive by a Spider!'
-    minecraft:skeleton: '<player> was shot in the face by a Skeleton'
-    minecraft:zombie: '<player> was ripped to bits by a Zombie!'
-  # Death messages for different damage types
-  # These are used when a player dies from a natural cause
-  damage-types:
-    minecraft:arrow: '<player> was shot by an arrow.'
-    minecraft:cactus: '<player> died trying to fight a cactus'
-    minecraft:campfire: '<player> died while trying to cook on a campfire'
-    minecraft:drown: '<player> drowned'
-    minecraft:explosion: '<player> was blown to bits!'
-    minecraft:fall: '<player> fell to their death!'
-    minecraft:falling_anvil: '<player> was crushed by an anvil'
-    minecraft:falling_block: '<player> was smashed by a block!'
-    minecraft:falling_stalactite: '<player> was impaled by a stalactite'
-    minecraft:fireball: '<player> was struck by a fireball'
-    minecraft:fireworks: '<player> exploded while watching the fireworks'
-    minecraft:fly_into_wall: '<player> flew into a wall, ouchie!'
-    minecraft:freeze: '<player> froze to death'
-    minecraft:generic: '<player> died in a generic way'
-    minecraft:hot_floor: '<player> died while walking on a hot floor'
-    minecraft:in_fire: '<player> was burned alive!'
-    minecraft:in_wall: '<player> got stuck in a wall'
-    minecraft:lava: '<player> fell into a pit of lava!'
-    minecraft:lightning_bolt: '<player> was struck by lightning'
-    minecraft:mace_smash: '<player> was smashed by a mace'
-    minecraft:magic: '<player> was destroyed by magic!'
-    minecraft:mob_projectile: '<player> got hit by a projectile!'
-    minecraft:on_fire: '<player> caught on fire'
-    minecraft:out_of_world: '<player> fell out of the world'
-    minecraft:outside_border: '<player> died outside the game border'
-    minecraft:sonic_boom: '<player> went kaboom'
-    minecraft:spit: '<player> was spit at too hard'
-    minecraft:stalagmite: '<player> fell onto a stalagmite'
-    minecraft:starve: '<player> starved to death'
-    minecraft:sting: '<player> was stung to death'
-    minecraft:sweet_berry_bush: '<player> died while picking some berries'
-    minecraft:thorns: '<player> died by magical thorns'
-    minecraft:thrown: '<player> was thrown to their death'
-    minecraft:trident: '<player> was impaled by a Trident!'
-    minecraft:wind_charge: '<player> was blown away by a wind charge'
-
-#  COMMANDS
-
 ## Kit
 cmd-no-change: '<red>You can not change your kit while the game is running!'
 
-## COMMANDS
+# ARENA DEBUG
+arena-debug:
+  need-more-spawns: '<red>You still need <aqua><number> <red>more spawns!'
+  min-max-players: '<red>Max players cannot be less than min players, found: <yellow><min><white>/<yellow<max>'
+  broken-debug: '<red>Your arena is marked as broken! use <aqua>/hg debug <arena> <red>to check for errors!'
+  broken-debug-2: '<red>If no errors are found, please use <aqua>/hg toggle <arena><red>!'
+  invalid-lobby: '<red>Your LobbyWall is invalid! Please reset them!'
+  set-lobby: '<gold>Set lobbywall: <grey>/hg setlobbywall <arena>'
+  ready-run: '<green>Your HungerGames arena <grey><arena><green> is ready to run!'
+
+# COMMANDS
 command:
   # Base
   base-not-in-valid-game: '<red>You are not in a valid game!'
@@ -279,6 +147,119 @@ command:
   toggle-locked: '<dark_aqua><arena><aqua> is now <dark_red>LOCKED<aqua>!'
   toggle-running: '<aqua><arena><red> is running and cannot be toggled!'
 
+# DEATH MESSAGES
+death-messages:
+  # Prefix used when a player dies in an arena
+  prefix: '<grey>[<dark_aqua>HungerGames Fallen<grey>]'
+  # Fallback message when no other specific message is provided
+  other: '<player> was killed by <cause>'
+  # Death messages for different entity types
+  # These are used when a player directly dies by another entity
+  entity-types:
+    minecraft:player: '<player> was killed by <killer> using <aqua><weapon>!'
+    minecraft:stray: '<player> was shot in the face by a Stray!'
+    minecraft:drowned: '<player> was ripped apart by a Drowned!'
+    minecraft:spider: '<player> was eaten alive by a Spider!'
+    minecraft:skeleton: '<player> was shot in the face by a Skeleton'
+    minecraft:zombie: '<player> was ripped to bits by a Zombie!'
+  # Death messages for different damage types
+  # These are used when a player dies from a natural cause
+  damage-types:
+    minecraft:arrow: '<player> was shot by an arrow.'
+    minecraft:cactus: '<player> died trying to fight a cactus'
+    minecraft:campfire: '<player> died while trying to cook on a campfire'
+    minecraft:drown: '<player> drowned'
+    minecraft:explosion: '<player> was blown to bits!'
+    minecraft:fall: '<player> fell to their death!'
+    minecraft:falling_anvil: '<player> was crushed by an anvil'
+    minecraft:falling_block: '<player> was smashed by a block!'
+    minecraft:falling_stalactite: '<player> was impaled by a stalactite'
+    minecraft:fireball: '<player> was struck by a fireball'
+    minecraft:fireworks: '<player> exploded while watching the fireworks'
+    minecraft:fly_into_wall: '<player> flew into a wall, ouchie!'
+    minecraft:freeze: '<player> froze to death'
+    minecraft:generic: '<player> died in a generic way'
+    minecraft:hot_floor: '<player> died while walking on a hot floor'
+    minecraft:in_fire: '<player> was burned alive!'
+    minecraft:in_wall: '<player> got stuck in a wall'
+    minecraft:lava: '<player> fell into a pit of lava!'
+    minecraft:lightning_bolt: '<player> was struck by lightning'
+    minecraft:mace_smash: '<player> was smashed by a mace'
+    minecraft:magic: '<player> was destroyed by magic!'
+    minecraft:mob_projectile: '<player> got hit by a projectile!'
+    minecraft:on_fire: '<player> caught on fire'
+    minecraft:out_of_world: '<player> fell out of the world'
+    minecraft:outside_border: '<player> died outside the game border'
+    minecraft:sonic_boom: '<player> went kaboom'
+    minecraft:spit: '<player> was spit at too hard'
+    minecraft:stalagmite: '<player> fell onto a stalagmite'
+    minecraft:starve: '<player> starved to death'
+    minecraft:sting: '<player> was stung to death'
+    minecraft:sweet_berry_bush: '<player> died while picking some berries'
+    minecraft:thorns: '<player> died by magical thorns'
+    minecraft:thrown: '<player> was thrown to their death'
+    minecraft:trident: '<player> was impaled by a Trident!'
+    minecraft:wind_charge: '<player> was blown away by a wind charge'
+
+# GAME
+##  <arena> will be replaced with the name of the arena
+game:
+  started: 'Arena <aqua><arena> <grey>will begin in <green>30 seconds<grey>!'
+  running: '<red>The game <aqua><arena> <red>is already running and cannot be joined!'
+  join: 'Use: <aqua>/hg join <arena><grey> to join!'
+  countdown: 'The game will start in <timer> seconds..'
+  almost-over: '<red>The game is almost over, fight to the death!'
+  ending-min-sec: '<green>The game is ending in <minutes> minute(s), and <seconds> second(s)!'
+  ending-min: '<green>The game is ending in <minutes> minute(s)!'
+  ending-sec: '<green>the game is ending in <seconds> second(s)!'
+  border-closing: '<gold>The border is coming, you have <seconds> seconds to get to the center of the arena!'
+  chests-refill: '<gold>Chests have been refilled'
+  full: '<aqua><arena> <red>is currently full!'
+
+# KIT MESSAGES
+kits:
+  join-header: '<red>><grey>----------[<white>Welcome to Hunger<white>Games<grey>]<grey>----------<red><'
+  join-msg: '<grey>           - <dark_aqua>Pick a kit using <aqua>/hg kit <grey><<reset>name<grey>>'
+  join-available: '<dark_aqua>  Available Kits:<aqua>'
+  join-kits-command: '<grey>  You can also run <aqua>/hg kits<grey> to open the kits GUI.'
+  join-footer: '<red>><grey>------------------------------------------<red><'
+  doesnt-exist: '<red>Does not exist'
+  give-default: 'You have been given the default kit'
+
+  # Main kits GUI
+  kits-gui:
+    title: '<green>Available Kits'
+
+  # GUI for individual kits
+  kit-gui:
+    title: '<grey>Kit: <aqua><name>'
+    exit: '<red>Exit'
+    apply: '<green>Apply'
+    helmet-none: '<red>No Helmet'
+    chestplate-none: '<red>No Chestplate'
+    leggings-none: '<red>No Leggings'
+    boots-none: '<red>No Boots'
+    potion-effects: '<aqua><!italic>Potion Effects'
+    potion-effect-none: '<red>No potion effects!'
+    # <type> will be used as a translation key to translate to the client's language
+    potion-effect-lore: '<!italic>- <yellow><lang:<type>>'
+
+# LEADERBOARD
+leaderboard:
+  blank-space: ''
+  combined-separator: ' : '
+  missing-player: '<none>'
+
+# LISTENER
+listener:
+  not-running: '<red>The game is not running!'
+  no-edit-block: '<red>You cannot edit this block type!'
+  no-interact: '<red>You cannot interact until the game has started!'
+  sign-click-hand: '<red>Click the sign with your hand!'
+  command-handler-no-command: '<red>You can not use non-HungerGames commands while in-game!'
+  command-handler-playing: '<red>This player is currently playing <aqua>HungerGames!'
+
+# LOBBY SIGN
 lobby-signs:
   sign-1:
     line-1: '<dark_blue>Hunger Games'
@@ -289,30 +270,57 @@ lobby-signs:
   sign-3:
     line-1: '<dark_blue>Alive'
 
-## Start
-cmd-start-starting: '<aqua><arena><gold> is now starting!'
+# SPECTATOR
+spectate:
+  gui:
+    title: '<grey>Spectators of <aqua><arena>'
+  compass:
+    name: '<#0EE7CD>Spectator Compass'
+    head-lore:
+      - '<!italic><grey>Click to teleport to player'
+  start-title: 'You are now spectating!'
 
-## Handler
-cmd-handler-nocmd: '<red>You can not use non-HungerGames commands while in-game!'
-cmd-handler-playing: '<red>This player is currently playing <aqua>HungerGames!'
+# SCOREBOARD
+scoreboard:
+  sidebar:
+    title: '<gold>HungerGames'
+    arena: "<green>Arena: <aqua>"
+    players-alive: '<light_purple>Tributes:'
+    # <num> will be replaced by the number of remaining players in the game
+    players-alive-num: '<yellow><num> alive'
+  show-health:
+    # This is the name that will show for the health objective
+    name: '<aqua>Health'
 
-#  LISTENER
-listener-not-running: '<red>The game is not running!'
-listener-no-edit-block: '<red>You cannot edit this block type!'
-listener-no-interact: '<red>You cannot interact until the game has started!'
-listener-sign-click-hand: '<red>Click the sign with your hand!'
+# STATUSES
+status:
+  game-status:
+    running: '<green>Running'
+    stopped: '<dark_red>Stopped'
+    ready: '<dark_purple>Ready'
+    waiting: '<aqua>Waiting...'
+    broken: '<dark_red>BROKEN'
+    rollback: '<red>Restoring...'
+    not-ready: '<dark_blue>NotReady'
+    beginning: '<green>Running'
+    countdown: '<aqua>Starting...'
+  player-status:
+    in-game: 'In Game'
+    spectator: 'Spectator'
+    not-in-game: 'Not In Game'
 
-#  ARENA DEBUG
-arena-debug:
-  need-more-spawns: '<red>You still need <aqua><number> <red>more spawns!'
-  min-max-players: '<red>Max players cannot be less than min players, found: <yellow><min><white>/<yellow<max>'
-  broken-debug: '<red>Your arena is marked as broken! use <aqua>/hg debug <arena> <red>to check for errors!'
-  broken-debug-2: '<red>If no errors are found, please use <aqua>/hg toggle <arena><red>!'
-  invalid-lobby: '<red>Your LobbyWall is invalid! Please reset them!'
-  set-lobby: '<gold>Set lobbywall: <grey>/hg setlobbywall <arena>'
-  ready-run: '<green>Your HungerGames arena <grey><arena><green> is ready to run!'
+# TEAMS
+team:
+  invite-1: '<gold>*<aqua><strikethrough>                                                                             <gold>*'
+  invite-2: '| <white><inviter> <dark_aqua>just invited you to a <white>Team<dark_aqua>!'
+  invite-3: '| <dark_aqua>Type <white>/hg team accept <dark_aqua>To join!'
+  invite-4: '<gold>*<aqua><strikethrough>                                                                             <gold>*'
+  joined: '<dark_aqua>You successfully joined this team!'
+  # <name> will be replaced with team name
+  prefix: "<grey>[<green>Team-<name><grey>]"
+  suffix: ""
 
-#  TRACK STICK
+# TRACKING STICK
 tracking-stick:
   name: 'Tracking Stick'
   lore:
@@ -323,8 +331,3 @@ tracking-stick:
   bar: '<green>[]------------------------------------------[]'
   new1: '<green> |<gold>   You have been given a player-tracking stick! <green> |'
   new2: '<green> |<gold>   Swing the stick to track players!                <green> |'
-
-#  LEADERBOARD
-lb-blank-space: ''
-lb-combined-separator: ' : '
-lb-missing-player: '<none>'

@@ -34,14 +34,14 @@ public class GameCommandListener extends GameListenerBase {
             }
             event.setMessage("/");
             event.setCancelled(true);
-            Util.sendMessage(player, this.lang.cmd_handler_nocmd);
+            Util.sendMessage(player, this.lang.listener_command_handler_no_command);
         }
         // Prevent teleporting players out of an arena
         else if (("/tp".equalsIgnoreCase(st[0]) || "/teleport".equalsIgnoreCase(st[0])) && st.length >= 2) {
             Player p = Bukkit.getServer().getPlayer(st[1]);
             if (p != null) {
                 if (this.playerManager.hasPlayerData(uuid)) {
-                    Util.sendMessage(player, this.lang.cmd_handler_playing);
+                    Util.sendMessage(player, this.lang.listener_command_handler_playing);
                     event.setMessage("/");
                     event.setCancelled(true);
                 }

@@ -37,7 +37,7 @@ public class GameLobbyListener extends GameListenerBase {
             String name = pdc.get(Constants.LOBBY_SIGN_KEY, PersistentDataType.STRING);
             Game game = this.gameManager.getGame(name);
             if (game == null) {
-                Util.sendMessage(player, this.lang.command_delete_noexist);
+                Util.sendMessage(player, this.lang.command_delete_no_exist);
             } else {
                 if (player.getInventory().getItemInMainHand().getType() == Material.AIR) {
                     // Process this after event has finished running to prevent double click issues

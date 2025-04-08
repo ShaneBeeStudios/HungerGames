@@ -528,7 +528,8 @@ public class Game {
 
     boolean canJoin(Player player) {
         if (this.gamePlayerData.getPlayers().size() >= this.getGameArenaData().getMaxPlayers()) {
-            Util.sendPrefixedMessage(player, this.lang.game_full);
+            String name = this.gameArenaData.getName();
+            Util.sendPrefixedMessage(player, this.lang.game_full.replace("<name>", name));
             return false;
         }
         return vaultCheck(player);
@@ -541,7 +542,7 @@ public class Game {
                 Vault.economy.withdrawPlayer(player, cost);
                 return true;
             } else {
-                Util.sendMessage(player, lang.prefix + lang.command_join_no_money.replace("<cost>", String.valueOf(cost)));
+                Util.sendPrefixedMessage(player, this.lang.command_join_no_money.replace("<cost>", String.valueOf(cost)));
                 return false;
             }
         }

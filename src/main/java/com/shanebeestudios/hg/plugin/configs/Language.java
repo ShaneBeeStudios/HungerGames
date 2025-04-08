@@ -26,29 +26,11 @@ public class Language {
     public String prefix;
     public String player_joined_game;
     public String player_left_game;
-    public String game_started;
-    public String game_join;
-    public String game_countdown;
-    public String game_almost_over;
-    public String game_ending_minsec;
-    public String game_ending_min;
-    public String game_ending_sec;
-    public String game_border_closing;
-    public String game_chest_refill;
-    public String game_running;
     public String players_to_start;
     public String arena_not_ready;
     public String arena_spectate;
-    public String game_full;
     public String player_won;
     public String winning_amount;
-    public String team_invite_1;
-    public String team_invite_2;
-    public String team_invite_3;
-    public String team_invite_4;
-    public String team_prefix;
-    public String team_suffix;
-    public String team_joined;
     public String chest_drop_1;
     public String chest_drop_2;
     public String compass_nearest_player;
@@ -56,30 +38,7 @@ public class Language {
     public String roam_time;
     public String roam_finished;
     public String cmd_start_starting;
-    public String cmd_handler_nocmd;
-    public String cmd_handler_playing;
-    public String listener_not_running;
-    public String listener_no_edit_block;
-    public String listener_no_interact;
-    public String listener_sign_click_hand;
     public String bossbar;
-    public String lb_blank_space;
-    public String lb_combined_separator;
-    public String lb_missing_player;
-    public String lobby_sign_cost;
-    public String lobby_sign_1_1;
-    public String lobby_sign_1_3;
-    public String lobby_sign_2_1;
-    public String lobby_sign_3_1;
-
-    // Tracking Stick
-    public String tracking_stick_name;
-    public List<String> tracking_stick_lore;
-    public String tracking_stick_nearest;
-    public String tracking_stick_no_near;
-    public String tracking_stick_bar;
-    public String tracking_stick_new1;
-    public String tracking_stick_new2;
 
     // ARENA DEBUG
     public String arena_debug_need_more_spawns;
@@ -91,11 +50,11 @@ public class Language {
     public String arena_debug_ready_run;
 
     // COMMANDS
-    // Base
+    // - Base
     public String command_base_not_in_valid_game;
     public String command_base_no_region;
     public String command_base_status;
-    // Create
+    // - Create
     public String command_create_error_arguments;
     public String command_create_error_already_exists;
     public String command_create_error_session_exists;
@@ -112,44 +71,44 @@ public class Language {
     public String command_create_session_select_sign;
     public String command_create_session_done;
     public String command_create_session_sign_invalid;
-    // Delete
+    // - Delete
     public String command_delete_attempt;
     public String command_delete_kicking;
     public String command_delete_stopping;
     public String command_delete_deleted;
     public String command_delete_failed;
     public String command_delete_rollback;
-    public String command_delete_noexist;
+    public String command_delete_no_exist;
 
-    // Edit
-    // - ChestRefill
+    // - Edit
+    //   - ChestRefill
     public String command_edit_chest_refill_time_set;
     public String command_edit_chest_refill_repeat_set;
     public String command_chest_refill_now;
-    // - LobbyWall
+    //   - LobbyWall
     public String command_edit_lobbywall_set;
     public String command_edit_lobbywall_incorrect;
     public String command_edit_lobbywall_format;
 
-    // Exit
+    // - Exit
     public String command_exit_set_global;
     public String command_exit_set_all;
     public String command_exit_set_arena;
-    // Join
+    // - Join
     public String command_join_already_in_game;
     public String command_join_already_in_game_other;
     public String command_join_no_money;
-    // Kit
+    // - Kit
     public String command_kit_game_running;
     public String command_kit_invalid_name;
     public String command_kit_no_permission;
-    // List
+    // - List
     public String command_list_players;
     public String command_list_players_delimiter;
-    // Leave
+    // - Leave
     public String command_leave_left;
     public String command_leave_refund;
-    // Team
+    // - Team
     public String command_team_player_not_available;
     public String command_team_only_leader;
     public String command_team_on_team;
@@ -167,18 +126,31 @@ public class Language {
     public String command_team_already_exists;
     public String command_team_already_have;
     public String command_team_none;
-    // Toggle
+    // - Toggle
     public String command_toggle_locked;
     public String command_toggle_unlocked;
     public String command_toggle_running;
 
-    // Death Messages
+    // DEATH MESSAGES
     public Map<String, String> death_message_entity_types = new HashMap<>();
     public Map<String, String> death_message_damage_types = new TreeMap<>();
     public String death_messages_prefix;
     public String death_messages_other;
 
-    // Kits
+    // GAME
+    public String game_started;
+    public String game_join;
+    public String game_countdown;
+    public String game_almost_over;
+    public String game_ending_min_sec;
+    public String game_ending_min;
+    public String game_ending_sec;
+    public String game_border_closing;
+    public String game_chest_refill;
+    public String game_running;
+    public String game_full;
+
+    // KITS
     public String kits_join_header;
     public String kits_join_footer;
     public String kits_join_msg;
@@ -186,9 +158,9 @@ public class Language {
     public String kits_join_kits_command;
     public String kits_doesnt_exist;
     public String kits_give_default;
-    // Kits - Kits GUI
+    // - Kits GUI
     public String kits_kits_gui_title;
-    // Kits - Kit GUI
+    // - Kit GUI
     public String kits_kit_gui_title;
     public String kits_kit_gui_exit;
     public String kits_kit_gui_apply;
@@ -200,20 +172,40 @@ public class Language {
     public String kits_kit_gui_potion_effect_lore;
     public String kits_kit_gui_potion_effect_none;
 
-    // Scoreboard
+    // LEADERBOARD
+    public String leaderboard_blank_space;
+    public String leaderboard_combined_separator;
+    public String leaderboard_missing_player;
+
+    // LISTENERS
+    public String listener_not_running;
+    public String listener_no_edit_block;
+    public String listener_no_interact;
+    public String listener_sign_click_hand;
+    public String listener_command_handler_no_command;
+    public String listener_command_handler_playing;
+
+    // LOBBY SIGN
+    public String lobby_sign_cost;
+    public String lobby_sign_1_1;
+    public String lobby_sign_1_3;
+    public String lobby_sign_2_1;
+    public String lobby_sign_3_1;
+
+    // SCOREBOARD
     public String scoreboard_sidebar_title;
     public String scoreboard_sidebar_arena;
     public String scoreboard_sidebar_players_alive;
     public String scoreboard_sidebar_players_alive_num;
     public String scoreboard_show_health_name;
 
-    // Spectator
+    // SPECTATOR
     public String spectate_gui_title;
     public String spectate_compass_name;
     public List<String> spectate_compass_head_lore;
     public String spectate_start_title;
 
-    // Status
+    // STATUS
     public String game_status_running;
     public String game_status_stopped;
     public String game_status_ready;
@@ -226,6 +218,24 @@ public class Language {
     public String player_status_in_game;
     public String player_status_spectator;
     public String player_status_not_in_game;
+
+    // TEAM
+    public String team_invite_1;
+    public String team_invite_2;
+    public String team_invite_3;
+    public String team_invite_4;
+    public String team_prefix;
+    public String team_suffix;
+    public String team_joined;
+
+    // TRACKING STICK
+    public String tracking_stick_name;
+    public List<String> tracking_stick_lore;
+    public String tracking_stick_nearest;
+    public String tracking_stick_no_near;
+    public String tracking_stick_bar;
+    public String tracking_stick_new1;
+    public String tracking_stick_new2;
 
 
     public Language(HungerGames plugin) {
@@ -282,30 +292,13 @@ public class Language {
         this.prefix = this.lang.getString("prefix");
         player_joined_game = this.lang.getString("player-joined-game");
         player_left_game = this.lang.getString("player-left-game");
-        this.game_started = this.lang.getString("game-started");
-        this.game_join = this.lang.getString("game-join");
-        this.game_countdown = this.lang.getString("game-countdown");
-        this.game_almost_over = this.lang.getString("game-almost-over");
-        this.game_ending_minsec = this.lang.getString("game-ending-minsec");
-        this.game_ending_min = this.lang.getString("game-ending-min");
-        this.game_ending_sec = this.lang.getString("game-ending-sec");
-        this.game_border_closing = this.lang.getString("game-border-closing");
-        this.game_running = this.lang.getString("game-running");
 
         players_to_start = this.lang.getString("players-to-start");
         this.arena_not_ready = this.lang.getString("arena-not-ready");
         this.arena_spectate = this.lang.getString("arena-spectate");
-        this.game_full = this.lang.getString("game-full");
         player_won = this.lang.getString("player-won");
 
         winning_amount = this.lang.getString("winning-amount");
-        team_invite_1 = this.lang.getString("team.invite-1");
-        team_invite_2 = this.lang.getString("team.invite-2");
-        team_invite_3 = this.lang.getString("team.invite-3");
-        team_invite_4 = this.lang.getString("team.invite-4");
-        team_prefix = this.lang.getString("team.prefix");
-        team_suffix = this.lang.getString("team.suffix");
-        team_joined = this.lang.getString("team.joined");
 
         chest_drop_1 = this.lang.getString("chest-drop-1");
         chest_drop_2 = this.lang.getString("chest-drop-2");
@@ -317,25 +310,9 @@ public class Language {
         roam_finished = this.lang.getString("roam-finished");
 
         cmd_start_starting = this.lang.getString("cmd-start-starting");
-        cmd_handler_nocmd = this.lang.getString("cmd-handler-nocmd");
-        cmd_handler_playing = this.lang.getString("cmd-handler-playing");
-        listener_not_running = this.lang.getString("listener-not-running");
-        listener_no_edit_block = this.lang.getString("listener-no-edit-block");
-        listener_no_interact = this.lang.getString("listener-no-interact");
-        listener_sign_click_hand = this.lang.getString("listener-sign-click-hand");
         bossbar = this.lang.getString("game-bossbar");
 
         this.game_chest_refill = this.lang.getString("game-chests-refill");
-
-        lb_blank_space = this.lang.getString("lb-blank-space");
-        lb_combined_separator = this.lang.getString("lb-combined-separator");
-        lb_missing_player = this.lang.getString("lb-missing-player");
-
-        this.lobby_sign_1_1 = this.lang.getString("lobby-signs.sign-1.line-1");
-        this.lobby_sign_1_3 = this.lang.getString("lobby-signs.sign-1.line-3");
-        this.lobby_sign_cost = this.lang.getString("lobby-signs.sign-1.line-4");
-        this.lobby_sign_2_1 = this.lang.getString("lobby-signs.sign-2.line-1");
-        this.lobby_sign_3_1 = this.lang.getString("lobby-signs.sign-3.line-1");
 
         // ARENA DEBUG
         this.arena_debug_need_more_spawns = this.lang.getString("arena-debug.need-more-spawns");
@@ -346,23 +323,14 @@ public class Language {
         this.arena_debug_set_lobby = this.lang.getString("arena-debug.set-lobby");
         this.arena_debug_ready_run = this.lang.getString("arena-debug.ready-run");
 
-        // Tracking Stick
-        this.tracking_stick_name = this.lang.getString("tracking-stick.name");
-        this.tracking_stick_lore = this.lang.getStringList("tracking-stick.lore");
-        this.tracking_stick_nearest = this.lang.getString("tracking-stick.nearest");
-        this.tracking_stick_no_near = this.lang.getString("tracking-stick.no-near");
-        this.tracking_stick_bar = this.lang.getString("tracking-stick.bar");
-        this.tracking_stick_new1 = this.lang.getString("tracking-stick.new1");
-        this.tracking_stick_new2 = this.lang.getString("tracking-stick.new2");
-
         // COMMANDS
-        // Base
+        // - Base
         this.command_base_not_in_valid_game = this.lang.getString("command.base-not-in-valid-game");
         this.command_base_no_region = this.lang.getString("command.base-no-region");
         this.command_base_status = this.lang.getString("command.base-status");
-        // ChestRefill
+        // - ChestRefill
         this.command_chest_refill_now = this.lang.getString("command.chest-refill-now");
-        // Create
+        // - Create
         this.command_create_error_arguments = this.lang.getString("command.create-error-arguments");
         this.command_create_error_already_exists = this.lang.getString("command.create-error-already-exists");
         this.command_create_error_session_exists = this.lang.getString("command.create-error-session-exists");
@@ -379,42 +347,42 @@ public class Language {
         this.command_create_session_select_sign = this.lang.getString("command.create-session-select-sign");
         this.command_create_session_sign_invalid = this.lang.getString("command.create-session-sign-invalid");
         this.command_create_session_done = this.lang.getString("command.create-session-done");
-        // Delete
+        // - Delete
         this.command_delete_attempt = this.lang.getString("command.delete-attempt");
         this.command_delete_kicking = this.lang.getString("command.delete-kicking");
         this.command_delete_stopping = this.lang.getString("command.delete-stopping");
         this.command_delete_deleted = this.lang.getString("command.delete-deleted");
         this.command_delete_failed = this.lang.getString("command.delete-failed");
         this.command_delete_rollback = this.lang.getString("command.delete-rollback");
-        this.command_delete_noexist = this.lang.getString("command.delete-noexist");
-        // Edit
-        // - ChestRefill
+        this.command_delete_no_exist = this.lang.getString("command.delete-noexist");
+        // - Edit
+        //   - ChestRefill
         this.command_edit_chest_refill_time_set = this.lang.getString("command.edit.chest-refill-time-set");
         this.command_edit_chest_refill_repeat_set = this.lang.getString("command.edit.chest-refill-repeat-set");
-        // - LobbyWall
+        //   - LobbyWall
         this.command_edit_lobbywall_set = this.lang.getString("command.edit.lobbywall-set");
         this.command_edit_lobbywall_incorrect = this.lang.getString("command.edit.lobbywall-incorrect");
         this.command_edit_lobbywall_format = this.lang.getString("command.edit.lobbywall-format");
 
-        // Exit
+        // - Exit
         this.command_exit_set_global = this.lang.getString("command.exit-set-global");
         this.command_exit_set_all = this.lang.getString("command.exit-set-all");
         this.command_exit_set_arena = this.lang.getString("command.exit-set-arena");
-        // Join
+        // - Join
         this.command_join_already_in_game = this.lang.getString("command.join-already-in-game");
         this.command_join_already_in_game_other = this.lang.getString("command.join-already-in-game-other");
         this.command_join_no_money = this.lang.getString("command.join-no-money");
-        // Kit
+        // - Kit
         this.command_kit_game_running = this.lang.getString("command.kit.game-running");
         this.command_kit_invalid_name = this.lang.getString("command.kit.invalid-name");
         this.command_kit_no_permission = this.lang.getString("command.kit.no-permission");
-        // List
+        // - List
         this.command_list_players = this.lang.getString("command.list-players");
         this.command_list_players_delimiter = this.lang.getString("command.list-players-delimiter");
-        // Leave
+        // - Leave
         this.command_leave_left = this.lang.getString("command.leave-left");
         this.command_leave_refund = this.lang.getString("command.leave-refund");
-        // Team
+        // - Team
         this.command_team_player_not_available = this.lang.getString("command.team-player-not-available");
         this.command_team_only_leader = this.lang.getString("command.team-only-leader");
         this.command_team_on_team = this.lang.getString("command.team-on-team");
@@ -432,12 +400,12 @@ public class Language {
         this.command_team_already_exists = this.lang.getString("command.team-already-exists");
         this.command_team_already_have = this.lang.getString("command.team-already-have");
         this.command_team_none = this.lang.getString("command.team-none");
-        // Toggle
+        // - Toggle
         this.command_toggle_unlocked = this.lang.getString("command.toggle-unlocked");
         this.command_toggle_locked = this.lang.getString("command.toggle-locked");
         this.command_toggle_running = this.lang.getString("command.toggle-running");
 
-        // Death Messages
+        // DEATH MESSAGES
         ConfigurationSection entityTypeSection = this.lang.getConfigurationSection("death-messages.entity-types");
         if (entityTypeSection != null) {
             entityTypeSection.getKeys(false).forEach(key -> {
@@ -455,7 +423,19 @@ public class Language {
         this.death_messages_prefix = this.lang.getString("death-messages.prefix");
         this.death_messages_other = this.lang.getString("death-messages.other");
 
-        // Kits
+        // GAME
+        this.game_started = this.lang.getString("game.started");
+        this.game_join = this.lang.getString("game.join");
+        this.game_countdown = this.lang.getString("game.countdown");
+        this.game_almost_over = this.lang.getString("game.almost-over");
+        this.game_ending_min_sec = this.lang.getString("game.ending-min-sec");
+        this.game_ending_min = this.lang.getString("game.ending-min");
+        this.game_ending_sec = this.lang.getString("game.ending-sec");
+        this.game_border_closing = this.lang.getString("game.border-closing");
+        this.game_running = this.lang.getString("game.running");
+        this.game_full = this.lang.getString("game.full");
+
+        // KITS
         this.kits_join_header = this.lang.getString("kits.join-header");
         this.kits_join_footer = this.lang.getString("kits.join-footer");
         this.kits_join_msg = this.lang.getString("kits.join-msg");
@@ -475,32 +455,70 @@ public class Language {
         this.kits_kit_gui_potion_effect_lore = this.lang.getString("kits.kit-gui.potion-effect-lore");
         this.kits_kit_gui_potion_effect_none = this.lang.getString("kits.kit-gui.potion-effect-none");
 
-        // Scoreboard
+        // LEADERBOARD
+        this.leaderboard_blank_space = this.lang.getString("leaderboard.blank-space");
+        this.leaderboard_combined_separator = this.lang.getString("leaderboard.combined-separator");
+        this.leaderboard_missing_player = this.lang.getString("leaderboard.missing-player");
+
+        // LISTENER
+        this.listener_not_running = this.lang.getString("listener.not-running");
+        this.listener_no_edit_block = this.lang.getString("listener.no-edit-block");
+        this.listener_no_interact = this.lang.getString("listener.no-interact");
+        this.listener_sign_click_hand = this.lang.getString("listener.sign-click-hand");
+        this.listener_command_handler_no_command = this.lang.getString("listener.command-handler-no-command");
+        this.listener_command_handler_playing = this.lang.getString("listener.command-handler-playing");
+
+        // LOBBY SIGN
+        this.lobby_sign_1_1 = this.lang.getString("lobby-signs.sign-1.line-1");
+        this.lobby_sign_1_3 = this.lang.getString("lobby-signs.sign-1.line-3");
+        this.lobby_sign_cost = this.lang.getString("lobby-signs.sign-1.line-4");
+        this.lobby_sign_2_1 = this.lang.getString("lobby-signs.sign-2.line-1");
+        this.lobby_sign_3_1 = this.lang.getString("lobby-signs.sign-3.line-1");
+
+        // SCOREBOARD
         this.scoreboard_sidebar_title = this.lang.getString("scoreboard.sidebar.title");
         this.scoreboard_sidebar_arena = this.lang.getString("scoreboard.sidebar.arena");
         this.scoreboard_sidebar_players_alive = this.lang.getString("scoreboard.sidebar.players-alive");
         this.scoreboard_sidebar_players_alive_num = this.lang.getString("scoreboard.sidebar.players-alive-num");
         this.scoreboard_show_health_name = this.lang.getString("scoreboard.show-health.name");
 
-        // Spectator
+        // SPECTATOR
         this.spectate_gui_title = this.lang.getString("spectate.gui.title");
         this.spectate_compass_name = this.lang.getString("spectate.compass.name");
         this.spectate_compass_head_lore = this.lang.getStringList("spectate.compass.head-lore");
         this.spectate_start_title = this.lang.getString("spectate.start-title");
 
-        // Status
-        this.game_status_running = this.lang.getString("game-status.running");
-        this.game_status_stopped = this.lang.getString("game-status.stopped");
-        this.game_status_ready = this.lang.getString("game-status.ready");
-        this.game_status_waiting = this.lang.getString("game-status.waiting");
-        this.game_status_broken = this.lang.getString("game-status.broken");
-        this.game_status_rollback = this.lang.getString("game-status.rollback");
-        this.game_status_not_ready = this.lang.getString("game-status.not-ready");
-        this.game_status_beginning = this.lang.getString("game-status.beginning");
-        this.game_status_countdown = this.lang.getString("game-status.countdown");
-        this.player_status_in_game = this.lang.getString("player-status.in-game");
-        this.player_status_spectator = this.lang.getString("player-status.spectator");
-        this.player_status_not_in_game = this.lang.getString("player-status.not-in-game");
+        // STATUS
+        this.game_status_running = this.lang.getString("status.game-status.running");
+        this.game_status_stopped = this.lang.getString("status.game-status.stopped");
+        this.game_status_ready = this.lang.getString("status.game-status.ready");
+        this.game_status_waiting = this.lang.getString("status.game-status.waiting");
+        this.game_status_broken = this.lang.getString("status.game-status.broken");
+        this.game_status_rollback = this.lang.getString("status.game-status.rollback");
+        this.game_status_not_ready = this.lang.getString("status.game-status.not-ready");
+        this.game_status_beginning = this.lang.getString("status.game-status.beginning");
+        this.game_status_countdown = this.lang.getString("status.game-status.countdown");
+        this.player_status_in_game = this.lang.getString("status.player-status.in-game");
+        this.player_status_spectator = this.lang.getString("status.player-status.spectator");
+        this.player_status_not_in_game = this.lang.getString("status.player-status.not-in-game");
+
+        // TEAM
+        this.team_invite_1 = this.lang.getString("team.invite-1");
+        this.team_invite_2 = this.lang.getString("team.invite-2");
+        this.team_invite_3 = this.lang.getString("team.invite-3");
+        this.team_invite_4 = this.lang.getString("team.invite-4");
+        this.team_prefix = this.lang.getString("team.prefix");
+        this.team_suffix = this.lang.getString("team.suffix");
+        this.team_joined = this.lang.getString("team.joined");
+
+        // TRACKING STICK
+        this.tracking_stick_name = this.lang.getString("tracking-stick.name");
+        this.tracking_stick_lore = this.lang.getStringList("tracking-stick.lore");
+        this.tracking_stick_nearest = this.lang.getString("tracking-stick.nearest");
+        this.tracking_stick_no_near = this.lang.getString("tracking-stick.no-near");
+        this.tracking_stick_bar = this.lang.getString("tracking-stick.bar");
+        this.tracking_stick_new1 = this.lang.getString("tracking-stick.new1");
+        this.tracking_stick_new2 = this.lang.getString("tracking-stick.new2");
     }
 
 }

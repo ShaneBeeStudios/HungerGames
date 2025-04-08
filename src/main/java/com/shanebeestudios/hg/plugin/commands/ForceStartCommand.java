@@ -40,7 +40,7 @@ public class ForceStartCommand extends SubCommand {
                             Util.sendMessage(sender, "<red>Game has already started");
                         }
                     } else {
-                        Util.sendPrefixedMessage(sender, this.lang.command_delete_noexist.replace("<arena>", args.getRaw("game")));
+                        Util.sendPrefixedMessage(sender, this.lang.command_delete_no_exist.replace("<arena>", args.getRaw("game")));
                     }
                 }));
     }

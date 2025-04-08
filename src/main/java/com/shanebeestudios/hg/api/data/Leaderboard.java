@@ -263,7 +263,7 @@ public class Leaderboard {
             String player = Bukkit.getOfflinePlayer(UUID.fromString(sortingMap.getKey())).getName();
             int score = sortingMap.getValue();
             scores.add(String.valueOf(score));
-            players.add(player != null ? player : lang.lb_missing_player);
+            players.add(player != null ? player : lang.leaderboard_missing_player);
         }
     }
 

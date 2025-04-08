@@ -37,7 +37,7 @@ public class GameTimerTask implements Runnable {
         game.getGamePlayerData().getPlayers().forEach(player -> player.setInvulnerable(false));
 
         this.end_min = this.lang.game_ending_min;
-        this.end_min_sec = this.lang.game_ending_minsec;
+        this.end_min_sec = this.lang.game_ending_min_sec;
         this.end_sec = this.lang.game_ending_sec;
 
         this.taskId = Bukkit.getScheduler().scheduleSyncRepeatingTask(plugin, this, 0, 20L);
