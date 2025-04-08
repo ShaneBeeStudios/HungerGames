@@ -156,7 +156,7 @@ public class EditCommand extends SubCommand {
                     .executes(info -> {
                         Game game = CustomArg.getGame(info);
                         int minPlayers = info.args().getByClass("min", Integer.class);
-                        if (minPlayers > game.getGameArenaData().getMinPlayers()) {
+                        if (minPlayers > game.getGameArenaData().getMaxPlayers()) {
                             throw CommandAPI.failWithString("Min players cannot be greater than max players");
                         }
                         game.getGameArenaData().setMinPlayers(minPlayers);
