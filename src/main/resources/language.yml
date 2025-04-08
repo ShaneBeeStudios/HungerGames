@@ -293,9 +293,8 @@ lobby-signs:
 cmd-start-starting: '<aqua><arena><gold> is now starting!'
 
 ## Handler
-cmd-handler-nokit: '<red>You can not choose a kit while the game is running!'
 cmd-handler-nocmd: '<red>You can not use non-HungerGames commands while in-game!'
-cmd-handler-playing: '<red>This player is currently playing <dark_aqua>HungerGames!'
+cmd-handler-playing: '<red>This player is currently playing <aqua>HungerGames!'
 
 #  LISTENER
 listener-not-running: '<red>The game is not running!'

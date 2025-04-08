@@ -103,7 +103,7 @@ public class GamePlayerData extends Data {
         Util.sendMessage(player, " ");
         Util.sendMessage(player, this.lang.kits_join_header);
         Util.sendMessage(player, " ");
-        if (Permissions.KITS.has(player) && kitData.hasKits()) {
+        if (Permissions.COMMAND_KIT.has(player) && kitData.hasKits()) {
             Util.sendMessage(player, this.lang.kits_join_msg);
             Util.sendMessage(player, " ");
             Util.sendMessage(player, this.lang.kits_join_avail + " " + kitNames);

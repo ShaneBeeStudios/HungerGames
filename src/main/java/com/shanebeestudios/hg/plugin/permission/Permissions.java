@@ -45,7 +45,7 @@ public class Permissions {
     public static final Permission COMMAND_TOGGLE = getCommand("toggle", "Toggle a game", PermissionDefault.OP);
 
     // Other Permissions
-    public static final Permission KITS = getBase("kits", "Whether a player can use kits", PermissionDefault.TRUE);
+    public static final Permission BYPASS_COMMAND_RESTRICTION = getBase("bypass.command.restriction", "Bypass command restriction while in games", PermissionDefault.OP);
 
     private static Permission getCommand(String perm, String description, PermissionDefault defaultPermission) {
         return getBase("command." + perm, description, defaultPermission);

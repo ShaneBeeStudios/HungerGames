@@ -56,7 +56,6 @@ public class Language {
     public String roam_time;
     public String roam_finished;
     public String cmd_start_starting;
-    public String cmd_handler_nokit;
     public String cmd_handler_nocmd;
     public String cmd_handler_playing;
     public String listener_not_running;
@@ -318,7 +317,6 @@ public class Language {
         roam_finished = this.lang.getString("roam-finished");
 
         cmd_start_starting = this.lang.getString("cmd-start-starting");
-        cmd_handler_nokit = this.lang.getString("cmd-handler-nokit");
         cmd_handler_nocmd = this.lang.getString("cmd-handler-nocmd");
         cmd_handler_playing = this.lang.getString("cmd-handler-playing");
         listener_not_running = this.lang.getString("listener-not-running");
