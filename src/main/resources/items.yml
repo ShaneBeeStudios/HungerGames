@@ -97,7 +97,7 @@ items:
       count: 1
       custom_name: '<gold>Death Dealer'
       enchantments:
-        - 'sharpness=1'
+        'minecraft:sharpness': 1
     '24':
       id: 'minecraft:golden_apple'
       count: 1
@@ -182,13 +182,13 @@ items:
       count: 1
       custom_name: '<dark_aqua>Power Sword'
       enchantments:
-        - 'sharpness=5'
+        'minecraft:sharpness': 5
     '2':
       id: 'minecraft:diamond_chestplate'
       count: 1
       custom_name: '<green>Life Saver'
       enchantments:
-        - 'protection=3'
+        'minecraft:protection': 3
     '3':
       id: 'minecraft:cooked_beef'
       count: 6
@@ -208,11 +208,11 @@ items:
     '1':
       id: 'minecraft:netherite_axe'
       enchantments:
-        - 'efficiency=5'
+        'minecraft:efficiency': 5
     '2':
       id: 'minecraft:netherite_chestplate'
       enchantments:
-        - 'blast_projection=2'
+        'minecraft:blast_projection': 2
     '3':
       id: 'minecraft:cooked_mutton'
       custom_name: '<green>Power Mutton'

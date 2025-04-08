@@ -163,7 +163,7 @@ kits:
         - '<gold>Ninja-Stealth-Suit'
         - '<dark_red>-------------'
       enchantments:
-        - 'fire_protection=1'
+        'minecraft:fire_protection': 1
       dyed_color: 1908001
     leggings:
       id: 'minecraft:leather_leggings'
@@ -173,7 +173,7 @@ kits:
       id: 'minecraft:leather_boots'
       count: 1
       enchantments:
-        - 'feather_falling=1'
+        'minecraft:feather_falling': 1
       dyed_color: 1908001
     items:
       '1':
@@ -200,8 +200,8 @@ kits:
         count: 1
         custom_name: '<aqua>OP <gold>Sword?'
         enchantments:
-          - 'sharpness=2'
-          - 'smite=2'
+          'minecraft:sharpness': 2
+          'minecraft:smite': 2
       '2':
         id: 'minecraft:bread'
         count: 4

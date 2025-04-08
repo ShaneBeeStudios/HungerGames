@@ -84,21 +84,26 @@ public class ItemParser {
         }
 
         // ENCHANTMENTS
-        if (config.contains("enchantments")) {
-            List<String> enchantmentList = config.getStringList("enchantments");
-            for (String string : enchantmentList) {
-                String[] split = string.split("=");
-                NamespacedKey namespacedKey = NamespacedKey.fromString(split[0]);
-                ItemEnchantments.Builder builder = ItemEnchantments.itemEnchantments();
-                int level = Integer.parseInt(split[1]);
+        if (config.isConfigurationSection("enchantments")) {
+            ConfigurationSection enchantments = config.getConfigurationSection("enchantments");
+            assert enchantments != null;
+            ItemEnchantments.Builder builder = ItemEnchantments.itemEnchantments();
+            for (String eKey : enchantments.getKeys(false)) {
+                NamespacedKey namespacedKey = NamespacedKey.fromString(eKey);
                 if (namespacedKey != null) {
                     Enchantment enchantment = Registries.ENCHANTMENT_REGISTRY.get(namespacedKey);
                     if (enchantment != null) {
+                        int level = enchantments.getInt(eKey);
                         builder.add(enchantment, level);
+                    } else {
+                        Util.warning("Invalid enchantment key '%s'", namespacedKey.toString());
                     }
+                } else {
+                    Util.warning("Invalid enchantment key '%s'", eKey);
                 }
-                itemStack.setData(DataComponentTypes.ENCHANTMENTS, builder.build());
+
             }
+            itemStack.setData(DataComponentTypes.ENCHANTMENTS, builder.build());
         }
 
         // MAX_DAMAGE
