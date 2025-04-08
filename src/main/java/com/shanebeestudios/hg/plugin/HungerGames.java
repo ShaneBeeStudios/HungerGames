@@ -1,12 +1,12 @@
 package com.shanebeestudios.hg.plugin;
 
+import com.shanebeestudios.hg.api.data.Leaderboard;
 import com.shanebeestudios.hg.api.util.NBTApi;
 import com.shanebeestudios.hg.api.util.Util;
-import com.shanebeestudios.hg.plugin.configs.Language;
-import com.shanebeestudios.hg.api.data.Leaderboard;
 import com.shanebeestudios.hg.plugin.commands.MainCommand;
 import com.shanebeestudios.hg.plugin.configs.ArenaConfig;
 import com.shanebeestudios.hg.plugin.configs.Config;
+import com.shanebeestudios.hg.plugin.configs.Language;
 import com.shanebeestudios.hg.plugin.listeners.GameBlockListener;
 import com.shanebeestudios.hg.plugin.listeners.GameChestListener;
 import com.shanebeestudios.hg.plugin.listeners.GameCommandListener;
@@ -31,6 +31,7 @@ import dev.jorel.commandapi.CommandAPIBukkitConfig;
 import dev.jorel.commandapi.exceptions.UnsupportedVersionException;
 import io.lumine.mythic.api.MythicProvider;
 import org.bstats.bukkit.Metrics;
+import org.bstats.charts.SimplePie;
 import org.bukkit.Bukkit;
 import org.bukkit.event.HandlerList;
 import org.bukkit.plugin.PluginManager;
@@ -90,12 +91,12 @@ public class HungerGames extends JavaPlugin {
         loadPlugin(true);
     }
 
+    @SuppressWarnings("deprecation")
     public void loadPlugin(boolean load) {
         long start = System.currentTimeMillis();
         PLUGIN_INSTANCE = this;
 
         this.config = new Config(this);
-        this.metrics = new Metrics(this, 25144);
 
         //MythicMob check
         if (Bukkit.getPluginManager().getPlugin("MythicMobs") != null) {
@@ -132,6 +133,8 @@ public class HungerGames extends JavaPlugin {
             Util.warning("Report any issues to: <aqua>https://github.com/ShaneBeeStudios/HungerGames/issues");
         }
 
+        setupMetrics();
+
         Util.log("HungerGames has been <green>enabled<grey> in <aqua>%.2f seconds<grey>!", (float) (System.currentTimeMillis() - start) / 1000);
     }
 
@@ -166,6 +169,20 @@ public class HungerGames extends JavaPlugin {
         // nulls everything to prevent memory leaks
         unloadPlugin(false);
         Util.log("HungerGames has been disabled!");
+    }
+
+    private void setupMetrics() {
+        this.metrics = new Metrics(this, 25144);
+        // Config
+        this.metrics.addCustomChart(new SimplePie("config-worldborder-enabled", () ->
+            "" + Config.WORLD_BORDER_ENABLED));
+        this.metrics.addCustomChart(new SimplePie("config-chestdrop-enabled", () ->
+            "" + Config.CHESTS_CHEST_DROP_ENABLED));
+
+        // Arenas
+        this.metrics.addCustomChart(new SimplePie("arenas-count", () ->
+            "" + this.gameManager.getGames().size()));
+
     }
 
     private void loadListeners() {
