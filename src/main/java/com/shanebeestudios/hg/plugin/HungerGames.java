@@ -128,7 +128,7 @@ public class HungerGames extends JavaPlugin {
         loadCommands();
         loadListeners();
 
-        if (this.getDescription().getVersion().contains("Beta")) {
+        if (this.getDescription().getVersion().contains("beta")) {
             Util.warning("YOU ARE RUNNING A BETA VERSION, please use with caution");
             Util.warning("Report any issues to: <aqua>https://github.com/ShaneBeeStudios/HungerGames/issues");
         }
