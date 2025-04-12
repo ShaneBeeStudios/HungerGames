@@ -35,7 +35,7 @@ public class SetExitCommand extends SubCommand {
             .then(CustomArg.GAME.get("game")
                 .executesPlayer(info -> {
                     Player player = info.sender();
-                    Game game = CustomArg.getGame(info);
+                    Game game = info.args().getByClass("game", Game.class);
                     setExit(game, player);
                     Util.sendPrefixedMessage(player, this.lang.command_exit_set_arena.replace("<arena>", game.getGameArenaData().getName()));
                 }));

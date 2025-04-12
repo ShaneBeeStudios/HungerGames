@@ -19,7 +19,8 @@ public class DebugCommand extends SubCommand {
             .withPermission(Permissions.COMMAND_DEBUG.permission())
             .then(CustomArg.GAME.get("game")
                 .executes(info -> {
-                    Game game = CustomArg.getGame(info);
+                    Game game = info.args().getByClass("game", Game.class);
+                    assert game != null;
                     this.gameManager.checkGame(game, info.sender());
                 }));
     }

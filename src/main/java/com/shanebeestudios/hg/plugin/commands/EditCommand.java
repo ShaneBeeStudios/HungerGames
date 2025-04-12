@@ -46,7 +46,7 @@ public class EditCommand extends SubCommand {
             .then(LiteralArgument.literal("final_size")
                 .then(new IntegerArgument("final_size", 5)
                     .executes(info -> {
-                        Game game = CustomArg.getGame(info);
+                        Game game = info.args().getByClass("game", Game.class);
                         int finalSize = info.args().getByClass("final_size", Integer.class);
                         GameBorderData gameBorderData = game.getGameBorderData();
                         gameBorderData.setFinalBorderSize(finalSize);
@@ -56,7 +56,7 @@ public class EditCommand extends SubCommand {
             .then(LiteralArgument.literal("countdown_start")
                 .then(new IntegerArgument("countdown_start", 5)
                     .executes(info -> {
-                        Game game = CustomArg.getGame(info);
+                        Game game = info.args().getByClass("game", Game.class);
                         int countdownStart = info.args().getByClass("countdown_start", Integer.class);
                         GameBorderData gameBorderData = game.getGameBorderData();
                         gameBorderData.setBorderCountdownStart(countdownStart);
@@ -66,7 +66,7 @@ public class EditCommand extends SubCommand {
             .then(LiteralArgument.literal("countdown_end")
                 .then(new IntegerArgument("countdown_end", 5)
                     .executes(info -> {
-                        Game game = CustomArg.getGame(info);
+                        Game game = info.args().getByClass("game", Game.class);
                         int countdownEnd = info.args().getByClass("countdown_end", Integer.class);
                         GameBorderData gameBorderData = game.getGameBorderData();
                         gameBorderData.setBorderCountdownEnd(countdownEnd);
@@ -77,7 +77,7 @@ public class EditCommand extends SubCommand {
             .then(LiteralArgument.literal("center_location")
                 .then(new Location2DArgument("center_location", LocationType.BLOCK_POSITION)
                     .executes(info -> {
-                        Game game = CustomArg.getGame(info);
+                        Game game = info.args().getByClass("game", Game.class);
                         Location2D centerLocation = info.args().getByClass("center_location", Location2D.class);
                         GameBorderData gameBorderData = game.getGameBorderData();
                         gameBorderData.setCenterLocation(convert(centerLocation));
@@ -91,7 +91,7 @@ public class EditCommand extends SubCommand {
         return LiteralArgument.literal("chest-refill-time")
             .then(new IntegerArgument("time", 30)
                 .executes(info -> {
-                    Game game = CustomArg.getGame(info);
+                    Game game = info.args().getByClass("game", Game.class);
                     CommandSender sender = info.sender();
                     String name = game.getGameArenaData().getName();
                     int time = info.args().getByClass("time", Integer.class);
@@ -113,7 +113,7 @@ public class EditCommand extends SubCommand {
         return LiteralArgument.literal("chest-refill-repeat")
             .then(new IntegerArgument("time", 30)
                 .executes(info -> {
-                    Game game = CustomArg.getGame(info);
+                    Game game = info.args().getByClass("game", Game.class);
                     CommandSender sender = info.sender();
                     String name = game.getGameArenaData().getName();
                     int time = info.args().getByClass("time", Integer.class);
@@ -135,7 +135,7 @@ public class EditCommand extends SubCommand {
             .then(LiteralArgument.literal("free_roam_time")
                 .then(new IntegerArgument("seconds", -1)
                     .executes(info -> {
-                        Game game = CustomArg.getGame(info);
+                        Game game = info.args().getByClass("game", Game.class);
                         int freeRoamTime = info.args().getByClass("seconds", Integer.class);
                         game.getGameArenaData().setFreeRoamTime(freeRoamTime);
                         Util.sendPrefixedMessage(info.sender(), "Free roam time set to %s", freeRoamTime);
@@ -144,7 +144,7 @@ public class EditCommand extends SubCommand {
             .then(LiteralArgument.literal("cost")
                 .then(new IntegerArgument("dollars", 0)
                     .executes(info -> {
-                        Game game = CustomArg.getGame(info);
+                        Game game = info.args().getByClass("game", Game.class);
                         int cost = info.args().getByClass("dollars", Integer.class);
                         game.getGameArenaData().setCost(cost);
                         Util.sendPrefixedMessage(info.sender(), "Cost set to %s", cost);
@@ -153,7 +153,7 @@ public class EditCommand extends SubCommand {
             .then(LiteralArgument.literal("timer")
                 .then(new IntegerArgument("seconds", 30)
                     .executes(info -> {
-                        Game game = CustomArg.getGame(info);
+                        Game game = info.args().getByClass("game", Game.class);
                         int timerSeconds = info.args().getByClass("seconds", Integer.class);
                         game.getGameArenaData().setTimer(timerSeconds);
                         Util.sendPrefixedMessage(info.sender(), "Timer set to %s", timerSeconds);
@@ -162,7 +162,7 @@ public class EditCommand extends SubCommand {
             .then(LiteralArgument.literal("min_players")
                 .then(new IntegerArgument("min", 2)
                     .executes(info -> {
-                        Game game = CustomArg.getGame(info);
+                        Game game = info.args().getByClass("game", Game.class);
                         int minPlayers = info.args().getByClass("min", Integer.class);
                         if (minPlayers > game.getGameArenaData().getMaxPlayers()) {
                             throw CommandAPI.failWithString("Min players cannot be greater than max players");
@@ -174,7 +174,7 @@ public class EditCommand extends SubCommand {
             .then(LiteralArgument.literal("max_players")
                 .then(new IntegerArgument("max", 2)
                     .executes(info -> {
-                        Game game = CustomArg.getGame(info);
+                        Game game = info.args().getByClass("game", Game.class);
                         int maxPlayers = info.args().getByClass("max", Integer.class);
                         if (maxPlayers < game.getGameArenaData().getMinPlayers()) {
                             throw CommandAPI.failWithString("Max players cannot be less than min players");
@@ -189,7 +189,7 @@ public class EditCommand extends SubCommand {
         return LiteralArgument.literal("locations")
             .then(LiteralArgument.literal("lobby_wall")
                 .executesPlayer(info -> {
-                    Game game = CustomArg.getGame(info);
+                    Game game = info.args().getByClass("game", Game.class);
                     Player player = info.sender();
                     Block targetBlock = player.getTargetBlockExact(10);
                     if (targetBlock != null && Tag.WALL_SIGNS.isTagged(targetBlock.getType()) && game.getGameBlockData().setLobbyBlock(targetBlock.getLocation())) {
@@ -202,7 +202,7 @@ public class EditCommand extends SubCommand {
                 }))
             .then(LiteralArgument.literal("clear_spawns")
                 .executes(info -> {
-                    Game game = CustomArg.getGame(info);
+                    Game game = info.args().getByClass("game", Game.class);
                     game.getGameArenaData().clearSpawns();
                     Util.sendPrefixedMessage(info.sender(), "Spawns have been cleared. <yellow>Arena <white>'<aqua>%s<white>'<yellow> has a max of <red>%s<yellow> players, so make sure to add spawns for them.",
                         game.getGameArenaData().getName(), game.getGameArenaData().getMaxPlayers());
@@ -211,7 +211,7 @@ public class EditCommand extends SubCommand {
             .then(LiteralArgument.literal("add_spawn")
                 .then(new LocationArgument("location", LocationType.BLOCK_POSITION)
                     .executesPlayer(info -> {
-                        Game game = CustomArg.getGame(info);
+                        Game game = info.args().getByClass("game", Game.class);
                         GameArenaData gameArenaData = game.getGameArenaData();
                         Location location = info.args().getByClass("location", Location.class);
                         assert location != null;

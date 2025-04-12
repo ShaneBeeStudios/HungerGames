@@ -41,6 +41,7 @@ public class Language {
 
     // COMMANDS
     // - Base
+    public String command_base_invalid_game;
     public String command_base_not_in_valid_game;
     public String command_base_no_region;
     public String command_base_status;
@@ -315,6 +316,7 @@ public class Language {
 
         // COMMANDS
         // - Base
+        this.command_base_invalid_game = this.lang.getString("command.base-invalid-game");
         this.command_base_not_in_valid_game = this.lang.getString("command.base-not-in-valid-game");
         this.command_base_no_region = this.lang.getString("command.base-no-region");
         this.command_base_status = this.lang.getString("command.base-status");

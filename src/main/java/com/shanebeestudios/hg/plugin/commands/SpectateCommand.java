@@ -27,7 +27,8 @@ public class SpectateCommand extends SubCommand {
                     if (this.playerManager.hasPlayerData(player) || this.playerManager.hasSpectatorData(player)) {
                         Util.sendMessage(player, this.lang.command_join_already_in_game);
                     } else {
-                        Game game = CustomArg.getGame(info);
+                        Game game = info.args().getByClass("game", Game.class);
+                        assert game != null;
                         GameArenaData arenaData = game.getGameArenaData();
                         Status status = arenaData.getStatus();
                         if (status == Status.RUNNING || status == Status.FREE_ROAM) {

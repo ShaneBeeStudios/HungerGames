@@ -37,6 +37,7 @@ arena-debug:
 # COMMANDS
 command:
   # Base
+  base-invalid-game: "<red>Invalid game <white>'<yellow><arena><white>'"
   base-not-in-valid-game: '<red>You are not in a valid game!'
   base-no-region: '<red>You are not in a valid HungerGames region!'
   base-status: "Status for arena <white>'<aqua><arena><white>' <grey>= <status>"

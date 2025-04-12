@@ -45,7 +45,7 @@ public class GameManager {
     public GameManager(HungerGames plugin) {
         this.plugin = plugin;
         this.lang = plugin.getLang();
-        CustomArg.init(this);
+        CustomArg.init(plugin, this);
         this.globalExitLocation = Config.GLOBAL_EXIT_LOCATION;
     }
 

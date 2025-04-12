@@ -3,6 +3,7 @@ package com.shanebeestudios.hg.api.util;
 import com.shanebeestudios.hg.plugin.HungerGames;
 import com.shanebeestudios.hg.plugin.configs.Config;
 import com.shanebeestudios.hg.plugin.configs.Language;
+import dev.jorel.commandapi.arguments.CustomArgument.CustomArgumentException;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.minimessage.MiniMessage;
 import net.md_5.bungee.api.ChatColor;
@@ -170,6 +171,10 @@ public class Util {
      */
     public static Component getMini(String format, Object... objects) {
         return MINI_MESSAGE.deserialize(String.format(format, objects));
+    }
+
+    public static void throwCustomArgException(String message) throws CustomArgumentException {
+        throw CustomArgumentException.fromAdventureComponent(getMini(getPrefix() + " " + message));
     }
 
     /**

@@ -23,7 +23,8 @@ public class RefillChestNowCommand extends SubCommand {
             .then(CustomArg.GAME.get("game")
                 .executes(info -> {
                     CommandSender sender = info.sender();
-                    Game game = CustomArg.getGame(info);
+                    Game game = info.args().getByClass("game", Game.class);
+                    assert game != null;
                     if (game.getGameArenaData().getStatus() != Status.RUNNING) {
                         Util.sendMessage(sender, this.lang.listener_not_running);
                         return;
