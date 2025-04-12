@@ -63,8 +63,6 @@ public class GamePlayerData extends Data {
         this.gameManager = this.plugin.getGameManager();
     }
 
-    // TODO Data methods
-
     /**
      * Get a list of all players in the game
      *
