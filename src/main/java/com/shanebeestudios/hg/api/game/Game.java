@@ -244,6 +244,7 @@ public class Game {
         Bukkit.getPluginManager().callEvent(event);
 
         this.gameArenaData.setStatus(Status.COUNTDOWN);
+        this.gamePlayerData.putAllPlayersIntoArena();
         this.startingTask = new StartingTask(this);
     }
 
@@ -366,26 +367,28 @@ public class Game {
             }
             case READY -> {
                 if (!canJoin(player)) return false;
-                this.gamePlayerData.addPlayerData(player);
+                this.gamePlayerData.addPlayerData(player, savePreviousLocation);
                 startWaitingPeriod();
                 broadcastJoin(player);
+                Util.sendPrefixedMessage(player, this.lang.game_joined_waiting_to_teleport.replace("<arena>", arenaName));
             }
             case WAITING -> {
                 if (!canJoin(player)) return false;
-                this.gamePlayerData.addPlayerData(player);
+                this.gamePlayerData.addPlayerData(player, savePreviousLocation);
                 if (this.gamePlayerData.getPlayers().size() >= this.gameArenaData.getMinPlayers()) {
                     startPreGameCountdown();
                 } else {
                     broadcastJoin(player);
+                    Util.sendPrefixedMessage(player, this.lang.game_joined_waiting_to_teleport.replace("<arena>", arenaName));
                 }
             }
             case COUNTDOWN -> {
                 if (!canJoin(player)) return false;
-                this.gamePlayerData.addPlayerData(player);
+                this.gamePlayerData.addPlayerData(player, savePreviousLocation);
+                this.gamePlayerData.putPlayerIntoArena(player);
             }
         }
 
-        this.gamePlayerData.putPlayerIntoArena(player, savePreviousLocation);
         return true;
     }
 

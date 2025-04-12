@@ -130,6 +130,7 @@ public class Language {
     // GAME
     public String game_waiting_join;
     public String game_waiting_players_to_start;
+    public String game_joined_waiting_to_teleport;
     public String game_join;
     public String game_countdown_started;
     public String game_countdown_timer;
@@ -415,6 +416,7 @@ public class Language {
         // GAME
         this.game_waiting_join = this.lang.getString("game.waiting-join");
         this.game_waiting_players_to_start = this.lang.getString("game.waiting-players-to-start");
+        this.game_joined_waiting_to_teleport = this.lang.getString("game.joined-waiting-to-teleport");
         this.game_join = this.lang.getString("game.join");
         this.game_countdown_started = this.lang.getString("game.countdown-started");
         this.game_countdown_timer = this.lang.getString("game.countdown-timer");

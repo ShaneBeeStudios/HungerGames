@@ -30,7 +30,7 @@ public class Config {
     public static int TRACKING_STICK_USES;
     public static int PLAYERS_FOR_TRACKING_STICK;
     public static int SETTINGS_TELEPORT_AT_END_TIME;
-    public static boolean savePreviousLocation;
+    public static boolean SETTINGS_SAVE_PREVIOUS_LOCATION;
     public static int SETTINGS_FREE_ROAM_TIME;
     public static Location GLOBAL_EXIT_LOCATION;
 
@@ -134,7 +134,7 @@ public class Config {
         bossbar = config.getBoolean("settings.bossbar-countdown");
         TRACKING_STICK_USES = config.getInt("settings.trackingstick-uses");
         PLAYERS_FOR_TRACKING_STICK = config.getInt("settings.players-for-trackingstick");
-        savePreviousLocation = config.getBoolean("settings.save-previous-location");
+        SETTINGS_SAVE_PREVIOUS_LOCATION = config.getBoolean("settings.save-previous-location");
         SETTINGS_TELEPORT_AT_END_TIME = config.getInt("settings.teleport-at-end-time");
         SETTINGS_FREE_ROAM_TIME = config.getInt("settings.free-room-time");
         String locString = config.getString("settings.global-exit-location");

@@ -47,8 +47,8 @@ public class GamePlayerData extends Data {
     private final GameManager gameManager;
 
     // Player Lists
-    final List<Player> players = new ArrayList<>();
-    final List<Player> spectators = new ArrayList<>();
+    final Map<Player, Boolean> players = new HashMap<>();
+    final Map<Player, Boolean> spectators = new HashMap<>();
     // This list contains all players who have joined the arena
     // Will be used to broadcast messages even if a player is no longer in the game
     final List<Player> allPlayers = new ArrayList<>();
@@ -69,7 +69,7 @@ public class GamePlayerData extends Data {
      * @return UUID list of all players in game
      */
     public List<Player> getPlayers() {
-        return this.players;
+        return new ArrayList<>(this.players.keySet());
     }
 
     void clearPlayers() {
@@ -83,7 +83,7 @@ public class GamePlayerData extends Data {
      * @return List of spectators
      */
     public List<Player> getSpectators() {
-        return new ArrayList<>(this.spectators);
+        return new ArrayList<>(this.spectators.keySet());
     }
 
     void clearSpectators() {
@@ -118,7 +118,7 @@ public class GamePlayerData extends Data {
      */
     public void respawnAll() {
         this.randomizedSpawns.clear();
-        for (Player player : this.players) {
+        for (Player player : this.players.keySet()) {
             player.teleport(pickRandomSpawn());
         }
     }
@@ -174,8 +174,8 @@ public class GamePlayerData extends Data {
      */
     public void messageAllActivePlayers(String message) {
         List<Player> allPlayers = new ArrayList<>();
-        allPlayers.addAll(this.players);
-        allPlayers.addAll(this.spectators);
+        allPlayers.addAll(this.players.keySet());
+        allPlayers.addAll(this.spectators.keySet());
         for (Player player : allPlayers) {
             Util.sendMessage(player, message);
         }
@@ -190,7 +190,7 @@ public class GamePlayerData extends Data {
      */
     public void messageAllPlayers(String message) {
         List<Player> allPlayers = new ArrayList<>(this.allPlayers);
-        allPlayers.addAll(this.spectators);
+        allPlayers.addAll(this.spectators.keySet());
         for (Player player : allPlayers) {
             Util.sendPrefixedMessage(player, message);
         }
@@ -206,13 +206,21 @@ public class GamePlayerData extends Data {
         return spawn;
     }
 
-    void addPlayerData(Player player) {
-        this.players.add(player);
+    void addPlayerData(Player player, boolean savePreviousLocation) {
+        this.players.put(player, savePreviousLocation);
         this.allPlayers.add(player);
         this.game.getGameBlockData().updateLobbyBlock();
     }
 
-    void putPlayerIntoArena(Player player, boolean savePreviousLocation) {
+    /**
+     * Teleport all waiting players into the arena
+     */
+    public void putAllPlayersIntoArena() {
+        this.players.keySet().forEach(this::putPlayerIntoArena);
+    }
+
+    void putPlayerIntoArena(Player player) {
+        boolean savePreviousLocation = this.players.get(player);
         Location loc = pickRandomSpawn();
         if (loc.getBlock().getRelative(BlockFace.DOWN).getType() == Material.AIR) {
             while (loc.getBlock().getRelative(BlockFace.DOWN).getType() == Material.AIR) {
@@ -224,12 +232,12 @@ public class GamePlayerData extends Data {
             player.leaveVehicle();
         }
 
-        Location previousLocation = player.getLocation();
+        Location previousLocation = player.getLocation().clone();
 
         // Teleport async into the arena so it loads a little more smoothly
         player.teleportAsync(loc).thenAccept(a -> {
             PlayerData playerData = new PlayerData(player, this.game);
-            if (savePreviousLocation && Config.savePreviousLocation) {
+            if (savePreviousLocation && Config.SETTINGS_SAVE_PREVIOUS_LOCATION) {
                 playerData.setPreviousLocation(previousLocation);
             }
             this.playerManager.addPlayerData(playerData);
@@ -319,19 +327,19 @@ public class GamePlayerData extends Data {
         if (this.playerManager.hasPlayerData(uuid)) {
             this.playerManager.transferPlayerDataToSpectator(uuid);
         } else {
-            this.playerManager.addSpectatorData(new PlayerData(spectator, game));
+            this.playerManager.addSpectatorData(new PlayerData(spectator, this.game));
         }
-        this.spectators.add(spectator);
+        this.spectators.put(spectator, true); // TODO should we handle location saving?
         spectator.setGameMode(GameMode.SURVIVAL);
         spectator.setCollidable(false);
         if (Config.SPECTATE_FLY)
             spectator.setAllowFlight(true);
 
         if (Config.SPECTATE_HIDE) {
-            for (Player player : this.players) {
+            for (Player player : this.players.keySet()) {
                 player.hidePlayer(this.plugin, spectator);
             }
-            for (Player player : this.spectators) {
+            for (Player player : this.spectators.keySet()) {
                 player.hidePlayer(this.plugin, spectator);
             }
         }

@@ -181,6 +181,7 @@ game:
   waiting-join: "<aqua><player> <grey>joined arena <white>'<aqua><arena><white>'"
   #  <amount> will be replaced with amount of players left to start a game
   waiting-players-to-start: '<aqua><amount> <gold>players to start!'
+  joined-waiting-to-teleport: "You have joined arena <white>'<aqua><arena><white>'<grey>! You will teleport when the game is ready to go."
 
   running: "<red>The game <white>'<aqua><arena><white>' <red>is already running and cannot be joined!"
   join: "Use: <aqua>/hg join <arena><grey> to join!"
