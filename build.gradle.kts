@@ -41,7 +41,7 @@ dependencies {
     compileOnly("io.papermc.paper:paper-api:${minecraftVersion}-R0.1-SNAPSHOT")
 
     // Command Api
-    implementation("dev.jorel:commandapi-bukkit-shade:9.7.0")
+    implementation("dev.jorel:commandapi-bukkit-shade:10.0.0")
 
     // bStats
     implementation("org.bstats:bstats-bukkit:3.1.0")
