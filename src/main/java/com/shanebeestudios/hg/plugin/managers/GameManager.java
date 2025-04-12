@@ -128,9 +128,7 @@ public class GameManager {
     public Game createGame(String name, Block corner1, Block corner2, List<Location> spawns, Location sign,
                            int timer, int minPlayers, int maxPlayers, int cost) {
         GameRegion gameRegion = GameRegion.createNew(corner1, corner2);
-        int roam = 1; // tODO  what are you?
-        boolean isReady = true; // TODO yeah?
-        Game game = new Game(name, gameRegion, spawns, sign, timer, minPlayers, maxPlayers, roam, isReady, cost);
+        Game game = new Game(name, gameRegion, spawns, sign, timer, minPlayers, maxPlayers, Config.SETTINGS_FREE_ROAM_TIME, true, cost);
         this.games.put(name, game);
         this.plugin.getArenaConfig().saveGameToConfig(game);
         return game;
