@@ -5,9 +5,9 @@ plugins {
 // Version of HungerGames
 val projectVersion = "5.0.0-beta1"
 // Where this builds on the server
-val serverLocation = "1-21-4"
+val serverLocation = "1-21-5"
 // Minecraft version to build against
-val minecraftVersion = "1.21.4"
+val minecraftVersion = "1.21.5"
 
 java.sourceCompatibility = JavaVersion.VERSION_21
 

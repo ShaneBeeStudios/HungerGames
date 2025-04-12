@@ -174,7 +174,7 @@ public class ItemParser {
         // DYED_COLOR
         if (config.contains("dyed_color")) {
             int color = config.getInt("dyed_color");
-            itemStack.setData(DataComponentTypes.DYED_COLOR, DyedItemColor.dyedItemColor(Color.fromRGB(color), false));
+            itemStack.setData(DataComponentTypes.DYED_COLOR, DyedItemColor.dyedItemColor(Color.fromRGB(color)));
         }
 
         // NBT
