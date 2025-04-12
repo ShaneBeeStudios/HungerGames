@@ -3,10 +3,12 @@ package com.shanebeestudios.hg.api.parsers;
 import com.shanebeestudios.hg.api.registry.Registries;
 import com.shanebeestudios.hg.api.util.NBTApi;
 import com.shanebeestudios.hg.api.util.Util;
+import io.papermc.paper.datacomponent.DataComponentType;
 import io.papermc.paper.datacomponent.DataComponentTypes;
 import io.papermc.paper.datacomponent.item.DyedItemColor;
 import io.papermc.paper.datacomponent.item.ItemEnchantments;
 import io.papermc.paper.datacomponent.item.PotionContents;
+import io.papermc.paper.datacomponent.item.TooltipDisplay;
 import net.kyori.adventure.text.Component;
 import org.bukkit.Color;
 import org.bukkit.NamespacedKey;
@@ -154,6 +156,25 @@ public class ItemParser {
         if (config.contains("dyed_color")) {
             int color = config.getInt("dyed_color");
             itemStack.setData(DataComponentTypes.DYED_COLOR, DyedItemColor.dyedItemColor(Color.fromRGB(color)));
+        }
+
+        // HIDDEN COMPONENTS
+        if (config.isList("hidden_components")) {
+            TooltipDisplay.Builder builder = TooltipDisplay.tooltipDisplay();
+            for (String compKey : config.getStringList("hidden_components")) {
+                NamespacedKey namespacedKey = NamespacedKey.fromString(compKey);
+                if (namespacedKey == null) {
+                    Util.warning("Invalid component key: " + compKey);
+                    continue;
+                }
+                DataComponentType type = Registries.DATA_COMPONENT_TYPE_REGISTRY.get(namespacedKey);
+                if (type == null) {
+                    Util.warning("Invalid component key: " + compKey);
+                    continue;
+                }
+                builder.addHiddenComponents(type);
+            }
+            itemStack.setData(DataComponentTypes.TOOLTIP_DISPLAY, builder.build());
         }
 
         // NBT
