@@ -1,11 +1,12 @@
 package com.shanebeestudios.hg.api.gui;
 
-import com.shanebeestudios.hg.api.util.Util;
 import com.shanebeestudios.hg.api.data.KitEntry;
-import com.shanebeestudios.hg.plugin.configs.Language;
+import com.shanebeestudios.hg.api.util.Util;
 import com.shanebeestudios.hg.plugin.HungerGames;
+import com.shanebeestudios.hg.plugin.configs.Language;
 import io.papermc.paper.datacomponent.DataComponentTypes;
 import io.papermc.paper.datacomponent.item.ItemLore;
+import io.papermc.paper.datacomponent.item.TooltipDisplay;
 import net.kyori.adventure.text.Component;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
@@ -38,11 +39,16 @@ public class KitGUI implements InventoryHolder {
             Util.getMini(this.lang.kits_kit_gui_title.replace("<name>", kitEntry.getName())));
 
         // SETUP INVENTORY
-        // white line
-        ItemStack line = ItemType.WHITE_WOOL.createItemStack();
-        // TODO hide tooltip (1.21.5 way)
+        // divider
+        ItemStack divider = ItemType.BLACK_STAINED_GLASS_PANE.createItemStack();
+        if (Util.RUNNING_1_21_5) {
+            divider.setData(DataComponentTypes.TOOLTIP_DISPLAY, TooltipDisplay.tooltipDisplay()
+                .hideTooltip(true));
+        } else {
+            divider.setData(DataComponentTypes.CUSTOM_NAME, Component.text(" "));
+        }
         for (int i = 9; i < 18; i++) {
-            this.inventory.setItem(i, line);
+            this.inventory.setItem(i, divider);
         }
 
         // exit button
@@ -71,7 +77,7 @@ public class KitGUI implements InventoryHolder {
         }
         this.inventory.setItem(1, chestplate);
 
-        // Helmet
+        // Leggings
         ItemStack leggings = kitEntry.getLeggings();
         if (leggings == null) {
             leggings = ItemType.BARRIER.createItemStack();
@@ -79,7 +85,7 @@ public class KitGUI implements InventoryHolder {
         }
         this.inventory.setItem(2, leggings);
 
-        // Helmet
+        // Boots
         ItemStack boots = kitEntry.getBoots();
         if (boots == null) {
             boots = ItemType.BARRIER.createItemStack();
@@ -90,8 +96,13 @@ public class KitGUI implements InventoryHolder {
         // Potions
         ItemStack potion = ItemType.POTION.createItemStack();
         potion.setData(DataComponentTypes.CUSTOM_NAME, Util.getMini(this.lang.kits_kit_gui_potion_effects));
-        // TODO 1.21.5 hide potion contents
-        potion.addItemFlags(ItemFlag.HIDE_ADDITIONAL_TOOLTIP);
+        if (Util.RUNNING_1_21_5) {
+            potion.setData(DataComponentTypes.TOOLTIP_DISPLAY, TooltipDisplay.tooltipDisplay()
+                .hideTooltip(true));
+        } else {
+            //noinspection deprecation
+            potion.addItemFlags(ItemFlag.HIDE_ADDITIONAL_TOOLTIP);
+        }
 
         List<PotionEffect> potionEffects = kitEntry.getPotionEffects();
         List<Component> lore = new ArrayList<>();

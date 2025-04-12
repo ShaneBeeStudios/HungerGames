@@ -14,6 +14,7 @@ import org.bukkit.Color;
 import org.bukkit.NamespacedKey;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.enchantments.Enchantment;
+import org.bukkit.inventory.ItemFlag;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.ItemType;
 import org.bukkit.potion.PotionEffect;
@@ -151,15 +152,17 @@ public class ItemParser {
             itemStack.setData(DataComponentTypes.POTION_CONTENTS, builder.build());
         }
 
-
         // DYED_COLOR
         if (config.contains("dyed_color")) {
             int color = config.getInt("dyed_color");
-            itemStack.setData(DataComponentTypes.DYED_COLOR, DyedItemColor.dyedItemColor(Color.fromRGB(color)));
+            itemStack.setData(DataComponentTypes.DYED_COLOR, DyedItemColor.dyedItemColor().color(Color.fromRGB(color)));
+            if (!Util.RUNNING_1_21_5) {
+                itemStack.addItemFlags(ItemFlag.HIDE_ADDITIONAL_TOOLTIP);
+            }
         }
 
         // HIDDEN COMPONENTS
-        if (config.isList("hidden_components")) {
+        if (Util.RUNNING_1_21_5 && config.isList("hidden_components")) {
             TooltipDisplay.Builder builder = TooltipDisplay.tooltipDisplay();
             for (String compKey : config.getStringList("hidden_components")) {
                 NamespacedKey namespacedKey = NamespacedKey.fromString(compKey);

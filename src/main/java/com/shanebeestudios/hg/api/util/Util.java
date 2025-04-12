@@ -27,7 +27,11 @@ import java.util.regex.Pattern;
 @SuppressWarnings("WeakerAccess")
 public class Util {
 
-    public static final BlockFace[] BLOCK_FACES = new BlockFace[]{BlockFace.EAST, BlockFace.WEST, BlockFace.NORTH, BlockFace.SOUTH};
+    // PUBLIC
+    // Quick link to help for removing legacy stuff later
+    public static final boolean RUNNING_1_21_5 = isRunningMinecraft(1, 21, 5);
+
+    // PRIVATE
     private static final Pattern HEX_PATTERN = Pattern.compile("<#([A-Fa-f0-9]){6}>");
     private static final CommandSender CONSOLE = Bukkit.getConsoleSender();
     private static final MiniMessage MINI_MESSAGE = MiniMessage.miniMessage();
