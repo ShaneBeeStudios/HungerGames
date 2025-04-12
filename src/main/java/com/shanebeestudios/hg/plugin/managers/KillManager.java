@@ -188,6 +188,7 @@ public class KillManager {
     public void processDeath(Player player, Game game, Entity attacker, DamageSource damageSource) {
         List<ItemStack> drops = dropInventoryOfPlayer(player);
         player.setHealth(20);
+        player.getInventory().clear();
         Bukkit.getScheduler().runTaskLater(this.plugin, () -> {
             GamePlayerData gamePlayerData = game.getGamePlayerData();
             String deathString;
