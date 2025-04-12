@@ -22,12 +22,10 @@ import org.jetbrains.annotations.Nullable;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
-import java.util.Map;
-import java.util.concurrent.atomic.AtomicInteger;
 
 public class ItemParser {
 
-    @SuppressWarnings({"UnstableApiUsage", "unchecked"})
+    @SuppressWarnings({"UnstableApiUsage"})
     public static @Nullable ItemStack parseItem(@Nullable ConfigurationSection config) {
         if (config == null) return null;
 
@@ -132,25 +130,6 @@ public class ItemParser {
                 }
             }
         }
-
-        // POTION_EFFECT
-//        if (config.contains("potion_effects")) {
-//            List<Map<String, Object>> potionEffectsList = (List<Map<String, Object>>) config.getList("potion_effects");
-//            assert potionEffectsList != null;
-//            PotionContents.Builder builder = PotionContents.potionContents();
-//            AtomicInteger color = new AtomicInteger(-1);
-//            potionEffectsList.forEach(entry -> {
-//                PotionEffect potionEffect = parsePotionEffect(entry);
-//                if (potionEffect != null) {
-//                    builder.addCustomEffect(potionEffect);
-//                    if (entry.containsKey("custom_color")) {
-//                        color.set((int) entry.get("custom_color"));
-//                    }
-//                }
-//            });
-//            if (color.get() != -1) builder.customColor(Color.fromRGB(color.get()));
-//            itemStack.setData(DataComponentTypes.POTION_CONTENTS, builder.build());
-//        }
 
         // POTION_EFFECT
         if (config.isConfigurationSection("potion_effects")) {
