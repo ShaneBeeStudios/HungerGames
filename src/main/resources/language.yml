@@ -48,7 +48,7 @@ command:
   create-error-session-exists: '<red>Looks like you are already in a creation session!'
   create-divisible-1: '<red>Time-in-seconds must be divisible by 30!'
   create-divisible-2: '<red>Ex: 90 is divisible by 30'
-  create-minmax: '<red>min-players cannot be more then max-players!'
+  create-minmax: '<red>min-players cannot be more than max-players!'
   create-session-stick-name: '<aqua><!italic>HungerGames Selection Stick'
   create-session-start: '<aqua>You are now ready to create your area, click the first corner of your area with the stick.'
   create-session-next-corner: '<green>First corner selected! <aqua>Now select your second corner.'
