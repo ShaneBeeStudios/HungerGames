@@ -417,7 +417,10 @@ public class Game {
         for (Player player : this.gamePlayerData.getPlayers()) {
             UUID uuid = player.getUniqueId();
             PlayerData playerData = this.playerManager.getPlayerData(uuid);
-            assert playerData != null;
+
+            // We might be in the waiting stage
+            if (playerData == null) continue;
+
             Location previousLocation = playerData.getPreviousLocation();
 
             this.gamePlayerData.heal(player);
