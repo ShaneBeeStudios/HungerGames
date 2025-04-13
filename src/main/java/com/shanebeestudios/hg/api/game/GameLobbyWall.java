@@ -93,8 +93,9 @@ public class GameLobbyWall extends Data {
     }
 
     boolean isLobbyValid() {
-        return this.signLoc1.getBlock().getState() instanceof Sign && this.signLoc2.getBlock().getState() instanceof Sign
-            && this.signLoc3.getBlock().getState() instanceof Sign;
+        return this.signLoc1.getBlock().getState() instanceof Sign
+            && this.signLoc2 != null && this.signLoc2.getBlock().getState() instanceof Sign
+            && this.signLoc3 != null && this.signLoc3.getBlock().getState() instanceof Sign;
     }
 
 }
