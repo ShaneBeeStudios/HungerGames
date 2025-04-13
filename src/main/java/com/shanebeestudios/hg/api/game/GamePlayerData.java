@@ -71,8 +71,9 @@ public class GamePlayerData extends Data {
         return new ArrayList<>(this.players.keySet());
     }
 
-    void clearPlayers() {
+    void postGameReset() {
         this.players.clear();
+        this.spectators.clear();
         this.allPlayers.clear();
     }
 
@@ -87,10 +88,6 @@ public class GamePlayerData extends Data {
      */
     public List<Player> getSpectators() {
         return new ArrayList<>(this.spectators.keySet());
-    }
-
-    void clearSpectators() {
-        spectators.clear();
     }
 
     // Utility methods

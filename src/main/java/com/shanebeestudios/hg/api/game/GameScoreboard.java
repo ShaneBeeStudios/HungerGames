@@ -101,9 +101,9 @@ public class GameScoreboard extends Data {
     }
 
     /**
-     * Clear all {@link GameTeam GameTeams}
+     * Clear all {@link GameTeam GameTeams} after game stops
      */
-    public void clearGameTeams() {
+    public void postGameReset() {
         this.gameTeams.forEach((team, gameTeam) -> gameTeam.unregister());
         this.gameTeams.clear();
     }

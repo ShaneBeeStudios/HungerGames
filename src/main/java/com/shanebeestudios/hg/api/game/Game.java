@@ -501,9 +501,8 @@ public class Game {
         this.gameCommandData.runCommands(CommandType.STOP, null);
 
         // Game has ended, we can clear some data
-        this.gamePlayerData.clearPlayers();
-        this.gamePlayerData.clearSpectators();
-        this.gameScoreboard.clearGameTeams();
+        this.gamePlayerData.postGameReset();
+        this.gameScoreboard.postGameReset();
         this.gameItemData.postGameReset();
         this.plugin.getLeaderboard().saveLeaderboard();
 
