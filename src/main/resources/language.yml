@@ -31,7 +31,7 @@ arena-debug:
   broken-debug: '<red>Your arena is marked as broken! use <aqua>/hg debug <arena> <red>to check for errors!'
   broken-debug-2: '<red>If no errors are found, please use <aqua>/hg toggle <arena><red>!'
   invalid-lobby: '<red>Your LobbyWall is invalid! Please reset them!'
-  set-lobby: '<gold>Set lobbywall: <grey>/hg setlobbywall <arena>'
+  set-lobby: 'Set lobbywall: <aqua>/hg edit <arena> locations lobby_wall'
   ready-run: '<green>Your HungerGames arena <grey><arena><green> is ready to run!'
 
 # COMMANDS
