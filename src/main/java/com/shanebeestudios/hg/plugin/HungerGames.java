@@ -31,11 +31,15 @@ import dev.jorel.commandapi.CommandAPIBukkitConfig;
 import dev.jorel.commandapi.exceptions.UnsupportedVersionException;
 import io.lumine.mythic.api.MythicProvider;
 import org.bstats.bukkit.Metrics;
+import org.bstats.charts.DrilldownPie;
 import org.bstats.charts.SimplePie;
 import org.bukkit.Bukkit;
 import org.bukkit.event.HandlerList;
 import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.java.JavaPlugin;
+
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * <b>Main class for HungerGames</b>
@@ -174,10 +178,14 @@ public class HungerGames extends JavaPlugin {
     private void setupMetrics() {
         this.metrics = new Metrics(this, 25144);
         // Config
-        this.metrics.addCustomChart(new SimplePie("config-worldborder-enabled", () ->
-            "" + Config.WORLD_BORDER_ENABLED));
-        this.metrics.addCustomChart(new SimplePie("config-chestdrop-enabled", () ->
-            "" + Config.CHESTS_CHEST_DROP_ENABLED));
+        this.metrics.addCustomChart(new DrilldownPie("config", () -> {
+            Map<String, Map<String, Integer>> map = new HashMap<>();
+            map.put("worldborder-enabled", Map.of("" + Config.WORLD_BORDER_ENABLED, 1));
+            map.put("chestdrop-enabled", Map.of("" + Config.CHESTS_CHEST_DROP_ENABLED, 1));
+            map.put("reward-enabled", Map.of("" + Config.REWARD_GIVE_REWARD, 1));
+            map.put("spectate-enabled", Map.of("" + Config.SPECTATE_ENABLED, 1));
+            return map;
+        }));
 
         // Arenas
         this.metrics.addCustomChart(new SimplePie("arenas-count", () ->
