@@ -124,9 +124,12 @@ chests:
       # The blocks will be replaced with the first element of 'chests.bonus.block-types' from above
       enabled: true
       # Place this block randomly around your arena to be replaced when a game starts
+      # Place as many as you'd like
       block: 'minecraft:pink_wool'
-      # Chance a block will be replaced (out of 100)
-      chance: 50
+      # How many random bonus chests to place (randomly selected between min/max)
+      # If there aren't enough blocks placed it will just stop (make sure to place plenty more than your max)
+      min: 2
+      max: 5
   # Chest drops
   chest-drop:
     # Whether to enable chest drops

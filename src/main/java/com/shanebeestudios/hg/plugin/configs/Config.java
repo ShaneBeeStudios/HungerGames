@@ -74,7 +74,8 @@ public class Config {
     public static List<String> CHESTS_BONUS_BLOCK_TYPES;
     // Chests - Bonus - Randomize
     public static boolean CHESTS_BONUS_RANDOMIZE_ENABLED;
-    public static int CHESTS_BONUS_RANDOMIZE_CHANCE;
+    public static int CHESTS_BONUS_RANDOMIZE_MIN;
+    public static int CHESTS_BONUS_RANDOMIZE_MAX;
     public static String CHESTS_BONUS_RANDOMIZE_BLOCK;
 
     // Chests - Drops
@@ -177,7 +178,8 @@ public class Config {
         CHESTS_BONUS_MAX_CONTENT = config.getInt("chests.bonus.max-content");
         CHESTS_BONUS_BLOCK_TYPES = config.getStringList("chests.bonus.block-types");
         CHESTS_BONUS_RANDOMIZE_ENABLED = config.getBoolean("chests.bonus.randomize.enabled");
-        CHESTS_BONUS_RANDOMIZE_CHANCE = config.getInt("chests.bonus.randomize.chance");
+        CHESTS_BONUS_RANDOMIZE_MIN = config.getInt("chests.bonus.randomize.min");
+        CHESTS_BONUS_RANDOMIZE_MAX = config.getInt("chests.bonus.randomize.max");
         CHESTS_BONUS_RANDOMIZE_BLOCK = config.getString("chests.bonus.randomize.block");
         CHESTS_CHEST_DROP_ENABLED = config.getBoolean("chests.chest-drop.enabled");
         CHESTS_CHEST_DROP_INTERVAL = config.getInt("chests.chest-drop.interval");

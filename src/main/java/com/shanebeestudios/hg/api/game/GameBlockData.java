@@ -183,16 +183,21 @@ public class GameBlockData extends Data {
 
     @SuppressWarnings("UnstableApiUsage")
     public void setupRandomizedBonusChests() {
+        if (!Config.CHESTS_BONUS_RANDOMIZE_ENABLED) return;
+
         Optional<BlockType> first = BlockUtils.getBonusBlockTypes().stream().findFirst();
         if (first.isEmpty()) return;
-        BlockData blockData = first.get().createBlockData();
 
-        if (Config.CHESTS_BONUS_RANDOMIZE_ENABLED) {
-            this.randomBonusChests.forEach(bonusChest -> {
-                if (this.random.nextInt(100) < Config.CHESTS_BONUS_RANDOMIZE_CHANCE) {
-                    bonusChest.setBlockData(blockData);
-                }
-            });
+        BlockData blockData = first.get().createBlockData();
+        int bonusChestAmount = this.random.nextInt(Config.CHESTS_BONUS_RANDOMIZE_MIN, Config.CHESTS_BONUS_RANDOMIZE_MAX + 1);
+        List<Block> randoms = new ArrayList<>(this.randomBonusChests);
+        for (int i = 0; i < bonusChestAmount; i++) {
+            if (randoms.isEmpty()) return;
+
+            Collections.shuffle(randoms);
+            Block bonusChest = randoms.getFirst();
+            randoms.remove(bonusChest);
+            bonusChest.setBlockData(blockData);
         }
     }
 
