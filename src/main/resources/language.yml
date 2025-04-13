@@ -235,6 +235,7 @@ kits:
     potion-effect-none: '<red>No potion effects!'
     # <type> will be used as a translation key to translate to the client's language
     potion-effect-lore: '<!italic>- <yellow><lang:<type>>'
+    pre-select: "You have preselected kit <white>'<aqua><kit><white>'<grey> and will be given the items when you enter the arena."
 
 # LEADERBOARD
 leaderboard:

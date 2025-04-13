@@ -58,11 +58,11 @@ public class HungerGames extends JavaPlugin {
     private ArenaConfig arenaConfig;
 
     // Managers
-    private GameManager gameManager;
-    private PlayerManager playerManager;
-    private KillManager killManager;
     private ItemManager itemManager;
+    private PlayerManager playerManager;
     private KitManager kitManager;
+    private GameManager gameManager;
+    private KillManager killManager;
     private SessionManager sessionManager;
     private MobManager mobManager;
     private io.lumine.mythic.api.mobs.MobManager mythicMobManager;
@@ -111,11 +111,10 @@ public class HungerGames extends JavaPlugin {
         }
         this.lang = new Language(this);
         this.itemManager = new ItemManager(this);
+        this.playerManager = new PlayerManager();
         this.kitManager = new KitManager(this);
         this.sessionManager = new SessionManager();
-
         this.mobManager = new MobManager(this);
-        this.playerManager = new PlayerManager();
         this.gameManager = new GameManager(this);
         this.arenaConfig = new ArenaConfig(this);
         this.leaderboard = new Leaderboard(this);

@@ -255,7 +255,7 @@ public class GamePlayerData extends Data {
 
             this.game.getGameScoreboard().updateBoards();
             this.game.getGameCommandData().runCommands(GameCommandData.CommandType.JOIN, player);
-            this.game.getGameItemData().getKitData().giveDefaultKit(player);
+            this.game.getGameItemData().getKitData().givePreselectedOrDefaultKit(player);
         });
     }
 

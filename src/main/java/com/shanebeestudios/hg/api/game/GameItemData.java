@@ -36,4 +36,8 @@ public class GameItemData extends Data {
         return this.kitData;
     }
 
+    public void postGameReset() {
+        this.kitData.clearPreselectedKits();
+    }
+
 }

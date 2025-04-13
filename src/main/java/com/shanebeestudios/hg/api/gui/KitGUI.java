@@ -130,7 +130,7 @@ public class KitGUI implements InventoryHolder {
     public void click(int slot) {
         // APPLY
         if (slot == 7) {
-            this.kitsGUI.getKitData().setKit(this.player, this.kitEntry.getName());
+            this.kitsGUI.getKitData().setKit(this.player, this.kitEntry);
             this.player.closeInventory();
         }
         // EXIT

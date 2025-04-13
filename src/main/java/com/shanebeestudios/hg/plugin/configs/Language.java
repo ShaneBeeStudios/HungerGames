@@ -174,6 +174,7 @@ public class Language {
     public String kits_kit_gui_potion_effects;
     public String kits_kit_gui_potion_effect_lore;
     public String kits_kit_gui_potion_effect_none;
+    public String kits_kit_gui_pre_select;
 
     // LEADERBOARD
     public String leaderboard_blank_space;
@@ -454,6 +455,7 @@ public class Language {
         this.kits_kit_gui_potion_effects = this.lang.getString("kits.kit-gui.potion-effects");
         this.kits_kit_gui_potion_effect_lore = this.lang.getString("kits.kit-gui.potion-effect-lore");
         this.kits_kit_gui_potion_effect_none = this.lang.getString("kits.kit-gui.potion-effect-none");
+        this.kits_kit_gui_pre_select = this.lang.getString("kits.kit-gui.pre-select");
 
         // LEADERBOARD
         this.leaderboard_blank_space = this.lang.getString("leaderboard.blank-space");
