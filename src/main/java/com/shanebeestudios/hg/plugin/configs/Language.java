@@ -189,11 +189,7 @@ public class Language {
     public String listener_command_handler_playing;
 
     // LOBBY SIGN
-    public String lobby_sign_cost;
-    public String lobby_sign_1_1;
-    public String lobby_sign_1_3;
-    public String lobby_sign_2_1;
-    public String lobby_sign_3_1;
+    public List<List<String>> lobby_signs_lines;
 
     // SCOREBOARD
     public String scoreboard_sidebar_title;
@@ -473,11 +469,10 @@ public class Language {
         this.listener_command_handler_playing = this.lang.getString("listener.command-handler-playing");
 
         // LOBBY SIGN
-        this.lobby_sign_1_1 = this.lang.getString("lobby-signs.sign-1.line-1");
-        this.lobby_sign_1_3 = this.lang.getString("lobby-signs.sign-1.line-3");
-        this.lobby_sign_cost = this.lang.getString("lobby-signs.sign-1.line-4");
-        this.lobby_sign_2_1 = this.lang.getString("lobby-signs.sign-2.line-1");
-        this.lobby_sign_3_1 = this.lang.getString("lobby-signs.sign-3.line-1");
+        List<String> sign1 = this.lang.getStringList("lobby-signs.sign-1");
+        List<String> sign2 = this.lang.getStringList("lobby-signs.sign-2");
+        List<String> sign3 = this.lang.getStringList("lobby-signs.sign-3");
+        this.lobby_signs_lines = List.of(sign1, sign2, sign3);
 
         // SCOREBOARD
         this.scoreboard_sidebar_title = this.lang.getString("scoreboard.sidebar.title");

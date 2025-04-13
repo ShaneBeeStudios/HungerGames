@@ -251,16 +251,30 @@ listener:
   command-handler-no-command: '<red>You can not use non-HungerGames commands while in-game!'
   command-handler-playing: '<red>This player is currently playing <aqua>HungerGames!'
 
-# LOBBY SIGN
+# LOBBY SIGNS
+# Each sign MUST have 4 lines or else they'll error
+# Placeholders:
+# - <arena> = Will be replaced with arena name
+# - <cost> = Will be replaced with arena cost (if arena cost <= 0, this line will be omitted)
+# - <status> = Will be replaced with arena status
+# - <alive> = Will be replaced with amount of alive players in game
+# - <max_players> = Will be replaced with max amount of players of arena
 lobby-signs:
   sign-1:
-    line-1: '<dark_blue>Hunger Games'
-    line-3: '<black>Click To Join'
-    line-4: 'Cost $<aqua><cost>'
+    - '<dark_blue>Hunger Games'
+    - '<aqua><arena>'
+    - '<black>Click To Join'
+    - 'Cost $<aqua><cost>'
   sign-2:
-    line-1: '<dark_blue>Game Status'
+    - '<dark_blue>Game Status'
+    - '<status>'
+    - ''
+    - ''
   sign-3:
-    line-1: '<dark_blue>Alive'
+    - '<dark_blue>Alive'
+    - '<click:run_command:/hg list <arena>><alive>/<max_players>'
+    - ''
+    - ''
 
 # SPECTATOR
 spectate:

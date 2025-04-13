@@ -2,7 +2,6 @@ package com.shanebeestudios.hg.api.game;
 
 import com.shanebeestudios.hg.api.util.Constants;
 import com.shanebeestudios.hg.api.util.Util;
-import com.shanebeestudios.hg.plugin.HungerGames;
 import com.shanebeestudios.hg.plugin.configs.Config;
 import org.bukkit.Location;
 import org.bukkit.block.BlockFace;
@@ -11,20 +10,26 @@ import org.bukkit.block.data.BlockData;
 import org.bukkit.block.data.Directional;
 import org.bukkit.block.data.Rotatable;
 import org.bukkit.block.sign.Side;
+import org.bukkit.block.sign.SignSide;
 import org.bukkit.persistence.PersistentDataContainer;
 import org.bukkit.persistence.PersistentDataType;
+import org.jetbrains.annotations.Nullable;
+
+import java.util.List;
 
 /**
  * Data holder for a {@link Game Game's} lobby signs
  */
 public class GameLobbyWall extends Data {
 
+    private final GameArenaData gameArenaData;
     private Location signLoc1;
     private Location signLoc2;
     private Location signLoc3;
 
     protected GameLobbyWall(Game game) {
         super(game);
+        this.gameArenaData = game.getGameArenaData();
     }
 
     /**
@@ -42,6 +47,7 @@ public class GameLobbyWall extends Data {
      * @param location The location of the sign to which the lobby will be set at
      * @return True if lobby is set
      */
+    @SuppressWarnings("CallToPrintStackTrace")
     protected boolean setLobbyBlock(Location location) {
         GameArenaData gameArenaData = this.game.getGameArenaData();
         try {
@@ -65,15 +71,8 @@ public class GameLobbyWall extends Data {
             this.signLoc2 = sign2.getLocation();
             this.signLoc3 = sign3.getLocation();
 
-            sign1.getSide(Side.FRONT).line(0, Util.getMini(this.lang.lobby_sign_1_1));
-            sign1.getSide(Side.FRONT).line(1, Util.getMini("<bold>" + gameArenaData.getName()));
-            sign1.getSide(Side.FRONT).line(2, Util.getMini(this.lang.lobby_sign_1_3));
-            if (gameArenaData.getCost() > 0)
-                sign1.getSide(Side.FRONT).line(3, Util.getMini(HungerGames.getPlugin().getLang().lobby_sign_cost.replace("<cost>", String.valueOf(gameArenaData.getCost()))));
-            sign2.getSide(Side.FRONT).line(0, Util.getMini(this.lang.lobby_sign_2_1));
-            sign2.getSide(Side.FRONT).line(1, gameArenaData.getStatus().getName());
-            sign3.getSide(Side.FRONT).line(0, Util.getMini(this.lang.lobby_sign_3_1));
-            sign3.getSide(Side.FRONT).line(1, Util.getMini("<bold>0/%s", gameArenaData.getMaxPlayers()));
+            updateSignLines(List.of(sign1, sign2, sign3));
+
             sign1.setWaxed(true);
             sign2.setWaxed(true);
             sign3.setWaxed(true);
@@ -91,19 +90,37 @@ public class GameLobbyWall extends Data {
     }
 
     void updateLobbyBlock() {
-        if (this.signLoc2 == null || this.signLoc3 == null) {
+        if (this.signLoc1 == null || this.signLoc2 == null || this.signLoc3 == null) {
             Util.warning("The lobby wall seems to be missing for '%s'", this.game.getGameArenaData().getName());
             return;
         }
-        if (this.signLoc2.getBlock().getState() instanceof Sign sign2 && this.signLoc3.getBlock().getState() instanceof Sign sign3) {
-            GameArenaData gameArenaData = this.game.getGameArenaData();
-            sign2.getSide(Side.FRONT).line(1, gameArenaData.getStatus().getName());
-            sign3.getSide(Side.FRONT).line(1, Util.getMini("<bold>%s/%s",
-                this.game.getGamePlayerData().getPlayers().size(),
-                gameArenaData.getMaxPlayers()));
-            sign2.update(true);
-            sign3.update(true);
+        if (this.signLoc1.getBlock().getState() instanceof Sign sign1 && this.signLoc2.getBlock().getState() instanceof Sign sign2 && this.signLoc3.getBlock().getState() instanceof Sign sign3) {
+            updateSignLines(List.of(sign1, sign2, sign3));
         }
+    }
+
+    void updateSignLines(List<Sign> signs) {
+        for (int signCount = 0; signCount < 3; signCount++) {
+            List<String> lines = this.lang.lobby_signs_lines.get(signCount);
+            Sign sign = signs.get(signCount);
+            SignSide side = sign.getSide(Side.FRONT);
+            for (int lineCount = 0; lineCount < 4; lineCount++) {
+                String line = replacements(lines.get(lineCount));
+                if (line == null || line.isEmpty()) continue;
+                side.line(lineCount, Util.getMini(line));
+            }
+            sign.update(true);
+        }
+    }
+
+    private @Nullable String replacements(String line) {
+        if (line.contains("<cost>") && this.gameArenaData.getCost() <= 0) return null;
+        return line
+            .replace("<arena>", this.gameArenaData.getName())
+            .replace("<status>", this.gameArenaData.getStatus().getStringName())
+            .replace("<cost>", "" + this.gameArenaData.getCost())
+            .replace("<alive>", "" + this.game.getGamePlayerData().getPlayers().size())
+            .replace("<max_players>", "" + this.gameArenaData.getMaxPlayers());
     }
 
     boolean isLobbyValid() {
