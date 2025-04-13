@@ -502,6 +502,7 @@ public class Game {
         this.gamePlayerData.clearPlayers();
         this.gamePlayerData.clearSpectators();
         this.gameScoreboard.clearGameTeams();
+        this.plugin.getLeaderboard().saveLeaderboard();
 
         // Call GameEndEvent
         new GameEndEvent(this, winners, death).callEvent();

@@ -160,6 +160,7 @@ public class HungerGames extends JavaPlugin {
         this.arenaConfig = null;
         this.killManager = null;
         this.gameManager = null;
+        this.leaderboard.saveLeaderboard();
         this.leaderboard = null;
         HandlerList.unregisterAll(this);
         if (reload) {
@@ -190,7 +191,6 @@ public class HungerGames extends JavaPlugin {
         // Arenas
         this.metrics.addCustomChart(new SimplePie("arenas-count", () ->
             "" + this.gameManager.getGames().size()));
-
     }
 
     private void loadListeners() {
