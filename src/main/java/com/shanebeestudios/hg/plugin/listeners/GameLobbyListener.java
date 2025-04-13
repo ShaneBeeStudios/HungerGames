@@ -1,9 +1,9 @@
 package com.shanebeestudios.hg.plugin.listeners;
 
-import com.shanebeestudios.hg.plugin.HungerGames;
+import com.shanebeestudios.hg.api.game.Game;
 import com.shanebeestudios.hg.api.util.Constants;
 import com.shanebeestudios.hg.api.util.Util;
-import com.shanebeestudios.hg.api.game.Game;
+import com.shanebeestudios.hg.plugin.HungerGames;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.Tag;

@@ -1,8 +1,8 @@
 package com.shanebeestudios.hg.api.game;
 
-import com.shanebeestudios.hg.plugin.HungerGames;
 import com.shanebeestudios.hg.api.util.Constants;
 import com.shanebeestudios.hg.api.util.Util;
+import com.shanebeestudios.hg.plugin.HungerGames;
 import org.bukkit.Location;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
@@ -25,7 +25,9 @@ public class GameLobbyWall extends Data {
         super(game);
     }
 
-    /** Get location of far left sign of lobby wall
+    /**
+     * Get location of far left sign of lobby wall
+     *
      * @return Location of sign
      */
     public Location getSignLocation() {

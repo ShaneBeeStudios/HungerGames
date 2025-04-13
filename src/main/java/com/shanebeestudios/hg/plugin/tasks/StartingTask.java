@@ -1,10 +1,10 @@
 package com.shanebeestudios.hg.plugin.tasks;
 
-import org.bukkit.Bukkit;
-import com.shanebeestudios.hg.plugin.configs.Config;
-import com.shanebeestudios.hg.plugin.configs.Language;
 import com.shanebeestudios.hg.api.game.Game;
 import com.shanebeestudios.hg.api.util.Util;
+import com.shanebeestudios.hg.plugin.configs.Config;
+import com.shanebeestudios.hg.plugin.configs.Language;
+import org.bukkit.Bukkit;
 
 public class StartingTask implements Runnable {
 
@@ -19,8 +19,8 @@ public class StartingTask implements Runnable {
         this.lang = game.getPlugin().getLang();
         String name = game.getGameArenaData().getName();
         String broadcast = this.lang.game_countdown_started
-                .replace("<arena>", name)
-                .replace("<seconds>", "" + this.timer);
+            .replace("<arena>", name)
+            .replace("<seconds>", "" + this.timer);
         if (Config.SETTINGS_BROADCAST_JOIN_MESSAGES) {
             Util.broadcast(broadcast);
             Util.broadcast(this.lang.game_join.replace("<arena>", name));

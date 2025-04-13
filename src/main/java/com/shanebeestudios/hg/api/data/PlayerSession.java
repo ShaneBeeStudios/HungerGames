@@ -1,7 +1,7 @@
 package com.shanebeestudios.hg.api.data;
 
-import com.shanebeestudios.hg.plugin.HungerGames;
 import com.shanebeestudios.hg.api.util.Util;
+import com.shanebeestudios.hg.plugin.HungerGames;
 import com.shanebeestudios.hg.plugin.configs.Language;
 import io.papermc.paper.datacomponent.DataComponentTypes;
 import org.bukkit.Location;

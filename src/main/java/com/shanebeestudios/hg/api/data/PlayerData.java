@@ -1,5 +1,9 @@
 package com.shanebeestudios.hg.api.data;
 
+import com.shanebeestudios.hg.api.game.Game;
+import com.shanebeestudios.hg.api.game.GameTeam;
+import com.shanebeestudios.hg.api.util.Util;
+import com.shanebeestudios.hg.plugin.HungerGames;
 import org.bukkit.Bukkit;
 import org.bukkit.GameMode;
 import org.bukkit.Location;
@@ -8,10 +12,6 @@ import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.scoreboard.Scoreboard;
 import org.jetbrains.annotations.Nullable;
-import com.shanebeestudios.hg.plugin.HungerGames;
-import com.shanebeestudios.hg.api.game.Game;
-import com.shanebeestudios.hg.api.game.GameTeam;
-import com.shanebeestudios.hg.api.util.Util;
 
 import java.util.Arrays;
 import java.util.UUID;
@@ -221,19 +221,19 @@ public class PlayerData implements Cloneable {
     @Override
     public String toString() {
         return "PlayerData{" +
-                "inv=" + Arrays.toString(inv) +
-                ", equip=" + Arrays.toString(equip) +
-                ", expLevel=" + expL +
-                ", expPoints=" + expP +
-                ", health=" + health +
-                ", food=" + food +
-                ", saturation=" + saturation +
-                ", mode=" + mode +
-                ", uuid=" + uuid +
-                ", team=" + gameTeam +
-                ", pending=" + pendingGameTeam +
-                ", game=" + game +
-                '}';
+            "inv=" + Arrays.toString(inv) +
+            ", equip=" + Arrays.toString(equip) +
+            ", expLevel=" + expL +
+            ", expPoints=" + expP +
+            ", health=" + health +
+            ", food=" + food +
+            ", saturation=" + saturation +
+            ", mode=" + mode +
+            ", uuid=" + uuid +
+            ", team=" + gameTeam +
+            ", pending=" + pendingGameTeam +
+            ", game=" + game +
+            '}';
     }
 
     @Override

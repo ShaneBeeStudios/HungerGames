@@ -9,8 +9,6 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.player.PlayerCommandPreprocessEvent;
 
-import java.util.UUID;
-
 /**
  * Internal event listener
  */

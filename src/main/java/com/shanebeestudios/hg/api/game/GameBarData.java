@@ -1,6 +1,5 @@
 package com.shanebeestudios.hg.api.game;
 
-import com.shanebeestudios.hg.plugin.HungerGames;
 import com.shanebeestudios.hg.api.util.Util;
 import net.kyori.adventure.audience.Audience;
 import net.kyori.adventure.bossbar.BossBar;

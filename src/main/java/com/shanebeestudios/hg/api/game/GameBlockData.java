@@ -1,8 +1,8 @@
 package com.shanebeestudios.hg.api.game;
 
-import com.shanebeestudios.hg.api.util.BlockUtils;
 import com.shanebeestudios.hg.api.data.ItemData;
 import com.shanebeestudios.hg.api.data.ItemFrameData;
+import com.shanebeestudios.hg.api.util.BlockUtils;
 import com.shanebeestudios.hg.plugin.configs.Config;
 import org.bukkit.Location;
 import org.bukkit.Material;
@@ -186,9 +186,9 @@ public class GameBlockData extends Data {
 
         if (Config.CHESTS_BONUS_RANDOMIZE_ENABLED) {
             this.randomBonusChests.forEach(bonusChest -> {
-               if (this.random.nextInt(100) < Config.CHESTS_BONUS_RANDOMIZE_CHANCE) {
-                   bonusChest.setBlockData(blockData);
-               }
+                if (this.random.nextInt(100) < Config.CHESTS_BONUS_RANDOMIZE_CHANCE) {
+                    bonusChest.setBlockData(blockData);
+                }
             });
         }
     }

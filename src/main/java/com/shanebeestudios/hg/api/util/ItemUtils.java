@@ -1,8 +1,8 @@
 package com.shanebeestudios.hg.api.util;
 
 import com.shanebeestudios.hg.plugin.HungerGames;
-import com.shanebeestudios.hg.plugin.configs.Language;
 import com.shanebeestudios.hg.plugin.configs.Config;
+import com.shanebeestudios.hg.plugin.configs.Language;
 import io.papermc.paper.datacomponent.DataComponentTypes;
 import io.papermc.paper.datacomponent.item.ItemLore;
 import io.papermc.paper.persistence.PersistentDataContainerView;

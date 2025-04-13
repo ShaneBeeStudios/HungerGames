@@ -1,12 +1,12 @@
 package com.shanebeestudios.hg.plugin.listeners;
 
-import com.shanebeestudios.hg.plugin.HungerGames;
-import com.shanebeestudios.hg.api.status.Status;
-import com.shanebeestudios.hg.api.util.Util;
-import com.shanebeestudios.hg.plugin.configs.Config;
 import com.shanebeestudios.hg.api.data.PlayerData;
 import com.shanebeestudios.hg.api.game.Game;
 import com.shanebeestudios.hg.api.game.GameArenaData;
+import com.shanebeestudios.hg.api.status.Status;
+import com.shanebeestudios.hg.api.util.Util;
+import com.shanebeestudios.hg.plugin.HungerGames;
+import com.shanebeestudios.hg.plugin.configs.Config;
 import io.papermc.paper.event.player.AsyncChatEvent;
 import org.bukkit.Location;
 import org.bukkit.entity.Player;

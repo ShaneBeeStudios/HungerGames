@@ -1,7 +1,6 @@
 package com.shanebeestudios.hg.api.util;
 
 import de.tr7zw.changeme.nbtapi.NBT;
-import de.tr7zw.changeme.nbtapi.NBTCompound;
 import de.tr7zw.changeme.nbtapi.NBTContainer;
 import de.tr7zw.changeme.nbtapi.NbtApiException;
 import de.tr7zw.changeme.nbtapi.iface.ReadWriteNBT;

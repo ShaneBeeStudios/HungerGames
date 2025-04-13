@@ -1,7 +1,7 @@
 package com.shanebeestudios.hg.plugin.tasks;
 
-import com.shanebeestudios.hg.plugin.HungerGames;
 import com.shanebeestudios.hg.api.util.Constants;
+import com.shanebeestudios.hg.plugin.HungerGames;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.block.BlockFace;

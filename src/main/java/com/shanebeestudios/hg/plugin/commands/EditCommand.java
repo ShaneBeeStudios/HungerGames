@@ -1,11 +1,11 @@
 package com.shanebeestudios.hg.plugin.commands;
 
-import com.shanebeestudios.hg.plugin.HungerGames;
 import com.shanebeestudios.hg.api.command.CustomArg;
-import com.shanebeestudios.hg.api.util.Util;
 import com.shanebeestudios.hg.api.game.Game;
 import com.shanebeestudios.hg.api.game.GameArenaData;
 import com.shanebeestudios.hg.api.game.GameBorderData;
+import com.shanebeestudios.hg.api.util.Util;
+import com.shanebeestudios.hg.plugin.HungerGames;
 import com.shanebeestudios.hg.plugin.permission.Permissions;
 import dev.jorel.commandapi.CommandAPI;
 import dev.jorel.commandapi.arguments.Argument;
@@ -215,7 +215,7 @@ public class EditCommand extends SubCommand {
                         GameArenaData gameArenaData = game.getGameArenaData();
                         Location location = info.args().getByClass("location", Location.class);
                         assert location != null;
-                        location.add(0.5,0,0.5);
+                        location.add(0.5, 0, 0.5);
                         location.setPitch(0);
                         location.setYaw(info.sender().getLocation().getYaw());
                         gameArenaData.addSpawn(location);

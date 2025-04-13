@@ -1,9 +1,8 @@
 package com.shanebeestudios.hg.api.util;
 
+import net.milkbowl.vault.economy.Economy;
 import org.bukkit.Bukkit;
 import org.bukkit.plugin.RegisteredServiceProvider;
-
-import net.milkbowl.vault.economy.Economy;
 
 /**
  * General Vault class

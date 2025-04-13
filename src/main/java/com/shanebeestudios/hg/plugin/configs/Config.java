@@ -1,13 +1,13 @@
 package com.shanebeestudios.hg.plugin.configs;
 
 import com.shanebeestudios.hg.api.parsers.LocationParser;
+import com.shanebeestudios.hg.api.util.Util;
+import com.shanebeestudios.hg.api.util.Vault;
+import com.shanebeestudios.hg.plugin.HungerGames;
 import org.bukkit.Location;
 import org.bukkit.configuration.Configuration;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
-import com.shanebeestudios.hg.plugin.HungerGames;
-import com.shanebeestudios.hg.api.util.Util;
-import com.shanebeestudios.hg.api.util.Vault;
 
 import java.io.File;
 import java.io.IOException;

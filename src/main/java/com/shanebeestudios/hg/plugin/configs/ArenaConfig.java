@@ -1,12 +1,12 @@
 package com.shanebeestudios.hg.plugin.configs;
 
-import com.shanebeestudios.hg.api.parsers.LocationParser;
-import com.shanebeestudios.hg.api.util.Pair;
-import com.shanebeestudios.hg.api.util.Util;
 import com.shanebeestudios.hg.api.game.Game;
 import com.shanebeestudios.hg.api.game.GameArenaData;
 import com.shanebeestudios.hg.api.game.GameBorderData;
 import com.shanebeestudios.hg.api.game.GameRegion;
+import com.shanebeestudios.hg.api.parsers.LocationParser;
+import com.shanebeestudios.hg.api.util.Pair;
+import com.shanebeestudios.hg.api.util.Util;
 import com.shanebeestudios.hg.plugin.HungerGames;
 import com.shanebeestudios.hg.plugin.managers.GameManager;
 import org.bukkit.Difficulty;

@@ -1,16 +1,16 @@
 package com.shanebeestudios.hg.plugin.managers;
 
-import com.shanebeestudios.hg.plugin.HungerGames;
-import com.shanebeestudios.hg.api.registry.Registries;
-import com.shanebeestudios.hg.api.util.ItemUtils;
-import com.shanebeestudios.hg.api.util.Util;
-import com.shanebeestudios.hg.plugin.configs.Config;
-import com.shanebeestudios.hg.plugin.configs.Language;
 import com.shanebeestudios.hg.api.data.Leaderboard;
 import com.shanebeestudios.hg.api.events.PlayerDeathGameEvent;
 import com.shanebeestudios.hg.api.game.Game;
 import com.shanebeestudios.hg.api.game.GameCommandData;
 import com.shanebeestudios.hg.api.game.GamePlayerData;
+import com.shanebeestudios.hg.api.registry.Registries;
+import com.shanebeestudios.hg.api.util.ItemUtils;
+import com.shanebeestudios.hg.api.util.Util;
+import com.shanebeestudios.hg.plugin.HungerGames;
+import com.shanebeestudios.hg.plugin.configs.Config;
+import com.shanebeestudios.hg.plugin.configs.Language;
 import io.papermc.paper.datacomponent.DataComponentTypes;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.TranslatableComponent;
