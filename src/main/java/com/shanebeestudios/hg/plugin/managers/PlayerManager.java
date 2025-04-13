@@ -1,9 +1,9 @@
 package com.shanebeestudios.hg.plugin.managers;
 
-import com.shanebeestudios.hg.plugin.HungerGames;
-import com.shanebeestudios.hg.api.status.PlayerStatus;
 import com.shanebeestudios.hg.api.data.PlayerData;
 import com.shanebeestudios.hg.api.game.Game;
+import com.shanebeestudios.hg.api.status.PlayerStatus;
+import com.shanebeestudios.hg.plugin.HungerGames;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.Nullable;
 
@@ -154,13 +154,14 @@ public class PlayerManager {
     }
 
     /**
-     * Add a PlayerData to the stored PlayerData map
-     * <p>This should mainly be used <b>internally only</b></p>
+     * Create {@link PlayerData} for a player
      *
-     * @param playerData PlayerData to add
+     * @param player Player to create data for
+     * @param game   Game player is entering
      */
-    public void addPlayerData(PlayerData playerData) {
-        playerMap.put(playerData.getUuid(), playerData);
+    public void createPlayerData(Player player, Game game) {
+        PlayerData playerData = new PlayerData(player, game);
+        this.playerMap.put(player.getUniqueId(), playerData);
     }
 
     /**

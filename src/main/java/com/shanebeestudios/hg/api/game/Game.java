@@ -414,16 +414,16 @@ public class Game {
         cancelTasks();
         for (Player player : this.gamePlayerData.getPlayers()) {
             PlayerData playerData = this.playerManager.getPlayerData(player);
+            assert playerData != null;
 
-            // We might be in the waiting stage
-            if (playerData == null) continue;
+            if (playerData.hasGameStared()) {
+                Location previousLocation = playerData.getPreviousLocation();
 
-            Location previousLocation = playerData.getPreviousLocation();
-
-            this.gamePlayerData.heal(player);
-            playerData.restore(player);
-            winners.add(player);
-            this.gamePlayerData.exit(player, previousLocation);
+                this.gamePlayerData.heal(player);
+                playerData.restore(player);
+                winners.add(player);
+                this.gamePlayerData.exit(player, previousLocation);
+            }
             this.playerManager.removePlayerData(player);
         }
 
@@ -431,7 +431,7 @@ public class Game {
             this.gamePlayerData.leaveSpectate(spectator);
         }
 
-        if (gameArenaData.getStatus() == Status.RUNNING) {
+        if (this.gameArenaData.getStatus() == Status.RUNNING) {
             this.bar.clearBar();
         }
 

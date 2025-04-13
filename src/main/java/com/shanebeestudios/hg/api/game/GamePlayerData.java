@@ -210,6 +210,7 @@ public class GamePlayerData extends Data {
         this.players.put(player, savePreviousLocation);
         this.allPlayers.add(player);
         this.game.getGameBlockData().updateLobbyBlock();
+        this.playerManager.createPlayerData(player, this.game);
     }
 
     /**
@@ -236,11 +237,12 @@ public class GamePlayerData extends Data {
 
         // Teleport async into the arena so it loads a little more smoothly
         player.teleportAsync(loc).thenAccept(a -> {
-            PlayerData playerData = new PlayerData(player, this.game);
+            PlayerData playerData = this.playerManager.getPlayerData(player);
+            assert playerData != null;
+            playerData.backup();
             if (savePreviousLocation && Config.SETTINGS_SAVE_PREVIOUS_LOCATION) {
                 playerData.setPreviousLocation(previousLocation);
             }
-            this.playerManager.addPlayerData(playerData);
             this.game.getGameScoreboard().setupBoard(player);
 
             heal(player);
