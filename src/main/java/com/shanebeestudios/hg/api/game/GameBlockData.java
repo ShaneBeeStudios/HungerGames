@@ -167,15 +167,18 @@ public class GameBlockData extends Data {
     /**
      * Log all blocks in an arena for rollback
      */
-    public void logBlocksForRollback() {
+    public int logBlocksForRollback() {
+        int count = 0;
         for (Location location : this.getGame().getGameArenaData().getGameRegion().getBlocks(null)) {
             Block block = location.getBlock();
             this.blocks.add(block.getState());
+            count++;
             if (Config.CHESTS_BONUS_RANDOMIZE_ENABLED && BlockUtils.isBonusBlockReplacement(block)) {
                 this.randomBonusChests.add(block);
                 block.setType(Material.AIR);
             }
         }
+        return count;
     }
 
     @SuppressWarnings("UnstableApiUsage")

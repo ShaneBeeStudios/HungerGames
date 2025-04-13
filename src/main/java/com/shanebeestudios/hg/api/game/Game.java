@@ -228,10 +228,12 @@ public class Game {
     public void startWaitingPeriod() {
         this.gameArenaData.setStatus(Status.WAITING);
         long start = System.currentTimeMillis();
-        this.gameBlockData.logBlocksForRollback();
+        int count = this.gameBlockData.logBlocksForRollback();
         this.gameBlockData.setupRandomizedBonusChests();
         long fin = System.currentTimeMillis() - start;
-        Util.log("Logged blocks in %s ms", fin);
+        if (Config.SETTINGS_DEBUG) {
+            Util.log("Logged <aqua>%,d<grey> blocks in <aqua>%sms<grey> for arena <green>%s", count, fin, getGameArenaData().getName());
+        }
     }
 
     /**
