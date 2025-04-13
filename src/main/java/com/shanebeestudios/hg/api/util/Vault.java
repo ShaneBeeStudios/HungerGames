@@ -10,14 +10,14 @@ import net.milkbowl.vault.economy.Economy;
  */
 public class Vault {
 
-    public static Economy economy = null;
+    public static Economy ECONOMY = null;
 
     public static boolean setupEconomy() {
         RegisteredServiceProvider<Economy> economyProvider = Bukkit.getServer().getServicesManager().getRegistration(net.milkbowl.vault.economy.Economy.class);
         if (economyProvider != null) {
-            economy = economyProvider.getProvider();
+            ECONOMY = economyProvider.getProvider();
         }
-        return (economy != null);
+        return (ECONOMY != null);
     }
 
 }

@@ -226,38 +226,6 @@ public class Util {
         player.updateInventory();
     }
 
-    /**
-     * Convert a list of UUIDs to a string of player names
-     *
-     * @param uuid UUID list to convert
-     * @return List of player names
-     */
-    public static List<String> convertUUIDListToStringList(List<UUID> uuid) {
-        List<String> winners = new ArrayList<>();
-        for (UUID id : uuid) {
-            winners.add(Objects.requireNonNull(Bukkit.getPlayer(id)).getName());
-        }
-        return winners;
-    }
-
-    public static String translateStop(List<String> win) {
-        StringBuilder builder = null;
-        int count = 0;
-        for (String s : win) {
-            count++;
-            if (count == 1) builder = new StringBuilder(s);
-            else if (count == win.size()) {
-                builder.append(", and ").append(s);
-            } else {
-                builder.append(", ").append(s);
-            }
-        }
-        if (builder != null)
-            return builder.toString();
-        else
-            return "No one";
-    }
-
     @SuppressWarnings("DataFlowIssue")
     public static @NotNull NamespacedKey getPluginKey(String key) {
         return NamespacedKey.fromString("hungergames:" + key);

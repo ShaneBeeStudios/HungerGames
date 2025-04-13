@@ -33,7 +33,7 @@ public class LeaveCommand extends SubCommand {
                         Status status = gameArenaData.getStatus();
                         int cost = gameArenaData.getCost();
                         if ((status == Status.WAITING || status == Status.COUNTDOWN) && cost > 0) {
-                            Vault.economy.depositPlayer(player, cost);
+                            Vault.ECONOMY.depositPlayer(player, cost);
                             Util.sendMessage(player, this.lang.command_leave_refund.replace("<cost>", String.valueOf(cost)));
                         }
                     }

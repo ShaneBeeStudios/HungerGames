@@ -24,7 +24,7 @@ public class Config {
 
     //Basic settings
     public static boolean BROADCAST_JOIN_MESSAGES;
-    public static boolean broadcastWinMessages;
+    public static boolean SETTINGS_BROADCAST_WIN_MESSAGES;
     public static boolean economy = true;
     public static boolean bossbar;
     public static int TRACKING_STICK_USES;
@@ -50,10 +50,10 @@ public class Config {
     public static int MOBS_SPAWN_CAP_PER_PLAYER;
 
     //Reward info
-    public static boolean giveReward;
-    public static int cash;
-    public static List<String> rewardCommands;
-    public static List<String> rewardMessages;
+    public static boolean REWARD_GIVE_REWARD;
+    public static int REWARD_CASH;
+    public static List<String> REWARD_COMMANDS;
+    public static List<String> REWARD_MESSAGES;
 
     //Rollback
     public static boolean ROLLBACK_ALLOW_BREAK_BLOCKS;
@@ -130,7 +130,7 @@ public class Config {
         // Settings
         SETTINGS_DEBUG = config.getBoolean("settings.debug");
         BROADCAST_JOIN_MESSAGES = config.getBoolean("settings.broadcast-join-messages");
-        broadcastWinMessages = config.getBoolean("settings.broadcast-win-messages");
+        SETTINGS_BROADCAST_WIN_MESSAGES = config.getBoolean("settings.broadcast-win-messages");
         bossbar = config.getBoolean("settings.bossbar-countdown");
         TRACKING_STICK_USES = config.getInt("settings.trackingstick-uses");
         PLAYERS_FOR_TRACKING_STICK = config.getInt("settings.players-for-trackingstick");
@@ -157,12 +157,12 @@ public class Config {
         MOBS_SPAWN_INTERVAL = config.getInt("mob-spawning.interval") * 20;
         MOBS_SPAWN_CAP_PER_PLAYER = config.getInt("mob-spawning.cap-per-player");
 
-        giveReward = config.getBoolean("reward.enabled");
-        cash = config.getInt("reward.cash");
-        rewardCommands = config.getStringList("reward.commands");
-        rewardMessages = config.getStringList("reward.messages");
-        giveReward = config.getBoolean("reward.enabled");
-        cash = config.getInt("reward.cash");
+        REWARD_GIVE_REWARD = config.getBoolean("reward.enabled");
+        REWARD_CASH = config.getInt("reward.cash");
+        REWARD_COMMANDS = config.getStringList("reward.commands");
+        REWARD_MESSAGES = config.getStringList("reward.messages");
+        REWARD_GIVE_REWARD = config.getBoolean("reward.enabled");
+        REWARD_CASH = config.getInt("reward.cash");
 
         // Rollback
         ROLLBACK_ALLOW_BREAK_BLOCKS = config.getBoolean("rollback.allow-block-break");
@@ -204,17 +204,17 @@ public class Config {
 
         try {
             Vault.setupEconomy();
-            if (Vault.economy == null) {
+            if (Vault.ECONOMY == null) {
                 Util.log("<red>Unable to setup vault!");
                 Util.log(" - <red>Economy provider is missing.");
                 Util.log(" - <yellow>Cash rewards will not be given out..");
-                giveReward = false;
+                REWARD_GIVE_REWARD = false;
                 economy = false;
             }
         } catch (NoClassDefFoundError e) {
             Util.log("<red>Unable to setup vault!");
             Util.log("  - <yellow>Cash rewards will not be given out..");
-            giveReward = false;
+            REWARD_GIVE_REWARD = false;
             economy = false;
         }
     }
