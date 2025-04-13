@@ -33,7 +33,7 @@ public class GamePlayerListener extends GameListenerBase {
             PlayerData playerData = this.playerManager.getPlayerData(player);
             assert playerData != null;
             Status status = playerData.getGame().getGameArenaData().getStatus();
-            if (status != Status.RUNNING && status != Status.FREE_ROAM) {
+            if (playerData.hasGameStared() && status != Status.RUNNING && status != Status.FREE_ROAM) {
                 event.setCancelled(true);
                 Util.sendMessage(player, lang.listener_no_interact);
             }

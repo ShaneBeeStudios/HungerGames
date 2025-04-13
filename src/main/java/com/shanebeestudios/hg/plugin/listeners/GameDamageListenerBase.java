@@ -31,9 +31,9 @@ public class GameDamageListenerBase extends GameListenerBase {
             }
         }
         if (victim instanceof Player victimPlayer) {
-            PlayerData playerData = playerManager.getPlayerData(victimPlayer);
+            PlayerData playerData = this.playerManager.getPlayerData(victimPlayer);
 
-            if (playerData != null) {
+            if (playerData != null && playerData.hasGameStared()) {
                 Game game = playerData.getGame();
 
                 if (game.getGameArenaData().getStatus() != Status.RUNNING) {
@@ -50,14 +50,14 @@ public class GameDamageListenerBase extends GameListenerBase {
     @EventHandler(priority = EventPriority.HIGHEST)
     private void onDeathByOther(EntityDamageEvent event) {
         if (event.getEntity() instanceof Player player) {
-            if (playerManager.hasSpectatorData(player)) {
+            if (this.playerManager.hasSpectatorData(player)) {
                 event.setCancelled(true);
                 player.setFireTicks(0);
                 return;
             }
             if (event instanceof EntityDamageByEntityEvent) return;
-            PlayerData playerData = playerManager.getPlayerData(player);
-            if (playerData != null) {
+            PlayerData playerData = this.playerManager.getPlayerData(player);
+            if (playerData != null && playerData.hasGameStared()) {
                 if (event.getFinalDamage() >= player.getHealth()) {
                     if (hasTotem(player)) return;
                     event.setCancelled(true);

@@ -59,7 +59,8 @@ public class GameChestListener extends GameListenerBase {
             Block block = event.getClickedBlock();
             PlayerData playerData = this.playerManager.getPlayerData(player);
             assert block != null;
-            assert playerData != null;
+
+            if (playerData == null || !playerData.hasGameStared()) return;
 
             Game game = playerData.getGame();
             if (block.getType() == Material.CHEST) {

@@ -1,6 +1,7 @@
 package com.shanebeestudios.hg.plugin.listeners;
 
 import com.shanebeestudios.hg.api.data.ItemData;
+import com.shanebeestudios.hg.api.data.PlayerData;
 import com.shanebeestudios.hg.api.game.Game;
 import com.shanebeestudios.hg.api.game.GameArenaData;
 import com.shanebeestudios.hg.api.game.GameBlockData;
@@ -83,7 +84,8 @@ public class GameBlockListener extends GameListenerBase {
             }
             return;
         }
-        Game game = this.playerManager.getPlayerData(player).getGame();
+        PlayerData playerData = this.playerManager.getPlayerData(player);
+        Game game = playerData.getGame();
         GameArenaData gameArenaData = game.getGameArenaData();
 
         if (gameArenaData.getGameRegion().isInRegion(block.getLocation())) {
@@ -106,6 +108,7 @@ public class GameBlockListener extends GameListenerBase {
 
             }
         } else {
+            if (!playerData.hasGameStared()) return;
             // Prevent placing blocks outside arena
             event.setCancelled(true);
         }
@@ -129,7 +132,8 @@ public class GameBlockListener extends GameListenerBase {
             }
             return;
         }
-        Game game = this.playerManager.getPlayerData(player).getGame();
+        PlayerData playerData = this.playerManager.getPlayerData(player);
+        Game game = playerData.getGame();
         GameArenaData gameArenaData = game.getGameArenaData();
 
         if (gameArenaData.getGameRegion().isInRegion(block.getLocation())) {
@@ -161,6 +165,7 @@ public class GameBlockListener extends GameListenerBase {
                 event.setCancelled(true);
             }
         } else {
+            if (!playerData.hasGameStared()) return;
             // Prevent breaking blocks outside arena
             event.setCancelled(true);
         }
