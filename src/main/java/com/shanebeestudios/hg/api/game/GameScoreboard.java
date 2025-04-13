@@ -24,7 +24,7 @@ public class GameScoreboard extends Data {
     private final GameSidebar gameSidebar;
     private final Scoreboard scoreboard;
     private final Team baseBukkitTeam;
-    final Map<String, GameTeam> gameTeams = new HashMap<>();
+    private final Map<String, GameTeam> gameTeams = new HashMap<>();
 
     protected GameScoreboard(Game game) {
         super(game);

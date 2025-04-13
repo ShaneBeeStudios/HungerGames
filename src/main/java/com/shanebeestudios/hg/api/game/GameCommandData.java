@@ -62,8 +62,8 @@ public class GameCommandData extends Data {
             if (!type.equals(commandType.getName())) continue;
             if (command.equalsIgnoreCase("none")) continue;
             command = command.split(":")[1]
-                .replace("<world>", this.game.gameArenaData.gameRegion.getWorld().getName())
-                .replace("<arena>", this.game.gameArenaData.getName());
+                .replace("<world>", this.game.getGameArenaData().getGameRegion().getWorld().getName())
+                .replace("<arena>", this.game.getGameArenaData().getName());
             if (player != null) {
                 command = command.replace("<player>", player.getName());
             }

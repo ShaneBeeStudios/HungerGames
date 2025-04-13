@@ -53,15 +53,15 @@ public class Game {
     private NearestPlayerCompassTask nearestPlayerCompassTask;
 
     // Data Objects
-    final GameArenaData gameArenaData;
+    private final GameArenaData gameArenaData;
     private final GameEntityData gameEntityData;
-    final GameScoreboard gameScoreboard;
-    final GameBarData bar;
-    final GamePlayerData gamePlayerData;
-    final GameBlockData gameBlockData;
-    final GameItemData gameItemData;
-    final GameCommandData gameCommandData;
-    final GameBorderData gameBorderData;
+    private final GameScoreboard gameScoreboard;
+    private final GameBarData bar;
+    private final GamePlayerData gamePlayerData;
+    private final GameBlockData gameBlockData;
+    private final GameItemData gameItemData;
+    private final GameCommandData gameCommandData;
+    private final GameBorderData gameBorderData;
 
     /**
      * Create a new game
@@ -91,7 +91,7 @@ public class Game {
         this.gameItemData = new GameItemData(this);
         this.gameCommandData = new GameCommandData(this);
         this.gameBorderData = new GameBorderData(this);
-        this.gameArenaData.spawns.addAll(spawns);
+        this.gameArenaData.getSpawns().addAll(spawns);
 
         // If lobby signs are not properly setup, game is not ready
         if (!this.gameBlockData.setLobbyBlock(lobbySign)) {
@@ -268,7 +268,7 @@ public class Game {
         if (Config.CHESTS_CHEST_DROP_ENABLED) this.chestDropTask = new ChestDropTask(this);
         this.gameBlockData.updateLobbyBlock();
         if (Config.SETTINGS_BOSSBAR_COUNTDOWN) {
-            this.bar.createBossBar(gameArenaData.timer);
+            this.bar.createBossBar(this.gameArenaData.getTimer());
         }
         if (Config.WORLD_BORDER_ENABLED) {
             this.gameBorderData.initialize();
@@ -514,7 +514,7 @@ public class Game {
             if (isGameOver()) {
                 if (!death) {
                     for (Player player1 : this.gamePlayerData.getPlayers()) {
-                        if (this.gamePlayerData.kills.get(player1) >= 1) {
+                        if (this.gamePlayerData.getKills().get(player1) >= 1) {
                             death = true;
                         }
                     }
@@ -548,7 +548,7 @@ public class Game {
             assert playerData != null;
             GameTeam gameTeam = playerData.getTeam();
 
-            if (gameTeam != null && (gameTeam.getPlayers().size() >= gamePlayerData.players.size())) {
+            if (gameTeam != null && (gameTeam.getPlayers().size() >= this.gamePlayerData.getPlayers().size())) {
                 for (Player player1 : this.gamePlayerData.getPlayers()) {
                     if (!gameTeam.getPlayers().contains(player1)) {
                         return false;

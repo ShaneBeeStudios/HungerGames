@@ -46,14 +46,14 @@ public class GamePlayerData extends Data {
     private final GameManager gameManager;
 
     // Player Lists
-    final Map<Player, Boolean> players = new HashMap<>();
-    final Map<Player, Boolean> spectators = new HashMap<>();
+    private final Map<Player, Boolean> players = new HashMap<>();
+    private final Map<Player, Boolean> spectators = new HashMap<>();
     // This list contains all players who have joined the arena
     // Will be used to broadcast messages even if a player is no longer in the game
-    final List<Player> allPlayers = new ArrayList<>();
+    private final List<Player> allPlayers = new ArrayList<>();
 
     // Data lists
-    final Map<Player, Integer> kills = new HashMap<>();
+    private final Map<Player, Integer> kills = new HashMap<>();
     private final List<Location> randomizedSpawns = new ArrayList<>();
 
     protected GamePlayerData(Game game) {
@@ -74,6 +74,10 @@ public class GamePlayerData extends Data {
     void clearPlayers() {
         this.players.clear();
         this.allPlayers.clear();
+    }
+
+    public Map<Player, Integer> getKills() {
+        return this.kills;
     }
 
     /**

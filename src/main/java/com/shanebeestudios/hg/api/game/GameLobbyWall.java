@@ -57,8 +57,8 @@ public class GameLobbyWall extends Data {
             sign1.getSide(Side.FRONT).line(0, Util.getMini(this.lang.lobby_sign_1_1));
             sign1.getSide(Side.FRONT).line(1, Util.getMini("<bold>" + gameArenaData.getName()));
             sign1.getSide(Side.FRONT).line(2, Util.getMini(this.lang.lobby_sign_1_3));
-            if (gameArenaData.cost > 0)
-                sign1.getSide(Side.FRONT).line(3, Util.getMini(HungerGames.getPlugin().getLang().lobby_sign_cost.replace("<cost>", String.valueOf(gameArenaData.cost))));
+            if (gameArenaData.getCost() > 0)
+                sign1.getSide(Side.FRONT).line(3, Util.getMini(HungerGames.getPlugin().getLang().lobby_sign_cost.replace("<cost>", String.valueOf(gameArenaData.getCost()))));
             sign2.getSide(Side.FRONT).line(0, Util.getMini(this.lang.lobby_sign_2_1));
             sign2.getSide(Side.FRONT).line(1, gameArenaData.getStatus().getName());
             sign3.getSide(Side.FRONT).line(0, Util.getMini(this.lang.lobby_sign_3_1));

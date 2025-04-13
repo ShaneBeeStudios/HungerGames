@@ -13,18 +13,18 @@ import java.util.List;
  */
 public class GameArenaData extends Data {
 
-    final String name;
-    final GameRegion gameRegion;
-    int timer;
-    int minPlayers;
-    int maxPlayers;
+    private final String name;
+    private final GameRegion gameRegion;
+    private int timer;
+    private int minPlayers;
+    private int maxPlayers;
     private int freeRoamTime;
-    int cost;
-    final List<Location> spawns;
-    Location exit;
+    private int cost;
+    private final List<Location> spawns;
+    private Location exit;
     private Status status = Status.NOT_READY;
-    int chestRefillTime = 0;
-    int chestRefillRepeat = 0;
+    private int chestRefillTime = 0;
+    private int chestRefillRepeat = 0;
 
     GameArenaData(Game game, String name, GameRegion gameRegion, int timer, int minPlayers, int maxPlayers, int freeRoamTime, int cost) {
         super(game);
