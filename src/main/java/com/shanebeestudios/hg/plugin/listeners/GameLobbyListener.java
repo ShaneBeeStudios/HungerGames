@@ -29,7 +29,7 @@ public class GameLobbyListener extends GameListenerBase {
         if (action != Action.RIGHT_CLICK_BLOCK) return;
         Block block = event.getClickedBlock();
         assert block != null;
-        if (!Tag.WALL_SIGNS.isTagged(block.getType())) return;
+        if (!Tag.ALL_SIGNS.isTagged(block.getType())) return;
 
         Sign sign = (Sign) block.getState();
         PersistentDataContainer pdc = sign.getPersistentDataContainer();

@@ -3,11 +3,13 @@ package com.shanebeestudios.hg.api.game;
 import com.shanebeestudios.hg.api.util.Constants;
 import com.shanebeestudios.hg.api.util.Util;
 import com.shanebeestudios.hg.plugin.HungerGames;
+import com.shanebeestudios.hg.plugin.configs.Config;
 import org.bukkit.Location;
-import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
 import org.bukkit.block.Sign;
+import org.bukkit.block.data.BlockData;
 import org.bukkit.block.data.Directional;
+import org.bukkit.block.data.Rotatable;
 import org.bukkit.block.sign.Side;
 import org.bukkit.persistence.PersistentDataContainer;
 import org.bukkit.persistence.PersistentDataType;
@@ -47,9 +49,18 @@ public class GameLobbyWall extends Data {
             Sign sign1 = (Sign) location.getBlock().getState();
             PersistentDataContainer pdc = sign1.getPersistentDataContainer();
             pdc.set(Constants.LOBBY_SIGN_KEY, PersistentDataType.STRING, gameArenaData.getName());
-            Block c = sign1.getBlock();
-            BlockFace face = Util.getSignFace(((Directional) sign1.getBlockData()).getFacing());
-            Sign sign2 = (Sign) c.getRelative(face).getState();
+            BlockFace face;
+            BlockData sign1Data = sign1.getBlockData();
+            if (sign1Data instanceof Directional directional) {
+                // Wall Sign
+                face = Util.getSignFace(directional.getFacing());
+            } else if (sign1Data instanceof Rotatable rotatable) {
+                // Floor/Hanging Sign
+                face = Util.getSignFace(rotatable.getRotation());
+            } else {
+                return false;
+            }
+            Sign sign2 = (Sign) sign1.getBlock().getRelative(face).getState();
             Sign sign3 = (Sign) sign2.getBlock().getRelative(face).getState();
             this.signLoc2 = sign2.getLocation();
             this.signLoc3 = sign3.getLocation();
@@ -71,6 +82,9 @@ public class GameLobbyWall extends Data {
             sign3.update(true);
         } catch (Exception e) {
             Util.warning("Failed to setup lobby wall for arena '%s', msg: %s", gameArenaData.getName(), e.getMessage());
+            if (Config.SETTINGS_DEBUG) {
+                e.printStackTrace();
+            }
             return false;
         }
         return true;
