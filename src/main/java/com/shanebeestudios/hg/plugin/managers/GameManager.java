@@ -2,15 +2,15 @@ package com.shanebeestudios.hg.plugin.managers;
 
 import com.google.common.collect.ImmutableList;
 import com.shanebeestudios.hg.api.command.CustomArg;
-import com.shanebeestudios.hg.api.status.Status;
-import com.shanebeestudios.hg.api.util.Util;
-import com.shanebeestudios.hg.plugin.configs.Language;
+import com.shanebeestudios.hg.api.data.ItemData.ChestType;
 import com.shanebeestudios.hg.api.game.Game;
 import com.shanebeestudios.hg.api.game.GameArenaData;
-import com.shanebeestudios.hg.api.data.ItemData.ChestType;
 import com.shanebeestudios.hg.api.game.GameRegion;
+import com.shanebeestudios.hg.api.status.Status;
+import com.shanebeestudios.hg.api.util.Util;
 import com.shanebeestudios.hg.plugin.HungerGames;
 import com.shanebeestudios.hg.plugin.configs.Config;
+import com.shanebeestudios.hg.plugin.configs.Language;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Material;
@@ -28,7 +28,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Random;
-import java.util.UUID;
 import java.util.stream.Collectors;
 
 /**
@@ -110,15 +109,14 @@ public class GameManager {
             players.addAll(game.getGamePlayerData().getSpectators());
         }
         for (Player player : players) {
-            UUID uuid = player.getUniqueId();
             player.closeInventory();
-            if (playerManager.hasPlayerData(uuid)) {
-                playerManager.getPlayerData(uuid).getGame().getGamePlayerData().leaveGame(player, false);
-                playerManager.removePlayerData(uuid);
+            if (playerManager.hasPlayerData(player)) {
+                playerManager.getPlayerData(player).getGame().getGamePlayerData().leaveGame(player, false);
+                playerManager.removePlayerData(player);
             }
-            if (playerManager.hasSpectatorData(uuid)) {
-                playerManager.getSpectatorData(uuid).getGame().getGamePlayerData().leaveSpectate(player);
-                playerManager.removePlayerData(uuid);
+            if (playerManager.hasSpectatorData(player)) {
+                playerManager.getSpectatorData(player).getGame().getGamePlayerData().leaveSpectate(player);
+                playerManager.removePlayerData(player);
             }
         }
         this.games.clear();

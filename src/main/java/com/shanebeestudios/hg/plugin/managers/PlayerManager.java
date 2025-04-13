@@ -33,17 +33,7 @@ public class PlayerManager {
      * @return True if player is playing in a game and has data
      */
     public boolean hasPlayerData(Player player) {
-        return hasPlayerData(player.getUniqueId());
-    }
-
-    /**
-     * Check if a player is playing a game and has PlayerData
-     *
-     * @param uuid UUID of player to check
-     * @return True if player is playing in a game and has data
-     */
-    public boolean hasPlayerData(UUID uuid) {
-        return playerMap.containsKey(uuid);
+        return this.playerMap.containsKey(player.getUniqueId());
     }
 
     /**
@@ -53,17 +43,7 @@ public class PlayerManager {
      * @return True if player is spectating a game and has data
      */
     public boolean hasSpectatorData(Player player) {
-        return hasSpectatorData(player.getUniqueId());
-    }
-
-    /**
-     * Check if a player is spectating a game and has PlayerData
-     *
-     * @param uuid UUID of player to check
-     * @return True if player is spectating a game and has data
-     */
-    public boolean hasSpectatorData(UUID uuid) {
-        return spectatorMap.containsKey(uuid);
+        return this.spectatorMap.containsKey(player.getUniqueId());
     }
 
     /**
@@ -74,19 +54,9 @@ public class PlayerManager {
      */
     @Nullable
     public PlayerData getPlayerData(Player player) {
-        return getPlayerData(player.getUniqueId());
-    }
-
-    /**
-     * Get an instance of a player's data if player is playing in a game
-     *
-     * @param uuid UUID of player to get data for
-     * @return PlayerData from player, null if player is not in a game
-     */
-    @Nullable
-    public PlayerData getPlayerData(UUID uuid) {
-        if (hasPlayerData(uuid)) {
-            return playerMap.get(uuid);
+        UUID uuid = player.getUniqueId();
+        if (this.playerMap.containsKey(uuid)) {
+            return this.playerMap.get(uuid);
         }
         return null;
     }
@@ -99,19 +69,10 @@ public class PlayerManager {
      */
     @Nullable
     public PlayerData getSpectatorData(Player player) {
-        return getSpectatorData(player.getUniqueId());
-    }
-
-    /**
-     * Get an instance of a player's data if player is spectating a game
-     *
-     * @param uuid UUID of player to get data for
-     * @return PlayerData from player, null if player is not spectating a game
-     */
-    @Nullable
-    public PlayerData getSpectatorData(UUID uuid) {
-        if (hasSpectatorData(uuid))
+        UUID uuid = player.getUniqueId();
+        if (this.spectatorMap.containsKey(uuid)) {
             return spectatorMap.get(uuid);
+        }
         return null;
     }
 
@@ -125,32 +86,11 @@ public class PlayerManager {
      */
     @Nullable
     public PlayerData getData(Player player) {
-        return getData(player.getUniqueId());
-    }
-
-    /**
-     * Get an instance of a player's data if player is in a game
-     * <p>This will first check if a player is playing in a game, then check if they are spectating a game.
-     * <br>If you would like specific data use {@link #getPlayerData(UUID)} or {@link #getSpectatorData(UUID)}</p>
-     *
-     * @param uuid UUID of player to get data for
-     * @return PlayerData from player, null if player is not in a game
-     */
-    @Nullable
-    public PlayerData getData(UUID uuid) {
-        if (hasPlayerData(uuid))
-            return getPlayerData(uuid);
-        else if (hasSpectatorData(uuid))
-            return getSpectatorData(uuid);
+        if (hasPlayerData(player))
+            return getPlayerData(player);
+        else if (hasSpectatorData(player))
+            return getSpectatorData(player);
         return null;
-    }
-
-    public boolean hasData(Player player) {
-        return hasData(player.getUniqueId());
-    }
-
-    public boolean hasData(UUID uuid) {
-        return hasPlayerData(uuid) || hasSpectatorData(uuid);
     }
 
     /**
@@ -165,13 +105,14 @@ public class PlayerManager {
     }
 
     /**
-     * Add a PlayerData to the stored SpectatorData map
-     * <p>This should mainly be used <b>internally only</b></p>
+     * Create {@link PlayerData} for a spectator
      *
-     * @param playerData PlayerData to add
+     * @param spectator Player to create data for
+     * @param game      Game player is entering
      */
-    public void addSpectatorData(PlayerData playerData) {
-        this.spectatorMap.put(playerData.getUuid(), playerData);
+    public void createSpectatorData(Player spectator, Game game) {
+        PlayerData playerData = new PlayerData(spectator, game);
+        this.spectatorMap.put(spectator.getUniqueId(), playerData);
     }
 
     /**
@@ -210,20 +151,20 @@ public class PlayerManager {
         this.spectatorMap.remove(uuid);
     }
 
-    public boolean transferPlayerDataToSpectator(Player player) {
-        return transferPlayerDataToSpectator(player.getUniqueId());
-    }
-
-    public boolean transferPlayerDataToSpectator(UUID uuid) {
+    /**
+     * Transfer {@link PlayerData} from Player to Spectator
+     *
+     * @param player Player to transfer
+     */
+    public void transferPlayerDataToSpectator(Player player) {
+        UUID uuid = player.getUniqueId();
         if (this.playerMap.containsKey(uuid)) {
             PlayerData clone = this.playerMap.get(uuid).clone();
             if (clone != null) {
                 this.spectatorMap.put(uuid, clone);
                 this.playerMap.remove(uuid);
-                return true;
             }
         }
-        return false;
     }
 
     /**
@@ -232,22 +173,12 @@ public class PlayerManager {
      * @param player Player to get game
      * @return Game of player, null if player is not in a game
      */
+    @SuppressWarnings("DataFlowIssue")
     public @Nullable Game getGame(Player player) {
-        return getGame(player.getUniqueId());
-    }
-
-    /**
-     * Get the current game of a player
-     *
-     * @param uuid UUID of player to get game
-     * @return Game of player, null if player is not in a game
-     */
-    @SuppressWarnings("ConstantConditions")
-    public @Nullable Game getGame(UUID uuid) {
-        if (hasPlayerData(uuid))
-            return getPlayerData(uuid).getGame();
-        else if (hasSpectatorData(uuid))
-            return getSpectatorData(uuid).getGame();
+        if (hasPlayerData(player))
+            return getPlayerData(player).getGame();
+        else if (hasSpectatorData(player))
+            return getSpectatorData(player).getGame();
         else
             return null;
     }
@@ -259,7 +190,7 @@ public class PlayerManager {
      * @return True if in game, otherwise false
      */
     public boolean isInGame(Player player) {
-        return getGame(player) != null;
+        return getPlayerStatus(player) != PlayerStatus.NOT_IN_GAME;
     }
 
     /**

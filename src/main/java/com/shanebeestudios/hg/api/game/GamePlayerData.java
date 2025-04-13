@@ -31,7 +31,6 @@ import java.util.Collections;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
-import java.util.UUID;
 
 /**
  * Data class for holding a {@link Game Game's} players
@@ -273,7 +272,6 @@ public class GamePlayerData extends Data {
      */
     public void leaveGame(Player player, boolean death) {
         new PlayerLeaveGameEvent(this.game, player, death).callEvent();
-        UUID uuid = player.getUniqueId();
         this.players.remove(player);
         if (!death) this.allPlayers.remove(player); // Only remove the player if they voluntarily left the game
         unFreeze(player);
@@ -289,7 +287,7 @@ public class GamePlayerData extends Data {
             }
         }
         heal(player);
-        PlayerData playerData = this.playerManager.getPlayerData(uuid);
+        PlayerData playerData = this.playerManager.getPlayerData(player);
         assert playerData != null;
         Location previousLocation = playerData.getPreviousLocation();
 
@@ -324,12 +322,11 @@ public class GamePlayerData extends Data {
      * @param spectator The player to spectate
      */
     public void spectate(Player spectator) {
-        UUID uuid = spectator.getUniqueId();
         spectator.teleport(this.game.getGameArenaData().getSpawns().getFirst());
-        if (this.playerManager.hasPlayerData(uuid)) {
-            this.playerManager.transferPlayerDataToSpectator(uuid);
+        if (this.playerManager.hasPlayerData(spectator)) {
+            this.playerManager.transferPlayerDataToSpectator(spectator);
         } else {
-            this.playerManager.addSpectatorData(new PlayerData(spectator, this.game));
+            this.playerManager.createSpectatorData(spectator, this.game);
         }
         this.spectators.put(spectator, true); // TODO should we handle location saving?
         spectator.setGameMode(GameMode.SURVIVAL);
@@ -356,8 +353,7 @@ public class GamePlayerData extends Data {
      * @param spectator The player to remove
      */
     public void leaveSpectate(Player spectator) {
-        UUID uuid = spectator.getUniqueId();
-        PlayerData playerData = this.playerManager.getSpectatorData(uuid);
+        PlayerData playerData = this.playerManager.getSpectatorData(spectator);
         if (playerData == null) return;
 
         Location previousLocation = playerData.getPreviousLocation();
@@ -373,7 +369,7 @@ public class GamePlayerData extends Data {
         if (Config.SPECTATE_HIDE)
             revealPlayer(spectator);
         exit(spectator, previousLocation);
-        this.playerManager.removeSpectatorData(uuid);
+        this.playerManager.removeSpectatorData(spectator);
     }
 
     void revealPlayer(Player hidden) {

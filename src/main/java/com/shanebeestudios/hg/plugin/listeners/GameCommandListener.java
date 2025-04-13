@@ -25,10 +25,9 @@ public class GameCommandListener extends GameListenerBase {
         Player player = event.getPlayer();
         if (Permissions.BYPASS_COMMAND_RESTRICTION.has(player)) return;
 
-        UUID uuid = player.getUniqueId();
         String[] st = event.getMessage().split(" ");
         // Prevent game players running non hunger games commands
-        if (this.playerManager.hasData(uuid) && !st[0].equalsIgnoreCase("/login")) {
+        if (this.playerManager.isInGame(player) && !st[0].equalsIgnoreCase("/login")) {
             if (st[0].equalsIgnoreCase("/hg") || st[0].equalsIgnoreCase("/hungergames")) {
                 return;
             }
@@ -40,7 +39,7 @@ public class GameCommandListener extends GameListenerBase {
         else if (("/tp".equalsIgnoreCase(st[0]) || "/teleport".equalsIgnoreCase(st[0])) && st.length >= 2) {
             Player p = Bukkit.getServer().getPlayer(st[1]);
             if (p != null) {
-                if (this.playerManager.hasPlayerData(uuid)) {
+                if (this.playerManager.hasPlayerData(p)) {
                     Util.sendMessage(player, this.lang.listener_command_handler_playing);
                     event.setMessage("/");
                     event.setCancelled(true);

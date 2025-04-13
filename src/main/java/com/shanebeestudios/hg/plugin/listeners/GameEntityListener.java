@@ -75,7 +75,7 @@ public class GameEntityListener extends GameListenerBase {
             event.getProjectile().setMetadata("death-message",
                 new FixedMetadataValue(plugin, entity.getMetadata("death-message").get(0).asString()));
         }
-        if (entity instanceof Player && playerManager.hasPlayerData(entity.getUniqueId())) {
+        if (entity instanceof Player player && playerManager.hasPlayerData(player)) {
             event.getProjectile().setMetadata("shooter", new FixedMetadataValue(plugin, entity.getName()));
         }
     }

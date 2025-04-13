@@ -29,7 +29,7 @@ public class NearestPlayerCompassTask implements Runnable {
     public void run() {
         for (Player player : this.game.getGamePlayerData().getPlayers()) {
             if (player.getInventory().getItemInMainHand().getType() == Material.COMPASS) {
-                PlayerData playerData = this.playerManager.getPlayerData(player.getUniqueId());
+                PlayerData playerData = this.playerManager.getPlayerData(player);
                 if (playerData == null) continue;
 
                 Player nearest = getNearestPlayer(player);
