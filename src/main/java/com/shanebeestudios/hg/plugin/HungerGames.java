@@ -182,7 +182,7 @@ public class HungerGames extends JavaPlugin {
             Map<String, Map<String, Integer>> map = new HashMap<>();
             map.put("worldborder-enabled", Map.of("" + Config.WORLD_BORDER_ENABLED, 1));
             map.put("chestdrop-enabled", Map.of("" + Config.CHESTS_CHEST_DROP_ENABLED, 1));
-            map.put("reward-enabled", Map.of("" + Config.REWARD_GIVE_REWARD, 1));
+            map.put("reward-enabled", Map.of("" + Config.REWARD_ENABLED, 1));
             map.put("spectate-enabled", Map.of("" + Config.SPECTATE_ENABLED, 1));
             return map;
         }));

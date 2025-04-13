@@ -271,7 +271,7 @@ public class KillManager {
     }
 
     private void checkStick(Game game) {
-        if (Config.PLAYERS_FOR_TRACKING_STICK == game.getGamePlayerData().getPlayers().size()) {
+        if (Config.SETTINGS_PLAYERS_FOR_TRACKING_STICK == game.getGamePlayerData().getPlayers().size()) {
             for (Player player : game.getGamePlayerData().getPlayers()) {
                 Util.sendMessage(player, this.lang.tracking_stick_bar);
                 Util.sendMessage(player, this.lang.tracking_stick_new1);

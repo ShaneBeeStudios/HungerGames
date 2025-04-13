@@ -40,7 +40,7 @@ public class ItemUtils {
 
         itemStack.setData(DataComponentTypes.ITEM_NAME, Util.getMini(LANG.tracking_stick_name));
         itemStack.setData(DataComponentTypes.MAX_STACK_SIZE, 1);
-        itemStack.setData(DataComponentTypes.MAX_DAMAGE, Config.TRACKING_STICK_USES);
+        itemStack.setData(DataComponentTypes.MAX_DAMAGE, Config.SETTINGS_TRACKING_STICK_USES);
         itemStack.setData(DataComponentTypes.DAMAGE, 0);
         List<Component> lore = new ArrayList<>();
         LANG.tracking_stick_lore.forEach(line -> lore.add(Util.getMini(line)));

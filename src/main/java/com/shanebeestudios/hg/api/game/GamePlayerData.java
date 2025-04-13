@@ -276,7 +276,7 @@ public class GamePlayerData extends Data {
         if (!death) this.allPlayers.remove(player); // Only remove the player if they voluntarily left the game
         unFreeze(player);
         if (death) {
-            if (Config.SPECTATE_ENABLED && Config.spectateOnDeath && !game.isGameOver()) {
+            if (Config.SPECTATE_ENABLED && Config.SPECTATE_DEATH_TO_SPECTATE && !game.isGameOver()) {
                 spectate(player);
                 player.playSound(player.getLocation(), Config.SOUNDS_DEATH, 5, 1);
                 player.showTitle(createTitle());
@@ -334,7 +334,7 @@ public class GamePlayerData extends Data {
         if (Config.SPECTATE_FLY)
             spectator.setAllowFlight(true);
 
-        if (Config.SPECTATE_HIDE) {
+        if (Config.SPECTATE_HIDE_HIDE_SPECTATORS) {
             for (Player player : this.players.keySet()) {
                 player.hidePlayer(this.plugin, spectator);
             }
@@ -366,7 +366,7 @@ public class GamePlayerData extends Data {
             if (mode == GameMode.SURVIVAL || mode == GameMode.ADVENTURE)
                 spectator.setAllowFlight(false);
         }
-        if (Config.SPECTATE_HIDE)
+        if (Config.SPECTATE_HIDE_HIDE_SPECTATORS)
             revealPlayer(spectator);
         exit(spectator, previousLocation);
         this.playerManager.removeSpectatorData(spectator);

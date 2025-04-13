@@ -45,7 +45,7 @@ public class GameManager {
         this.plugin = plugin;
         this.lang = plugin.getLang();
         CustomArg.init(plugin, this);
-        this.globalExitLocation = Config.GLOBAL_EXIT_LOCATION;
+        this.globalExitLocation = Config.SETTINGS_GLOBAL_EXIT_LOCATION;
     }
 
     /**

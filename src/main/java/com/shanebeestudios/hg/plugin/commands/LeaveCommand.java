@@ -28,7 +28,7 @@ public class LeaveCommand extends SubCommand {
                 Game game;
                 if (this.playerManager.hasPlayerData(player)) {
                     game = this.playerManager.getPlayerData(player).getGame();
-                    if (Config.economy) {
+                    if (Config.HAS_ECONOMY) {
                         GameArenaData gameArenaData = game.getGameArenaData();
                         Status status = gameArenaData.getStatus();
                         int cost = gameArenaData.getCost();

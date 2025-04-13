@@ -267,7 +267,7 @@ public class Game {
         if (Config.MOBS_SPAWN_ENABLED) this.mobSpawnerTask = new MobSpawnerTask(this);
         if (Config.CHESTS_CHEST_DROP_ENABLED) this.chestDropTask = new ChestDropTask(this);
         this.gameBlockData.updateLobbyBlock();
-        if (Config.bossbar) {
+        if (Config.SETTINGS_BOSSBAR_COUNTDOWN) {
             this.bar.createBossBar(gameArenaData.timer);
         }
         if (Config.WORLD_BORDER_ENABLED) {
@@ -301,7 +301,7 @@ public class Game {
      * @param player Player who joined
      */
     private void broadcastJoin(Player player) {
-        if (!Config.BROADCAST_JOIN_MESSAGES) return;
+        if (!Config.SETTINGS_BROADCAST_JOIN_MESSAGES) return;
         String name = this.getGameArenaData().getName();
         Util.broadcast(this.lang.game_waiting_join
             .replace("<arena>", name)
@@ -439,7 +439,7 @@ public class Game {
         if (!winners.isEmpty() && death) {
             double winningReward = (double) Config.REWARD_CASH / winners.size();
             for (Player winner : winners) {
-                if (Config.REWARD_GIVE_REWARD) {
+                if (Config.REWARD_ENABLED) {
                     // Run reward commands
                     if (!Config.REWARD_COMMANDS.isEmpty()) {
                         for (String cmd : Config.REWARD_COMMANDS) {
@@ -565,12 +565,8 @@ public class Game {
             Util.sendPrefixedMessage(player, this.lang.game_full.replace("<name>", name));
             return false;
         }
-        return vaultCheck(player);
-    }
-
-    boolean vaultCheck(Player player) {
-        if (Config.economy) {
-            int cost = this.getGameArenaData().getCost();
+        int cost = this.getGameArenaData().getCost();
+        if (Config.HAS_ECONOMY && cost > 0) {
             if (Vault.ECONOMY.getBalance(player) >= cost) {
                 Vault.ECONOMY.withdrawPlayer(player, cost);
                 return true;

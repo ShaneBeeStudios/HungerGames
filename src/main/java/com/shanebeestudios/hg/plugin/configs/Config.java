@@ -23,16 +23,16 @@ public class Config {
     public static boolean SETTINGS_DEBUG;
 
     //Basic settings
-    public static boolean BROADCAST_JOIN_MESSAGES;
+    public static boolean SETTINGS_BROADCAST_JOIN_MESSAGES;
     public static boolean SETTINGS_BROADCAST_WIN_MESSAGES;
-    public static boolean economy = true;
-    public static boolean bossbar;
-    public static int TRACKING_STICK_USES;
-    public static int PLAYERS_FOR_TRACKING_STICK;
+    public static boolean HAS_ECONOMY = true;
+    public static boolean SETTINGS_BOSSBAR_COUNTDOWN;
+    public static int SETTINGS_TRACKING_STICK_USES;
+    public static int SETTINGS_PLAYERS_FOR_TRACKING_STICK;
     public static int SETTINGS_TELEPORT_AT_END_TIME;
     public static boolean SETTINGS_SAVE_PREVIOUS_LOCATION;
     public static int SETTINGS_FREE_ROAM_TIME;
-    public static Location GLOBAL_EXIT_LOCATION;
+    public static Location SETTINGS_GLOBAL_EXIT_LOCATION;
 
     // Scoreboard
     public static boolean SCOREBOARD_HIDE_NAMETAGS;
@@ -49,8 +49,8 @@ public class Config {
     public static int MOBS_SPAWN_INTERVAL;
     public static int MOBS_SPAWN_CAP_PER_PLAYER;
 
-    //Reward info
-    public static boolean REWARD_GIVE_REWARD;
+    // Reward info
+    public static boolean REWARD_ENABLED;
     public static int REWARD_CASH;
     public static List<String> REWARD_COMMANDS;
     public static List<String> REWARD_MESSAGES;
@@ -93,8 +93,8 @@ public class Config {
 
     //Spectate
     public static boolean SPECTATE_ENABLED;
-    public static boolean spectateOnDeath;
-    public static boolean SPECTATE_HIDE;
+    public static boolean SPECTATE_DEATH_TO_SPECTATE;
+    public static boolean SPECTATE_HIDE_HIDE_SPECTATORS;
     public static boolean SPECTATE_FLY;
     public static boolean SPECTATE_CHAT;
 
@@ -112,15 +112,15 @@ public class Config {
     }
 
     private void loadConfigFile() {
-        if (configFile == null) {
-            configFile = new File(plugin.getDataFolder(), "config.yml");
+        if (this.configFile == null) {
+            this.configFile = new File(this.plugin.getDataFolder(), "config.yml");
         }
-        if (!configFile.exists()) {
-            plugin.saveResource("config.yml", false);
+        if (!this.configFile.exists()) {
+            this.plugin.saveResource("config.yml", false);
             Util.log("New config.yml <green>created");
         }
-        config = YamlConfiguration.loadConfiguration(configFile);
-        matchConfig(config, configFile);
+        this.config = YamlConfiguration.loadConfiguration(this.configFile);
+        matchConfig(this.config, this.configFile);
         loadConfig();
         Util.log("config.yml <green>successfully loaded");
     }
@@ -129,17 +129,17 @@ public class Config {
     private void loadConfig() {
         // Settings
         SETTINGS_DEBUG = config.getBoolean("settings.debug");
-        BROADCAST_JOIN_MESSAGES = config.getBoolean("settings.broadcast-join-messages");
+        SETTINGS_BROADCAST_JOIN_MESSAGES = config.getBoolean("settings.broadcast-join-messages");
         SETTINGS_BROADCAST_WIN_MESSAGES = config.getBoolean("settings.broadcast-win-messages");
-        bossbar = config.getBoolean("settings.bossbar-countdown");
-        TRACKING_STICK_USES = config.getInt("settings.trackingstick-uses");
-        PLAYERS_FOR_TRACKING_STICK = config.getInt("settings.players-for-trackingstick");
+        SETTINGS_BOSSBAR_COUNTDOWN = config.getBoolean("settings.bossbar-countdown");
+        SETTINGS_TRACKING_STICK_USES = config.getInt("settings.tracking-stick-uses");
+        SETTINGS_PLAYERS_FOR_TRACKING_STICK = config.getInt("settings.players-for-tracking-stick");
         SETTINGS_SAVE_PREVIOUS_LOCATION = config.getBoolean("settings.save-previous-location");
         SETTINGS_TELEPORT_AT_END_TIME = config.getInt("settings.teleport-at-end-time");
         SETTINGS_FREE_ROAM_TIME = config.getInt("settings.free-room-time");
         String locString = config.getString("settings.global-exit-location");
         if (locString != null && locString.contains(":")) {
-            GLOBAL_EXIT_LOCATION = LocationParser.getLocFromString(locString);
+            SETTINGS_GLOBAL_EXIT_LOCATION = LocationParser.getLocFromString(locString);
         }
 
         // Scoreboard
@@ -157,12 +157,10 @@ public class Config {
         MOBS_SPAWN_INTERVAL = config.getInt("mob-spawning.interval") * 20;
         MOBS_SPAWN_CAP_PER_PLAYER = config.getInt("mob-spawning.cap-per-player");
 
-        REWARD_GIVE_REWARD = config.getBoolean("reward.enabled");
+        REWARD_ENABLED = config.getBoolean("reward.enabled");
         REWARD_CASH = config.getInt("reward.cash");
         REWARD_COMMANDS = config.getStringList("reward.commands");
         REWARD_MESSAGES = config.getStringList("reward.messages");
-        REWARD_GIVE_REWARD = config.getBoolean("reward.enabled");
-        REWARD_CASH = config.getInt("reward.cash");
 
         // Rollback
         ROLLBACK_ALLOW_BREAK_BLOCKS = config.getBoolean("rollback.allow-block-break");
@@ -194,8 +192,8 @@ public class Config {
         WORLD_BORDER_FINAL_SIZE = config.getInt("world-border.final-border-size");
 
         SPECTATE_ENABLED = config.getBoolean("spectate.enabled");
-        spectateOnDeath = config.getBoolean("spectate.death-to-spectate");
-        SPECTATE_HIDE = config.getBoolean("spectate.hide-spectators");
+        SPECTATE_DEATH_TO_SPECTATE = config.getBoolean("spectate.death-to-spectate");
+        SPECTATE_HIDE_HIDE_SPECTATORS = config.getBoolean("spectate.hide-spectators");
         SPECTATE_FLY = config.getBoolean("spectate.fly");
         SPECTATE_CHAT = config.getBoolean("spectate.chat");
 
@@ -208,14 +206,14 @@ public class Config {
                 Util.log("<red>Unable to setup vault!");
                 Util.log(" - <red>Economy provider is missing.");
                 Util.log(" - <yellow>Cash rewards will not be given out..");
-                REWARD_GIVE_REWARD = false;
-                economy = false;
+                REWARD_ENABLED = false;
+                HAS_ECONOMY = false;
             }
         } catch (NoClassDefFoundError e) {
             Util.log("<red>Unable to setup vault!");
             Util.log("  - <yellow>Cash rewards will not be given out..");
-            REWARD_GIVE_REWARD = false;
-            economy = false;
+            REWARD_ENABLED = false;
+            HAS_ECONOMY = false;
         }
     }
 

@@ -27,9 +27,9 @@ settings:
   # Whether or not to show a countdown bossbar in game
   bossbar-countdown: true
   # The amount of uses a tracking stick will have
-  trackingstick-uses: 8
+  tracking-stick-uses: 8
   # Minimum amount of players required in a game for a tracking stick to work
-  players-for-trackingstick: 5
+  players-for-tracking-stick: 5
   # Maximum/Minimum amount of items that will spawn in chests
   max-chestcontent: 5
   min-chestcontent: 1
