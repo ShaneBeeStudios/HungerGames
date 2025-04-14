@@ -10,6 +10,7 @@ public class MainCommand {
 
     public MainCommand(HungerGames plugin) {
         this.command = new CommandTree("hungergames");
+        this.command.withHelp("Base HungerGames command", "All the commands you'll need for HungerGames!");
         this.command.withAliases("hg");
 
         // Register sub-commands
