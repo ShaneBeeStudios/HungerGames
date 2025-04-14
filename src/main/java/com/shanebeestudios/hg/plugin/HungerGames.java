@@ -1,6 +1,7 @@
 package com.shanebeestudios.hg.plugin;
 
 import com.shanebeestudios.hg.api.data.Leaderboard;
+import com.shanebeestudios.hg.api.region.TaskUtils;
 import com.shanebeestudios.hg.api.util.NBTApi;
 import com.shanebeestudios.hg.api.util.Util;
 import com.shanebeestudios.hg.plugin.commands.MainCommand;
@@ -92,6 +93,7 @@ public class HungerGames extends JavaPlugin {
             return;
         }
         NBTApi.initializeNBTApi();
+        TaskUtils.initialize(this);
         loadPlugin(true);
     }
 

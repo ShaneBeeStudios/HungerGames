@@ -27,6 +27,8 @@ public class Util {
     // PUBLIC
     // Quick link to help for removing legacy stuff later
     public static final boolean RUNNING_1_21_5 = isRunningMinecraft(1, 21, 5);
+    public static final boolean IS_RUNNING_FOLIA = classExists("io.papermc.paper.threadedregions.FoliaWatchdogThread");
+
 
     // PRIVATE
     private static final Pattern HEX_PATTERN = Pattern.compile("<#([A-Fa-f0-9]){6}>");
