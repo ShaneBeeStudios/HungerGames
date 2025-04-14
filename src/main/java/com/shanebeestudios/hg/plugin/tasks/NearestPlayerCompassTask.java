@@ -35,7 +35,7 @@ public class NearestPlayerCompassTask implements Runnable {
                 Player nearest = getNearestPlayer(player);
                 if (nearest == null) continue;
 
-                String info = this.lang.compass_nearest_player
+                String info = this.lang.item_compass_nearest_player
                     .replace("<player>", nearest.getName())
                     .replace("<distance>", String.format("%.2f", nearest.getLocation().distance(player.getLocation())));
 

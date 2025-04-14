@@ -33,12 +33,12 @@ public class ChestDropTask implements Runnable {
         Location randomLocation = gameRegion.getRandomLocation();
 
         for (Player player : this.game.getGamePlayerData().getPlayers()) {
-            Util.sendMessage(player, this.lang.chest_drop_1);
-            Util.sendMessage(player, this.lang.chest_drop_2
+            Util.sendMessage(player, this.lang.chest_drop_line);
+            Util.sendMessage(player, this.lang.chest_drop_dropped_at_location
                 .replace("<x>", "" + randomLocation.getBlockX())
                 .replace("<y>", "" + randomLocation.getBlockY())
                 .replace("<z>", "" + randomLocation.getBlockZ()));
-            Util.sendMessage(player, this.lang.chest_drop_1);
+            Util.sendMessage(player, this.lang.chest_drop_line);
             this.tasks.add(new ChestDropChestTask(randomLocation));
         }
     }

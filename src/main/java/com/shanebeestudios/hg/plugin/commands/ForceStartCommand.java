@@ -31,7 +31,7 @@ public class ForceStartCommand extends SubCommand {
                         Status status = game.getGameArenaData().getStatus();
                         if (status == Status.WAITING || status == Status.READY) {
                             game.startPreGameCountdown();
-                            Util.sendMessage(sender, lang.cmd_start_starting.replace("<arena>", game.getGameArenaData().getName()));
+                            Util.sendMessage(sender, this.lang.command_force_start_starting.replace("<arena>", game.getGameArenaData().getName()));
                         } else if (status == Status.COUNTDOWN) {
                             game.getStartingTask().stop();
                             game.startFreeRoam();

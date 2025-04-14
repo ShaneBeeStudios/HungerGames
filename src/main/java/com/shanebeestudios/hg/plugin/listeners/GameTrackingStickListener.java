@@ -49,7 +49,7 @@ public class GameTrackingStickListener extends GameListenerBase {
 
                 Location location = nearbyEntity.getLocation();
                 int range = (int) player.getLocation().distance(location);
-                Util.sendMessage(player, this.lang.tracking_stick_nearest
+                Util.sendMessage(player, this.lang.item_tracking_stick_nearest
                     .replace("<player>", nearbyEntity.getName())
                     .replace("<range>", "" + range)
                     .replace("<location>", getDirection(player.getLocation().getBlock(), location.getBlock())));
@@ -58,7 +58,7 @@ public class GameTrackingStickListener extends GameListenerBase {
                 return;
             }
         }
-        Util.sendMessage(player, this.lang.tracking_stick_no_near);
+        Util.sendMessage(player, this.lang.item_tracking_stick_no_near);
     }
 
     private String getDirection(Block block, Block block1) {
