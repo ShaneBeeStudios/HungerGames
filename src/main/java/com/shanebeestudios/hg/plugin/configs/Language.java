@@ -87,6 +87,9 @@ public class Language {
     public String command_exit_set_all;
     public String command_exit_set_arena;
     // - ForceStart
+    public String command_force_start_cannot_start;
+    public String command_force_start_game_already_running;
+    public String command_force_start_no_players;
     public String command_force_start_starting;
     // - Join
     public String command_join_already_in_game;
@@ -227,7 +230,7 @@ public class Language {
     public String game_status_broken;
     public String game_status_rollback;
     public String game_status_not_ready;
-    public String game_status_beginning;
+    public String game_status_free_roam;
     public String game_status_countdown;
     public String player_status_in_game;
     public String player_status_spectator;
@@ -359,6 +362,9 @@ public class Language {
         this.command_exit_set_all = this.lang.getString("command.exit.set-all");
         this.command_exit_set_arena = this.lang.getString("command.exit.set-arena");
         // - ForceStart
+        this.command_force_start_cannot_start = this.lang.getString("command.force-start.cannot-start");
+        this.command_force_start_game_already_running = this.lang.getString("command.force-start.game-already-running");
+        this.command_force_start_no_players = this.lang.getString("command.force-start.no-players");
         this.command_force_start_starting = this.lang.getString("command.force-start.starting");
         // - Join
         this.command_join_already_in_game = this.lang.getString("command.join.already-in-game");
@@ -511,7 +517,7 @@ public class Language {
         this.game_status_broken = this.lang.getString("status.game-status.broken");
         this.game_status_rollback = this.lang.getString("status.game-status.rollback");
         this.game_status_not_ready = this.lang.getString("status.game-status.not-ready");
-        this.game_status_beginning = this.lang.getString("status.game-status.beginning");
+        this.game_status_free_roam = this.lang.getString("status.game-status.free-roam");
         this.game_status_countdown = this.lang.getString("status.game-status.countdown");
         this.player_status_in_game = this.lang.getString("status.player-status.in-game");
         this.player_status_spectator = this.lang.getString("status.player-status.spectator");

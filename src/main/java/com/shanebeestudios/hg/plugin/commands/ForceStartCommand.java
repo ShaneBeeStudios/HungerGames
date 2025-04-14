@@ -17,7 +17,6 @@ public class ForceStartCommand extends SubCommand {
         super(plugin);
     }
 
-    @SuppressWarnings("DataFlowIssue")
     @Override
     protected Argument<?> register() {
         return LiteralArgument.literal("forcestart")
@@ -27,20 +26,22 @@ public class ForceStartCommand extends SubCommand {
                     CommandSender sender = info.sender();
                     CommandArguments args = info.args();
                     Game game = args.getByClass("game", Game.class);
-                    if (game != null) {
-                        Status status = game.getGameArenaData().getStatus();
-                        if (status == Status.WAITING || status == Status.READY) {
-                            game.startPreGameCountdown();
-                            Util.sendMessage(sender, this.lang.command_force_start_starting.replace("<arena>", game.getGameArenaData().getName()));
-                        } else if (status == Status.COUNTDOWN) {
-                            game.getStartingTask().stop();
-                            game.startFreeRoam();
-                            Util.sendMessage(sender, "<green>Game starting now");
-                        } else {
-                            Util.sendMessage(sender, "<red>Game has already started");
-                        }
+                    assert game != null;
+                    Status status = game.getGameArenaData().getStatus();
+                    String name = game.getGameArenaData().getName();
+                    if (status == Status.READY) {
+                        Util.sendPrefixedMessage(sender, this.lang.command_force_start_no_players);
+                    } else if (status == Status.WAITING) {
+                        game.startPreGameCountdown();
+                        Util.sendPrefixedMessage(sender, this.lang.command_force_start_starting.replace("<arena>", name));
+                    } else if (status == Status.COUNTDOWN) {
+                        game.getStartingTask().stop();
+                        game.startFreeRoam();
+                        Util.sendPrefixedMessage(sender, this.lang.command_force_start_starting.replace("<arena>", name));
+                    } else if (status == Status.FREE_ROAM || status == Status.RUNNING){
+                        Util.sendPrefixedMessage(sender, this.lang.command_force_start_game_already_running);
                     } else {
-                        Util.sendPrefixedMessage(sender, this.lang.command_delete_no_exist.replace("<arena>", args.getRaw("game")));
+                        Util.sendPrefixedMessage(sender, this.lang.command_force_start_cannot_start);
                     }
                 }));
     }

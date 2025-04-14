@@ -81,7 +81,10 @@ command:
     set-all: 'Exit for all arenas has been set to your location!'
     set-arena: '<gold>Exit for arena <arena> has been set to your location!'
   force-start:
-    starting: '<aqua><arena><gold> is now starting!'
+    cannot-start: '<red>Cannot start this game right now.'
+    game-already-running: '<red>The game is already running.'
+    no-players: '<red>There are no players to start this game.'
+    starting: '<aqua><arena><grey> is now <green>starting!'
   # Join
   join:
     already-in-game: '<red>You are already in a game!'
@@ -327,15 +330,15 @@ scoreboard:
 # STATUSES
 status:
   game-status:
-    running: '<green>Running'
-    stopped: '<dark_red>Stopped'
     ready: '<dark_purple>Ready'
     waiting: '<aqua>Waiting...'
-    broken: '<dark_red>BROKEN'
-    rollback: '<red>Restoring...'
-    not-ready: '<dark_blue>NotReady'
-    beginning: '<green>Running'
     countdown: '<aqua>Starting...'
+    free-roam: '<green>Running'
+    running: '<green>Running'
+    stopped: '<dark_red>Stopped'
+    rollback: '<red>Restoring...'
+    broken: '<dark_red>BROKEN'
+    not-ready: '<dark_blue>NotReady'
   player-status:
     in-game: 'In Game'
     spectator: 'Spectator'

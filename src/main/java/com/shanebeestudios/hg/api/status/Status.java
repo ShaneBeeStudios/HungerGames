@@ -58,15 +58,15 @@ public enum Status {
 
     public Component getName() {
         return switch (this) {
-            case RUNNING -> Util.getMini(this.lang.game_status_running);
-            case STOPPED -> Util.getMini(this.lang.game_status_stopped);
             case READY -> Util.getMini(this.lang.game_status_ready);
             case WAITING -> Util.getMini(this.lang.game_status_waiting);
-            case BROKEN -> Util.getMini(this.lang.game_status_broken);
-            case ROLLBACK -> Util.getMini(this.lang.game_status_rollback);
-            case NOT_READY -> Util.getMini(this.lang.game_status_not_ready);
-            case FREE_ROAM -> Util.getMini(this.lang.game_status_beginning);
             case COUNTDOWN -> Util.getMini(this.lang.game_status_countdown);
+            case FREE_ROAM -> Util.getMini(this.lang.game_status_free_roam);
+            case RUNNING -> Util.getMini(this.lang.game_status_running);
+            case STOPPED -> Util.getMini(this.lang.game_status_stopped);
+            case ROLLBACK -> Util.getMini(this.lang.game_status_rollback);
+            case BROKEN -> Util.getMini(this.lang.game_status_broken);
+            case NOT_READY -> Util.getMini(this.lang.game_status_not_ready);
         };
     }
 
