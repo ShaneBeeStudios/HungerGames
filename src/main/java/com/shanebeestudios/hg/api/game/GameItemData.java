@@ -36,4 +36,11 @@ public class GameItemData extends Data {
         return this.kitData;
     }
 
+    /**
+     * Clear preselected kits after game stops
+     */
+    public void postGameReset() {
+        this.kitData.clearPreselectedKits();
+    }
+
 }

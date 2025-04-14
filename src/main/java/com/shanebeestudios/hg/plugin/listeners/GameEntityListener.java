@@ -1,8 +1,8 @@
 package com.shanebeestudios.hg.plugin.listeners;
 
-import com.shanebeestudios.hg.api.status.Status;
 import com.shanebeestudios.hg.api.game.Game;
 import com.shanebeestudios.hg.api.game.GameArenaData;
+import com.shanebeestudios.hg.api.status.Status;
 import com.shanebeestudios.hg.plugin.HungerGames;
 import org.bukkit.Location;
 import org.bukkit.block.Block;
@@ -75,7 +75,7 @@ public class GameEntityListener extends GameListenerBase {
             event.getProjectile().setMetadata("death-message",
                 new FixedMetadataValue(plugin, entity.getMetadata("death-message").get(0).asString()));
         }
-        if (entity instanceof Player && playerManager.hasPlayerData(entity.getUniqueId())) {
+        if (entity instanceof Player player && playerManager.hasPlayerData(player)) {
             event.getProjectile().setMetadata("shooter", new FixedMetadataValue(plugin, entity.getName()));
         }
     }

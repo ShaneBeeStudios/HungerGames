@@ -2,15 +2,15 @@ package com.shanebeestudios.hg.plugin.managers;
 
 import com.google.common.collect.ImmutableList;
 import com.shanebeestudios.hg.api.command.CustomArg;
-import com.shanebeestudios.hg.api.status.Status;
-import com.shanebeestudios.hg.api.util.Util;
-import com.shanebeestudios.hg.plugin.configs.Language;
+import com.shanebeestudios.hg.api.data.ItemData.ChestType;
 import com.shanebeestudios.hg.api.game.Game;
 import com.shanebeestudios.hg.api.game.GameArenaData;
-import com.shanebeestudios.hg.api.data.ItemData.ChestType;
 import com.shanebeestudios.hg.api.game.GameRegion;
+import com.shanebeestudios.hg.api.status.Status;
+import com.shanebeestudios.hg.api.util.Util;
 import com.shanebeestudios.hg.plugin.HungerGames;
 import com.shanebeestudios.hg.plugin.configs.Config;
+import com.shanebeestudios.hg.plugin.configs.Language;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Material;
@@ -28,7 +28,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Random;
-import java.util.UUID;
 import java.util.stream.Collectors;
 
 /**
@@ -45,8 +44,8 @@ public class GameManager {
     public GameManager(HungerGames plugin) {
         this.plugin = plugin;
         this.lang = plugin.getLang();
-        CustomArg.init(this);
-        this.globalExitLocation = Config.GLOBAL_EXIT_LOCATION;
+        CustomArg.init(plugin, this);
+        this.globalExitLocation = Config.SETTINGS_GLOBAL_EXIT_LOCATION;
     }
 
     /**
@@ -110,15 +109,14 @@ public class GameManager {
             players.addAll(game.getGamePlayerData().getSpectators());
         }
         for (Player player : players) {
-            UUID uuid = player.getUniqueId();
             player.closeInventory();
-            if (playerManager.hasPlayerData(uuid)) {
-                playerManager.getPlayerData(uuid).getGame().getGamePlayerData().leaveGame(player, false);
-                playerManager.removePlayerData(uuid);
+            if (playerManager.hasPlayerData(player)) {
+                playerManager.getPlayerData(player).getGame().getGamePlayerData().leaveGame(player, false);
+                playerManager.removePlayerData(player);
             }
-            if (playerManager.hasSpectatorData(uuid)) {
-                playerManager.getSpectatorData(uuid).getGame().getGamePlayerData().leaveSpectate(player);
-                playerManager.removePlayerData(uuid);
+            if (playerManager.hasSpectatorData(player)) {
+                playerManager.getSpectatorData(player).getGame().getGamePlayerData().leaveSpectate(player);
+                playerManager.removePlayerData(player);
             }
         }
         this.games.clear();
@@ -128,9 +126,7 @@ public class GameManager {
     public Game createGame(String name, Block corner1, Block corner2, List<Location> spawns, Location sign,
                            int timer, int minPlayers, int maxPlayers, int cost) {
         GameRegion gameRegion = GameRegion.createNew(corner1, corner2);
-        int roam = 1; // tODO  what are you?
-        boolean isReady = true; // TODO yeah?
-        Game game = new Game(name, gameRegion, spawns, sign, timer, minPlayers, maxPlayers, roam, isReady, cost);
+        Game game = new Game(name, gameRegion, spawns, sign, timer, minPlayers, maxPlayers, Config.SETTINGS_FREE_ROAM_TIME, true, cost);
         this.games.put(name, game);
         this.plugin.getArenaConfig().saveGameToConfig(game);
         return game;
@@ -171,6 +167,15 @@ public class GameManager {
         if (!game.getGameBlockData().isLobbyValid()) {
             Util.sendPrefixedMessage(sender, this.lang.arena_debug_invalid_lobby);
             Util.sendPrefixedMessage(sender, this.lang.arena_debug_set_lobby.replace("<arena>", name));
+            isReady = false;
+        }
+        // Check overlapping
+        Game overlap = gameArenaData.checkOverlap();
+        if (overlap != null) {
+            String message = this.lang.arena_debug_arena_overlap
+                .replace("<arena1>", name)
+                .replace("<arena2>", overlap.getGameArenaData().getName());
+            Util.sendPrefixedMessage(sender, message);
             isReady = false;
         }
         // Yay! All good to go

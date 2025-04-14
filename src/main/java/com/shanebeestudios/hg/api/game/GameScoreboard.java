@@ -24,7 +24,7 @@ public class GameScoreboard extends Data {
     private final GameSidebar gameSidebar;
     private final Scoreboard scoreboard;
     private final Team baseBukkitTeam;
-    final Map<String, GameTeam> gameTeams = new HashMap<>();
+    private final Map<String, GameTeam> gameTeams = new HashMap<>();
 
     protected GameScoreboard(Game game) {
         super(game);
@@ -101,9 +101,9 @@ public class GameScoreboard extends Data {
     }
 
     /**
-     * Clear all {@link GameTeam GameTeams}
+     * Clear all {@link GameTeam GameTeams} after game stops
      */
-    public void clearGameTeams() {
+    public void postGameReset() {
         this.gameTeams.forEach((team, gameTeam) -> gameTeam.unregister());
         this.gameTeams.clear();
     }

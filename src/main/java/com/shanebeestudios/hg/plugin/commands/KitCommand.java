@@ -1,10 +1,11 @@
 package com.shanebeestudios.hg.plugin.commands;
 
-import com.shanebeestudios.hg.plugin.HungerGames;
+import com.shanebeestudios.hg.api.data.KitData;
+import com.shanebeestudios.hg.api.data.KitEntry;
+import com.shanebeestudios.hg.api.game.Game;
 import com.shanebeestudios.hg.api.status.Status;
 import com.shanebeestudios.hg.api.util.Util;
-import com.shanebeestudios.hg.api.data.KitData;
-import com.shanebeestudios.hg.api.game.Game;
+import com.shanebeestudios.hg.plugin.HungerGames;
 import com.shanebeestudios.hg.plugin.permission.Permissions;
 import dev.jorel.commandapi.arguments.Argument;
 import dev.jorel.commandapi.arguments.ArgumentSuggestions;
@@ -58,13 +59,19 @@ public class KitCommand extends SubCommand {
                         return;
                     }
                     KitData kitData = game.getGameItemData().getKitData();
+                    KitEntry kitEntry = kitData.getKitEntry(kitName);
+                    if (kitEntry == null) {
+                        Util.sendMessage(player, "<red>" + kitName + this.lang.kits_doesnt_exist);
+                        Util.sendMessage(player, "Available Kits:" + kitData.getKitNameList(player));
+                        return;
+                    }
                     // No permission
                     if (!kitData.hasKitPermission(player, kitName)) {
                         Util.sendPrefixedMessage(player, this.lang.command_kit_no_permission);
                         return;
                     }
                     // Set kit
-                    kitData.setKit(player, kitName);
+                    kitData.setKit(player, kitEntry);
                 }));
     }
 

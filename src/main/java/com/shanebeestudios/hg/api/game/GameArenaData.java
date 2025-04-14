@@ -2,6 +2,7 @@ package com.shanebeestudios.hg.api.game;
 
 import com.shanebeestudios.hg.api.status.Status;
 import com.shanebeestudios.hg.api.util.Util;
+import com.shanebeestudios.hg.plugin.HungerGames;
 import net.kyori.adventure.text.Component;
 import org.bukkit.Location;
 
@@ -13,18 +14,18 @@ import java.util.List;
  */
 public class GameArenaData extends Data {
 
-    final String name;
-    final GameRegion gameRegion;
-    int timer;
-    int minPlayers;
-    int maxPlayers;
+    private final String name;
+    private final GameRegion gameRegion;
+    private int timer;
+    private int minPlayers;
+    private int maxPlayers;
     private int freeRoamTime;
-    int cost;
-    final List<Location> spawns;
-    Location exit;
+    private int cost;
+    private final List<Location> spawns;
+    private Location exit;
     private Status status = Status.NOT_READY;
-    int chestRefillTime = 0;
-    int chestRefillRepeat = 0;
+    private int chestRefillTime = 0;
+    private int chestRefillRepeat = 0;
 
     GameArenaData(Game game, String name, GameRegion gameRegion, int timer, int minPlayers, int maxPlayers, int freeRoamTime, int cost) {
         super(game);
@@ -73,6 +74,15 @@ public class GameArenaData extends Data {
      */
     public boolean isInRegion(Location location) {
         return gameRegion.isInRegion(location);
+    }
+
+    public Game checkOverlap() {
+        for (Game toCheck : HungerGames.getPlugin().getGameManager().getGames()) {
+            if (this.game.equals(toCheck)) continue;
+
+            if (toCheck.getGameArenaData().getGameRegion().getBoundingBox().overlaps(this.gameRegion.getBoundingBox())) return toCheck;
+        }
+        return null;
     }
 
     /**

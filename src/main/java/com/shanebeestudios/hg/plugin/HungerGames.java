@@ -1,6 +1,7 @@
 package com.shanebeestudios.hg.plugin;
 
 import com.shanebeestudios.hg.api.data.Leaderboard;
+import com.shanebeestudios.hg.api.region.TaskUtils;
 import com.shanebeestudios.hg.api.util.NBTApi;
 import com.shanebeestudios.hg.api.util.Util;
 import com.shanebeestudios.hg.plugin.commands.MainCommand;
@@ -31,11 +32,15 @@ import dev.jorel.commandapi.CommandAPIBukkitConfig;
 import dev.jorel.commandapi.exceptions.UnsupportedVersionException;
 import io.lumine.mythic.api.MythicProvider;
 import org.bstats.bukkit.Metrics;
+import org.bstats.charts.DrilldownPie;
 import org.bstats.charts.SimplePie;
 import org.bukkit.Bukkit;
 import org.bukkit.event.HandlerList;
 import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.java.JavaPlugin;
+
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * <b>Main class for HungerGames</b>
@@ -54,11 +59,11 @@ public class HungerGames extends JavaPlugin {
     private ArenaConfig arenaConfig;
 
     // Managers
-    private GameManager gameManager;
-    private PlayerManager playerManager;
-    private KillManager killManager;
     private ItemManager itemManager;
+    private PlayerManager playerManager;
     private KitManager kitManager;
+    private GameManager gameManager;
+    private KillManager killManager;
     private SessionManager sessionManager;
     private MobManager mobManager;
     private io.lumine.mythic.api.mobs.MobManager mythicMobManager;
@@ -88,6 +93,7 @@ public class HungerGames extends JavaPlugin {
             return;
         }
         NBTApi.initializeNBTApi();
+        TaskUtils.initialize(this);
         loadPlugin(true);
     }
 
@@ -107,11 +113,10 @@ public class HungerGames extends JavaPlugin {
         }
         this.lang = new Language(this);
         this.itemManager = new ItemManager(this);
+        this.playerManager = new PlayerManager();
         this.kitManager = new KitManager(this);
         this.sessionManager = new SessionManager();
-
         this.mobManager = new MobManager(this);
-        this.playerManager = new PlayerManager();
         this.gameManager = new GameManager(this);
         this.arenaConfig = new ArenaConfig(this);
         this.leaderboard = new Leaderboard(this);
@@ -156,6 +161,7 @@ public class HungerGames extends JavaPlugin {
         this.arenaConfig = null;
         this.killManager = null;
         this.gameManager = null;
+        this.leaderboard.saveLeaderboard();
         this.leaderboard = null;
         HandlerList.unregisterAll(this);
         if (reload) {
@@ -174,15 +180,18 @@ public class HungerGames extends JavaPlugin {
     private void setupMetrics() {
         this.metrics = new Metrics(this, 25144);
         // Config
-        this.metrics.addCustomChart(new SimplePie("config-worldborder-enabled", () ->
-            "" + Config.WORLD_BORDER_ENABLED));
-        this.metrics.addCustomChart(new SimplePie("config-chestdrop-enabled", () ->
-            "" + Config.CHESTS_CHEST_DROP_ENABLED));
+        this.metrics.addCustomChart(new DrilldownPie("config", () -> {
+            Map<String, Map<String, Integer>> map = new HashMap<>();
+            map.put("worldborder-enabled", Map.of("" + Config.WORLD_BORDER_ENABLED, 1));
+            map.put("chestdrop-enabled", Map.of("" + Config.CHESTS_CHEST_DROP_ENABLED, 1));
+            map.put("reward-enabled", Map.of("" + Config.REWARD_ENABLED, 1));
+            map.put("spectate-enabled", Map.of("" + Config.SPECTATE_ENABLED, 1));
+            return map;
+        }));
 
         // Arenas
         this.metrics.addCustomChart(new SimplePie("arenas-count", () ->
             "" + this.gameManager.getGames().size()));
-
     }
 
     private void loadListeners() {

@@ -27,9 +27,9 @@ settings:
   # Whether or not to show a countdown bossbar in game
   bossbar-countdown: true
   # The amount of uses a tracking stick will have
-  trackingstick-uses: 8
+  tracking-stick-uses: 8
   # Minimum amount of players required in a game for a tracking stick to work
-  players-for-trackingstick: 5
+  players-for-tracking-stick: 5
   # Maximum/Minimum amount of items that will spawn in chests
   max-chestcontent: 5
   min-chestcontent: 1
@@ -124,9 +124,12 @@ chests:
       # The blocks will be replaced with the first element of 'chests.bonus.block-types' from above
       enabled: true
       # Place this block randomly around your arena to be replaced when a game starts
+      # Place as many as you'd like
       block: 'minecraft:pink_wool'
-      # Chance a block will be replaced (out of 100)
-      chance: 50
+      # How many random bonus chests to place (randomly selected between min/max)
+      # If there aren't enough blocks placed it will just stop (make sure to place plenty more than your max)
+      min: 2
+      max: 5
   # Chest drops
   chest-drop:
     # Whether to enable chest drops

@@ -1,8 +1,8 @@
 package com.shanebeestudios.hg.plugin.commands;
 
 import com.shanebeestudios.hg.api.command.CustomArg;
-import com.shanebeestudios.hg.api.util.Util;
 import com.shanebeestudios.hg.api.game.Game;
+import com.shanebeestudios.hg.api.util.Util;
 import com.shanebeestudios.hg.plugin.HungerGames;
 import com.shanebeestudios.hg.plugin.permission.Permissions;
 import dev.jorel.commandapi.arguments.Argument;
@@ -35,7 +35,7 @@ public class SetExitCommand extends SubCommand {
             .then(CustomArg.GAME.get("game")
                 .executesPlayer(info -> {
                     Player player = info.sender();
-                    Game game = CustomArg.getGame(info);
+                    Game game = info.args().getByClass("game", Game.class);
                     setExit(game, player);
                     Util.sendPrefixedMessage(player, this.lang.command_exit_set_arena.replace("<arena>", game.getGameArenaData().getName()));
                 }));

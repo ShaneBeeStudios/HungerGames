@@ -1,14 +1,14 @@
 package com.shanebeestudios.hg.plugin.listeners;
 
 import com.shanebeestudios.hg.api.data.ItemData;
-import com.shanebeestudios.hg.plugin.HungerGames;
-import com.shanebeestudios.hg.api.events.ChestOpenEvent;
-import com.shanebeestudios.hg.api.util.BlockUtils;
-import com.shanebeestudios.hg.api.util.Constants;
+import com.shanebeestudios.hg.api.data.ItemData.ChestType;
 import com.shanebeestudios.hg.api.data.PlayerData;
+import com.shanebeestudios.hg.api.events.ChestOpenEvent;
 import com.shanebeestudios.hg.api.game.Game;
 import com.shanebeestudios.hg.api.game.GameBlockData;
-import com.shanebeestudios.hg.api.data.ItemData.ChestType;
+import com.shanebeestudios.hg.api.util.BlockUtils;
+import com.shanebeestudios.hg.api.util.Constants;
+import com.shanebeestudios.hg.plugin.HungerGames;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
@@ -59,7 +59,8 @@ public class GameChestListener extends GameListenerBase {
             Block block = event.getClickedBlock();
             PlayerData playerData = this.playerManager.getPlayerData(player);
             assert block != null;
-            assert playerData != null;
+
+            if (playerData == null || !playerData.hasGameStared()) return;
 
             Game game = playerData.getGame();
             if (block.getType() == Material.CHEST) {

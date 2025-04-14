@@ -1,5 +1,6 @@
 package com.shanebeestudios.hg.api.registry;
 
+import io.papermc.paper.datacomponent.DataComponentType;
 import io.papermc.paper.registry.RegistryAccess;
 import io.papermc.paper.registry.RegistryKey;
 import org.bukkit.Registry;
@@ -21,6 +22,7 @@ public class Registries {
     public static final Registry<Attribute> ATTRIBUTE_REGISTRY = RegistryAccess.registryAccess().getRegistry(RegistryKey.ATTRIBUTE);
     public static final Registry<BlockType> BLOCK_TYPE_REGISTRY = RegistryAccess.registryAccess().getRegistry(RegistryKey.BLOCK);
     public static final Registry<DamageType> DAMAGE_TYPE_REGISTRY = RegistryAccess.registryAccess().getRegistry(RegistryKey.DAMAGE_TYPE);
+    public static final Registry<DataComponentType> DATA_COMPONENT_TYPE_REGISTRY = RegistryAccess.registryAccess().getRegistry(RegistryKey.DATA_COMPONENT_TYPE);
     public static final Registry<Enchantment> ENCHANTMENT_REGISTRY = RegistryAccess.registryAccess().getRegistry(RegistryKey.ENCHANTMENT);
     public static final Registry<EntityType> ENTITY_TYPE_REGISTRY = RegistryAccess.registryAccess().getRegistry(RegistryKey.ENTITY_TYPE);
     public static final Registry<ItemType> ITEM_TYPE_REGISTRY = RegistryAccess.registryAccess().getRegistry(RegistryKey.ITEM);

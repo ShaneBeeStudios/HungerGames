@@ -1,7 +1,6 @@
 package com.shanebeestudios.hg.api.util;
 
 import de.tr7zw.changeme.nbtapi.NBT;
-import de.tr7zw.changeme.nbtapi.NBTCompound;
 import de.tr7zw.changeme.nbtapi.NBTContainer;
 import de.tr7zw.changeme.nbtapi.NbtApiException;
 import de.tr7zw.changeme.nbtapi.iface.ReadWriteNBT;
@@ -130,10 +129,10 @@ public class NBTApi {
      * Get a pretty NBT string
      * <p>This is the same as what vanilla Minecraft outputs when using the '/data' command</p>
      *
-     * @param compound Compound to convert to pretty
-     * @param split    When null NBT will print on one long line, if not null NBT compound will be
-     *                 split into lines with JSON style, and this string will start each line off
-     *                 (usually spaces)
+     * @param nbtString NBT string to convert to pretty
+     * @param split     When null NBT will print on one long line, if not null NBT compound will be
+     *                  split into lines with JSON style, and this string will start each line off
+     *                  (usually spaces)
      * @return Pretty string of NBTCompound
      */
     @SuppressWarnings("deprecation")

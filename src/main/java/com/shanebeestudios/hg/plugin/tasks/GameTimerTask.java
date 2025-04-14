@@ -1,13 +1,13 @@
 package com.shanebeestudios.hg.plugin.tasks;
 
-import com.shanebeestudios.hg.plugin.HungerGames;
-import com.shanebeestudios.hg.api.status.Status;
-import com.shanebeestudios.hg.plugin.configs.Config;
-import com.shanebeestudios.hg.plugin.configs.Language;
 import com.shanebeestudios.hg.api.game.Game;
 import com.shanebeestudios.hg.api.game.GameArenaData;
 import com.shanebeestudios.hg.api.game.GameBlockData;
 import com.shanebeestudios.hg.api.game.GamePlayerData;
+import com.shanebeestudios.hg.api.status.Status;
+import com.shanebeestudios.hg.plugin.HungerGames;
+import com.shanebeestudios.hg.plugin.configs.Config;
+import com.shanebeestudios.hg.plugin.configs.Language;
 import org.bukkit.Bukkit;
 
 public class GameTimerTask implements Runnable {
@@ -47,7 +47,7 @@ public class GameTimerTask implements Runnable {
     public void run() {
         if (this.gameArenaData.getStatus() != Status.RUNNING) stop(); // Safety exit
 
-        if (Config.bossbar) this.game.getGameBarData().bossBarUpdate(this.remainingTime);
+        if (Config.SETTINGS_BOSSBAR_COUNTDOWN) this.game.getGameBarData().bossBarUpdate(this.remainingTime);
 
         // Refill chests
         if (this.gameArenaData.getChestRefillTime() > 0 && this.remainingTime == this.gameArenaData.getChestRefillTime()) {
@@ -62,7 +62,7 @@ public class GameTimerTask implements Runnable {
         } else if (this.remainingTime <= 0) {
             stop();
             this.game.stop(false);
-        } else if (!Config.bossbar && this.remainingTime % 30 == 0) {
+        } else if (!Config.SETTINGS_BOSSBAR_COUNTDOWN && this.remainingTime % 30 == 0) {
             int minutes = this.remainingTime / 60;
             int seconds = this.remainingTime % 60;
             if (minutes != 0) {

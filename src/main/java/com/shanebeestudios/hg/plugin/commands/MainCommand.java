@@ -10,6 +10,7 @@ public class MainCommand {
 
     public MainCommand(HungerGames plugin) {
         this.command = new CommandTree("hungergames");
+        this.command.withHelp("Base HungerGames command", "All the commands you'll need for HungerGames!");
         this.command.withAliases("hg");
 
         // Register sub-commands
@@ -27,6 +28,7 @@ public class MainCommand {
         this.command.then(new PermissionsCommand(plugin).register());
         this.command.then(new RefillChestNowCommand(plugin).register());
         this.command.then(new ReloadCommand(plugin).register());
+        this.command.then(new SessionCommand(plugin).register());
         this.command.then(new SetExitCommand(plugin).register());
         this.command.then(new SettingsCommand(plugin).register());
         this.command.then(new SpectateCommand(plugin).register());
