@@ -459,7 +459,9 @@ public class Game {
                     // Deposit reward winnings
                     if (winningReward > 0) {
                         Vault.ECONOMY.depositPlayer(winner, winningReward);
-                        Util.sendMessage(winner, this.lang.game_winning_amount.replace("<amount>", String.valueOf(winningReward)));
+                        Util.sendMessage(winner, this.lang.game_winning_amount
+                            // Format money with commas and 2 decimal spaces
+                            .replace("<amount>", "%,.2f"), winningReward);
                     }
                 }
                 this.plugin.getLeaderboard().addStat(winner, Leaderboard.Stats.WINS);
