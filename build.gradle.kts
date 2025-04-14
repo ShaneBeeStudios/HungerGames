@@ -41,7 +41,7 @@ dependencies {
     compileOnly("io.papermc.paper:paper-api:${minecraftVersion}-R0.1-SNAPSHOT")
 
     // Command Api
-    implementation("dev.jorel:commandapi-bukkit-shade:10.0.0")
+    implementation("dev.jorel:commandapi-bukkit-shade-mojang-mapped:10.0.0")
 
     // bStats
     implementation("org.bstats:bstats-bukkit:3.1.0")
@@ -77,7 +77,7 @@ tasks {
     }
     processResources {
         val prop = ("version" to projectVersion)
-        filesMatching("plugin.yml") {
+        filesMatching("paper-plugin.yml") {
             expand(prop)
         }
     }
