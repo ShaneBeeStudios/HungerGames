@@ -33,6 +33,7 @@ arena-debug:
   invalid-lobby: '<red>Your LobbyWall is invalid! Please reset them!'
   set-lobby: 'Set lobbywall: <aqua>/hg edit <arena> locations lobby_wall'
   ready-run: '<green>Your HungerGames arena <grey><arena><green> is ready to run!'
+  arena-overlap: "<red>The bounds of arena <white>'<aqua><arena1><white>' <red>overlap the bounds of arena <white>'<aqua><arena2><white>'"
 
 # COMMANDS
 command:

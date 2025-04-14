@@ -38,6 +38,7 @@ public class Language {
     public String arena_debug_invalid_lobby;
     public String arena_debug_set_lobby;
     public String arena_debug_ready_run;
+    public String arena_debug_arena_overlap;
 
     // COMMANDS
     // - Base
@@ -311,6 +312,7 @@ public class Language {
         this.arena_debug_invalid_lobby = this.lang.getString("arena-debug.invalid-lobby");
         this.arena_debug_set_lobby = this.lang.getString("arena-debug.set-lobby");
         this.arena_debug_ready_run = this.lang.getString("arena-debug.ready-run");
+        this.arena_debug_arena_overlap = this.lang.getString("arena-debug.arena-overlap");
 
         // COMMANDS
         // - Base

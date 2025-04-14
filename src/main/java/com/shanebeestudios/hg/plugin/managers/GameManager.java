@@ -169,6 +169,15 @@ public class GameManager {
             Util.sendPrefixedMessage(sender, this.lang.arena_debug_set_lobby.replace("<arena>", name));
             isReady = false;
         }
+        // Check overlapping
+        Game overlap = gameArenaData.checkOverlap();
+        if (overlap != null) {
+            String message = this.lang.arena_debug_arena_overlap
+                .replace("<arena1>", name)
+                .replace("<arena2>", overlap.getGameArenaData().getName());
+            Util.sendPrefixedMessage(sender, message);
+            isReady = false;
+        }
         // Yay! All good to go
         if (isReady) {
             Util.sendPrefixedMessage(sender, this.lang.arena_debug_ready_run.replace("<arena>", name));

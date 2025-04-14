@@ -2,6 +2,7 @@ package com.shanebeestudios.hg.api.game;
 
 import com.shanebeestudios.hg.api.status.Status;
 import com.shanebeestudios.hg.api.util.Util;
+import com.shanebeestudios.hg.plugin.HungerGames;
 import net.kyori.adventure.text.Component;
 import org.bukkit.Location;
 
@@ -73,6 +74,15 @@ public class GameArenaData extends Data {
      */
     public boolean isInRegion(Location location) {
         return gameRegion.isInRegion(location);
+    }
+
+    public Game checkOverlap() {
+        for (Game toCheck : HungerGames.getPlugin().getGameManager().getGames()) {
+            if (this.game.equals(toCheck)) continue;
+
+            if (toCheck.getGameArenaData().getGameRegion().getBoundingBox().overlaps(this.gameRegion.getBoundingBox())) return toCheck;
+        }
+        return null;
     }
 
     /**
