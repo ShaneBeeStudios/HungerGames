@@ -103,6 +103,9 @@ command:
   list:
     players: "<gold>Players in arena <white>'<aqua><arena><white>': <aqua><players>"
     players-delimiter: '<white>, <aqua>'
+  session:
+    no-session: '<red>You do not have a current session.'
+    ended: 'Your current session has ended.'
   # Team
   team:
     player-not-available: '<aqua><player> <red>Is not available!'

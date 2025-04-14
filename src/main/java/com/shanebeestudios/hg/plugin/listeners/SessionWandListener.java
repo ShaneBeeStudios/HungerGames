@@ -15,6 +15,7 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.Action;
 import org.bukkit.event.player.PlayerInteractEvent;
+import org.bukkit.event.player.PlayerQuitEvent;
 import org.bukkit.inventory.EquipmentSlot;
 
 /**
@@ -57,6 +58,13 @@ public class SessionWandListener implements Listener {
 
             session.click(player, block);
         }
+    }
+
+    // Failsafe, end session if player logs out
+    @EventHandler
+    private void onQuit(PlayerQuitEvent event) {
+        Player player = event.getPlayer();
+        this.sessionManager.endPlayerSession(player);
     }
 
 }

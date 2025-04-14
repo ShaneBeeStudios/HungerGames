@@ -35,6 +35,7 @@ public class Permissions {
     public static final Permission COMMAND_PERMISSIONS = getCommand("permissions", "List of permissions", PermissionDefault.OP);
     public static final Permission COMMAND_REFILL_CHESTS = getCommand("refill_chests", "Refill chests in a game", PermissionDefault.OP);
     public static final Permission COMMAND_RELOAD = getCommand("reload", "Reload configs/arenas", PermissionDefault.OP);
+    public static final Permission COMMAND_SESSION = getCommand("session", "Options for arena creation sessions", PermissionDefault.OP);
     public static final Permission COMMAND_SET_EXIT = getCommand("setexit", "Set the exit of a game, all games or the global exit", PermissionDefault.OP);
     public static final Permission COMMAND_SETTINGS = getCommand("settings", "Temporarily modify some config settings (not saved to file)", PermissionDefault.OP);
     public static final Permission COMMAND_SPECTATE = getCommand("spectate", "Spectate a game", PermissionDefault.TRUE);
