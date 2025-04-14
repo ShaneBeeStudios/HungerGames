@@ -1,5 +1,6 @@
 package com.shanebeestudios.hg.plugin.commands;
 
+import com.shanebeestudios.hg.api.command.CustomArg;
 import com.shanebeestudios.hg.api.data.PlayerData;
 import com.shanebeestudios.hg.api.game.Game;
 import com.shanebeestudios.hg.api.game.GameTeam;
@@ -8,7 +9,6 @@ import com.shanebeestudios.hg.plugin.HungerGames;
 import com.shanebeestudios.hg.plugin.configs.Config;
 import com.shanebeestudios.hg.plugin.permission.Permissions;
 import dev.jorel.commandapi.arguments.Argument;
-import dev.jorel.commandapi.arguments.EntitySelectorArgument;
 import dev.jorel.commandapi.arguments.LiteralArgument;
 import dev.jorel.commandapi.arguments.StringArgument;
 import org.bukkit.entity.Player;
@@ -52,7 +52,7 @@ public class TeamCommand extends SubCommand {
                         }
                     })))
             .then(LiteralArgument.literal("invite")
-                .then(new EntitySelectorArgument.OnePlayer("player")
+                .then(CustomArg.GAME_PLAYER_FOR_TEAM.get("player")
                     .executesPlayer(info -> {
                         Player teamLeader = info.sender();
                         PlayerData playerData = this.playerManager.getPlayerData(teamLeader);
@@ -74,7 +74,7 @@ public class TeamCommand extends SubCommand {
                         assert invitee != null;
                         if (!game.getGamePlayerData().getPlayers().contains(invitee)) {
                             // Invitee is not in game
-                            Util.sendMessage(teamLeader, this.lang.command_team_player_not_available.replace("<player>", teamLeader.getName()));
+                            Util.sendMessage(teamLeader, this.lang.command_team_player_not_available.replace("<player>", invitee.getName()));
                             return;
                         }
 
@@ -140,7 +140,7 @@ public class TeamCommand extends SubCommand {
                 }))
             .then(LiteralArgument.literal("teleport")
                 .withPermission(Permissions.COMMAND_TEAM_TELEPORT.permission())
-                .then(new EntitySelectorArgument.OnePlayer("player")
+                .then(CustomArg.GAME_PLAYER_ON_TEAM.get("player")
                     .executesPlayer(info -> {
                         Player player = info.sender();
                         PlayerData playerData = this.playerManager.getPlayerData(player);
