@@ -98,9 +98,9 @@ tasks {
 
     }
     shadowJar {
-        relocate("fr.mrmicky.fastboard", "com.shanebeestudios.hg.api.fastboard")
-        relocate("dev.jorel.commandapi", "com.shanebeestudios.hg.api.commandapi")
-        relocate("de.tr7zw.changeme.nbtapi", "com.shanebeestudios.hg.api.nbt")
+        relocate("fr.mrmicky.fastboard", "com.shanebeestudios.hg.shaded-api.fastboard")
+        relocate("dev.jorel.commandapi", "com.shanebeestudios.hg.shaded-api.commandapi")
+        relocate("de.tr7zw.changeme.nbtapi", "com.shanebeestudios.hg.shaded-api.nbt")
         relocate("org.bstats", "com.shanebeestudios.hg.api.metrics")
         archiveFileName = "HungerGames-${projectVersion}.jar"
     }
