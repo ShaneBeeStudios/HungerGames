@@ -58,6 +58,7 @@ public class Language {
     public String command_create_session_select_spawns;
     public String command_create_session_select_spawns_next;
     public String command_create_session_error_too_small;
+    public String command_create_session_error_overlap;
     public String command_create_session_already_in_arena;
     public String command_create_session_select_sign;
     public String command_create_session_done;
@@ -332,6 +333,7 @@ public class Language {
         this.command_create_session_select_spawns = this.lang.getString("command.create-session-select-spawns");
         this.command_create_session_select_spawns_next = this.lang.getString("command.create-session-select-spawns-next");
         this.command_create_session_error_too_small = this.lang.getString("command.create-session-error-too-small");
+        this.command_create_session_error_overlap = this.lang.getString("command.create-session-error-overlap");
         this.command_create_session_already_in_arena = this.lang.getString("command.create-session-already-in-arena");
         this.command_create_session_select_sign = this.lang.getString("command.create-session-select-sign");
         this.command_create_session_sign_invalid = this.lang.getString("command.create-session-sign-invalid");
