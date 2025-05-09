@@ -1,6 +1,5 @@
 package com.shanebeestudios.hg.api.game;
 
-import com.shanebeestudios.hg.plugin.HungerGames;
 import com.shanebeestudios.hg.api.util.Util;
 import net.kyori.adventure.audience.Audience;
 import net.kyori.adventure.bossbar.BossBar;
@@ -47,7 +46,7 @@ public class GameBarData extends Data {
      */
     public void bossBarUpdate(int remaining) {
         if (this.bar == null) return;
-        float remain = ((float) remaining) / ((float) getGame().gameArenaData.timer);
+        float remain = ((float) remaining) / ((float) getGame().getGameArenaData().getTimer());
         int min = (remaining / 60);
         int sec = (remaining % 60);
         String title = formatTitle(min, sec);

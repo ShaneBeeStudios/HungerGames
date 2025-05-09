@@ -3,6 +3,7 @@ package com.shanebeestudios.hg.api.util;
 import com.shanebeestudios.hg.plugin.HungerGames;
 import com.shanebeestudios.hg.plugin.configs.Config;
 import com.shanebeestudios.hg.plugin.configs.Language;
+import dev.jorel.commandapi.arguments.CustomArgument.CustomArgumentException;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.minimessage.MiniMessage;
 import net.md_5.bungee.api.ChatColor;
@@ -14,10 +15,6 @@ import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Objects;
-import java.util.UUID;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -27,7 +24,13 @@ import java.util.regex.Pattern;
 @SuppressWarnings("WeakerAccess")
 public class Util {
 
-    public static final BlockFace[] BLOCK_FACES = new BlockFace[]{BlockFace.EAST, BlockFace.WEST, BlockFace.NORTH, BlockFace.SOUTH};
+    // PUBLIC
+    // Quick link to help for removing legacy stuff later
+    public static final boolean RUNNING_1_21_5 = isRunningMinecraft(1, 21, 5);
+    public static final boolean IS_RUNNING_FOLIA = classExists("io.papermc.paper.threadedregions.FoliaWatchdogThread");
+
+
+    // PRIVATE
     private static final Pattern HEX_PATTERN = Pattern.compile("<#([A-Fa-f0-9]){6}>");
     private static final CommandSender CONSOLE = Bukkit.getConsoleSender();
     private static final MiniMessage MINI_MESSAGE = MiniMessage.miniMessage();
@@ -168,6 +171,10 @@ public class Util {
         return MINI_MESSAGE.deserialize(String.format(format, objects));
     }
 
+    public static void throwCustomArgException(String message) throws CustomArgumentException {
+        throw CustomArgumentException.fromAdventureComponent(getMini(getPrefix() + " " + message));
+    }
+
     /**
      * Convert a MiniMessage/Component to text
      *
@@ -215,38 +222,6 @@ public class Util {
         player.getInventory().setLeggings(null);
         player.getInventory().setBoots(null);
         player.updateInventory();
-    }
-
-    /**
-     * Convert a list of UUIDs to a string of player names
-     *
-     * @param uuid UUID list to convert
-     * @return List of player names
-     */
-    public static List<String> convertUUIDListToStringList(List<UUID> uuid) {
-        List<String> winners = new ArrayList<>();
-        for (UUID id : uuid) {
-            winners.add(Objects.requireNonNull(Bukkit.getPlayer(id)).getName());
-        }
-        return winners;
-    }
-
-    public static String translateStop(List<String> win) {
-        StringBuilder builder = null;
-        int count = 0;
-        for (String s : win) {
-            count++;
-            if (count == 1) builder = new StringBuilder(s);
-            else if (count == win.size()) {
-                builder.append(", and ").append(s);
-            } else {
-                builder.append(", ").append(s);
-            }
-        }
-        if (builder != null)
-            return builder.toString();
-        else
-            return "No one";
     }
 
     @SuppressWarnings("DataFlowIssue")

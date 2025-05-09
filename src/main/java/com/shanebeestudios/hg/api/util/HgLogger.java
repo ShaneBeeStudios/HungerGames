@@ -11,7 +11,9 @@ public class HgLogger extends Logger {
         super(name, resourceBundleName);
     }
 
-    /** Get an instance of HgLogger
+    /**
+     * Get an instance of HgLogger
+     *
      * @return new instance of HgLogger
      */
     public static HgLogger getLogger() {

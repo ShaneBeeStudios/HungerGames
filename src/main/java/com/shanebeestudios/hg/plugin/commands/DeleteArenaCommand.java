@@ -1,11 +1,11 @@
 package com.shanebeestudios.hg.plugin.commands;
 
-import com.shanebeestudios.hg.plugin.HungerGames;
 import com.shanebeestudios.hg.api.command.CustomArg;
-import com.shanebeestudios.hg.api.util.Util;
 import com.shanebeestudios.hg.api.game.Game;
 import com.shanebeestudios.hg.api.game.GameArenaData;
 import com.shanebeestudios.hg.api.game.GamePlayerData;
+import com.shanebeestudios.hg.api.util.Util;
+import com.shanebeestudios.hg.plugin.HungerGames;
 import com.shanebeestudios.hg.plugin.permission.Permissions;
 import dev.jorel.commandapi.arguments.Argument;
 import dev.jorel.commandapi.arguments.LiteralArgument;
@@ -25,7 +25,8 @@ public class DeleteArenaCommand extends SubCommand {
             .then(CustomArg.GAME.get("game")
                 .executes(info -> {
                     CommandSender sender = info.sender();
-                    Game game = CustomArg.getGame(info);
+                    Game game = info.args().getByClass("game", Game.class);
+                    assert game != null;
                     GamePlayerData gamePlayerData = game.getGamePlayerData();
                     GameArenaData gameArenaData = game.getGameArenaData();
                     String name = gameArenaData.getName();

@@ -1,8 +1,8 @@
 package com.shanebeestudios.hg.api.util;
 
 import com.shanebeestudios.hg.plugin.HungerGames;
-import com.shanebeestudios.hg.plugin.configs.Language;
 import com.shanebeestudios.hg.plugin.configs.Config;
+import com.shanebeestudios.hg.plugin.configs.Language;
 import io.papermc.paper.datacomponent.DataComponentTypes;
 import io.papermc.paper.datacomponent.item.ItemLore;
 import io.papermc.paper.persistence.PersistentDataContainerView;
@@ -38,12 +38,12 @@ public class ItemUtils {
         pdc.set(Constants.TRACKING_STICK_KEY, PersistentDataType.BOOLEAN, true);
         itemStack.setItemMeta(itemMeta);
 
-        itemStack.setData(DataComponentTypes.ITEM_NAME, Util.getMini(LANG.tracking_stick_name));
+        itemStack.setData(DataComponentTypes.ITEM_NAME, Util.getMini(LANG.item_tracking_stick_name));
         itemStack.setData(DataComponentTypes.MAX_STACK_SIZE, 1);
-        itemStack.setData(DataComponentTypes.MAX_DAMAGE, Config.TRACKING_STICK_USES);
+        itemStack.setData(DataComponentTypes.MAX_DAMAGE, Config.SETTINGS_TRACKING_STICK_USES);
         itemStack.setData(DataComponentTypes.DAMAGE, 0);
         List<Component> lore = new ArrayList<>();
-        LANG.tracking_stick_lore.forEach(line -> lore.add(Util.getMini(line)));
+        LANG.item_tracking_stick_lore.forEach(line -> lore.add(Util.getMini(line)));
         itemStack.setData(DataComponentTypes.LORE, ItemLore.lore(lore));
         return itemStack;
     }

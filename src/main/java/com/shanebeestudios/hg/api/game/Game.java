@@ -28,9 +28,8 @@ import org.bukkit.entity.HumanEntity;
 import org.bukkit.entity.Player;
 
 import java.util.ArrayList;
-import java.util.Collection;
 import java.util.List;
-import java.util.UUID;
+import java.util.StringJoiner;
 
 /**
  * General game object
@@ -54,15 +53,15 @@ public class Game {
     private NearestPlayerCompassTask nearestPlayerCompassTask;
 
     // Data Objects
-    final GameArenaData gameArenaData;
+    private final GameArenaData gameArenaData;
     private final GameEntityData gameEntityData;
-    final GameScoreboard gameScoreboard;
-    final GameBarData bar;
-    final GamePlayerData gamePlayerData;
-    final GameBlockData gameBlockData;
-    final GameItemData gameItemData;
-    final GameCommandData gameCommandData;
-    final GameBorderData gameBorderData;
+    private final GameScoreboard gameScoreboard;
+    private final GameBarData bar;
+    private final GamePlayerData gamePlayerData;
+    private final GameBlockData gameBlockData;
+    private final GameItemData gameItemData;
+    private final GameCommandData gameCommandData;
+    private final GameBorderData gameBorderData;
 
     /**
      * Create a new game
@@ -92,7 +91,7 @@ public class Game {
         this.gameItemData = new GameItemData(this);
         this.gameCommandData = new GameCommandData(this);
         this.gameBorderData = new GameBorderData(this);
-        this.gameArenaData.spawns.addAll(spawns);
+        this.gameArenaData.getSpawns().addAll(spawns);
 
         // If lobby signs are not properly setup, game is not ready
         if (!this.gameBlockData.setLobbyBlock(lobbySign)) {
@@ -229,10 +228,12 @@ public class Game {
     public void startWaitingPeriod() {
         this.gameArenaData.setStatus(Status.WAITING);
         long start = System.currentTimeMillis();
-        this.gameBlockData.logBlocksForRollback();
+        int count = this.gameBlockData.logBlocksForRollback();
         this.gameBlockData.setupRandomizedBonusChests();
         long fin = System.currentTimeMillis() - start;
-        Util.log("Logged blocks in %s ms", fin);
+        if (Config.SETTINGS_DEBUG) {
+            Util.log("Logged <aqua>%,d<grey> blocks in <aqua>%sms<grey> for arena <green>%s", count, fin, getGameArenaData().getName());
+        }
     }
 
     /**
@@ -244,6 +245,7 @@ public class Game {
         Bukkit.getPluginManager().callEvent(event);
 
         this.gameArenaData.setStatus(Status.COUNTDOWN);
+        this.gamePlayerData.putAllPlayersIntoArena();
         this.startingTask = new StartingTask(this);
     }
 
@@ -267,8 +269,8 @@ public class Game {
         if (Config.MOBS_SPAWN_ENABLED) this.mobSpawnerTask = new MobSpawnerTask(this);
         if (Config.CHESTS_CHEST_DROP_ENABLED) this.chestDropTask = new ChestDropTask(this);
         this.gameBlockData.updateLobbyBlock();
-        if (Config.bossbar) {
-            this.bar.createBossBar(gameArenaData.timer);
+        if (Config.SETTINGS_BOSSBAR_COUNTDOWN) {
+            this.bar.createBossBar(this.gameArenaData.getTimer());
         }
         if (Config.WORLD_BORDER_ENABLED) {
             this.gameBorderData.initialize();
@@ -301,7 +303,7 @@ public class Game {
      * @param player Player who joined
      */
     private void broadcastJoin(Player player) {
-        if (!Config.BROADCAST_JOIN_MESSAGES) return;
+        if (!Config.SETTINGS_BROADCAST_JOIN_MESSAGES) return;
         String name = this.getGameArenaData().getName();
         Util.broadcast(this.lang.game_waiting_join
             .replace("<arena>", name)
@@ -366,26 +368,28 @@ public class Game {
             }
             case READY -> {
                 if (!canJoin(player)) return false;
-                this.gamePlayerData.addPlayerData(player);
+                this.gamePlayerData.addPlayerData(player, savePreviousLocation);
                 startWaitingPeriod();
                 broadcastJoin(player);
+                Util.sendPrefixedMessage(player, this.lang.game_joined_waiting_to_teleport.replace("<arena>", arenaName));
             }
             case WAITING -> {
                 if (!canJoin(player)) return false;
-                this.gamePlayerData.addPlayerData(player);
+                this.gamePlayerData.addPlayerData(player, savePreviousLocation);
                 if (this.gamePlayerData.getPlayers().size() >= this.gameArenaData.getMinPlayers()) {
                     startPreGameCountdown();
                 } else {
                     broadcastJoin(player);
+                    Util.sendPrefixedMessage(player, this.lang.game_joined_waiting_to_teleport.replace("<arena>", arenaName));
                 }
             }
             case COUNTDOWN -> {
                 if (!canJoin(player)) return false;
-                this.gamePlayerData.addPlayerData(player);
+                this.gamePlayerData.addPlayerData(player, savePreviousLocation);
+                this.gamePlayerData.putPlayerIntoArena(player);
             }
         }
 
-        this.gamePlayerData.putPlayerIntoArena(player, savePreviousLocation);
         return true;
     }
 
@@ -399,78 +403,91 @@ public class Game {
     /**
      * Stop the game
      *
-     * @param death Whether the game stopped after the result of a death (false = no winnings payed out)
+     * @param death Whether the game stopped after the result of a death (false = no winnings paid out)
      */
-    public void stop(Boolean death) {
+    public void stop(boolean death) {
         if (Config.WORLD_BORDER_ENABLED) {
             this.gameBorderData.resetBorder();
         }
         this.gameEntityData.removeEntities();
         this.gameScoreboard.resetSidebars();
 
-        // TODO win list should be players
-        List<UUID> win = new ArrayList<>();
+        List<Player> winners = new ArrayList<>();
         cancelTasks();
         for (Player player : this.gamePlayerData.getPlayers()) {
-            UUID uuid = player.getUniqueId();
-            PlayerData playerData = this.playerManager.getPlayerData(uuid);
+            PlayerData playerData = this.playerManager.getPlayerData(player);
             assert playerData != null;
-            Location previousLocation = playerData.getPreviousLocation();
 
-            this.gamePlayerData.heal(player);
-            playerData.restore(player);
-            win.add(uuid);
-            this.gamePlayerData.exit(player, previousLocation);
-            this.playerManager.removePlayerData(uuid);
+            if (playerData.hasGameStared()) {
+                Location previousLocation = playerData.getPreviousLocation();
+
+                this.gamePlayerData.heal(player);
+                playerData.restore(player);
+                winners.add(player);
+                this.gamePlayerData.exit(player, previousLocation);
+            }
+            this.playerManager.removePlayerData(player);
         }
 
         for (Player spectator : this.gamePlayerData.getSpectators()) {
             this.gamePlayerData.leaveSpectate(spectator);
         }
 
-        if (gameArenaData.getStatus() == Status.RUNNING) {
-            bar.clearBar();
+        if (this.gameArenaData.getStatus() == Status.RUNNING) {
+            this.bar.clearBar();
         }
 
-        if (!win.isEmpty() && death) {
-            double db = (double) Config.cash / win.size();
-            for (UUID u : win) {
-                if (Config.giveReward) {
-                    Player p = Bukkit.getPlayer(u);
-                    assert p != null;
-                    if (!Config.rewardCommands.isEmpty()) {
-                        for (String cmd : Config.rewardCommands) {
-                            if (!cmd.equalsIgnoreCase("none"))
-                                Bukkit.dispatchCommand(Bukkit.getConsoleSender(), cmd.replace("<player>", p.getName()));
+        // Handle rewards and stats
+        if (!winners.isEmpty() && death) {
+            double winningReward = (double) Config.REWARD_CASH / winners.size();
+            for (Player winner : winners) {
+                if (Config.REWARD_ENABLED) {
+                    // Run reward commands
+                    if (!Config.REWARD_COMMANDS.isEmpty()) {
+                        for (String cmd : Config.REWARD_COMMANDS) {
+                            if (cmd.equalsIgnoreCase("none")) continue;
+                            Bukkit.dispatchCommand(Bukkit.getConsoleSender(), cmd.replace("<player>", winner.getName()));
                         }
                     }
-                    if (!Config.rewardMessages.isEmpty()) {
-                        for (String msg : Config.rewardMessages) {
-                            if (!msg.equalsIgnoreCase("none"))
-                                Util.sendMessage(p, msg.replace("<player>", p.getName()));
+                    // Send reward messages
+                    if (!Config.REWARD_MESSAGES.isEmpty()) {
+                        for (String msg : Config.REWARD_MESSAGES) {
+                            if (msg.equalsIgnoreCase("none")) continue;
+                            Util.sendMessage(winner, msg.replace("<player>", winner.getName()));
                         }
                     }
-                    if (Config.cash != 0) {
-                        Vault.economy.depositPlayer(Bukkit.getServer().getOfflinePlayer(u), db);
-                        Util.sendMessage(p, lang.winning_amount.replace("<amount>", String.valueOf(db)));
+                    // Deposit reward winnings
+                    if (winningReward > 0) {
+                        Vault.ECONOMY.depositPlayer(winner, winningReward);
+                        Util.sendMessage(winner, this.lang.game_winning_amount
+                            // Format money with commas and 2 decimal spaces
+                            .replace("<amount>", "%,.2f"), winningReward);
                     }
                 }
-                this.plugin.getLeaderboard().addStat(u, Leaderboard.Stats.WINS);
-                this.plugin.getLeaderboard().addStat(u, Leaderboard.Stats.GAMES);
+                this.plugin.getLeaderboard().addStat(winner, Leaderboard.Stats.WINS);
+                this.plugin.getLeaderboard().addStat(winner, Leaderboard.Stats.GAMES);
             }
         }
         this.gameBlockData.clearChests();
-        String winner = Util.translateStop(Util.convertUUIDListToStringList(win));
 
         // Broadcast wins
         if (death) {
-            String broadcast = this.lang.game_player_won.replace("<arena>", this.gameArenaData.name).replace("<winner>", winner);
-            if (Config.broadcastWinMessages) {
+            // String together winners names
+            StringJoiner joiner = new StringJoiner(", ");
+            winners.forEach(player -> joiner.add(player.getName()));
+            String joinedWinners = joiner.toString();
+
+            String broadcast = this.lang.game_player_won
+                .replace("<arena>", this.gameArenaData.getName())
+                .replace("<winner>", joinedWinners);
+            if (Config.SETTINGS_BROADCAST_WIN_MESSAGES) {
                 Util.broadcast(broadcast);
             } else {
                 this.gamePlayerData.messageAllPlayers(broadcast);
             }
         }
+
+        // Run rollback
         if (this.gameBlockData.requiresRollback()) {
             if (this.plugin.isEnabled()) {
                 new RollbackTask(this);
@@ -481,18 +498,17 @@ public class Game {
         } else {
             this.gameArenaData.setStatus(Status.READY);
         }
+
+        // Run stop commands
         this.gameCommandData.runCommands(CommandType.STOP, null);
 
-        // Call GameEndEvent
-        Collection<Player> winners = new ArrayList<>();
-        for (UUID uuid : win) {
-            winners.add(Bukkit.getPlayer(uuid));
-        }
+        // Game has ended, we can clear some data
+        this.gamePlayerData.postGameReset();
+        this.gameScoreboard.postGameReset();
+        this.gameItemData.postGameReset();
+        this.plugin.getLeaderboard().saveLeaderboard();
 
-        // Game has ended, we can clear all players now
-        this.gamePlayerData.clearPlayers();
-        this.gamePlayerData.clearSpectators();
-        this.gameScoreboard.clearGameTeams();
+        // Call GameEndEvent
         new GameEndEvent(this, winners, death).callEvent();
     }
 
@@ -502,7 +518,7 @@ public class Game {
             if (isGameOver()) {
                 if (!death) {
                     for (Player player1 : this.gamePlayerData.getPlayers()) {
-                        if (this.gamePlayerData.kills.get(player1) >= 1) {
+                        if (this.gamePlayerData.getKills().get(player1) >= 1) {
                             death = true;
                         }
                     }
@@ -536,7 +552,7 @@ public class Game {
             assert playerData != null;
             GameTeam gameTeam = playerData.getTeam();
 
-            if (gameTeam != null && (gameTeam.getPlayers().size() >= gamePlayerData.players.size())) {
+            if (gameTeam != null && (gameTeam.getPlayers().size() >= this.gamePlayerData.getPlayers().size())) {
                 for (Player player1 : this.gamePlayerData.getPlayers()) {
                     if (!gameTeam.getPlayers().contains(player1)) {
                         return false;
@@ -554,14 +570,10 @@ public class Game {
             Util.sendPrefixedMessage(player, this.lang.game_full.replace("<name>", name));
             return false;
         }
-        return vaultCheck(player);
-    }
-
-    boolean vaultCheck(Player player) {
-        if (Config.economy) {
-            int cost = this.getGameArenaData().getCost();
-            if (Vault.economy.getBalance(player) >= cost) {
-                Vault.economy.withdrawPlayer(player, cost);
+        int cost = this.getGameArenaData().getCost();
+        if (Config.HAS_ECONOMY && cost > 0) {
+            if (Vault.ECONOMY.getBalance(player) >= cost) {
+                Vault.ECONOMY.withdrawPlayer(player, cost);
                 return true;
             } else {
                 Util.sendPrefixedMessage(player, this.lang.command_join_no_money.replace("<cost>", String.valueOf(cost)));

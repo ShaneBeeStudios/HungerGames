@@ -1,11 +1,11 @@
 package com.shanebeestudios.hg.plugin.tasks;
 
-import com.shanebeestudios.hg.plugin.HungerGames;
-import com.shanebeestudios.hg.api.util.Util;
-import com.shanebeestudios.hg.plugin.configs.Language;
 import com.shanebeestudios.hg.api.game.Game;
 import com.shanebeestudios.hg.api.game.GameRegion;
+import com.shanebeestudios.hg.api.util.Util;
+import com.shanebeestudios.hg.plugin.HungerGames;
 import com.shanebeestudios.hg.plugin.configs.Config;
+import com.shanebeestudios.hg.plugin.configs.Language;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.entity.Player;
@@ -33,12 +33,12 @@ public class ChestDropTask implements Runnable {
         Location randomLocation = gameRegion.getRandomLocation();
 
         for (Player player : this.game.getGamePlayerData().getPlayers()) {
-            Util.sendMessage(player, this.lang.chest_drop_1);
-            Util.sendMessage(player, this.lang.chest_drop_2
+            Util.sendMessage(player, this.lang.chest_drop_line);
+            Util.sendMessage(player, this.lang.chest_drop_dropped_at_location
                 .replace("<x>", "" + randomLocation.getBlockX())
                 .replace("<y>", "" + randomLocation.getBlockY())
                 .replace("<z>", "" + randomLocation.getBlockZ()));
-            Util.sendMessage(player, this.lang.chest_drop_1);
+            Util.sendMessage(player, this.lang.chest_drop_line);
             this.tasks.add(new ChestDropChestTask(randomLocation));
         }
     }

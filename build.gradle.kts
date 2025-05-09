@@ -5,9 +5,9 @@ plugins {
 // Version of HungerGames
 val projectVersion = "5.0.0-beta1"
 // Where this builds on the server
-val serverLocation = "1-21-4"
+val serverLocation = "1-21-5"
 // Minecraft version to build against
-val minecraftVersion = "1.21.4"
+val minecraftVersion = "1.21.5"
 
 java.sourceCompatibility = JavaVersion.VERSION_21
 
@@ -41,7 +41,7 @@ dependencies {
     compileOnly("io.papermc.paper:paper-api:${minecraftVersion}-R0.1-SNAPSHOT")
 
     // Command Api
-    implementation("dev.jorel:commandapi-bukkit-shade:9.7.0")
+    implementation("dev.jorel:commandapi-bukkit-shade-mojang-mapped:10.0.1")
 
     // bStats
     implementation("org.bstats:bstats-bukkit:3.1.0")
@@ -53,7 +53,7 @@ dependencies {
     compileOnly("me.clip:placeholderapi:2.11.6")
 
     // NBT-API
-    implementation("de.tr7zw:item-nbt-api:2.14.2-SNAPSHOT") {
+    implementation("de.tr7zw:item-nbt-api:2.15.0") {
         isTransitive = false
     }
 
@@ -77,7 +77,7 @@ tasks {
     }
     processResources {
         val prop = ("version" to projectVersion)
-        filesMatching("plugin.yml") {
+        filesMatching("paper-plugin.yml") {
             expand(prop)
         }
     }
@@ -91,16 +91,16 @@ tasks {
         exclude("com/shanebeestudios/hg/plugin/commands")
         exclude("com/shanebeestudios/hg/plugin/listeners")
         (options as StandardJavadocDocletOptions).links(
-            "https://jd.papermc.io/paper/1.21.1/",
+            "https://jd.papermc.io/paper/1.21.5/",
             "https://jd.advntr.dev/api/4.17.0/",
             "https://tr7zw.github.io/Item-NBT-API/v2-api/"
         )
 
     }
     shadowJar {
-        relocate("fr.mrmicky.fastboard", "com.shanebeestudios.hg.api.fastboard")
-        relocate("dev.jorel.commandapi", "com.shanebeestudios.hg.api.commandapi")
-        relocate("de.tr7zw.changeme.nbtapi", "com.shanebeestudios.hg.api.nbt")
+        relocate("fr.mrmicky.fastboard", "com.shanebeestudios.hg.shaded-api.fastboard")
+        relocate("dev.jorel.commandapi", "com.shanebeestudios.hg.shaded-api.commandapi")
+        relocate("de.tr7zw.changeme.nbtapi", "com.shanebeestudios.hg.shaded-api.nbt")
         relocate("org.bstats", "com.shanebeestudios.hg.api.metrics")
         archiveFileName = "HungerGames-${projectVersion}.jar"
     }

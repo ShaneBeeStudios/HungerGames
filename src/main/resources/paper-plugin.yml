@@ -1,0 +1,18 @@
+name: HungerGames
+main: com.shanebeestudios.hg.plugin.HungerGames
+authors: [ShaneBee]
+description: 'A Simple, fun, PvP arena plugin'
+version: '${version}'
+website: 'https://github.com/ShaneBeeStudios/HungerGames'
+api-version: '1.21.5'
+dependencies:
+  server:
+    Vault:
+      load: BEFORE
+      required: false
+    PlaceholderAPI:
+      load: BEFORE
+      required: false
+    MythicMobs:
+      load: BEFORE
+      required: false

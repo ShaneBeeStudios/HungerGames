@@ -1,12 +1,13 @@
 package com.shanebeestudios.hg.plugin.configs;
 
-import com.shanebeestudios.hg.api.parsers.LocationParser;
-import com.shanebeestudios.hg.api.util.Pair;
-import com.shanebeestudios.hg.api.util.Util;
 import com.shanebeestudios.hg.api.game.Game;
 import com.shanebeestudios.hg.api.game.GameArenaData;
 import com.shanebeestudios.hg.api.game.GameBorderData;
 import com.shanebeestudios.hg.api.game.GameRegion;
+import com.shanebeestudios.hg.api.parsers.LocationParser;
+import com.shanebeestudios.hg.api.status.Status;
+import com.shanebeestudios.hg.api.util.Pair;
+import com.shanebeestudios.hg.api.util.Util;
 import com.shanebeestudios.hg.plugin.HungerGames;
 import com.shanebeestudios.hg.plugin.managers.GameManager;
 import org.bukkit.Difficulty;
@@ -84,26 +85,35 @@ public class ArenaConfig {
                 Util.warning("Could not create arenas directory!");
             }
         }
-        int count = 0;
+        int readyCount = 0;
+        int brokenCount = 0;
         for (File arenaFile : this.arenaDirectory.listFiles()) {
             String name = arenaFile.getName();
             if (name.endsWith(".yml")) {
                 YamlConfiguration arenaConfig = YamlConfiguration.loadConfiguration(arenaFile);
                 name = name.replace(".yml", "");
-                loadArena(arenaConfig, name);
+                boolean isReady = loadArena(arenaConfig, name);
                 this.fileConfigMap.put(name, Pair.of(arenaFile, arenaConfig));
-                count++;
+                if (isReady) {
+                    readyCount++;
+                } else {
+                    brokenCount++;
+                }
             }
         }
-        if (count > 0) {
-            Util.log("- <aqua>%s <grey>arenas have been <green>successfully loaded!", count);
-        } else {
+        if (readyCount == 0 && brokenCount == 0) {
             Util.log("- <red>No Arenas found. <grey>Time to create some!");
+        }
+        if (readyCount > 0) {
+            Util.log("- <aqua>%s <grey>arenas have been <green>successfully loaded!", readyCount);
+        }
+        if (brokenCount > 0) {
+            Util.log("- <aqua>%s <grey>arenas have <red>failed to successfully loaded!", brokenCount);
         }
     }
 
     @SuppressWarnings("DataFlowIssue")
-    public void loadArena(FileConfiguration arenaConfig, String arenaName) {
+    public boolean loadArena(FileConfiguration arenaConfig, String arenaName) {
         boolean isReady = true;
         List<Location> spawns = new ArrayList<>();
         Location lobbysign = null;
@@ -229,7 +239,14 @@ public class ArenaConfig {
                 arenaName, world.getName());
             Util.debug(exception);
         }
-        Util.log("- Loaded arena <white>'<aqua>%s<white>'<grey>", arenaName);
+        if (gameArenaData.getStatus() == Status.BROKEN) {
+            Util.warning("<red>Failed to properly initiate arena <white>'<aqua>%s<white>'<grey>", arenaName);
+            Util.warning("Run <white>'<aqua>/hg debug %s<white>' <yellow>to check the status of the arena.", arenaName);
+            isReady = false;
+        } else {
+            Util.log("- Loaded arena <white>'<aqua>%s<white>'<grey>", arenaName);
+        }
+        return isReady;
     }
 
     /**

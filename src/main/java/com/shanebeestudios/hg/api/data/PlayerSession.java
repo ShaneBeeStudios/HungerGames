@@ -1,7 +1,8 @@
 package com.shanebeestudios.hg.api.data;
 
-import com.shanebeestudios.hg.plugin.HungerGames;
+import com.shanebeestudios.hg.api.game.Game;
 import com.shanebeestudios.hg.api.util.Util;
+import com.shanebeestudios.hg.plugin.HungerGames;
 import com.shanebeestudios.hg.plugin.configs.Language;
 import io.papermc.paper.datacomponent.DataComponentTypes;
 import org.bukkit.Location;
@@ -60,11 +61,13 @@ public class PlayerSession {
             Util.sendPrefixedMessage(player, this.lang.command_create_session_next_corner);
         } else if (this.stage == Stage.CORNER_2) {
             this.corner2 = block;
-            if (isBigEnough()) {
+            if (isTooSmall()) {
+                Util.sendPrefixedMessage(player, this.lang.command_create_session_error_too_small);
+            } else if (isOverlapping()) {
+                Util.sendPrefixedMessage(player, this.lang.command_create_session_error_overlap);
+            } else {
                 this.stage = Stage.SPAWN_LOCATIONS;
                 Util.sendPrefixedMessage(player, this.lang.command_create_session_select_spawns);
-            } else {
-                Util.sendPrefixedMessage(player, this.lang.command_create_session_error_too_small);
             }
         } else if (this.stage == Stage.SPAWN_LOCATIONS) {
             if (this.spawnLocations.size() >= this.maxPlayers) {
@@ -96,7 +99,7 @@ public class PlayerSession {
         }
     }
 
-    public void finalizeGame(Player player) {
+    private void finalizeGame(Player player) {
         HungerGames plugin = HungerGames.getPlugin();
         plugin.getGameManager().createGame(this.name,
             this.corner1, this.corner2, this.spawnLocations,
@@ -104,10 +107,20 @@ public class PlayerSession {
         plugin.getSessionManager().endPlayerSession(player);
     }
 
-    public boolean isBigEnough() {
-        if (this.corner1 == null || this.corner2 == null) return false;
+    private boolean isTooSmall() {
+        if (this.corner1 == null || this.corner2 == null) return true;
         BoundingBox boundingBox = BoundingBox.of(this.corner1, this.corner2);
-        return boundingBox.getWidthX() > 5 && boundingBox.getWidthZ() > 5 && boundingBox.getHeight() > 5;
+        return boundingBox.getWidthX() <= 5 || boundingBox.getWidthZ() <= 5 || boundingBox.getHeight() <= 5;
+    }
+
+    private boolean isOverlapping() {
+        if (this.corner1 == null || this.corner2 == null) return true;
+        BoundingBox boundingBox = BoundingBox.of(this.corner1, this.corner2);
+        for (Game game : HungerGames.getPlugin().getGameManager().getGames()) {
+            BoundingBox gameBox = game.getGameArenaData().getGameRegion().getBoundingBox();
+            if (boundingBox.overlaps(gameBox)) return true;
+        }
+        return false;
     }
 
 }

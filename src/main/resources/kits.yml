@@ -36,18 +36,26 @@ kits:
       id: 'minecraft:leather_helmet'
       count: 1
       dyed_color: 11546150
+      hidden_components:
+        - 'minecraft:dyed_color'
     chestplate:
       id: 'minecraft:leather_chestplate'
       count: 1
       dyed_color: 11546150
+      hidden_components:
+        - 'minecraft:dyed_color'
     leggings:
       id: 'minecraft:leather_leggings'
       count: 1
       dyed_color: 11546150
+      hidden_components:
+        - 'minecraft:dyed_color'
     boots:
       id: 'minecraft:leather_boots'
       count: 1
       dyed_color: 11546150
+      hidden_components:
+        - 'minecraft:dyed_color'
     items:
       '1':
         id: 'minecraft:bow'
@@ -98,10 +106,14 @@ kits:
       id: 'minecraft:leather_chestplate'
       count: 1
       dyed_color: 6192150
+      hidden_components:
+        - 'minecraft:dyed_color'
     leggings:
       id: 'minecraft:leather_leggings'
       count: 1
       dyed_color: 6192150
+      hidden_components:
+        - 'minecraft:dyed_color'
     boots:
       id: 'minecraft:leather_boots'
       count: 1
@@ -155,6 +167,8 @@ kits:
       id: 'minecraft:leather_helmet'
       count: 1
       dyed_color: 1908001
+      hidden_components:
+        - 'minecraft:dyed_color'
     chestplate:
       id: 'minecraft:leather_chestplate'
       count: 1
@@ -165,16 +179,22 @@ kits:
       enchantments:
         'minecraft:fire_protection': 1
       dyed_color: 1908001
+      hidden_components:
+        - 'minecraft:dyed_color'
     leggings:
       id: 'minecraft:leather_leggings'
       count: 1
       dyed_color: 1908001
+      hidden_components:
+        - 'minecraft:dyed_color'
     boots:
       id: 'minecraft:leather_boots'
       count: 1
       enchantments:
         'minecraft:feather_falling': 1
       dyed_color: 1908001
+      hidden_components:
+        - 'minecraft:dyed_color'
     items:
       '1':
         id: 'minecraft:potion'

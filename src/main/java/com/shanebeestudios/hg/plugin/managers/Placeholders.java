@@ -1,8 +1,9 @@
 package com.shanebeestudios.hg.plugin.managers;
 
+import com.shanebeestudios.hg.api.data.Leaderboard;
+import com.shanebeestudios.hg.api.game.Game;
 import com.shanebeestudios.hg.plugin.HungerGames;
 import com.shanebeestudios.hg.plugin.configs.Language;
-import com.shanebeestudios.hg.api.data.Leaderboard;
 import me.clip.placeholderapi.expansion.PlaceholderExpansion;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.entity.Player;
@@ -16,11 +17,13 @@ import org.jetbrains.annotations.Nullable;
 public class Placeholders extends PlaceholderExpansion {
 
     private final HungerGames plugin;
+    private final GameManager gameManager;
     private final Leaderboard leaderboard;
     private final Language lang;
 
     public Placeholders(HungerGames plugin) {
         this.plugin = plugin;
+        this.gameManager = plugin.getGameManager();
         this.leaderboard = plugin.getLeaderboard();
         this.lang = plugin.getLang();
     }
@@ -57,7 +60,6 @@ public class Placeholders extends PlaceholderExpansion {
     @Nullable
     @Override
     public String onRequest(OfflinePlayer offlinePlayer, @NotNull String identifier) {
-        GameManager gameManager = this.plugin.getGameManager();
         String[] id = identifier.split("_");
         switch (id[0]) {
             case "lb":
@@ -71,41 +73,51 @@ public class Placeholders extends PlaceholderExpansion {
                         else if (id[2].equalsIgnoreCase("s"))
                             return getStatScores(identifier);
                         else if (id[2].equalsIgnoreCase("c"))
-                            return getStatPlayers(identifier) + " : " + getStatScores(identifier);
+                            return getStatPlayers(identifier) + this.lang.leaderboard_combined_separator + getStatScores(identifier);
                         else if (id[2].equalsIgnoreCase("player"))
                             return getStatsPlayer(identifier, offlinePlayer);
                 }
             case "status":
-                return gameManager.getGame(id[1]).getGameArenaData().getStatus().getStringName();
-            case "player_status":
+                if (getGame(id[1]) == null) return "invalid game";
+                return getGame(id[1]).getGameArenaData().getStatus().getStringName();
+            case "playerstatus":
                 if (offlinePlayer instanceof Player player)
                     return this.plugin.getPlayerManager().getPlayerStatus(player).getStringName();
+                return "offline";
             case "cost":
-                return String.valueOf(gameManager.getGame(id[1]).getGameArenaData().getCost());
+                if (getGame(id[1]) == null) return "invalid game";
+                return String.valueOf(getGame(id[1]).getGameArenaData().getCost());
             case "playerscurrent":
-                return String.valueOf(gameManager.getGame(id[1]).getGamePlayerData().getPlayers().size());
+                if (getGame(id[1]) == null) return "invalid game";
+                return String.valueOf(getGame(id[1]).getGamePlayerData().getPlayers().size());
             case "playersmax":
-                return String.valueOf(gameManager.getGame(id[1]).getGameArenaData().getMaxPlayers());
+                if (getGame(id[1]) == null) return "invalid game";
+                return String.valueOf(getGame(id[1]).getGameArenaData().getMaxPlayers());
             case "playersmin":
-                return String.valueOf(gameManager.getGame(id[1]).getGameArenaData().getMinPlayers());
+                if (getGame(id[1]) == null) return "invalid game";
+                return String.valueOf(getGame(id[1]).getGameArenaData().getMinPlayers());
         }
         return null;
+    }
+
+    private Game getGame(String name) {
+        return this.gameManager.getGame(name);
     }
 
     private String getStatsPlayer(String identifier, OfflinePlayer player) {
         String[] ind = identifier.split("_");
         Leaderboard.Stats stat = Leaderboard.Stats.valueOf(ind[1].toUpperCase());
-        return String.valueOf(leaderboard.getStat(player.getUniqueId(), stat));
+        return String.valueOf(this.leaderboard.getStat(player.getUniqueId(), stat));
     }
 
     private String getStatPlayers(String identifier) {
         String[] ind = identifier.split("_");
         Leaderboard.Stats stat = Leaderboard.Stats.valueOf(ind[1].toUpperCase());
         int leader = (Integer.parseInt(ind[3]));
-        if (leaderboard.getStatsPlayers(stat).size() >= leader) {
-            return leaderboard.getStatsPlayers(stat).get(leader - 1);
+        if (this.leaderboard.getStatsPlayers(stat).size() >= leader + 1) {
+            return this.leaderboard.getStatsPlayers(stat).get(leader);
         } else {
-            return lang.leaderboard_blank_space;
+            return this.lang.leaderboard_blank_space;
         }
     }
 
@@ -113,10 +125,10 @@ public class Placeholders extends PlaceholderExpansion {
         String[] ind = identifier.split("_");
         Leaderboard.Stats stat = Leaderboard.Stats.valueOf(ind[1].toUpperCase());
         int leader = (Integer.parseInt(ind[3]));
-        if (leaderboard.getStatsScores(stat).size() >= leader) {
-            return leaderboard.getStatsScores(stat).get(leader - 1);
+        if (this.leaderboard.getStatsScores(stat).size() >= leader + 1) {
+            return "" + this.leaderboard.getStatsScores(stat).get(leader);
         } else {
-            return lang.leaderboard_blank_space;
+            return this.lang.leaderboard_blank_space;
         }
     }
 

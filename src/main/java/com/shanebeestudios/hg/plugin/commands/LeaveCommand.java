@@ -1,12 +1,12 @@
 package com.shanebeestudios.hg.plugin.commands;
 
-import com.shanebeestudios.hg.plugin.HungerGames;
+import com.shanebeestudios.hg.api.game.Game;
+import com.shanebeestudios.hg.api.game.GameArenaData;
 import com.shanebeestudios.hg.api.status.Status;
 import com.shanebeestudios.hg.api.util.Util;
 import com.shanebeestudios.hg.api.util.Vault;
+import com.shanebeestudios.hg.plugin.HungerGames;
 import com.shanebeestudios.hg.plugin.configs.Config;
-import com.shanebeestudios.hg.api.game.Game;
-import com.shanebeestudios.hg.api.game.GameArenaData;
 import com.shanebeestudios.hg.plugin.permission.Permissions;
 import dev.jorel.commandapi.arguments.Argument;
 import dev.jorel.commandapi.arguments.LiteralArgument;
@@ -28,12 +28,12 @@ public class LeaveCommand extends SubCommand {
                 Game game;
                 if (this.playerManager.hasPlayerData(player)) {
                     game = this.playerManager.getPlayerData(player).getGame();
-                    if (Config.economy) {
+                    if (Config.HAS_ECONOMY) {
                         GameArenaData gameArenaData = game.getGameArenaData();
                         Status status = gameArenaData.getStatus();
                         int cost = gameArenaData.getCost();
                         if ((status == Status.WAITING || status == Status.COUNTDOWN) && cost > 0) {
-                            Vault.economy.depositPlayer(player, cost);
+                            Vault.ECONOMY.depositPlayer(player, cost);
                             Util.sendMessage(player, this.lang.command_leave_refund.replace("<cost>", String.valueOf(cost)));
                         }
                     }

@@ -1,9 +1,9 @@
 package com.shanebeestudios.hg.plugin.listeners;
 
-import com.shanebeestudios.hg.plugin.HungerGames;
+import com.shanebeestudios.hg.api.game.Game;
 import com.shanebeestudios.hg.api.util.Constants;
 import com.shanebeestudios.hg.api.util.Util;
-import com.shanebeestudios.hg.api.game.Game;
+import com.shanebeestudios.hg.plugin.HungerGames;
 import org.bukkit.Bukkit;
 import org.bukkit.Material;
 import org.bukkit.Tag;
@@ -29,7 +29,7 @@ public class GameLobbyListener extends GameListenerBase {
         if (action != Action.RIGHT_CLICK_BLOCK) return;
         Block block = event.getClickedBlock();
         assert block != null;
-        if (!Tag.WALL_SIGNS.isTagged(block.getType())) return;
+        if (!Tag.ALL_SIGNS.isTagged(block.getType())) return;
 
         Sign sign = (Sign) block.getState();
         PersistentDataContainer pdc = sign.getPersistentDataContainer();

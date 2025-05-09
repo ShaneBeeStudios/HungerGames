@@ -1,28 +1,12 @@
 #  This is the language file
 #  Change the messages to your liking
-#  Mini message formatting is accepted, see https://docs.advntr.dev/minimessage/format
-#  Messages that contain <> indicate things that the plugin replaces, such as <player> or <distance>
+#  Mini message formatting is supported, see https://docs.advntr.dev/minimessage/format
+#  Messages that contain <> indicate things that the plugin replaces, such as <player>, <arena> or <distance>
 #  Comments in this file will be removed if we update messages during a plugin update
 #  To restore these messages, backup this file, delete it, and restart your server, this will create a new lang file with all the notes
 
-#  GENERAL PLUGIN MESSAGES
+#  GENERAL PLUGIN MESSAGE PREFIX
 prefix: '<grey>[<aqua>Hunger<dark_aqua>Games<grey>]'
-
-#  <amount> will be replaced with the amount the player will receive on win
-winning-amount: '<grey>You received <aqua>$<amount> <grey>for winning <dark_aqua>Hunger<aqua>Games!'
-
-## Start
-cmd-start-starting: '<aqua><arena><gold> is now starting!'
-
-#  CHEST DROPS
-chest-drop-1: '<gold>*<aqua><strikethrough>                                                                                   <gold>*'
-chest-drop-2: '"<aqua>| <dark_aqua>A Care-Package was just dropped near: <white><x><dark_aqua>, <white><y><dark_aqua>, <white><z>'
-
-#  COMPASS
-#  <player> will be replaced with the name of the nearest player
-#  <distance> will be replaced with the distance of the nearest player
-compass-nearest-player: '<grey>Nearest Player: <aqua><player> <grey>Distance: <green><distance>'
-
 
 # ARENA DEBUG
 arena-debug:
@@ -31,44 +15,56 @@ arena-debug:
   broken-debug: '<red>Your arena is marked as broken! use <aqua>/hg debug <arena> <red>to check for errors!'
   broken-debug-2: '<red>If no errors are found, please use <aqua>/hg toggle <arena><red>!'
   invalid-lobby: '<red>Your LobbyWall is invalid! Please reset them!'
-  set-lobby: '<gold>Set lobbywall: <grey>/hg setlobbywall <arena>'
+  set-lobby: 'Set lobbywall: <aqua>/hg edit <arena> locations lobby_wall'
   ready-run: '<green>Your HungerGames arena <grey><arena><green> is ready to run!'
+  arena-overlap: "<red>The bounds of arena <white>'<aqua><arena1><white>' <red>overlap the bounds of arena <white>'<aqua><arena2><white>'"
+
+# CHEST DROP
+chest-drop:
+  line: '<gold>*<aqua><strikethrough>                                                                                   <gold>*'
+  dropped-at-location: '"<aqua>| <dark_aqua>A Care-Package was just dropped near: <white><x><dark_aqua>, <white><y><dark_aqua>, <white><z>'
 
 # COMMANDS
 command:
   # Base
-  base-not-in-valid-game: '<red>You are not in a valid game!'
-  base-no-region: '<red>You are not in a valid HungerGames region!'
-  base-status: "Status for arena <white>'<aqua><arena><white>' <grey>= <status>"
+  base:
+    invalid-game: "<red>Invalid game <white>'<yellow><arena><white>'"
+    not-in-valid-game: '<red>You are not in a valid game!'
+    no-region: '<red>You are not in a valid HungerGames region!'
+    status: "Status for arena <white>'<aqua><arena><white>' <grey>= <status>"
   # ChestRefill
-  chest-refill-now: '<gold>Chests have now been refilled in <aqua><arena>'
-  ## Create
-  create-error-arguments: '<red>Looks like something went wrong with your command arguments'
-  create-error-already-exists: '<red>Looks like the arena <yellow><arena><red> already exists!'
-  create-error-session-exists: '<red>Looks like you are already in a creation session!'
-  create-divisible-1: '<red>Time-in-seconds must be divisible by 30!'
-  create-divisible-2: '<red>Ex: 90 is divisible by 30'
-  create-minmax: '<red>min-players cannot be more then max-players!'
-  create-session-stick-name: '<aqua><!italic>HungerGames Selection Stick'
-  create-session-start: '<aqua>You are now ready to create your area, click the first corner of your area with the stick.'
-  create-session-next-corner: '<green>First corner selected! <aqua>Now select your second corner.'
-  create-session-select-spawns: '<green>Second corner selected! <aqua>Now start selecting your spawn locations. Simply right click a block where a player will spawn above!'
-  # <selected> = Will be replaced with how many spawns you have selected so far
-  # <left> = Will be replaced with how many more spawns you must select
-  create-session-select-spawns-next: 'Selected <selected>, only <left> more to go.'
-  create-session-error-too-small: '<red>Too small, arena must be at least 5x5x5, please re-select second corner.'
-  create-session-select-sign: '<green>Spawns selected! <aqua>Now select your lobby sign. Make sure you have 3 wall signs in a row, and click on the far left one.'
-  create-session-sign-invalid: '<red>That is not a sign silly!'
-  create-session-already-in-arena: '<red>This location is already within an arena!'
-  create-session-done: "<green>You're all done, your arena is ready to go!"
+  chest-refill:
+    now: '<gold>Chests have now been refilled in <aqua><arena>'
+  # Create
+  create:
+    error-arguments: '<red>Looks like something went wrong with your command arguments'
+    error-already-exists: '<red>Looks like the arena <yellow><arena><red> already exists!'
+    error-session-exists: '<red>Looks like you are already in a creation session!'
+    divisible-1: '<red>Time-in-seconds must be divisible by 30!'
+    divisible-2: '<red>Ex: 90 is divisible by 30'
+    minmax: '<red>min-players cannot be more than max-players!'
+    session-stick-name: '<aqua><!italic>HungerGames Selection Stick'
+    session-start: '<aqua>You are now ready to create your area, click the first corner of your area with the stick.'
+    session-next-corner: '<green>First corner selected! <aqua>Now select your second corner.'
+    session-select-spawns: '<green>Second corner selected! <aqua>Now start selecting your spawn locations. Simply right click a block where a player will spawn above!'
+    # <selected> = Will be replaced with how many spawns you have selected so far
+    # <left> = Will be replaced with how many more spawns you must select
+    session-select-spawns-next: 'Selected <selected>, only <left> more to go.'
+    session-error-too-small: '<red>Too small, arena must be at least 5x5x5, please re-select second corner.'
+    session-error-overlap: "<red>This area overlaps another arena."
+    session-select-sign: '<green>Spawns selected! <aqua>Now select your lobby sign. Make sure you have 3 wall signs in a row, and click on the far left one.'
+    session-sign-invalid: '<red>That is not a sign silly!'
+    session-already-in-arena: '<red>This location is already within an arena!'
+    session-done: "<green>You're all done, your arena is ready to go!"
   # Delete
-  delete-attempt: '<green>Attempting to delete <arena>!'
-  delete-stopping: '<grey>- <red>Game running! <yellow>Stopping..'
-  delete-kicking: '<grey>- <red>Players detected! <yellow>Kicking..'
-  delete-deleted: '<green>Successfully deleted HungerGames arena <aqua><arena><green>!'
-  delete-failed: '<red>Failed to delete arena!'
-  delete-rollback: '<red>The game is currently rolling back and cannot be deleted right now!'
-  delete-noexist: "<red>The arena <white>'<yellow><arena><white>'<red> does not exist!"
+  delete:
+    attempt: '<green>Attempting to delete <arena>!'
+    stopping: '<grey>- <red>Game running! <yellow>Stopping..'
+    kicking: '<grey>- <red>Players detected! <yellow>Kicking..'
+    deleted: '<green>Successfully deleted HungerGames arena <aqua><arena><green>!'
+    failed: '<red>Failed to delete arena!'
+    rollback: '<red>The game is currently rolling back and cannot be deleted right now!'
+    no-exist: "<red>The arena <white>'<yellow><arena><white>'<red> does not exist!"
 
   # Edit
   edit:
@@ -80,46 +76,60 @@ command:
     lobbywall-incorrect: '<red>These signs are not in correct format!'
     lobbywall-format: '<grey>format: <gold>[sign] <red>[sign] [sign]'
   # Exit
-  exit-set-global: '<gold>Global exit has been set to your location!'
-  exit-set-all: 'Exit for all arenas has been set to your location!'
-  exit-set-arena: '<gold>Exit for arena <arena> has been set to your location!'
-  ## Join
-  join-already-in-game: '<red>You are already in a game!'
-  join-already-in-game-other: '<red><player> is already in a game!'
-  join-no-money: '<red>You do not have enough money to join this game. Cost: <aqua>$<cost>'
+  exit:
+    set-global: '<gold>Global exit has been set to your location!'
+    set-all: 'Exit for all arenas has been set to your location!'
+    set-arena: '<gold>Exit for arena <arena> has been set to your location!'
+  force-start:
+    cannot-start: '<red>Cannot start this game right now.'
+    game-already-running: '<red>The game is already running.'
+    no-players: '<red>There are no players to start this game.'
+    starting: '<aqua><arena><grey> is now <green>starting!'
+  # Join
+  join:
+    already-in-game: '<red>You are already in a game!'
+    already-in-game-other: '<red><player> is already in a game!'
+    no-money: '<red>You do not have enough money to join this game. Cost: <aqua>$<cost>'
   # Kit
   kit:
     game-running: '<red>You cannot get a kit at this stage in the game!'
     invalid-name: '<red>Invalid kit name.'
     no-permission: '<red>You do not have permission to use this kit!'
   # Leave
-  leave-left: '<grey>You left <aqua><arena><grey>!'
-  leave-refund: '<grey>You got a refund of <aqua>$<cost> <grey>for leaving the game before it started.'
+  leave:
+    left: '<grey>You left <aqua><arena><grey>!'
+    refund: '<grey>You got a refund of <aqua>$<cost> <grey>for leaving the game before it started.'
   # List
-  list-players: "<gold>Players in arena <white>'<aqua><arena><white>': <aqua><players>"
-  list-players-delimiter: '<white>, <aqua>'
+  list:
+    players: "<gold>Players in arena <white>'<aqua><arena><white>': <aqua><players>"
+    players-delimiter: '<white>, <aqua>'
+  session:
+    no-session: '<red>You do not have a current session.'
+    ended: 'Your current session has ended.'
   # Team
-  team-player-not-available: '<aqua><player> <red>Is not available!'
-  team-only-leader: '<red>Only the leader can invite other players!'
-  team-on-team: '<aqua><player> <gold>is already on a team!'
-  team-max: '<red>You have hit the max team limit!'
-  team-invited: '<aqua><player> <gold>Has been invited!'
-  team-wrong: '<red>Wrong Usage: <gold>/hg team invite <aqua><name>'
-  team-no-pending: '<red>You have no pending invites...'
-  team-joined: '<aqua><player> <gold>Just joined your team!'
-  team-deny: '<aqua><player> <gold>has denied your invitation!'
-  team-no-team: '<red>You are not on a team!'
-  team-not-on-team: '<aqua><player> <red>is not on your team!'
-  team-tp: '<gold>Teleporting to <aqua><player>'
-  team-self: '<red>You can not invite yourself to your own team.'
-  team-created: "<green>Created team: <aqua><name>"
-  team-already-exists: "<red>Team <aqua><name> <red>already exists."
-  team-already-have: "<red>You have already created a team: <aqua><name>"
-  team-none: "<red>You do not have a team, create one first with command <aqua>'/hg team create <name>'"
-  ## Toggle
-  toggle-unlocked: '<aqua><arena><gold> is now <green>UNLOCKED!'
-  toggle-locked: '<dark_aqua><arena><aqua> is now <dark_red>LOCKED<aqua>!'
-  toggle-running: '<aqua><arena><red> is running and cannot be toggled!'
+  team:
+    player-not-available: '<aqua><player> <red>is not available!'
+    only-leader: '<red>Only the leader can invite other players!'
+    on-team: '<aqua><player> <gold>is already on a team!'
+    max: '<red>You have hit the max team limit!'
+    invited: '<aqua><player> <gold>Has been invited!'
+    wrong: '<red>Wrong Usage: <gold>/hg team invite <aqua><name>'
+    no-pending: '<red>You have no pending invites...'
+    joined: '<aqua><player> <gold>Just joined your team!'
+    deny: '<aqua><player> <gold>has denied your invitation!'
+    no-team: '<red>You are not on a team!'
+    not-on-team: '<aqua><player> <red>is not on your team!'
+    tp: '<gold>Teleporting to <aqua><player>'
+    self: '<red>You can not invite yourself to your own team.'
+    created: "<green>Created team: <aqua><name>"
+    already-exists: "<red>Team <aqua><name> <red>already exists."
+    already-have: "<red>You have already created a team: <aqua><name>"
+    none: "<red>You do not have a team, create one first with command <aqua>'/hg team create <name>'"
+  # Toggle
+  toggle:
+    unlocked: '<aqua><arena><gold> is now <green>UNLOCKED!'
+    locked: '<dark_aqua><arena><aqua> is now <dark_red>LOCKED<aqua>!'
+    running: '<aqua><arena><red> is running and cannot be toggled!'
 
 # DEATH MESSAGES
 death-messages:
@@ -181,6 +191,7 @@ game:
   waiting-join: "<aqua><player> <grey>joined arena <white>'<aqua><arena><white>'"
   #  <amount> will be replaced with amount of players left to start a game
   waiting-players-to-start: '<aqua><amount> <gold>players to start!'
+  joined-waiting-to-teleport: "You have joined arena <white>'<aqua><arena><white>'<grey>! You will teleport when the game is ready to go."
 
   running: "<red>The game <white>'<aqua><arena><white>' <red>is already running and cannot be joined!"
   join: "Use: <aqua>/hg join <arena><grey> to join!"
@@ -205,6 +216,28 @@ game:
   #  <roam> will be replaced with the time the players can roam for
   roam-time: ' <yellow> You have <roam> seconds to roam without taking damage!'
   roam-finished: '<red>Free-Roam is over, PVP is now enabled!'
+  #  <amount> will be replaced with the amount the player will receive on win
+  winning-amount: '<grey>You received <aqua>$<amount> <grey>for winning <dark_aqua>Hunger<aqua>Games!'
+
+# ITEM
+item:
+  # COMPASS
+  # <player> will be replaced with the name of the nearest player
+  # <distance> will be replaced with the distance of the nearest player
+  compass:
+    nearest-player: '<grey>Nearest Player: <aqua><player> <grey>Distance: <green><distance>'
+
+  # TRACKING STICK
+  tracking-stick:
+    name: 'Tracking Stick'
+    lore:
+      - '<yellow><!italic>Click your stick'
+      - '<yellow><!italic>to track nearby players'
+    nearest: '"<aqua><player> <yellow>is <aqua><range> <yellow>blocks away from you: <aqua><location>"'
+    no-near: '<red>Could not locate any nearby players!'
+    bar: '<green>[]------------------------------------------[]'
+    new1: '<green> |<gold>   You have been given a player-tracking stick! <green> |'
+    new2: '<green> |<gold>   Swing the stick to track players!                <green> |'
 
 # KIT MESSAGES
 kits:
@@ -233,6 +266,7 @@ kits:
     potion-effect-none: '<red>No potion effects!'
     # <type> will be used as a translation key to translate to the client's language
     potion-effect-lore: '<!italic>- <yellow><lang:<type>>'
+    pre-select: "You have preselected kit <white>'<aqua><kit><white>'<grey> and will be given the items when you enter the arena."
 
 # LEADERBOARD
 leaderboard:
@@ -249,16 +283,30 @@ listener:
   command-handler-no-command: '<red>You can not use non-HungerGames commands while in-game!'
   command-handler-playing: '<red>This player is currently playing <aqua>HungerGames!'
 
-# LOBBY SIGN
+# LOBBY SIGNS
+# Each sign MUST have 4 lines or else they'll error
+# Placeholders:
+# - <arena> = Will be replaced with arena name
+# - <cost> = Will be replaced with arena cost (if arena cost <= 0, this line will be omitted)
+# - <status> = Will be replaced with arena status
+# - <alive> = Will be replaced with amount of alive players in game
+# - <max_players> = Will be replaced with max amount of players of arena
 lobby-signs:
   sign-1:
-    line-1: '<dark_blue>Hunger Games'
-    line-3: '<black>Click To Join'
-    line-4: 'Cost $<aqua><cost>'
+    - '<dark_blue>Hunger Games'
+    - '<aqua><arena>'
+    - '<black>Click To Join'
+    - 'Cost $<aqua><cost>'
   sign-2:
-    line-1: '<dark_blue>Game Status'
+    - '<dark_blue>Game Status'
+    - '<status>'
+    - ''
+    - ''
   sign-3:
-    line-1: '<dark_blue>Alive'
+    - '<dark_blue>Alive'
+    - '<click:run_command:/hg list <arena>><alive>/<max_players>'
+    - ''
+    - ''
 
 # SPECTATOR
 spectate:
@@ -285,15 +333,15 @@ scoreboard:
 # STATUSES
 status:
   game-status:
-    running: '<green>Running'
-    stopped: '<dark_red>Stopped'
     ready: '<dark_purple>Ready'
     waiting: '<aqua>Waiting...'
-    broken: '<dark_red>BROKEN'
-    rollback: '<red>Restoring...'
-    not-ready: '<dark_blue>NotReady'
-    beginning: '<green>Running'
     countdown: '<aqua>Starting...'
+    free-roam: '<green>Running'
+    running: '<green>Running'
+    stopped: '<dark_red>Stopped'
+    rollback: '<red>Restoring...'
+    broken: '<dark_red>BROKEN'
+    not-ready: '<dark_blue>NotReady'
   player-status:
     in-game: 'In Game'
     spectator: 'Spectator'
@@ -307,17 +355,5 @@ team:
   invite-4: '<gold>*<aqua><strikethrough>                                                                             <gold>*'
   joined: '<dark_aqua>You successfully joined this team!'
   # <name> will be replaced with team name
-  prefix: "<grey>[<green>Team-<name><grey>]"
+  prefix: "<grey>[<green><name><grey>]"
   suffix: ""
-
-# TRACKING STICK
-tracking-stick:
-  name: 'Tracking Stick'
-  lore:
-    - '<yellow><!italic>Click your stick'
-    - '<yellow><!italic>to track nearby players'
-  nearest: '"<aqua><player> <yellow>is <aqua><range> <yellow>blocks away from you: <aqua><location>"'
-  no-near: '<red>Could not locate any nearby players!'
-  bar: '<green>[]------------------------------------------[]'
-  new1: '<green> |<gold>   You have been given a player-tracking stick! <green> |'
-  new2: '<green> |<gold>   Swing the stick to track players!                <green> |'

@@ -1,10 +1,10 @@
 package com.shanebeestudios.hg.plugin.listeners;
 
-import com.shanebeestudios.hg.plugin.HungerGames;
-import com.shanebeestudios.hg.api.util.ItemUtils;
-import com.shanebeestudios.hg.api.util.Util;
 import com.shanebeestudios.hg.api.data.PlayerData;
 import com.shanebeestudios.hg.api.game.Game;
+import com.shanebeestudios.hg.api.util.ItemUtils;
+import com.shanebeestudios.hg.api.util.Util;
+import com.shanebeestudios.hg.plugin.HungerGames;
 import org.bukkit.Location;
 import org.bukkit.block.Block;
 import org.bukkit.entity.Entity;
@@ -49,7 +49,7 @@ public class GameTrackingStickListener extends GameListenerBase {
 
                 Location location = nearbyEntity.getLocation();
                 int range = (int) player.getLocation().distance(location);
-                Util.sendMessage(player, this.lang.tracking_stick_nearest
+                Util.sendMessage(player, this.lang.item_tracking_stick_nearest
                     .replace("<player>", nearbyEntity.getName())
                     .replace("<range>", "" + range)
                     .replace("<location>", getDirection(player.getLocation().getBlock(), location.getBlock())));
@@ -58,7 +58,7 @@ public class GameTrackingStickListener extends GameListenerBase {
                 return;
             }
         }
-        Util.sendMessage(player, this.lang.tracking_stick_no_near);
+        Util.sendMessage(player, this.lang.item_tracking_stick_no_near);
     }
 
     private String getDirection(Block block, Block block1) {

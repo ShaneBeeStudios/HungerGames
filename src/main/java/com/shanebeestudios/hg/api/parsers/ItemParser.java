@@ -3,15 +3,18 @@ package com.shanebeestudios.hg.api.parsers;
 import com.shanebeestudios.hg.api.registry.Registries;
 import com.shanebeestudios.hg.api.util.NBTApi;
 import com.shanebeestudios.hg.api.util.Util;
+import io.papermc.paper.datacomponent.DataComponentType;
 import io.papermc.paper.datacomponent.DataComponentTypes;
 import io.papermc.paper.datacomponent.item.DyedItemColor;
 import io.papermc.paper.datacomponent.item.ItemEnchantments;
 import io.papermc.paper.datacomponent.item.PotionContents;
+import io.papermc.paper.datacomponent.item.TooltipDisplay;
 import net.kyori.adventure.text.Component;
 import org.bukkit.Color;
 import org.bukkit.NamespacedKey;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.enchantments.Enchantment;
+import org.bukkit.inventory.ItemFlag;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.ItemType;
 import org.bukkit.potion.PotionEffect;
@@ -22,12 +25,10 @@ import org.jetbrains.annotations.Nullable;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
-import java.util.Map;
-import java.util.concurrent.atomic.AtomicInteger;
 
 public class ItemParser {
 
-    @SuppressWarnings({"UnstableApiUsage", "unchecked"})
+    @SuppressWarnings({"UnstableApiUsage"})
     public static @Nullable ItemStack parseItem(@Nullable ConfigurationSection config) {
         if (config == null) return null;
 
@@ -134,25 +135,6 @@ public class ItemParser {
         }
 
         // POTION_EFFECT
-//        if (config.contains("potion_effects")) {
-//            List<Map<String, Object>> potionEffectsList = (List<Map<String, Object>>) config.getList("potion_effects");
-//            assert potionEffectsList != null;
-//            PotionContents.Builder builder = PotionContents.potionContents();
-//            AtomicInteger color = new AtomicInteger(-1);
-//            potionEffectsList.forEach(entry -> {
-//                PotionEffect potionEffect = parsePotionEffect(entry);
-//                if (potionEffect != null) {
-//                    builder.addCustomEffect(potionEffect);
-//                    if (entry.containsKey("custom_color")) {
-//                        color.set((int) entry.get("custom_color"));
-//                    }
-//                }
-//            });
-//            if (color.get() != -1) builder.customColor(Color.fromRGB(color.get()));
-//            itemStack.setData(DataComponentTypes.POTION_CONTENTS, builder.build());
-//        }
-
-        // POTION_EFFECT
         if (config.isConfigurationSection("potion_effects")) {
             ConfigurationSection potionEffectsSection = config.getConfigurationSection("potion_effects");
             assert potionEffectsSection != null;
@@ -170,11 +152,32 @@ public class ItemParser {
             itemStack.setData(DataComponentTypes.POTION_CONTENTS, builder.build());
         }
 
-
         // DYED_COLOR
         if (config.contains("dyed_color")) {
             int color = config.getInt("dyed_color");
-            itemStack.setData(DataComponentTypes.DYED_COLOR, DyedItemColor.dyedItemColor(Color.fromRGB(color), false));
+            itemStack.setData(DataComponentTypes.DYED_COLOR, DyedItemColor.dyedItemColor().color(Color.fromRGB(color)));
+            if (!Util.RUNNING_1_21_5) {
+                itemStack.addItemFlags(ItemFlag.HIDE_ADDITIONAL_TOOLTIP);
+            }
+        }
+
+        // HIDDEN COMPONENTS
+        if (Util.RUNNING_1_21_5 && config.isList("hidden_components")) {
+            TooltipDisplay.Builder builder = TooltipDisplay.tooltipDisplay();
+            for (String compKey : config.getStringList("hidden_components")) {
+                NamespacedKey namespacedKey = NamespacedKey.fromString(compKey);
+                if (namespacedKey == null) {
+                    Util.warning("Invalid component key: " + compKey);
+                    continue;
+                }
+                DataComponentType type = Registries.DATA_COMPONENT_TYPE_REGISTRY.get(namespacedKey);
+                if (type == null) {
+                    Util.warning("Invalid component key: " + compKey);
+                    continue;
+                }
+                builder.addHiddenComponents(type);
+            }
+            itemStack.setData(DataComponentTypes.TOOLTIP_DISPLAY, builder.build());
         }
 
         // NBT

@@ -1,7 +1,7 @@
 package com.shanebeestudios.hg.api.events;
 
-import com.shanebeestudios.hg.api.game.Game;
 import com.shanebeestudios.hg.api.data.ItemData.ChestType;
+import com.shanebeestudios.hg.api.game.Game;
 import org.bukkit.block.Block;
 import org.bukkit.event.Event;
 import org.bukkit.event.HandlerList;

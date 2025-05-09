@@ -12,3 +12,6 @@ trim_trailing_whitespace = true
 ij_continuation_indent_size = 4
 [*.yml]
 indent_size = 2
+[*.java]
+ij_java_class_count_to_use_import_on_demand = 999999
+ij_java_names_count_to_use_import_on_demand = 999999

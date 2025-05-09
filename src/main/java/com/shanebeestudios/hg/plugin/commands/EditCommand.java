@@ -1,11 +1,11 @@
 package com.shanebeestudios.hg.plugin.commands;
 
-import com.shanebeestudios.hg.plugin.HungerGames;
 import com.shanebeestudios.hg.api.command.CustomArg;
-import com.shanebeestudios.hg.api.util.Util;
 import com.shanebeestudios.hg.api.game.Game;
 import com.shanebeestudios.hg.api.game.GameArenaData;
 import com.shanebeestudios.hg.api.game.GameBorderData;
+import com.shanebeestudios.hg.api.util.Util;
+import com.shanebeestudios.hg.plugin.HungerGames;
 import com.shanebeestudios.hg.plugin.permission.Permissions;
 import dev.jorel.commandapi.CommandAPI;
 import dev.jorel.commandapi.arguments.Argument;
@@ -32,9 +32,8 @@ public class EditCommand extends SubCommand {
         return LiteralArgument.literal("edit")
             .withPermission(Permissions.COMMAND_EDIT.permission())
             .then(CustomArg.GAME.get("game")
-                .then(chestRefillRepeat())
-                .then(chestRefillTime())
                 .then(border())
+                .then(chestRefill())
                 .then(info())
                 .then(locations())
             );
@@ -46,7 +45,7 @@ public class EditCommand extends SubCommand {
             .then(LiteralArgument.literal("final_size")
                 .then(new IntegerArgument("final_size", 5)
                     .executes(info -> {
-                        Game game = CustomArg.getGame(info);
+                        Game game = info.args().getByClass("game", Game.class);
                         int finalSize = info.args().getByClass("final_size", Integer.class);
                         GameBorderData gameBorderData = game.getGameBorderData();
                         gameBorderData.setFinalBorderSize(finalSize);
@@ -56,7 +55,7 @@ public class EditCommand extends SubCommand {
             .then(LiteralArgument.literal("countdown_start")
                 .then(new IntegerArgument("countdown_start", 5)
                     .executes(info -> {
-                        Game game = CustomArg.getGame(info);
+                        Game game = info.args().getByClass("game", Game.class);
                         int countdownStart = info.args().getByClass("countdown_start", Integer.class);
                         GameBorderData gameBorderData = game.getGameBorderData();
                         gameBorderData.setBorderCountdownStart(countdownStart);
@@ -66,7 +65,7 @@ public class EditCommand extends SubCommand {
             .then(LiteralArgument.literal("countdown_end")
                 .then(new IntegerArgument("countdown_end", 5)
                     .executes(info -> {
-                        Game game = CustomArg.getGame(info);
+                        Game game = info.args().getByClass("game", Game.class);
                         int countdownEnd = info.args().getByClass("countdown_end", Integer.class);
                         GameBorderData gameBorderData = game.getGameBorderData();
                         gameBorderData.setBorderCountdownEnd(countdownEnd);
@@ -77,7 +76,7 @@ public class EditCommand extends SubCommand {
             .then(LiteralArgument.literal("center_location")
                 .then(new Location2DArgument("center_location", LocationType.BLOCK_POSITION)
                     .executes(info -> {
-                        Game game = CustomArg.getGame(info);
+                        Game game = info.args().getByClass("game", Game.class);
                         Location2D centerLocation = info.args().getByClass("center_location", Location2D.class);
                         GameBorderData gameBorderData = game.getGameBorderData();
                         gameBorderData.setCenterLocation(convert(centerLocation));
@@ -87,46 +86,43 @@ public class EditCommand extends SubCommand {
     }
 
     @SuppressWarnings("DataFlowIssue")
-    private Argument<?> chestRefillTime() {
-        return LiteralArgument.literal("chest-refill-time")
-            .then(new IntegerArgument("time", 30)
-                .executes(info -> {
-                    Game game = CustomArg.getGame(info);
-                    CommandSender sender = info.sender();
-                    String name = game.getGameArenaData().getName();
-                    int time = info.args().getByClass("time", Integer.class);
-                    if (time % 30 != 0) {
-                        Util.sendPrefixedMessage(sender, "<yellow><time> <red>must be in increments of 30");
-                        return;
-                    }
-                    game.getGameArenaData().setChestRefillTime(time);
-                    saveGame(game);
-                    Util.sendPrefixedMessage(sender, this.lang.command_edit_chest_refill_time_set
-                        .replace("<arena>", name)
-                        .replace("<sec>", String.valueOf(time)));
+    private Argument<?> chestRefill() {
+        return LiteralArgument.literal("chest-refill")
+            .then(LiteralArgument.literal("time")
+                .then(new IntegerArgument("seconds", 30)
+                    .executes(info -> {
+                        Game game = info.args().getByClass("game", Game.class);
+                        CommandSender sender = info.sender();
+                        String name = game.getGameArenaData().getName();
+                        int time = info.args().getByClass("seconds", Integer.class);
+                        if (time % 30 != 0) {
+                            Util.sendPrefixedMessage(sender, "<yellow><time> <red>must be in increments of 30");
+                            return;
+                        }
+                        game.getGameArenaData().setChestRefillTime(time);
+                        saveGame(game);
+                        Util.sendPrefixedMessage(sender, this.lang.command_edit_chest_refill_time_set
+                            .replace("<arena>", name)
+                            .replace("<sec>", String.valueOf(time)));
 
-                }));
-    }
-
-    @SuppressWarnings("DataFlowIssue")
-    private Argument<?> chestRefillRepeat() {
-        return LiteralArgument.literal("chest-refill-repeat")
-            .then(new IntegerArgument("time", 30)
-                .executes(info -> {
-                    Game game = CustomArg.getGame(info);
-                    CommandSender sender = info.sender();
-                    String name = game.getGameArenaData().getName();
-                    int time = info.args().getByClass("time", Integer.class);
-                    if (time % 30 != 0) {
-                        Util.sendPrefixedMessage(sender, "<yellow><time> <red>must be in increments of 30");
-                        return;
-                    }
-                    game.getGameArenaData().setChestRefillRepeat(time);
-                    saveGame(game);
-                    Util.sendPrefixedMessage(sender, this.lang.command_edit_chest_refill_repeat_set
-                        .replace("<arena>", name)
-                        .replace("<sec>", String.valueOf(time)));
-                }));
+                    })))
+            .then(LiteralArgument.literal("repeat")
+                .then(new IntegerArgument("seconds", 30)
+                    .executes(info -> {
+                        Game game = info.args().getByClass("game", Game.class);
+                        CommandSender sender = info.sender();
+                        String name = game.getGameArenaData().getName();
+                        int time = info.args().getByClass("seconds", Integer.class);
+                        if (time % 30 != 0) {
+                            Util.sendPrefixedMessage(sender, "<yellow><time> <red>must be in increments of 30");
+                            return;
+                        }
+                        game.getGameArenaData().setChestRefillRepeat(time);
+                        saveGame(game);
+                        Util.sendPrefixedMessage(sender, this.lang.command_edit_chest_refill_repeat_set
+                            .replace("<arena>", name)
+                            .replace("<sec>", String.valueOf(time)));
+                    })));
     }
 
     @SuppressWarnings("DataFlowIssue")
@@ -135,7 +131,7 @@ public class EditCommand extends SubCommand {
             .then(LiteralArgument.literal("free_roam_time")
                 .then(new IntegerArgument("seconds", -1)
                     .executes(info -> {
-                        Game game = CustomArg.getGame(info);
+                        Game game = info.args().getByClass("game", Game.class);
                         int freeRoamTime = info.args().getByClass("seconds", Integer.class);
                         game.getGameArenaData().setFreeRoamTime(freeRoamTime);
                         Util.sendPrefixedMessage(info.sender(), "Free roam time set to %s", freeRoamTime);
@@ -144,7 +140,7 @@ public class EditCommand extends SubCommand {
             .then(LiteralArgument.literal("cost")
                 .then(new IntegerArgument("dollars", 0)
                     .executes(info -> {
-                        Game game = CustomArg.getGame(info);
+                        Game game = info.args().getByClass("game", Game.class);
                         int cost = info.args().getByClass("dollars", Integer.class);
                         game.getGameArenaData().setCost(cost);
                         Util.sendPrefixedMessage(info.sender(), "Cost set to %s", cost);
@@ -153,7 +149,7 @@ public class EditCommand extends SubCommand {
             .then(LiteralArgument.literal("timer")
                 .then(new IntegerArgument("seconds", 30)
                     .executes(info -> {
-                        Game game = CustomArg.getGame(info);
+                        Game game = info.args().getByClass("game", Game.class);
                         int timerSeconds = info.args().getByClass("seconds", Integer.class);
                         game.getGameArenaData().setTimer(timerSeconds);
                         Util.sendPrefixedMessage(info.sender(), "Timer set to %s", timerSeconds);
@@ -162,7 +158,7 @@ public class EditCommand extends SubCommand {
             .then(LiteralArgument.literal("min_players")
                 .then(new IntegerArgument("min", 2)
                     .executes(info -> {
-                        Game game = CustomArg.getGame(info);
+                        Game game = info.args().getByClass("game", Game.class);
                         int minPlayers = info.args().getByClass("min", Integer.class);
                         if (minPlayers > game.getGameArenaData().getMaxPlayers()) {
                             throw CommandAPI.failWithString("Min players cannot be greater than max players");
@@ -174,7 +170,7 @@ public class EditCommand extends SubCommand {
             .then(LiteralArgument.literal("max_players")
                 .then(new IntegerArgument("max", 2)
                     .executes(info -> {
-                        Game game = CustomArg.getGame(info);
+                        Game game = info.args().getByClass("game", Game.class);
                         int maxPlayers = info.args().getByClass("max", Integer.class);
                         if (maxPlayers < game.getGameArenaData().getMinPlayers()) {
                             throw CommandAPI.failWithString("Max players cannot be less than min players");
@@ -189,10 +185,11 @@ public class EditCommand extends SubCommand {
         return LiteralArgument.literal("locations")
             .then(LiteralArgument.literal("lobby_wall")
                 .executesPlayer(info -> {
-                    Game game = CustomArg.getGame(info);
+                    Game game = info.args().getByClass("game", Game.class);
+                    assert game != null;
                     Player player = info.sender();
                     Block targetBlock = player.getTargetBlockExact(10);
-                    if (targetBlock != null && Tag.WALL_SIGNS.isTagged(targetBlock.getType()) && game.getGameBlockData().setLobbyBlock(targetBlock.getLocation())) {
+                    if (targetBlock != null && Tag.ALL_SIGNS.isTagged(targetBlock.getType()) && game.getGameBlockData().setLobbyBlock(targetBlock.getLocation())) {
                         Util.sendPrefixedMessage(player, this.lang.command_edit_lobbywall_set);
                         saveGame(game);
                     } else {
@@ -202,7 +199,8 @@ public class EditCommand extends SubCommand {
                 }))
             .then(LiteralArgument.literal("clear_spawns")
                 .executes(info -> {
-                    Game game = CustomArg.getGame(info);
+                    Game game = info.args().getByClass("game", Game.class);
+                    assert game != null;
                     game.getGameArenaData().clearSpawns();
                     Util.sendPrefixedMessage(info.sender(), "Spawns have been cleared. <yellow>Arena <white>'<aqua>%s<white>'<yellow> has a max of <red>%s<yellow> players, so make sure to add spawns for them.",
                         game.getGameArenaData().getName(), game.getGameArenaData().getMaxPlayers());
@@ -211,11 +209,12 @@ public class EditCommand extends SubCommand {
             .then(LiteralArgument.literal("add_spawn")
                 .then(new LocationArgument("location", LocationType.BLOCK_POSITION)
                     .executesPlayer(info -> {
-                        Game game = CustomArg.getGame(info);
+                        Game game = info.args().getByClass("game", Game.class);
+                        assert game != null;
                         GameArenaData gameArenaData = game.getGameArenaData();
                         Location location = info.args().getByClass("location", Location.class);
                         assert location != null;
-                        location.add(0.5,0,0.5);
+                        location.add(0.5, 0, 0.5);
                         location.setPitch(0);
                         location.setYaw(info.sender().getLocation().getYaw());
                         gameArenaData.addSpawn(location);

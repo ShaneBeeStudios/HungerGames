@@ -1,16 +1,16 @@
 package com.shanebeestudios.hg.plugin.managers;
 
-import com.shanebeestudios.hg.plugin.HungerGames;
-import com.shanebeestudios.hg.api.registry.Registries;
-import com.shanebeestudios.hg.api.util.ItemUtils;
-import com.shanebeestudios.hg.api.util.Util;
-import com.shanebeestudios.hg.plugin.configs.Config;
-import com.shanebeestudios.hg.plugin.configs.Language;
 import com.shanebeestudios.hg.api.data.Leaderboard;
 import com.shanebeestudios.hg.api.events.PlayerDeathGameEvent;
 import com.shanebeestudios.hg.api.game.Game;
 import com.shanebeestudios.hg.api.game.GameCommandData;
 import com.shanebeestudios.hg.api.game.GamePlayerData;
+import com.shanebeestudios.hg.api.registry.Registries;
+import com.shanebeestudios.hg.api.util.ItemUtils;
+import com.shanebeestudios.hg.api.util.Util;
+import com.shanebeestudios.hg.plugin.HungerGames;
+import com.shanebeestudios.hg.plugin.configs.Config;
+import com.shanebeestudios.hg.plugin.configs.Language;
 import io.papermc.paper.datacomponent.DataComponentTypes;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.TranslatableComponent;
@@ -188,6 +188,7 @@ public class KillManager {
     public void processDeath(Player player, Game game, Entity attacker, DamageSource damageSource) {
         List<ItemStack> drops = dropInventoryOfPlayer(player);
         player.setHealth(20);
+        player.getInventory().clear();
         Bukkit.getScheduler().runTaskLater(this.plugin, () -> {
             GamePlayerData gamePlayerData = game.getGamePlayerData();
             String deathString;
@@ -241,7 +242,7 @@ public class KillManager {
             // Call bukkit player death event so other plugins can pick up on that too
             PlayerDeathEvent playerDeathEvent = new PlayerDeathEvent(player, damageSource,
                 drops, 0,
-                Util.getMini(deathString));
+                Util.getMini(deathString), true);
             playerDeathEvent.callEvent();
 
             Bukkit.getScheduler().scheduleSyncDelayedTask(this.plugin, () -> checkStick(game), 40L);
@@ -270,12 +271,12 @@ public class KillManager {
     }
 
     private void checkStick(Game game) {
-        if (Config.PLAYERS_FOR_TRACKING_STICK == game.getGamePlayerData().getPlayers().size()) {
+        if (Config.SETTINGS_PLAYERS_FOR_TRACKING_STICK == game.getGamePlayerData().getPlayers().size()) {
             for (Player player : game.getGamePlayerData().getPlayers()) {
-                Util.sendMessage(player, this.lang.tracking_stick_bar);
-                Util.sendMessage(player, this.lang.tracking_stick_new1);
-                Util.sendMessage(player, this.lang.tracking_stick_new2);
-                Util.sendMessage(player, this.lang.tracking_stick_bar);
+                Util.sendMessage(player, this.lang.item_tracking_stick_bar);
+                Util.sendMessage(player, this.lang.item_tracking_stick_new1);
+                Util.sendMessage(player, this.lang.item_tracking_stick_new2);
+                Util.sendMessage(player, this.lang.item_tracking_stick_bar);
                 player.getInventory().addItem(ItemUtils.getTrackingStick());
             }
         }

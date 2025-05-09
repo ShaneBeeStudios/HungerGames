@@ -1,4 +1,7 @@
 # ARENA GAMES LEADERBOARD
 # This file saves stats from arenas
 
-Total-Wins:
+wins: {}
+kills: {}
+deaths: {}
+games: {}

@@ -1,8 +1,8 @@
 package com.shanebeestudios.hg.plugin.commands;
 
+import com.shanebeestudios.hg.api.game.Game;
 import com.shanebeestudios.hg.plugin.HungerGames;
 import com.shanebeestudios.hg.plugin.configs.Language;
-import com.shanebeestudios.hg.api.game.Game;
 import com.shanebeestudios.hg.plugin.managers.GameManager;
 import com.shanebeestudios.hg.plugin.managers.PlayerManager;
 import dev.jorel.commandapi.arguments.Argument;

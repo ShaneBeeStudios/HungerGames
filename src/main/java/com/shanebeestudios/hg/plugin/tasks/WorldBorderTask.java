@@ -1,11 +1,11 @@
 package com.shanebeestudios.hg.plugin.tasks;
 
-import com.shanebeestudios.hg.plugin.configs.Config;
-import com.shanebeestudios.hg.plugin.configs.Language;
 import com.shanebeestudios.hg.api.game.Game;
 import com.shanebeestudios.hg.api.game.GameArenaData;
 import com.shanebeestudios.hg.api.game.GameBorderData;
 import com.shanebeestudios.hg.api.game.GamePlayerData;
+import com.shanebeestudios.hg.plugin.configs.Config;
+import com.shanebeestudios.hg.plugin.configs.Language;
 import org.bukkit.Bukkit;
 import org.bukkit.WorldBorder;
 import org.bukkit.damage.DamageSource;

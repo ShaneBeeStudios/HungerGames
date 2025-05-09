@@ -1,7 +1,7 @@
 package com.shanebeestudios.hg.api.events;
 
-import com.shanebeestudios.hg.api.util.Util;
 import com.shanebeestudios.hg.api.game.Game;
+import com.shanebeestudios.hg.api.util.Util;
 import org.bukkit.damage.DamageSource;
 import org.bukkit.entity.Player;
 import org.bukkit.event.HandlerList;
@@ -23,7 +23,7 @@ public class PlayerDeathGameEvent extends PlayerDeathEvent {
 
     public PlayerDeathGameEvent(@NotNull Player player, DamageSource damageSource,
                                 @NotNull List<ItemStack> drops, @Nullable String deathMessage, @NotNull Game game) {
-        super(player, damageSource, drops, 0, Util.getMini(deathMessage));
+        super(player, damageSource, drops, 0, Util.getMini(deathMessage), true);
         this.game = game;
     }
 
