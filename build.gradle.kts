@@ -41,7 +41,7 @@ dependencies {
     compileOnly("io.papermc.paper:paper-api:${minecraftVersion}-R0.1-SNAPSHOT")
 
     // Command Api
-    implementation("dev.jorel:commandapi-bukkit-shade-mojang-mapped:10.0.0")
+    implementation("dev.jorel:commandapi-bukkit-shade-mojang-mapped:10.0.1")
 
     // bStats
     implementation("org.bstats:bstats-bukkit:3.1.0")
@@ -53,7 +53,7 @@ dependencies {
     compileOnly("me.clip:placeholderapi:2.11.6")
 
     // NBT-API
-    implementation("de.tr7zw:item-nbt-api:2.14.2-SNAPSHOT") {
+    implementation("de.tr7zw:item-nbt-api:2.15.0") {
         isTransitive = false
     }
 
