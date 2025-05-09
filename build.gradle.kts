@@ -3,7 +3,7 @@ plugins {
     id("com.gradleup.shadow") version "8.3.6"
 }
 // Version of HungerGames
-val projectVersion = "5.0.0-beta1"
+val projectVersion = "5.0.0-beta2"
 // Where this builds on the server
 val serverLocation = "1-21-5"
 // Minecraft version to build against
