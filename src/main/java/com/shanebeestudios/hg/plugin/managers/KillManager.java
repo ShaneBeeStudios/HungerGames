@@ -242,7 +242,7 @@ public class KillManager {
             // Call bukkit player death event so other plugins can pick up on that too
             PlayerDeathEvent playerDeathEvent = new PlayerDeathEvent(player, damageSource,
                 drops, 0,
-                Util.getMini(deathString));
+                Util.getMini(deathString), true);
             playerDeathEvent.callEvent();
 
             Bukkit.getScheduler().scheduleSyncDelayedTask(this.plugin, () -> checkStick(game), 40L);
