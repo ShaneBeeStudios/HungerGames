@@ -23,7 +23,8 @@ public class PlayerDeathGameEvent extends PlayerDeathEvent {
 
     public PlayerDeathGameEvent(@NotNull Player player, DamageSource damageSource,
                                 @NotNull List<ItemStack> drops, @Nullable String deathMessage, @NotNull Game game) {
-        super(player, damageSource, drops, 0, Util.getMini(deathMessage), true);
+        super(player, damageSource, drops, 0, 0, 0, 0,
+            Util.getMini(deathMessage), false);
         this.game = game;
     }
 
