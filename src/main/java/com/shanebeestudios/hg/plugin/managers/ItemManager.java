@@ -13,7 +13,6 @@ import org.bukkit.Material;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.inventory.ItemStack;
-import org.bukkit.persistence.PersistentDataContainer;
 import org.bukkit.persistence.PersistentDataType;
 import org.jetbrains.annotations.Nullable;
 
@@ -116,10 +115,8 @@ public class ItemManager {
     public ItemStack getSpectatorCompass() {
         ItemStack compass = new ItemStack(Material.COMPASS);
         compass.setData(DataComponentTypes.ITEM_NAME, Util.getMini(this.lang.spectate_compass_name));
-        compass.editMeta(itemMeta -> {
-            PersistentDataContainer pdc = itemMeta.getPersistentDataContainer();
-            pdc.set(Constants.SPECTATOR_COMPASS_KEY, PersistentDataType.BOOLEAN, true);
-        });
+        compass.editPersistentDataContainer(pdc ->
+            pdc.set(Constants.SPECTATOR_COMPASS_KEY, PersistentDataType.BOOLEAN, true));
         return compass;
     }
 
