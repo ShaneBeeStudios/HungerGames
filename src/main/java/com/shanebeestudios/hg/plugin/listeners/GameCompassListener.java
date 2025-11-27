@@ -4,6 +4,7 @@ import com.shanebeestudios.hg.api.data.PlayerData;
 import com.shanebeestudios.hg.api.gui.SpectatorGUI;
 import com.shanebeestudios.hg.api.util.Constants;
 import com.shanebeestudios.hg.plugin.HungerGames;
+import io.papermc.paper.persistence.PersistentDataContainerView;
 import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -12,8 +13,6 @@ import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
-import org.bukkit.inventory.meta.ItemMeta;
-import org.bukkit.persistence.PersistentDataContainer;
 import org.bukkit.persistence.PersistentDataType;
 
 public class GameCompassListener extends GameListenerBase {
@@ -57,10 +56,8 @@ public class GameCompassListener extends GameListenerBase {
 
         ItemStack item = event.getItem();
         if (item == null || item.getType() != Material.COMPASS) return false;
-        ItemMeta itemMeta = item.getItemMeta();
-        if (itemMeta == null) return false;
 
-        PersistentDataContainer pdc = itemMeta.getPersistentDataContainer();
+        PersistentDataContainerView pdc = item.getPersistentDataContainer();
         return pdc.has(Constants.SPECTATOR_COMPASS_KEY, PersistentDataType.BOOLEAN);
     }
 

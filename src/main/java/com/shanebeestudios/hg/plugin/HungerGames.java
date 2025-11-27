@@ -28,7 +28,7 @@ import com.shanebeestudios.hg.plugin.managers.Placeholders;
 import com.shanebeestudios.hg.plugin.managers.PlayerManager;
 import com.shanebeestudios.hg.plugin.managers.SessionManager;
 import dev.jorel.commandapi.CommandAPI;
-import dev.jorel.commandapi.CommandAPIBukkitConfig;
+import dev.jorel.commandapi.CommandAPIPaperConfig;
 import dev.jorel.commandapi.exceptions.UnsupportedVersionException;
 import io.lumine.mythic.api.MythicProvider;
 import org.bstats.bukkit.Metrics;
@@ -74,11 +74,10 @@ public class HungerGames extends JavaPlugin {
     @Override
     public void onLoad() {
         try {
-            CommandAPI.onLoad(new CommandAPIBukkitConfig(this)
+            CommandAPI.onLoad(new CommandAPIPaperConfig(this)
                 .setNamespace("hungergames")
                 .verboseOutput(false)
-                .silentLogs(true)
-                .skipReloadDatapacks(true));
+                .silentLogs(true));
         } catch (UnsupportedVersionException ignore) {
             Util.log("CommandAPI does not support this version of Minecraft, will update soon.");
         }

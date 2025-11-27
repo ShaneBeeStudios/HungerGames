@@ -33,10 +33,8 @@ public class ItemUtils {
 
     public static ItemStack getTrackingStick() {
         ItemStack itemStack = ItemType.STICK.createItemStack();
-        ItemMeta itemMeta = itemStack.getItemMeta();
-        PersistentDataContainer pdc = itemMeta.getPersistentDataContainer();
-        pdc.set(Constants.TRACKING_STICK_KEY, PersistentDataType.BOOLEAN, true);
-        itemStack.setItemMeta(itemMeta);
+        itemStack.editPersistentDataContainer(pdc ->
+            pdc.set(Constants.TRACKING_STICK_KEY, PersistentDataType.BOOLEAN, true));
 
         itemStack.setData(DataComponentTypes.ITEM_NAME, Util.getMini(LANG.item_tracking_stick_name));
         itemStack.setData(DataComponentTypes.MAX_STACK_SIZE, 1);

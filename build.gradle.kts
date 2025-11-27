@@ -7,7 +7,7 @@ val projectVersion = "5.0.0-beta3"
 // Where this builds on the server
 val serverLocation = "1-21-5"
 // Minecraft version to build against
-val minecraftVersion = "1.21.5"
+val minecraftVersion = "1.21.10"
 
 java.sourceCompatibility = JavaVersion.VERSION_21
 
@@ -41,7 +41,7 @@ dependencies {
     compileOnly("io.papermc.paper:paper-api:${minecraftVersion}-R0.1-SNAPSHOT")
 
     // Command Api
-    implementation("dev.jorel:commandapi-bukkit-shade-mojang-mapped:10.0.1")
+    implementation("dev.jorel:commandapi-paper-shade:11.0.1-SNAPSHOT")
 
     // bStats
     implementation("org.bstats:bstats-bukkit:3.1.0")
@@ -53,7 +53,7 @@ dependencies {
     compileOnly("me.clip:placeholderapi:2.11.6")
 
     // NBT-API
-    implementation("de.tr7zw:item-nbt-api:2.15.0") {
+    implementation("de.tr7zw:item-nbt-api:2.15.3") {
         isTransitive = false
     }
 
@@ -63,7 +63,7 @@ dependencies {
     }
 
     // FastBoard
-    implementation("fr.mrmicky:fastboard:2.1.4")
+    implementation("fr.mrmicky:fastboard:2.1.5")
 }
 
 tasks {

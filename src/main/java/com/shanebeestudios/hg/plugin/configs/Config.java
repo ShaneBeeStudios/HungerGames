@@ -103,6 +103,9 @@ public class Config {
     public static String SOUNDS_DEATH;
     public static String SOUNDS_OPEN_CHEST_DROP;
 
+    // Commands
+    public static List<String> COMMANDS_ALLOWED_IN_GAME;
+
     private final HungerGames plugin;
     private File configFile;
     private FileConfiguration config;
@@ -201,6 +204,9 @@ public class Config {
 
         SOUNDS_DEATH = config.getString("sounds.death");
         SOUNDS_OPEN_CHEST_DROP = config.getString("sounds.open-chest-drop");
+
+        // Commands
+        COMMANDS_ALLOWED_IN_GAME = config.getStringList("commands.allowed-in-game");
 
         try {
             Vault.setupEconomy();
