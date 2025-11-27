@@ -200,8 +200,15 @@ spectate:
   # Allow spectators to chat
   chat: false
 
+## SOUNDS
 # Different sounds played in the game
 sounds:
   # Played when a player dies in the game
   death: 'ui.toast.challenge_complete'
   open-chest-drop: 'block.ender_chest.open'
+
+## COMMANDS
+commands:
+  # Represents commands a player is allowed to use whilst in a HungerGames arena
+  allowed-in-game:
+    - 'login'

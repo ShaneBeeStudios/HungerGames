@@ -2,12 +2,15 @@ package com.shanebeestudios.hg.plugin.listeners;
 
 import com.shanebeestudios.hg.api.util.Util;
 import com.shanebeestudios.hg.plugin.HungerGames;
+import com.shanebeestudios.hg.plugin.configs.Config;
 import com.shanebeestudios.hg.plugin.permission.Permissions;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.player.PlayerCommandPreprocessEvent;
+
+import java.util.Locale;
 
 /**
  * Internal event listener
@@ -24,9 +27,15 @@ public class GameCommandListener extends GameListenerBase {
         if (Permissions.BYPASS_COMMAND_RESTRICTION.has(player)) return;
 
         String[] st = event.getMessage().split(" ");
+        String command = st[0].toLowerCase(Locale.ROOT);
         // Prevent game players running non hunger games commands
-        if (this.playerManager.isInGame(player) && !st[0].equalsIgnoreCase("/login")) {
-            if (st[0].equalsIgnoreCase("/hg") || st[0].equalsIgnoreCase("/hungergames")) {
+        if (this.playerManager.isInGame(player)) {
+            // Allow some commands from the config to be bypassed
+            if (Config.COMMANDS_ALLOWED_IN_GAME.contains(command.replaceFirst("/", ""))) {
+                return;
+            }
+            // Allow use of HungerGames commands
+            if (command.equalsIgnoreCase("/hg") || command.equalsIgnoreCase("/hungergames")) {
                 return;
             }
             event.setMessage("/");
@@ -34,7 +43,7 @@ public class GameCommandListener extends GameListenerBase {
             Util.sendMessage(player, this.lang.listener_command_handler_no_command);
         }
         // Prevent teleporting players out of an arena
-        else if (("/tp".equalsIgnoreCase(st[0]) || "/teleport".equalsIgnoreCase(st[0])) && st.length >= 2) {
+        else if (("/tp".equalsIgnoreCase(command) || "/teleport".equalsIgnoreCase(command)) && st.length >= 2) {
             Player p = Bukkit.getServer().getPlayer(st[1]);
             if (p != null) {
                 if (this.playerManager.hasPlayerData(p)) {
