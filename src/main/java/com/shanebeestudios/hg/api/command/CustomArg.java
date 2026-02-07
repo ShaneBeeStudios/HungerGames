@@ -17,7 +17,6 @@ import org.bukkit.entity.Player;
 import org.jetbrains.annotations.ApiStatus;
 
 import java.util.List;
-import java.util.Locale;
 import java.util.concurrent.CompletableFuture;
 
 public abstract class CustomArg {
@@ -46,7 +45,7 @@ public abstract class CustomArg {
         @Override
         public Argument<?> get(String name) {
             return new CustomArgument<>(new StringArgument(name), info -> {
-                String gameName = info.input().toLowerCase(Locale.ROOT);
+                String gameName = info.input();
                 Game game = GAME_MANAGER.getGame(gameName);
                 if (game == null) {
                     String msg = LANG.command_base_invalid_game.replace("<arena>", gameName);
