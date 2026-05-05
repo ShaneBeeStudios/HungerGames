@@ -7,7 +7,7 @@ val projectVersion = "5.0.0-beta4"
 // Minimum version of Minecraft that HungerGames supports
 val apiVersion = "1.21.10"
 // Where this builds on the server
-val serverLocation = "1-21-11"
+val serverLocation = "26-1"
 // Minecraft version to build against
 val minecraftVersion = "26.1.2"
 
