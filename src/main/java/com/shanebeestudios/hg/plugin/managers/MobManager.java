@@ -88,7 +88,6 @@ public class MobManager {
 
     private MobData createMobData(ConfigurationSection mobsSection, @Nullable Game game) {
         MobData mobData = new MobData();
-        int count = 0;
         String gameName = game != null ? game.getGameArenaData().getName() + ":" : "";
         for (String time : Arrays.asList("day", "night")) {
             if (!mobsSection.contains(time)) continue;
@@ -212,20 +211,20 @@ public class MobManager {
                     mobEntry.setDeathMessage(deathMessage);
                 }
                 int weight = mobSection.getInt("weight", 1);
-                count++;
-                for (int i = 1; i <= weight; i++) {
-                    if (time.equalsIgnoreCase("day")) {
-                        mobData.addDayMob(mobEntry);
-                    } else {
-                        mobData.addNightMob(mobEntry);
-                    }
+                if (weight <= 0) {
+                    Util.warning("Invalid weight '%d' for mob entry '%s:%s'", weight, time, sectionKey);
+                    continue;
+                }
+                if (time.equalsIgnoreCase("day")) {
+                    mobData.addDayMob(mobEntry, weight);
+                } else {
+                    mobData.addNightMob(mobEntry, weight);
                 }
                 if (Config.SETTINGS_DEBUG) {
                     Util.log("- Loaded mob entry <white>'<aqua>%s<white>'", mobEntryKey);
                 }
             }
         }
-        mobData.setMobCount(count);
         return mobData;
     }
 
