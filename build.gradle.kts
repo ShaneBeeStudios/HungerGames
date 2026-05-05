@@ -1,15 +1,17 @@
 plugins {
     id("java")
-    id("com.gradleup.shadow") version "8.3.6"
+    id("com.gradleup.shadow") version "9.3.0"
 }
 // Version of HungerGames
 val projectVersion = "5.0.0-beta4"
+// Minimum version of Minecraft that HungerGames supports
+val apiVersion = "1.21.10"
 // Where this builds on the server
-val serverLocation = "1-21-5"
+val serverLocation = "26-1"
 // Minecraft version to build against
-val minecraftVersion = "1.21.10"
+val minecraftVersion = "26.1.2"
 
-java.sourceCompatibility = JavaVersion.VERSION_21
+java.sourceCompatibility = JavaVersion.VERSION_25
 
 repositories {
     mavenCentral()
@@ -26,7 +28,7 @@ repositories {
 
     // MythicMobs
     maven("https://mvn.lumine.io/repository/maven-public/") {
-        content { includeGroup("io.lumine")  }
+        content { includeGroup("io.lumine") }
     }
 
     // Papi
@@ -38,22 +40,22 @@ repositories {
 
 dependencies {
     // Paper
-    compileOnly("io.papermc.paper:paper-api:${minecraftVersion}-R0.1-SNAPSHOT")
+    compileOnly("io.papermc.paper:paper-api:${minecraftVersion}.build.+")
 
     // Command Api
-    implementation("dev.jorel:commandapi-paper-shade:11.0.1-SNAPSHOT")
+    implementation("dev.jorel:commandapi-paper-shade:11.2.0")
 
     // bStats
-    implementation("org.bstats:bstats-bukkit:3.1.0")
+    implementation("org.bstats:bstats-bukkit:3.2.0")
 
     // MythicMobs
     compileOnly("io.lumine:Mythic-Dist:5.6.1")
 
     // Papi
-    compileOnly("me.clip:placeholderapi:2.11.6")
+    compileOnly("me.clip:placeholderapi:2.12.2")
 
     // NBT-API
-    implementation("de.tr7zw:item-nbt-api:2.15.3") {
+    implementation("de.tr7zw:item-nbt-api:2.15.7") {
         isTransitive = false
     }
 
@@ -71,18 +73,20 @@ tasks {
         dependsOn("shadowJar")
         from("build/libs") {
             include("HungerGames-*.jar")
-            destinationDir = file("/Users/ShaneBee/Desktop/Server/${serverLocation}/plugins/")
+            destinationDir = file("/Users/ShaneBee/Desktop/Server/Minecraft/${serverLocation}/plugins/")
         }
 
     }
     processResources {
         val prop = ("version" to projectVersion)
+        val prop2 = ("apiversion" to apiVersion)
         filesMatching("paper-plugin.yml") {
-            expand(prop)
+            expand(prop, prop2)
         }
+
     }
     compileJava {
-        options.release = 21
+        options.release = 25
         options.compilerArgs.add("-Xlint:unchecked")
         options.compilerArgs.add("-Xlint:deprecation")
     }
@@ -98,14 +102,21 @@ tasks {
 
     }
     shadowJar {
+        archiveFileName = "HungerGames-${projectVersion}.jar"
+        archiveClassifier.set("")
         relocate("fr.mrmicky.fastboard", "com.shanebeestudios.hg.shaded-api.fastboard")
         relocate("dev.jorel.commandapi", "com.shanebeestudios.hg.shaded-api.commandapi")
         relocate("de.tr7zw.changeme.nbtapi", "com.shanebeestudios.hg.shaded-api.nbt")
         relocate("org.bstats", "com.shanebeestudios.hg.api.metrics")
-        archiveFileName = "HungerGames-${projectVersion}.jar"
     }
     jar {
+        enabled = false
         dependsOn(shadowJar)
-        archiveFileName.set("HungerGames.jar")
+    }
+    java {
+        toolchain {
+            languageVersion.set(JavaLanguageVersion.of(25))
+        }
+        withSourcesJar()
     }
 }

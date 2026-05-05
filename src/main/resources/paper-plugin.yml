@@ -2,9 +2,9 @@ name: HungerGames
 main: com.shanebeestudios.hg.plugin.HungerGames
 authors: [ShaneBee]
 description: 'A Simple, fun, PvP arena plugin'
-version: '${version}'
+version: '$version'
 website: 'https://github.com/ShaneBeeStudios/HungerGames'
-api-version: '1.21.4'
+api-version: '$apiversion'
 dependencies:
   server:
     Vault:

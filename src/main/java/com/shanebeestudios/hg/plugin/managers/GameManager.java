@@ -277,7 +277,17 @@ public class GameManager {
      * @return The game
      */
     public Game getGame(String name) {
-        return this.games.get(name);
+        Game game = this.games.get(name);
+        if (game != null) {
+            return game;
+        }
+        // Try match without case
+        for (String key : this.games.keySet()) {
+            if (key.equalsIgnoreCase(name)) {
+                return this.games.get(key);
+            }
+        }
+        return null;
     }
 
     /**

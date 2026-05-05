@@ -5,6 +5,7 @@ import com.shanebeestudios.hg.api.util.Util;
 import com.shanebeestudios.hg.plugin.HungerGames;
 import com.shanebeestudios.hg.plugin.permission.Permissions;
 import de.tr7zw.changeme.nbtapi.NBT;
+import de.tr7zw.changeme.nbtapi.NBTCompound;
 import de.tr7zw.changeme.nbtapi.iface.ReadWriteNBT;
 import dev.jorel.commandapi.arguments.Argument;
 import dev.jorel.commandapi.arguments.LiteralArgument;
@@ -38,7 +39,7 @@ public class NBTCommand extends SubCommand {
                     NBT.getComponents(itemStack, readableNBT -> {
                         Util.sendPrefixedMessage(player, "NBT of held item sent to console!");
                         Util.log("NBT: %s", readableNBT.toString());
-                        String pretty = NBTApi.getPrettyNBT(readableNBT.toString(), "   ");
+                        String pretty = NBTApi.getPrettyNBT((NBTCompound) readableNBT, "   ");
                         if (pretty != null) {
                             Util.log("Pretty NBT:");
                             Bukkit.getConsoleSender().sendMessage(System.lineSeparator() + pretty);
@@ -59,7 +60,7 @@ public class NBTCommand extends SubCommand {
                     ReadWriteNBT nbtCopy = NBT.parseNBT(snapshot.getAsString());
                     Util.sendPrefixedMessage(player, "NBT of target entity sent to console!");
                     Util.log("NBT: %s", nbtCopy.toString());
-                    String pretty = NBTApi.getPrettyNBT(nbtCopy.toString(), "   ");
+                    String pretty = NBTApi.getPrettyNBT((NBTCompound) nbtCopy, "   ");
                     if (pretty != null) {
                         Util.log("Pretty NBT:");
                         Bukkit.getConsoleSender().sendMessage(System.lineSeparator() + pretty);
