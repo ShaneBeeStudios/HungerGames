@@ -98,12 +98,16 @@ tasks {
         options.compilerArgs.add("-Xlint:deprecation")
     }
     javadoc {
+        val options = options as StandardJavadocDocletOptions
+        options.docTitle = "HungerGames API - $projectVersion"
+        options.overview = "src/main/javadoc/overview.html"
         options.encoding = Charsets.UTF_8.name()
+
         exclude("com/shanebeestudios/hg/plugin/commands")
         exclude("com/shanebeestudios/hg/plugin/listeners")
-        (options as StandardJavadocDocletOptions).links(
-            "https://jd.papermc.io/paper/1.21.5/",
-            "https://jd.advntr.dev/api/4.17.0/",
+        options.links(
+            "https://jd.papermc.io/paper/26.1.2/",
+            "https://jd.advntr.dev/api/4.25.0/",
             "https://tr7zw.github.io/Item-NBT-API/v2-api/"
         )
 
