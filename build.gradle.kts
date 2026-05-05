@@ -2,8 +2,15 @@ plugins {
     id("java")
     id("com.gradleup.shadow") version "9.3.0"
 }
+
+configurations.matching { it.isCanBeResolved }.configureEach {
+    attributes {
+        attribute(TargetJvmVersion.TARGET_JVM_VERSION_ATTRIBUTE, 25)
+    }
+}
+
 // Version of HungerGames
-val projectVersion = "5.0.0-beta4"
+val projectVersion = "5.0.0"
 // Minimum version of Minecraft that HungerGames supports
 val apiVersion = "1.21.10"
 // Where this builds on the server
@@ -86,7 +93,7 @@ tasks {
 
     }
     compileJava {
-        options.release = 25
+        options.release.set(21)
         options.compilerArgs.add("-Xlint:unchecked")
         options.compilerArgs.add("-Xlint:deprecation")
     }
