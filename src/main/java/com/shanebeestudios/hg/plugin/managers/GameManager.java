@@ -13,7 +13,6 @@ import com.shanebeestudios.hg.plugin.configs.Config;
 import com.shanebeestudios.hg.plugin.configs.Language;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
-import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
@@ -234,12 +233,7 @@ public class GameManager {
      * @return Random ItemStack
      */
     public ItemStack randomItem(Game game, ChestType chestType) {
-        List<ItemStack> items = game.getGameItemData().getItemData().getItems(chestType);
-        int r = items.size();
-        if (r == 0) return new ItemStack(Material.AIR);
-        int i = this.random.nextInt(r);
-        return items.get(i);
-
+        return game.getGameItemData().getItemData().getRandomItem(chestType);
     }
 
     /**
