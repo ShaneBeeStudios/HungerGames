@@ -85,9 +85,9 @@ public class HungerGames extends JavaPlugin {
 
     @Override
     public void onEnable() {
-        if (!Util.isRunningMinecraft(1, 21, 4)) {
+        if (!Util.isRunningMinecraft(1, 21, 10)) {
             Util.warning("HungerGames does not support your server version!");
-            Util.warning("Only versions 1.21.4+ are supported");
+            Util.warning("Only versions 1.21.10+ are supported");
             Bukkit.getPluginManager().disablePlugin(this);
             return;
         }
