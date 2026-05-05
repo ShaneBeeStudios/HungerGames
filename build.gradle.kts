@@ -4,6 +4,8 @@ plugins {
 }
 // Version of HungerGames
 val projectVersion = "5.0.0-beta4"
+// Minimum version of Minecraft that HungerGames supports
+val apiVersion = "1.21.10"
 // Where this builds on the server
 val serverLocation = "1-21-11"
 // Minecraft version to build against
@@ -26,7 +28,7 @@ repositories {
 
     // MythicMobs
     maven("https://mvn.lumine.io/repository/maven-public/") {
-        content { includeGroup("io.lumine")  }
+        content { includeGroup("io.lumine") }
     }
 
     // Papi
@@ -77,9 +79,11 @@ tasks {
     }
     processResources {
         val prop = ("version" to projectVersion)
+        val prop2 = ("apiversion" to apiVersion)
         filesMatching("paper-plugin.yml") {
-            expand(prop)
+            expand(prop, prop2)
         }
+
     }
     compileJava {
         options.release = 25
@@ -98,14 +102,21 @@ tasks {
 
     }
     shadowJar {
+        archiveFileName = "HungerGames-${projectVersion}.jar"
+        archiveClassifier.set("")
         relocate("fr.mrmicky.fastboard", "com.shanebeestudios.hg.shaded-api.fastboard")
         relocate("dev.jorel.commandapi", "com.shanebeestudios.hg.shaded-api.commandapi")
         relocate("de.tr7zw.changeme.nbtapi", "com.shanebeestudios.hg.shaded-api.nbt")
         relocate("org.bstats", "com.shanebeestudios.hg.api.metrics")
-        archiveFileName = "HungerGames-${projectVersion}.jar"
     }
     jar {
+        enabled = false
         dependsOn(shadowJar)
-        archiveFileName.set("HungerGames.jar")
+    }
+    java {
+        toolchain {
+            languageVersion.set(JavaLanguageVersion.of(25))
+        }
+        withSourcesJar()
     }
 }
