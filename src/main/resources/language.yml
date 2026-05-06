@@ -58,6 +58,8 @@ command:
     session-done: "<green>You're all done, your arena is ready to go!"
   # Delete
   delete:
+    confirm-console: "Please use '/hg delete <arena> confirm'"
+    confirm: '<yellow>Are you sure you want to delete the arena <white><arena><yellow>? <green><click:run_command:/hg delete-arena <arena> confirm>Click to confirm'
     attempt: '<green>Attempting to delete <arena>!'
     stopping: '<grey>- <red>Game running! <yellow>Stopping..'
     kicking: '<grey>- <red>Players detected! <yellow>Kicking..'
@@ -65,7 +67,6 @@ command:
     failed: '<red>Failed to delete arena!'
     rollback: '<red>The game is currently rolling back and cannot be deleted right now!'
     no-exist: "<red>The arena <white>'<yellow><arena><white>'<red> does not exist!"
-
   # Edit
   edit:
     # ChestRefill

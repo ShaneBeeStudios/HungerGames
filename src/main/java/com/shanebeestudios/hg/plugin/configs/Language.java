@@ -65,6 +65,8 @@ public class Language {
     public String command_create_session_sign_invalid;
     // - Delete
     public String command_delete_attempt;
+    public String command_delete_confirm;
+    public String command_delete_confirm_console;
     public String command_delete_kicking;
     public String command_delete_stopping;
     public String command_delete_deleted;
@@ -345,6 +347,8 @@ public class Language {
         this.command_create_session_done = this.lang.getString("command.create.session-done");
         // - Delete
         this.command_delete_attempt = this.lang.getString("command.delete.attempt");
+        this.command_delete_confirm = this.lang.getString("command.delete.confirm");
+        this.command_delete_confirm_console = this.lang.getString("command.delete.confirm-console");
         this.command_delete_kicking = this.lang.getString("command.delete.kicking");
         this.command_delete_stopping = this.lang.getString("command.delete.stopping");
         this.command_delete_deleted = this.lang.getString("command.delete.deleted");
