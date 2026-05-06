@@ -407,7 +407,7 @@ public class Game {
      */
     public void stop(boolean death) {
         if (Config.WORLD_BORDER_ENABLED) {
-            this.gameBorderData.resetBorder();
+            this.gameBorderData.resetBorder(false);
         }
         this.gameEntityData.removeEntities();
         this.gameScoreboard.resetSidebars();

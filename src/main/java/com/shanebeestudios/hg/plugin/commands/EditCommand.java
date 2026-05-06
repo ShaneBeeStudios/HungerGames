@@ -73,16 +73,23 @@ public class EditCommand extends SubCommand {
 
                         saveGame(game);
                     })))
-            .then(LiteralArgument.literal("center_location")
+            .then(LiteralArgument.literal("add_center_location")
                 .then(new Location2DArgument("center_location", LocationType.BLOCK_POSITION)
                     .executes(info -> {
                         Game game = info.args().getByClass("game", Game.class);
                         Location2D centerLocation = info.args().getByClass("center_location", Location2D.class);
                         GameBorderData gameBorderData = game.getGameBorderData();
-                        gameBorderData.setCenterLocation(convert(centerLocation));
-                        Util.sendPrefixedMessage(info.sender(), "Border center location set to %s", centerLocation);
+                        gameBorderData.addCenterLocation(convert(centerLocation));
+                        Util.sendPrefixedMessage(info.sender(), "Border center location added: %s", centerLocation);
                         saveGame(game);
-                    })));
+                    })))
+            .then(LiteralArgument.literal("clear_center_locations")
+                .executes(info -> {
+                    Game game = info.args().getByClass("game", Game.class);
+                    game.getGameBorderData().clearCenterLocations();
+                    Util.sendPrefixedMessage(info.sender(), "Border center locations cleared");
+                    saveGame(game);
+                }));
     }
 
     @SuppressWarnings("DataFlowIssue")

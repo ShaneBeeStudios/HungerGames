@@ -1,13 +1,15 @@
 package com.shanebeestudios.hg.api.game;
 
+import com.shanebeestudios.hg.api.util.Util;
 import com.shanebeestudios.hg.plugin.configs.Config;
 import com.shanebeestudios.hg.plugin.tasks.WorldBorderTask;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.WorldBorder;
 import org.bukkit.util.BoundingBox;
-import org.jetbrains.annotations.Nullable;
+import org.jetbrains.annotations.NotNull;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
@@ -18,7 +20,7 @@ public class GameBorderData extends Data {
 
     private final Random random = new Random();
     private boolean isDefault;
-    private Location centerLocation;
+    private final List<Location> centerLocations = new ArrayList<>();
     private int finalBorderSize;
     private int borderCountdownStart;
     private int borderCountdownEnd;
@@ -32,11 +34,11 @@ public class GameBorderData extends Data {
         this.isDefault = true;
     }
 
-    GameBorderData(Game game, Location centerLocation, int finalSize, int start, int end) {
+    GameBorderData(Game game, Location centerLocations, int finalSize, int start, int end) {
         super(game);
         this.gamePlayerData = game.getGamePlayerData();
         this.worldBorder = Bukkit.createWorldBorder();
-        this.centerLocation = centerLocation;
+        this.centerLocations.add(centerLocations);
         this.finalBorderSize = finalSize;
         this.borderCountdownStart = start;
         this.borderCountdownEnd = end;
@@ -56,25 +58,33 @@ public class GameBorderData extends Data {
      * Initialize the {@link WorldBorder} of this game
      */
     public void initialize() {
-        resetBorder();
+        resetBorder(true);
         this.gamePlayerData.getPlayers().forEach(player -> player.setWorldBorder(this.worldBorder));
         this.worldBorderTask = new WorldBorderTask(this.game);
     }
 
     /**
      * Reset the {@link WorldBorder} of this game
+     *
+     * @param start Whether this is a game start or end reset
      */
-    public void resetBorder() {
+    public void resetBorder(boolean start) {
         Location center;
         GameArenaData gameArenaData = this.game.getGameArenaData();
         List<Location> spawns = gameArenaData.getSpawns();
-        if (this.centerLocation != null) {
-            center = this.centerLocation;
-        } else {
+        if (this.centerLocations.isEmpty()) {
             switch (Config.WORLD_BORDER_CENTER) { // 'first-spawn', 'random-spawn' and 'arena-center'
                 case "first-spawn" -> center = spawns.getFirst();
                 case "random-spawn" -> center = spawns.get(this.random.nextInt(spawns.size()));
                 default -> center = gameArenaData.getGameRegion().getCenter();
+            }
+        } else {
+            if (start) {
+                // If starting a new game, pick a random center location
+                center = this.centerLocations.get(this.random.nextInt(this.centerLocations.size()));
+            } else {
+                // If game is ending, reset to arena center
+                center = gameArenaData.getGameRegion().getCenter();
             }
         }
         this.worldBorder.setCenter(center);
@@ -103,22 +113,40 @@ public class GameBorderData extends Data {
     }
 
     /**
-     * Set the center of the border of this game
+     * Add a center location to the border of this game
      *
      * @param centerLocation Location of the center
      */
-    public void setCenterLocation(Location centerLocation) {
-        this.centerLocation = centerLocation;
+    public void addCenterLocation(Location centerLocation) {
+        this.centerLocations.add(centerLocation);
+    }
+
+    /**
+     * Clear all center locations from the border of this game
+     */
+    public void clearCenterLocations() {
+        this.centerLocations.clear();
+    }
+
+    /**
+     * Set the center of the border of this game
+     *
+     * @param centerLocations Location of the center
+     */
+    public void setCenterLocations(List<Location> centerLocations) {
+        Util.log("Setting center locations for game border");
+        this.centerLocations.clear();
+        this.centerLocations.addAll(centerLocations);
         this.isDefault = false;
     }
 
     /**
-     * Get the center location of the border
+     * Get a list of center locations of the border
      *
-     * @return Center location
+     * @return Center locations
      */
-    public @Nullable Location getCenterLocation() {
-        return this.centerLocation;
+    public @NotNull List<Location> getCenterLocations() {
+        return this.centerLocations;
     }
 
     /**

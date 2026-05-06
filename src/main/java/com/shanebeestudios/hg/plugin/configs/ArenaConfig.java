@@ -115,6 +115,7 @@ public class ArenaConfig {
     @SuppressWarnings("DataFlowIssue")
     public boolean loadArena(FileConfiguration arenaConfig, String arenaName) {
         boolean isReady = true;
+        boolean isDirty = false;
         List<Location> spawns = new ArrayList<>();
         Location lobbysign = null;
         int timer = 0;
@@ -192,9 +193,20 @@ public class ArenaConfig {
         if (arenaConfig.isSet("game_border")) {
             ConfigurationSection borderSection = arenaConfig.getConfigurationSection("game_border");
             GameBorderData gameBorderData = game.getGameBorderData();
-            if (borderSection.isSet("center_location")) {
-                Location borderCenter = LocationParser.getBlockLocFromString(borderSection.getString("center_location"));
-                gameBorderData.setCenterLocation(borderCenter);
+
+            if (borderSection.isSet("center_locations")) {
+                List<String> centerLocations = borderSection.getStringList("center_locations");
+                List<Location> centerLocationList = new ArrayList<>();
+                for (String locString : centerLocations) {
+                    Location centerLocation = LocationParser.getBlockLocFromString(locString);
+                    centerLocationList.add(centerLocation);
+                }
+                gameBorderData.setCenterLocations(centerLocationList);
+            } else if (borderSection.isSet("center_location")) { // Deprecated (May 5/2026)
+                String centerLocString = borderSection.getString("center_location");
+                Location borderCenter = LocationParser.getBlockLocFromString(centerLocString);
+                gameBorderData.setCenterLocations(List.of(borderCenter));
+                isDirty = true;
             }
             if (borderSection.isSet("final_size")) {
                 int borderSize = borderSection.getInt("final_size");
@@ -245,6 +257,9 @@ public class ArenaConfig {
             isReady = false;
         } else {
             Util.log("- Loaded arena <white>'<aqua>%s<white>'<grey>", arenaName);
+        }
+        if (isDirty) {
+            saveGameToConfig(game);
         }
         return isReady;
     }
@@ -300,11 +315,13 @@ public class ArenaConfig {
         GameBorderData borderData = game.getGameBorderData();
         if (!borderData.isDefault()) {
             ConfigurationSection borderSection = gameSection.createSection("game_border");
-            Location centerLocation = borderData.getCenterLocation();
-            if (centerLocation != null) {
+            List<String> centerLocations = new ArrayList<>();
+            for (Location centerLocation : borderData.getCenterLocations()) {
                 String locString = LocationParser.blockLocToString(centerLocation);
-                borderSection.set("center_location", locString);
+                centerLocations.add(locString);
+
             }
+            borderSection.set("center_locations", centerLocations);
             borderSection.set("final_size", borderData.getFinalBorderSize());
             borderSection.set("countdown_start", borderData.getBorderCountdownStart());
             borderSection.set("countdown_end", borderData.getBorderCountdownEnd());
