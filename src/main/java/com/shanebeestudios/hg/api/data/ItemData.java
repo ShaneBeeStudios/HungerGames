@@ -1,66 +1,69 @@
 package com.shanebeestudios.hg.api.data;
 
+import com.shanebeestudios.hg.api.game.Game;
+import com.shanebeestudios.hg.api.util.WeightedList;
 import org.bukkit.inventory.ItemStack;
 
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
+/**
+ * Holder of {@link ItemStack Items} for a {@link Game}
+ */
 public class ItemData {
 
-    private final Map<ChestType, List<ItemStack>> items = new HashMap<>();
-    private final Map<ChestType, Integer> count = new HashMap<>();
+    private final Map<ChestType, WeightedList<ItemStack>> weightedItems = new HashMap<>();
 
     public ItemData() {
         for (ChestType chestType : ChestType.values()) {
-            this.items.put(chestType, new ArrayList<>());
+            this.weightedItems.put(chestType, new WeightedList<>());
         }
     }
 
-    public void setItems(ChestType type, List<ItemStack> items) {
-        this.items.put(type, items);
-    }
-
-    public List<ItemStack> getItems(ChestType type) {
-        return this.items.get(type);
-    }
-
     /**
-     * Set item count
+     * Add a weighted item to the item data.
      *
-     * @param chestType ChestType to count
-     * @param itemCount Amount of items
+     * @param type   Chest type
+     * @param item   Item to add
+     * @param weight Weight of item
      */
-    public void setItemCount(ChestType chestType, int itemCount) {
-        this.count.put(chestType, itemCount);
+    public void addEntry(ChestType type, ItemStack item, int weight) {
+        this.weightedItems.get(type).add(item, weight);
     }
 
     /**
-     * Get item count by ChestType
+     * Get a random item.
      *
-     * @param chestType ChestType to get count from
-     * @return AMount of items by ChestType
+     * @param type Type of chest
+     * @return Random item
      */
-    public int getItemCount(ChestType chestType) {
-        return this.count.get(chestType);
+    public ItemStack getRandomItem(ChestType type) {
+        return this.weightedItems.get(type).nextEntry();
+    }
+
+    public void setWeightedItems(ChestType type, WeightedList<ItemStack> weightedItems) {
+        this.weightedItems.put(type, weightedItems);
+    }
+
+    public WeightedList<ItemStack> getWeightedItems(ChestType type) {
+        return this.weightedItems.get(type);
     }
 
     /**
-     * Get total item count for all chest types
+     * Get the total item count for all chest types.
      *
      * @return Total item count
      */
     public int getTotalItemCount() {
         int count = 0;
-        for (int value : this.count.values()) {
-            count += value;
+        for (WeightedList<ItemStack> value : this.weightedItems.values()) {
+            count += value.size();
         }
         return count;
     }
 
     /**
-     * Represents the type of chests in game
+     * Represents the type of chests in a game.
      * <p>Used for logging and refilling</p>
      */
     public enum ChestType {
@@ -97,4 +100,5 @@ public class ItemData {
             return this.name;
         }
     }
+
 }
