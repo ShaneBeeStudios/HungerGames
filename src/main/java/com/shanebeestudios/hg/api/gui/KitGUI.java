@@ -12,7 +12,6 @@ import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.InventoryHolder;
-import org.bukkit.inventory.ItemFlag;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.ItemType;
 import org.bukkit.potion.PotionEffect;
@@ -41,12 +40,9 @@ public class KitGUI implements InventoryHolder {
         // SETUP INVENTORY
         // divider
         ItemStack divider = ItemType.BLACK_STAINED_GLASS_PANE.createItemStack();
-        if (Util.RUNNING_1_21_5) {
-            divider.setData(DataComponentTypes.TOOLTIP_DISPLAY, TooltipDisplay.tooltipDisplay()
-                .hideTooltip(true));
-        } else {
-            divider.setData(DataComponentTypes.CUSTOM_NAME, Component.text(" "));
-        }
+        divider.setData(DataComponentTypes.TOOLTIP_DISPLAY, TooltipDisplay.tooltipDisplay()
+            .hideTooltip(true));
+
         for (int i = 9; i < 18; i++) {
             this.inventory.setItem(i, divider);
         }
@@ -96,13 +92,8 @@ public class KitGUI implements InventoryHolder {
         // Potions
         ItemStack potion = ItemType.POTION.createItemStack();
         potion.setData(DataComponentTypes.CUSTOM_NAME, Util.getMini(this.lang.kits_kit_gui_potion_effects));
-        if (Util.RUNNING_1_21_5) {
-            potion.setData(DataComponentTypes.TOOLTIP_DISPLAY, TooltipDisplay.tooltipDisplay()
-                .hideTooltip(true));
-        } else {
-            //noinspection deprecation
-            potion.addItemFlags(ItemFlag.HIDE_ADDITIONAL_TOOLTIP);
-        }
+        potion.setData(DataComponentTypes.TOOLTIP_DISPLAY, TooltipDisplay.tooltipDisplay()
+            .hideTooltip(true));
 
         List<PotionEffect> potionEffects = kitEntry.getPotionEffects();
         List<Component> lore = new ArrayList<>();
