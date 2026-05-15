@@ -99,7 +99,7 @@ public class Util {
     }
 
     /**
-     * Send a debug message to console
+     * Send a debug message to console.
      * <p>This will only send if 'debug' is enabled in config.yml</p>
      *
      * @param debug Debug message to log
@@ -107,6 +107,19 @@ public class Util {
     public static void debug(String debug) {
         if (Config.SETTINGS_DEBUG) {
             log(debug);
+        }
+    }
+
+    /**
+     * Send a formatted debug message to the console.
+     * <p>This will only send if 'debug' is enabled in config.yml</p>
+     *
+     * @param format Message format
+     * @param args   Arguments for message format
+     */
+    public static void debug(String format, Object... args) {
+        if (Config.SETTINGS_DEBUG) {
+            log(format, args);
         }
     }
 
