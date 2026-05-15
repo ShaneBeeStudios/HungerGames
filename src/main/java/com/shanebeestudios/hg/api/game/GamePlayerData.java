@@ -6,7 +6,6 @@ import com.shanebeestudios.hg.api.events.PlayerLeaveGameEvent;
 import com.shanebeestudios.hg.api.status.Status;
 import com.shanebeestudios.hg.api.util.Util;
 import com.shanebeestudios.hg.plugin.configs.Config;
-import com.shanebeestudios.hg.plugin.managers.GameManager;
 import com.shanebeestudios.hg.plugin.managers.PlayerManager;
 import com.shanebeestudios.hg.plugin.permission.Permissions;
 import net.kyori.adventure.title.Title;
@@ -43,7 +42,6 @@ public class GamePlayerData extends Data {
     private static final @NotNull NamespacedKey MOVE_KEY = NamespacedKey.fromString("hg:freeze_move");
 
     private final PlayerManager playerManager;
-    private final GameManager gameManager;
 
     // Player Lists
     private final Map<Player, Boolean> players = new HashMap<>();
@@ -59,7 +57,6 @@ public class GamePlayerData extends Data {
     protected GamePlayerData(Game game) {
         super(game);
         this.playerManager = this.plugin.getPlayerManager();
-        this.gameManager = this.plugin.getGameManager();
     }
 
     /**
@@ -308,7 +305,7 @@ public class GamePlayerData extends Data {
         player.setInvulnerable(false);
         if (gameArenaData.getStatus() == Status.RUNNING)
             this.game.getGameBarData().removePlayer(player);
-        Location location = exitLocation != null ? exitLocation : this.gameManager.getGlobalExitLocation(player);
+        Location location = exitLocation != null ? exitLocation : this.game.getGameArenaData().getExitForPlayer(player);
         PlayerData playerData = this.playerManager.getData(player);
         if (playerData == null || playerData.isOnline()) {
             player.teleportAsync(location);
