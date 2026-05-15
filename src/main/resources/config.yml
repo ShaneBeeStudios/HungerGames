@@ -26,10 +26,6 @@ settings:
   free-roam-time: 25
   # Whether or not to show a countdown bossbar in game
   bossbar-countdown: true
-  # The amount of uses a tracking stick will have
-  tracking-stick-uses: 8
-  # Minimum amount of players required in a game for a tracking stick to work
-  players-for-tracking-stick: 5
   # Maximum/Minimum amount of items that will spawn in chests
   max-chestcontent: 5
   min-chestcontent: 1
@@ -48,6 +44,28 @@ settings:
   # This can be changed per arena
   # If 'none', will use the player's respawn location or main world's spawn location
   global-exit-location: 'none'
+
+## PLAYER TRACKING
+player-tracking:
+  # How far in blocks players can see each other on the tracking bar
+  # Set to -1 to keep default value (whatever the player's current tracking range is)
+  # Set to 0 to disable
+  distance: 100
+
+  # Represents the color of enemy players
+  # Set to 'disable' to keep default color the player is assigned
+  # Accepts int color, `#rrggbb` or `r:g:b` (0-255 for r:g:b) formats
+  enemy-player-color: '#EB2D07'
+
+  # Represents the color of enemy entities
+  # Set to 'disable' to disable
+  enemy-entity-color: '#EBD807'
+
+  # The number of uses a tracking stick will have
+  tracking-stick-uses: 8
+
+  # Minimum number of players required in a game for a tracking stick to work
+  players-for-tracking-stick: 5
 
 # Settings for different scoreboard options
 # This doesn't necessarily mean the sidebar
