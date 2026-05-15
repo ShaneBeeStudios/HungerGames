@@ -80,6 +80,7 @@ tasks {
         dependsOn("shadowJar")
         from("build/libs") {
             include("HungerGames-*.jar")
+            exclude("*-sources.jar")
             destinationDir = file("/Users/ShaneBee/Desktop/Server/Minecraft/Skript/${serverLocation}/plugins/")
         }
 
