@@ -217,6 +217,7 @@ public class GamePlayerData extends Data {
         this.players.keySet().forEach(this::putPlayerIntoArena);
     }
 
+    @SuppressWarnings("DataFlowIssue")
     void putPlayerIntoArena(Player player) {
         boolean savePreviousLocation = this.players.get(player);
         Location loc = pickRandomSpawn();
@@ -234,13 +235,23 @@ public class GamePlayerData extends Data {
 
         // Teleport async into the arena so it loads a little more smoothly
         player.teleportAsync(loc).thenAccept(a -> {
+            Util.debug("<yellow>Putting player %s into arena", player.getName());
             PlayerData playerData = this.playerManager.getPlayerData(player);
-            assert playerData != null;
+            assert playerData != null : "This should never happen, player data should always exist";
             playerData.backup();
             if (savePreviousLocation && Config.SETTINGS_SAVE_PREVIOUS_LOCATION) {
                 playerData.setPreviousLocation(previousLocation);
             }
             this.game.getGameScoreboard().setupBoard(player);
+            Util.debug("<aqua>Player %s has been teleported into arena", player.getName());
+
+            // Setup Tracking
+            if (Config.PLAYER_TRACKING_DISTANCE >= 0) {
+                player.getAttribute(Attribute.WAYPOINT_RECEIVE_RANGE).setBaseValue(Math.max(0, Config.PLAYER_TRACKING_DISTANCE));
+            }
+            if (Config.PLAYER_TRACKING_ENEMY_PLAYER_COLOR != null) {
+                player.setWaypointColor(Config.PLAYER_TRACKING_ENEMY_PLAYER_COLOR);
+            }
 
             heal(player);
             freeze(player);

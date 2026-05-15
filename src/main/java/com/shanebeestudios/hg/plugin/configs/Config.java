@@ -4,10 +4,13 @@ import com.shanebeestudios.hg.api.parsers.LocationParser;
 import com.shanebeestudios.hg.api.util.Util;
 import com.shanebeestudios.hg.api.util.Vault;
 import com.shanebeestudios.hg.plugin.HungerGames;
+import org.bukkit.Color;
 import org.bukkit.Location;
 import org.bukkit.configuration.Configuration;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.io.File;
 import java.io.IOException;
@@ -22,17 +25,22 @@ public class Config {
 
     public static boolean SETTINGS_DEBUG;
 
-    //Basic settings
+    // Basic settings
     public static boolean SETTINGS_BROADCAST_JOIN_MESSAGES;
     public static boolean SETTINGS_BROADCAST_WIN_MESSAGES;
     public static boolean HAS_ECONOMY = true;
     public static boolean SETTINGS_BOSSBAR_COUNTDOWN;
-    public static int SETTINGS_TRACKING_STICK_USES;
-    public static int SETTINGS_PLAYERS_FOR_TRACKING_STICK;
     public static int SETTINGS_TELEPORT_AT_END_TIME;
     public static boolean SETTINGS_SAVE_PREVIOUS_LOCATION;
     public static int SETTINGS_FREE_ROAM_TIME;
     public static Location SETTINGS_GLOBAL_EXIT_LOCATION;
+
+    // Player Tracking
+    public static int PLAYER_TRACKING_DISTANCE;
+    public static Color PLAYER_TRACKING_ENEMY_PLAYER_COLOR;
+    public static Color PLAYER_TRACKING_ENEMY_ENTITY_COLOR;
+    public static int PLAYER_TRACKING_TRACKING_STICK_USES;
+    public static int PLAYER_TRACKING_PLAYERS_FOR_TRACKING_STICK;
 
     // Scoreboard
     public static boolean SCOREBOARD_HIDE_NAMETAGS;
@@ -136,8 +144,6 @@ public class Config {
         SETTINGS_BROADCAST_JOIN_MESSAGES = config.getBoolean("settings.broadcast-join-messages");
         SETTINGS_BROADCAST_WIN_MESSAGES = config.getBoolean("settings.broadcast-win-messages");
         SETTINGS_BOSSBAR_COUNTDOWN = config.getBoolean("settings.bossbar-countdown");
-        SETTINGS_TRACKING_STICK_USES = config.getInt("settings.tracking-stick-uses");
-        SETTINGS_PLAYERS_FOR_TRACKING_STICK = config.getInt("settings.players-for-tracking-stick");
         SETTINGS_SAVE_PREVIOUS_LOCATION = config.getBoolean("settings.save-previous-location");
         SETTINGS_TELEPORT_AT_END_TIME = config.getInt("settings.teleport-at-end-time");
         SETTINGS_FREE_ROAM_TIME = config.getInt("settings.free-room-time");
@@ -145,6 +151,13 @@ public class Config {
         if (locString != null && locString.contains(":")) {
             SETTINGS_GLOBAL_EXIT_LOCATION = LocationParser.getLocFromString(locString);
         }
+
+        // Player Tracking
+        PLAYER_TRACKING_DISTANCE = this.config.getInt("player-tracking.distance");
+        PLAYER_TRACKING_ENEMY_PLAYER_COLOR = getColor("player-tracking.enemy-player-color");
+        PLAYER_TRACKING_ENEMY_ENTITY_COLOR = getColor("player-tracking.enemy-entity-color");
+        PLAYER_TRACKING_TRACKING_STICK_USES = config.getInt("player-tracking.tracking-stick-uses");
+        PLAYER_TRACKING_PLAYERS_FOR_TRACKING_STICK = config.getInt("player-tracking.players-for-tracking-stick");
 
         // Scoreboard
         SCOREBOARD_HIDE_NAMETAGS = config.getBoolean("scoreboard.hide-nametags");
@@ -274,6 +287,44 @@ public class Config {
         String locString = LocationParser.locToString(location);
         this.config.set("settings.global-exit-location", locString);
         save();
+    }
+
+    private @Nullable Color getColor(@NotNull String setting) {
+        String string = this.config.getString(setting);
+        if (string == null) {
+            Util.log("Invalid color for setting '%s'", setting);
+            return null;
+        }
+        if (string.equalsIgnoreCase("disable") || string.equalsIgnoreCase("disabled")) {
+            return null;
+        }
+        if (string.startsWith("#")) {
+            // parse from hex
+            int i = Integer.parseInt(string.substring(1), 16);
+            return Color.fromRGB(i);
+        } else if (string.contains(":")) {
+            String[] split = string.split(":");
+            if (split.length == 3) {
+                try {
+                    int r = Integer.parseInt(split[0]);
+                    int g = Integer.parseInt(split[1]);
+                    int b = Integer.parseInt(split[2]);
+                    return Color.fromRGB(r,g,b);
+                } catch (NumberFormatException ignore) {
+                    Util.log("Invalid color '%s' for setting '%s'", string, setting);
+                    return null;
+                }
+            }
+        } else {
+            try {
+                return Color.fromRGB(Integer.parseInt(string));
+            } catch (NumberFormatException ignore) {
+                Util.log("Invalid color '%s' for setting '%s'", string, setting);
+                return null;
+            }
+        }
+        Util.log("Invalid color '%s' for setting '%s'", string, setting);
+        return null;
     }
 
 }
