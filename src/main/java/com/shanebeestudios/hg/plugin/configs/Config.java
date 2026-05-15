@@ -209,8 +209,7 @@ public class Config {
         COMMANDS_ALLOWED_IN_GAME = config.getStringList("commands.allowed-in-game");
 
         try {
-            Vault.setupEconomy();
-            if (Vault.ECONOMY == null) {
+            if (!Vault.setupEconomy()) {
                 Util.log("<red>Unable to setup vault!");
                 Util.log(" - <red>Economy provider is missing.");
                 Util.log(" - <yellow>Cash rewards will not be given out..");

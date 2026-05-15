@@ -25,6 +25,9 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
 
+/**
+ * Parser for items from configs
+ */
 public class ItemParser {
 
     @SuppressWarnings({"UnstableApiUsage"})
