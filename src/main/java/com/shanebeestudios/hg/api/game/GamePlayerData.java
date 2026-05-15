@@ -337,7 +337,7 @@ public class GamePlayerData extends Data {
         } else {
             this.playerManager.createSpectatorData(spectator, this.game);
         }
-        this.spectators.put(spectator, true); // TODO should we handle location saving?
+        this.spectators.put(spectator, true);
         spectator.setGameMode(GameMode.SURVIVAL);
         spectator.setCollidable(false);
         if (Config.SPECTATE_FLY)
