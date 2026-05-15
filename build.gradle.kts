@@ -56,7 +56,7 @@ dependencies {
     implementation("org.bstats:bstats-bukkit:3.2.0")
 
     // MythicMobs
-    compileOnly("io.lumine:Mythic-Dist:5.6.1")
+    compileOnly("io.lumine:Mythic-Dist:5.12.0")
 
     // Papi
     compileOnly("me.clip:placeholderapi:2.12.2")
@@ -80,7 +80,7 @@ tasks {
         dependsOn("shadowJar")
         from("build/libs") {
             include("HungerGames-*.jar")
-            destinationDir = file("/Users/ShaneBee/Desktop/Server/Minecraft/${serverLocation}/plugins/")
+            destinationDir = file("/Users/ShaneBee/Desktop/Server/Minecraft/Skript/${serverLocation}/plugins/")
         }
 
     }
