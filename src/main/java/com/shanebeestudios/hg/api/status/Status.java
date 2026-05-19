@@ -56,6 +56,18 @@ public enum Status {
         };
     }
 
+    /**
+     * Whether the game is currently running.
+     *
+     * @return Is currently running
+     */
+    public boolean isRunning() {
+        return switch (this) {
+            case WAITING, COUNTDOWN, FREE_ROAM, RUNNING -> true;
+            default -> false;
+        };
+    }
+
     public Component getName() {
         return switch (this) {
             case READY -> Util.getMini(this.lang.game_status_ready);

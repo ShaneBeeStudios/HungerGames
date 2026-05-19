@@ -406,6 +406,10 @@ public class Game {
      * @param death Whether the game stopped after the result of a death (false = no winnings paid out)
      */
     public void stop(boolean death) {
+        if (!this.gameArenaData.getStatus().isRunning()) {
+            // Don't attempt to stop if the game isn't running
+            return;
+        }
         if (Config.WORLD_BORDER_ENABLED) {
             this.gameBorderData.resetBorder(false);
         }
