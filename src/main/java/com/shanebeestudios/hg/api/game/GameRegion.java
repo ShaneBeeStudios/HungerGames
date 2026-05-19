@@ -13,6 +13,7 @@ import org.jetbrains.annotations.Nullable;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
+import java.util.function.Predicate;
 
 /**
  * Data holder for a {@link Game Game's} bounding box
@@ -76,7 +77,7 @@ public class GameRegion {
      * @param type Material type to check
      * @return ArrayList of locations of all blocks of this type in this bound
      */
-    public List<Location> getBlocks(@Nullable Material type) {
+    public List<Location> getBlocks(@Nullable Predicate<Block> predicate) {
         World world = Bukkit.getWorld(this.world);
         assert world != null;
         List<Location> blockList = new ArrayList<>();
@@ -86,7 +87,7 @@ public class GameRegion {
                 for (int z = (int) this.boundingBox.getMinZ(); z < this.boundingBox.getMaxZ(); z++) {
 
                     Block block = world.getBlockAt(x, y, z);
-                    if (type == null || block.getType() == type) {
+                    if (predicate == null || predicate.test(block)) {
                         blockList.add(block.getLocation());
                     }
                 }

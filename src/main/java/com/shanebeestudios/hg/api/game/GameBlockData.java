@@ -5,7 +5,6 @@ import com.shanebeestudios.hg.api.data.ItemFrameData;
 import com.shanebeestudios.hg.api.util.BlockUtils;
 import com.shanebeestudios.hg.plugin.configs.Config;
 import org.bukkit.Location;
-import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockState;
 import org.bukkit.block.BlockType;
@@ -32,7 +31,7 @@ public class GameBlockData extends Data {
 
     private final Random random = new Random();
     private final Map<ItemData.ChestType, List<Location>> chests = new HashMap<>();
-    private final List<BlockState> blocks = new ArrayList<>();
+    private final List<BlockState> blocksToRollback = new ArrayList<>();
     private final List<Block> randomBonusChests = new ArrayList<>();
     private final Map<UUID, ItemFrameData> itemFrameData = new HashMap<>();
     private final GameLobbyWall gameLobbyWall;
@@ -164,24 +163,14 @@ public class GameBlockData extends Data {
         return true;
     }
 
-    /**
-     * Log all blocks in an arena for rollback
-     */
-    public int logBlocksForRollback() {
-        int count = 0;
-        for (Location location : this.getGame().getGameArenaData().getGameRegion().getBlocks(null)) {
-            Block block = location.getBlock();
-            this.blocks.add(block.getState());
-            count++;
-            if (Config.CHESTS_BONUS_RANDOMIZE_ENABLED && BlockUtils.isBonusBlockReplacement(block)) {
-                this.randomBonusChests.add(block);
-                block.setType(Material.AIR);
-            }
-        }
-        return count;
+    public void logBlockForRollback(Block block) {
+        this.blocksToRollback.add(block.getState());
     }
 
-    @SuppressWarnings("UnstableApiUsage")
+    public void logRandomBonusChest(Block block) {
+        this.randomBonusChests.add(block);
+    }
+
     public void setupRandomizedBonusChests() {
         if (!Config.CHESTS_BONUS_RANDOMIZE_ENABLED) return;
 
@@ -207,14 +196,14 @@ public class GameBlockData extends Data {
      * rollback at once, which can cause heavy amounts of lag.</p>
      */
     public void forceRollback() {
-        Collections.reverse(blocks);
-        for (BlockState state : blocks) {
+        Collections.reverse(this.blocksToRollback);
+        for (BlockState state : this.blocksToRollback) {
             state.update(true);
         }
     }
 
     boolean requiresRollback() {
-        return !this.blocks.isEmpty() || !this.itemFrameData.isEmpty();
+        return !this.blocksToRollback.isEmpty() || !this.itemFrameData.isEmpty();
     }
 
     /**
@@ -241,16 +230,16 @@ public class GameBlockData extends Data {
      *
      * @return List of all recorded blocks
      */
-    public List<BlockState> getBlocks() {
-        Collections.reverse(this.blocks);
-        return this.blocks;
+    public List<BlockState> getBlocksToRollback() {
+        Collections.reverse(this.blocksToRollback);
+        return this.blocksToRollback;
     }
 
     /**
      * Clear the current block list
      */
     public void resetBlocks() {
-        this.blocks.clear();
+        this.blocksToRollback.clear();
         this.randomBonusChests.clear();
     }
 

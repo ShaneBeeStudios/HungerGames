@@ -157,12 +157,14 @@ chests:
     min-content: 1
     max-content: 5
 rollback:
+  # Whether to enable the rollback system
+  enabled: true
   # Let players break blocks in the arena, and restore when the game is done
   allow-block-break: false
   # Allow players to take items out of item frames (will be rolled back)
   allow-itemframe-take: false
   # The amount of blocks that will be restored during rollback per second (this number is actually divided by 20 and restored in 1 tick intervals)
-  blocks-per-second: 500
+  blocks-per-second: 500000
   # When enabled, will not allow players to break blocks during the free-roam time
   protect-during-free-roam: true
   # Prevent players from trampling crops in your arenas

@@ -237,6 +237,7 @@ public class Language {
     public String game_status_not_ready;
     public String game_status_free_roam;
     public String game_status_countdown;
+    public String game_status_preparing;
     public String player_status_in_game;
     public String player_status_spectator;
     public String player_status_not_in_game;
@@ -529,6 +530,7 @@ public class Language {
         this.game_status_not_ready = this.lang.getString("status.game-status.not-ready");
         this.game_status_free_roam = this.lang.getString("status.game-status.free-roam");
         this.game_status_countdown = this.lang.getString("status.game-status.countdown");
+        this.game_status_preparing = this.lang.getString("status.game-status.preparing");
         this.player_status_in_game = this.lang.getString("status.player-status.in-game");
         this.player_status_spectator = this.lang.getString("status.player-status.spectator");
         this.player_status_not_in_game = this.lang.getString("status.player-status.not-in-game");

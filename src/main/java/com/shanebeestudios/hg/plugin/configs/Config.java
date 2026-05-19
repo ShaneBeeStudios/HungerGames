@@ -64,6 +64,7 @@ public class Config {
     public static List<String> REWARD_MESSAGES;
 
     //Rollback
+    public static boolean ROLLBACK_ENABLED;
     public static boolean ROLLBACK_ALLOW_BREAK_BLOCKS;
     public static int ROLLBACK_BLOCKS_PER_SECOND;
     public static boolean ROLLBACK_PROTECT_DURING_FREE_ROAM;
@@ -180,6 +181,7 @@ public class Config {
         REWARD_MESSAGES = config.getStringList("reward.messages");
 
         // Rollback
+        ROLLBACK_ENABLED = config.getBoolean("rollback.enabled");
         ROLLBACK_ALLOW_BREAK_BLOCKS = config.getBoolean("rollback.allow-block-break");
         ROLLBACK_BLOCKS_PER_SECOND = config.getInt("rollback.blocks-per-second");
         ROLLBACK_PROTECT_DURING_FREE_ROAM = config.getBoolean("rollback.protect-during-free-roam");

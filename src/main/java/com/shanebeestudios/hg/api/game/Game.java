@@ -20,6 +20,7 @@ import com.shanebeestudios.hg.plugin.tasks.FreeRoamTask;
 import com.shanebeestudios.hg.plugin.tasks.GameTimerTask;
 import com.shanebeestudios.hg.plugin.tasks.MobSpawnerTask;
 import com.shanebeestudios.hg.plugin.tasks.NearestPlayerCompassTask;
+import com.shanebeestudios.hg.plugin.tasks.PrepareArenaTask;
 import com.shanebeestudios.hg.plugin.tasks.RollbackTask;
 import com.shanebeestudios.hg.plugin.tasks.StartingTask;
 import org.bukkit.Bukkit;
@@ -45,6 +46,7 @@ public class Game {
 
     // Tasks here!
     private MobSpawnerTask mobSpawnerTask;
+    private PrepareArenaTask prepareArenaTask;
     private FreeRoamTask freeRoamTask;
     private StartingTask startingTask;
     private GameTimerTask gameTimerTask;
@@ -222,17 +224,21 @@ public class Game {
     }
 
     /**
-     * Initialize the waiting period of the game
-     * <p>This will be called when a player first joins</p>
+     * Prepare the arena for the game.
+     */
+    public void prepareArena() {
+        this.gameArenaData.setStatus(Status.PREPARING);
+        this.prepareArenaTask = new PrepareArenaTask(this);
+    }
+
+    /**
+     * Initialize the waiting period of the game.
+     * <p>This will be called when a player first joins.</p>
      */
     public void startWaitingPeriod() {
         this.gameArenaData.setStatus(Status.WAITING);
-        long start = System.currentTimeMillis();
-        int count = this.gameBlockData.logBlocksForRollback();
-        this.gameBlockData.setupRandomizedBonusChests();
-        long fin = System.currentTimeMillis() - start;
-        if (Config.SETTINGS_DEBUG) {
-            Util.log("Logged <aqua>%,d<grey> blocks in <aqua>%sms<grey> for arena <green>%s", count, fin, getGameArenaData().getName());
+        if (this.gamePlayerData.getPlayers().size() >= this.gameArenaData.getMinPlayers()) {
+            startPreGameCountdown();
         }
     }
 
@@ -286,6 +292,7 @@ public class Game {
      * Cancel all active tasks
      */
     public void cancelTasks() {
+        if (this.prepareArenaTask != null) this.prepareArenaTask.stop();
         if (this.startingTask != null) this.startingTask.stop();
         if (this.freeRoamTask != null) this.freeRoamTask.stop();
         if (this.gameTimerTask != null) this.gameTimerTask.stop();
@@ -369,7 +376,13 @@ public class Game {
             case READY -> {
                 if (!canJoin(player)) return false;
                 this.gamePlayerData.addPlayerData(player, savePreviousLocation);
-                startWaitingPeriod();
+                prepareArena();
+                broadcastJoin(player);
+                Util.sendPrefixedMessage(player, this.lang.game_joined_waiting_to_teleport.replace("<arena>", arenaName));
+            }
+            case PREPARING -> {
+                if (!canJoin(player)) return false;
+                this.gamePlayerData.addPlayerData(player, savePreviousLocation);
                 broadcastJoin(player);
                 Util.sendPrefixedMessage(player, this.lang.game_joined_waiting_to_teleport.replace("<arena>", arenaName));
             }
@@ -543,7 +556,7 @@ public class Game {
                 .replace("<arena>", this.gameArenaData.getName())
                 .replace("<player>", player.getName()) +
                 (this.gameArenaData.getMinPlayers() - this.gamePlayerData.getPlayers().size() <= 0 ? "!" : ": " + this.lang.game_waiting_players_to_start
-                    .replace("<amount>", String.valueOf((this.gameArenaData.getMinPlayers() - this.gamePlayerData.getPlayers().size())))));
+                                                                                                                  .replace("<amount>", String.valueOf((this.gameArenaData.getMinPlayers() - this.gamePlayerData.getPlayers().size())))));
         }
         this.gameBlockData.updateLobbyBlock();
         this.gameScoreboard.updateBoards();
