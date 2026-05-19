@@ -3,7 +3,7 @@ package com.shanebeestudios.hg.api.game;
 import org.bukkit.Bukkit;
 import org.bukkit.HeightMap;
 import org.bukkit.Location;
-import org.bukkit.Material;
+import org.bukkit.NamespacedKey;
 import org.bukkit.World;
 import org.bukkit.block.Block;
 import org.bukkit.util.BoundingBox;
@@ -22,25 +22,43 @@ import java.util.function.Predicate;
 public class GameRegion {
 
     private final BoundingBox boundingBox;
-    private final String world;
+    private NamespacedKey key;
+    private String name;
 
     public static GameRegion createNew(@NotNull Block corner1, @NotNull Block corner2) {
         BoundingBox boundingBox = BoundingBox.of(corner1, corner2);
-        return new GameRegion(corner1.getWorld().getName(), boundingBox);
+        return new GameRegion(corner1.getWorld().getKey(), boundingBox);
     }
 
-    public static GameRegion loadFromConfig(String world, BoundingBox boundingBox) {
-        return new GameRegion(world, boundingBox);
+    public static GameRegion loadFromConfig(NamespacedKey key, BoundingBox boundingBox) {
+        return new GameRegion(key, boundingBox);
+    }
+
+
+    @Deprecated(forRemoval = true, since = "INSERT VERSION")
+    public static GameRegion loadFromConfig(String name, BoundingBox boundingBox) {
+        World world = Bukkit.getWorld(name);
+        if (world == null) {
+            return new GameRegion(name, boundingBox);
+        }
+        return new GameRegion(world.getKey(), boundingBox);
     }
 
     /**
      * Create a new bounding box between 2 sets of coordinates
      *
-     * @param world       World this bound is in
+     * @param key         World this bound is in
      * @param boundingBox BoundingBox for this bound
      */
-    private GameRegion(String world, BoundingBox boundingBox) {
-        this.world = world;
+    private GameRegion(NamespacedKey key, BoundingBox boundingBox) {
+        this.key = key;
+        this.boundingBox = boundingBox;
+    }
+
+    @Deprecated(forRemoval = true, since = "INSERT VERSION")
+    private GameRegion(String name, BoundingBox boundingBox) {
+        this.key = null;
+        this.name = name;
         this.boundingBox = boundingBox;
     }
 
@@ -74,11 +92,11 @@ public class GameRegion {
     /**
      * Get location of all blocks of a type within a bound
      *
-     * @param type Material type to check
+     * @param predicate Material predicate to check
      * @return ArrayList of locations of all blocks of this type in this bound
      */
     public List<Location> getBlocks(@Nullable Predicate<Block> predicate) {
-        World world = Bukkit.getWorld(this.world);
+        World world = getWorld();
         assert world != null;
         List<Location> blockList = new ArrayList<>();
 
@@ -101,8 +119,17 @@ public class GameRegion {
      *
      * @return World of this bound
      */
-    public World getWorld() {
-        return Bukkit.getWorld(this.world);
+    public @Nullable World getWorld() {
+        if (this.key != null) {
+            return Bukkit.getWorld(this.key);
+        } else if (this.name != null) {
+            World world = Bukkit.getWorld(this.name);
+            if (world != null) {
+                this.key = world.getKey();
+                return world;
+            }
+        }
+        return null;
     }
 
     public BoundingBox getBoundingBox() {
@@ -138,9 +165,10 @@ public class GameRegion {
 
     @Override
     public String toString() {
+        String name = this.key != null ? this.key.toString() : this.name != null ? this.name : "unavailable";
         return "Bound{" +
             "boundingBox=" + boundingBox +
-            ", world='" + world + '\'' +
+            ", world='" + name + '\'' +
             '}';
     }
 

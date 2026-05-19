@@ -8,29 +8,8 @@ import org.jetbrains.annotations.Nullable;
 /**
  * Parser for {@link Location Locations}
  */
+@Deprecated(forRemoval = true, since = "INSERT VERSION")
 public class LocationParser {
-
-    /**
-     * Serialize a block location to a string
-     *
-     * @param location Block location to serialize
-     * @return Serialized block location
-     */
-    public static String blockLocToString(Location location) {
-        return location.getWorld().getName() + ":" + location.getBlockX() + ":" + location.getBlockY() + ":" + location.getBlockZ();
-    }
-
-    /**
-     * Serialize a location to a string
-     *
-     * @param location Location to serialize
-     * @return Serialized location
-     */
-    public static String locToString(Location location) {
-        float yaw = (float) Math.floor(location.getYaw());
-        float pitch = (float) Math.floor(location.getPitch());
-        return location.getWorld().getName() + ":" + location.getX() + ":" + location.getY() + ":" + location.getZ() + ":" + yaw + ":" + pitch;
-    }
 
     /**
      * Deserialize a block location from a string
@@ -49,7 +28,8 @@ public class LocationParser {
      * @param stringLocation String to deserialize
      * @return Location from string
      */
-    public static @Nullable Location getLocFromString(String stringLocation) {
+    public static @Nullable Location getLocFromString(@Nullable String stringLocation) {
+        if (stringLocation == null) return null;
         String[] split = stringLocation.split(":");
         if (split.length < 4) return null;
 

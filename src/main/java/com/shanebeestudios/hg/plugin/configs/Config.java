@@ -148,9 +148,12 @@ public class Config {
         SETTINGS_SAVE_PREVIOUS_LOCATION = config.getBoolean("settings.save-previous-location");
         SETTINGS_TELEPORT_AT_END_TIME = config.getInt("settings.teleport-at-end-time");
         SETTINGS_FREE_ROAM_TIME = config.getInt("settings.free-room-time");
-        String locString = config.getString("settings.global-exit-location");
-        if (locString != null && locString.contains(":")) {
-            SETTINGS_GLOBAL_EXIT_LOCATION = LocationParser.getLocFromString(locString);
+
+        if (this.config.isString("settings.global-exit-location")) {
+            SETTINGS_GLOBAL_EXIT_LOCATION = LocationParser.getLocFromString(this.config.getString("settings.global-exit-location"));
+            setGlobalExitLocation(SETTINGS_GLOBAL_EXIT_LOCATION);
+        } else if (this.config.isLocation("settings.global-exit-location")) {
+            SETTINGS_GLOBAL_EXIT_LOCATION = this.config.getLocation("settings.global-exit-location");
         }
 
         // Player Tracking
@@ -286,8 +289,7 @@ public class Config {
      * @param location Global exit location
      */
     public void setGlobalExitLocation(Location location) {
-        String locString = LocationParser.locToString(location);
-        this.config.set("settings.global-exit-location", locString);
+        this.config.set("settings.global-exit-location", location);
         save();
     }
 
@@ -311,7 +313,7 @@ public class Config {
                     int r = Integer.parseInt(split[0]);
                     int g = Integer.parseInt(split[1]);
                     int b = Integer.parseInt(split[2]);
-                    return Color.fromRGB(r,g,b);
+                    return Color.fromRGB(r, g, b);
                 } catch (NumberFormatException ignore) {
                     Util.log("Invalid color '%s' for setting '%s'", string, setting);
                     return null;
