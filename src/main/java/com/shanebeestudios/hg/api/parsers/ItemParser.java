@@ -47,7 +47,7 @@ public class ItemParser {
         // COUNT
         int count = 1;
         if (config.contains("count")) {
-            count = config.getInt("count");
+            count = Math.clamp(config.getInt("count"), 1, 99);
         }
         ItemStack itemStack = itemType.createItemStack(count);
 
