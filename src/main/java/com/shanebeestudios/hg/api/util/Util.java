@@ -6,7 +6,6 @@ import com.shanebeestudios.hg.plugin.configs.Language;
 import dev.jorel.commandapi.arguments.CustomArgument.CustomArgumentException;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.minimessage.MiniMessage;
-import net.md_5.bungee.api.ChatColor;
 import org.bukkit.Bukkit;
 import org.bukkit.NamespacedKey;
 import org.bukkit.block.BlockFace;
@@ -14,9 +13,6 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
-
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 /**
  * Generalized utility class for shortcut methods
@@ -29,7 +25,6 @@ public class Util {
     public static final boolean IS_RUNNING_FOLIA = classExists("io.papermc.paper.threadedregions.FoliaWatchdogThread");
 
     // PRIVATE
-    private static final Pattern HEX_PATTERN = Pattern.compile("<#([A-Fa-f0-9]){6}>");
     private static final CommandSender CONSOLE = Bukkit.getConsoleSender();
     private static final MiniMessage MINI_MESSAGE = MiniMessage.miniMessage();
     private static String PREFIX;
@@ -148,27 +143,6 @@ public class Util {
         if (!s.isEmpty()) { // only send messages if it's actually a message
             Bukkit.broadcast(getMini(getPrefix() + " " + s));
         }
-    }
-
-    /**
-     * Shortcut for adding color to a string
-     *
-     * @param string String including color codes
-     * @return Formatted string
-     */
-    @Deprecated(forRemoval = true)
-    public static String getColString(String string) {
-        if (isRunningMinecraft(1, 16)) {
-            Matcher matcher = HEX_PATTERN.matcher(string);
-            while (matcher.find()) {
-                final ChatColor hexColor = ChatColor.of(matcher.group().substring(1, matcher.group().length() - 1));
-                final String before = string.substring(0, matcher.start());
-                final String after = string.substring(matcher.end());
-                string = before + hexColor + after;
-                matcher = HEX_PATTERN.matcher(string);
-            }
-        }
-        return ChatColor.translateAlternateColorCodes('&', string);
     }
 
     /**
