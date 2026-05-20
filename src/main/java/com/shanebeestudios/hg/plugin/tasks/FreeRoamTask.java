@@ -8,6 +8,9 @@ import com.shanebeestudios.hg.plugin.configs.Language;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 
+/**
+ * Task for allowing game players to free roam
+ */
 public class FreeRoamTask implements Runnable {
 
     private final Game game;

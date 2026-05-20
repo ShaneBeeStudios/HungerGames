@@ -14,6 +14,9 @@ import org.jetbrains.annotations.Nullable;
 
 import java.util.Random;
 
+/**
+ * Task for spawning mobs in the game arena
+ */
 public class MobSpawnerTask implements Runnable {
 
     private final GamePlayerData gamePlayerData;

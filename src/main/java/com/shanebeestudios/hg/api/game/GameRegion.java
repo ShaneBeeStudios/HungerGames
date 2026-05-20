@@ -7,6 +7,7 @@ import org.bukkit.NamespacedKey;
 import org.bukkit.World;
 import org.bukkit.block.Block;
 import org.bukkit.util.BoundingBox;
+import org.jetbrains.annotations.ApiStatus;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
@@ -30,11 +31,18 @@ public class GameRegion {
         return new GameRegion(corner1.getWorld().getKey(), boundingBox);
     }
 
+    /**
+     * @hidden
+     */
+    @ApiStatus.Internal
     public static GameRegion loadFromConfig(NamespacedKey key, BoundingBox boundingBox) {
         return new GameRegion(key, boundingBox);
     }
 
-
+    /**
+     * @hidden
+     */
+    @ApiStatus.Internal
     @Deprecated(forRemoval = true, since = "INSERT VERSION")
     public static GameRegion loadFromConfig(String name, BoundingBox boundingBox) {
         World world = Bukkit.getWorld(name);

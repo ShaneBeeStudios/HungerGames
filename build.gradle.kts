@@ -107,6 +107,7 @@ tasks {
         exclude("com/shanebeestudios/hg/plugin/commands")
         exclude("com/shanebeestudios/hg/plugin/listeners")
         options.links(
+            "https://javadoc.io/doc/org.jetbrains/annotations/latest/",
             "https://jd.papermc.io/paper/26.1.2/",
             "https://jd.advntr.dev/api/4.25.0/",
             "https://tr7zw.github.io/Item-NBT-API/v2-api/"

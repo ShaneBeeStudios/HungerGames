@@ -10,6 +10,9 @@ import com.shanebeestudios.hg.plugin.configs.Config;
 import com.shanebeestudios.hg.plugin.configs.Language;
 import org.bukkit.Bukkit;
 
+/**
+ * Timer task for games
+ */
 public class GameTimerTask implements Runnable {
 
     private int remainingTime;

@@ -13,6 +13,9 @@ import org.bukkit.block.Block;
 import java.util.Iterator;
 import java.util.List;
 
+/**
+ * Task for preparing an arena by logging blocks for rollback
+ */
 public class PrepareArenaTask implements Runnable {
 
     private final Game game;
