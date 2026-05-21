@@ -26,6 +26,8 @@ public class Config {
     public static boolean SETTINGS_DEBUG;
 
     // Basic settings
+    public static boolean SETTINGS_UPDATE_CHECKER_ENABLED;
+    public static boolean SETTINGS_UPDATE_CHECKER_ASYNC;
     public static boolean SETTINGS_BROADCAST_JOIN_MESSAGES;
     public static boolean SETTINGS_BROADCAST_WIN_MESSAGES;
     public static boolean HAS_ECONOMY = true;
@@ -142,6 +144,8 @@ public class Config {
     private void loadConfig() {
         // Settings
         SETTINGS_DEBUG = config.getBoolean("settings.debug");
+        SETTINGS_UPDATE_CHECKER_ENABLED = config.getBoolean("settings.update-checker.enabled");
+        SETTINGS_UPDATE_CHECKER_ASYNC = config.getBoolean("settings.update-checker.async");
         SETTINGS_BROADCAST_JOIN_MESSAGES = config.getBoolean("settings.broadcast-join-messages");
         SETTINGS_BROADCAST_WIN_MESSAGES = config.getBoolean("settings.broadcast-win-messages");
         SETTINGS_BOSSBAR_COUNTDOWN = config.getBoolean("settings.bossbar-countdown");

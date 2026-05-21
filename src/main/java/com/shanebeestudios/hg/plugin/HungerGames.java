@@ -27,6 +27,7 @@ import com.shanebeestudios.hg.plugin.managers.MobManager;
 import com.shanebeestudios.hg.plugin.managers.Placeholders;
 import com.shanebeestudios.hg.plugin.managers.PlayerManager;
 import com.shanebeestudios.hg.plugin.managers.SessionManager;
+import com.shanebeestudios.hg.plugin.update.UpdateChecker;
 import dev.jorel.commandapi.CommandAPI;
 import dev.jorel.commandapi.CommandAPIPaperConfig;
 import dev.jorel.commandapi.exceptions.UnsupportedVersionException;
@@ -146,6 +147,7 @@ public class HungerGames extends JavaPlugin {
 
         setupMetrics();
 
+        new UpdateChecker(this);
         Util.log("HungerGames has been <green>enabled<grey> in <aqua>%.2f seconds<grey>!", (float) (System.currentTimeMillis() - start) / 1000);
     }
 
