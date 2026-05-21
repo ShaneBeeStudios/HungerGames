@@ -47,7 +47,7 @@ body:
       label: Server Version
       description: Which version of the server and MC are you using?
       placeholder: |
-        Ex: "Paper 1.21.4"
+        Ex: "Paper 26.1.2"
     validations:
       required: true
 
