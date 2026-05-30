@@ -78,7 +78,7 @@ public class GameArenaData extends Data {
     }
 
     public Game checkOverlap() {
-        for (Game toCheck : HungerGames.getPlugin().getGameManager().getGames()) {
+        for (Game toCheck : HungerGames.getPlugin().getGameManager().getGames(this.gameRegion.getWorld())) {
             if (this.game.equals(toCheck)) continue;
 
             if (toCheck.getGameArenaData().getGameRegion().getBoundingBox().overlaps(this.gameRegion.getBoundingBox()))

@@ -93,6 +93,9 @@ public class GameRegion {
      * @return True if location is within this bound
      */
     public boolean isInRegion(Location loc) {
+        if (this.getWorld() != loc.getWorld()) {
+            return false;
+        }
         return this.boundingBox.contains(loc.toVector());
     }
 

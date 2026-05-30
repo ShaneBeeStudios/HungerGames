@@ -108,17 +108,23 @@ public class PlayerSession {
     }
 
     private boolean isTooSmall() {
-        if (this.corner1 == null || this.corner2 == null) return true;
+        if (this.corner1 == null || this.corner2 == null) {
+            return true;
+        }
         BoundingBox boundingBox = BoundingBox.of(this.corner1, this.corner2);
         return boundingBox.getWidthX() <= 5 || boundingBox.getWidthZ() <= 5 || boundingBox.getHeight() <= 5;
     }
 
     private boolean isOverlapping() {
-        if (this.corner1 == null || this.corner2 == null) return true;
+        if (this.corner1 == null || this.corner2 == null) {
+            return true;
+        }
         BoundingBox boundingBox = BoundingBox.of(this.corner1, this.corner2);
-        for (Game game : HungerGames.getPlugin().getGameManager().getGames()) {
+        for (Game game : HungerGames.getPlugin().getGameManager().getGames(this.corner1.getWorld())) {
             BoundingBox gameBox = game.getGameArenaData().getGameRegion().getBoundingBox();
-            if (boundingBox.overlaps(gameBox)) return true;
+            if (boundingBox.overlaps(gameBox)) {
+                return true;
+            }
         }
         return false;
     }
