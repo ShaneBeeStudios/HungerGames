@@ -234,7 +234,8 @@ public class Util {
      * @return True if running this version or higher, otherwise false
      */
     public static boolean isRunningMinecraft(int year, int drop, int revision) {
-        String[] version = Bukkit.getServer().getMinecraftVersion().split("\\.");
+        String mcVer = Bukkit.getServer().getMinecraftVersion().split(" ")[0];
+        String[] version = mcVer.split("\\.");
         int maj = Integer.parseInt(version[0]);
         int min = Integer.parseInt(version[1]);
         int rev;
