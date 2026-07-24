@@ -18,6 +18,9 @@ settings:
     # Whether the update check should be done on another thread
     async: false
 
+  # Whether to force load the NBT-API if Minecraft version is not supported
+  force-load-nbt-api: false
+
   # When enabled, if a player joins an arena, a message will broadcast to all players on the server that a game is available to
   # join and how many players til it can start.
   # A message will broadcast that a game has started, and that you can still join.

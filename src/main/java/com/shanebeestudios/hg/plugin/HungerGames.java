@@ -96,7 +96,6 @@ public class HungerGames extends JavaPlugin {
             Bukkit.getPluginManager().disablePlugin(this);
             return;
         }
-        NBTApi.initializeNBTApi();
         TaskUtils.initialize(this);
         loadPlugin(true);
     }
@@ -110,6 +109,7 @@ public class HungerGames extends JavaPlugin {
         PLUGIN_INSTANCE = this;
 
         this.config = new Config(this);
+        NBTApi.initializeNBTApi();
 
         //MythicMob check
         if (Bukkit.getPluginManager().getPlugin("MythicMobs") != null) {
