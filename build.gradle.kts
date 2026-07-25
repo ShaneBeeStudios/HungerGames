@@ -10,7 +10,7 @@ configurations.matching { it.isCanBeResolved }.configureEach {
 }
 
 // Version of HungerGames
-val projectVersion = "5.0.0"
+val projectVersion = "5.1.0"
 // Minimum version of Minecraft that HungerGames supports
 val apiVersion = "1.21.11"
 // Where this builds on the server
