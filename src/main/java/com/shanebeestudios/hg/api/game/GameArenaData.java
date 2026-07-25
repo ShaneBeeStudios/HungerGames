@@ -5,6 +5,7 @@ import com.shanebeestudios.hg.api.util.Util;
 import com.shanebeestudios.hg.plugin.HungerGames;
 import net.kyori.adventure.text.Component;
 import org.bukkit.Location;
+import org.bukkit.entity.Player;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -77,10 +78,11 @@ public class GameArenaData extends Data {
     }
 
     public Game checkOverlap() {
-        for (Game toCheck : HungerGames.getPlugin().getGameManager().getGames()) {
+        for (Game toCheck : HungerGames.getPlugin().getGameManager().getGames(this.gameRegion.getWorld())) {
             if (this.game.equals(toCheck)) continue;
 
-            if (toCheck.getGameArenaData().getGameRegion().getBoundingBox().overlaps(this.gameRegion.getBoundingBox())) return toCheck;
+            if (toCheck.getGameArenaData().getGameRegion().getBoundingBox().overlaps(this.gameRegion.getBoundingBox()))
+                return toCheck;
         }
         return null;
     }
@@ -231,7 +233,24 @@ public class GameArenaData extends Data {
     }
 
     /**
-     * Set exit location for this game
+     * Get the exit location for a player.
+     * <p>
+     * If the game has a specific exit location, it will be returned.
+     * Otherwise, the global exit location for the player will be returned.
+     * </p>
+     *
+     * @param player Player to get exit location for
+     * @return Exit location for the player
+     */
+    public Location getExitForPlayer(Player player) {
+        if (this.exit != null) {
+            return this.exit;
+        }
+        return this.gameManager.getGlobalExitLocation(player);
+    }
+
+    /**
+     * Set the exit location for this game.
      *
      * @param location Location where players will exit
      */

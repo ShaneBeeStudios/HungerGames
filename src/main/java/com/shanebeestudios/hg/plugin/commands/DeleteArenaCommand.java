@@ -23,44 +23,59 @@ public class DeleteArenaCommand extends SubCommand {
         return LiteralArgument.literal("delete-arena")
             .withPermission(Permissions.COMMAND_DELETE.permission())
             .then(CustomArg.GAME.get("game")
+                .then(LiteralArgument.literal("confirm")
+                    .executes(info -> {
+                        CommandSender sender = info.sender();
+                        Game game = info.args().getByClass("game", Game.class);
+                        assert game != null;
+                        GamePlayerData gamePlayerData = game.getGamePlayerData();
+                        GameArenaData gameArenaData = game.getGameArenaData();
+                        String name = gameArenaData.getName();
+
+                        try {
+                            Util.sendPrefixedMessage(sender, this.lang.command_delete_attempt.replace("<arena>", name));
+
+                            switch (gameArenaData.getStatus()) {
+                                case WAITING, COUNTDOWN, FREE_ROAM, RUNNING -> {
+                                    Util.sendMessage(sender, this.lang.command_delete_stopping);
+                                    game.getGameBlockData().forceRollback();
+                                    game.stop(false);
+                                }
+                                case ROLLBACK -> {
+                                    Util.sendMessage(sender, this.lang.command_delete_rollback);
+                                    return;
+                                }
+                            }
+
+                            // This shouldn't happen, why is it here?
+                            if (!gamePlayerData.getPlayers().isEmpty()) {
+                                Util.sendMessage(sender, this.lang.command_delete_kicking);
+                                for (Player player : gamePlayerData.getPlayers()) {
+                                    gamePlayerData.leaveGame(player, false);
+                                }
+                            }
+
+                            this.gameManager.deleteGame(game);
+                            Util.sendMessage(sender, this.lang.command_delete_deleted.replace("<arena>", name));
+                        } catch (Exception e) {
+                            Util.sendMessage(sender, this.lang.command_delete_failed);
+                            Util.sendMessage(sender, "Error Message: <red>" + e.getMessage());
+                        }
+                    }))
                 .executes(info -> {
                     CommandSender sender = info.sender();
                     Game game = info.args().getByClass("game", Game.class);
                     assert game != null;
-                    GamePlayerData gamePlayerData = game.getGamePlayerData();
-                    GameArenaData gameArenaData = game.getGameArenaData();
-                    String name = gameArenaData.getName();
 
-                    try {
-                        Util.sendPrefixedMessage(sender, this.lang.command_delete_attempt.replace("<arena>", name));
-
-                        switch (gameArenaData.getStatus()) {
-                            case WAITING, COUNTDOWN, FREE_ROAM, RUNNING -> {
-                                Util.sendMessage(sender, this.lang.command_delete_stopping);
-                                game.getGameBlockData().forceRollback();
-                                game.stop(false);
-                            }
-                            case ROLLBACK -> {
-                                Util.sendMessage(sender, this.lang.command_delete_rollback);
-                                return;
-                            }
-                        }
-
-                        // This shouldn't happen, why is it here?
-                        if (!gamePlayerData.getPlayers().isEmpty()) {
-                            Util.sendMessage(sender, this.lang.command_delete_kicking);
-                            for (Player player : gamePlayerData.getPlayers()) {
-                                gamePlayerData.leaveGame(player, false);
-                            }
-                        }
-
-                        this.gameManager.deleteGame(game);
-                        Util.sendMessage(sender, this.lang.command_delete_deleted.replace("<arena>", name));
-                    } catch (Exception e) {
-                        Util.sendMessage(sender, this.lang.command_delete_failed);
-                        Util.sendMessage(sender, "Error Message: <red>" + e.getMessage());
+                    String name = game.getGameArenaData().getName();
+                    if (sender instanceof Player player) {
+                        Util.sendMessage(sender, this.lang.command_delete_confirm.replace("<arena>", name),
+                            name);
+                    } else {
+                        Util.sendMessage(sender, this.lang.command_delete_confirm_console.replace("<arena>", name));
                     }
-                }));
+                })
+            );
     }
 
 }

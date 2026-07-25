@@ -8,6 +8,9 @@ import com.shanebeestudios.hg.api.status.Status;
 import com.shanebeestudios.hg.plugin.configs.Language;
 import org.bukkit.Bukkit;
 
+/**
+ * Task for handling refills of chests in a game
+ */
 public class ChestRefillRepeatTask implements Runnable {
 
     private final Language lang;

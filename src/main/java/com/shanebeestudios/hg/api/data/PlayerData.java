@@ -5,6 +5,7 @@ import com.shanebeestudios.hg.api.game.GameTeam;
 import com.shanebeestudios.hg.api.util.Util;
 import com.shanebeestudios.hg.plugin.HungerGames;
 import org.bukkit.Bukkit;
+import org.bukkit.Color;
 import org.bukkit.GameMode;
 import org.bukkit.Location;
 import org.bukkit.attribute.Attribute;
@@ -41,6 +42,8 @@ public class PlayerData implements Cloneable {
     private Location previousLocation = null;
     private boolean online;
     private boolean hasGameStarted;
+    private double waypointReceiveRange;
+    private Color trackingColor;
 
     //InGame data
     private GameTeam gameTeam;
@@ -59,6 +62,7 @@ public class PlayerData implements Cloneable {
         this.online = true;
     }
 
+    @SuppressWarnings("DataFlowIssue")
     public void backup() {
         this.hasGameStarted = true;
         this.inv = this.player.getInventory().getStorageContents();
@@ -73,6 +77,8 @@ public class PlayerData implements Cloneable {
         this.player.setLevel(0);
         this.player.setExp(0);
         this.scoreboard = this.player.getScoreboard();
+        this.waypointReceiveRange = this.player.getAttribute(Attribute.WAYPOINT_RECEIVE_RANGE).getValue();
+        this.trackingColor = this.player.getWaypointColor();
     }
 
     /**
@@ -80,6 +86,7 @@ public class PlayerData implements Cloneable {
      *
      * @param player Player to restore data to
      */
+    @SuppressWarnings("DataFlowIssue")
     public void restore(Player player) {
         if (player == null || !this.hasGameStarted) return;
         Util.clearInv(player);
@@ -97,6 +104,8 @@ public class PlayerData implements Cloneable {
         // Force back their original scoreboard
         player.setScoreboard(DUMMY);
         player.setScoreboard(this.scoreboard);
+        player.getAttribute(Attribute.WAYPOINT_RECEIVE_RANGE).setBaseValue(Math.max(0, this.waypointReceiveRange));
+        player.setWaypointColor(this.trackingColor);
     }
 
     // Restores later if player has an item in their inventory which changes their max health value

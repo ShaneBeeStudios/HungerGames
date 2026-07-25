@@ -5,6 +5,9 @@ import com.shanebeestudios.hg.plugin.HungerGames;
 import com.shanebeestudios.hg.plugin.configs.Language;
 import net.kyori.adventure.text.Component;
 
+/**
+ * Status of a player in and out of games
+ */
 public enum PlayerStatus {
 
     IN_GAME,

@@ -65,6 +65,8 @@ public class Language {
     public String command_create_session_sign_invalid;
     // - Delete
     public String command_delete_attempt;
+    public String command_delete_confirm;
+    public String command_delete_confirm_console;
     public String command_delete_kicking;
     public String command_delete_stopping;
     public String command_delete_deleted;
@@ -235,6 +237,7 @@ public class Language {
     public String game_status_not_ready;
     public String game_status_free_roam;
     public String game_status_countdown;
+    public String game_status_preparing;
     public String player_status_in_game;
     public String player_status_spectator;
     public String player_status_not_in_game;
@@ -345,6 +348,8 @@ public class Language {
         this.command_create_session_done = this.lang.getString("command.create.session-done");
         // - Delete
         this.command_delete_attempt = this.lang.getString("command.delete.attempt");
+        this.command_delete_confirm = this.lang.getString("command.delete.confirm");
+        this.command_delete_confirm_console = this.lang.getString("command.delete.confirm-console");
         this.command_delete_kicking = this.lang.getString("command.delete.kicking");
         this.command_delete_stopping = this.lang.getString("command.delete.stopping");
         this.command_delete_deleted = this.lang.getString("command.delete.deleted");
@@ -525,6 +530,7 @@ public class Language {
         this.game_status_not_ready = this.lang.getString("status.game-status.not-ready");
         this.game_status_free_roam = this.lang.getString("status.game-status.free-roam");
         this.game_status_countdown = this.lang.getString("status.game-status.countdown");
+        this.game_status_preparing = this.lang.getString("status.game-status.preparing");
         this.player_status_in_game = this.lang.getString("status.player-status.in-game");
         this.player_status_spectator = this.lang.getString("status.player-status.spectator");
         this.player_status_not_in_game = this.lang.getString("status.player-status.not-in-game");

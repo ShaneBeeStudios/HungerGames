@@ -28,7 +28,7 @@ public class RollbackTask implements Runnable {
         this.gameBlockData = game.getGameBlockData();
         this.blocks_per_tick = Config.ROLLBACK_BLOCKS_PER_SECOND / 20;
         game.getGameArenaData().setStatus(Status.ROLLBACK);
-        this.blockRollbackSession = this.gameBlockData.getBlocks().iterator();
+        this.blockRollbackSession = this.gameBlockData.getBlocksToRollback().iterator();
         this.itemFrameDataIterator = this.gameBlockData.getItemFrameData().iterator();
         this.taskId = Bukkit.getScheduler().scheduleSyncDelayedTask(HungerGames.getPlugin(), this, 20);
     }

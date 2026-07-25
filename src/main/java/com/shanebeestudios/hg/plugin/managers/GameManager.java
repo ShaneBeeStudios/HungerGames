@@ -13,7 +13,7 @@ import com.shanebeestudios.hg.plugin.configs.Config;
 import com.shanebeestudios.hg.plugin.configs.Language;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
-import org.bukkit.Material;
+import org.bukkit.World;
 import org.bukkit.block.Block;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
@@ -55,6 +55,24 @@ public class GameManager {
      */
     public ImmutableList<Game> getGames() {
         return ImmutableList.copyOf(this.games.values());
+    }
+
+    /**
+     * Get all games in a specific world.
+     *
+     * @param world World to get games for
+     * @return All games in the specified world
+     */
+    public ImmutableList<Game> getGames(World world) {
+        if (world == null) return ImmutableList.of();
+
+        List<Game> gamesInWorld = new ArrayList<>();
+        for (Game game : this.games.values()) {
+            World world1 = game.getGameArenaData().getGameRegion().getWorld();
+            if (world1 == world)
+                gamesInWorld.add(game);
+        }
+        return ImmutableList.copyOf(gamesInWorld);
     }
 
     /**
@@ -234,12 +252,7 @@ public class GameManager {
      * @return Random ItemStack
      */
     public ItemStack randomItem(Game game, ChestType chestType) {
-        List<ItemStack> items = game.getGameItemData().getItemData().getItems(chestType);
-        int r = items.size();
-        if (r == 0) return new ItemStack(Material.AIR);
-        int i = this.random.nextInt(r);
-        return items.get(i);
-
+        return game.getGameItemData().getItemData().getRandomItem(chestType);
     }
 
     /**

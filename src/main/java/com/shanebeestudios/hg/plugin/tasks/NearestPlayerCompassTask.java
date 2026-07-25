@@ -11,6 +11,9 @@ import org.bukkit.Material;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.Nullable;
 
+/**
+ * Task for handling nearest player compass functionality
+ */
 public class NearestPlayerCompassTask implements Runnable {
 
     private final Game game;

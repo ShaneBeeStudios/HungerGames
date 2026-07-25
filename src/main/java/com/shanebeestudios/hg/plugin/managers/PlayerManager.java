@@ -112,6 +112,7 @@ public class PlayerManager {
      */
     public void createSpectatorData(Player spectator, Game game) {
         PlayerData playerData = new PlayerData(spectator, game);
+        playerData.backup();
         this.spectatorMap.put(spectator.getUniqueId(), playerData);
     }
 

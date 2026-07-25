@@ -6,7 +6,6 @@ import com.shanebeestudios.hg.plugin.configs.Language;
 import dev.jorel.commandapi.arguments.CustomArgument.CustomArgumentException;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.minimessage.MiniMessage;
-import net.md_5.bungee.api.ChatColor;
 import org.bukkit.Bukkit;
 import org.bukkit.NamespacedKey;
 import org.bukkit.block.BlockFace;
@@ -14,9 +13,6 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
-
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 /**
  * Generalized utility class for shortcut methods
@@ -26,12 +22,9 @@ public class Util {
 
     // PUBLIC
     // Quick link to help for removing legacy stuff later
-    public static final boolean RUNNING_1_21_5 = isRunningMinecraft(1, 21, 5);
     public static final boolean IS_RUNNING_FOLIA = classExists("io.papermc.paper.threadedregions.FoliaWatchdogThread");
 
-
     // PRIVATE
-    private static final Pattern HEX_PATTERN = Pattern.compile("<#([A-Fa-f0-9]){6}>");
     private static final CommandSender CONSOLE = Bukkit.getConsoleSender();
     private static final MiniMessage MINI_MESSAGE = MiniMessage.miniMessage();
     private static String PREFIX;
@@ -101,7 +94,7 @@ public class Util {
     }
 
     /**
-     * Send a debug message to console
+     * Send a debug message to console.
      * <p>This will only send if 'debug' is enabled in config.yml</p>
      *
      * @param debug Debug message to log
@@ -109,6 +102,19 @@ public class Util {
     public static void debug(String debug) {
         if (Config.SETTINGS_DEBUG) {
             log(debug);
+        }
+    }
+
+    /**
+     * Send a formatted debug message to the console.
+     * <p>This will only send if 'debug' is enabled in config.yml</p>
+     *
+     * @param format Message format
+     * @param args   Arguments for message format
+     */
+    public static void debug(String format, Object... args) {
+        if (Config.SETTINGS_DEBUG) {
+            log(format, args);
         }
     }
 
@@ -137,27 +143,6 @@ public class Util {
         if (!s.isEmpty()) { // only send messages if it's actually a message
             Bukkit.broadcast(getMini(getPrefix() + " " + s));
         }
-    }
-
-    /**
-     * Shortcut for adding color to a string
-     *
-     * @param string String including color codes
-     * @return Formatted string
-     */
-    @Deprecated(forRemoval = true)
-    public static String getColString(String string) {
-        if (isRunningMinecraft(1, 16)) {
-            Matcher matcher = HEX_PATTERN.matcher(string);
-            while (matcher.find()) {
-                final ChatColor hexColor = ChatColor.of(matcher.group().substring(1, matcher.group().length() - 1));
-                final String before = string.substring(0, matcher.start());
-                final String after = string.substring(matcher.end());
-                string = before + hexColor + after;
-                matcher = HEX_PATTERN.matcher(string);
-            }
-        }
-        return ChatColor.translateAlternateColorCodes('&', string);
     }
 
     /**
@@ -230,26 +215,27 @@ public class Util {
     }
 
     /**
-     * Check if server is running a minimum Minecraft version
+     * Check if the server is running a minimum Minecraft version.
      *
-     * @param major Major version to check (Most likely just going to be 1)
-     * @param minor Minor version to check
-     * @return True if running this version or higher
+     * @param year Year version to check
+     * @param drop Drop version to check
+     * @return True if running this version or higher, otherwise false
      */
-    public static boolean isRunningMinecraft(int major, int minor) {
-        return isRunningMinecraft(major, minor, 0);
+    public static boolean isRunningMinecraft(int year, int drop) {
+        return isRunningMinecraft(year, drop, 0);
     }
 
     /**
-     * Check if server is running a minimum Minecraft version
+     * Check if the server is running a minimum Minecraft version.
      *
-     * @param major    Major version to check (Most likely just going to be 1)
-     * @param minor    Minor version to check
+     * @param year     Year version to check
+     * @param drop     Drop version to check
      * @param revision Revision to check
-     * @return True if running this version or higher
+     * @return True if running this version or higher, otherwise false
      */
-    public static boolean isRunningMinecraft(int major, int minor, int revision) {
-        String[] version = Bukkit.getServer().getBukkitVersion().split("-")[0].split("\\.");
+    public static boolean isRunningMinecraft(int year, int drop, int revision) {
+        String mcVer = Bukkit.getServer().getMinecraftVersion().split(" ")[0];
+        String[] version = mcVer.split("\\.");
         int maj = Integer.parseInt(version[0]);
         int min = Integer.parseInt(version[1]);
         int rev;
@@ -258,7 +244,13 @@ public class Util {
         } catch (Exception ignore) {
             rev = 0;
         }
-        return maj > major || min > minor || (min == minor && rev >= revision);
+        if (maj > year) {
+            return true;
+        } else if (maj == year && min > drop) {
+            return true;
+        } else {
+            return maj == year && min == drop && rev >= revision;
+        }
     }
 
     /**

@@ -11,7 +11,9 @@ import org.bukkit.WorldBorder;
 import org.bukkit.damage.DamageSource;
 import org.bukkit.damage.DamageType;
 
-@SuppressWarnings("UnstableApiUsage")
+/**
+ * Task for handing a world border in a game
+ */
 public class WorldBorderTask implements Runnable {
 
     private final Game game;

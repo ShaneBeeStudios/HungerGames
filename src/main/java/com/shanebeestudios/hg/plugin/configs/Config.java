@@ -4,10 +4,13 @@ import com.shanebeestudios.hg.api.parsers.LocationParser;
 import com.shanebeestudios.hg.api.util.Util;
 import com.shanebeestudios.hg.api.util.Vault;
 import com.shanebeestudios.hg.plugin.HungerGames;
+import org.bukkit.Color;
 import org.bukkit.Location;
 import org.bukkit.configuration.Configuration;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
+import org.jetbrains.annotations.NotNull;
+import org.jetbrains.annotations.Nullable;
 
 import java.io.File;
 import java.io.IOException;
@@ -22,17 +25,25 @@ public class Config {
 
     public static boolean SETTINGS_DEBUG;
 
-    //Basic settings
+    // Basic settings
+    public static boolean SETTINGS_UPDATE_CHECKER_ENABLED;
+    public static boolean SETTINGS_UPDATE_CHECKER_ASYNC;
+    public static boolean SETTINGS_FORCE_LOAD_NBT_API;
     public static boolean SETTINGS_BROADCAST_JOIN_MESSAGES;
     public static boolean SETTINGS_BROADCAST_WIN_MESSAGES;
     public static boolean HAS_ECONOMY = true;
     public static boolean SETTINGS_BOSSBAR_COUNTDOWN;
-    public static int SETTINGS_TRACKING_STICK_USES;
-    public static int SETTINGS_PLAYERS_FOR_TRACKING_STICK;
     public static int SETTINGS_TELEPORT_AT_END_TIME;
     public static boolean SETTINGS_SAVE_PREVIOUS_LOCATION;
     public static int SETTINGS_FREE_ROAM_TIME;
     public static Location SETTINGS_GLOBAL_EXIT_LOCATION;
+
+    // Player Tracking
+    public static int PLAYER_TRACKING_DISTANCE;
+    public static Color PLAYER_TRACKING_ENEMY_PLAYER_COLOR;
+    public static Color PLAYER_TRACKING_ENEMY_ENTITY_COLOR;
+    public static int PLAYER_TRACKING_TRACKING_STICK_USES;
+    public static int PLAYER_TRACKING_PLAYERS_FOR_TRACKING_STICK;
 
     // Scoreboard
     public static boolean SCOREBOARD_HIDE_NAMETAGS;
@@ -56,6 +67,7 @@ public class Config {
     public static List<String> REWARD_MESSAGES;
 
     //Rollback
+    public static boolean ROLLBACK_ENABLED;
     public static boolean ROLLBACK_ALLOW_BREAK_BLOCKS;
     public static int ROLLBACK_BLOCKS_PER_SECOND;
     public static boolean ROLLBACK_PROTECT_DURING_FREE_ROAM;
@@ -133,18 +145,29 @@ public class Config {
     private void loadConfig() {
         // Settings
         SETTINGS_DEBUG = config.getBoolean("settings.debug");
+        SETTINGS_UPDATE_CHECKER_ENABLED = config.getBoolean("settings.update-checker.enabled");
+        SETTINGS_UPDATE_CHECKER_ASYNC = config.getBoolean("settings.update-checker.async");
+        SETTINGS_FORCE_LOAD_NBT_API = config.getBoolean("settings.force-load-nbt-api");
         SETTINGS_BROADCAST_JOIN_MESSAGES = config.getBoolean("settings.broadcast-join-messages");
         SETTINGS_BROADCAST_WIN_MESSAGES = config.getBoolean("settings.broadcast-win-messages");
         SETTINGS_BOSSBAR_COUNTDOWN = config.getBoolean("settings.bossbar-countdown");
-        SETTINGS_TRACKING_STICK_USES = config.getInt("settings.tracking-stick-uses");
-        SETTINGS_PLAYERS_FOR_TRACKING_STICK = config.getInt("settings.players-for-tracking-stick");
         SETTINGS_SAVE_PREVIOUS_LOCATION = config.getBoolean("settings.save-previous-location");
         SETTINGS_TELEPORT_AT_END_TIME = config.getInt("settings.teleport-at-end-time");
         SETTINGS_FREE_ROAM_TIME = config.getInt("settings.free-room-time");
-        String locString = config.getString("settings.global-exit-location");
-        if (locString != null && locString.contains(":")) {
-            SETTINGS_GLOBAL_EXIT_LOCATION = LocationParser.getLocFromString(locString);
+
+        if (this.config.isString("settings.global-exit-location")) {
+            SETTINGS_GLOBAL_EXIT_LOCATION = LocationParser.getLocFromString(this.config.getString("settings.global-exit-location"));
+            setGlobalExitLocation(SETTINGS_GLOBAL_EXIT_LOCATION);
+        } else if (this.config.isLocation("settings.global-exit-location")) {
+            SETTINGS_GLOBAL_EXIT_LOCATION = this.config.getLocation("settings.global-exit-location");
         }
+
+        // Player Tracking
+        PLAYER_TRACKING_DISTANCE = this.config.getInt("player-tracking.distance");
+        PLAYER_TRACKING_ENEMY_PLAYER_COLOR = getColor("player-tracking.enemy-player-color");
+        PLAYER_TRACKING_ENEMY_ENTITY_COLOR = getColor("player-tracking.enemy-entity-color");
+        PLAYER_TRACKING_TRACKING_STICK_USES = config.getInt("player-tracking.tracking-stick-uses");
+        PLAYER_TRACKING_PLAYERS_FOR_TRACKING_STICK = config.getInt("player-tracking.players-for-tracking-stick");
 
         // Scoreboard
         SCOREBOARD_HIDE_NAMETAGS = config.getBoolean("scoreboard.hide-nametags");
@@ -167,6 +190,7 @@ public class Config {
         REWARD_MESSAGES = config.getStringList("reward.messages");
 
         // Rollback
+        ROLLBACK_ENABLED = config.getBoolean("rollback.enabled");
         ROLLBACK_ALLOW_BREAK_BLOCKS = config.getBoolean("rollback.allow-block-break");
         ROLLBACK_BLOCKS_PER_SECOND = config.getInt("rollback.blocks-per-second");
         ROLLBACK_PROTECT_DURING_FREE_ROAM = config.getBoolean("rollback.protect-during-free-roam");
@@ -209,8 +233,7 @@ public class Config {
         COMMANDS_ALLOWED_IN_GAME = config.getStringList("commands.allowed-in-game");
 
         try {
-            Vault.setupEconomy();
-            if (Vault.ECONOMY == null) {
+            if (!Vault.setupEconomy()) {
                 Util.log("<red>Unable to setup vault!");
                 Util.log(" - <red>Economy provider is missing.");
                 Util.log(" - <yellow>Cash rewards will not be given out..");
@@ -272,9 +295,46 @@ public class Config {
      * @param location Global exit location
      */
     public void setGlobalExitLocation(Location location) {
-        String locString = LocationParser.locToString(location);
-        this.config.set("settings.global-exit-location", locString);
+        this.config.set("settings.global-exit-location", location);
         save();
+    }
+
+    private @Nullable Color getColor(@NotNull String setting) {
+        String string = this.config.getString(setting);
+        if (string == null) {
+            Util.log("Invalid color for setting '%s'", setting);
+            return null;
+        }
+        if (string.equalsIgnoreCase("disable") || string.equalsIgnoreCase("disabled")) {
+            return null;
+        }
+        if (string.startsWith("#")) {
+            // parse from hex
+            int i = Integer.parseInt(string.substring(1), 16);
+            return Color.fromRGB(i);
+        } else if (string.contains(":")) {
+            String[] split = string.split(":");
+            if (split.length == 3) {
+                try {
+                    int r = Integer.parseInt(split[0]);
+                    int g = Integer.parseInt(split[1]);
+                    int b = Integer.parseInt(split[2]);
+                    return Color.fromRGB(r, g, b);
+                } catch (NumberFormatException ignore) {
+                    Util.log("Invalid color '%s' for setting '%s'", string, setting);
+                    return null;
+                }
+            }
+        } else {
+            try {
+                return Color.fromRGB(Integer.parseInt(string));
+            } catch (NumberFormatException ignore) {
+                Util.log("Invalid color '%s' for setting '%s'", string, setting);
+                return null;
+            }
+        }
+        Util.log("Invalid color '%s' for setting '%s'", string, setting);
+        return null;
     }
 
 }

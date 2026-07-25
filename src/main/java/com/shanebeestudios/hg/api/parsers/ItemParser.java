@@ -14,7 +14,6 @@ import org.bukkit.Color;
 import org.bukkit.NamespacedKey;
 import org.bukkit.configuration.ConfigurationSection;
 import org.bukkit.enchantments.Enchantment;
-import org.bukkit.inventory.ItemFlag;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.ItemType;
 import org.bukkit.potion.PotionEffect;
@@ -26,6 +25,9 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
 
+/**
+ * Parser for items from configs
+ */
 public class ItemParser {
 
     @SuppressWarnings({"UnstableApiUsage"})
@@ -45,7 +47,7 @@ public class ItemParser {
         // COUNT
         int count = 1;
         if (config.contains("count")) {
-            count = config.getInt("count");
+            count = Math.clamp(config.getInt("count"), 1, 99);
         }
         ItemStack itemStack = itemType.createItemStack(count);
 
@@ -156,13 +158,10 @@ public class ItemParser {
         if (config.contains("dyed_color")) {
             int color = config.getInt("dyed_color");
             itemStack.setData(DataComponentTypes.DYED_COLOR, DyedItemColor.dyedItemColor().color(Color.fromRGB(color)));
-            if (!Util.RUNNING_1_21_5) {
-                itemStack.addItemFlags(ItemFlag.HIDE_ADDITIONAL_TOOLTIP);
-            }
         }
 
         // HIDDEN COMPONENTS
-        if (Util.RUNNING_1_21_5 && config.isList("hidden_components")) {
+        if (config.isList("hidden_components")) {
             TooltipDisplay.Builder builder = TooltipDisplay.tooltipDisplay();
             for (String compKey : config.getStringList("hidden_components")) {
                 NamespacedKey namespacedKey = NamespacedKey.fromString(compKey);

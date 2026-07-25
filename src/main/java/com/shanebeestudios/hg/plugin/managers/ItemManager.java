@@ -66,30 +66,25 @@ public class ItemManager {
         ItemData itemData = new ItemData();
 
         for (ChestType chestType : ChestType.values()) {
-            int count = 0;
             ConfigurationSection chestTypeSection = itemsSection.getConfigurationSection(chestType.getName());
             if (chestTypeSection == null) {
                 // If the section does not exist in a game, use defaults
                 if (game != null && this.defaultItemData != null) {
-                    itemData.setItems(chestType, this.defaultItemData.getItems(chestType));
-                    count += this.defaultItemData.getItemCount(chestType);
+                    itemData.setWeightedItems(chestType, this.defaultItemData.getWeightedItems(chestType));
                 }
             } else {
-                List<ItemStack> items = new ArrayList<>();
                 for (String key : chestTypeSection.getKeys(false)) {
                     ConfigurationSection itemSection = chestTypeSection.getConfigurationSection(key);
                     if (itemSection == null) continue;
 
                     ItemStack itemStack = ItemParser.parseItem(itemSection);
                     int weight = itemSection.getInt("weight", 1);
-                    for (int i = 0; i < weight; i++) {
-                        items.add(itemStack);
+                    if (weight <= 0) {
+                        continue;
                     }
-                    count++;
+                    itemData.addEntry(chestType, itemStack, weight);
                 }
-                itemData.setItems(chestType, items);
             }
-            itemData.setItemCount(chestType, count);
         }
         return itemData;
     }

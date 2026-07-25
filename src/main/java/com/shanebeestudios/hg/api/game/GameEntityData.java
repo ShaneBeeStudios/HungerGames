@@ -3,7 +3,10 @@ package com.shanebeestudios.hg.api.game;
 import com.shanebeestudios.hg.api.data.MobData;
 import com.shanebeestudios.hg.api.data.MobEntry;
 import com.shanebeestudios.hg.plugin.HungerGames;
+import com.shanebeestudios.hg.plugin.configs.Config;
 import org.bukkit.Location;
+import org.bukkit.attribute.Attribute;
+import org.bukkit.entity.Enemy;
 import org.bukkit.entity.Entity;
 import org.bukkit.metadata.FixedMetadataValue;
 import org.jetbrains.annotations.NotNull;
@@ -52,6 +55,7 @@ public class GameEntityData extends Data {
      * @param dayTime  Whether it's daytime/nighttime
      * @return Whether an entity spawned
      */
+    @SuppressWarnings("DataFlowIssue")
     public boolean spawnMob(Location location, boolean dayTime) {
         MobEntry mobEntry;
         if (dayTime) {
@@ -63,6 +67,10 @@ public class GameEntityData extends Data {
             Entity spawn = mobEntry.spawn(location);
             if (spawn != null) {
                 logEntity(spawn);
+                if (spawn instanceof Enemy enemy && Config.PLAYER_TRACKING_DISTANCE > 0 && Config.PLAYER_TRACKING_ENEMY_ENTITY_COLOR != null) {
+                    enemy.getAttribute(Attribute.WAYPOINT_TRANSMIT_RANGE).setBaseValue(Math.max(0, Config.PLAYER_TRACKING_DISTANCE));
+                    enemy.setWaypointColor(Config.PLAYER_TRACKING_ENEMY_ENTITY_COLOR);
+                }
                 return true;
             }
         }

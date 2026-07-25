@@ -2,17 +2,25 @@
 # Revamped by: ShaneBee
 
 # Issues: Please report issues on the GitHub issue tracker @ https://github.com/ShaneBeeStudios/HungerGames/issues
-# Updates: Can be found on SpigotMC @ --- https://www.spigotmc.org/resources/hungergames.65942/
+# Updates: Can be found on Modrinth @ --- https://modrinth.com/plugin/hungergames-sb
 
 # More Info: See the wiki for more info on this config @ https://github.com/ShaneBeeStudios/HungerGames/wiki/Config.yml
-
-# Helpful Links:
-# Bukkit Material Enums: https://hub.spigotmc.org/javadocs/spigot/org/bukkit/Material.html
-# Bukkit Tags: https://hub.spigotmc.org/javadocs/spigot/org/bukkit/Tag.html
 
 settings:
   # When enabled, more informative debug messages will be sent when errors occur
   debug: false
+
+  # Enable this to automatically check for HungerGames updates
+  # Disable this if you do not want to check for updates, or it takes too long/has issues checking
+  update-checker:
+    # Whether to check for updates
+    enabled: true
+    # Whether the update check should be done on another thread
+    async: false
+
+  # Whether to force load the NBT-API if Minecraft version is not supported
+  force-load-nbt-api: false
+
   # When enabled, if a player joins an arena, a message will broadcast to all players on the server that a game is available to
   # join and how many players til it can start.
   # A message will broadcast that a game has started, and that you can still join.
@@ -26,10 +34,6 @@ settings:
   free-roam-time: 25
   # Whether or not to show a countdown bossbar in game
   bossbar-countdown: true
-  # The amount of uses a tracking stick will have
-  tracking-stick-uses: 8
-  # Minimum amount of players required in a game for a tracking stick to work
-  players-for-tracking-stick: 5
   # Maximum/Minimum amount of items that will spawn in chests
   max-chestcontent: 5
   min-chestcontent: 1
@@ -48,6 +52,28 @@ settings:
   # This can be changed per arena
   # If 'none', will use the player's respawn location or main world's spawn location
   global-exit-location: 'none'
+
+## PLAYER TRACKING
+player-tracking:
+  # How far in blocks players can see each other on the tracking bar
+  # Set to -1 to keep default value (whatever the player's current tracking range is)
+  # Set to 0 to disable
+  distance: 100
+
+  # Represents the color of enemy players
+  # Set to 'disable' to keep default color the player is assigned
+  # Accepts int color, `#rrggbb` or `r:g:b` (0-255 for r:g:b) formats
+  enemy-player-color: '#EB2D07'
+
+  # Represents the color of enemy entities
+  # Set to 'disable' to disable
+  enemy-entity-color: '#EBD807'
+
+  # The number of uses a tracking stick will have
+  tracking-stick-uses: 8
+
+  # Minimum number of players required in a game for a tracking stick to work
+  players-for-tracking-stick: 5
 
 # Settings for different scoreboard options
 # This doesn't necessarily mean the sidebar
@@ -139,12 +165,14 @@ chests:
     min-content: 1
     max-content: 5
 rollback:
+  # Whether to enable the rollback system
+  enabled: true
   # Let players break blocks in the arena, and restore when the game is done
   allow-block-break: false
   # Allow players to take items out of item frames (will be rolled back)
   allow-itemframe-take: false
   # The amount of blocks that will be restored during rollback per second (this number is actually divided by 20 and restored in 1 tick intervals)
-  blocks-per-second: 500
+  blocks-per-second: 500000
   # When enabled, will not allow players to break blocks during the free-roam time
   protect-during-free-roam: true
   # Prevent players from trampling crops in your arenas

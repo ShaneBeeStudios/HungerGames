@@ -9,6 +9,9 @@ import org.jetbrains.annotations.Nullable;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
+/**
+ * Permissions for players
+ */
 public class Permissions {
 
     public record Permission(String permission, org.bukkit.permissions.Permission bukkitPermission) {
@@ -48,6 +51,7 @@ public class Permissions {
 
     // Other Permissions
     public static final Permission BYPASS_COMMAND_RESTRICTION = getBase("bypass.command.restriction", "Bypass command restriction while in games", PermissionDefault.OP);
+    public static final Permission UPDATE_CHECKER = getBase("update_checker", "Receive update messages on join", PermissionDefault.OP);
 
     private static Permission getCommand(String perm, String description, PermissionDefault defaultPermission) {
         return getBase("command." + perm, description, defaultPermission);

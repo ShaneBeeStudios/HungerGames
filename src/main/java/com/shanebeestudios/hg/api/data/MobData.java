@@ -1,7 +1,7 @@
 package com.shanebeestudios.hg.api.data;
 
 import com.google.common.collect.ImmutableList;
-import org.jetbrains.annotations.ApiStatus;
+import com.shanebeestudios.hg.api.util.WeightedList;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.ArrayList;
@@ -12,8 +12,8 @@ import java.util.Random;
 public class MobData {
 
     private final Random random = new Random();
-    private final List<MobEntry> dayMobs = new ArrayList<>();
-    private final List<MobEntry> nightMobs = new ArrayList<>();
+    private final WeightedList<MobEntry> dayMobs = new WeightedList<>();
+    private final WeightedList<MobEntry> nightMobs = new WeightedList<>();
     private int mobCount;
 
     /**
@@ -22,7 +22,7 @@ public class MobData {
      * @return List of MobEntries
      */
     public List<MobEntry> getDayMobs() {
-        return ImmutableList.copyOf(this.dayMobs);
+        return ImmutableList.copyOf(this.dayMobs.getEntries());
     }
 
     /**
@@ -32,16 +32,17 @@ public class MobData {
      */
     public @Nullable MobEntry getRandomDayMob() {
         if (this.dayMobs.isEmpty()) return null;
-        return this.dayMobs.get(this.random.nextInt(this.dayMobs.size()));
+        return this.dayMobs.nextEntry();
     }
 
     /**
      * Add a new mob entry to the day mobs
      *
      * @param mobEntry Mob entry to add
+     * @param weight   Weight of mob entry
      */
-    public void addDayMob(MobEntry mobEntry) {
-        this.dayMobs.add(mobEntry);
+    public void addDayMob(MobEntry mobEntry, int weight) {
+        this.dayMobs.add(mobEntry, weight);
     }
 
     /**
@@ -50,7 +51,7 @@ public class MobData {
      * @return List of MobEntries
      */
     public List<MobEntry> getNightMobs() {
-        return ImmutableList.copyOf(this.nightMobs);
+        return ImmutableList.copyOf(this.nightMobs.getEntries());
     }
 
     /**
@@ -60,24 +61,17 @@ public class MobData {
      */
     public @Nullable MobEntry getRandomNightMob() {
         if (this.nightMobs.isEmpty()) return null;
-        return this.nightMobs.get(this.random.nextInt(this.nightMobs.size()));
+        return this.nightMobs.nextEntry();
     }
 
     /**
      * Add a new mob entry to the night mobs
      *
      * @param mobEntry Mob entry to add
+     * @param weight   Weight of mob entry
      */
-    public void addNightMob(MobEntry mobEntry) {
-        this.nightMobs.add(mobEntry);
-    }
-
-    /**
-     * @hidden
-     */
-    @ApiStatus.Internal
-    public void setMobCount(int mobCount) {
-        this.mobCount = mobCount;
+    public void addNightMob(MobEntry mobEntry, int weight) {
+        this.nightMobs.add(mobEntry, weight);
     }
 
     /**
@@ -86,18 +80,18 @@ public class MobData {
      * @return Count of all mobs
      */
     public int getMobCount() {
-        return this.mobCount;
+        return this.dayMobs.size() + this.nightMobs.size();
     }
 
     /**
-     * Get list of all MobEntries
+     * Get a list of all MobEntries
      *
      * @return List of MobEntries
      */
     public List<MobEntry> getAllMobs() {
         List<MobEntry> mobs = new ArrayList<>();
-        mobs.addAll(this.dayMobs);
-        mobs.addAll(this.nightMobs);
+        mobs.addAll(this.dayMobs.getEntries());
+        mobs.addAll(this.nightMobs.getEntries());
         return mobs;
     }
 

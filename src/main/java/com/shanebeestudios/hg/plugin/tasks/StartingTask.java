@@ -6,6 +6,9 @@ import com.shanebeestudios.hg.plugin.configs.Config;
 import com.shanebeestudios.hg.plugin.configs.Language;
 import org.bukkit.Bukkit;
 
+/**
+ * Task for counting down before game starts
+ */
 public class StartingTask implements Runnable {
 
     private int timer;

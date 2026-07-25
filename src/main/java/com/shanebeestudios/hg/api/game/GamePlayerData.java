@@ -6,7 +6,6 @@ import com.shanebeestudios.hg.api.events.PlayerLeaveGameEvent;
 import com.shanebeestudios.hg.api.status.Status;
 import com.shanebeestudios.hg.api.util.Util;
 import com.shanebeestudios.hg.plugin.configs.Config;
-import com.shanebeestudios.hg.plugin.managers.GameManager;
 import com.shanebeestudios.hg.plugin.managers.PlayerManager;
 import com.shanebeestudios.hg.plugin.permission.Permissions;
 import net.kyori.adventure.title.Title;
@@ -43,7 +42,6 @@ public class GamePlayerData extends Data {
     private static final @NotNull NamespacedKey MOVE_KEY = NamespacedKey.fromString("hg:freeze_move");
 
     private final PlayerManager playerManager;
-    private final GameManager gameManager;
 
     // Player Lists
     private final Map<Player, Boolean> players = new HashMap<>();
@@ -59,7 +57,6 @@ public class GamePlayerData extends Data {
     protected GamePlayerData(Game game) {
         super(game);
         this.playerManager = this.plugin.getPlayerManager();
-        this.gameManager = this.plugin.getGameManager();
     }
 
     /**
@@ -220,6 +217,7 @@ public class GamePlayerData extends Data {
         this.players.keySet().forEach(this::putPlayerIntoArena);
     }
 
+    @SuppressWarnings("DataFlowIssue")
     void putPlayerIntoArena(Player player) {
         boolean savePreviousLocation = this.players.get(player);
         Location loc = pickRandomSpawn();
@@ -237,13 +235,23 @@ public class GamePlayerData extends Data {
 
         // Teleport async into the arena so it loads a little more smoothly
         player.teleportAsync(loc).thenAccept(a -> {
+            Util.debug("<yellow>Putting player %s into arena", player.getName());
             PlayerData playerData = this.playerManager.getPlayerData(player);
-            assert playerData != null;
+            assert playerData != null : "This should never happen, player data should always exist";
             playerData.backup();
             if (savePreviousLocation && Config.SETTINGS_SAVE_PREVIOUS_LOCATION) {
                 playerData.setPreviousLocation(previousLocation);
             }
             this.game.getGameScoreboard().setupBoard(player);
+            Util.debug("<aqua>Player %s has been teleported into arena", player.getName());
+
+            // Setup Tracking
+            if (Config.PLAYER_TRACKING_DISTANCE >= 0) {
+                player.getAttribute(Attribute.WAYPOINT_RECEIVE_RANGE).setBaseValue(Math.max(0, Config.PLAYER_TRACKING_DISTANCE));
+            }
+            if (Config.PLAYER_TRACKING_ENEMY_PLAYER_COLOR != null) {
+                player.setWaypointColor(Config.PLAYER_TRACKING_ENEMY_PLAYER_COLOR);
+            }
 
             heal(player);
             freeze(player);
@@ -308,7 +316,7 @@ public class GamePlayerData extends Data {
         player.setInvulnerable(false);
         if (gameArenaData.getStatus() == Status.RUNNING)
             this.game.getGameBarData().removePlayer(player);
-        Location location = exitLocation != null ? exitLocation : this.gameManager.getGlobalExitLocation(player);
+        Location location = exitLocation != null ? exitLocation : this.game.getGameArenaData().getExitForPlayer(player);
         PlayerData playerData = this.playerManager.getData(player);
         if (playerData == null || playerData.isOnline()) {
             player.teleportAsync(location);
@@ -329,7 +337,7 @@ public class GamePlayerData extends Data {
         } else {
             this.playerManager.createSpectatorData(spectator, this.game);
         }
-        this.spectators.put(spectator, true); // TODO should we handle location saving?
+        this.spectators.put(spectator, true);
         spectator.setGameMode(GameMode.SURVIVAL);
         spectator.setCollidable(false);
         if (Config.SPECTATE_FLY)

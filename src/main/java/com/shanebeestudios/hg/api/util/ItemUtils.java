@@ -10,8 +10,6 @@ import net.kyori.adventure.text.Component;
 import org.bukkit.enchantments.Enchantment;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.ItemType;
-import org.bukkit.inventory.meta.ItemMeta;
-import org.bukkit.persistence.PersistentDataContainer;
 import org.bukkit.persistence.PersistentDataType;
 import org.jetbrains.annotations.Nullable;
 
@@ -38,7 +36,7 @@ public class ItemUtils {
 
         itemStack.setData(DataComponentTypes.ITEM_NAME, Util.getMini(LANG.item_tracking_stick_name));
         itemStack.setData(DataComponentTypes.MAX_STACK_SIZE, 1);
-        itemStack.setData(DataComponentTypes.MAX_DAMAGE, Config.SETTINGS_TRACKING_STICK_USES);
+        itemStack.setData(DataComponentTypes.MAX_DAMAGE, Config.PLAYER_TRACKING_TRACKING_STICK_USES);
         itemStack.setData(DataComponentTypes.DAMAGE, 0);
         List<Component> lore = new ArrayList<>();
         LANG.item_tracking_stick_lore.forEach(line -> lore.add(Util.getMini(line)));

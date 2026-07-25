@@ -30,7 +30,7 @@ public class GameSidebar {
     }
 
     /**
-     * Add a player to this scoreboard
+     * Add a player to this sidebar
      *
      * @param player Player to add
      */
@@ -49,7 +49,7 @@ public class GameSidebar {
     }
 
     /**
-     * Set the title of this scoreboard
+     * Set the title of this sidebar
      *
      * @param title Title to set
      */
@@ -58,7 +58,7 @@ public class GameSidebar {
     }
 
     /**
-     * Update this scoreboard
+     * Update this sidebar
      */
     public void updateBoard() {
         String alive = "  " + this.lang.scoreboard_sidebar_players_alive_num.replace("<num>", String.valueOf(this.game.getGamePlayerData().getPlayers().size()));

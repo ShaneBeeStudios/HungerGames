@@ -27,6 +27,7 @@ import com.shanebeestudios.hg.plugin.managers.MobManager;
 import com.shanebeestudios.hg.plugin.managers.Placeholders;
 import com.shanebeestudios.hg.plugin.managers.PlayerManager;
 import com.shanebeestudios.hg.plugin.managers.SessionManager;
+import com.shanebeestudios.hg.plugin.update.UpdateChecker;
 import dev.jorel.commandapi.CommandAPI;
 import dev.jorel.commandapi.CommandAPIPaperConfig;
 import dev.jorel.commandapi.exceptions.UnsupportedVersionException;
@@ -38,12 +39,13 @@ import org.bukkit.Bukkit;
 import org.bukkit.event.HandlerList;
 import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.java.JavaPlugin;
+import org.jetbrains.annotations.ApiStatus;
 
 import java.util.HashMap;
 import java.util.Map;
 
 /**
- * <b>Main class for HungerGames</b>
+ * Main class for HungerGames
  */
 public class HungerGames extends JavaPlugin {
 
@@ -83,6 +85,9 @@ public class HungerGames extends JavaPlugin {
         }
     }
 
+    /**
+     * @hidden
+     */
     @Override
     public void onEnable() {
         if (!Util.isRunningMinecraft(1, 21, 10)) {
@@ -91,17 +96,20 @@ public class HungerGames extends JavaPlugin {
             Bukkit.getPluginManager().disablePlugin(this);
             return;
         }
-        NBTApi.initializeNBTApi();
         TaskUtils.initialize(this);
         loadPlugin(true);
     }
 
+    /**
+     * @hidden
+     */
     @SuppressWarnings("deprecation")
     public void loadPlugin(boolean load) {
         long start = System.currentTimeMillis();
         PLUGIN_INSTANCE = this;
 
         this.config = new Config(this);
+        NBTApi.initializeNBTApi();
 
         //MythicMob check
         if (Bukkit.getPluginManager().getPlugin("MythicMobs") != null) {
@@ -139,9 +147,17 @@ public class HungerGames extends JavaPlugin {
 
         setupMetrics();
 
+        new UpdateChecker(this);
         Util.log("HungerGames has been <green>enabled<grey> in <aqua>%.2f seconds<grey>!", (float) (System.currentTimeMillis() - start) / 1000);
     }
 
+    /**
+     * Reload the plugin, unloading and reloading all components.
+     * <p>
+     * This should not be used externally.
+     * </p>
+     */
+    @ApiStatus.Internal
     public void reloadPlugin() {
         unloadPlugin(true);
     }
@@ -168,6 +184,9 @@ public class HungerGames extends JavaPlugin {
         }
     }
 
+    /**
+     * @hidden
+     */
     @Override
     public void onDisable() {
         // I know this seems odd, but this method just
@@ -216,7 +235,7 @@ public class HungerGames extends JavaPlugin {
     }
 
     /**
-     * Get the instance of this plugin
+     * Get the instance of this plugin.
      *
      * @return This plugin
      */
@@ -225,7 +244,7 @@ public class HungerGames extends JavaPlugin {
     }
 
     /**
-     * Get an instance of the KillManager
+     * Get an instance of the KillManager.
      *
      * @return KillManager
      */
@@ -234,7 +253,7 @@ public class HungerGames extends JavaPlugin {
     }
 
     /**
-     * Get an instance of the plugins main item manager
+     * Get an instance of the ItemManager.
      *
      * @return The item manager
      */
@@ -243,7 +262,7 @@ public class HungerGames extends JavaPlugin {
     }
 
     /**
-     * Get an instance of the plugins main kit manager
+     * Get an instance of the KitManager.
      *
      * @return The kit manager
      */
@@ -252,7 +271,7 @@ public class HungerGames extends JavaPlugin {
     }
 
     /**
-     * Get the instance of the game manager
+     * Get the instance of the game manager.
      *
      * @return The game manager
      */
@@ -261,7 +280,7 @@ public class HungerGames extends JavaPlugin {
     }
 
     /**
-     * Get an instance of the PlayerManager
+     * Get an instance of the PlayerManager.
      *
      * @return PlayerManager
      */
@@ -270,7 +289,7 @@ public class HungerGames extends JavaPlugin {
     }
 
     /**
-     * Get an instance of the ArenaConfig
+     * Get an instance of the ArenaConfig.
      *
      * @return ArenaConfig
      */
@@ -279,7 +298,7 @@ public class HungerGames extends JavaPlugin {
     }
 
     /**
-     * Get an instance of HG's leaderboards
+     * Get an instance of HG's leaderboards.
      *
      * @return Leaderboard
      */
@@ -288,7 +307,7 @@ public class HungerGames extends JavaPlugin {
     }
 
     /**
-     * Get an instance of the language file
+     * Get an instance of the language file.
      *
      * @return Language file
      */
@@ -297,7 +316,7 @@ public class HungerGames extends JavaPlugin {
     }
 
     /**
-     * Get an instance of {@link Config}
+     * Get an instance of {@link Config}.
      *
      * @return Config file
      */
@@ -306,7 +325,7 @@ public class HungerGames extends JavaPlugin {
     }
 
     /**
-     * Get an instance of the MobManager
+     * Get an instance of the MobManager.
      *
      * @return MobManager
      */
@@ -314,12 +333,8 @@ public class HungerGames extends JavaPlugin {
         return this.mobManager;
     }
 
-    public Metrics getMetrics() {
-        return this.metrics;
-    }
-
     /**
-     * Get an instance of the MythicMobs MobManager
+     * Get an instance of the MythicMobs MobManager.
      *
      * @return MythicMobs MobManager
      */
@@ -327,6 +342,11 @@ public class HungerGames extends JavaPlugin {
         return this.mythicMobManager;
     }
 
+    /**
+     * Get an instance of the SessionManager.
+     *
+     * @return Instance of SessionManager
+     */
     // Managers
     public SessionManager getSessionManager() {
         return this.sessionManager;

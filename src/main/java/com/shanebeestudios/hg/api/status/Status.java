@@ -35,6 +35,10 @@ public enum Status {
      */
     STOPPED,
     /**
+     * Game is preparing to start
+     */
+    PREPARING,
+    /**
      * Game is currently rolling back blocks
      */
     ROLLBACK,
@@ -56,6 +60,18 @@ public enum Status {
         };
     }
 
+    /**
+     * Whether the game is currently running.
+     *
+     * @return Is currently running
+     */
+    public boolean isRunning() {
+        return switch (this) {
+            case PREPARING, WAITING, COUNTDOWN, FREE_ROAM, RUNNING -> true;
+            default -> false;
+        };
+    }
+
     public Component getName() {
         return switch (this) {
             case READY -> Util.getMini(this.lang.game_status_ready);
@@ -64,6 +80,7 @@ public enum Status {
             case FREE_ROAM -> Util.getMini(this.lang.game_status_free_roam);
             case RUNNING -> Util.getMini(this.lang.game_status_running);
             case STOPPED -> Util.getMini(this.lang.game_status_stopped);
+            case PREPARING -> Util.getMini(this.lang.game_status_preparing);
             case ROLLBACK -> Util.getMini(this.lang.game_status_rollback);
             case BROKEN -> Util.getMini(this.lang.game_status_broken);
             case NOT_READY -> Util.getMini(this.lang.game_status_not_ready);

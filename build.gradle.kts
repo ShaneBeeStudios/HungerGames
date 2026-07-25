@@ -12,11 +12,11 @@ configurations.matching { it.isCanBeResolved }.configureEach {
 // Version of HungerGames
 val projectVersion = "5.0.0"
 // Minimum version of Minecraft that HungerGames supports
-val apiVersion = "1.21.10"
+val apiVersion = "1.21.11"
 // Where this builds on the server
-val serverLocation = "26-1"
+val serverLocation = "26-2"
 // Minecraft version to build against
-val minecraftVersion = "26.1.2"
+val minecraftVersion = "26.2"
 
 java.sourceCompatibility = JavaVersion.VERSION_25
 
@@ -56,7 +56,7 @@ dependencies {
     implementation("org.bstats:bstats-bukkit:3.2.0")
 
     // MythicMobs
-    compileOnly("io.lumine:Mythic-Dist:5.6.1")
+    compileOnly("io.lumine:Mythic-Dist:5.12.0")
 
     // Papi
     compileOnly("me.clip:placeholderapi:2.12.2")
@@ -80,7 +80,8 @@ tasks {
         dependsOn("shadowJar")
         from("build/libs") {
             include("HungerGames-*.jar")
-            destinationDir = file("/Users/ShaneBee/Desktop/Server/Minecraft/${serverLocation}/plugins/")
+            exclude("*-sources.jar")
+            destinationDir = file("/Users/ShaneBee/Desktop/Server/Minecraft/Skript/${serverLocation}/plugins/")
         }
 
     }
@@ -98,12 +99,17 @@ tasks {
         options.compilerArgs.add("-Xlint:deprecation")
     }
     javadoc {
+        val options = options as StandardJavadocDocletOptions
+        options.docTitle = "HungerGames API - $projectVersion"
+        options.overview = "src/main/javadoc/overview.html"
         options.encoding = Charsets.UTF_8.name()
+
         exclude("com/shanebeestudios/hg/plugin/commands")
         exclude("com/shanebeestudios/hg/plugin/listeners")
-        (options as StandardJavadocDocletOptions).links(
-            "https://jd.papermc.io/paper/1.21.5/",
-            "https://jd.advntr.dev/api/4.17.0/",
+        options.links(
+            "https://javadoc.io/doc/org.jetbrains/annotations/latest/",
+            "https://jd.papermc.io/paper/26.1.2/",
+            "https://jd.advntr.dev/api/4.25.0/",
             "https://tr7zw.github.io/Item-NBT-API/v2-api/"
         )
 

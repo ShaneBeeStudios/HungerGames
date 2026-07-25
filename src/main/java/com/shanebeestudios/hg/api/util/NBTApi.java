@@ -1,5 +1,6 @@
 package com.shanebeestudios.hg.api.util;
 
+import com.shanebeestudios.hg.plugin.configs.Config;
 import de.tr7zw.changeme.nbtapi.NBT;
 import de.tr7zw.changeme.nbtapi.NBTCompound;
 import de.tr7zw.changeme.nbtapi.NBTContainer;
@@ -29,8 +30,14 @@ public class NBTApi {
         MinecraftVersion.replaceLogger(HgLogger.getLogger());
         if (!NBT.preloadApi()) {
             Util.warning("NBT-API unavailable for your server version.");
-            Util.warning(" - Some items may not be loaded correctly if you are using the 'data' option");
-            ENABLED = false;
+            if (Config.SETTINGS_FORCE_LOAD_NBT_API) {
+                Util.warning(" - The API has been force loaded via config, please use with caution.");
+                ENABLED = true;
+            } else {
+                Util.warning(" - The API has been disabled, you can force enable it in the config 'force-load-nbt-api'.");
+                Util.warning(" - Some items may not be loaded correctly if you are using the 'data' option");
+                ENABLED = false;
+            }
         } else {
             ENABLED = true;
         }
