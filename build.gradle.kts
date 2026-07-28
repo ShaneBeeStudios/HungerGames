@@ -62,7 +62,7 @@ dependencies {
     compileOnly("me.clip:placeholderapi:2.12.2")
 
     // NBT-API
-    implementation("de.tr7zw:item-nbt-api:2.15.7") {
+    implementation("de.tr7zw:item-nbt-api:2.16.0") {
         isTransitive = false
     }
 
@@ -72,7 +72,7 @@ dependencies {
     }
 
     // FastBoard
-    implementation("fr.mrmicky:fastboard:2.1.5")
+    implementation("fr.mrmicky:fastboard:2.2.0")
 }
 
 tasks {
