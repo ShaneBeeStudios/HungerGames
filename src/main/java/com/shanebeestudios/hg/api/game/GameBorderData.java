@@ -38,8 +38,8 @@ public class GameBorderData extends Data {
         super(game);
         this.gamePlayerData = game.getGamePlayerData();
         this.worldBorder = Bukkit.createWorldBorder();
-	if(centerLocations != null)
-        	this.centerLocations.add(centerLocations);
+        if(centerLocations != null)
+            this.centerLocations.add(centerLocations);
         this.finalBorderSize = finalSize;
         this.borderCountdownStart = start;
         this.borderCountdownEnd = end;
