@@ -6,12 +6,10 @@ import com.shanebeestudios.hg.api.util.Util;
 import com.shanebeestudios.hg.plugin.HungerGames;
 import com.shanebeestudios.hg.plugin.configs.Config;
 import org.bukkit.Bukkit;
-import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
 
 import java.util.Iterator;
-import java.util.List;
 
 /**
  * Task for preparing an arena by logging blocks for rollback
@@ -20,8 +18,7 @@ public class PrepareArenaTask implements Runnable {
 
     private final Game game;
     private final int blocksPerTick;
-    private Iterator<Location> blocksToLog;
-    private final int countToLog;
+    private Iterator<Block> blocksToLog;
     private int totalLogged = 0;
     private int taskId;
 
@@ -30,17 +27,13 @@ public class PrepareArenaTask implements Runnable {
         this.blocksPerTick = Config.ROLLBACK_BLOCKS_PER_SECOND / 20;
 
         Util.debug("Starting prepare task, grabbing blocks to log...");
-        List<Location> blocks;
         if (Config.ROLLBACK_ENABLED) {
-            blocks = this.game.getGameArenaData().getGameRegion().getBlocks(null);
+            this.blocksToLog = this.game.getGameArenaData().getGameRegion().getBlockIterator(null);
         } else if (Config.CHESTS_BONUS_RANDOMIZE_ENABLED) {
-            blocks = this.game.getGameArenaData().getGameRegion().getBlocks(BlockUtils::isBonusBlockReplacement);
+            this.blocksToLog = this.game.getGameArenaData().getGameRegion().getBlockIterator(BlockUtils::isBonusBlockReplacement);
         } else {
-            blocks = List.of();
+            this.blocksToLog = java.util.Collections.emptyIterator();
         }
-        this.countToLog = blocks.size();
-        this.blocksToLog = blocks.iterator();
-        Util.debug("Found %s blocks to log", this.countToLog);
         this.taskId = schedule();
     }
 
@@ -53,7 +46,7 @@ public class PrepareArenaTask implements Runnable {
                 // Task has been stopped
                 return;
             }
-            Block block = this.blocksToLog.next().getBlock();
+            Block block = this.blocksToLog.next();
             this.game.getGameBlockData().logBlockForRollback(block);
             logged++;
             this.totalLogged++;
@@ -64,7 +57,7 @@ public class PrepareArenaTask implements Runnable {
             }
         }
         if (this.blocksToLog.hasNext()) {
-            Util.debug("Logging blocks... %,d/%,d", this.totalLogged, this.countToLog);
+            Util.debug("Logging blocks... %,d", this.totalLogged);
             this.taskId = this.schedule();
             return;
         }
