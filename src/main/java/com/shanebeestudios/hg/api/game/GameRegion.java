@@ -12,7 +12,9 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
+import java.util.NoSuchElementException;
 import java.util.Random;
 import java.util.function.Predicate;
 
@@ -123,6 +125,74 @@ public class GameRegion {
             }
         }
         return blockList;
+    }
+
+    /**
+     * Iterate over blocks in this region without first allocating a location
+     * for every block in the arena.
+     *
+     * @param predicate Block predicate to apply, or null for every block
+     * @return Lazy iterator over matching blocks
+     */
+    public Iterator<Block> getBlockIterator(@Nullable Predicate<Block> predicate) {
+        World world = getWorld();
+        assert world != null;
+        int minX = (int) this.boundingBox.getMinX();
+        int minY = (int) this.boundingBox.getMinY();
+        int minZ = (int) this.boundingBox.getMinZ();
+        int maxX = (int) this.boundingBox.getMaxX();
+        int maxY = (int) this.boundingBox.getMaxY();
+        int maxZ = (int) this.boundingBox.getMaxZ();
+
+        return new Iterator<>() {
+            private int x = minX;
+            private int y = minY;
+            private int z = minZ;
+            private Block next;
+            private boolean prepared;
+
+            @Override
+            public boolean hasNext() {
+                prepareNext();
+                return this.next != null;
+            }
+
+            @Override
+            public Block next() {
+                prepareNext();
+                if (this.next == null) throw new NoSuchElementException();
+                Block result = this.next;
+                this.next = null;
+                this.prepared = false;
+                return result;
+            }
+
+            private void prepareNext() {
+                if (this.prepared) return;
+                this.prepared = true;
+                this.next = null;
+                while (this.x < maxX) {
+                    Block block = world.getBlockAt(this.x, this.y, this.z);
+                    advance();
+                    if (predicate == null || predicate.test(block)) {
+                        this.next = block;
+                        return;
+                    }
+                }
+            }
+
+            private void advance() {
+                this.z++;
+                if (this.z >= maxZ) {
+                    this.z = minZ;
+                    this.y++;
+                    if (this.y >= maxY) {
+                        this.y = minY;
+                        this.x++;
+                    }
+                }
+            }
+        };
     }
 
     /**
