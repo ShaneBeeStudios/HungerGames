@@ -23,14 +23,34 @@ public class SessionCommand extends SubCommand {
             .withPermission(Permissions.COMMAND_SESSION.permission())
             .then(LiteralArgument.literal("end_session")
                 .executesPlayer(info -> {
-                    Player player = info.sender();
-                    if (this.sessionManager.hasPlayerSession(player)) {
-                        this.sessionManager.endPlayerSession(player);
-                        Util.sendPrefixedMessage(player, this.lang.command_session_ended);
-                    } else {
-                        Util.sendPrefixedMessage(player, this.lang.command_session_no_session);
-                    }
+                    endSession(info.sender());
+                }))
+            .then(LiteralArgument.literal("cancel")
+                .executesPlayer(info -> {
+                    endSession(info.sender());
+                }))
+            .then(LiteralArgument.literal("wand")
+                .executesPlayer(info -> {
+                    giveSelectionStick(info.sender());
                 }));
+    }
+
+    private void endSession(Player player) {
+        if (this.sessionManager.hasPlayerSession(player)) {
+            this.sessionManager.endPlayerSession(player);
+            Util.sendPrefixedMessage(player, this.lang.command_session_ended);
+        } else {
+            Util.sendPrefixedMessage(player, this.lang.command_session_no_session);
+        }
+    }
+
+    private void giveSelectionStick(Player player) {
+        if (this.sessionManager.hasPlayerSession(player)) {
+            this.sessionManager.getPlayerSession(player).giveSelectionStick(player);
+            Util.sendPrefixedMessage(player, this.lang.command_session_stick_given);
+        } else {
+            Util.sendPrefixedMessage(player, this.lang.command_session_no_session);
+        }
     }
 
 }

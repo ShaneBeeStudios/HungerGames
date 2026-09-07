@@ -15,6 +15,7 @@ import org.bukkit.util.BoundingBox;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 public class PlayerSession {
 
@@ -48,10 +49,21 @@ public class PlayerSession {
     @SuppressWarnings("UnstableApiUsage")
     public void start(Player player) {
         this.stage = Stage.CORNER_1;
+        giveSelectionStick(player);
+        Util.sendPrefixedMessage(player, this.lang.command_create_session_start);
+    }
+
+    /**
+     * Give the player another arena selection stick.
+     *
+     * @param player Player to receive the selection stick
+     */
+    @SuppressWarnings("UnstableApiUsage")
+    public void giveSelectionStick(Player player) {
         ItemStack itemStack = ItemType.STICK.createItemStack();
         itemStack.setData(DataComponentTypes.ITEM_NAME, Util.getMini(this.lang.command_create_session_stick_name));
-        player.getWorld().dropItem(player.getLocation(), itemStack);
-        Util.sendPrefixedMessage(player, this.lang.command_create_session_start);
+        Map<Integer, ItemStack> remaining = player.getInventory().addItem(itemStack);
+        remaining.values().forEach(item -> player.getWorld().dropItemNaturally(player.getLocation(), item));
     }
 
     public void click(Player player, Block block) {
