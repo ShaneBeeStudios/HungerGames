@@ -32,6 +32,8 @@ public class PlayerData implements Cloneable {
     //Pregame data
     private ItemStack[] inv;
     private ItemStack[] equip;
+    private ItemStack[] extra;
+    private ItemStack cursor;
     private int expL;
     private float expP;
     private double health;
@@ -67,6 +69,8 @@ public class PlayerData implements Cloneable {
         this.hasGameStarted = true;
         this.inv = this.player.getInventory().getStorageContents();
         this.equip = this.player.getInventory().getArmorContents();
+        this.extra = this.player.getInventory().getExtraContents();
+        this.cursor = this.player.getItemOnCursor();
         this.expL = this.player.getLevel();
         this.expP = this.player.getExp();
         this.mode = this.player.getGameMode();
@@ -74,6 +78,7 @@ public class PlayerData implements Cloneable {
         this.saturation = this.player.getSaturation();
         this.health = this.player.getHealth();
         Util.clearInv(this.player);
+        this.player.setItemOnCursor(null);
         this.player.setLevel(0);
         this.player.setExp(0);
         this.scoreboard = this.player.getScoreboard();
@@ -96,6 +101,8 @@ public class PlayerData implements Cloneable {
         player.setSaturation(this.saturation);
         player.getInventory().setStorageContents(this.inv);
         player.getInventory().setArmorContents(this.equip);
+        player.getInventory().setExtraContents(this.extra);
+        player.setItemOnCursor(this.cursor);
         player.setGameMode(this.mode);
         player.updateInventory();
         player.setInvulnerable(false);
@@ -232,6 +239,8 @@ public class PlayerData implements Cloneable {
         return "PlayerData{" +
             "inv=" + Arrays.toString(inv) +
             ", equip=" + Arrays.toString(equip) +
+            ", extra=" + Arrays.toString(extra) +
+            ", cursor=" + cursor +
             ", expLevel=" + expL +
             ", expPoints=" + expP +
             ", health=" + health +
