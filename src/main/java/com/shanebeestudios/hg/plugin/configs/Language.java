@@ -110,6 +110,7 @@ public class Language {
     // - Session
     public String command_session_no_session;
     public String command_session_ended;
+    public String command_session_stick_given;
     // - Team
     public String command_team_player_not_available;
     public String command_team_only_leader;
@@ -391,6 +392,7 @@ public class Language {
         // - Session
         this.command_session_no_session = this.lang.getString("command.session.no-session");
         this.command_session_ended = this.lang.getString("command.session.ended");
+        this.command_session_stick_given = this.lang.getString("command.session.stick-given");
         // - Team
         this.command_team_player_not_available = this.lang.getString("command.team.player-not-available");
         this.command_team_only_leader = this.lang.getString("command.team.only-leader");

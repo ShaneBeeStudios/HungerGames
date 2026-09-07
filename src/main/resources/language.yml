@@ -107,6 +107,7 @@ command:
   session:
     no-session: '<red>You do not have a current session.'
     ended: 'Your current session has ended.'
+    stick-given: '<green>You have been given another arena selection stick.'
   # Team
   team:
     player-not-available: '<aqua><player> <red>is not available!'
